@@ -1,0 +1,17 @@
+.patients {
+  padding: 30px 50px 0 50px;
+  flex: 1;
+  .panel {
+    :global {
+      .ant-table-cell {
+        font-size: 16px;
+      }
+    }
+    .select_wrap {
+      @include flex(flex-start, center);
+      flex-wrap: wrap;
+      font-size: 15px;
+      padding-bottom: 20px;
+    }
+  }
+}

@@ -1,0 +1,88 @@
+.add_card {
+  position: relative;
+  display: inline-block;
+  width: 170px;
+  min-height: 250px;
+  font-size: 14px;
+  color: #000000;
+  text-align: center;
+  cursor: pointer;
+  margin: 15px 13px 0 0;
+  overflow: hidden;
+  border-radius: 0;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, .10);
+  :global {
+    .anticon-plus {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      font-size: 96px;
+      color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+.doctor_list {
+  font-size: 14px;
+  color: #000000A6;
+  :global {
+    .ant-input {
+      height: 32px;
+      font-size: 13px;
+    }
+    .ant-select {
+      width: 130px;
+      height: 33px;
+      margin: 0 0 10px 10px;
+    }
+    .ant-select-selector {
+      height: 33px;
+    }
+    .ant-select-selection-item {
+      line-height: 33px;
+    }
+    .anticon-file-text {
+      margin-left: 10px;
+    }
+    .ant-pagination-options {
+      margin-top: 10px;
+    }
+  }
+  ul {
+    @include flex(flex-start, center);
+    flex-wrap: wrap;
+  }
+  .checked_doctor {
+    margin-top: 5px;
+    margin-right: 5px;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .params {
+    @include flex();
+    color: #000;
+    font-size: 15px;
+  }
+  .params2 {
+    @include flex(flex-start, flex-start);
+    margin-bottom: 10px;
+  }
+  :global {
+    .ant-btn {
+      line-height: 14px;
+      height: 32px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+  }
+  .add {
+    margin-top: 10px;
+  }
+  .table {
+    max-height: calc(100vh - 400px);
+    overflow: auto;
+  }
+}

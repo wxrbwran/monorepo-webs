@@ -1,0 +1,78 @@
+.m-chat {
+  &-editor {
+    flex: 0 0 200px;
+    width: 100%;
+    position: relative;
+    border-radius: 4px;
+    padding: 10px 10px 8px;
+    max-height: 80%;
+    background: #F8F8F8;
+    border-top: 1px solid #E0E0E0;
+  }
+  &-action {
+    @include flex(space-between, center);
+  }
+  &-file {
+    margin-bottom: 5px;
+    .u-editor-icon {
+      display: inline-block;
+      font-size: 12px;
+      color: #666666;
+      img {
+        margin-right: 5px;
+        width: 20px;
+        height: 20px;
+      }
+      span{
+        position: relative;
+        top: -5px;
+        color: #181818;
+      }
+      position: relative;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+    input[type='file'] {
+      position: absolute;
+      display: inline-block;
+      left: 0;
+      top: 0;
+      width: 60px;
+      height: inherit;
+      opacity: 0;
+      font-size: 1rem;
+    }
+    .netcall_icon {
+      margin-left: 12px;
+    }
+  }
+  &-editor-main {
+    height: calc(100% - 45px);
+    .u-editor-input {
+      width: 100%;
+      height: 125px;
+      .ant-input-textarea {
+        height: 100%;
+      }
+    }
+    .u-editor-icons {
+      margin-top: 5px;
+      @include flex-lay(row, nowrap, flex-end, center);
+      > img {
+        @include size(20px);
+      }
+    }
+    textarea.ant-input {
+      height: 100%;
+      background: #F8F8F8;
+    }
+    button {
+      width: 50px;
+    }
+  }
+}
+.videoPopInfo {
+  font-size: 18px;
+  position: relative;
+  left: -15px;
+}

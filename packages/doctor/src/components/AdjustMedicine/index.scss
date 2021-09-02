@@ -1,0 +1,152 @@
+.adjust_medicine {
+  color: #000;
+  font-size: 14px;
+  .head {
+    @include flex(flex-start, center);
+    margin-bottom: 20px;
+    .name {
+      flex: 0 0 21%;
+    }
+    .instructions {
+      flex: 0 0 100px;
+    }
+    .dosage {
+      flex: 0 0 180px;
+    }
+    .time {
+      flex: 0 0 485px;
+    }
+  }
+  .medicine_item {
+    @include flex(flex-start, flex-start);
+    font-size: 14px;
+    color: #000;
+    .name {
+      flex: 0 0 21%;
+    }
+    .instructions {
+      flex: 0 0 30px;
+      cursor: pointer;
+      margin-right: 25px;
+    }
+    .plans {
+      flex: 1;
+      .plans_item {
+        @include flex(flex-start, center);
+        margin-bottom: 20px;
+      }
+      .dosage {
+        flex: 0 0 180px;
+        @include flex(flex-start, center);
+        >span {
+          margin-left: 3px;
+        }
+      }
+      .time {
+        // flex:0 0 60%;
+        flex:0 0 485px;
+        @include flex(flex-start, center);
+        :global {
+          .ant-select-selection-item {
+            height: 30px!important;
+            line-height: 30px!important;
+            font-size: 14px;
+          }
+        }
+      }
+      .edit_btn {
+        flex: 0 0 74px;
+        height: 34px;
+        cursor: pointer;
+        @include flex(flex-start, center);
+        margin-left: 12px;
+        position: relative;
+        .add_btn {
+          border-right: none;
+        }
+        >span {
+          flex: 0 0 50%;
+          height: 100%;
+          display: inline-block;
+          line-height: 37px;
+          border: 1px solid #007ada;
+          color: #007ada;
+        }
+      }
+    }
+    :global {
+
+      .anticon-close {
+        color:#007ada;
+      }
+      .ant-input-number {
+        width: 80px;
+      }
+    }
+  }
+  .add_medicine_btn {
+    >span {
+      cursor: pointer;
+      font-size: 14px;
+    }
+  }
+  .note {
+    margin: 10px 0 20px;
+  }
+}
+.adjust_plan_time {
+  :global {
+    .ant-select-item-group {
+      flex: 100%;
+      margin-bottom: 3px;
+      height: 32px;
+      padding: 0 12px;
+      color: rgba(0,0,0,.45);
+      font-size: 14px;
+      line-height: 32px;
+      background: #f6f8fa;
+      padding: 0 15px;
+      height: 30px;
+      span {
+        display: inline-block;
+        border-left: 2px solid #007ada;
+        padding-left: 5px;
+        height: 14px;
+        line-height: 14px;
+        margin-top: 8px;
+      }
+    }
+    .ant-select-item-option {
+      display: flex;
+      flex:0 0 80px;
+    }
+    .rc-virtual-list-holder-inner {
+      display: flex!important;
+      justify-content: flex-start;
+      flex-direction: row!important;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .ant-select-item-option-grouped {
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+  }
+}
+.adjust_medicine_modal {
+  h3 {
+    line-height: 22px;
+    color: #007ADA;
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  text-align: center;
+  canvas {
+    margin: 0 auto;
+  }
+}
+
+.advice {
+  margin-bottom: 30px;
+}
+

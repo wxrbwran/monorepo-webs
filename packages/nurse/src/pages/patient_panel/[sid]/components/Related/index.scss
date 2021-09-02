@@ -1,0 +1,6 @@
+.related {
+    @extend %common_header;
+    .related__lists {
+        @include flex-lay(row, nowrap, flex-start, flex-start);
+    }
+}

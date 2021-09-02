@@ -1,0 +1,67 @@
+.center {
+  @include flex();
+  position: relative;
+  .badge {
+    position: absolute;
+    left: 0;
+    top: 0px;
+    z-index: 2;
+  }
+  :global {
+    .ant-tabs {
+      // height: 70px;
+      // line-height: 70px;
+      // border-bottom: none;
+      padding: 0 70px 0 60px;
+      color: #fff;
+      .ant-tabs-tab {
+        // height: 70px;
+        // line-height: 70px;
+        font-size: 18px;
+        // padding: 0 20px;
+        // border-bottom: none;
+        margin-right: 0;
+        &:hover {
+          color: #fff;
+        }
+      }
+      // .ant-tabs-tab.ant-tabs-tab-active {
+      //   background-color: #fff;
+      //   .ant-tabs-tab-btn {
+      //     background-color: #fff;
+      //     color: #455b89;
+      //     border-bottom: none;
+      //   }
+      // }
+      // .ant-tabs-nav {
+      //   &::before {
+      //     border: none;
+      //   }
+      // }
+      .ant-tabs-ink-bar {
+        // background: none;
+      }
+      .ant-tabs-tab-btn {
+        &:focus {
+          color: transparent;
+        }
+        &:active {
+          color: transparent;
+        }
+      }
+    }
+    .ant-badge-count {
+      box-shadow: none;
+    }
+  }
+  .clinical {
+    // height: 71px;
+    // line-height: 71px;
+    color: #181818;
+    font-size: 18px;
+    cursor: pointer;
+    // margin-right: 25px;
+    position: relative;
+    top: -5px;
+  }
+}

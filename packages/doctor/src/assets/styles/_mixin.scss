@@ -1,0 +1,53 @@
+@mixin flex-lay($direction: row, $wrap: nowrap, $main: space-between, $cross: center) {
+  display: flex;
+  flex-flow: $direction $wrap;
+  justify-content: $main;
+  align-items: $cross;
+}
+
+@mixin flex($main: space-between, $cross: center) {
+  display: flex;
+  justify-content: $main;
+  align-items: $cross;
+}
+@mixin size($width: 0px, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin lh($height: 34px, $lineHeight: $height) {
+  height: $height;
+  line-height: $lineHeight;
+}
+
+@mixin clearfix {
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+
+  *zoom: 1;
+}
+
+@mixin line-clamp($lines-to-show, $font-size, $line-height) {
+  display: block; // Fallback for non-webkit browsers
+  display: -webkit-box;
+  font-size: $font-size;
+  //height: ($font-size * $line-height * $lines-to-show); // Fallback for non-webkit browsers
+  line-height: $line-height;
+  height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines-to-show;
+}
+
+@mixin card-shadow {
+  box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.13);
+  border-radius: 4px;
+}

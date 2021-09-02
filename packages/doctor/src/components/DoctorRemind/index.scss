@@ -1,0 +1,26 @@
+.remind {
+  font-size: 14px;
+  text-align: center;
+  .remind_btn {
+    height: 30px;
+    line-height: 18px;
+    color: #007ADA;
+    border-color: #007ADA;
+    font-size: 14px;
+    padding: 0 5px;
+  }
+
+}
+.remind_cont {
+  button {
+    font-size: 14px;
+    width: 64px;
+    height: 32px;
+    line-height: 20px;
+  }
+  textarea {
+    line-height: 20px;
+    font-size: 14px;
+    color: #000;
+  }
+}

@@ -1,0 +1,23 @@
+.im {
+  @include flex-lay(row, nowrap, flex-start, flex-start);
+  text-align: left;
+  align-self: stretch;
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.left {
+  align-self: stretch;
+  // flex: 0 0 200px;
+  // width: 150px;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  margin-right: -1px;
+}
+.right {
+  flex: auto;
+  height: 100%;
+  @include flex-lay(column, nowrap, flex-start, flex-start);
+}

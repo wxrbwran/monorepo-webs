@@ -1,0 +1,87 @@
+.diff_table {
+  font-size: 16px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 0.5px solid #d8d8d8;
+  border-radius: 5px;
+  .medicine_item {
+    @include flex(flex-start, flex-start);
+    color: rgba(0, 0, 0, 0.65);
+    // padding: 10px 0;
+    line-height: 40px;
+    .name {
+      flex: 0 0 25%;
+      line-height: 45px;
+    }
+    .plans {
+      flex: 1;
+    }
+    .plan_item {
+      @include flex(flex-start, flex-start);
+      line-height: 45px;
+    }
+    .dosage {
+      flex: 0 0 120px;
+      padding: 0 15px;
+    }
+    .time {
+      max-width: 40%;
+      span {
+        display: inline-block;
+        text-align: center;
+        width: "auto";
+        height: 22px;
+        line-height: 22px;
+        padding: 1px 4px;
+        border-radius: 100px;
+        border: 1px solid #333;
+        font-size: 12px;
+        margin-right: 5px;
+      }
+    }
+    .add_text {
+      font-size: 12px;
+    }
+  }
+  &.border_line {
+    .medicine_item {
+      border-top: 0.5px solid #d8d8d8;
+      &:first-child {
+        border-top: none;
+      }
+      .plan_item {
+        border-top: 0.5px solid #d8d8d8;
+        &:first-child {
+          border: none;
+        }
+      }
+    }
+  }
+  .EDIT, .ADD{
+    color: red;
+    .time {
+      span {
+        border-color: #E14433;
+      }
+    }
+  }
+  .DELETE {
+    .dosage, .time, .name {
+      color: #ddd;
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        height: 2px;
+        width:  100%;
+        background-color: #ddd;
+      }
+    }
+    .time {
+      span {
+        border-color: #ddd;
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.tabs {
+  margin: 0;
+  height: 40px;
+  @include flex-lay(row, nowrap, flex-start, center);
+  color: rgba(44, 45, 46, .5);
+  // border-bottom: 1px solid $border-color;
+  font-size: 16px;
+  padding-left: 0;
+  >li {
+    padding: 0 15px;
+    cursor: pointer;
+    line-height: 44px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+    &.active {
+      padding: 0 14px;
+      color: $import-text-color;
+      line-height: 40px;
+      border-left: 1px solid $border-color;
+      border-right: 1px solid $border-color;
+      border-bottom: 1px solid #fff;
+      border-top: 1px solid $theme-color;
+      background: #fff;
+    }
+  }
+}

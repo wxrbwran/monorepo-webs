@@ -1,0 +1,109 @@
+.patient_panel {
+  @include flex(space-between, flex-start);
+  align-self: stretch;
+  height: 100%;
+  background-color: #f3f8f9;
+  .left_wrap {
+    flex: 1 1 680px;
+    max-height: 100vh;
+    overflow-y: auto;
+    .wrap_two {
+      @include flex();
+      align-items: stretch;
+      margin-bottom: 10px;
+      >div {
+        padding: 10px 0;
+        background-color: #fff;
+      }
+      .operation_wrap {
+        flex: 0 1 57%;
+        margin-right: 10px;
+      }
+      .outer_wrap {
+        flex: 0 1 43%
+      }
+      .health_wrap {
+        flex: 1 0 39%;
+        min-width: 322px;
+      }
+      .related_wrap {
+        flex: 1 0 39%;
+        min-width: 322px;
+        ul{
+          padding: 10px 15px 0;
+          margin-bottom: 0;
+          li {
+            margin-bottom: 5px;
+          }
+        }
+      }
+      .gutter {
+        height: 10px;
+        background: #f4f8f9;
+      }
+    }
+    :global {
+      .rightAddbtn {
+        width: 44px;
+        height: 22px;
+        color: #007ADA;
+        border: 1px solid #007ADA;
+        font-size: 14px;
+        line-height: 20px;
+        cursor: pointer;
+        margin-right: 8px;
+        text-align: center;
+        .anticon-edit {
+          font-size: 10px;
+          margin-right: 1px;
+        }
+      }
+    }
+  }
+  .right_wrap {
+    flex: 1 0 250px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .medicine_cont {
+      background-color: #ffffff;
+      height: 200px;
+      overflow: auto;
+    }
+  }
+  .control_line {
+    cursor: col-resize;
+    z-index: 9;
+    align-self: stretch;
+    width: 10px;
+    height: 100%;
+  }
+  .controlLineY {
+    height: 10px;
+    // background: url(../../../assets/img/dragUpDown.svg) no-repeat;
+    background-position: center top;
+    background-size: 20px 20px;
+  }
+  .patient_panel_btns {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    >div {
+      padding: 0 10px;
+      margin-bottom: 10px;
+      border: 0.5px solid #09205D;
+      border-radius: 2px;
+      font-size: 14px;
+      color: #09205D;
+      line-height: 28px;
+      cursor: pointer;
+    }
+  }
+  &.hide_edit {
+    :global {
+      .patientEditBtn {
+        visibility: hidden;
+      }
+    }
+  }
+}

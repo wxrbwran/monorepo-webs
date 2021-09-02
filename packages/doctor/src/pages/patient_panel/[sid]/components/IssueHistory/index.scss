@@ -1,0 +1,99 @@
+.history {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  padding: 5px 20px 10px;
+  font-size: 14px;
+  >div {
+    border-bottom: 1px solid #d8d8d8;
+    margin-top: 15px;
+    padding-bottom: 20px;
+  }
+  .no_data {
+    height: 100%;
+    color: #000;
+    @include flex(center, center);
+    flex-direction: column;
+
+    img {
+      width: 223px;
+    }
+  }
+  .remind_doctor_btn {
+    position: absolute;
+    right: 20px;
+    top: 6px;
+    margin-top: 0;
+    border-bottom: none;
+    padding-bottom: 0px;
+  }
+  :global {
+    .confirm_date {
+      width: 116px;
+      height: 20px;
+      margin: 0 auto 5px;
+      font-size: 12px;
+      border-radius: 3px;
+      color: #999;
+      background-color: #f2f2f2;
+      text-align: center;
+      line-height: 20px;
+    }
+  }
+  .status {
+    width: 65px;
+    height: 30px;
+    margin-bottom: 5px;
+    line-height: 30px;
+    text-align: center;
+    color: #3FBB4C;
+    background-color: rgba(63, 187, 76, 0.1);
+    border-radius: 3px;
+    &.overlook {
+      color: #999;
+      background-color: rgba(153, 153, 153, 0.1);
+    }
+    &.modify {
+      color: #fd6803;
+      background-color: rgba(253, 104, 3, 0.1);
+    }
+  }
+
+  .text {
+    color: #000;
+  }
+  .detail {
+    color: #108ee9;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+}
+
+.medicine_diff_title {
+  h3 {
+    line-height: 22px;
+    color: #007ADA;
+    font-size: 16px;
+    margin: 10px 0;
+  }
+}
+.medicine_diff_wrap {
+  ul {
+    border: .5px solid #e5e5e5;
+    padding: 10px;
+    border-radius: 5px;
+  }
+}
+
+.advice {
+  width:  530px;
+  margin: 0 auto 30px;
+  h3 {
+    margin: 0;
+  }
+}
+
+.pager {
+  margin: 20px auto;
+  text-align: center;
+}

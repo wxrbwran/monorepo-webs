@@ -1,0 +1,41 @@
+.item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  border-right: 1px solid #e4e4e7;
+  &:last-child {
+    border-bottom: 1px solid #e4e4e7;
+  }
+  td {
+    // flex: 0 0 25%;
+    // flex:1;
+    font-size: 16px;
+    padding: 5px 0;
+    border: 1px solid #e4e4e7;
+    border-right: none;
+    border-bottom: none;
+    word-break: break-all;
+    // flex: 0 0 160px;
+    flex-shrink: 0;
+    width: 160px;
+
+    &:last-child {
+      // flex: 0 0 155px;
+      flex: 1;
+      text-align: left;
+    }
+  }
+}
+.data_history {
+  overflow-x: auto;
+  :global {
+    .ant-table-content {
+      overflow-x: auto;
+    }
+    th, td{
+      &:last-child {
+        min-width: 160px;
+      }
+    }
+  }
+}

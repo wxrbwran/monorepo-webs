@@ -1,0 +1,8 @@
+.common_tab {
+  padding-left: 10px;
+  :global {
+    .ant-tabs-tab {
+      font-size: 15px;
+    }
+  }
+}

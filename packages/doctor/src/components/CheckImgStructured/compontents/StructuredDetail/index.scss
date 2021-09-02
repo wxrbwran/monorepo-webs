@@ -1,0 +1,135 @@
+.structrued {
+  height: 90vh;
+  overflow-y: scroll;
+  .level1type_wrap {
+    :global {
+      .ant-radio-wrapper {
+        line-height: inherit!important;
+      }
+    }
+  }
+  .save_btn {
+    position: absolute;
+    right: 40px;
+    font-size: 16px;
+    width: 103px;
+    height: 34px;
+    z-index: 10;
+  }
+  .checkbox_group {
+    :global {
+      .ant-checkbox-group {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        // width:650px;
+        width:100%;
+        // margin: 0 auto;
+        margin-bottom: 10px;
+        border-left: 1px solid #ccc;
+        margin-top: 15px;
+      }
+      .ant-checkbox-group-item {
+        flex: 0 0 25%;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        margin: 0;
+        border-left: 0;
+        border-top: 0;
+        padding-left: 5px;
+        line-height: 38px;
+        position: relative;
+        top: -1px;
+        &:nth-child(1),&:nth-child(2),&:nth-child(3),&:nth-child(4) {
+          border-top: 1px solid #ccc;
+        }
+      }
+    }
+  }
+  :global {
+    .ant-checkbox-wrapper {
+      font-size: 15px;
+    }
+    #structured_content {
+      max-width: 750px;
+      .ant-tabs-card {
+        .ant-tabs-nav-list {
+          width: 100%;
+        }
+        .ant-tabs-tab {
+          flex: 0 0 50%;
+          margin: 0;
+          padding: 5px 22px;
+          font-size: 14px;
+          background-color: #fff;
+          border: none;
+          border-bottom: 1px solid #d8d8d8;
+          border-top: 3px solid transparent;
+          &.ant-tabs-tab-active {
+            border-color: #007ADA #d8d8d8 #fff;
+            border-style: solid;
+            border-width: 3px 1px 1px;
+          }
+          .ant-tabs-tab-btn {
+            margin: 0 auto;
+          }
+        }
+        .ant-tabs-nav {
+          margin-bottom: 0;
+        }
+        .ant-tabs-content-holder {
+          border: 1px solid #d8d8d8;
+          border-top: none;
+          padding: 20px;
+        }
+        &.ant-tabs-editable-card {
+          .ant-tabs-content-holder {
+            border: none;
+            padding: 0px;
+            padding-top: 20px;
+          }
+          .ant-tabs-nav {
+            border-bottom: 1px solid #d8d8d8;
+          }
+          .anticon-close {
+            font-size: 12px;
+          }
+          .ant-tabs-tab {
+            flex: 0 0 auto;
+            margin: 0;
+            padding: 5px 22px;
+            font-size: 14px;
+            background-color: #fff;
+            border: none;
+            border-bottom: 3px solid transparent;
+            &.ant-tabs-tab-active {
+              // border-bottom: 3px solid #007ADA;
+              position: relative;
+              &::before {
+                content: "";
+                position: absolute;
+                left: 25%;
+                width: 50%;
+                height: 3px;
+                background-color: #007ADA;
+                bottom: -3px;
+              }
+            }
+          }
+        }
+      }
+      .sub_tab {
+        .ant-tabs-tab {
+          &.ant-tabs-tab-active {
+            border: none;
+            border-bottom: 3px solid #007ADA;
+          }
+        }
+        .ant-tabs-content-holder {
+          border:none;
+        }
+      }
+    }
+  }
+
+}

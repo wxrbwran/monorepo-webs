@@ -1,0 +1,22 @@
+.add {
+	width: 205px;
+	height: 32px;
+	line-height: 32px;
+	font-size: 14px;
+	color: #007ADA;
+	border: 1px dotted #4985FD;
+	border-radius: 4px;
+	text-align: center;
+	margin: 5px 0 40px;
+	cursor: pointer;
+}
+.disease {
+	@include flex-lay(row,nowrap,flex-start,center);
+	margin-bottom: 5px;
+	:global {
+		.anticon-delete {
+			margin-left: 5px;
+			color: #108ee9;
+		}
+	}
+}

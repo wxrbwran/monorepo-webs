@@ -1,0 +1,22 @@
+.manual{
+  .name {
+    font-size: 18px;
+    color: $theme-color;
+    line-height: 52px;
+  }
+  > div {
+    line-height: 24px;
+    margin-bottom: 24px;
+    h3 {
+      font-size: 14px;
+      color: $theme-color;
+    }
+    p {
+      color: $import-text-color;
+    }
+  }
+}
+.manual_pic {
+  width: 70px;
+}
+  

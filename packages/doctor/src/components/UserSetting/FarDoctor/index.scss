@@ -1,0 +1,41 @@
+.future {
+  .tab {
+    @include flex-lay(row, nowrap, center, center);
+    width: 160px;
+    margin: 10px auto 20px;
+    border: 1px solid $theme-color;
+    border-radius: 4px;
+    overflow: hidden;
+
+    div {
+      width: 50%;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      color: $theme-color;
+      cursor: pointer;
+      margin-bottom: 0;
+      font-size: 16px;
+      &.active {
+        background-color: $theme-color;
+        color: #fff;
+      }
+    }
+  }
+
+  .user-info__base-right .infos__base {
+    display: inline-block;
+  }
+
+  .infos__introduction {
+    margin-bottom: 55px;
+  }
+
+  .first-login--top {
+    padding-top: 20px;
+  }
+
+  #Faction {
+    min-height: 255px;
+  }
+}

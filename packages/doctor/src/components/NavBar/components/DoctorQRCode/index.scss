@@ -1,0 +1,145 @@
+.qrcode {
+  // margin: 0 20px 0 33px;
+  // width: 50px;
+  // height: 50px;
+  // cursor: pointer;
+  // border: 5px solid #fff;
+}
+.ewm_modal {
+  :global {
+    .ant-modal-body {
+      padding-top: 0;
+    }
+    .ant-tabs-nav {
+      &::before {
+        display: none;
+      }
+    }
+    .ant-tabs-tab {
+      font-size: 14px;
+      padding: 10px 15px;
+    }
+    .ant-tabs-nav-wrap {
+      padding-left: 106px;
+    }
+    .ant-tabs-nav-list {
+      .ant-tabs-tab {
+        margin-right: 106px;
+      }
+    }
+    .ant-btn {
+      margin: 0 5px 10px;
+      border-radius: 2px;
+      font-size: 14px;
+      height: 32px;
+      &.active {
+        color: #1890ff;
+        border-color: #1890ff;
+      }
+    }
+  }
+  // 机构列表
+  .org_list {
+    width: 350px;
+    max-height: 76px;
+    overflow: auto;
+    margin: 10px auto 0;
+    @include flex();
+    flex-wrap: wrap;
+  }
+  // 医生详情
+  .doctor {
+    width: 330px;
+    margin: 0px auto 0px;
+    padding-top: 10px;
+    text-align: left;
+    background-color: #fff;
+    .info {
+      width: 306px;
+      margin: 0 auto;
+      font-size: 15px;
+      color: #2C2F32;
+      @include flex(space-between, flex-start);
+    }
+    .wxinfo {
+      font-size: 15px;
+      color: #2C2F32;
+      @include flex(center, flex-start);
+      .avatar {
+        margin-right: 20px;
+      }
+    }
+    .name {
+      font-size: 18px;
+    }
+    .avatar {
+      background: #FFFFFF;
+      border-radius: 5px;
+      width: 70px;
+      height: 70px;
+    }
+    .show_id {
+      width: 185px;
+      height: 34px;
+      text-align: center;
+      line-height: 34px;
+      background: #4C73CF;
+      border-radius: 2px;
+      font-size: 16px;
+      color: #FFFFFF;
+      margin: 10px 0 10px 0;
+    }
+  }
+  .ewm {
+    text-align: center;
+    p {
+      margin-top: 15px;
+      color: #999999;
+      padding-bottom: 10px;
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+  }
+  .service {
+    width: 330px;
+    height: 258px;
+    margin: 10px auto 15px;
+    img {
+      width: 100%;
+    }
+  }
+  .wxewm {
+    @include flex(center, center);
+    .wxewm_left {
+      width: 83px;
+      height: 83px;
+      img {
+        width: 100%;
+      }
+    }
+    .wxewm_right {
+      font-size: 15px;
+      color: #181818;
+      text-align: left;
+      margin-left: 10px;
+    }
+  }
+  .download {
+    margin: 0 auto;
+    display: block;
+    color: #007ADA;
+    background-color: #fff;
+    border: 1px solid #007ADA;
+    border-radius: 2px;
+    width: 130px;
+    height: 42px;
+    font-size: 18px;
+  }
+  .hidden_a {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    overflow: hidden;
+  }
+}
+

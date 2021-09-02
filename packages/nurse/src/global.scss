@@ -1,0 +1,159 @@
+img {
+  display: inline-block;
+  vertical-align: initial;
+}
+svg {
+  vertical-align: initial;
+}
+// button按钮样式
+.common__btn {
+  @extend %common__btn;
+}
+textarea {
+  resize: none;
+}
+.pointer {
+  cursor: pointer;
+}
+
+// 关于表单，高度要设置42的
+#height42 {
+  &.ant-form {
+    .ant-form-item-control-input-content,
+    .ant-input {
+      @extend %common_height
+    }
+    textarea {
+      &.ant-input {
+        line-height: 22px;
+      }
+    }
+    .ant-select-selector {
+      height: 42px;
+
+      .ant-select-selection-search-input {
+        @extend %common_height
+      }
+    }
+
+    .ant-select-selection-item {
+      line-height: 42px;
+    }
+
+    .ant-select-selection-placeholder {
+      font-size: 14px;
+      color: #999999;
+      line-height: 42px;
+    }
+
+    label {
+      height: 42px;
+    }
+    .ant-input-number-input {
+      height: 42px;
+    }
+  }
+}
+.modal {
+  label {
+    @extend %common_height
+  }
+
+  .ant-form-item {
+    margin-bottom: 8px;
+  }
+  .ant-input-number-input{
+    @extend %common_height
+  }
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    height: 42px;
+    input {
+      height: 42px;
+    }
+  }
+  .ant-select-selection-item,.ant-select-selection-placeholder {
+    line-height: 42px!important;
+    font-size: 14px;
+  }
+  .list_item {
+    margin-bottom: 9px;
+  }
+  .info {
+    @include flex();
+    .ant-form-item-control-input-content {
+      font-size: 14px;
+    }
+    .ant-select-selector, .ant-select-selection-item {
+      @extend %common_height
+    }
+  }
+  .history {
+    margin-bottom: 20px;
+    .ant-form-item-control-input-content {
+      @include flex();
+      font-size: 14px;
+      .family-label {
+        flex: 1 0 auto;
+        margin-right: 10px;
+        display: inline-block;
+        text-align: right;
+      }
+    }
+    .ant-select-selector, .ant-select-selection-item {
+      min-height: 42px;
+      line-height: 42px;
+    }
+  }
+  .more-padding {
+    padding: 0 30px;
+  }
+}
+// 确认提示框
+.confirm_ignore {
+  .ant-popover-message {
+    padding: 16px 0 30px;
+    font-size: 20px;
+    color: $import-text-color;
+    >.anticon {
+      line-height: 29px;
+      font-size: 18px;
+      top: 20px;
+    }
+
+    .ant-popover-message-title {
+      padding-left: 25px;
+    }
+  }
+
+  .ant-popover-buttons {
+    >button {
+      width: 140px;
+      height: 42px;
+      line-height: 42px;
+      font-size: 16px;
+      background-color: $theme-color;
+
+      &:first-child {
+        background-color: #fff;
+        color: $theme-color;
+        border-color: $theme-color;
+      }
+    }
+  }
+
+}
+textarea.ant-input {
+  font-size: 14px;
+}
+.mode_hide {
+  display: none!important;
+}
+.mode_block {
+  display: block!important;
+}
+// //react-viewer 图片查看器图片居中
+// .react-viewer-canvas > img {
+//   position: relative;
+//   top: 50%;
+//   transform: translateY(-50%)!important;
+// }

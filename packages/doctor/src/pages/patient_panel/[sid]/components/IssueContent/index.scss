@@ -1,0 +1,99 @@
+.confirm_cont {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  padding: 5px 20px 10px;
+  overflow: auto;
+  .blue {
+    color: #007ADA;
+    cursor: pointer;
+  }
+  >div {
+    border-bottom: 1px solid #d8d8d8;
+    margin-top: 15px;
+    padding-bottom: 20px;
+  }
+  .no_data {
+    height: 100%;
+    color: #000;
+    @include flex(center, center);
+    flex-direction: column;
+    img {
+      width: 223px;
+    }
+  }
+  .remind_doctor_btn {
+    position: absolute;
+    right: 20px;
+    top: 6px;
+    margin-top: 0;
+    border-bottom: none;
+    padding-bottom: 0px;
+  }
+  :global {
+    .confirm_date {
+      width: 116px;
+      height: 20px;
+      margin: 0 auto 5px;
+      font-size: 12px;
+      border-radius: 3px;
+      color: #999;
+      background-color: #f2f2f2;
+      text-align: center;
+      line-height: 20px;
+    }
+  }
+}
+.text {
+  color: #000;
+  height: auto;
+  line-height: 22px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.btn_wrap {
+  margin-top: 20px;
+  button {
+    border-radius: 3px;
+    line-height: 18px;
+    font-size: 14px;
+
+    &:first-child {
+      color: #007ADA;
+      border: 1px solid #007ADA;
+      margin-right: 10px;
+    }
+  }
+}
+.remind {
+  margin-left: 10px;
+  .title {
+    color: #999;
+  }
+  textarea {
+    height: auto;
+    color: #000;
+    font-size: 14px;
+    line-height: 22px;
+    margin-top: 3px;
+  }
+}
+.treatment_plan {
+  .pic_btn {
+    color: #108ee9;
+    cursor: pointer;
+    margin: 0 2px;
+  }
+}
+
+.medicine_diff_title {
+  h3 {
+    line-height: 22px;
+    color: #007ADA;
+    font-size: 16px;
+    margin: 10px 0;
+  }
+}
+

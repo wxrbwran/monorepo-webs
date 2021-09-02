@@ -1,0 +1,59 @@
+.btn_wrap {
+  div {
+    width: 203px;
+    height: 40px;
+    border-radius: 2px;
+    border: 1px solid #48A6FE;
+    margin-top: 38px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #48A6FE;
+    text-align: center;
+    line-height: 40px;
+    margin: 10px auto 38px;
+    cursor: pointer;
+    &.active {
+      background: #48A6FE;
+      color: #Ffffff;
+    }
+  }
+}
+.doctor_list {
+  @include flex(flex-start, center);
+  flex-wrap: wrap;
+  margin-bottom: -30px;
+  .doctor_item {
+    text-align: center;
+    margin: 0 20px 25px 0;
+    width: 163px;
+    height: 239px;
+    border: 1px solid #CECECE;
+    cursor: pointer;
+    &:nth-child(4n) {
+      margin-right: 0;
+    }
+    span {
+      margin: 0 5px;
+      color: #979797;
+    }
+    &:hover {
+      box-shadow: 0px 2px 13px 0px #48A6FE;
+      border: 1px solid #67aae9
+    }
+  }
+  .active {
+    box-shadow: 0px 2px 13px 0px #48A6FE;
+    // box-shadow: 0px 2px 4px 0px #48A6FE;
+    border: 1px solid #67aae9
+  }
+  img {
+    width: 150px;
+    height: 150px;
+    margin: 10px auto 0;
+  }
+  .name {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px auto 5px;
+  }
+}

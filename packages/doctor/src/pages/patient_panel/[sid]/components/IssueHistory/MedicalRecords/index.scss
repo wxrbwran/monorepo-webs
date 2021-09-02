@@ -1,0 +1,32 @@
+.medical_records {
+  @include flex(space-between, flex-start);
+  > div {
+    flex: 1 0 47%;
+    overflow: auto;
+    &:first-child {
+      margin-right: 20px;
+    }
+    .border {
+      border: .5px solid #e5e5e5;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      overflow: auto;
+    }
+    h3 {
+      color: #007ADA;
+      cursor: pointer;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+  }
+}
+.blue {
+  color: #007ADA;
+  cursor: pointer;
+}
+.note_tit {
+  font-size: 16px;
+  margin-top: 10px;
+}

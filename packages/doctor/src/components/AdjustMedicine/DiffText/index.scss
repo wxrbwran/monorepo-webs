@@ -1,0 +1,16 @@
+.diff_text {
+  color: #000;
+    font-size: 14px;
+  h3 {
+    line-height: 22px;
+    color: #007ADA;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  p {
+    line-height: 22px;
+  }
+  li {
+    @include flex(flex-start, flex-start);
+  }
+}

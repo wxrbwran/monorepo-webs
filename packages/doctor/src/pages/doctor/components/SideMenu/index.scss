@@ -1,0 +1,49 @@
+.side_menu {
+    padding-top: 14px;
+    width: 240px;
+    // flex: 0 0 180px;
+    z-index: 2;
+    >ul {
+      :global {
+        width: 240px!important;
+        height: calc(100vh - 58px);
+        .ant-menu-submenu-title, .anticon {
+          font-size: 16px;
+          font-weight: 600;
+        }
+        .ant-menu-item {
+          font-size: 14px;
+          height: 38px!important;
+          line-height: 38px!important;
+          width: 80%;
+          margin-left: 12px;
+          border-radius: 10px;
+          &::after {
+            border: 0;
+          }
+        }
+        .ant-menu-submenu-title {
+          height: 50px!important;
+          line-height: 50px!important;
+        }
+      }
+    }
+  >div {
+    padding-left: 20px;
+    line-height: 42px;
+    font-size: 16px;
+    color: #000;
+    cursor: pointer;
+    &.active {
+      border-right: 6px solid #007ADA;
+      background-color: #cfdfff;
+    }
+  }
+  .structure {
+    height: 38px;
+    line-height: 38px;
+    padding-left: 25px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}

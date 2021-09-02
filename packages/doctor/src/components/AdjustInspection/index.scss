@@ -1,0 +1,83 @@
+.adjust {
+  font-size: 15px;
+  color: #000000;
+  .content {
+    width: 450px;
+    margin: 0 auto;
+  }
+  .advice {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .item {
+    @include flex();
+    margin-bottom: 15px;
+    &:first-child {
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .line {
+      margin: 0 3px;
+    }
+    .item_name {
+      flex: 0 0 170px;
+    }
+    .item_standart {
+      flex: 0 0 201px;
+      text-align: center;
+      // margin-right: 110px;
+    }
+    .item_advice {
+      flex: 1;
+      text-align: center;
+    }
+    :global {
+      .ant-input-number-input {
+        font-size: 14px;
+      }
+      .ant-input-number-input {
+        height: 30px;
+      }
+      .ant-input-number {
+        border-radius: 4px;
+        width: 70px;
+      }
+    }
+  }
+
+}
+.diff {
+  .content {
+    width: 530px;
+    margin: 0 auto 30px;
+    font-size: 14px;
+  }
+  li {
+    @include flex();
+    margin-bottom: 15px;
+    &:first-child {
+      color:#007ADA;
+    }
+    &.red {
+      color: red;
+    }
+    .arrow {
+      font-size: 12px;
+      margin: 0 3px;
+      position: relative;
+      top: -1px;
+    }
+    .item_name {
+      flex: 0 0 170px;
+    }
+    .item_standart {
+      flex: 0 0 30%;
+    }
+    .item_advice {
+      flex: 1;
+    }
+  }
+}
+.note {
+  margin-bottom: 30px;
+}

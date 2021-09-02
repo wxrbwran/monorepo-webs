@@ -1,0 +1,47 @@
+.mp_content {
+  margin-top: 10px;
+  font-size: 14px;
+	.list_index {
+		width: 50px;
+	}
+	.list_name {
+    flex: 1 1 50%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+	}
+	.list_value {
+		flex: 1 1 20%;
+	}
+	.list_time {
+		flex: 1 1 30%;
+	}
+	.list_plan {
+		flex: 1 1 50%;
+	}
+	.plan_item {
+		// p {
+		//   display: inline;
+		// }
+		display: flex;
+	}
+
+	.list_head {
+		display: flex;
+	}
+	.list_outer {
+		li {
+			display: flex;
+			p{
+				margin-bottom: 8px;
+			}
+			.unit {
+				margin-right: 10px;
+			}
+			.time {
+        margin-right: 5px;
+        display: inline-block;
+			}
+		}
+	}
+}

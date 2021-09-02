@@ -1,0 +1,67 @@
+
+.location_wrap {
+  width: 376px;
+  margin-left: 75px;
+  .location_item {
+     @include flex();
+     
+  }
+  :global {
+    .anticon-plus,
+    .anticon-delete {
+      color: #08888f;
+      margin-left: 10px;
+    }
+    .ant-row {
+      flex: 1;
+    }
+    .ant-form-item-explain {
+      text-align: left;
+    }
+  } 
+}
+// 选择支架  尺寸
+.stents {
+  @include flex(flex-start, flex-start);
+  margin-bottom: 16px;
+  .stents_form_item {
+    flex: 1;
+    position: relative;
+    :global {
+      .ant-select {
+        position: absolute;
+        width: 96%;
+        top: 0;
+      }
+    }
+  }
+  .coronary {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+  .size {
+    font-size: 14px;
+    flex: 0 0 100px;
+    text-align: center;
+    height: 42px;
+    line-height: 42px;
+    position: relative;
+  }
+  :global {
+    .anticon-plus,
+    .anticon-delete {
+      color: #08888f;
+      margin-left: 10px;
+    }
+    .ant-form-item-control-input {
+      height: 42px;
+      line-height: 42px;
+    }
+
+    .anticon-plus,
+    .anticon-delete {
+      margin-top: 15px;
+    }
+  }
+}

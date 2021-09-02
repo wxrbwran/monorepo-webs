@@ -1,0 +1,26 @@
+.end_event_modal, .event {
+  font-size: 16px;
+  color: #282828;
+}
+.event {
+  p {
+    margin-bottom: 10px;
+  }
+  .checkbox_wrapper {
+    margin-left: 28px;
+  }
+  :global {
+    .ant-checkbox-group {
+      margin-left: 28px;
+    }
+    .ant-checkbox-wrapper {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.65);
+    }
+  }
+}
+.empty {
+  font-size: 14px;
+  color: #aaa;
+}
