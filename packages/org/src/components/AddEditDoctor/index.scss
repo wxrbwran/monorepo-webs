@@ -1,0 +1,66 @@
+.base {
+  @include flex(row, nowrap, flex-start, flex-start);
+}
+.left {
+  flex: 0 0 80px;
+  margin-right: 20px;
+  @include flex(column, nowrap, flex-start, flex-start);
+  > div {
+    margin-top: 10px;
+  }
+}
+.right {
+  flex: 1 1 auto;
+  min-width: 900px;
+  @include flex(row, wrap, space-between, flex-start);
+  :global(.ant-form-item) {
+    margin-bottom: 20px;
+  }
+}
+
+.exist {
+  width: 100%;
+  @include flex(column, nowrap, flex-start, center);
+  li {
+    margin-top: 20px;
+  }
+}
+.form_list {
+  // @include flex(flex-start, center);
+  // @include flex-lay(row, wrap, space-between, center);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  .name {
+    padding-right: 23px;
+  }
+  :global {
+    .ant-row {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-grow: 1;
+    }
+    .ant-form-item-label {
+      label {
+        width: 100%;
+      }
+    }
+  }
+}
+.form_item {
+  display: flex;
+  width: 100%;
+  // :global {
+  //   .ant-picker {
+  //     width: 200px;
+  //     position: absolute;
+  //     left: 75px;
+  //     top: 0px;
+  //     height: 40px;
+  //   }
+  // }
+}

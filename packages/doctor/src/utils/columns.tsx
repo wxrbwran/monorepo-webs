@@ -67,6 +67,8 @@ const handleCommon = (common: boolean, editData: object, refreshList: () => void
   api.indexLibrary.patchIndexDocumentIndex(params).then(() => {
     message.success('修改成功');
     refreshList();
+  }).catch((err) => {
+    message.error(err?.result ?? '修改失败');
   });
 };
 export const indexCommon = (refreshList: () => void) => (

@@ -1,10 +1,6 @@
 import http from '@/services/http';
 
 export default {
-  // 获取化验单检查单统计数据接口
-  fetchImageCount(data: any): Promise<any> {
-    return http.get('image/count', { data });
-  },
   // 获取化验单检查单统计数据接口new
   fetchImageCountNew(data: any): Promise<any> {
     return http.get('image/count/last', { data });

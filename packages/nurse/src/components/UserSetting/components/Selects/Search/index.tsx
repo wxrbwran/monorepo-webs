@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { getCondition } from '@/utils/utils';
 import { Input } from 'antd';
+import { getCondition } from '@/utils/utils';
 
 interface IProps {
   changeSelect: (val: ISelectItem, index: number) => void;

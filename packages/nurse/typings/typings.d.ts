@@ -1,6 +1,7 @@
 declare module 'slash2';
 declare module 'antd-theme-webpack-plugin';
 declare module 'qrcode.react';
+declare module 'js-base64';
 
 declare module '*.css';
 declare module '*.less';

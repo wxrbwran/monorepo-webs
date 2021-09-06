@@ -5,8 +5,11 @@
 /* eslint-disable */
 
 import React from "react";
+import PropTypes from "prop-types";
 export default class DragM extends React.Component {
-
+  static propTypes = {
+    children: PropTypes.element.isRequired
+  };
   static defaultProps = {
     //默认是移动children dom,覆盖该方法，可以把tranform行为同步给外部
     updateTransform: (transformStr, tx, ty, tdom) => {

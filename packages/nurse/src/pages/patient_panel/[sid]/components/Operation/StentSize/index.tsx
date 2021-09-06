@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {
   Input, InputNumber, Radio, Button, message,
 } from 'antd';
-import DragModal from '@/components/DragModal';
 import { RadioChangeEvent } from 'antd/lib/radio';
+import DragModal from '@/components/DragModal';
 import styles from './index.scss';
 
 const RadioGroup = Radio.Group;

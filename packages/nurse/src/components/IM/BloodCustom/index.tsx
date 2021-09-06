@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useState, useEffect } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 import { defaultAvatar } from '@/utils/consts';
 import { BloodType } from '@/utils/tools';
 import { getRole } from '@/utils/utils';
-import dayjs from 'dayjs';
 import './index.scss';
 
 interface IMsg {

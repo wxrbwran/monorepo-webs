@@ -12,12 +12,6 @@ for (const key in oriEnv) {
   defineEnv[`process.env.${key}`] = oriEnv[key];
 }
 
-// ref: https://umijs.org/config/
-
-// const paths = path.resolve(__dirname, '../').split('/').reverse();
-// console.log(paths);
-// const [pubPath, ...rest] = paths;
-// console.log('****************', pubPath);
 console.log('building ... ', pkg.name, pkg.version);
 
 const targetUrl = {
@@ -37,9 +31,6 @@ const config = {
   antd: {
     compact: true,
   },
-  // dynamicImport: {
-  //   webpackChunkName: true,
-  // },
   title: '心之力',
   locale: {
     default: 'zh-CN',
@@ -119,18 +110,9 @@ const config = {
     // config.plugin('umi-webpack-bundle-analyzer').use(BundleAnalyzerPlugin);
   },
   history: { type: 'hash' },
-  // proxy: {
-  //   '/organization': targetUrl,
-  //   '/disease': targetUrl,
-  //   '/user': targetUrl,
-  //   '/diagnosis': targetUrl,
-  //   '/treatment': targetUrl,
-  //   '/stent': targetUrl,
-  //   '/medical': targetUrl,
-  //   '/address': targetUrl,
-  // },
-  // extraPostCSSPlugins: [require('tailwindcss')],
-  extraBabelPlugins: process.env.NODE_ENV === 'production' ? ['transform-remove-console'] : [],
+  extraPostCSSPlugins: [require('@tailwindcss/postcss7-compat')],
+  extraBabelPlugins:
+    process.env.NODE_ENV === 'production' ? ['transform-remove-console'] : [],
   externals: {
     echarts: 'window.echarts',
     vis: 'vis',

@@ -1,0 +1,17 @@
+/lambda/
+/scripts
+/config
+.history
+/mock
+/src/lib/
+node_modules
+dist/
+test
+build/
+src/types/
+**/*.test.tsx
+**/*.d.ts
+**/*.test.ts
+.eslintrc.js
+
+

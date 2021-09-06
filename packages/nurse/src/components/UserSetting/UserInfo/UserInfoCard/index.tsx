@@ -1,7 +1,7 @@
 import React from 'react';
-import { btnRender } from '@/utils/button';
 import QRCode from 'qrcode.react';
 import { useSelector } from 'umi';
+import { btnRender } from '@/utils/button';
 import { defaultAvatar } from '@/utils/consts';
 import UserBaseInfos from '../../components/UserBaseInfos';
 import UserAvatar from '../../components/UserAvatar';

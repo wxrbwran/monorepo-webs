@@ -1,7 +1,7 @@
 import React from 'react';
-import IM from '@/components/IM';
 import { useSelector } from 'umi';
 import { Spin } from 'antd';
+import IM from '@/components/IM';
 import styles from './index.scss';
 
 const Communicate = () => {

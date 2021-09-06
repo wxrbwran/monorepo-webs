@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Slider } from 'antd';
 import mute from '@/assets/img/im/mute.png';
 import volume from '@/assets/img/im/volume.png';
-import { Slider } from 'antd';
 
 // 调整音量
 function BtnVolume({ netcallStatus, myNetcall }: ImWindowProps) {

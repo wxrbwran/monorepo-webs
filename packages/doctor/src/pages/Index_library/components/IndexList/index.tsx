@@ -35,7 +35,7 @@ const IndexList: FC = () => {
   const [total, setTotal] = useState(0);
   const initDepOptions = {
     documentId,
-    pageSize: 999999999999,
+    pageSize: 9999999,
     sourceSid: window.$storage.getItem('sid'),
   };
   const [depOptions, setOptions] = useState<IParams>(initDepOptions);
@@ -80,6 +80,8 @@ const IndexList: FC = () => {
     api.indexLibrary.deleteIndexDocumentIndex(id).then(() => {
       message.success('删除成功');
       onSuccess();
+    }).catch((err) => {
+      message.error(err?.result ?? '删除失败');
     });
   };
   const operation = {
@@ -87,33 +89,29 @@ const IndexList: FC = () => {
     dataIndex: 'id',
     render: (text: string, record: any) => (
       <div className="operation-btn">
-        {
-          record.source === 'DOCTOR' && (
-            <>
-              <Popconfirm
-                title="确定删除此指标吗?"
-                onConfirm={() => handleDel(text)}
-                okText="是"
-                cancelText="否"
+        {record.source === 'DOCTOR' && (
+          <>
+            <Popconfirm
+              title="确定删除此指标吗?"
+              onConfirm={() => handleDel(text)}
+              okText="是"
+              cancelText="否"
+            >
+              <span>删除</span>
+            </Popconfirm>
+            {!record.used && (
+              <EditIndex
+                onSuccess={onSuccess}
+                initFormVal={record}
+                documentId={documentId}
+                level1Type={documentType}
+                source="libraryEdit"
               >
-                <span>删除</span>
-              </Popconfirm>
-              {
-                !record.used && (
-                  <EditIndex
-                    onSuccess={onSuccess}
-                    initFormVal={record}
-                    imgTypeId={documentId}
-                    level1Type={documentType}
-                    source="libraryEdit"
-                  >
-                    <span>编辑</span>
-                  </EditIndex>
-                )
-              }
-            </>
-          )
-        }
+                <span>编辑</span>
+              </EditIndex>
+            )}
+          </>
+        )}
       </div>
     ),
   };

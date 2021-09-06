@@ -84,7 +84,7 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
           return (
             <div>
               <div style={index === lastInx ? { textAlign: 'center' } : {}}>
-                {`${value} ${unit || ''}`}
+                {`${value ?? ''} ${unit || ''}`}
               </div>
               {
                 minVal && minVal !== 'empty' && maxVal && maxVal !== 'empty' && (

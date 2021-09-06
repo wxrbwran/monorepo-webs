@@ -84,6 +84,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             message.error('请完善检查单后提交！');
           });
       } else {
+        apiParams.documentList = [];
         saveData(apiParams);
       }
     } else {

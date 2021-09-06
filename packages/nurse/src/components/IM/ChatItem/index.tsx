@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef } from 'react';
 import classnames from 'classnames';
+import { useDispatch } from 'umi';
 import { defaultAvatar } from '@/utils/consts';
 import { getRole } from '@/utils/utils';
-import { useDispatch } from 'umi';
 import { Role } from '@/utils/role';
 // eslint-disable-next-line import/no-cycle
 import { IAvatar } from '../ChatList';
@@ -18,7 +18,7 @@ import Video from '../Video';
 
 interface IMsg {
   rawMsg: Store;
-  myInfo: Store;
+  // myInfo: Store;
   avatarArr: IAvatar[];
 }
 interface IFile {

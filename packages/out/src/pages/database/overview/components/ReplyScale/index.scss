@@ -1,0 +1,18 @@
+.reply_wrap {
+  margin: 13px 35px;
+  font-size: 14px;
+  color: #181818;
+  .ant-table {
+    border: 1px solid #EEEEEE;
+  }
+  .count {
+    margin: 25px 0 20px;
+    span {
+      margin-right: 50px;
+    }
+  }
+  .number {
+    color: #3296FA;
+    cursor: pointer;
+  }
+}

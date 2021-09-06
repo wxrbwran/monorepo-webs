@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import config from '@/config';
 import {
   Form, Button, Input, Select, Radio, DatePicker, message,
 } from 'antd';
-import { titleList, banksName } from '@/utils/tools';
 import { useSelector, useDispatch } from 'umi';
-import UploadAvatar from '@/components/UploadAvatar';
 import moment from 'moment';
+import config from '@/config';
+import { titleList, banksName } from '@/utils/tools';
+import UploadAvatar from '@/components/UploadAvatar';
 import EditTextArea from '../EditTextArea';
 import CertificateEdit from '../CertificateEdit';
 import formatCert from '../formatCert';

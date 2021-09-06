@@ -1,9 +1,9 @@
 import React from 'react';
 import { Badge } from 'antd';
-import { sexList } from '@/utils/tools';
 import { PictureOutlined } from '@ant-design/icons';
 import { history, getDvaApp } from 'umi';
 import dayjs from 'dayjs';
+import { sexList } from '@/utils/tools';
 
 export interface IRecord {
   sid: string;

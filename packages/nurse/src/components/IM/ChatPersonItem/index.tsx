@@ -1,7 +1,7 @@
-import { defaultAvatar } from '@/utils/consts';
 import React, { FC } from 'react';
-import { getRole } from '@/utils/utils';
 import { useSelector, useDispatch } from 'umi';
+import { defaultAvatar } from '@/utils/consts';
+import { getRole } from '@/utils/utils';
 import styles from './index.scss';
 
 interface IProps {

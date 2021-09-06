@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import * as api from '@/services/api';
 import dayjs from 'dayjs';
 import {
   Popover, message, Popconfirm,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useParams } from 'umi';
+import * as api from '@/services/api';
 import AddDiagnose, { IdiagnosisItem } from '../DiagnoseAdd';
 import styles from '../index.scss';
 

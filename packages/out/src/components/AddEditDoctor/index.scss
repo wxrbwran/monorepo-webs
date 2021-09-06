@@ -1,0 +1,27 @@
+.base {
+  @include flex(row, nowrap, flex-start, flex-start);
+}
+.left {
+  flex: 0 0 80px;
+  margin-right: 20px;
+  @include flex(column, nowrap, flex-start, flex-start);
+  > div {
+    margin-top: 10px;
+  }
+}
+.right {
+  flex: 1 1 auto;
+  min-width: 900px;
+  @include flex(row, wrap, space-between, flex-start);
+  :global(.ant-form-item) {
+    margin-bottom: 20px;
+  }
+}
+
+.exist {
+  width: 100%;
+  @include flex(column, nowrap, flex-start, center);
+  li {
+    margin-top: 20px;
+  }
+}

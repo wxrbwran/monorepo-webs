@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'umi';
-import { btnRender } from '@/utils/button';
 import {
   Form, Checkbox, Radio, Select, InputNumber, Input, message,
 } from 'antd';
-import { relatedOptions, familyList } from '@/utils/tools';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import * as api from '@/services/api';
 import { SelectValue } from 'antd/lib/select';
+import { btnRender } from '@/utils/button';
+import { relatedOptions, familyList } from '@/utils/tools';
+import * as api from '@/services/api';
 
 const RadioGroup = Radio.Group;
 const { Option } = Select;

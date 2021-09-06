@@ -1,0 +1,12 @@
+.staffs {
+  @include flex(row, nowrap, flex-start, center);
+}
+.item {
+  display: inline-block;
+  margin-right: 60px;
+}
+.name,
+.count {
+  color: $main;
+  font-size: 14px;
+}

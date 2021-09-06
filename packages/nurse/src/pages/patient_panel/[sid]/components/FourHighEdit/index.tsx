@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'umi';
-import DragModal from '@/components/DragModal';
-import { btnRender } from '@/utils/button';
 import {
   Form, Checkbox, Select, message,
 } from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import DragModal from '@/components/DragModal';
+import { btnRender } from '@/utils/button';
 import * as api from '@/services/api';
 import { hyperList } from '@/utils/tools';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import DateInput from '../DateInput';
 
 const { Option } = Select;

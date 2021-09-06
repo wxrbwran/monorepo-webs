@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import XzlTable from '@/components/XzlTable';
 import { useParams, history } from 'umi';
 import { Button } from 'antd';
+import XzlTable from '@/components/XzlTable';
 import GoBack from '@/components/GoBack';
 
 interface IUrlParams {

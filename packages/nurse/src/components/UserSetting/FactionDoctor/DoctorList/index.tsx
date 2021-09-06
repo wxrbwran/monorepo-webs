@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import DragModal from '@/components/DragModal';
-import config from '@/config';
 import {
   Table, Button, message,
 } from 'antd';
+import DragModal from '@/components/DragModal';
+import config from '@/config';
 import {
   clAvatar, clName, clTitle, clDepartment,
 } from '@/utils/columns';

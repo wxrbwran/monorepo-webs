@@ -6,7 +6,7 @@ import { Role } from '@/utils/role';
 import {
   Age, Sex, Organization, Address, PatientRole, Search,
 } from '@/components/Selects';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
 import { handleSelection, initSelectForm } from '@/utils/conditions';
 import {
   name,

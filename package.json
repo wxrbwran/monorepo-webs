@@ -6,5 +6,8 @@
     "access": "public"
   },
   "keywords": [],
-  "author": ""
+  "author": "",
+  "dependencies": {
+    "xzl-web-shared": "workspace:^1.0.0"
+  }
 }

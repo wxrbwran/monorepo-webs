@@ -1,16 +1,16 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'umi';
-import DragModal from '@/components/DragModal';
-import { btnRender } from '@/utils/button';
 import {
   Form, Checkbox, Radio, message, Input,
 } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { radioList, pRadioList, diaList } from '@/utils/tools';
-import * as api from '@/services/api';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { SelectValue } from 'antd/lib/select';
+import DragModal from '@/components/DragModal';
+import { btnRender } from '@/utils/button';
+import { radioList, pRadioList, diaList } from '@/utils/tools';
+import * as api from '@/services/api';
 import DateInput from '../DateInput';
 import ExtraDiagSelect from '../ExtraDiagSelect';
 import styles from './index.scss';

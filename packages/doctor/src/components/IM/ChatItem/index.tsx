@@ -21,7 +21,7 @@ import Video from '../Video';
 
 interface IMsg {
   rawMsg: Store;
-  myInfo: Store;
+  // myInfo: Store;
   avatarArr: IAvatar[];
 }
 interface IFile {

@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useEffect } from 'react';
+import dayjs from 'dayjs';
 import { defaultAvatar } from '@/utils/consts';
 import { getRole } from '@/utils/utils';
 // import moment from 'moment';
-import dayjs from 'dayjs';
 import './index.scss';
 
 interface IMsg {

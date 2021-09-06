@@ -1,0 +1,43 @@
+$active-color: #cfdfff;
+
+.org_menu {
+  background-color: #fff;
+  // height: 100%;
+  font-size: 16px;
+  color: #000;
+  overflow: auto;
+  :global(.pt-90) {
+    padding-top: 90px;
+  }
+  :global {
+    .ant-menu-item {
+      height: auto;
+    }
+  }
+}
+.item {
+  height: 36px;
+  padding: 7px 20px;
+  color: #000;
+  // color: #666;
+}
+.active {
+  background-color: $active-color;
+}
+.name {
+  cursor: pointer;
+  max-width: 120px;
+  white-space: break-spaces;
+  line-height: 25px;
+  padding: 5px 0;
+  // @include line-clamp(1);
+  &:hover {
+    // font-size: 18px;
+    font-weight: bold;
+  }
+}
+.icon_btn {
+  > span {
+    margin-left: 1px !important;
+  }
+}

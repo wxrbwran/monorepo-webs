@@ -22,9 +22,9 @@
       "pre-commit": "pnpm lint"
     }
   },
-    "dependencies": {
+  "dependencies": {
     "antd": "^4.16.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.3",
     "classnames": "^2.2.6",
     "css-loader": "^5.2.6",
     "dayjs": "^1.10.5",
@@ -45,10 +45,10 @@
     "fuzhi": "^1.0.0",
     "husky": "^4.2.5",
     "less-loader": "^9.0.0",
-    "sass": "1.38.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
+    "sass": "1.38.2",
     "ts-loader": "^8.0.2",
     "typescript": "4.2.4",
     "webpack-combine-loaders": "^2.0.4"

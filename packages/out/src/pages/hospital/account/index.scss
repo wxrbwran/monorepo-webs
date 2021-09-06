@@ -1,0 +1,19 @@
+.account {
+  padding: 0!important;
+  .ant-descriptions-row > th,
+  .ant-descriptions-row > td {
+    padding-bottom: 6px;
+  }
+  .mr {
+    border-right: 18px solid #f2f0f5;
+  }
+  .introduce {
+    border-top: 18px solid #f2f0f5;
+  }
+  :global {
+    .shadow {
+      box-shadow: 0px 1px 25px rgb(53 136 253)!important;
+      cursor: pointer;
+    }
+  }
+}

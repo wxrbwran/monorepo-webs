@@ -1,5 +1,6 @@
 import http from '@/services/http';
 // import qs from 'qs';
+// import { Base64 } from 'js-base64';
 
 export default {
   // 查询查询最后一次用药达标

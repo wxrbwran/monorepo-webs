@@ -1,0 +1,25 @@
+.setting {
+  border: 1px solid #fff;
+  border-radius: 5px;
+  margin-left: 12px;
+  font-size: 12px;
+  :global {
+    .ant-avatar {
+      margin-right: 3px;
+    }
+    .anticon-down {
+      margin: 0 3px;
+    }
+  }
+}
+.item_btn {
+  text-align: center;
+  display: flex;
+  font-size: 14px;
+  margin: 6px 0;
+  padding: 0 10px;
+  img {
+    width: 16px;
+    margin-right: 8px;
+  }
+}

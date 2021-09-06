@@ -1,6 +1,6 @@
 import React from 'react';
-import back from '@/assets/img/back.svg';
 import { history } from 'umi';
+import back from '@/assets/img/back.svg';
 import styles from './index.scss';
 
 export default () => {

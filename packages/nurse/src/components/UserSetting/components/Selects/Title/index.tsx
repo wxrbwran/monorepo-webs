@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Select } from 'antd';
 import { titleList } from '@/utils/tools';
 import { getCondition } from '@/utils/utils';
-import { Select } from 'antd';
 
 const { Option } = Select;
 interface IProps {

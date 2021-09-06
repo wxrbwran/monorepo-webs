@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
-// import { ModalProps } from 'antd/lib/modal';
+import { ModalProps } from 'antd/lib/modal';
 import BuildTitle from './BuildTitle';
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
   onCancel: () => void;
 }
 
-function DragModal(props: IProps) {
+function DragModal(props: IProps & ModalProps) {
   const { title, extra, children } = props;
   const titleNode = (
     <BuildTitle

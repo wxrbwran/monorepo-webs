@@ -22,7 +22,10 @@ const SideMenu: FC = () => {
   const [imgType, setImgType] = useState<IImgType>({});
   const [keyword, setKeyword] = useState('');
   const fetchImageType = () => {
-    const params: {name?: string;} = {};
+    const params: {name?: string;sourceSid: string;source: string} = {
+      sourceSid: window.$storage.getItem('sid'),
+      source: 'DOCTOR',
+    };
     if (keyword) params.name = keyword;
     api.indexLibrary.fetchIndexDocument(params).then((res: {list : IIndexItem[]}) => {
       if (res.list.length > 0) {

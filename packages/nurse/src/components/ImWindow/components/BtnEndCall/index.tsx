@@ -1,6 +1,6 @@
 import React from 'react';
-import cancel from '@/assets/img/im/cancel.png';
 import { useSelector } from 'umi';
+import cancel from '@/assets/img/im/cancel.png';
 
 // 操作按钮  来电(拒绝/接听) 拨打(取消)  通话中(音量/挂断/关闭麦克风)
 // 此页面按钮类型  拒绝、取消、挂断

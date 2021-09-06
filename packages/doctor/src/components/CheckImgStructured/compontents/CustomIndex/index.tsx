@@ -7,6 +7,7 @@ import {
 import {
   IApiDocumentItem, IIndexItem, ISearchDocumentItem,
 } from 'typings/imgStructured';
+import { isEmpty } from 'lodash';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
@@ -41,11 +42,12 @@ interface IProps {
     commonItems: IIndexItem[],
     noCommonItems:IIndexItem[]
   } | null;
+  selectIndex?: any;
 }
 
 const CustomIndex: FC<IProps> = (props) => {
   const {
-    handleCallbackFns, formKey, initList, level1Type, firstIndex, apiParams,
+    handleCallbackFns, formKey, initList, level1Type, firstIndex, apiParams, selectIndex,
   } = props;
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue, getFieldsValue } = form;
@@ -75,26 +77,32 @@ const CustomIndex: FC<IProps> = (props) => {
     };
   };
   useEffect(() => {
-    if (initList) {
-      setApiData(formatDataAddIndex(initList, addIndexNum));
-    } else {
-      const params = {
-        documentId: apiParams.documentId,
-        sampleFroms: [apiParams.sampleFrom],
-      };
-      api.indexLibrary.fetchIndexDocumentIndex(params).then(
-        ({ list }: {list: IIndexItemCustom[]}) => {
-          const commonItems = list.filter((item) => item.common);
-          const noCommonItems = list.filter((item) => !item.common);
-          // 如果有指定首行展示哪个指标，这里移动到第一个
-          const data: IApiData = firstIndex
-            ? formatFirshIndex(commonItems, noCommonItems) : {
-              commonItems,
-              noCommonItems,
-            };
-          setApiData({ ...formatDataAddIndex(data, addIndexNum) });
-        },
-      );
+    // 首次渲染
+    if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
+      if (initList) {
+        console.log('=====+1,initList有数据时');
+        setApiData(formatDataAddIndex(initList, addIndexNum));
+      } else {
+        const params = {
+          documentId: apiParams.documentId,
+          sampleFroms: [apiParams.sampleFrom],
+          sourceSid: window.$storage.getItem('sid'),
+        };
+        api.indexLibrary.fetchIndexDocumentIndex(params).then(
+          ({ list }: {list: IIndexItemCustom[]}) => {
+            const commonItems = list.filter((item) => item.common);
+            const noCommonItems = list.filter((item) => !item.common);
+            // 如果有指定首行展示哪个指标，这里移动到第一个
+            const data: IApiData = firstIndex
+              ? formatFirshIndex(commonItems, noCommonItems) : {
+                commonItems,
+                noCommonItems,
+              };
+            console.log('=====+2,initList没数据，请求接口时');
+            setApiData({ ...formatDataAddIndex(data, addIndexNum) });
+          },
+        );
+      }
     }
   }, [initList]);
 
@@ -105,6 +113,7 @@ const CustomIndex: FC<IProps> = (props) => {
       const curFormData = getFieldsValue(true);
       const commonList = apiData.commonItems;
       const noCommonList = apiData.noCommonItems;
+      console.log('=====+3,firstIndex变化时');
       setApiData({
         ...formatFirshIndex(commonList, noCommonList),
       });
@@ -193,6 +202,7 @@ const CustomIndex: FC<IProps> = (props) => {
     };
     const newAddInx = addIndexNum + 1;
     setaddIndexNum((pre) => pre + 1);
+    console.log('=====+4,当前页面添加了新的指标时');
     setApiData({ ...formatDataAddIndex(newApiData, newAddInx) });
     setTimeout(() => {
       // 这里重新设置回去
@@ -201,7 +211,16 @@ const CustomIndex: FC<IProps> = (props) => {
       });
     }, 300);
   };
-
+  useEffect(() => {
+    // 点击搜索的， 如果当前指标列表中不存在此指标数据，则添加进来，否则这里不做处理
+    if (selectIndex) {
+      const isHasIndex = [...apiData.commonItems, ...apiData.noCommonItems]
+        .filter((item) => item.id === selectIndex.id || item.indexId === selectIndex.indexId);
+      if (isHasIndex.length === 0) {
+        addIndexSuccess(selectIndex);
+      }
+    }
+  }, [selectIndex]);
   const renderItem = useMemo(() => (subName?: string) => {
     const param: {apiData: any, subName?: string} = { apiData };
     if (subName) { param.subName = subName; }

@@ -10,7 +10,7 @@ const { Option } = Select;
 interface IProps {
   sampleFroms: string[]; // 勾选的样本来源、检查部位
   handleSelectTypeIndex: (params: ISearchDocumentItem) => void; // 选择了图片大分类或者 图片大分类+指标
-  imageId: string;
+  // imageId: string;
   documentType: string; // HYD JCD
 }
 

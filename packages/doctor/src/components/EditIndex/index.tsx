@@ -43,14 +43,11 @@ const EditIndex: FC<IProps> = (props) => {
   const handleShowModal = () => {
     setshowModal(true);
   };
-  const handleRequest = (params: any, request: any, documentName?: string) => {
+  const handleRequest = (params: any, request: any) => {
     request(params).then((res) => {
       message.success('保存成功');
-      if (['imgAddIndex', 'imgAddTypeIndex'].includes(source)) { // 编辑时没有此参数
+      if (['imgAddIndex'].includes(source)) { // 编辑时没有此参数
         const returnData = res;
-        if (source === 'imgAddTypeIndex' && documentName) {
-          returnData.documentName = documentName;
-        }
         onSuccess(returnData); // 指标库不需要params,结构化需要Params回显到指标列表
       } else {
         onSuccess();
@@ -61,7 +58,17 @@ const EditIndex: FC<IProps> = (props) => {
       message.error(err.result || '操作失败');
     });
   };
-
+  const handleRequestTypeAndIndex = (params: any) => {
+    api.indexLibrary.putIndexDocumentAndIndex(params).then((res) => {
+      console.log(res);
+      message.success('添加成功');
+      setshowModal(false);
+      onSuccess({ ...res, documentName: params.documentName });
+    }).catch((err) => {
+      console.log(932932, err);
+      message.error(err.result || '操作失败');
+    });
+  };
   const handleSubmit = async (values: IData) => {
     // documentName
     const formatVals: IData = { ...values };
@@ -87,6 +94,7 @@ const EditIndex: FC<IProps> = (props) => {
       message.error('存在相同单位');
     } else if (initFormVal) {
       params.id = initFormVal.id; // 编辑   id传指标的id
+      params.documentId = documentId;
       handleRequest(params, api.indexLibrary.patchIndexDocumentIndex);
     } else {
       // 添加
@@ -104,22 +112,12 @@ const EditIndex: FC<IProps> = (props) => {
         params.documentId = documentId;
       }
       if (source === 'imgAddTypeIndex') {
-        // 添加单据名称+指标信息时，需要先调用添加单据接口，把单据id存起来，再调用添加指标接口使用
-        const addDocumentparams = {
-          name: formatVals.documentName || '检查报告单9',
-          type: level1Type,
-          source: 'DOCTOR',
-          sourceSid: window.$storage.getItem('sid'),
-          wcId: window.$storage.getItem('wcId'),
-        };
-        try {
-          const newAddDocumentData = await api.indexLibrary.putIndexDocument(addDocumentparams);
-          console.log('newAddDocumentData', newAddDocumentData);
-          params.documentId = newAddDocumentData.id;
-          handleRequest(params, api.indexLibrary.putIndexDocumentIndex, addDocumentparams.name);
-        } catch (err) {
-          message.error(err?.result);
+        params.type = level1Type;
+        if (!params.documentName) {
+          params.documentName = '检查报告单';
         }
+        handleRequestTypeAndIndex(params);
+        console.log('params92892', params);
       } else {
         handleRequest(params, api.indexLibrary.putIndexDocumentIndex);
       }

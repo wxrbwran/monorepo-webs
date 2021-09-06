@@ -4,10 +4,10 @@
  */
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
+import { history } from 'umi';
 import { setAuthorizationToken } from '@/services/http';
 // import * as api from '@/services/api';
 import { Role } from '@/utils/role';
-import { history } from 'umi';
 import config from '@/config';
 
 export interface AuthModelType {

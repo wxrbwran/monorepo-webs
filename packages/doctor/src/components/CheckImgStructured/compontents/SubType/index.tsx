@@ -15,6 +15,7 @@ const SubType: FC<IProps> = (props) => {
   useEffect(() => {
     const params = {
       type: leve1Type,
+      sourceSid: window.$storage.getItem('sid'),
     };
     api.indexLibrary.fetchIndexSampleFrom(params).then((res) => {
       setsubTypeList(res.list);

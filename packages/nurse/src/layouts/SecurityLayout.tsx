@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import { useSelector, useDispatch, useStore } from 'umi';
 import NavBar from '@/components/NavBar';
 import ImWindow from '@/components/ImWindow';
 import CommonTab from '@/components/CommonTab';
 import '@/im_staffs/actions/rtcSupport';
-import { useSelector, useDispatch, useStore } from 'umi';
 import styles from './index.scss';
 
 interface IProps {

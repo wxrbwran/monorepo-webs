@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Popover } from 'antd';
-import { tumourTreatmentTitle } from '@/utils/tools';
 import dayjs from 'dayjs';
+import { tumourTreatmentTitle } from '@/utils/tools';
 import * as api from '@/services/api';
 import TumourEdit from '../TumourEdit';
 import styles from './index.scss';
