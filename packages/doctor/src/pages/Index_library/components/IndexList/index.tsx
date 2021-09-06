@@ -4,7 +4,7 @@ import {
   Form, Button, Popconfirm, message,
 } from 'antd';
 import { useLocation, Location } from 'umi';
-import { Common, Source, Search } from '@/components/Selects';
+import { Common, Source, Search } from 'xzl-web-shared/src/components/Selects';
 import XzlTable from '@/components/XzlTable';
 import {
   indexName, indexUnits, indexAbbr, indexCommon, indexSource, columnCreator,

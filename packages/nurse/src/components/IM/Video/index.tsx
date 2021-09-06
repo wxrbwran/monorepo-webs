@@ -1,6 +1,6 @@
 // 语音视频通话记录显示通话操作详情或时长
 import React, { FC } from 'react';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import phoneGray from '@/assets/img/im/phone_gray.svg';
 import phoneWhite from '@/assets/img/im/phone_white.svg';
 import videoGray from '@/assets/img/im/video_gray.svg';

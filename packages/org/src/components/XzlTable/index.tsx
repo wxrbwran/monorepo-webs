@@ -1,5 +1,5 @@
 import React, { useState, FC, useEffect, ReactText } from 'react';
-import { pageSize } from '@/utils/consts';
+import { pageSize } from 'xzl-web-shared/src/utils/consts';
 import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
 

@@ -1,6 +1,6 @@
 export const defaultAvatar = 'https://staff-avatars-prod.oss-cn-beijing.aliyuncs.com/default-avatar.jpg';
 /* eslint-disable global-require */
-export const defaultPatientAvatar = require('@/assets/img/patientAvatar.jpg');
+export { default as defaultPatientAvatar } from '@/assets/img/patientAvatar.jpg';
 
 export const imConfig = {
   // 本地消息显示数量，会影响性能

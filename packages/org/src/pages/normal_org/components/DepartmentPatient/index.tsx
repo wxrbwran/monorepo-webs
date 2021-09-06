@@ -5,8 +5,8 @@ import { departmentPatientColumns } from '@/utils/columns';
 import { Role } from '@/utils/role';
 import { handleSelection } from '@/utils/conditions';
 import XzlTable from '@/components/XzlTable';
-import PatientLevel from '@/components/Selects/PatientLevel';
-import Search from '@/components/Selects/Search';
+import PatientLevel xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/PatientLevel';
+import Search xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Search';
 // import AddPatient from '../AddPatient';
 import styles from '../DepartmentDoctor/index.scss';
 

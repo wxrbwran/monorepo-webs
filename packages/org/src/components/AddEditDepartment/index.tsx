@@ -3,7 +3,7 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import StopService from '@/components/StopService';
 import { Form, Radio, Input, message } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-import { labelCol, departmentType } from '@/utils/consts';
+import { labelCol, departmentType } from 'xzl-web-shared/src/utils/consts';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;

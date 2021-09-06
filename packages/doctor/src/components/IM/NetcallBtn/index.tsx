@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'umi';
 import { IState } from 'typings/model';
 import video from '@/assets/img/im/bar_video.png';
 import phone from '@/assets/img/im/bar_tel.png';
-import { defaultPatientAvatar } from '@/utils/consts';
+import { defaultPatientAvatar } from 'xzl-web-shared/src/utils/consts';
 import { Role } from '@/utils/role';
 
 function NetcallBtn() {

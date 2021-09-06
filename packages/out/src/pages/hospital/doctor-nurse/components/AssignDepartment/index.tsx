@@ -3,7 +3,7 @@ import React from 'react';
 import { message, Form } from 'antd';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import FormCheckGroup from '@/components/FormCheckGroup';
-import { formItemLayout } from '@/utils/consts';
+import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
 
 // import { useDispatch } from 'umi';
 // import styles from './index.scss';

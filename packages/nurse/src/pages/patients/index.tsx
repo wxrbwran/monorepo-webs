@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'antd';
 import { useSelector } from 'umi';
-import { Organization } from '@/components/Selects';
+import { Organization } from 'xzl-web-shared/src/components/Selects';
 import XzlTable from '@/components/XzlTable';
 import {
   name, tel, sex, org, dep, checked, imgCount, createTime,

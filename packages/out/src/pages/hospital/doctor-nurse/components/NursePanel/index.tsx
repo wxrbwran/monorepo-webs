@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import { Card, message, Form, Button, Row, Col } from 'antd';
-import { Search } from '@/components/Selects';
+import { Search } from 'xzl-web-shared/src/components/Selects';
 import type { XzlTableCallBackProps } from '@/components/XzlTable';
 import XzlTable from '@/components/XzlTable';
 // import MoveOutHospital from '@/components/MoveOutHospital';

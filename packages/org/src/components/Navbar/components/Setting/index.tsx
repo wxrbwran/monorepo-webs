@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Menu, Dropdown, Avatar, Button } from 'antd';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { DownOutlined, UserOutlined, LogoutOutlined, LockOutlined } from '@ant-design/icons';
 // import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { history, useDispatch } from 'umi';

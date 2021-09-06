@@ -2,8 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import XzlTable from '@/components/XzlTable';
-import Title from '@/components/Selects/Title';
-import Search from '@/components/Selects/Search';
+import Title xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Title';
+import Search xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Search';
 import { Role } from '@/utils/role';
 import { handleSelection } from '@/utils/conditions';
 

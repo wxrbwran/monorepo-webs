@@ -17,5 +17,5 @@
     "allowSyntheticDefaultImports": true
   },
   // "include": ["src"],
-  "exclude": ["src/**/*.test.tsx", "src/**/*.stories.tsx",  "./dist"]
+  "exclude": ["src/**/*.test.tsx", "src/**/*.stories.tsx",  "./dist", "node_modules"]
 }

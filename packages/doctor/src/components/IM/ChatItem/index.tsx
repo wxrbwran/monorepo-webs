@@ -4,7 +4,7 @@ import React, {
 import { Popover } from 'antd';
 import classnames from 'classnames';
 import { useDispatch } from 'umi';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { getRole } from '@/utils/utils';
 import { Role } from '@/utils/role';
 import * as api from '@/services/api';

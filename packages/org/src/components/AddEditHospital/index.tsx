@@ -3,7 +3,7 @@ import { Radio, Input, Form, message } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 // import StopService from '@/components/StopService';
 import AddressForm from '@/components/AddressForm';
-import { labelCol, orgType, orgGrade } from '@/utils/consts';
+import { labelCol, orgType, orgGrade } from 'xzl-web-shared/src/utils/consts';
 import { Role } from '@/utils/role';
 import { getCondition } from '@/utils/tools';
 import BaseDepartments from './components/BaseDepartments';

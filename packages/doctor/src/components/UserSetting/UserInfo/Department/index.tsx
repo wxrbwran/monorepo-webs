@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { debounce } from 'lodash';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { departmentType } from '@/utils/consts';
+import { departmentType } from 'xzl-web-shared/src/utils/consts';
 
 interface Iprops {
   setFieldsValue: (params: any) => void;

@@ -2,7 +2,7 @@ import type { FC} from 'react';
 import React, { useState } from 'react';
 import { Form, message, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Search } from '@/components/Selects';
+import { Search } from 'xzl-web-shared/src/components/Selects';
 import XzlTable from '@/components/XzlTable';
 import { orgListColumns } from '@/utils/columns';
 import AddOrg from '../components/addOrg';

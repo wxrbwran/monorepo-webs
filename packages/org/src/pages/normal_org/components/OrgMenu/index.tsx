@@ -5,7 +5,7 @@ import { PlusOutlined, /* DeleteOutlined, */ EditOutlined } from '@ant-design/ic
 import AddEditDepartment from '@/components/AddEditDepartment';
 // import DeleteDepOrg from '@/components/DeleteDepOrg';
 import AddEditHospital from '@/components/AddEditHospital';
-// import { addtionalMenuList } from '@/utils/consts';
+// import { addtionalMenuList } from 'xzl-web-shared/src/utils/consts';
 
 import styles from './index.scss';
 

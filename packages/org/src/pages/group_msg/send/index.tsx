@@ -3,7 +3,7 @@ import { Row, Col, Button, Form } from 'antd';
 // import { Link } from 'umi';
 // import { useRequest } from 'ahooks';
 import { name, sex, age, province, upperDoctor, lowerDoctor } from '@/utils/columns';
-import { Province, Sex, Age, Search } from '@/components/Selects';
+import { Province, Sex, Age, Search } from 'xzl-web-shared/src/components/Selects';
 
 // import SelectGroup from '@/components/SelectGroup';
 import XzlTable from '@/components/XzlTable';

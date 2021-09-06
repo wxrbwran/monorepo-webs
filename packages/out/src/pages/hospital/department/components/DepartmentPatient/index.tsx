@@ -8,7 +8,7 @@ import { Role } from '@/utils/role';
 import { handleSelection } from '@/utils/conditions';
 import type { XzlTableCallBackProps } from '@/components/XzlTable';
 import XzlTable from '@/components/XzlTable';
-import Search from '@/components/Selects/Search';
+import Search xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Search';
 import styles from '../DepartmentDoctor/index.scss';
 
 interface ILocation {

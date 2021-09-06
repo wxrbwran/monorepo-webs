@@ -4,7 +4,7 @@ import { useSelector } from 'umi';
 import { debounce } from 'lodash';
 import hand from '@/assets/img/change.svg';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { btnRender } from '@/utils/button';
 import * as api from '@/services/api';
 import { Role } from '@/utils/role';

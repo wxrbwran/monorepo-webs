@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, message } from 'antd';
 import XzlTable from '@/components/XzlTable';
 import type { XzlTableCallBackProps } from '@/components/XzlTable';
-import { Search } from '@/components/Selects';
+import { Search } from 'xzl-web-shared/src/components/Selects';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import AddNurse from '@/components/AddNurse';
 import ModalForm from '@/components/DragModal/DragModalForm';

@@ -4,7 +4,7 @@ import UploadImageWithCrop from '@/components/UploadImageWithCrop';
 import { Form, Input, Button, Avatar, Radio, Select, DatePicker, message } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import moment from 'moment';
-import { titleList, doctorRelated, defaultAvatar } from '@/utils/consts';
+import { titleList, doctorRelated, defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { Role } from '@/utils/role';
 import { formatCertificates2Server, formatCert2Local } from '@/utils/cert';
 import { banksName } from '@/utils/tools';

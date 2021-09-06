@@ -4,7 +4,7 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import StopService from '@/components/StopService';
 import { Form, Input, message, Radio } from 'antd';
 import { useDispatch } from 'umi';
-import { labelCol, departmentType } from '@/utils/consts';
+import { labelCol, departmentType } from 'xzl-web-shared/src/utils/consts';
 import { debounce } from 'lodash';
 
 const FormItem = Form.Item;

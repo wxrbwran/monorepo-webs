@@ -11,10 +11,10 @@ import {
   titleList,
   sexList,
   basicInfoTab,
-} from '@/utils/consts';
+} from 'xzl-web-shared/src/utils/consts';
 import { Role } from '@/utils/role';
 import { UserStatus } from '@/utils/enums';
-import { formItemLayout } from '@/utils/consts';
+import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
 import certified from './img/certified.svg';
 import notCertified from './img/not_certified.svg';
 import styles from './index.scss';

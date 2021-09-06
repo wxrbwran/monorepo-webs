@@ -3,7 +3,7 @@ import { LogoutOutlined, LockOutlined } from '@ant-design/icons';
 // import * as api from '@/services/api';
 import { Avatar, Menu, Button } from 'antd';
 import { useDispatch, useSelector } from 'umi';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import config from '@/config';
 import ChangePWD from '@/components/ChangePwd';
 // import { stringify } from 'querystring';

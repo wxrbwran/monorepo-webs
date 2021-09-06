@@ -6,7 +6,7 @@ import { useLocation } from 'umi';
 import type { XzlTableCallBackProps } from '@/components/XzlTable';
 import XzlTable from '@/components/XzlTable';
 // import MoveOutHospital from '@/components/MoveOutHospital';
-import Search from '@/components/Selects/Search';
+import Search xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Search';
 import { Role } from '@/utils/role';
 import { handleSelection } from '@/utils/conditions';
 import ModalForm from '@/components/DragModal/DragModalForm';

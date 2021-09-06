@@ -2,7 +2,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { BloodType } from '@/utils/tools';
 import { getRole } from '@/utils/utils';
 import './index.scss';

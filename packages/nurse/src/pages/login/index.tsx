@@ -22,13 +22,6 @@ function Login() {
         payload: params,
       });
     }
-    // api.auth.token(params).then((res) => {
-    //   setAuthorizationToken(res.data.accessToken);
-    //   window.$storage.setItem('access_token', res.data.accessToken);
-    //   window.$storage.setItem('wcId', res.data.wcl[0].wcId);
-    //   window.$storage.setItem('sid', res.data.wcl[0].roles[0].subject.id);
-    //   history.push('patients/list/doctor');
-    // });
   };
   const onFinishFailed = () => {
     message.error('请输入正常的用户名和密码');

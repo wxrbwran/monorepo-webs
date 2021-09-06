@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useSelector, useDispatch } from 'umi';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { getRole } from '@/utils/utils';
 import styles from './index.scss';
 

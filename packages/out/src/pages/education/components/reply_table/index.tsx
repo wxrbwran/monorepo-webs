@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import QuestionDetail from '../question_detail';
 import * as api from '@/services/api';
-import { pageSize } from '@/utils/consts';
+import { pageSize } from 'xzl-web-shared/src/utils/consts';
 import dayjs from 'dayjs';
 import styles from './index.scss';
 

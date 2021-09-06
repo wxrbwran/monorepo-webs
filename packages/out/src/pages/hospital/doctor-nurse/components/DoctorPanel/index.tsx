@@ -1,7 +1,7 @@
 import type { FC} from 'react';
 import React, { useState, useEffect } from 'react';
 import { Card, Alert, Form, Button, Row, Col, message } from 'antd';
-import { Search, AccountStatus } from '@/components/Selects';
+import { Search, AccountStatus } from 'xzl-web-shared/src/components/Selects';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { XzlTableCallBackProps } from '@/components/XzlTable';
 import XzlTable from '@/components/XzlTable';

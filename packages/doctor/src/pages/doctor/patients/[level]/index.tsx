@@ -5,9 +5,9 @@ import { useParams } from 'umi';
 import { Role } from '@/utils/role';
 import {
   Age, Sex, Organization, Address, PatientRole, Search,
-} from '@/components/Selects';
+} from 'xzl-web-shared/src/components/Selects';
 import XzlTable from '@/components/XzlTable';
-import { handleSelection, initSelectForm } from '@/utils/conditions';
+import { handleSelection, initSelectForm } from 'xzl-web-shared/src/utils/conditions';
 import {
   name,
   org,

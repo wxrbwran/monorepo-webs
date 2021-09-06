@@ -1,5 +1,5 @@
 import React from 'react';
-import {projectDefaultImg} from '@/utils/consts';
+import {projectDefaultImg} from 'xzl-web-shared/src/utils/consts';
 import { Tooltip } from 'antd';
 import styles from './index.scss';
 

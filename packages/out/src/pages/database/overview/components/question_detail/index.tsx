@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Checkbox, Input } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import styles from './index.scss'
-import type { IQuestions } from '@/utils/consts';
+import type { IQuestions } from 'xzl-web-shared/src/utils/consts';
 
 const {TextArea} = Input;
 interface IProps {

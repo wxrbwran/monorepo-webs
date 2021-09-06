@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Avatar } from 'antd';
-import { projectStatus } from '@/utils/consts';
+import { projectStatus } from 'xzl-web-shared/src/utils/consts';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import {

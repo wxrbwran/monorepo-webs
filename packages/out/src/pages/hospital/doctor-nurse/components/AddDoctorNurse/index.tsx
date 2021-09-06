@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, message } from 'antd';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import { ProFormText } from '@ant-design/pro-form';
-import { formItemLayout } from '@/utils/consts';
+import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
 import * as api from '@/services/api';
 import { Role } from '@/utils/role';
 

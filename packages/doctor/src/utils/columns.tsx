@@ -1,7 +1,6 @@
 import React from 'react';
 import { message, Switch } from 'antd';
 import config from '@/config';
-// import { QuestionCircleFilled } from '@ant-design/icons';
 import * as api from '@/services/api';
 
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
