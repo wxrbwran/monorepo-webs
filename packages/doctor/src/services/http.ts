@@ -4,7 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { history } from 'umi';
-import { Base64 } from 'js-base64';
+import { Base64 } from 'xzl-web-shared/src/utils/base64';
 import dayjs from 'dayjs';
 import pkg from '../../package.json';
 

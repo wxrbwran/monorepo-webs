@@ -1,6 +1,6 @@
-import path from 'path';
-import env from './env';
-import pkg from '../package.json';
+const path = require('path');
+const env = require('./env');
+const pkg = require('../package.json');
 
 const oriEnv = env[process.env.APP_ENV];
 const defineEnv = {};
@@ -38,12 +38,12 @@ const config = {
     },
   ],
   alias: {
-    '@/': path.resolve(__dirname, '../src/'),
+    '@/': path.resolve(process.cwd(), '../src/'),
   },
   sass: {
     prependData: '@import "assets/styles/index.scss";',
     sassOptions: {
-      includePaths: [path.resolve(__dirname, '../src')],
+      includePaths: [path.resolve(process.cwd(), '../src')],
     },
   },
   history: { type: 'hash' },
@@ -121,4 +121,4 @@ const config = {
   },
 };
 
-export default config;
+module.exports = config;

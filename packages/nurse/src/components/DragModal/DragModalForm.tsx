@@ -2,7 +2,8 @@
  * Created by wuxiaoran on 2019/1/28.
  */
 import React, { FC, useState } from 'react';
-import { Modal } from 'antd';
+import { ModalForm } from '@ant-design/pro-form';
+// import ProForm from '@ant-design/pro-form';
 import { ModalProps } from 'antd/lib/modal/Modal';
 import Draggable from 'react-draggable';
 
@@ -38,16 +39,19 @@ const AntdModalDrag: FC<IDMProps> = (props) => {
     </div>
   );
   return (
-    <Modal
-      destroyOnClose
+    <ModalForm
       {...props}
       title={titleNode}
-      modalRender={(modal) => (
-        <Draggable disabled={disabled}>{modal}</Draggable>
-      )}
+      modalProps={{
+        destroyOnClose: true,
+        modalRender: (modal) => (
+          <Draggable disabled={disabled}>{modal}</Draggable>
+        ),
+        ...props.modalProps,
+      }}
     >
       {children}
-    </Modal>
+    </ModalForm>
   );
 };
 

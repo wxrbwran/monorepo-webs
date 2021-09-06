@@ -112,11 +112,11 @@ const config = {
       .plugin('replace')
       .use(require("webpack").ContextReplacementPlugin)
       .tap(() => [/moment[/\\]locale$/, /zh-cn/]);
-      config.module
-        .rule('xlsx')
-        .test(/.(xlsx)$/)
-        .use('file-loader')
-        .loader(require.resolve('file-loader'));
+    config.module
+      .rule('xlsx')
+      .test(/.(xlsx)$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'));
     // config.plugin('umi-webpack-bundle-analyzer').use(BundleAnalyzerPlugin);
   },
 };

@@ -1,6 +1,6 @@
-const path = require('path');
-const env = require('./env');
-const pkg = require('../package.json');
+import path from 'path';
+import env from './env';
+import pkg from '../package.json';
 
 const oriEnv = env[process.env.APP_ENV];
 const defineEnv = {};
@@ -10,8 +10,7 @@ for (const key in oriEnv) {
 }
 
 console.log('building ... ', pkg.name, pkg.version);
-console.log("path.resolve(process.cwd(), '../src/')", path.resolve(process.cwd(), '../src/'))
-
+console.log("path.resolve(__dirname, '../src/')", path.resolve(__dirname, '../src/'))
 const config = {
   mfsu: {},
   hash: true,
@@ -40,13 +39,12 @@ const config = {
     },
   ],
   alias: {
-    // '@/': path.resolve(__dirname, '../src/'),
-    '@/': path.resolve(process.cwd(), './src/'),
+    '@/': path.resolve(__dirname, '../src/'),
   },
   sass: {
     prependData: '@import "assets/styles/index.scss";',
     sassOptions: {
-      includePaths: [path.resolve(process.cwd(), './src')],
+      includePaths: [path.resolve(__dirname, '../src')],
     },
   },
   history: { type: 'hash' },
@@ -65,4 +63,4 @@ const config = {
   }
 };
 
-module.exports = config;
+export default config;

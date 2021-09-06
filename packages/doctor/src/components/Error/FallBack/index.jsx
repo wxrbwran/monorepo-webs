@@ -2,7 +2,6 @@
  * Created by wuxiaoran on 2019/3/6.
  */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const Fallback = props => (
   <div>
@@ -19,8 +18,5 @@ const Fallback = props => (
 );
 
 
-Fallback.propTypes = {
-  error: PropTypes.any,
-  info: PropTypes.any,
-};
+
 export default Fallback;

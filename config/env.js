@@ -1,4 +1,4 @@
-const env =  {
+module.exports = {
   local: {
     BASEURL: 'http://localhost:8001/api/',
   },
@@ -16,5 +16,3 @@ const env =  {
     APP_ENV: 'prod',
   },
 };
-
-module.exports = env;
