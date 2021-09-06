@@ -4,7 +4,7 @@ import * as api from '@/services/api';
 import ReplyTable from '../reply_table';
 import styles from './index.scss';
 import { pageSize } from '@/utils/consts';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 
 interface IProps {
   id: string;

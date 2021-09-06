@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Menu, Dropdown, Avatar, Button } from 'antd';
 import { defaultAvatar } from '@/utils/consts';
 import { DownOutlined, UserOutlined, LogoutOutlined, LockOutlined } from '@ant-design/icons';
-// import DragModal from '@/components/DragModal';
+// import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { history, useDispatch } from 'umi';
 import ChangePWD from '../ChangePwd';
 import styles from './index.scss';

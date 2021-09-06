@@ -3,7 +3,7 @@ import { Button, message } from 'antd';
 import { useDispatch, useParams } from 'umi';
 import { isEmpty, debounce } from 'lodash';
 import { getIssueParams } from '@/utils/utils';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import AdjustAdvice from '@/components/AdjustAdvice';
 import AdjustPanel from './AdjustPanel';
 import InspectionDiff from './InspectionDiff';

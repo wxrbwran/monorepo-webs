@@ -1,6 +1,6 @@
 import type { FC} from 'react';
 import React, { useState, useLayoutEffect } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
 import { Form, Input, Button, Avatar, Radio, Select, DatePicker, message } from 'antd';
 import { useSelector /* useDispatch */ } from 'umi';

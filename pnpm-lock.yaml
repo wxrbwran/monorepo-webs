@@ -630,6 +630,7 @@ importers:
 
   packages/shared:
     specifiers:
+      '@ant-design/pro-form': ^1.38.1
       '@types/classnames': ^2.2.10
       '@types/jest': ^24.0.0
       '@types/node': ^12.0.0
@@ -660,6 +661,7 @@ importers:
       typescript: 4.2.4
       webpack-combine-loaders: ^2.0.4
     dependencies:
+      '@ant-design/pro-form': registry.nlark.com/@ant-design/pro-form/1.38.1_cb15c3fd8cfa79dfc1ac8043488ce288
       antd: registry.nlark.com/antd/4.16.13_react-dom@17.0.2+react@17.0.2
       axios: registry.nlark.com/axios/0.21.3
       classnames: 2.3.1
@@ -2249,9 +2251,9 @@ packages:
       '@ant-design/icons': registry.nlark.com/@ant-design/icons/4.6.4_react-dom@17.0.2+react@17.0.2
       '@ant-design/pro-provider': registry.nlark.com/@ant-design/pro-provider/1.4.17_cb15c3fd8cfa79dfc1ac8043488ce288
       antd: registry.nlark.com/antd/4.16.13_react-dom@17.0.2+react@17.0.2
-      classnames: 2.3.1
+      classnames: registry.nlark.com/classnames/2.3.1
       lodash.merge: registry.nlark.com/lodash.merge/4.6.2
-      moment: 2.29.1
+      moment: registry.nlark.com/moment/2.29.1
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
@@ -23337,7 +23339,7 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
     dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.3
+      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
       classnames: registry.nlark.com/classnames/2.3.1
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
@@ -24682,9 +24684,9 @@ packages:
       react: ^16.3.0 || ^17.0.0
       react-dom: ^16.3.0 || ^17.0.0
     dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.3
-      invariant: 2.2.4
-      prop-types: 15.7.2
+      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
+      invariant: registry.nlark.com/invariant/2.2.4
+      prop-types: registry.nlark.com/prop-types/15.7.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
     dev: false

@@ -3,7 +3,7 @@ import { Tabs, Spin, Button } from 'antd';
 // import QRCode from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import { useSelector } from 'umi';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Role } from '@/utils/role';
 import OrgListBtn from './OrgListBtn';
 import DoctorDetailEwm from './OrgDetail/ewm';

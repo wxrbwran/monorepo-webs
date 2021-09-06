@@ -3,7 +3,7 @@ import {
   Form, Select, Input, Button, Radio,
 } from 'antd';
 import { debounce } from 'lodash';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { departmentType } from '@/utils/consts';
 
 interface Iprops {

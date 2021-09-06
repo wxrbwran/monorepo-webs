@@ -32,7 +32,6 @@ interface IContent {
 
 const Scale: FC<IMsg> = (props) => {
   const { msg } = props;
-  console.log('msg666', msg);
   const { content, time } = msg;
   const { projectName } = content.content;
 

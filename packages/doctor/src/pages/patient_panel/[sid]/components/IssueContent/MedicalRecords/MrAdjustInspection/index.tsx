@@ -4,7 +4,7 @@ import { EditFilled } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
 import AdjustPanel from '@/components/AdjustInspection/AdjustPanel';
 import InspectionDiff from '@/components/AdjustInspection/InspectionDiff';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Role } from '@/utils/role';
 import LatestHealth from '../../../LatestHealth';
 import styles from '../index.scss';

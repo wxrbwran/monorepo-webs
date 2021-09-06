@@ -1,7 +1,7 @@
 import React, { useState, FC, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import { IImgStructuredApiData } from 'typings/imgStructured';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import ImgWrap from './compontents/ImgWrap';
 import StructuredDetail from './compontents/StructuredDetail';

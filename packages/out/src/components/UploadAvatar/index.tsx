@@ -1,7 +1,7 @@
 import type { FC} from 'react';
 import React, { useState } from 'react';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 
 // interface IProps {
 //   children: React.ReactElement;

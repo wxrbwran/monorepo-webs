@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { useSelector } from 'umi';
 import config from '@/config';
 import * as api from '@/services/api';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Role } from '@/utils/role';
 import Tabs from '../components/Tabs';
 import DoctorInfo from './DoctorInfo';

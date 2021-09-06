@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { Input, message } from 'antd';
 import { useSelector } from 'umi';
 import { isEmpty } from 'lodash';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { btnRender } from '@/utils/button';
 import * as api from '@/services/api';
 import { getCondition } from '@/utils/utils';

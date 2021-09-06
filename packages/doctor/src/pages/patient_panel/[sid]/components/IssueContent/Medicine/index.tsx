@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, message } from 'antd';
 import { useDispatch, useParams, useSelector } from 'umi';
 import { debounce } from 'lodash';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import DiffShow from '@/components/AdjustMedicine//DiffShow';
 import AdjustPanel from '@/components/AdjustMedicine//AdjustPanel';
 import DiffTable from '@/components/AdjustMedicine/DiffTable';

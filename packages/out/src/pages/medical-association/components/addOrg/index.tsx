@@ -1,7 +1,7 @@
 import type { FC} from 'react';
 import { useEffect} from 'react';
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Input, Button, message } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import XzlTable from '@/components/XzlTable';

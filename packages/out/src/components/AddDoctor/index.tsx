@@ -1,6 +1,6 @@
 import type { FC, ReactText} from 'react';
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { message } from 'antd';
 import type { XzlTableCallBackProps } from '@/components/XzlTable';
 import XzlTable from '@/components/XzlTable';

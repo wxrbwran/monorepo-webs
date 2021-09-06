@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import AdjustPanel from '@/components/AdjustMedicine/AdjustPanel';
 import DiffShow from '@/components/AdjustMedicine/DiffShow';
 import { Role } from '@/utils/role';

@@ -1,6 +1,6 @@
 import React, { useState, FC } from 'react';
 import { Radio, Input, Form, message } from 'antd';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 // import StopService from '@/components/StopService';
 import AddressForm from '@/components/AddressForm';
 import { labelCol, orgType, orgGrade } from '@/utils/consts';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, message } from 'antd';
 import { useDispatch, useParams } from 'umi';
 import { isEmpty } from 'lodash';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import InspectionDiff from '@/components/AdjustInspection/InspectionDiff';
 import AdjustPanel from '@/components/AdjustInspection/AdjustPanel';
 import { getIssueParams } from '@/utils/utils';

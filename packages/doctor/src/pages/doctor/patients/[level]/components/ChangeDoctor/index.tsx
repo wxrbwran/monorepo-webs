@@ -3,7 +3,7 @@ import { Empty, message } from 'antd';
 import { useSelector } from 'umi';
 import { debounce } from 'lodash';
 import hand from '@/assets/img/change.svg';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { defaultAvatar } from '@/utils/consts';
 import { btnRender } from '@/utils/button';
 import * as api from '@/services/api';

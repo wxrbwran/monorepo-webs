@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { handleBaseObj } from '../../util';
 import { INFO } from '../../consts';
 import { sexList } from '@/utils/consts';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Pagination } from 'antd';
 import { history } from 'umi';
 import { useDispatch } from 'react-redux';

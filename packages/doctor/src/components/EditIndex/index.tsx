@@ -3,7 +3,7 @@ import {
   Form, Input, Button, Radio, message,
 } from 'antd';
 import { DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import './index.scss';
 

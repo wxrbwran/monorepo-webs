@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'umi';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { getDurationText } from '@/utils/date';
 import VideoStream from './components/VideoStream';
 import RemoteAvatar from './components/RemoteAvatar';
