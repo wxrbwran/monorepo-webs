@@ -5,7 +5,8 @@ import React, { FC, useState } from 'react';
 import { Modal } from 'antd';
 import { ModalProps } from 'antd/lib/modal/Modal';
 import Draggable from 'react-draggable';
-import 'antd/dist/antd.min.css';
+// import 'antd/dist/antd.min.css';
+import 'antd/lib/modal/style/index.css';
 
 
 interface IDMProps extends ModalProps {

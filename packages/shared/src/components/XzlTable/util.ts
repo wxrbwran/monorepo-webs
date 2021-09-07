@@ -1,4 +1,4 @@
-import { Role } from '@/utils/role';
+import { Role, fetchRolePropValue } from '@/utils/role';
 
 interface ITeam {
   members: ISubject[];
@@ -6,7 +6,6 @@ interface ITeam {
 
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
 const handlePatientsTeamDataSource = (data) => {
-  console.log(5432, data);
   const newPatients: CommonData[] = [];
   let newObj: CommonData = {};
   data.forEach((team: ITeam) => {
@@ -33,12 +32,52 @@ const handlePatientsTeamDataSource = (data) => {
   return newPatients;
 };
 
+const handleDoctorTeamDataSource = (dataSource: Store[]) => {
+  const res: Store[] = [];
+  dataSource
+    .map((member) => member.members[0])
+    .forEach((member) => {
+      const tmp = { ...member };
+      tmp.patientNum = member.counters[0]?.count;
+      res.push(tmp);
+    });
+  return res;
+};
+
+const handlePatientTeamDataSource = (dataSource: Store[]) => {
+  const res: Store[] = [];
+  dataSource.forEach((datum) => {
+    // console.log(datum);
+    let tmp = {};
+    datum.members.forEach((member: Store) => {
+      const curRole: string = fetchRolePropValue(member.role, 'key') as string;
+      // console.log(curRole);
+      if (['patient', 'patient_vip'].includes(curRole)) {
+        tmp = { ...member };
+      } else if (curRole === 'lower_doctor') {
+        tmp.lower_doctor = member.name;
+      } else if (['upper_doctor', 'sys_doctor', 'alone_doctor'].includes(curRole)) {
+        tmp.upper_doctor = member.name;
+      }
+    });
+    res.push(tmp);
+  });
+  // console.log('handlePatientTeamDataSource res', res);
+  return res;
+};
+
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
   console.log('dataSource', dataSource);
   switch (dataKey) {
     case 'teams':
       if (category === 'patientList') {
         return handlePatientsTeamDataSource(dataSource);
+      }
+      if (Role.DOCTOR.id === category) {
+        return handleDoctorTeamDataSource(dataSource);
+      }
+      if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category)) {
+        return handlePatientTeamDataSource(dataSource);
       }
       return dataSource;
     default:
@@ -49,6 +88,8 @@ export const handleTableRowKey = (dataKey: string, record: Store): string => {
   switch (dataKey) {
     case 'teams':
       return record.sid;
+    case 'images':
+      return record.id;
     default:
       return record.sid || record.id;
   }

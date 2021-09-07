@@ -3,7 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Form, Button, Popconfirm, message, Switch } from 'antd';
 import { useLocation, Location } from 'umi';
 import { Common, Source, Search } from 'xzl-web-shared/src/components/Selects';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
   indexName, indexUnits, indexAbbr, indexSource, columnCreator,
 } from '@/utils/columns';

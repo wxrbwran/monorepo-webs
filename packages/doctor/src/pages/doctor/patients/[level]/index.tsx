@@ -7,7 +7,7 @@ import {
   Age, Sex, Address, PatientRole, Search,
 } from 'xzl-web-shared/src/components/Selects';
 import Organization from '@/components/Selects/Organization';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/src/utils/conditions';
 import {
   name,

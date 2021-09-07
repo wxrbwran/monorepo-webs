@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
+import { pageSize } from '../../utils/consts';
 
 interface IProps {
   columns: Store[];
@@ -16,11 +17,12 @@ interface IProps {
 }
 
 const XzlTable: FC<IProps> = (props) => {
-  console.log("this is table 2~");
+  console.log("this is table shared~");
   const {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
     handleCallbackSelectKeys, category,
   } = props;
+  const [size, setSize] = useState(pageSize);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(0);
   const [dataSource, setDataSource] = useState<Store[]>([]);
@@ -41,7 +43,7 @@ const XzlTable: FC<IProps> = (props) => {
     console.log('query', query);
     const params: Store = {
       pageAt: 1,
-      pageSize: 10,
+      pageSize: size,
       ...depOptions,
       ...query,
     };
@@ -49,6 +51,7 @@ const XzlTable: FC<IProps> = (props) => {
     const res = await request(params);
     console.log('fetchTableDataSource res', res);
     setCurrent(params.pageAt);
+    setSize(params.pageSize);
     setTotal(res.total);
     const handledData = handleTableDataSource(dataKey, res[dataKey], category);
     if (handleCallback) {
@@ -62,11 +65,24 @@ const XzlTable: FC<IProps> = (props) => {
     fetchTableDataSource({});
   }, [depOptions]);
 
-  const handlePagerChange = (page: number) => {
+  // const handlePagerChange = (page: number) => {
+  //   if (!tableOptions?.handlePagerChange) {
+  //     const params: Store = { pageAt: page };
+  //     fetchTableDataSource(params);
+  //   }
+  // };
+   const handlePagerChange = (page: number, changedSize: number | undefined) => {
+    console.log('handlePagerChange', page);
+    console.log('handlePagerChange', changedSize);
+    const params: Store = { pageAt: page };
+    if (changedSize) {
+      params.pageSize = changedSize;
+    }
     if (!tableOptions?.handlePagerChange) {
       const params: Store = { pageAt: page };
       fetchTableDataSource(params);
     }
+    // fetchTableDataSource(params);
   };
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -77,7 +93,7 @@ const XzlTable: FC<IProps> = (props) => {
       columns={columns}
       dataSource={dataSource}
       pagination={{
-        pageSize: depOptions?.pageSize || 10,
+        pageSize: size,
         showQuickJumper: true,
         current,
         total,

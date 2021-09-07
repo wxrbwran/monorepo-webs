@@ -8,6 +8,8 @@
   "keywords": [],
   "author": "",
   "scripts": {
+    "clean:doctor": "pnpm clean --filter 'xzl-web-doctor'",
+    
     "dev:doctor": "pnpm dev --filter 'xzl-web-doctor'",
     "dev:nurse": "pnpm dev --filter 'xzl-web-nurse'",
     "dev:org": "pnpm dev --filter 'xzl-web-org'",
