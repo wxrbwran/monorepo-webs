@@ -1,15 +1,19 @@
 import React from 'react';
 import FallBack from '../FallBack';
 
-function log() {}
+function log(error: any, info: string, props: any) {
 
-function ErrorHandler(Component,
-  FallbackComponent = FallBack,
-  errorCallback = log) {
-  class WithErrorHandler extends React.Component {
-    constructor(props) {
+}
+
+interface IState {
+  [key: string]: any;
+};
+
+function ErrorHandler(Component: any,
+  errorCallback = log): any {
+  class WithErrorHandler extends React.Component<any, IState> {
+    constructor(props: any) {
       super(props);
-      // Construct the initial state
       this.state = {
         hasError: false,
         error: null,
@@ -17,7 +21,7 @@ function ErrorHandler(Component,
       };
     }
 
-    componentDidCatch(error, info) {
+    componentDidCatch(error: any, info: any): void {
       // Update state if error happens
       this.setState({ hasError: true, error, info });
       // Report errors
@@ -31,7 +35,7 @@ function ErrorHandler(Component,
       if (this.state.hasError) {
         const { error, info } = this.state;
         return (
-          <FallbackComponent
+          <FallBack
             {...this.props}
             error={error}
             info={info}

@@ -9,7 +9,7 @@
     "debug-prod": "NODE_ENV=development APP_ENV=prod umi dev",
     "prerelease": "NODE_ENV=production APP_ENV=test umi build",
     "dist": "NODE_ENV=production APP_ENV=prod umi build",
-    "dev-build": "NODE_ENV=production APP_ENV=dev umi build",
+    "dev-dist": "NODE_ENV=production APP_ENV=dev umi build",
     "build": "umi build",
     "test": "umi test --watch",
     "lint": "eslint --ext ts,tsx src/ --fix",

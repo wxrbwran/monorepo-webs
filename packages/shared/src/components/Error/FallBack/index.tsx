@@ -3,15 +3,24 @@
  */
 import React from 'react';
 
-const Fallback = props => (
+interface IPros {
+  error: {
+    message: string;
+  };
+  info: {
+    componentStack: string;
+  };
+}
+
+const Fallback = (props: IPros) => (
   <div>
     <h1>页面出错，请检查！</h1>
     <details>
-      ====================>Error Message:
+      ====================Error Message:
       <p>{props.error.message}</p>
-      ====================>componentStack:
+      ====================componentStack:
       <p>{props.info.componentStack}</p>
-      ====================>Info:
+      ====================Info:
       <p>{ JSON.stringify(props) }</p>
     </details>
   </div>

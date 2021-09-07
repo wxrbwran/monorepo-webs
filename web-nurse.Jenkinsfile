@@ -7,8 +7,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5'))
         skipDefaultCheckout()
         disableConcurrentBuilds()
-//        retry(2)
-//        skipStagesAfterUnstable()
         timeout(time: 30, unit: 'MINUTES')
         timestamps()
         ansiColor('xterm')

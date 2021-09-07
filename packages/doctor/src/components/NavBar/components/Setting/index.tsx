@@ -130,7 +130,7 @@ function Setting() {
         </div>
       </Dropdown>
       <DragModal
-        title=""
+        title="用户设置"
         footer={null}
         width={1248}
         visible={showModal}

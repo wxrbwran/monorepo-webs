@@ -5,7 +5,7 @@ import phoneGray from '@/assets/img/im/phone_gray.svg';
 import phoneWhite from '@/assets/img/im/phone_white.svg';
 import videoGray from '@/assets/img/im/video_gray.svg';
 import videoWhite from '@/assets/img/im/video_white.svg';
-import errorHandler from '@/components/Error/ErrorHandler';
+import errorHandler from 'xzl-web-shared/src/components/Error/ErrorHandler';
 import './index.scss';
 
 /* eslint-disable */

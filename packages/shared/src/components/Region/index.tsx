@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Select, Space } from 'antd';
-import * as api from '@/services/api';
+// import * as api from '@/services/api';
 
 interface Iregion {
   regionName: string;
@@ -20,9 +20,10 @@ export interface IRegion {
 interface Iprops {
   getRegion: (region: IRegion) => void;
   initData: IRegion;
+  request: (params: any) => Promise<any>;
 }
 const { Option } = Select;
-function Region({ getRegion, initData }: Iprops) {
+function Region({ getRegion, initData, request }: Iprops) {
   const { provinceCode, townCode, cityCode } = initData;
   console.log('initDatainitData', provinceCode);
   const [province, setProvince] = useState<INumUnd>(provinceCode);
@@ -34,7 +35,7 @@ function Region({ getRegion, initData }: Iprops) {
   const [address, setAddress] = useState(initData?.address || ''); // 现住址：省 市  县
 
   const fetchAddress = (id: number, type: string) => {
-    api.base.fetchAddress({ id }).then((res) => {
+    request({ id }).then((res) => {
       switch (type) {
         case 'province':
           setProvinces(res.regions);
@@ -59,7 +60,7 @@ function Region({ getRegion, initData }: Iprops) {
       fetchAddress(cityCode, 'town');
     }
   }, [provinceCode, cityCode]);
-  const changeRegion = (name: string, value: number, { title }: { title: string}) => {
+  const changeRegion = (name: string, value: number, { title }: any) => {
     const newDomicile = address.split(' ');
     switch (name) {
       case 'province':

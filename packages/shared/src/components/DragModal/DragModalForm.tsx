@@ -10,6 +10,7 @@ import Draggable from 'react-draggable';
 interface IDMProps extends ModalProps {
   title: string;
   extra?: any;
+  modalProps: any;
 }
 /* eslint-disable */
 const AntdModalDrag: FC<IDMProps> = (props) => {

@@ -1,8 +1,5 @@
 import React from 'react';
-import { message, Switch } from 'antd';
-import config from '@/config';
-// import { QuestionCircleFilled } from '@ant-design/icons';
-import * as api from '@/services/api';
+import { defaultAvatar } from './consts';
 
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
   const column: CommonData = {
@@ -24,7 +21,7 @@ export const clAvatar = {
   dataIndex: 'avatarUrl',
   render: (text: string) => (
     <img
-      src={text || config.defaultAvatar}
+      src={text || defaultAvatar}
       style={{ width: 40, height: 40 }}
       alt="头像"
     />
@@ -59,42 +56,7 @@ export const indexAbbr = {
     </div>
   ),
 };
-const handleCommon = (common: boolean, editData: object, refreshList: () => void) => {
-  const params = {
-    ...editData,
-    common,
-  };
-  api.indexLibrary.patchIndexDocumentIndex(params).then(() => {
-    message.success('修改成功');
-    refreshList();
-  }).catch((err) => {
-    message.error(err?.result ?? '修改失败');
-  });
-};
-export const indexCommon = (refreshList: () => void) => (
-  {
-    title: () => (
-      <div>
-        <span>是否常用</span>
-        {/* <Tooltip title="是否是常用指标">
-          <QuestionCircleFilled style={{ color: '#EDEDE' }} />
-        </Tooltip> */}
-      </div>
-    ),
-    dataIndex: 'common',
-    render: (_text: boolean, record: any) => (
-      <div className="table-operating">
-        <Switch
-          checkedChildren="是"
-          unCheckedChildren="否"
-          checked={_text}
-          disabled={record.source === 'SYSTEM' || !!record.used}
-          onChange={(e) => { handleCommon(e, record, refreshList); }}
-        />
-      </div>
-    ),
-  }
-);
+
 export const indexSource = {
   title: '数据来源',
   dataIndex: 'source',

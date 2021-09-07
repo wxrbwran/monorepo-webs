@@ -4,8 +4,9 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useParams } from 'umi';
 import { Role } from '@/utils/role';
 import {
-  Age, Sex, Organization, Address, PatientRole, Search,
+  Age, Sex, Address, PatientRole, Search,
 } from 'xzl-web-shared/src/components/Selects';
+import Organization from '@/components/Selects/Organization';
 import XzlTable from '@/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/src/utils/conditions';
 import {

@@ -7,7 +7,40 @@
   },
   "keywords": [],
   "author": "",
-  "dependencies": {
-    "xzl-web-shared": "workspace:^1.0.0"
+  "scripts": {
+    "dev:doctor": "pnpm dev --filter 'xzl-web-doctor'",
+    "dev:nurse": "pnpm dev --filter 'xzl-web-nurse'",
+    "dev:org": "pnpm dev --filter 'xzl-web-org'",
+    "dev:out": "pnpm dev --filter 'out-hospital-patient'",
+
+    "dev-shared:doctor": "pnpm dev-shared --filter 'xzl-web-doctor'",
+    "dev-shared:nurse": "pnpm dev-shared --filter 'xzl-web-nurse'",
+    "dev-shared:org": "pnpm dev-shared --filter 'xzl-web-org'",
+    "dev-shared:out": "pnpm dev-shared --filter 'out-hospital-patient'",
+
+    "debug:doctor": "pnpm debug --filter 'xzl-web-doctor'",
+    "debug:nurse": "pnpm debug --filter 'xzl-web-nurse'",
+    "debug:org": "pnpm debug --filter 'xzl-web-org'",
+    "debug:out": "pnpm debug --filter 'out-hospital-patient'",
+
+    "debug-prod:doctor": "pnpm debug-prod --filter 'xzl-web-doctor'",
+    "debug-prod:nurse": "pnpm debug-prod --filter 'xzl-web-nurse'",
+    "debug-prod:org": "pnpm debug-prod --filter 'xzl-web-org'",
+    "debug-prod:out": "pnpm debug-prod --filter 'out-hospital-patient'",
+
+    "prerelease:doctor": "pnpm prerelease --filter 'xzl-web-doctor'",
+    "prerelease:nurse": "pnpm prerelease --filter 'xzl-web-nurse'",
+    "prerelease:org": "pnpm prerelease --filter 'xzl-web-org'",
+    "prerelease:out": "pnpm prerelease --filter 'out-hospital-patient'",
+
+    "dist:doctor": "pnpm dist --filter 'xzl-web-doctor'",
+    "dist:nurse": "pnpm dist --filter 'xzl-web-nurse'",
+    "dist:org": "pnpm dist --filter 'xzl-web-org'",
+    "dist:out": "pnpm dist --filter 'out-hospital-patient'",
+
+    "dev-dist:doctor": "pnpm dev-dist --filter 'xzl-web-doctor'",
+    "dev-dist:nurse": "pnpm dev-dist --filter 'xzl-web-nurse'",
+    "dev-dist:org": "pnpm dev-dist --filter 'xzl-web-org'",
+    "dev-dist:out": "pnpm dev-dist --filter 'out-hospital-patient'"
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, Form } from 'antd';
-import { provinces } from '@/utils/tools';
+import { provinces } from '../../../utils/consts';
 
 const { Option } = Select;
 function Address() {

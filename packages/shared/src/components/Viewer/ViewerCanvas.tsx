@@ -144,7 +144,7 @@ translateX(${props.left !== null ? `${props.left}px` : 'aoto'}) translateY(${pro
     [`${props.prefixCls}-image-transition`]: !isMouseDown.current,
   });
 
-  const style = {
+  const style:any = {
     zIndex: props.zIndex,
     pointerEvents: 'none',
   };
