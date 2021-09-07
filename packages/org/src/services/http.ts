@@ -5,7 +5,7 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import { history } from 'umi';
-import { Base64 } from 'js-base64';
+import { Base64 } from 'xzl-web-shared/src/utils/base64';
 import pkg from '../../package.json';
 
 // console.log(process.env.BASEURL);

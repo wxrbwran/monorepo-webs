@@ -12,7 +12,7 @@ import {
   sexList,
   basicInfoTab,
 } from 'xzl-web-shared/src/utils/consts';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import { UserStatus } from '@/utils/enums';
 import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
 import certified from './img/certified.svg';

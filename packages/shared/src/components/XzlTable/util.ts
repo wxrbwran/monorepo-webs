@@ -1,14 +1,14 @@
-import { Role, fetchRolePropValue } from '@/utils/role';
+import { Role, fetchRolePropValue } from '../../utils/role';
 
-interface ITeam {
-  members: ISubject[];
-}
+// interface ITeam {
+//   members: ISubject[];
+// }
 
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
-const handlePatientsTeamDataSource = (data) => {
+const handlePatientsTeamDataSource = (data: Store[]) => {
   const newPatients: CommonData[] = [];
   let newObj: CommonData = {};
-  data.forEach((team: ITeam) => {
+  data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
       switch (member.role) {
@@ -48,7 +48,7 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource.forEach((datum) => {
     // console.log(datum);
-    let tmp = {};
+    let tmp:Record<string, string> = {};
     datum.members.forEach((member: Store) => {
       const curRole: string = fetchRolePropValue(member.role, 'key') as string;
       // console.log(curRole);
@@ -68,6 +68,12 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
 
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
   console.log('dataSource', dataSource);
+  console.log('dataKey', dataKey);
+  console.log('category', category);
+  console.log('Role.DOCTOR.id', Role.DOCTOR.id);
+  console.log('Role.PATIENT_VIP.id', Role.PATIENT_VIP.id);
+  console.log('Role.PATIENT.id', Role.PATIENT.id);
+
   switch (dataKey) {
     case 'teams':
       if (category === 'patientList') {
@@ -76,7 +82,7 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       if (Role.DOCTOR.id === category) {
         return handleDoctorTeamDataSource(dataSource);
       }
-      if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category)) {
+      if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category as string)) {
         return handlePatientTeamDataSource(dataSource);
       }
       return dataSource;

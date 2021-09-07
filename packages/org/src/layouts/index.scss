@@ -1,4 +1,4 @@
-@import '@/styles/index.scss';
+@import '@/assets/styles/index.scss';
 
 .layout {
   @include flex(column, nowrap, flex-start, flex-start);

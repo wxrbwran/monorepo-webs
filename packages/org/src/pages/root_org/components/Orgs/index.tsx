@@ -1,10 +1,21 @@
 import React, { FC, useState } from 'react';
 import { Input, Button, Space, message } from 'antd';
+import { EditOutlined } from '@ant-design/icons'
 import { useDispatch, history, Link } from 'umi';
-import AddHospital from '@/components/AddEditHospital';
+import AddEditHospital from '@/components/AddEditHospital'
 import BatchUploadStaff from '@/components/BatchUploadStaff';
-import XzlTable, { XzlTableCallBackProps } from '@/components/XzlTable';
-import { rootOrgColumns } from '@/utils/columns';
+import XzlTable, { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
+import {
+  organizationName,
+  organizationCode,
+  adminName,
+  lowOrgCount,
+  upOrgCount,
+  deptCount,
+  doctorCount,
+  nurseCount,
+  patientCount,
+ } from 'xzl-web-shared/src/utils/columns';
 import OrgStaffs from '../OrgStaffs';
 import styles from './index.scss';
 
@@ -46,10 +57,35 @@ const Orgs: FC = () => {
     });
     history.push(`/normal_org/${record.nsId}`);
   };
-  const columns = rootOrgColumns({
-    handleGetOrgInfoThenNav,
-    refresh: () => setOptions({ ...tableOptions }),
-  });
+  const action = {
+    title: '操作',
+    dataIndex: 'operate',
+    // width: 200,
+    className: 'action',
+    render: (_text, record) => (
+      <div className="column_btn">
+        <AddEditHospital info={record} mode="edit" refresh={() => setOptions({ ...tableOptions })}>
+          <Button type="ghost" icon={<EditOutlined />}>
+            编辑
+          </Button>
+        </AddEditHospital>
+      </div>
+    ),
+  };
+  const columns = [
+    organizationName({
+      handleGetOrgInfoThenNav,
+    }),
+    organizationCode,
+    adminName,
+    lowOrgCount,
+    upOrgCount,
+    deptCount,
+    doctorCount,
+    nurseCount,
+    patientCount,
+    action,
+  ];
 
   return (
     <div className={styles.org}>
@@ -69,9 +105,9 @@ const Orgs: FC = () => {
             <BatchUploadStaff refresh={() => {}}>
               <Button>批量上传</Button>
             </BatchUploadStaff>
-            <AddHospital refresh={() => {}}>
+            <AddEditHospital refresh={() => {}}>
               <Button>添加医院</Button>
-            </AddHospital>
+            </AddEditHospital>
             <Button>
               <Link to="/group_msg/send">群发消息</Link>
             </Button>

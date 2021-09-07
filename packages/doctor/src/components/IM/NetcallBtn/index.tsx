@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'umi';
 import { IState } from 'typings/model';
 import video from '@/assets/img/im/bar_video.png';
 import phone from '@/assets/img/im/bar_tel.png';
-import { defaultPatientAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role } from '@/utils/role';
+import defaultPatientAvatar from '@/assets/img/defaultPatientAvatar';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 function NetcallBtn() {
   const myNetcall = useSelector((state: IState) => state.im.myNetcall);

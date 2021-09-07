@@ -9,8 +9,8 @@ import type { BasicLayoutProps } from '@ant-design/pro-layout';
 import RightContent from '@/components/RightContent';
 
 import routes from '@/routes';
-import storage from 'dva-model-persist/lib/storage';
-import { persistEnhancer } from '@/utils/dva-model-persist';
+import storage from 'xzl-web-shared/src/utils/dva-model-persist/storage';
+import { persistEnhancer } from 'xzl-web-shared/src/utils/dva-model-persist';
 // import Icon, { SmileOutlined, HeartOutlined, CrownOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
 import { Icon1, Icon2, Icon3, Icon4, Icon5, Icon6 } from '@/utils/menuIcon';

@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import AdjustPanel from '@/components/AdjustMedicine/AdjustPanel';
 import DiffShow from '@/components/AdjustMedicine/DiffShow';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import PlansDetail from '../../../CurrentMedicine/PlansDetail';
 import styles from '../index.scss';
 

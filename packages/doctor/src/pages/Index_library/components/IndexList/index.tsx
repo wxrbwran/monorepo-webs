@@ -6,7 +6,7 @@ import { Common, Source, Search } from 'xzl-web-shared/src/components/Selects';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
   indexName, indexUnits, indexAbbr, indexSource, columnCreator,
-} from '@/utils/columns';
+} from 'xzl-web-shared/src/utils/columns';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import Initials from '../Initials';

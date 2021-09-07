@@ -10,12 +10,10 @@ import styles from './index.scss';
 function Login() {
   const dispatch = useDispatch();
   const onFinish = (values: FormProps) => {
-    console.log('Success:', values);
     const params = {
       ...values,
       authType: 'password_type',
     };
-    console.log('dispatch', dispatch);
     if (dispatch) {
       dispatch({
         type: 'auth/login',

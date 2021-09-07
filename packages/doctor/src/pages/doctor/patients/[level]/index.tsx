@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useParams } from 'umi';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import {
   Age, Sex, Address, PatientRole, Search,
 } from 'xzl-web-shared/src/components/Selects';

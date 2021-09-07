@@ -1,8 +1,8 @@
 import { Role } from './role';
-import { croStatus } from './enums'
+import { croStatus, UserStatus } from './enums'
 export const defaultAvatar = 'https://staff-avatars-prod.oss-cn-beijing.aliyuncs.com/default-avatar.jpg';
-/* eslint-disable global-require */
-export { default as defaultPatientAvatar } from '@/assets/img/patientAvatar.jpg';
+import patientAvatar from '../assets/img/patientAvatar.jpg';
+
 
 export const imConfig = {
   // 本地消息显示数量，会影响性能
@@ -409,4 +409,14 @@ export const projectDefaultImg = [
   'https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/5c267f30-ccc7-4d9f-a749-420f3d740a4cprojectImg4.jpeg',
   'https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/ee254d65-f014-4c55-a952-6ec4c5ccf04aprojectImg5.jpeg',
 ];
+
+
+
+
+export const statusLists = {
+  [UserStatus.Accepted]: '已认证',
+  // [UserStatus.InitState]: '未完成注册',
+  [UserStatus.InitState]: '待审核',
+  [UserStatus.Refused]: '审核失败',
+};
 

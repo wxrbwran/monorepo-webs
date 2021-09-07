@@ -16,7 +16,8 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "xzl-web-shared/src/*": ["src/*"]
     },
     "typeRoots": ["node", "node_modules/@types", "./typings"]
   }

@@ -5,7 +5,7 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import { getIssueParams } from '@/utils/utils';
 import { AdjustMedicineBtn } from '@/utils/tools';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import DiffShow from './DiffShow';
 import AdjustPanel from './AdjustPanel';
 import styles from './index.scss';

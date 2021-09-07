@@ -3,9 +3,9 @@
 import { createLogger } from 'redux-logger';
 // import { getDvaApp, history } from 'umi';
 import { message } from 'antd';
-import storage from 'dva-model-persist/lib/storage/session';
-import { persistEnhancer } from './utils/dva-model-persist';
-
+import storage from 'xzl-web-shared/src/utils/dva-model-persist/storage/session';
+import { persistEnhancer } from 'xzl-web-shared/src/utils/dva-model-persist';
+import page404 from '@/pages/404';
 export const dva = {
   config: {
     extraEnhancers: [
@@ -33,6 +33,6 @@ export function patchRoutes({ routes }) {
   console.log('patchRoutes routes', routes);
   routes[0].routes.push({
     path: '*',
-    component: require('@/pages/404').default,
+    component: page404,
   });
 }

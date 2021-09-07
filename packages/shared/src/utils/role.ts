@@ -90,11 +90,18 @@ export const Role: RolesMap = {
   YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'), // 50
 };
 
+export function fetchRolePropById(id: string) {
+  const roleKey = Object.keys(Role);
+
+  roleKey.forEach((key) => {
+    Role[key].key = key.toLowerCase();
+  });
+  const activeRole = roleKey.filter((key: string) => Role[key].id === id)[0];
+  return Role[activeRole];
+}
 // 根据role的id，获取其它属性值
 export function fetchRolePropValue(id: string, keyName: string) {
-  const activeRole = Object.keys(Role).filter((key: string) => Role[key].id === id)[0];
-  if (activeRole) {
-    return Role[activeRole][keyName];
-  }
-  return '';
+  return fetchRolePropById(id)[keyName];
 }
+
+

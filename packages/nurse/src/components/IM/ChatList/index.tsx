@@ -6,7 +6,7 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 // import Viewer from 'react-viewer';
 import Viewer from '@/components/Viewer';
 import * as api from '@/services/api';
-// import { Role } from '@/utils/role';
+// import { Role } from 'xzl-web-shared/src/utils/role';
 import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
 import { imMsgType } from '@/utils/tools';
 import reCalcAllMessageTime from '@/utils/reCalcAllMessageTime';

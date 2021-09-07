@@ -3,7 +3,7 @@ import { Button, Popconfirm, Avatar, Popover } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import AddEditHospital from '@/components/AddEditHospital';
 // import DeleteDepOrg from '@/components/DeleteDepOrg';
-import { Role } from './role';
+import { Role } from './role.ts.remove';
 
 import {
   sexList,
@@ -12,7 +12,7 @@ import {
   statusLists,
   roleList,
   defaultAvatar,
-} from './consts';
+} from './consts.ts.remove';
 
 export type SexType = 'MALE' | 'FEMALE';
 

@@ -1,8 +1,19 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Button, Table } from 'antd';
+import { Button, Table, Popconfirm } from 'antd';
 import { useSelector, useDispatch } from 'umi';
+import { DeleteOutlined } from '@ant-design/icons'
 import AddEditOperatorAdmin from '@/components/AddEditOperatorAdmin';
-import { groupOperatorAdminColumns } from '@/utils/columns';
+import {
+  avatar,
+  navName,
+  sex,
+  role,
+  workload,
+  lastMonthWorkload,
+  monthWorkload,
+  adminDepartment,
+  status,
+} from 'xzl-web-shared/src/utils/columns';
 import { operators } from '../GroupOperator/mock';
 // import data from './mock';
 import styles from '../DepartmentDoctor/index.scss';
@@ -48,10 +59,44 @@ const DepartmentOperatorAdmin: FC = () => {
       },
     });
   };
-  const columns = groupOperatorAdminColumns({
-    nav: nav2RolePage,
-    delete: deleteOperator,
-  });
+  const action = {
+    title: '操作',
+    dataIndex: 'operate',
+    width: 100,
+    className: 'action',
+    render: (text, record) => (
+      <Popconfirm
+        placement="topRight"
+        overlayClassName="delete__pop-confirm"
+        title={
+          <div>
+            <h3>确认删除？</h3>
+            <p>一旦删除不可恢复！</p>
+          </div>
+        }
+        onConfirm={() => deleteOperator([record.id])}
+      >
+        <Button type="link" icon={<DeleteOutlined />}>
+          删除
+        </Button>
+      </Popconfirm>
+    ),
+  };
+  const columns = [
+    avatar,
+    navName({
+      nav: nav2RolePage,
+    }),
+    sex,
+    role,
+    workload,
+    lastMonthWorkload,
+    monthWorkload,
+    department,
+    adminDepartment,
+    status,
+    action,
+  ];
 
   return (
     <div>

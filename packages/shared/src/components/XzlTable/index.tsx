@@ -1,5 +1,5 @@
 import React, {
-  useState, FC, useEffect, Key,
+  useState, FC, useEffect, Key, ReactText,
 } from 'react';
 import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
@@ -16,6 +16,17 @@ interface IProps {
   category?: string;
 }
 
+export interface XzlTableCallBackProps {
+  selectedRowKeys?: ReactText[];
+  currentPage?: number;
+  dataSource?: Store[];
+}
+
+interface IOnSelectChange {
+  (selectedRowKeys: React.ReactText[], selectedRows?: Store[]): void;
+}
+
+
 const XzlTable: FC<IProps> = (props) => {
   console.log("this is table shared~");
   const {
@@ -28,7 +39,7 @@ const XzlTable: FC<IProps> = (props) => {
   const [dataSource, setDataSource] = useState<Store[]>([]);
   const [selectedRowKeys, setRowKeys] = useState<Key[]>([]);
   const [loading, setLoading] = useState(false);
-  const onSelectChange = (keys: Key[]) => {
+  const onSelectChange: IOnSelectChange = (keys: Key[]) => {
     setRowKeys(keys);
     if (handleCallbackSelectKeys) {
       handleCallbackSelectKeys(keys);

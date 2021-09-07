@@ -8,7 +8,7 @@ import AdjustPanel from '@/components/AdjustMedicine//AdjustPanel';
 import DiffTable from '@/components/AdjustMedicine/DiffTable';
 import { AdjustMedicineBtn } from '@/utils/tools';
 import { getIssueParams } from '@/utils/utils';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from '../index.scss';
 
 interface Iprops {

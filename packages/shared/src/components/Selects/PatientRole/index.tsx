@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, Form } from 'antd';
-import { Role } from '@/utils/role';
+import { Role } from '../../../utils/role';
 
 const { Option } = Select;
 function PatientRole() {

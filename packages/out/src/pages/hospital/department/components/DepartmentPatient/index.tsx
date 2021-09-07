@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Form } from 'antd';
 import { useLocation } from 'umi';
 import { UserOutlined } from '@ant-design/icons';
-import { departmentPatientColumns } from '@/utils/columns';
-import { Role } from '@/utils/role';
+import { departmentPatientColumns } from 'xzl-web-shared/src/utils/columns';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import { handleSelection } from '@/utils/conditions';
-import type { XzlTableCallBackProps } from '@/components/XzlTable';
-import XzlTable from '@/components/XzlTable';
-import Search xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Search';
+import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { Search } from 'xzl-web-shared/src/components/Selects';
 import styles from '../DepartmentDoctor/index.scss';
 
 interface ILocation {

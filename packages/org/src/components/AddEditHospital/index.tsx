@@ -4,7 +4,7 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 // import StopService from '@/components/StopService';
 import AddressForm from '@/components/AddressForm';
 import { labelCol, orgType, orgGrade } from 'xzl-web-shared/src/utils/consts';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import { getCondition } from '@/utils/tools';
 import BaseDepartments from './components/BaseDepartments';
 import styles from './index.scss';

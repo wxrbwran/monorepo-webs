@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import XzlTable from '@/components/XzlTable';
-import { patientName, crostatus, orgaName, sendNumber as sendNumberCol, noReplyNumber } from '@/utils/columns';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { patientName, crostatus, orgaName, sendNumber as sendNumberCol, noReplyNumber } from 'xzl-web-shared/src/utils/columns';
 import * as api from '@/services/api';
 import AlreadyReplyTable from '../already_reply_table';
 import { isEmpty } from 'lodash';

@@ -54,8 +54,6 @@ pipeline {
 
         stage('build') {
           steps {
-            sh "chmod +x ./config/todev.sh"
-            sh "chmod +x ./config/toprod.sh"
             sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
             sh "pnpm install --registry=https://registry.npm.taobao.org"
             sh "${BUILD_SH}"

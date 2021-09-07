@@ -6,3 +6,7 @@ export { default as PatientRole } from './PatientRole';
 export { default as Search } from './Search';
 export { default as Common } from './Common';
 export { default as Source } from './Source';
+export { default as Title } from './Title';
+export { default as PatientLevel } from './PatientLevel';
+export { default as Province } from './Province';
+

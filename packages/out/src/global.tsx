@@ -4,15 +4,15 @@ import '@/assets/styles/antd.scss';
 import * as api from '@/services/api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
-import storage from '@/utils/storage';
+import storage from 'xzl-web-shared/src/utils/storage';
 import { setAuthorizationToken } from '@/services/http';
+import pkg from '../package.json'
 
 if (window.location.href.includes('openSub')) {
   sessionStorage.setItem('openSub', 'YES'); // 防止url丢失openSub参数
 }
 
-storage.init();
-window.$storage = storage;
+window.$storage = storage(pkg.name);
 window.$api = api;
 dayjs.locale('zh-cn');
 const cacheToken = window.$storage.getItem('access_token');

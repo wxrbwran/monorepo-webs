@@ -40,7 +40,7 @@ export default defineConfig({
   },
   history: { type: 'hash' },
   sass: {
-    prependData: '@import "styles/index.scss";',
+    prependData: '@import "assets/styles/index.scss";',
     sassOptions: {
       includePaths: [path.resolve(__dirname, '../src')],
     },
@@ -58,14 +58,6 @@ export default defineConfig({
   theme: {
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
-  },
-  // proxy: ['bj_dev', 'dev'].includes(APP_ENV) ? proxy[APP_ENV] : {},
-  proxy: {
-    '/api': {
-      target: 'http://172.16.10.25:8000/',
-      changeOrigin: true,
-      pathRewrite: { '^/api': '' },
-    },
   },
   // @ts-ignore
   title: false,

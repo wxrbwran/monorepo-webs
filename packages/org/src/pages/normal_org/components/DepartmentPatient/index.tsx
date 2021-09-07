@@ -1,12 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Form } from 'antd';
 import { useSelector } from 'umi';
-import { departmentPatientColumns } from '@/utils/columns';
-import { Role } from '@/utils/role';
-import { handleSelection } from '@/utils/conditions';
-import XzlTable from '@/components/XzlTable';
-import PatientLevel xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/PatientLevel';
-import Search xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Search';
+import { departmentPatientColumns } from 'xzl-web-shared/src/utils/columns';
+import { Role } from 'xzl-web-shared/src/utils/role';
+import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
+
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { PatientLevel, Search } from  'xzl-web-shared/src/components/Selects';
 // import AddPatient from '../AddPatient';
 import styles from '../DepartmentDoctor/index.scss';
 
@@ -47,6 +47,7 @@ const DepartmentPatient: FC = () => {
         <XzlTable
           columns={departmentPatientColumns()}
           dataKey="teams"
+          category={Role.PATIENT.id}
           request={window.$api.org.getDepartmentRoles}
           depOptions={tableOptions}
         />

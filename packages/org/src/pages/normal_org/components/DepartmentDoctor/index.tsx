@@ -1,13 +1,18 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-import XzlTable from '@/components/XzlTable';
-import Title xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Title';
-import Search xzl-web-shared/src/utils/constsxzl-web-shared/src/components/Selects'/Search';
-import { Role } from '@/utils/role';
-import { handleSelection } from '@/utils/conditions';
-
-import { departmentDoctorColumns } from '@/utils/columns';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { Title, Search } from 'xzl-web-shared/src/components/Selects';
+import { Role } from 'xzl-web-shared/src/utils/role';
+import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
+import {
+    navAvatar,
+    navName,
+    sex,
+    title,
+    patientNum,
+    status,
+} from 'xzl-web-shared/src/utils/columns';
 import AddEditDoctor from '@/components/AddEditDoctor';
 import styles from './index.scss';
 
@@ -59,10 +64,12 @@ const DepartmentDoctor: FC = () => {
   const handleSelectChange = (changedValues: string[], allValues: string[]) => {
     setOptions({ ...tableOptions, conditions: handleSelection(allValues) });
   };
-  const columns = departmentDoctorColumns({
-    deleteDoctor,
+
+  const columnParams = {
     nav: nav2RolePage,
-  });
+  };
+  const columns = [navAvatar(columnParams), navName(columnParams), sex, title, patientNum, status];
+
 
   return (
     <div>
@@ -72,16 +79,6 @@ const DepartmentDoctor: FC = () => {
             添加
           </Button>
         </AddEditDoctor>
-        {/* <Button
-          className={styles.button}
-          onClick={handleConfirmDelete}
-          type="primary"
-          ghost
-          size="middle"
-          disabled={selectedRowKeys.length === 0}
-        >
-          删除
-        </Button> */}
       </div>
       <div className={styles.selection}>
         <Form form={form} onValuesChange={handleSelectChange}>
@@ -94,6 +91,7 @@ const DepartmentDoctor: FC = () => {
         <XzlTable
           columns={columns}
           dataKey="teams"
+          category={Role.DOCTOR.id}
           request={window.$api.org.getDepartmentRoles}
           depOptions={tableOptions}
           handleCallback={handleCallback}

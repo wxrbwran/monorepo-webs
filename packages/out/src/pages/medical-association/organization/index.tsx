@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { Form, message, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Search } from 'xzl-web-shared/src/components/Selects';
-import XzlTable from '@/components/XzlTable';
-import { orgListColumns } from '@/utils/columns';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { orgListColumns } from 'xzl-web-shared/src/utils/columns';
 import AddOrg from '../components/addOrg';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import { debounce } from 'lodash';
 import * as api from '@/services/api';
 

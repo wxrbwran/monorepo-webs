@@ -3,7 +3,7 @@ import { Badge, Menu } from 'antd';
 import { UserOutlined, BarChartOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import config from '@/config';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 
 interface Iprops {

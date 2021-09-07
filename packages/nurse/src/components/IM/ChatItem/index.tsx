@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { useDispatch } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { getRole } from '@/utils/utils';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 // eslint-disable-next-line import/no-cycle
 import { IAvatar } from '../ChatList';
 import AdjustMedicineCustom from '../AdjustMedicineCustom';

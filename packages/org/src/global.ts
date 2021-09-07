@@ -1,14 +1,16 @@
-import * as api from '@/services/api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
-import storage from '@/utils/storage';
+import storage from 'xzl-web-shared/src/utils/storage';
 import { setAuthorizationToken } from '@/services/http';
 import '@/assets/styles/global.scss';
+import * as api from '@/services/api';
+import pkg from '../package.json';
+
 
 window.$api = api;
 dayjs.locale('zh-cn');
-storage.init();
-window.$storage = storage;
+
+window.$storage = storage(pkg.name);
 
 const cacheToken = window.$storage.getItem('access_token');
 
