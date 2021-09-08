@@ -1,7 +1,14 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Form } from 'antd';
 import { useSelector } from 'umi';
-import { departmentPatientColumns } from 'xzl-web-shared/src/utils/columns';
+import {
+  name,
+  sex,
+  upperDoctor,
+  lowerDoctor,
+  serviceLevel,
+  tel,
+} from 'xzl-web-shared/src/utils/columns';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 
@@ -45,7 +52,7 @@ const DepartmentPatient: FC = () => {
       </div>
       <div className={styles.content}>
         <XzlTable
-          columns={departmentPatientColumns()}
+          columns={[name, sex, upperDoctor, lowerDoctor, serviceLevel, tel]}
           dataKey="teams"
           category={Role.PATIENT.id}
           request={window.$api.org.getDepartmentRoles}

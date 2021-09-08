@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Button } from 'antd';
-import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList } from './consts';
+import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
 import { Role } from './role';
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
   const column: CommonData = {
@@ -227,14 +227,6 @@ export const tel = {
   title: '联系方式',
   dataIndex: 'tel',
 };
-export const departmentPatientColumns = () => [
-  name,
-  sex,
-  upperDoctor,
-  lowerDoctor,
-  serviceLevel,
-  tel,
-];
 
 export const role = {
   title: '角色',
@@ -265,6 +257,7 @@ export const adminDepartment = {
   render: depRender,
 };
 
+
 export const lastMonthWorkload = {
   title: '上月工作量',
   dataIndex: 'lastMonthWorkload',
@@ -274,6 +267,128 @@ export const monthWorkload = {
   title: '本月工作量',
   dataIndex: 'monthWorkload',
 };
+
+
+
+export const organizationNameOut = (params: any) => ({
+  title: '医院名',
+  dataIndex: 'orgName',
+  align: 'center',
+  mock: '@region',
+  render: (text:string, record: any) =>
+    params.level === '下级机构' ? (
+      <a
+        className="header__link__clinical"
+        href={`${window.location.origin}${window.location.pathname}#/hospital/account?openSub=true&nsId=${record.nsId}&sid=${record.sid}`}
+        target="_blank"
+      >
+        {text}
+      </a>
+    ) : (
+      <span>{text}</span>
+    ),
+});
+
+export const orgName = {
+  title: '医院名',
+  dataIndex: 'orgName',
+  mock: '@region',
+  align: 'center',
+};
+
+export const patientName = {
+  title: '姓名',
+  dataIndex: 'patientName',
+  width: 100,
+  mock: '@cname',
+  render: (text: string) => <span>{text}</span>,
+};
+
+export const crostatus = {
+  title: '试验状态',
+  dataIndex: 'status',
+  mock: '@pick(["1002", "1001"])',
+  align: 'center',
+  render: (text: number) => (projectStatus[text]),
+};
+
+export const orgaName = {
+  title: '机构',
+  dataIndex: 'organizationName',
+  mock: '@pick(["心之力医院", "阜外医院", "临汾医院"])',
+  align: 'center',
+};
+
+export const sendNumber = {
+  title: '已发出量表数量',
+  dataIndex: 'sendNumber',
+  mock: '@integer(10,30)',
+  align: 'center',
+  sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
+};
+
+export const noReplyNumber = {
+  title: '未回复量表数量',
+  dataIndex: 'noReplyNumber',
+  align: 'center',
+  mock: '@integer(10,30)',
+  sorter: (a: { noReplyNumber: number }, b: { noReplyNumber: number }) =>
+    a.noReplyNumber - b.noReplyNumber,
+};
+
+
+// export const rootOrgColumns = (params) => [
+//   organizationName(params),
+//   // organizationCategory,
+//   organizationCode,
+//   adminName,
+//   lowOrgCount,
+//   upOrgCount,
+//   deptCount,
+//   doctorCount,
+//   nurseCount,
+//   patientCount,
+  // {
+  //   title: '操作',
+  //   dataIndex: 'operate',
+  //   // width: 200,
+  //   className: 'action',
+  //   render: (_text, _record) => (
+  //     <div className="column_btn">
+  //       <Button type="ghost" icon={<EditOutlined />}>
+  //         编辑
+  //       </Button>
+  //       <Button type="ghost" icon={<DeleteOutlined />}>
+  //         删除
+  //       </Button>
+  //     </div>
+  //   ),
+  // },
+// ];
+
+
+// 医联体->机构列表
+// export const orgListColumnsOut = (params: any) => [
+//   organizationNameOut(params),
+//   adminName,
+//   organizationCode,
+//   deptCount,
+//   doctorCount,
+//   nurseCount,
+//   patientCount,
+// ];
+// export const addOrgListColumns = [
+//   orgName,
+//   organizationCode,
+//   adminName,
+//   lowOrgCount,
+//   deptCount,
+//   doctorCount,
+//   nurseCount,
+//   patientCount,
+// ];
+
+
 
 // export const groupOperatorAdminColumns = (props) => [
 //   avatar,

@@ -3,7 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Form } from 'antd';
 import { useLocation } from 'umi';
 import { UserOutlined } from '@ant-design/icons';
-import { departmentPatientColumns } from 'xzl-web-shared/src/utils/columns';
+import {
+  name,
+  sex,
+  upperDoctor,
+  lowerDoctor,
+  serviceLevel,
+  tel,
+} from 'xzl-web-shared/src/utils/columns';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { handleSelection } from '@/utils/conditions';
 import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
@@ -54,7 +61,7 @@ const DepartmentPatient: FC = () => {
       <div className={styles.content}>
         {!!tableOptions?.targetNSId && (
           <XzlTable
-            columns={departmentPatientColumns()}
+            columns={[name, sex, upperDoctor, lowerDoctor, serviceLevel, tel]}
             dataKey="teams"
             request={window.$api.org.getDepartmentRoles}
             depOptions={tableOptions}

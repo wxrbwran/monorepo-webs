@@ -5,7 +5,16 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Input, Button, message } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { addOrgListColumns } from 'xzl-web-shared/src/utils/columns';
+import {
+  orgName,
+  organizationCode,
+  adminName,
+  lowOrgCount,
+  deptCount,
+  doctorCount,
+  nurseCount,
+  patientCount,
+} from 'xzl-web-shared/src/utils/columns';
 // import { DisconnectOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
 import { debounce } from 'lodash';
@@ -53,7 +62,14 @@ const AddOrg: FC<IProps> = (props) => {
     }
   }, [showModal])
   const columns = [
-    ...addOrgListColumns,
+    orgName,
+    organizationCode,
+    adminName,
+    lowOrgCount,
+    deptCount,
+    doctorCount,
+    nurseCount,
+    patientCount,
     {
       title: '操作',
       dataIndex: 'operate',
