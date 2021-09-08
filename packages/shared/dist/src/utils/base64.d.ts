@@ -23,13 +23,13 @@ declare const btoaPolyfill: (bin: string) => string;
  * @param {String} bin binary string
  * @returns {string} Base64-encoded string
  */
-declare const _btoa: (bin: string) => any;
+declare const _btoa: (bin: string) => string;
 /**
  * converts a Uint8Array to a Base64 string.
  * @param {boolean} [urlsafe] URL-and-filename-safe a la RFC4648 §5
  * @returns {string} Base64 string
  */
-declare const fromUint8Array: (u8a: Uint8Array, urlsafe?: boolean) => any;
+declare const fromUint8Array: (u8a: Uint8Array, urlsafe?: boolean) => string;
 /**
  * @deprecated should have been internal use only.
  * @param {string} src UTF-8 string
@@ -41,12 +41,12 @@ declare const utob: (u: string) => string;
  * @param {boolean} [urlsafe] if `true` make the result URL-safe
  * @returns {string} Base64 string
  */
-declare const encode: (src: string, urlsafe?: boolean) => any;
+declare const encode: (src: string, urlsafe?: boolean) => string;
 /**
  * converts a UTF-8-encoded string to URL-safe Base64 RFC4648 §5.
  * @returns {string} Base64 string
  */
-declare const encodeURI: (src: string) => any;
+declare const encodeURI: (src: string) => string;
 /**
  * @deprecated should have been internal use only.
  * @param {string} src UTF-16 string
@@ -62,7 +62,7 @@ declare const atobPolyfill: (asc: string) => string;
  * @param {String} asc Base64-encoded string
  * @returns {string} binary string
  */
-declare const _atob: (asc: string) => any;
+declare const _atob: (asc: string) => string;
 /**
  * converts a Base64 string to a Uint8Array.
  */
@@ -72,7 +72,7 @@ declare const toUint8Array: (a: string) => Uint8Array;
  * @param {String} src Base64 string.  Both normal and URL-safe are supported
  * @returns {string} UTF-8 string
  */
-declare const decode: (src: string) => any;
+declare const decode: (src: string) => string;
 /**
  * check if a value is a valid Base64 string
  * @param {String} src a value to check
@@ -93,20 +93,20 @@ declare const extendBuiltins: () => void;
 declare const gBase64: {
     version: string;
     VERSION: string;
-    atob: (asc: string) => any;
+    atob: (asc: string) => string;
     atobPolyfill: (asc: string) => string;
-    btoa: (bin: string) => any;
+    btoa: (bin: string) => string;
     btoaPolyfill: (bin: string) => string;
-    fromBase64: (src: string) => any;
-    toBase64: (src: string, urlsafe?: boolean) => any;
-    encode: (src: string, urlsafe?: boolean) => any;
-    encodeURI: (src: string) => any;
-    encodeURL: (src: string) => any;
+    fromBase64: (src: string) => string;
+    toBase64: (src: string, urlsafe?: boolean) => string;
+    encode: (src: string, urlsafe?: boolean) => string;
+    encodeURI: (src: string) => string;
+    encodeURL: (src: string) => string;
     utob: (u: string) => string;
     btou: (b: string) => string;
-    decode: (src: string) => any;
+    decode: (src: string) => string;
     isValid: (src: any) => boolean;
-    fromUint8Array: (u8a: Uint8Array, urlsafe?: boolean) => any;
+    fromUint8Array: (u8a: Uint8Array, urlsafe?: boolean) => string;
     toUint8Array: (a: string) => Uint8Array;
     extendString: () => void;
     extendUint8Array: () => void;
