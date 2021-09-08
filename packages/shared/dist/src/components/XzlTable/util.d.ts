@@ -1,4 +1,4 @@
-declare const handlePatientsTeamDataSource: (data: Store[]) => {};
-export declare const handleTableDataSource: (dataKey: string, dataSource: Store[], category?: string) => {};
+declare const handlePatientsTeamDataSource: (data: Store[]) => CommonData[];
+export declare const handleTableDataSource: (dataKey: string, dataSource: Store[], category?: string) => Store[];
 export declare const handleTableRowKey: (dataKey: string, record: Store) => string;
 export default handlePatientsTeamDataSource;
