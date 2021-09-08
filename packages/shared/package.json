@@ -1,0 +1,30 @@
+{
+  "name": "xzl-web-shared",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "lint": "eslint --ext js,ts,tsx src",
+    "build-project": "pnpm clean && pnpm build-ts && pnpm build-css",
+    "build-watch": "pnpm clean && pnpm build-ts-watch && pnpm build-css-watch",
+    "build-ts": "tsc -p tsconfig.build.json",
+    "build-ts-watch": "tsc -p tsconfig.build.json --watch",
+    "build-css": "sass ./src/components:./dist/components",
+    "build-css-watch": "sass ./src/components:./dist/src/components --watch",
+    "prepublishOnly": "pnpm lint && pnpm build-project",
+    "fuzhi-pag": "pnpm fuzhi package-dist.json dist/package.json"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pnpm lint"
+    }
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "typescript": "4.2.4",
+    "store": "2.0.12"
+  }
+}

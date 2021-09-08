@@ -661,52 +661,13 @@ importers:
 
   packages/shared:
     specifiers:
-      '@ant-design/pro-form': ^1.38.1
-      '@types/classnames': ^2.2.10
-      '@types/jest': ^24.0.0
-      '@types/node': ^12.0.0
-      '@types/react': ^17.0.19
-      '@types/react-dom': ^17.0.9
-      '@types/react-transition-group': ^4.4.0
-      antd: ^4.16.13
-      babel-loader: ^8.1.0
-      babel-plugin-import: ^1.13.3
-      classnames: ^2.2.6
-      fork-ts-checker-webpack-plugin: ^5.0.13
-      fuzhi: ^1.0.0
       husky: ^4.2.5
-      lodash: ^4.17.21
-      react-draggable: ^4.4.3
-      react-transition-group: ^4.4.1
-      rimraf: ^3.0.2
-      store: ^2.0.12
-      ts-loader: ^8.0.2
+      store: 2.0.12
       typescript: 4.2.4
-      webpack-combine-loaders: ^2.0.4
-    dependencies:
-      '@ant-design/pro-form': registry.nlark.com/@ant-design/pro-form/1.39.0_antd@4.16.13
-      antd: registry.nlark.com/antd/4.16.13
-      classnames: 2.3.1
-      lodash: 4.17.21
-      react-draggable: registry.nlark.com/react-draggable/4.4.4
-      react-transition-group: registry.nlark.com/react-transition-group/4.4.2
-      store: registry.nlark.com/store/2.0.12
     devDependencies:
-      '@types/classnames': registry.nlark.com/@types/classnames/2.3.1
-      '@types/jest': registry.nlark.com/@types/jest/24.9.1
-      '@types/node': registry.nlark.com/@types/node/12.20.24
-      '@types/react': registry.nlark.com/@types/react/17.0.20
-      '@types/react-dom': registry.nlark.com/@types/react-dom/17.0.9
-      '@types/react-transition-group': registry.nlark.com/@types/react-transition-group/4.4.2
-      babel-loader: 8.2.2
-      babel-plugin-import: 1.13.3
-      fork-ts-checker-webpack-plugin: registry.nlark.com/fork-ts-checker-webpack-plugin/5.2.1
-      fuzhi: registry.nlark.com/fuzhi/1.0.0
       husky: registry.nlark.com/husky/4.3.8
-      rimraf: 3.0.2
-      ts-loader: registry.nlark.com/ts-loader/8.3.0_typescript@4.2.4
+      store: registry.nlark.com/store/2.0.12
       typescript: registry.nlark.com/typescript/4.2.4
-      webpack-combine-loaders: registry.nlark.com/webpack-combine-loaders/2.0.4
 
   packages/shared/dist:
     specifiers:
@@ -4646,16 +4607,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/4.21.1
     dev: false
 
-  /rc-checkbox/2.3.2:
-    resolution: {integrity: sha1-+Rs2eMftsrqoEhyUg8Zk+m8K78E=, tarball: rc-checkbox/download/rc-checkbox-2.3.2.tgz}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-    dev: false
-
   /rc-checkbox/2.3.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-+Rs2eMftsrqoEhyUg8Zk+m8K78E=, tarball: rc-checkbox/download/rc-checkbox-2.3.2.tgz}
     peerDependencies:
@@ -4666,18 +4617,6 @@ packages:
       classnames: 2.3.1
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  /rc-rate/2.9.1:
-    resolution: {integrity: sha1-5Dy5XE65CiweCxbsZhTYxDUwpzE=, tarball: rc-rate/download/rc-rate-2.9.1.tgz}
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   /rc-rate/2.9.1_react-dom@17.0.2+react@17.0.2:
@@ -4694,18 +4633,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
     dev: false
 
-  /rc-steps/4.1.3:
-    resolution: {integrity: sha1-IIWA4i22GeODDdt/pBvIhsZdmAM=, tarball: rc-steps/download/rc-steps-4.1.3.tgz}
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   /rc-steps/4.1.3_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-IIWA4i22GeODDdt/pBvIhsZdmAM=, tarball: rc-steps/download/rc-steps-4.1.3.tgz}
     engines: {node: '>=8.x'}
@@ -4718,17 +4645,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  /rc-switch/3.2.2:
-    resolution: {integrity: sha1-0AH3fxJmTVJZW09vtCXdnmb7qOg=, tarball: rc-switch/download/rc-switch-3.2.2.tgz}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   /rc-switch/3.2.2_react-dom@17.0.2+react@17.0.2:
@@ -5903,22 +5819,6 @@ packages:
     version: 4.1.0
     dev: false
 
-  registry.nlark.com/@ant-design/icons/4.6.4:
-    resolution: {integrity: sha1-IbA327kO4bt8YyzKBXAG5X2ZL9k=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/icons/download/@ant-design/icons-4.6.4.tgz}
-    name: '@ant-design/icons'
-    version: 4.6.4
-    engines: {node: '>=8'}
-    peerDependencies:
-      react: '>=16.0.0'
-      react-dom: '>=16.0.0'
-    dependencies:
-      '@ant-design/colors': registry.nlark.com/@ant-design/colors/6.0.0
-      '@ant-design/icons-svg': registry.nlark.com/@ant-design/icons-svg/4.1.0
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   registry.nlark.com/@ant-design/icons/4.6.4_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-IbA327kO4bt8YyzKBXAG5X2ZL9k=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/icons/download/@ant-design/icons-4.6.4.tgz}
     id: registry.nlark.com/@ant-design/icons/4.6.4
@@ -5995,30 +5895,6 @@ packages:
       - react-dom
     dev: false
 
-  registry.nlark.com/@ant-design/pro-field/1.22.0_antd@4.16.13:
-    resolution: {integrity: sha1-2CPYaEhdzvEHqPIJ6wfl/s00c2Q=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/pro-field/download/@ant-design/pro-field-1.22.0.tgz}
-    id: registry.nlark.com/@ant-design/pro-field/1.22.0
-    name: '@ant-design/pro-field'
-    version: 1.22.0
-    peerDependencies:
-      antd: 4.x
-      react: '>=16.9.0'
-    dependencies:
-      '@ant-design/icons': registry.nlark.com/@ant-design/icons/4.6.4
-      '@ant-design/pro-provider': registry.nlark.com/@ant-design/pro-provider/1.4.17_antd@4.16.13
-      '@ant-design/pro-utils': registry.nlark.com/@ant-design/pro-utils/1.24.2_antd@4.16.13
-      antd: registry.nlark.com/antd/4.16.13
-      classnames: 2.3.1
-      lodash.tonumber: registry.nlark.com/lodash.tonumber/4.0.3
-      moment: 2.29.1
-      omit.js: registry.nlark.com/omit.js/2.0.2
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      react-color: registry.nlark.com/react-color/2.19.3
-      swr: registry.nlark.com/swr/1.0.0
-    transitivePeerDependencies:
-      - react-dom
-    dev: false
-
   registry.nlark.com/@ant-design/pro-field/1.22.0_cb15c3fd8cfa79dfc1ac8043488ce288:
     resolution: {integrity: sha1-2CPYaEhdzvEHqPIJ6wfl/s00c2Q=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/pro-field/download/@ant-design/pro-field-1.22.0.tgz}
     id: registry.nlark.com/@ant-design/pro-field/1.22.0
@@ -6042,30 +5918,6 @@ packages:
       swr: registry.nlark.com/swr/1.0.0_react@17.0.2
     transitivePeerDependencies:
       - react-dom
-    dev: false
-
-  registry.nlark.com/@ant-design/pro-form/1.39.0_antd@4.16.13:
-    resolution: {integrity: sha1-z0suarsaGYOA8zFV1n9DWkHhdDY=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/pro-form/download/@ant-design/pro-form-1.39.0.tgz}
-    id: registry.nlark.com/@ant-design/pro-form/1.39.0
-    name: '@ant-design/pro-form'
-    version: 1.39.0
-    peerDependencies:
-      antd: 4.x
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@ant-design/icons': registry.nlark.com/@ant-design/icons/4.6.4
-      '@ant-design/pro-field': registry.nlark.com/@ant-design/pro-field/1.22.0_antd@4.16.13
-      '@ant-design/pro-provider': registry.nlark.com/@ant-design/pro-provider/1.4.17_antd@4.16.13
-      '@ant-design/pro-utils': registry.nlark.com/@ant-design/pro-utils/1.24.2_antd@4.16.13
-      '@umijs/use-params': registry.nlark.com/@umijs/use-params/1.0.6
-      antd: registry.nlark.com/antd/4.16.13
-      classnames: 2.3.1
-      lodash.merge: 4.6.2
-      omit.js: registry.nlark.com/omit.js/2.0.2
-      rc-resize-observer: registry.nlark.com/rc-resize-observer/0.2.6
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      use-media-antd-query: registry.nlark.com/use-media-antd-query/1.1.0
     dev: false
 
   registry.nlark.com/@ant-design/pro-form/1.39.0_cb15c3fd8cfa79dfc1ac8043488ce288:
@@ -6121,21 +5973,6 @@ packages:
       use-json-comparison: registry.nlark.com/use-json-comparison/1.0.6_react@17.0.2
       use-media-antd-query: registry.nlark.com/use-media-antd-query/1.1.0_react@17.0.2
       warning: 4.0.3
-    transitivePeerDependencies:
-      - react-dom
-    dev: false
-
-  registry.nlark.com/@ant-design/pro-provider/1.4.17_antd@4.16.13:
-    resolution: {integrity: sha1-Q7vInM7P/ragQRiknf0kecQ6C4U=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/pro-provider/download/@ant-design/pro-provider-1.4.17.tgz}
-    id: registry.nlark.com/@ant-design/pro-provider/1.4.17
-    name: '@ant-design/pro-provider'
-    version: 1.4.17
-    peerDependencies:
-      antd: 4.x
-      react: '>=16.9.0'
-    dependencies:
-      antd: registry.nlark.com/antd/4.16.13
-      rc-util: registry.nlark.com/rc-util/5.13.2
     transitivePeerDependencies:
       - react-dom
     dev: false
@@ -6198,27 +6035,6 @@ packages:
       use-media-antd-query: registry.nlark.com/use-media-antd-query/1.1.0_react@17.0.2
     dev: false
 
-  registry.nlark.com/@ant-design/pro-utils/1.24.2_antd@4.16.13:
-    resolution: {integrity: sha1-yWubx9LV2qE7KmeD6gBgXYo7kfo=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/pro-utils/download/@ant-design/pro-utils-1.24.2.tgz}
-    id: registry.nlark.com/@ant-design/pro-utils/1.24.2
-    name: '@ant-design/pro-utils'
-    version: 1.24.2
-    peerDependencies:
-      antd: 4.x
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@ant-design/icons': registry.nlark.com/@ant-design/icons/4.6.4
-      '@ant-design/pro-provider': registry.nlark.com/@ant-design/pro-provider/1.4.17_antd@4.16.13
-      antd: registry.nlark.com/antd/4.16.13
-      classnames: 2.3.1
-      lodash.merge: 4.6.2
-      moment: 2.29.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      react-sortable-hoc: registry.nlark.com/react-sortable-hoc/2.0.0
-      swr: registry.nlark.com/swr/1.0.0
-    dev: false
-
   registry.nlark.com/@ant-design/pro-utils/1.24.2_cb15c3fd8cfa79dfc1ac8043488ce288:
     resolution: {integrity: sha1-yWubx9LV2qE7KmeD6gBgXYo7kfo=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/pro-utils/download/@ant-design/pro-utils-1.24.2.tgz}
     id: registry.nlark.com/@ant-design/pro-utils/1.24.2
@@ -6240,20 +6056,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
       react-sortable-hoc: registry.nlark.com/react-sortable-hoc/2.0.0_react-dom@17.0.2+react@17.0.2
       swr: registry.nlark.com/swr/1.0.0_react@17.0.2
-    dev: false
-
-  registry.nlark.com/@ant-design/react-slick/0.28.4:
-    resolution: {integrity: sha1-iylrh618euh38qUnuBt+69ndKak=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ant-design/react-slick/download/@ant-design/react-slick-0.28.4.tgz}
-    name: '@ant-design/react-slick'
-    version: 0.28.4
-    peerDependencies:
-      react: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      json2mq: 0.2.0
-      lodash: 4.17.21
-      resize-observer-polyfill: 1.5.1
     dev: false
 
   registry.nlark.com/@ant-design/react-slick/0.28.4_react@17.0.2:
@@ -8855,14 +8657,6 @@ packages:
     name: '@humanwhocodes/object-schema'
     version: 1.2.0
 
-  registry.nlark.com/@icons/material/0.2.4:
-    resolution: {integrity: sha1-6QyfcXaLNzbnbX3WeD/Gwq+oi8g=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@icons/material/download/@icons/material-0.2.4.tgz}
-    name: '@icons/material'
-    version: 0.2.4
-    peerDependencies:
-      react: '*'
-    dev: false
-
   registry.nlark.com/@icons/material/0.2.4_react@17.0.2:
     resolution: {integrity: sha1-6QyfcXaLNzbnbX3WeD/Gwq+oi8g=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@icons/material/download/@icons/material-0.2.4.tgz}
     id: registry.nlark.com/@icons/material/0.2.4
@@ -11327,14 +11121,6 @@ packages:
       - react-router
     dev: false
 
-  registry.nlark.com/@umijs/use-params/1.0.6:
-    resolution: {integrity: sha1-xbM3JciK6DHIbBbtud4t98/WVwc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@umijs/use-params/download/@umijs/use-params-1.0.6.tgz}
-    name: '@umijs/use-params'
-    version: 1.0.6
-    peerDependencies:
-      react: '*'
-    dev: false
-
   registry.nlark.com/@umijs/use-params/1.0.6_react@17.0.2:
     resolution: {integrity: sha1-xbM3JciK6DHIbBbtud4t98/WVwc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@umijs/use-params/download/@umijs/use-params-1.0.6.tgz}
     id: registry.nlark.com/@umijs/use-params/1.0.6
@@ -11827,57 +11613,6 @@ packages:
       rmc-steps: registry.nlark.com/rmc-steps/1.0.1
       rmc-tabs: registry.nlark.com/rmc-tabs/1.2.29
       rmc-tooltip: registry.nlark.com/rmc-tooltip/1.0.1
-    dev: false
-
-  registry.nlark.com/antd/4.16.13:
-    resolution: {integrity: sha1-6bm0pZDbKHR6rhyrmJgWSaNYgK8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/antd/download/antd-4.16.13.tgz}
-    name: antd
-    version: 4.16.13
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@ant-design/colors': registry.nlark.com/@ant-design/colors/6.0.0
-      '@ant-design/icons': registry.nlark.com/@ant-design/icons/4.6.4
-      '@ant-design/react-slick': registry.nlark.com/@ant-design/react-slick/0.28.4
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      array-tree-filter: 2.1.0
-      classnames: 2.3.1
-      copy-to-clipboard: 3.3.1
-      lodash: 4.17.21
-      moment: 2.29.1
-      rc-cascader: registry.nlark.com/rc-cascader/1.4.3
-      rc-checkbox: 2.3.2
-      rc-collapse: registry.nlark.com/rc-collapse/3.1.2
-      rc-dialog: registry.nlark.com/rc-dialog/8.6.0
-      rc-drawer: registry.nlark.com/rc-drawer/4.3.1
-      rc-dropdown: registry.nlark.com/rc-dropdown/3.2.0
-      rc-field-form: registry.nlark.com/rc-field-form/1.20.1
-      rc-image: registry.nlark.com/rc-image/5.2.5
-      rc-input-number: registry.nlark.com/rc-input-number/7.1.4
-      rc-mentions: registry.nlark.com/rc-mentions/1.6.1
-      rc-menu: registry.nlark.com/rc-menu/9.0.12
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-notification: registry.nlark.com/rc-notification/4.5.7
-      rc-pagination: registry.nlark.com/rc-pagination/3.1.9
-      rc-picker: registry.nlark.com/rc-picker/2.5.17
-      rc-progress: registry.nlark.com/rc-progress/3.1.4
-      rc-rate: 2.9.1
-      rc-resize-observer: registry.nlark.com/rc-resize-observer/1.0.1
-      rc-select: registry.nlark.com/rc-select/12.1.13
-      rc-slider: registry.nlark.com/rc-slider/9.7.2
-      rc-steps: 4.1.3
-      rc-switch: 3.2.2
-      rc-table: registry.nlark.com/rc-table/7.15.2
-      rc-tabs: registry.nlark.com/rc-tabs/11.10.1
-      rc-textarea: registry.nlark.com/rc-textarea/0.3.5
-      rc-tooltip: registry.nlark.com/rc-tooltip/5.1.1
-      rc-tree: registry.nlark.com/rc-tree/4.2.2
-      rc-tree-select: registry.nlark.com/rc-tree-select/4.3.3
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-      rc-upload: registry.nlark.com/rc-upload/4.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      scroll-into-view-if-needed: registry.nlark.com/scroll-into-view-if-needed/2.2.28
     dev: false
 
   registry.nlark.com/antd/4.16.13_react-dom@17.0.2+react@17.0.2:
@@ -21065,22 +20800,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/4.21.1
     dev: false
 
-  registry.nlark.com/rc-align/4.0.11:
-    resolution: {integrity: sha1-gZjGLbJmvBuO8F5WwTJ1v3Jiil4=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-align/download/rc-align-4.0.11.tgz}
-    name: rc-align
-    version: 4.0.11
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      dom-align: registry.nlark.com/dom-align/1.12.2
-      lodash: 4.17.21
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      resize-observer-polyfill: 1.5.1
-    dev: false
-
   registry.nlark.com/rc-align/4.0.11_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-gZjGLbJmvBuO8F5WwTJ1v3Jiil4=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-align/download/rc-align-4.0.11.tgz}
     id: registry.nlark.com/rc-align/4.0.11
@@ -21114,21 +20833,6 @@ packages:
       react-lifecycles-compat: 3.0.4
     dev: false
 
-  registry.nlark.com/rc-cascader/1.4.3:
-    resolution: {integrity: sha1-2RsNz4FXtg6+nsPli02wVNUplGQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-cascader/download/rc-cascader-1.4.3.tgz}
-    name: rc-cascader
-    version: 1.4.3
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      array-tree-filter: 2.1.0
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      warning: 4.0.3
-    dev: false
-
   registry.nlark.com/rc-cascader/1.4.3_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-2RsNz4FXtg6+nsPli02wVNUplGQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-cascader/download/rc-cascader-1.4.3.tgz}
     id: registry.nlark.com/rc-cascader/1.4.3
@@ -21158,21 +20862,6 @@ packages:
       rc-animate: registry.nlark.com/rc-animate/2.11.1
     dev: false
 
-  registry.nlark.com/rc-collapse/3.1.2:
-    resolution: {integrity: sha1-dgKKgRuEXQPZRgzMQJx+qK0J2xQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-collapse/download/rc-collapse-3.1.2.tgz}
-    name: rc-collapse
-    version: 3.1.2
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      shallowequal: 1.1.0
-    dev: false
-
   registry.nlark.com/rc-collapse/3.1.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-dgKKgRuEXQPZRgzMQJx+qK0J2xQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-collapse/download/rc-collapse-3.1.2.tgz}
     id: registry.nlark.com/rc-collapse/3.1.2
@@ -21189,20 +20878,6 @@ packages:
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
       shallowequal: 1.1.0
-    dev: false
-
-  registry.nlark.com/rc-dialog/8.6.0:
-    resolution: {integrity: sha1-OyKNrAhd5e7YxiN/MRYhBGh0Quc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-dialog/download/rc-dialog-8.6.0.tgz}
-    name: rc-dialog
-    version: 8.6.0
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-dialog/8.6.0_react-dom@17.0.2+react@17.0.2:
@@ -21222,19 +20897,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
     dev: false
 
-  registry.nlark.com/rc-drawer/4.3.1:
-    resolution: {integrity: sha1-NWMzp68Bt3er1oXJbCzmLvtE8/M=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-drawer/download/rc-drawer-4.3.1.tgz}
-    name: rc-drawer
-    version: 4.3.1
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   registry.nlark.com/rc-drawer/4.3.1_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-NWMzp68Bt3er1oXJbCzmLvtE8/M=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-drawer/download/rc-drawer-4.3.1.tgz}
     id: registry.nlark.com/rc-drawer/4.3.1
@@ -21251,19 +20913,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
     dev: false
 
-  registry.nlark.com/rc-dropdown/3.2.0:
-    resolution: {integrity: sha1-2mwq2kA4QrruOp6Qmgsakbo+EJA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-dropdown/download/rc-dropdown-3.2.0.tgz}
-    name: rc-dropdown
-    version: 3.2.0
-    peerDependencies:
-      react: '*'
-      react-dom: '*'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-    dev: false
-
   registry.nlark.com/rc-dropdown/3.2.0_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-2mwq2kA4QrruOp6Qmgsakbo+EJA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-dropdown/download/rc-dropdown-3.2.0.tgz}
     id: registry.nlark.com/rc-dropdown/3.2.0
@@ -21278,20 +20927,6 @@ packages:
       rc-trigger: registry.nlark.com/rc-trigger/5.2.10_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-field-form/1.20.1:
-    resolution: {integrity: sha1-0cUYiBB88HW0JwS3tXW++Ew1kpE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-field-form/download/rc-field-form-1.20.1.tgz}
-    name: rc-field-form
-    version: 1.20.1
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>= 16.9.0'
-      react-dom: '>= 16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      async-validator: registry.nlark.com/async-validator/3.5.2
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-field-form/1.20.1_react-dom@17.0.2+react@17.0.2:
@@ -21319,20 +20954,6 @@ packages:
       babel-runtime: 6.26.0
     dev: false
 
-  registry.nlark.com/rc-image/5.2.5:
-    resolution: {integrity: sha1-ROb/yEJiaCeWDnq3LhwNbzqM5EA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-image/download/rc-image-5.2.5.tgz}
-    name: rc-image
-    version: 5.2.5
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-dialog: registry.nlark.com/rc-dialog/8.6.0
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   registry.nlark.com/rc-image/5.2.5_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-ROb/yEJiaCeWDnq3LhwNbzqM5EA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-image/download/rc-image-5.2.5.tgz}
     id: registry.nlark.com/rc-image/5.2.5
@@ -21350,19 +20971,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
     dev: false
 
-  registry.nlark.com/rc-input-number/7.1.4:
-    resolution: {integrity: sha1-nXQQyR/43GOE0CM8IN8niYKYn5o=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-input-number/download/rc-input-number-7.1.4.tgz}
-    name: rc-input-number
-    version: 7.1.4
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   registry.nlark.com/rc-input-number/7.1.4_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-nXQQyR/43GOE0CM8IN8niYKYn5o=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-input-number/download/rc-input-number-7.1.4.tgz}
     id: registry.nlark.com/rc-input-number/7.1.4
@@ -21377,22 +20985,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-mentions/1.6.1:
-    resolution: {integrity: sha1-RgNQJ9ZKoz74QLoPvUEYceNGF64=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-mentions/download/rc-mentions-1.6.1.tgz}
-    name: rc-mentions
-    version: 1.6.1
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-menu: registry.nlark.com/rc-menu/9.0.12
-      rc-textarea: registry.nlark.com/rc-textarea/0.3.5
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-mentions/1.6.1_react-dom@17.0.2+react@17.0.2:
@@ -21412,23 +21004,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-menu/9.0.12:
-    resolution: {integrity: sha1-SSxLsHpZbizgdYfGabJ+4ow4EMU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-menu/download/rc-menu-9.0.12.tgz}
-    name: rc-menu
-    version: 9.0.12
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-overflow: registry.nlark.com/rc-overflow/1.2.2
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      shallowequal: 1.1.0
     dev: false
 
   registry.nlark.com/rc-menu/9.0.12_react-dom@17.0.2+react@17.0.2:
@@ -21451,19 +21026,6 @@ packages:
       shallowequal: 1.1.0
     dev: false
 
-  registry.nlark.com/rc-motion/2.4.4:
-    resolution: {integrity: sha1-6ZXV+iT8kwZcJPcUhXzyZ31lW7A=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-motion/download/rc-motion-2.4.4.tgz}
-    name: rc-motion
-    version: 2.4.4
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   registry.nlark.com/rc-motion/2.4.4_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-6ZXV+iT8kwZcJPcUhXzyZ31lW7A=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-motion/download/rc-motion-2.4.4.tgz}
     id: registry.nlark.com/rc-motion/2.4.4
@@ -21478,21 +21040,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-notification/4.5.7:
-    resolution: {integrity: sha1-Jl5uagwaD6xj1qvU2DLrj/MVIvE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-notification/download/rc-notification-4.5.7.tgz}
-    name: rc-notification
-    version: 4.5.7
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-notification/4.5.7_react-dom@17.0.2+react@17.0.2:
@@ -21513,20 +21060,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
     dev: false
 
-  registry.nlark.com/rc-overflow/1.2.2:
-    resolution: {integrity: sha1-lbAiIBbAzb3A24X1acJi53BqXyI=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-overflow/download/rc-overflow-1.2.2.tgz}
-    name: rc-overflow
-    version: 1.2.2
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-resize-observer: registry.nlark.com/rc-resize-observer/1.0.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   registry.nlark.com/rc-overflow/1.2.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-lbAiIBbAzb3A24X1acJi53BqXyI=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-overflow/download/rc-overflow-1.2.2.tgz}
     id: registry.nlark.com/rc-overflow/1.2.2
@@ -21544,18 +21077,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
     dev: false
 
-  registry.nlark.com/rc-pagination/3.1.9:
-    resolution: {integrity: sha1-eXrXXYWx73qCgBIH6tQQEQM3/dY=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-pagination/download/rc-pagination-3.1.9.tgz}
-    name: rc-pagination
-    version: 3.1.9
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-    dev: false
-
   registry.nlark.com/rc-pagination/3.1.9_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-eXrXXYWx73qCgBIH6tQQEQM3/dY=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-pagination/download/rc-pagination-3.1.9.tgz}
     id: registry.nlark.com/rc-pagination/3.1.9
@@ -21569,25 +21090,6 @@ packages:
       classnames: 2.3.1
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-picker/2.5.17:
-    resolution: {integrity: sha1-MjyuOhktQptUDtqmaXSUfT7IcDw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-picker/download/rc-picker-2.5.17.tgz}
-    name: rc-picker
-    version: 2.5.17
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      date-fns: registry.nlark.com/date-fns/2.23.0
-      dayjs: registry.nlark.com/dayjs/1.10.6
-      moment: 2.29.1
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      shallowequal: 1.1.0
     dev: false
 
   registry.nlark.com/rc-picker/2.5.17_react-dom@17.0.2+react@17.0.2:
@@ -21612,18 +21114,6 @@ packages:
       shallowequal: 1.1.0
     dev: false
 
-  registry.nlark.com/rc-progress/3.1.4:
-    resolution: {integrity: sha1-ZgQND659jO0rOFiDeOzLKGS61hU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-progress/download/rc-progress-3.1.4.tgz}
-    name: rc-progress
-    version: 3.1.4
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-    dev: false
-
   registry.nlark.com/rc-progress/3.1.4_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-ZgQND659jO0rOFiDeOzLKGS61hU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-progress/download/rc-progress-3.1.4.tgz}
     id: registry.nlark.com/rc-progress/3.1.4
@@ -21637,20 +21127,6 @@ packages:
       classnames: 2.3.1
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-resize-observer/0.2.6:
-    resolution: {integrity: sha1-wbZC9tEpPjTE43FfR/aUQ6FnuCU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-resize-observer/download/rc-resize-observer-0.2.6.tgz}
-    name: rc-resize-observer
-    version: 0.2.6
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      resize-observer-polyfill: 1.5.1
     dev: false
 
   registry.nlark.com/rc-resize-observer/0.2.6_react-dom@17.0.2+react@17.0.2:
@@ -21670,20 +21146,6 @@ packages:
       resize-observer-polyfill: 1.5.1
     dev: false
 
-  registry.nlark.com/rc-resize-observer/1.0.1:
-    resolution: {integrity: sha1-zNCYZUP/G/SfilgeisS7cU7STc0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-resize-observer/download/rc-resize-observer-1.0.1.tgz}
-    name: rc-resize-observer
-    version: 1.0.1
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      resize-observer-polyfill: 1.5.1
-    dev: false
-
   registry.nlark.com/rc-resize-observer/1.0.1_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-zNCYZUP/G/SfilgeisS7cU7STc0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-resize-observer/download/rc-resize-observer-1.0.1.tgz}
     id: registry.nlark.com/rc-resize-observer/1.0.1
@@ -21699,24 +21161,6 @@ packages:
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
       resize-observer-polyfill: 1.5.1
-    dev: false
-
-  registry.nlark.com/rc-select/12.1.13:
-    resolution: {integrity: sha1-wzVgzLkznTBpW1JFj1Xvw1rzUnM=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-select/download/rc-select-12.1.13.tgz}
-    name: rc-select
-    version: 12.1.13
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '*'
-      react-dom: '*'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-overflow: registry.nlark.com/rc-overflow/1.2.2
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      rc-virtual-list: registry.nlark.com/rc-virtual-list/3.4.1
     dev: false
 
   registry.nlark.com/rc-select/12.1.13_react-dom@17.0.2+react@17.0.2:
@@ -21754,22 +21198,6 @@ packages:
       warning: 3.0.0
     dev: false
 
-  registry.nlark.com/rc-slider/9.7.2:
-    resolution: {integrity: sha1-KC9XH3WCdS66ozlk5EEYT055rXQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-slider/download/rc-slider-9.7.2.tgz}
-    name: rc-slider
-    version: 9.7.2
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-tooltip: registry.nlark.com/rc-tooltip/5.1.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      shallowequal: 1.1.0
-    dev: false
-
   registry.nlark.com/rc-slider/9.7.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-KC9XH3WCdS66ozlk5EEYT055rXQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-slider/download/rc-slider-9.7.2.tgz}
     id: registry.nlark.com/rc-slider/9.7.2
@@ -21800,22 +21228,6 @@ packages:
       react-native-swipeout: registry.nlark.com/react-native-swipeout/2.3.6
     dev: false
 
-  registry.nlark.com/rc-table/7.15.2:
-    resolution: {integrity: sha1-9qtzss+xx288+WgshVVhQjxrWyI=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-table/download/rc-table-7.15.2.tgz}
-    name: rc-table
-    version: 7.15.2
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-resize-observer: registry.nlark.com/rc-resize-observer/1.0.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      shallowequal: 1.1.0
-    dev: false
-
   registry.nlark.com/rc-table/7.15.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-9qtzss+xx288+WgshVVhQjxrWyI=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-table/download/rc-table-7.15.2.tgz}
     id: registry.nlark.com/rc-table/7.15.2
@@ -21833,23 +21245,6 @@ packages:
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
       shallowequal: 1.1.0
-    dev: false
-
-  registry.nlark.com/rc-tabs/11.10.1:
-    resolution: {integrity: sha1-exEveLrJmEgMd3rhYK3EJeP9t8s=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-tabs/download/rc-tabs-11.10.1.tgz}
-    name: rc-tabs
-    version: 11.10.1
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-dropdown: registry.nlark.com/rc-dropdown/3.2.0
-      rc-menu: registry.nlark.com/rc-menu/9.0.12
-      rc-resize-observer: registry.nlark.com/rc-resize-observer/1.0.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-tabs/11.10.1_react-dom@17.0.2+react@17.0.2:
@@ -21870,20 +21265,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-textarea/0.3.5:
-    resolution: {integrity: sha1-B+1EXd25TlrmdkZ2kjpJvdrZsuw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-textarea/download/rc-textarea-0.3.5.tgz}
-    name: rc-textarea
-    version: 0.3.5
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-resize-observer: registry.nlark.com/rc-resize-observer/1.0.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-textarea/0.3.5_react-dom@17.0.2+react@17.0.2:
@@ -21913,18 +21294,6 @@ packages:
       rc-trigger: registry.nlark.com/rc-trigger/2.6.5
     dev: false
 
-  registry.nlark.com/rc-tooltip/5.1.1:
-    resolution: {integrity: sha1-lBeO0WLQJSvEmTtyX13CrA/M8VQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-tooltip/download/rc-tooltip-5.1.1.tgz}
-    name: rc-tooltip
-    version: 5.1.1
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      rc-trigger: registry.nlark.com/rc-trigger/5.2.10
-    dev: false
-
   registry.nlark.com/rc-tooltip/5.1.1_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-lBeO0WLQJSvEmTtyX13CrA/M8VQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-tooltip/download/rc-tooltip-5.1.1.tgz}
     id: registry.nlark.com/rc-tooltip/5.1.1
@@ -21938,21 +21307,6 @@ packages:
       rc-trigger: registry.nlark.com/rc-trigger/5.2.10_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-tree-select/4.3.3:
-    resolution: {integrity: sha1-KOuk2KjcjA+bYdg85GWEKmkV7KQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-tree-select/download/rc-tree-select-4.3.3.tgz}
-    name: rc-tree-select
-    version: 4.3.3
-    peerDependencies:
-      react: '*'
-      react-dom: '*'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-select: registry.nlark.com/rc-select/12.1.13
-      rc-tree: registry.nlark.com/rc-tree/4.2.2
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-tree-select/4.3.3_react-dom@17.0.2+react@17.0.2:
@@ -21971,22 +21325,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-tree/4.2.2:
-    resolution: {integrity: sha1-RCkYfLv77L6YlxSmB+Peizq3dj8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-tree/download/rc-tree-4.2.2.tgz}
-    name: rc-tree
-    version: 4.2.2
-    engines: {node: '>=10.x'}
-    peerDependencies:
-      react: '*'
-      react-dom: '*'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-util: registry.nlark.com/rc-util/5.13.2
-      rc-virtual-list: registry.nlark.com/rc-virtual-list/3.4.1
     dev: false
 
   registry.nlark.com/rc-tree/4.2.2_react-dom@17.0.2+react@17.0.2:
@@ -22022,22 +21360,6 @@ packages:
       react-lifecycles-compat: 3.0.4
     dev: false
 
-  registry.nlark.com/rc-trigger/5.2.10:
-    resolution: {integrity: sha1-igBXqUCxuQJ+qjO+7IpuzYXM4rE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-trigger/download/rc-trigger-5.2.10.tgz}
-    name: rc-trigger
-    version: 5.2.10
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-align: registry.nlark.com/rc-align/4.0.11
-      rc-motion: registry.nlark.com/rc-motion/2.4.4
-      rc-util: registry.nlark.com/rc-util/5.13.2
-    dev: false
-
   registry.nlark.com/rc-trigger/5.2.10_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-igBXqUCxuQJ+qjO+7IpuzYXM4rE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-trigger/download/rc-trigger-5.2.10.tgz}
     id: registry.nlark.com/rc-trigger/5.2.10
@@ -22055,19 +21377,6 @@ packages:
       rc-util: registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2
       react: registry.nlark.com/react/17.0.2
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
-    dev: false
-
-  registry.nlark.com/rc-upload/4.3.1:
-    resolution: {integrity: sha1-1u5muL0eHdL3hSbEhlOEI/fn7YQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-upload/download/rc-upload-4.3.1.tgz}
-    name: rc-upload
-    version: 4.3.1
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      classnames: 2.3.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-upload/4.3.1_react-dom@17.0.2+react@17.0.2:
@@ -22098,19 +21407,6 @@ packages:
       shallowequal: 1.1.0
     dev: false
 
-  registry.nlark.com/rc-util/5.13.2:
-    resolution: {integrity: sha1-qKC7d3QzUYQbqL7WOT4DuNL2hcg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-util/download/rc-util-5.13.2.tgz}
-    name: rc-util
-    version: 5.13.2
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      react-is: registry.nlark.com/react-is/16.13.1
-      shallowequal: 1.1.0
-    dev: false
-
   registry.nlark.com/rc-util/5.13.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-qKC7d3QzUYQbqL7WOT4DuNL2hcg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-util/download/rc-util-5.13.2.tgz}
     id: registry.nlark.com/rc-util/5.13.2
@@ -22125,20 +21421,6 @@ packages:
       react-dom: registry.nlark.com/react-dom/17.0.2_react@17.0.2
       react-is: registry.nlark.com/react-is/16.13.1
       shallowequal: 1.1.0
-    dev: false
-
-  registry.nlark.com/rc-virtual-list/3.4.1:
-    resolution: {integrity: sha1-HztBORrPAzpsfoTC9Oik7g3HKAc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rc-virtual-list/download/rc-virtual-list-3.4.1.tgz}
-    name: rc-virtual-list
-    version: 3.4.1
-    engines: {node: '>=8.x'}
-    peerDependencies:
-      react: '*'
-      react-dom: '*'
-    dependencies:
-      classnames: 2.3.1
-      rc-resize-observer: registry.nlark.com/rc-resize-observer/1.0.1
-      rc-util: registry.nlark.com/rc-util/5.13.2
     dev: false
 
   registry.nlark.com/rc-virtual-list/3.4.1_react-dom@17.0.2+react@17.0.2:
@@ -22170,22 +21452,6 @@ packages:
       raf: 3.4.1
       regenerator-runtime: registry.nlark.com/regenerator-runtime/0.13.9
       whatwg-fetch: 3.6.2
-    dev: false
-
-  registry.nlark.com/react-color/2.19.3:
-    resolution: {integrity: sha1-7GxrRWgxKjxqGEIKsEcuFGqlaD0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/react-color/download/react-color-2.19.3.tgz}
-    name: react-color
-    version: 2.19.3
-    peerDependencies:
-      react: '*'
-    dependencies:
-      '@icons/material': registry.nlark.com/@icons/material/0.2.4
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      material-colors: registry.nlark.com/material-colors/1.2.6
-      prop-types: 15.7.2
-      reactcss: registry.nlark.com/reactcss/1.2.3
-      tinycolor2: 1.4.2
     dev: false
 
   registry.nlark.com/react-color/2.19.3_react@17.0.2:
@@ -22276,18 +21542,6 @@ packages:
       object-assign: 4.1.1
       react: registry.nlark.com/react/17.0.2
       scheduler: registry.nlark.com/scheduler/0.20.2
-
-  registry.nlark.com/react-draggable/4.4.4:
-    resolution: {integrity: sha1-WybZmWvmPTLShaQm9BBV3oflmy8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/react-draggable/download/react-draggable-4.4.4.tgz}
-    name: react-draggable
-    version: 4.4.4
-    peerDependencies:
-      react: '>= 16.3.0'
-      react-dom: '>= 16.3.0'
-    dependencies:
-      clsx: registry.nlark.com/clsx/1.1.1
-      prop-types: 15.7.2
-    dev: false
 
   registry.nlark.com/react-draggable/4.4.4_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-WybZmWvmPTLShaQm9BBV3oflmy8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/react-draggable/download/react-draggable-4.4.4.tgz}
@@ -22790,19 +22044,6 @@ packages:
       resize-observer-polyfill: 1.5.1
     dev: false
 
-  registry.nlark.com/react-sortable-hoc/2.0.0:
-    resolution: {integrity: sha1-9ngNiqS5IqIfPnVK9ULwMmdweLc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/react-sortable-hoc/download/react-sortable-hoc-2.0.0.tgz}
-    name: react-sortable-hoc
-    version: 2.0.0
-    peerDependencies:
-      react: ^16.3.0 || ^17.0.0
-      react-dom: ^16.3.0 || ^17.0.0
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      invariant: 2.2.4
-      prop-types: 15.7.2
-    dev: false
-
   registry.nlark.com/react-sortable-hoc/2.0.0_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-9ngNiqS5IqIfPnVK9ULwMmdweLc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/react-sortable-hoc/download/react-sortable-hoc-2.0.0.tgz}
     id: registry.nlark.com/react-sortable-hoc/2.0.0
@@ -22833,20 +22074,6 @@ packages:
       react-shallow-renderer: registry.nlark.com/react-shallow-renderer/16.14.1_react@17.0.2
       scheduler: registry.nlark.com/scheduler/0.20.2
     dev: true
-
-  registry.nlark.com/react-transition-group/4.4.2:
-    resolution: {integrity: sha1-i1mlbwnO17VcvVPDZ2i5IokNVHA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/react-transition-group/download/react-transition-group-4.4.2.tgz}
-    name: react-transition-group
-    version: 4.4.2
-    peerDependencies:
-      react: '>=16.6.0'
-      react-dom: '>=16.6.0'
-    dependencies:
-      '@babel/runtime': registry.nlark.com/@babel/runtime/7.15.4
-      dom-helpers: registry.nlark.com/dom-helpers/5.2.1
-      loose-envify: registry.nlark.com/loose-envify/1.4.0
-      prop-types: 15.7.2
-    dev: false
 
   registry.nlark.com/react-transition-group/4.4.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha1-i1mlbwnO17VcvVPDZ2i5IokNVHA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/react-transition-group/download/react-transition-group-4.4.2.tgz}
@@ -24132,7 +23359,6 @@ packages:
     resolution: {integrity: sha1-jFNOKguDH3K3X8XxEZhXxE711ZM=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/store/download/store-2.0.12.tgz}
     name: store
     version: 2.0.12
-    dev: false
 
   registry.nlark.com/stream-combiner/0.2.2:
     resolution: {integrity: sha1-rsjLrBd7Vrb0+kec7YwZEs7lKFg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/stream-combiner/download/stream-combiner-0.2.2.tgz}
@@ -24591,16 +23817,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       has-flag: registry.nlark.com/has-flag/4.0.0
-
-  registry.nlark.com/swr/1.0.0:
-    resolution: {integrity: sha1-0EeTNxTYvRauNa9n2BFJ9K5wCk0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/swr/download/swr-1.0.0.tgz}
-    name: swr
-    version: 1.0.0
-    peerDependencies:
-      react: ^16.11.0 || ^17.0.0
-    dependencies:
-      dequal: registry.nlark.com/dequal/2.0.2
-    dev: false
 
   registry.nlark.com/swr/1.0.0_react@17.0.2:
     resolution: {integrity: sha1-0EeTNxTYvRauNa9n2BFJ9K5wCk0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/swr/download/swr-1.0.0.tgz}
@@ -25473,14 +24689,6 @@ packages:
       react: '>=16.9.0'
     dependencies:
       react: registry.nlark.com/react/17.0.2
-    dev: false
-
-  registry.nlark.com/use-media-antd-query/1.1.0:
-    resolution: {integrity: sha1-8IOtfiksHAJhtrv6rA7cPgkg2F0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/use-media-antd-query/download/use-media-antd-query-1.1.0.tgz}
-    name: use-media-antd-query
-    version: 1.1.0
-    peerDependencies:
-      react: '>=16.9.0'
     dev: false
 
   registry.nlark.com/use-media-antd-query/1.1.0_react@17.0.2:
