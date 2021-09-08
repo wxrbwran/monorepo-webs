@@ -22,13 +22,13 @@ pipeline {
                 sh 'node -v'
                 script {
                     if (env.BRANCH_NAME == 'master') {
-                        env.BUILD_SH = "pnpm run dist"
+                        env.BUILD_SH = "pnpm dist:nurse"
                         env.ROOT_PATH = "/Users/xinzhilici/homebrew/var/www/n/xzl-web-nurse"
                     } else if (env.BRANCH_NAME == 'test') {
-                        env.BUILD_SH = "pnpm run prerelease"
+                        env.BUILD_SH = "pnpm prerelease:nurse"
                         env.ROOT_PATH = "/Users/xinzhilici/homebrew/var/www/n.test/xzl-web-nurse"
                     } else if (env.BRANCH_NAME == 'dev') {
-                        env.BUILD_SH = "pnpm run dev-build"
+                        env.BUILD_SH = "pnpm dev-build:nurse"
                         env.ROOT_PATH = "/Users/xinzhilici/homebrew/var/www/n.dev/xzl-web-nurse"
                     }
                     env.TARGET_HOST_IP = "172.16.10.126"
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 git branch: "${BRANCH_NAME}",
                     credentialsId: "gitlab-ssh-key",
-                    url: "git@git.xzlcorp.com:UnitedFrontEnd/xzl-web-nurse.git"
+                    url: "git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git"
                 sh "ls -lat"
             }
         }

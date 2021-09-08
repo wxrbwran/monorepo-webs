@@ -29,13 +29,13 @@ pipeline {
             sh 'node -v'
             script {
               if (env.BRANCH_NAME == 'master') {
-                env.BUILD_SH = "pnpm dist"
+                env.BUILD_SH = "pnpm dist:doctor"
                 env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n/xzl-web-doctor'
                         } else if (env.BRANCH_NAME == 'test') {
-                env.BUILD_SH = "pnpm prerelease"
+                env.BUILD_SH = "pnpm prerelease:doctor"
                 env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.test/xzl-web-doctor'
                         } else if (env.BRANCH_NAME == 'dev') {
-                env.BUILD_SH = "pnpm dev-dist"
+                env.BUILD_SH = "pnpm dev-dist:doctor"
                 env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.dev/xzl-web-doctor'
               }
               env.TARGET_HOST_IP = '172.16.10.126'
@@ -47,7 +47,7 @@ pipeline {
           steps {
             git branch: "${BRANCH_NAME}",
                         credentialsId: 'gitlab-ssh-key',
-                        url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-web-doctor.git'
+                        url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
             sh 'ls -lat'
           }
         }
