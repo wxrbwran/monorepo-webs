@@ -17,7 +17,7 @@ console.log('building ... ', pkg.name, pkg.version);
 const config = {
   hash: true,
   define: defineEnv,
-  outputPath: pkg.name,
+  outputPath: `../../${pkg.name}`,
   favicon: '/assets/favicon.ico',
   publicPath: process.env.NODE_ENV === 'development' ? '/' : `/${pkg.name}/`,
   ignoreMomentLocale: true,

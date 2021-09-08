@@ -13,14 +13,12 @@ pipeline {
     }
 
     tools {
-        jdk "JDK_11"
         nodejs "NODEJS_14"
     }
 
     stages {
         stage('prepare') {
             steps {
-                sh 'java --version'
                 sh 'node -v'
                 script {
                     if (env.BRANCH_NAME == 'master') {

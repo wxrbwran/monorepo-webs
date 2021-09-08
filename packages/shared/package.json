@@ -6,7 +6,7 @@
   "keywords": [],
   "author": "",
   "scripts": {
-    "clean": "rimraf ./dist",
+    "clean": "",
     "lint": "eslint --ext js,ts,tsx src",
     "build-project": "pnpm clean && pnpm build-ts && pnpm build-css",
     "build-watch": "pnpm clean && pnpm build-ts-watch && pnpm build-css-watch",
