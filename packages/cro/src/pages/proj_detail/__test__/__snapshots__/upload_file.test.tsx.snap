@@ -1,0 +1,326 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`项目详情：项目文件 匹配快照 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div>
+        <div>
+          项目文件
+        </div>
+        <div
+          class="ant-row"
+        >
+          <div
+            class="ant-col ant-col-6"
+          >
+            <div
+              data-testid="toogleUpload"
+            >
+              <div>
+                <span
+                  class=""
+                >
+                  <div
+                    class="ant-upload ant-upload-select ant-upload-select-text"
+                  >
+                    <span
+                      class="ant-upload"
+                      role="button"
+                      tabindex="0"
+                    >
+                      <input
+                        accept=""
+                        style="display: none;"
+                        type="file"
+                      />
+                      <span
+                        aria-label="upload"
+                        class="anticon anticon-upload"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class=""
+                          data-icon="upload"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
+                          />
+                        </svg>
+                      </span>
+                      <span>
+                        上传
+                      </span>
+                    </span>
+                  </div>
+                </span>
+              </div>
+              <p>
+                <img
+                  alt=""
+                  src="project.png"
+                />
+              </p>
+              <p>
+                项目文件
+              </p>
+            </div>
+          </div>
+          <div
+            class="ant-col ant-col-12"
+          >
+            <div
+              data-testid="toogleUpload"
+            >
+              <div>
+                <span
+                  class=""
+                >
+                  <div
+                    class="ant-upload ant-upload-select ant-upload-select-text"
+                  >
+                    <span
+                      class="ant-upload"
+                      role="button"
+                      tabindex="0"
+                    >
+                      <input
+                        accept=""
+                        style="display: none;"
+                        type="file"
+                      />
+                      <span
+                        aria-label="upload"
+                        class="anticon anticon-upload"
+                        role="img"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class=""
+                          data-icon="upload"
+                          fill="currentColor"
+                          focusable="false"
+                          height="1em"
+                          viewBox="64 64 896 896"
+                          width="1em"
+                        >
+                          <path
+                            d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
+                          />
+                        </svg>
+                      </span>
+                      <span>
+                        上传
+                      </span>
+                    </span>
+                  </div>
+                </span>
+              </div>
+              <p>
+                <img
+                  alt=""
+                  src="invite.png"
+                />
+              </p>
+              <p>
+                项目邀请书
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div>
+      <div>
+        项目文件
+      </div>
+      <div
+        class="ant-row"
+      >
+        <div
+          class="ant-col ant-col-6"
+        >
+          <div
+            data-testid="toogleUpload"
+          >
+            <div>
+              <span
+                class=""
+              >
+                <div
+                  class="ant-upload ant-upload-select ant-upload-select-text"
+                >
+                  <span
+                    class="ant-upload"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <input
+                      accept=""
+                      style="display: none;"
+                      type="file"
+                    />
+                    <span
+                      aria-label="upload"
+                      class="anticon anticon-upload"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class=""
+                        data-icon="upload"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
+                        />
+                      </svg>
+                    </span>
+                    <span>
+                      上传
+                    </span>
+                  </span>
+                </div>
+              </span>
+            </div>
+            <p>
+              <img
+                alt=""
+                src="project.png"
+              />
+            </p>
+            <p>
+              项目文件
+            </p>
+          </div>
+        </div>
+        <div
+          class="ant-col ant-col-12"
+        >
+          <div
+            data-testid="toogleUpload"
+          >
+            <div>
+              <span
+                class=""
+              >
+                <div
+                  class="ant-upload ant-upload-select ant-upload-select-text"
+                >
+                  <span
+                    class="ant-upload"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <input
+                      accept=""
+                      style="display: none;"
+                      type="file"
+                    />
+                    <span
+                      aria-label="upload"
+                      class="anticon anticon-upload"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class=""
+                        data-icon="upload"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
+                        />
+                      </svg>
+                    </span>
+                    <span>
+                      上传
+                    </span>
+                  </span>
+                </div>
+              </span>
+            </div>
+            <p>
+              <img
+                alt=""
+                src="invite.png"
+              />
+            </p>
+            <p>
+              项目邀请书
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

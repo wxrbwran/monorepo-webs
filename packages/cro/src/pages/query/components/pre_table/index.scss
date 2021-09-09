@@ -1,0 +1,73 @@
+.pre_table {
+  display: flex;
+  max-width: 70vw;
+  overflow: auto;
+  &>div {
+    // float: left;
+    flex-shrink: 0;
+  }
+  .cell_wrapper, p {
+    border-right: 1px solid #ECECEC;
+    border-bottom: 1px solid #ECECEC;
+    // min-width: 100px;
+    // min-height: 40px;
+    @include flex-lay(row, wrap, center, center);
+    min-height: 50px;
+    min-width: 150px;
+    font-size: 14px;
+    width: 100%;
+    padding: 0 5px;
+  }
+  .double_line {
+    // display: inline-grid;
+    @include flex-lay(column, wrap, center, center);
+    .cell_wrapper {
+      // height: 100%;
+      // border-bottom: 0;
+      border: 0;
+    }
+  }
+  .th {
+    background: #f5f5f5;
+    p {
+      min-width: 120px;
+    }
+  }
+  input {
+    border: 0;
+    &::placeholder {
+      text-align: center;
+    }
+  }
+  .submit_btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .single_input {
+    :global {
+      input {
+        min-height: 49px;
+        min-width: 149px;
+        border: 0;
+        text-align: center;
+      }
+    }
+  }
+  .single_select {
+    :global {
+      .ant-select-selector {
+        min-height: 49px;
+        min-width: 149px;
+        border: 0;
+      }
+      .ant-select .ant-select-selection-item, .ant-select .ant-select-selection-placeholder {
+        line-height: 49px!important;
+        text-align: center;
+      }
+    }
+  }
+  // .multi_select {
+  //   padding: 0 5px;
+  // }
+}

@@ -1,0 +1,13 @@
+.send_record {
+  padding: 10px 35px;
+  :global {
+    .ant-tabs-nav {
+      &::before {
+        border-bottom: none;
+      }
+    }
+    .ant-form {
+      @include flex(flex-end, center);
+    }
+  }
+}

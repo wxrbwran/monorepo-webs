@@ -1,0 +1,14 @@
+.charts_title {
+  @include flex;
+
+  .name {
+    font-size: 18px;
+    line-height: 18px;
+    color: #181818;
+  }
+
+  .time {
+    font-size: 14px;
+    color: #999999;
+  }
+}

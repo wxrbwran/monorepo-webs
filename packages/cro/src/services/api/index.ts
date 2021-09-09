@@ -1,0 +1,12 @@
+export { default as auth } from './auth';
+export { default as detail } from './detail';
+export { default as user } from './user';
+export { default as subjective } from './subjective';
+export { default as project } from './project';
+export { default as patientManage } from './patientManage';
+export { default as report } from './report';
+export { default as query } from './query';
+export { default as template } from './template';
+export { default as research } from  './research';
+export { default as base } from './base';
+export { default as event } from './event';
