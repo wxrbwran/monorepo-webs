@@ -1,0 +1,145 @@
+.report-wrap-table {
+  width: 100%;
+  transition: all 0.2s;
+  &.full {
+    width: 96vw;
+    margin: 0 auto;
+    position: fixed;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+    background-color: #fff;
+    z-index: 2;
+    min-height: 500px;
+    .ant-table-wrapper {
+      max-height: 80vh;
+      overflow: auto;
+    }
+  }
+  .table-top {
+    @include flex;
+    margin-bottom: 15px;
+    margin-top: 30px;
+    &__info {
+      font-size: 14px;
+      color: #181818;
+    }
+    .btn-wrap {
+      @include flex;
+
+      .create-btn {
+        font-size: 14px;
+        color: #3296FA;
+        cursor: pointer;
+      }
+      .full-screen {
+        margin: 0 15px;
+        cursor: pointer;
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+
+  .table-export {
+    margin-bottom: 12px;
+    text-align: right;
+    span {
+      margin-left: 50px;
+      font-size: 14px;
+      color: #3296FA;
+      cursor: pointer;
+    }
+  }
+
+  .ant-table {
+    font-size: 14px;
+  }
+  .ant-table-cell {
+    span {
+      color: #3296FA;
+      cursor: pointer;
+    }
+  }
+
+  .checklist-num {
+    font-size: 14px;
+    color: #3296FA;
+    cursor: pointer;
+  }
+}
+
+// 查看图片的弹框样式
+// .report-wrap-modal {
+
+// }
+.img-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 38px;
+  .item {
+    margin-right: 16px;
+    margin-bottom: 16px;
+    width: 120px;
+    height: 90px;
+    position: relative;
+    &:nth-child(5n) {
+      margin-right: 0;
+    }
+
+    img {
+      width: 120px;
+      height: 90px;
+    }
+
+    .time {
+      text-align: center;
+      font-size: 14px;
+      color: #666666;
+      width: 120px;
+      height: 24px;
+      line-height: 24px;
+      background: #F4F4F4;
+      border: 1px solid #EFEFEF;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
+// 生成报告弹框样式
+.create-report-modal {
+  .report-name {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    width: 372px;
+    margin: 0 auto 155px;
+    input {
+      width: 300px;
+      height: 40px;
+      margin-left: 15px;
+    }
+  }
+}
+
+// 添加字段弹框
+.add-field-modal {
+  .ant-checkbox-group {
+    width: 100%;
+    padding-left: 15px;
+  }
+  .ant-checkbox-group-item {
+    display: inline-block;
+    margin-right: 6px;
+    width: 32%;
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .submit-btn-style1 {
+    margin-top: 60px;
+  }
+}

@@ -1,0 +1,76 @@
+.create-project {
+  @include flex(flex-start, flex-start);
+  padding: 20px 50px 0px;
+  .project-logo {
+    width: 140px;
+    height: 140px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .left {
+    .ant-btn {
+      background: #FAFAFA;
+      border: 1px solid #E6E6E6;
+      border-radius: 1px;
+      width: 110px;
+      height: 32px;
+      margin-left: 14px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+  }
+  .right {
+    margin-left: 40px;
+    &.create-project-form {
+      .ant-form-item {
+        display: block;
+        width: 460px;
+      }
+      .ant-form-item-label {
+        text-align: left;
+        label {
+          color: #181818;
+          font-size: 14px;
+          line-height: 28px;
+          height: 28px;
+        }
+      }
+      .ant-input {
+        height: 42px;
+      }
+      .ant-select-selector {
+        height: 42px!important;
+      }
+      .ant-select-selection-placeholder {
+        line-height: 42px;
+        font-size: 14px;
+      }
+      #basic_introduction {
+        height: 178px;
+        ;
+      }
+      .ant-btn {
+        width: 140px;
+        height: 40px;
+        background: #3296FA;
+        border-radius: 3px;
+        font-size: 14px;
+      }
+    }
+    .ant-input-suffix {
+      font-size: 14px;
+      color: #181818;
+    }
+    .ant-input-affix-wrapper {
+      padding: 0 7px;
+    }
+
+  }
+  .ant-radio-wrapper {
+    color: #000;
+    margin-top: 10px;
+  }
+}

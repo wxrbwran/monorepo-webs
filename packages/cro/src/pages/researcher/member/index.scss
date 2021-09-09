@@ -1,0 +1,46 @@
+.member {
+  color: #181818;
+  font-size: 14px;
+  // :global {
+  //   .ant-btn {
+  //     height: 34px;
+  //   }
+  // }
+  .lists_head {
+    @include flex-lay(row, nowrap, space-between, center);
+    margin: 15px 0;
+  }
+  .upgrade_btn {
+    position: absolute;
+    right: 0;
+    top: 0px;
+    color: #3296FA;
+    font-size: 15px;
+    cursor: pointer;
+  }
+}
+.title {
+  margin-bottom: 24px;
+  h3 {
+    font-size: 18px;
+    display: inline-block;
+    margin-right: 20px;
+  }
+  img {
+    vertical-align: middle;
+    margin-top: -2px;
+  }
+}
+.search {
+  :global {
+    .ant-input {
+      font-size: 14px;
+    }
+  }
+}
+.confirm_content {
+  font-size: 13px;
+  span {
+    color: #CF1322;
+  }
+}

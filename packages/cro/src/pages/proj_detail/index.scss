@@ -1,0 +1,25 @@
+.detail {
+  @include flex-lay(row, nowrap, flex-start, flex-start);
+  font-size: 14px;
+  color: #181818;
+  height: 100%;
+  .left {
+    width: 35%;
+    height: 100%;
+    background: #fff;
+    border-right: 10px solid #f6f6f6;
+  }
+  .right {
+    width: 65%;
+    height: 100%;
+    background: #fff;
+    img {
+      width: 42px;
+      height: 42px;
+    }
+  }
+  .gutter {
+    height: 10px;
+    background: #f6f6f6;
+  }
+}
