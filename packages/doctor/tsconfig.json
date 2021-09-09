@@ -1,28 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "jsx": "react",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "strict": true,
-    "resolveJsonModule": true,
-    "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@@/*": [
-        "src/.umi/*"
-      ]
-    },
-    "typeRoots": [
-      "node",
-      "node_modules/@types",
-      "./typings"
-    ],
-    "allowSyntheticDefaultImports": true
-  }
+  "extends": "../../tsconfig.json"
 }
