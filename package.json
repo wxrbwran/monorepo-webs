@@ -13,7 +13,7 @@
     ]
   },
   "scripts": {
-    "lint": "eslint --ext ts,tsx src/ --fix",
+    "lint": "eslint --ext ts,tsx **/src/ --fix",
     "clean:doctor": "pnpm clean --filter 'xzl-web-doctor'",
     "clean:nurse": "pnpm clean --filter 'xzl-web-nurse'",
     "clean:org": "pnpm clean --filter 'xzl-web-org'",
