@@ -41,7 +41,8 @@ var handlePatientsTeamDataSource = function (data) {
                 case Role.PATIENT_YL_VIP.id:
                     newObj.isYlPatient = true;
                     break; // 1表示此患者为养老患者
-                default: break;
+                default:
+                    break;
             }
         });
         newPatients.push(newObj);

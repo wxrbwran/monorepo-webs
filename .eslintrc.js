@@ -1,21 +1,23 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: ['airbnb-typescript', 'plugin:react-hooks/recommended'],
+  plugins: ['react', 'react-hooks'],
   parserOptions: {
     project: './tsconfig.json',
   },
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+    jest: true,
+  },
   rules: {
-    'react/jsx-filename-extension': [
-      1,
-      {
-        extensions: ['jsx', 'tsx'],
-      },
-    ],
+    'react/jsx-filename-extension': 0,
     // "jsx-no-multiline-js": 0,
     // "no-restricted-globals": ["error", "event", "fdescribe"]
     'import/no-extraneous-dependencies': 0,
     'react/jsx-wrap-multilines': 0,
-    'react/jsx-props-no-spreading': [{ explicitSpread: 'ignore' }], // 允许{...props}传递属性
+    'react/jsx-props-no-spreading': 0, // 允许{...props}传递属性
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/click-events-have-key-events': 0, // 由于ESLint检查强制非Button的 onClick 事件需要至少一个键盘事件。
     'no-console': 0,

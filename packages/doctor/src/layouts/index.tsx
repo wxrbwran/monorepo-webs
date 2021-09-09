@@ -22,23 +22,23 @@ export default (props: IProps) => {
   const authPages = <SecurityLayout location={location}>{children}</SecurityLayout>;
   // 已登录，去往需验证页面
   if (isLogin && !isNonAuthPage) {
-    console.log(333111);
+    // console.log(333111);
     child = authPages;
   }
   // 已登录，去往登录等页面
   if (isLogin && isNonAuthPage) {
-    console.log(3331112);
+    // console.log(3331112);
     child = null;
     history.push('/doctor/patients/alone');
   }
   // 未登录，去往登录等页面
   if (!isLogin && isNonAuthPage) {
-    console.log(3331113);
+    // console.log(3331113);
     child = children;
   }
   // 未登录，去往需验证等页面
   if (!isLogin && !isNonAuthPage) {
-    console.log(3331114);
+    // console.log(3331114);
     child = null;
     history.push('/login');
   }

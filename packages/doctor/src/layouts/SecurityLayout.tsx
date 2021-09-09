@@ -15,7 +15,7 @@ function SecurityLayout({ children, location }: IProps) {
   const pathname = location.pathname.split('/')[1];
   console.log('location.pathname', location.pathname);
   // 初始化im-s
-  const connected = useSelector((state) => state.im.connected);
+  const connected = useSelector((state: IState) => state.im.connected);
   const store = useStore();
   window.$store = window.$store || store;
   const dispatch = useDispatch();

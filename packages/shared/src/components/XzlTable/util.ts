@@ -19,15 +19,20 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           newObj.researchProjectDoctor = member.name;
           break;
         case Role.LOWER_DOCTOR.id:
-          newObj.lowerDoctor = member.name; break;
+          newObj.lowerDoctor = member.name;
+          break;
         case Role.UPPER_DOCTOR.id:
-          newObj.upperDoctor = member.name; break;
+          newObj.upperDoctor = member.name;
+          break;
         case Role.ORG.id:
-          newObj.organizationName = member.name; break;
+          newObj.organizationName = member.name;
+          break;
         case Role.PATIENT_YL.id:
         case Role.PATIENT_YL_VIP.id:
-          newObj.isYlPatient = true; break; // 1表示此患者为养老患者
-        default: break;
+          newObj.isYlPatient = true;
+          break; // 1表示此患者为养老患者
+        default:
+          break;
       }
     });
     newPatients.push(newObj);
@@ -38,9 +43,9 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
 // 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
 export const handleInviteMemberList = (dataSource: Store[]) => {
   const newData: Array<ISubject> = [];
-  console.log('dataSource', dataSource)
+  console.log('dataSource', dataSource);
   dataSource.forEach((item: any) => {
-    const { title, avatarUrl, firstProfessionCompany,firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
+    const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
     newData.push({
       ...item,
       title,
@@ -54,12 +59,12 @@ export const handleInviteMemberList = (dataSource: Store[]) => {
       firstProfessionCompany,
       firstPracticeDepartment,
       role: fetchRolePropValue(item.role, 'desc'),
-      roleId: item.role
-    })
-  })
-  console.log('newData', newData)
+      roleId: item.role,
+    });
+  });
+  console.log('newData', newData);
   return newData;
-}
+};
 
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
@@ -126,7 +131,7 @@ export const handleTableRowKey = (dataKey: string, record: Store): string => {
     case 'teams':
       return record.sid;
     case 'infos':
-      return record.subjectId
+      return record.subjectId;
     case 'images':
     case 'events':
     case 'sendRecordList':
