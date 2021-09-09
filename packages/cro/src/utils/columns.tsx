@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popconfirm } from 'antd';
-import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';import { eventList, exitReason } from '@/utils/consts';
+import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { eventList, exitReason } from '@/utils/consts';
 import moment from 'moment'
 
 import { sexList } from './consts';

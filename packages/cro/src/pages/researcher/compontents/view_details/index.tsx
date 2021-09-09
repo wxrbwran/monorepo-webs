@@ -5,7 +5,7 @@ import IconTip from '@/assets/img/icon_tip.png';
 import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';import styles from './index.scss';
 import { IState, ISubject } from 'typings/global';
 import { useSelector } from 'umi';
-import { handleInviteMemberList } from '@/components/XzlTable/util';
+import { handleInviteMemberList } from 'xzl-web-shared/src/components/XzlTable/util';
 import MemberDetail from '../member_detail';
 import * as api from '@/services/api';
 
