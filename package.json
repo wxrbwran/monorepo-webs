@@ -65,8 +65,9 @@
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
     "@types/react-test-renderer": "^17.0.1",
-    "husky": "^4.3.8",
+    "husky": "4.3.8",
     "postcss": "7",
+    "prettier": "",
     "typescript": "^4.4.2"
   }
 }
