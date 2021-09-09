@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, message } from 'antd';
 import defaultAvatar from '@/assets/img/default_doctor.png';
-import { Search, Organization, Department } from '@/components/Selects';
+import { Organization, Department } from '@/components/Selects';
+import { Search } from 'xzl-web-shared/src/components/Selects';
 import * as api from '@/services/api';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { name, firstProfessionCompany, title, department } from '@/utils/columns';
 import styles from './index.scss';
 import { Store } from 'antd/lib/form/interface';

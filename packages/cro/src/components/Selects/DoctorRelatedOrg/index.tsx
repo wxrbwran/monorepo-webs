@@ -4,7 +4,7 @@ import { Select, Form } from 'antd';
 import { useSelector } from 'umi';
 import styles from '../index.scss';
 import { IState, ISubject } from 'typings/global';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 const { Option } = Select;
 interface IOrg {

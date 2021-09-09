@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import styles from './index.scss'
 import { IQuestions } from '@/utils/consts';
 import ScaleTableDetailEcho from '@/components/ScaleTableDetailEcho';

@@ -2,11 +2,11 @@
 import * as api from '@/services/api';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import storage from '@/utils/storage';
+import storage from 'xzl-web-shared/src/utils/storage';
 import { setAuthorizationToken } from "@/services/http";
+import pkg from '../package.json';
 
-storage.init();
-window.$storage = storage;
+window.$storage = storage(pkg.name);
 window.$api = api;
 const cacheToken = localStorage.getItem('xzl-web-doctor_access_token');
 

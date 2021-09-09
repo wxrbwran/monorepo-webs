@@ -6,7 +6,7 @@ import * as api from '@/services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { Select, Input, Tooltip, message, InputNumber } from 'antd';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 import { CommonData, IState } from 'typings/global';
 import { projectLabel } from '@/utils/consts';

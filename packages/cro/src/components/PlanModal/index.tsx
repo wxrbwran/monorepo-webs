@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import SendPlan from '@/components/SendPlan'
 import { useDispatch } from 'umi';
 import { IPlanInfos } from '@/utils/consts';

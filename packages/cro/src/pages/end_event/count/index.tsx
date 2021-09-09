@@ -3,7 +3,7 @@ import { Form } from 'antd';
 import { isEmpty } from 'lodash';
 import Event from '../components/event';
 import Researcher from '../components/researcher';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { endEventColumns } from '@/utils/columns';
 import styles from './index.scss';
 

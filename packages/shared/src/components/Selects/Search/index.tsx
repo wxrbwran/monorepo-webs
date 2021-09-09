@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import { Input, Form } from 'antd';
 
 const { Item } = Form;
@@ -8,18 +8,23 @@ interface IProps {
   searchKey: string;
   form: Store;
   value?: string;
+  focus?: boolean; // 是否主动获取焦点
 }
 
 const Search: FC<IProps> = (props) => {
   const {
-    placeholder, form, searchKey, value,
+    placeholder, form, searchKey, value, focus,
   } = props;
   const [wordKey, setWordKey] = useState(value);
+  const inputRef = useRef<Input>(null);
   const formDispatch = (form as any).getInternalHooks('RC_FORM_INTERNAL_HOOKS')
     .dispatch;
   useEffect(() => {
     if (wordKey !== value) {
       setWordKey(value);
+    }
+    if (focus) {
+      inputRef.current!.focus();
     }
   }, [value]);
   const handleSearchKey = (word: string) => {
@@ -47,6 +52,7 @@ const Search: FC<IProps> = (props) => {
         style={{ width: 160, float: 'right' }}
         onSearch={handleSearchKey}
         onChange={handleChangeKey}
+        ref={inputRef}
       />
     </>
   );

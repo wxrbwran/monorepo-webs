@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import { useSelector, Link } from 'umi';
 import {projectDefaultImg} from '@/utils/consts';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 import { IProjectList, IState } from 'typings/global';
 import ProjectItem from '../ProjectItem';

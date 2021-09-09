@@ -4,13 +4,13 @@ import * as api from '@/services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { sexList } from '@/utils/consts';
 import draft from '@/assets/img/draft.png';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import Condition from '@/components/Condition';
 import styles from './index.scss';
 import { IConItem, findIndex } from '@/utils/tools';
 import { info } from 'console';
 import { IState } from 'typings/global';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 interface IProps{
   projectSid: string;

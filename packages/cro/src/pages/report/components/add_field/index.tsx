@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Checkbox, Button, message } from 'antd';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import {queryImage}  from '@/models/query';
 import { baseOption, extOptions } from '@/utils/consts';
 interface IProps {

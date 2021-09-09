@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Form, Input, Button, message } from 'antd';
 import * as api from '@/services/api';
 import styles from './index.scss';

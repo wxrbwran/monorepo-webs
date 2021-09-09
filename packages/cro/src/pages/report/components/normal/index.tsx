@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { normalColumns } from './columns';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { dataSource } from './mock';
 import styles from './index.scss';
 

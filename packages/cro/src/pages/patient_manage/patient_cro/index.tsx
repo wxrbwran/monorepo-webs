@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Select, message, Form, Tabs } from 'antd';
 import SelectGroup from '../components/select_group';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import * as api from '@/services/api';
 import { handleSelection } from '@/utils/conditions';
-import { Status, Group } from '@/components/Selects';
+import { Status } from 'xzl-web-shared/src/components/Selects';
+import { Group } from '@/components/Selects';
 import Viewer from 'react-viewer';
 import { patientCroColumns, patientCroStopColumns } from '@/utils/columns';
 import { useSelector, useDispatch } from 'umi';
@@ -128,6 +129,7 @@ function PatientCro({ }: IProps) {
         }
         <XzlTable
           columns={columns[status]}
+          category="patientList"
           dataKey="teams"
           request={window.$api.patientManage.getTestPatients}
           depOptions={tableOptions}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Input } from 'antd';
 import * as api from '@/services/api';
 import { useDispatch } from 'umi';

@@ -4,7 +4,7 @@ import project from '@/services/api/project';
 import detail from '@/services/api/detail';
 import { IPlanInfos } from '@/utils/consts';
 import { patientManage, subjective } from '@/services/api';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 export interface ProjectModelState {
   projectList: IProjectList[],

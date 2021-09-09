@@ -1,8 +1,6 @@
 import { Role, fetchRolePropValue } from '../../utils/role';
-
-// interface ITeam {
-//   members: ISubject[];
-// }
+import { projectInviteStatus, sexList } from '../../utils/consts';
+import dayjs from 'dayjs';
 
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
 const handlePatientsTeamDataSource = (data: Store[]) => {
@@ -12,9 +10,14 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
       switch (member.role) {
+        case Role.PROJECT_PATIENT.id: // 受试列表
         case Role.PATIENT.id:
         case Role.PATIENT_VIP.id:
-          newObj = { ...newObj, ...member }; break;
+          newObj = { ...newObj, ...member };
+          break;
+        case Role.RESEARCH_PROJECT_DOCTOR.id:
+          newObj.researchProjectDoctor = member.name;
+          break;
         case Role.LOWER_DOCTOR.id:
           newObj.lowerDoctor = member.name; break;
         case Role.UPPER_DOCTOR.id:
@@ -31,6 +34,32 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   });
   return newPatients;
 };
+
+// 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
+export const handleInviteMemberList = (dataSource: Store[]) => {
+  const newData: Array<ISubject> = [];
+  console.log('dataSource', dataSource)
+  dataSource.forEach((item: any) => {
+    const { title, avatarUrl, firstProfessionCompany,firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
+    newData.push({
+      ...item,
+      title,
+      avatarUrl,
+      name,
+      joinTime: item?.interval?.start ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
+      status: projectInviteStatus[item.status],
+      tel,
+      provinceName,
+      sex: sexList[sex],
+      firstProfessionCompany,
+      firstPracticeDepartment,
+      role: fetchRolePropValue(item.role, 'desc'),
+      roleId: item.role
+    })
+  })
+  console.log('newData', newData)
+  return newData;
+}
 
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
@@ -86,6 +115,8 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
         return handlePatientTeamDataSource(dataSource);
       }
       return dataSource;
+    case 'infos':
+      return handleInviteMemberList(dataSource);
     default:
       return dataSource;
   }
@@ -94,7 +125,11 @@ export const handleTableRowKey = (dataKey: string, record: Store): string => {
   switch (dataKey) {
     case 'teams':
       return record.sid;
+    case 'infos':
+      return record.subjectId
     case 'images':
+    case 'events':
+    case 'sendRecordList':
       return record.id;
     default:
       return record.sid || record.id;

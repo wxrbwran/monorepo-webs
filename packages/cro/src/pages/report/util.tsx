@@ -1,4 +1,4 @@
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import type { Store } from 'antd/lib/form/interface';
 export const handleTableDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];

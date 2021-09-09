@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, message } from 'antd';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import dayjs from 'dayjs';
 import styles from './index.scss'

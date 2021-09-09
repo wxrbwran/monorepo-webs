@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { groupDetailColumns } from '@/utils/columns';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';
@@ -39,6 +39,7 @@ function GroupDetails({location}: IProps) {
         <XzlTable
           columns={groupDetailColumns()}
           dataKey="teams"
+          category="patientList"
           request={window.$api.patientManage.getGroupPatient}
           noPagination={true}
           tableOptions={{

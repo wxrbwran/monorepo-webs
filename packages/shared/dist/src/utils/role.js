@@ -43,9 +43,10 @@ export var Role = {
     PI: roleType('Y0OG0Q', 0, 0, 0, 'PI'),
     MAIN_PI: roleType('NeEd4M', 0, 0, 0, '总PI'),
     SUB_PI: roleType('D09PeP', 0, 0, 0, '分PI'),
-    PROJECT_LEADER: roleType('v4Rwe2', 0, 0, 0, '组长'),
+    PROJECT_LEADER: roleType('v4Rwe2', 0, 0, 0, '项目组长'),
     PROJECT_RESEARCHER: roleType('x4y14p', 0, 0, 0, '研究者'),
     PROJECT_PATIENT: roleType('NWkr0D', 0, 0, 0, '受试者'),
+    PROJECT_MEMBERS: roleType('V0YzWE', 0, 0, 0, '组员'),
     PATIENT_YL: roleType('XWrVxW', 459, 450, 458, '患 养老院患者'),
     PATIENT_YL_VIP: roleType('V0XNq4', 469, 460, 468, '患 养老院vip患者'),
     NURSE_YL: roleType('qWd7L0', 0, 0, 0, '护 养老院护士'),
@@ -62,5 +63,6 @@ export function fetchRolePropById(id) {
 }
 // 根据role的id，获取其它属性值
 export function fetchRolePropValue(id, keyName) {
-    return fetchRolePropById(id)[keyName];
+    var _a;
+    return (_a = fetchRolePropById(id)) === null || _a === void 0 ? void 0 : _a[keyName];
 }

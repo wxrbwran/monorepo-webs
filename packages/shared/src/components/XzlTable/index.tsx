@@ -14,6 +14,7 @@ interface IProps {
   depOptions?: Store;
   tableOptions?: Store;
   category?: string;
+  noPagination?: boolean; // true：此值为true，则去除api参数pageAt、和pageSize
 }
 
 export interface XzlTableCallBackProps {
@@ -28,10 +29,10 @@ interface IOnSelectChange {
 
 
 const XzlTable: FC<IProps> = (props) => {
-  console.log("this is table shared~");
+  console.log("this is table shared~111");
   const {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
-    handleCallbackSelectKeys, category,
+    handleCallbackSelectKeys, category, noPagination,
   } = props;
   const [size, setSize] = useState(pageSize);
   const [total, setTotal] = useState(0);
@@ -58,6 +59,11 @@ const XzlTable: FC<IProps> = (props) => {
       ...depOptions,
       ...query,
     };
+    // 处理不分页的api请求
+    if (noPagination) {
+      delete params.pageAt;
+      delete params.pageSize;
+    }
     console.log('fetchTableDataSource params', params);
     const res = await request(params);
     console.log('fetchTableDataSource res', res);
@@ -68,6 +74,7 @@ const XzlTable: FC<IProps> = (props) => {
     if (handleCallback) {
       handleCallback(handledData);
     }
+    console.log('handledData*****', handledData)
     setDataSource(handledData);
     setLoading(false);
   };
@@ -76,12 +83,6 @@ const XzlTable: FC<IProps> = (props) => {
     fetchTableDataSource({});
   }, [depOptions]);
 
-  // const handlePagerChange = (page: number) => {
-  //   if (!tableOptions?.handlePagerChange) {
-  //     const params: Store = { pageAt: page };
-  //     fetchTableDataSource(params);
-  //   }
-  // };
    const handlePagerChange = (page: number, changedSize: number | undefined) => {
     console.log('handlePagerChange', page);
     console.log('handlePagerChange', changedSize);

@@ -48,7 +48,7 @@
     "dev-dist:org": "pnpm dev-dist --filter 'xzl-web-org'",
     "dev-dist:out": "pnpm dev-dist --filter 'out-hospital-patient'",
     "dev-dist:cro": "pnpm dev-dist --filter 'clinical-cro'",
-    "build-ts-watch:shard": "pnpm build-ts-watch --filter 'xzl-web-shared'"
+    "build-ts-watch:shared": "cd packages/shared && pnpm build-ts-watch"
   },
   "dependencies": {
     "rimraf": "^3.0.2"

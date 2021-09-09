@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import ViewDetails from '../compontents/view_details';
-import { fetchRolePropValue, Role } from '@/utils/role';
+import { fetchRolePropValue, Role } from 'xzl-web-shared/src/utils/role';
 import AddGroup from '../compontents/add_group';
 import AddResearcher from '../compontents/add_researcher';
 import EditGroup from '../compontents/edit_group';
