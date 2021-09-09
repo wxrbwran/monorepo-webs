@@ -29,7 +29,7 @@ interface IOnSelectChange {
 
 
 const XzlTable: FC<IProps> = (props) => {
-  console.log("this is table shared~111");
+  console.log('this is table shared~111');
   const {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
     handleCallbackSelectKeys, category, noPagination,
@@ -70,11 +70,11 @@ const XzlTable: FC<IProps> = (props) => {
     setCurrent(params.pageAt);
     setSize(params.pageSize);
     setTotal(res.total);
-    const handledData = handleTableDataSource(dataKey, res[dataKey], category);
+    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, category);
     if (handleCallback) {
       handleCallback(handledData);
     }
-    console.log('handledData*****', handledData)
+    console.log('handledData*****', handledData);
     setDataSource(handledData);
     setLoading(false);
   };
@@ -83,7 +83,7 @@ const XzlTable: FC<IProps> = (props) => {
     fetchTableDataSource({});
   }, [depOptions]);
 
-   const handlePagerChange = (page: number, changedSize: number | undefined) => {
+  const handlePagerChange = (page: number, changedSize: number | undefined) => {
     console.log('handlePagerChange', page);
     console.log('handlePagerChange', changedSize);
     const params: Store = { pageAt: page };
@@ -91,8 +91,8 @@ const XzlTable: FC<IProps> = (props) => {
       params.pageSize = changedSize;
     }
     if (!tableOptions?.handlePagerChange) {
-      const params: Store = { pageAt: page };
-      fetchTableDataSource(params);
+      const data: Store = { pageAt: page };
+      fetchTableDataSource(data);
     }
     // fetchTableDataSource(params);
   };

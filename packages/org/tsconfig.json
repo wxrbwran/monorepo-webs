@@ -1,22 +1,16 @@
 {
+  "extends": "../../tsconfig",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "jsx": "react",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "baseUrl": "./",
-    "strict": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@@/*": ["src/.umi/*"]
+      "@/*": ["./src/*"],
+      "@@/*": ["./src/.umi/*"]
     },
-    "typeRoots": ["node", "node_modules/@types", "types"],
-    "allowSyntheticDefaultImports": true
+    "typeRoots": [
+      "node",
+      "node_modules/@types",
+      "./typings"
+    ],
   },
-  "include": ["mock/**/*", "src/**/*", "config/**/*", ".umirc.ts", "types/typings.d.ts"],
-  "exclude": ["__mock__/**/*"]
+  "include": ["src/**/*", "config/**/*"],
+  "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
 }

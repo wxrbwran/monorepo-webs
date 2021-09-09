@@ -32,7 +32,7 @@ declare interface Window {
   NIM: Store; // SDK
   nim: Store; // NIM 实例
   readonly $dva: Store;
-  readonly $store: Store;
+  $store: Store;
   $api: Store;
   reloadAuthorized: Store;
   $storage: {

@@ -28,7 +28,7 @@ export const authState: AuthModelState = {
   wcl: [],
   yxRegister: {
     accid: '',
-    token: '',
+    token: ""
   },
 };
 
