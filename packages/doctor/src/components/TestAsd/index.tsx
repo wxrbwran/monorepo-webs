@@ -2,7 +2,7 @@ import React from 'react';
 
 const TestAsd = () => {
   const asd_asdad = 11131111113;
-  return <div>{asd_asdad}</div>;
+  return <div className="asd">{asd_asdad}</div>;
 }
 
 export default TestAsd;
