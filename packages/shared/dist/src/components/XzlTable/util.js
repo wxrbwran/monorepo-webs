@@ -21,9 +21,13 @@ var handlePatientsTeamDataSource = function (data) {
         newObj = {};
         team.members.forEach(function (member) {
             switch (member.role) {
+                case Role.PROJECT_PATIENT.id: // 受试列表
                 case Role.PATIENT.id:
                 case Role.PATIENT_VIP.id:
                     newObj = __assign(__assign({}, newObj), member);
+                    break;
+                case Role.RESEARCH_PROJECT_DOCTOR.id:
+                    newObj.researchProjectDoctor = member.name;
                     break;
                 case Role.LOWER_DOCTOR.id:
                     newObj.lowerDoctor = member.name;
@@ -38,7 +42,8 @@ var handlePatientsTeamDataSource = function (data) {
                 case Role.PATIENT_YL_VIP.id:
                     newObj.isYlPatient = true;
                     break; // 1表示此患者为养老患者
-                default: break;
+                default:
+                    break;
             }
         });
         newPatients.push(newObj);

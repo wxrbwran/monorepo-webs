@@ -9,11 +9,11 @@
   "author": "",
   "lint-staged": {
     "*.ts?(x)": [
-      "pnpm lint"
+      "eslint --fix"
     ]
   },
   "scripts": {
-    "prepare": "husky install",
+    "postinstall": "husky install",
     "lint": "eslint --ext ts,tsx packages/**/src/ --fix",
     "clean:doctor": "pnpm clean --filter 'xzl-web-doctor'",
     "clean:nurse": "pnpm clean --filter 'xzl-web-nurse'",
@@ -55,16 +55,24 @@
     "dev-dist:org": "pnpm dev-dist --filter 'xzl-web-org'",
     "dev-dist:out": "pnpm dev-dist --filter 'out-hospital-patient'",
     "dev-dist:cro": "pnpm dev-dist --filter 'clinical-cro'",
-    "build-ts-watch:shard": "pnpm build-ts-watch --filter 'xzl-web-shared'"
-  },
-  "dependencies": {
-    "eslint": "^7.32.0",
-    "husky": "7.0.2",
-    "lint-staged": "^11.1.2",
-    "rimraf": "^3.0.2"
+    "build-ts-watch:shard": "cd packages/shared && pnpm build-ts-watch"
   },
   "devDependencies": {
-    "@microsoft/rush": "^5.52.0",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
+    "eslint": "^7.32.0",
+    "eslint-config-umi": "^1.6.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "tslint": "^5.20.1",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-react": "^4.1.0",
+    "husky": "7.0.2",
+    "lint-staged": "^11.1.2",
+    "rimraf": "^3.0.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^7.0.1",

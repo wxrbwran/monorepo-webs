@@ -5,12 +5,7 @@ module.exports = {
     project: './tsconfig.json',
   },
   rules: {
-    'react/jsx-filename-extension': [
-      1,
-      {
-        extensions: ['jsx', 'tsx'],
-      },
-    ],
+    'react/jsx-filename-extension': 0,
     // "jsx-no-multiline-js": 0,
     // "no-restricted-globals": ["error", "event", "fdescribe"]
     'import/no-extraneous-dependencies': 0,
