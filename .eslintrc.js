@@ -1,8 +1,15 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: ['airbnb-typescript', 'plugin:react-hooks/recommended'],
+  plugins: ['react', 'react-hooks'],
   parserOptions: {
     project: './tsconfig.json',
+  },
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+    jest: true,
   },
   rules: {
     'react/jsx-filename-extension': 0,
