@@ -66,7 +66,7 @@ import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
 import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
-    console.log("this is table shared~111");
+    console.log('this is table shared~111');
     var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination;
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
@@ -131,8 +131,8 @@ var XzlTable = function (props) {
             params.pageSize = changedSize;
         }
         if (!(tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.handlePagerChange)) {
-            var params_1 = { pageAt: page };
-            fetchTableDataSource(params_1);
+            var data = { pageAt: page };
+            fetchTableDataSource(data);
         }
         // fetchTableDataSource(params);
     };
