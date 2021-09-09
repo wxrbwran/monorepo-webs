@@ -64,7 +64,7 @@ const XzlTable: FC<IProps> = (props) => {
     setCurrent(params.pageAt);
     setSize(params.pageSize);
     setTotal(res.total);
-    const handledData = handleTableDataSource(dataKey, res[dataKey], category);
+    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, category);
     if (handleCallback) {
       handleCallback(handledData);
     }

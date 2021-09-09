@@ -12,19 +12,29 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
       switch (member.role) {
+        case Role.PROJECT_PATIENT.id: // 受试列表
         case Role.PATIENT.id:
         case Role.PATIENT_VIP.id:
-          newObj = { ...newObj, ...member }; break;
+          newObj = { ...newObj, ...member };
+          break;
+        case Role.RESEARCH_PROJECT_DOCTOR.id:
+          newObj.researchProjectDoctor = member.name;
+          break;
         case Role.LOWER_DOCTOR.id:
-          newObj.lowerDoctor = member.name; break;
+          newObj.lowerDoctor = member.name;
+          break;
         case Role.UPPER_DOCTOR.id:
-          newObj.upperDoctor = member.name; break;
+          newObj.upperDoctor = member.name;
+          break;
         case Role.ORG.id:
-          newObj.organizationName = member.name; break;
+          newObj.organizationName = member.name;
+          break;
         case Role.PATIENT_YL.id:
         case Role.PATIENT_YL_VIP.id:
-          newObj.isYlPatient = true; break; // 1表示此患者为养老患者
-        default: break;
+          newObj.isYlPatient = true;
+          break; // 1表示此患者为养老患者
+        default:
+          break;
       }
     });
     newPatients.push(newObj);
