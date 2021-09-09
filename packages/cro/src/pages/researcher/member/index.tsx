@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {  Form, Modal, Button, Space, message } from 'antd';
 import number from '@/assets/img/number.svg';
 import InviteMember from '../compontents/invite_member';
-import { Search, AccountStatus } from '@/components/Selects';
+import { Search, InviteStatus } from 'xzl-web-shared/src/components/Selects';
 import * as api from '@/services/api';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { memberListColumns, groupName } from '@/utils/columns';
 import MemberDetail from '../compontents/member_detail';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import { useSelector, useDispatch } from 'umi';
 import styles from './index.scss';
 import { CommonData, IState } from 'typings/global';
@@ -95,7 +95,7 @@ function Member() {
       <Form form={form} onValuesChange={handleSelectChange} style={{position: 'relative'}}>
         <Search form={form} searchKey="var" placeholder="搜索姓名或手机号"  />
         <div className={styles.lists_head}>
-          <AccountStatus />
+          <InviteStatus />
           {
             [
               Role.MAIN_PI.id,

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import DoctorList, { Irecord } from '../doctor_list';
 import { Input, Button, message } from 'antd';
-import { fetchRolePropValue, Role } from '@/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
 import styles from '../add_group/index.scss';
 import { CommonData, IState } from 'typings/global';
 import { debounce } from 'lodash';

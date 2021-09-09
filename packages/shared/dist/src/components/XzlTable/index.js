@@ -66,8 +66,8 @@ import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
 import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
-    console.log("this is table shared~");
-    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category;
+    console.log("this is table shared~111");
+    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination;
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
     var _c = __read(useState(0), 2), current = _c[0], setCurrent = _c[1];
@@ -94,6 +94,11 @@ var XzlTable = function (props) {
                         setLoading(true);
                         console.log('query', query);
                         params = __assign(__assign({ pageAt: 1, pageSize: size }, depOptions), query);
+                        // 处理不分页的api请求
+                        if (noPagination) {
+                            delete params.pageAt;
+                            delete params.pageSize;
+                        }
                         console.log('fetchTableDataSource params', params);
                         return [4 /*yield*/, request(params)];
                     case 1:
@@ -106,6 +111,7 @@ var XzlTable = function (props) {
                         if (handleCallback) {
                             handleCallback(handledData);
                         }
+                        console.log('handledData*****', handledData);
                         setDataSource(handledData);
                         setLoading(false);
                         return [2 /*return*/];
@@ -117,12 +123,6 @@ var XzlTable = function (props) {
         console.log('depOptions', depOptions);
         fetchTableDataSource({});
     }, [depOptions]);
-    // const handlePagerChange = (page: number) => {
-    //   if (!tableOptions?.handlePagerChange) {
-    //     const params: Store = { pageAt: page };
-    //     fetchTableDataSource(params);
-    //   }
-    // };
     var handlePagerChange = function (page, changedSize) {
         console.log('handlePagerChange', page);
         console.log('handlePagerChange', changedSize);

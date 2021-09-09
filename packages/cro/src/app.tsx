@@ -1,8 +1,9 @@
 // import { persistEnhancer } from 'dva-model-persist';
 import { message } from 'antd';
 import { createLogger } from 'redux-logger';
-import { persistEnhancer } from '@/utils/dva-model-persist';
-import storage from 'dva-model-persist/lib/storage';
+// 运行时配置文件，可以在这里扩展运行时的能力，比如修改路由、修改 render 方法等。
+import storage from 'xzl-web-shared/src/utils/dva-model-persist/storage';
+import { persistEnhancer } from 'xzl-web-shared/src/utils/dva-model-persist';
 
 export function patchRoutes({ routes }) {
   routes[0].routes.push({

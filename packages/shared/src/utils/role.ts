@@ -22,6 +22,12 @@ interface RolesMap {
   PATIENT_VIP: RoleType;
   PATIENT: RoleType;
   ORG: RoleType;
+  PI: RoleType;
+  MAIN_PI: RoleType;
+  SUB_PI: RoleType;
+  PROJECT_LEADER: RoleType;
+  PROJECT_RESEARCHER: RoleType;
+  PROJECT_MEMBERS: RoleType;
   [propName: string]: RoleType;
 }
 const roleType = (
@@ -55,13 +61,8 @@ export const Role: RolesMap = {
   UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '上级医生'), // 14
   LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '下级医生'), // 15
   ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
-  COUNSELOR_DOCTOR: roleType(
-    '2eAEeG',
-    169,
-    160,
-    168,
-    '顾问医生(角色默认在xinzhili - 顾问医生团队)',
-  ), // 17
+
+  COUNSELOR_DOCTOR: roleType( '2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)', ), // 17
   CONSOLE_ROOT: roleType('6exPeb', 179, 170, 178, '后台系统Root管理员'), // 18
   CRO_ORG: roleType('YWQD0z', 189, 180, 188, 'CRO 机构'), // 19
   NONE: roleType('bWlZez', 199, 190, 198, '任何角色都没有，即没有任何身份，默认都进入xinzhili空间'), // 20
@@ -79,9 +80,10 @@ export const Role: RolesMap = {
   PI: roleType('Y0OG0Q', 0, 0, 0, 'PI'), // 32 科研多中心项目PI
   MAIN_PI: roleType('NeEd4M', 0, 0, 0, '总PI'), // 33 科研多中心项目总PI
   SUB_PI: roleType('D09PeP', 0, 0, 0, '分PI'), // 34 科研多中心项目分PI
-  PROJECT_LEADER: roleType('v4Rwe2', 0, 0, 0, '组长'), // 34 科研单中心项目组长
-  PROJECT_RESEARCHER: roleType('x4y14p', 0, 0, 0, '研究者'), // 34 科研项目多中心研究者
-  PROJECT_PATIENT: roleType('NWkr0D', 0, 0, 0, '受试者'), // 34 科研 受试者
+  PROJECT_LEADER: roleType('v4Rwe2', 0, 0, 0, '项目组长'), // 35 科研单中心项目组长
+  PROJECT_RESEARCHER: roleType('x4y14p', 0, 0, 0, '研究者'), // 36 科研项目普通研究者
+  PROJECT_PATIENT: roleType('NWkr0D', 0, 0, 0, '受试者'), // 37 科研 受试者
+  PROJECT_MEMBERS: roleType('V0YzWE', 0, 0, 0, '组员'), // 38 科研单中心项目组员
 
   PATIENT_YL: roleType('XWrVxW', 459, 450, 458, '患 养老院患者'), // 46
   PATIENT_YL_VIP: roleType('V0XNq4', 469, 460, 468, '患 养老院vip患者'), // 47
@@ -101,7 +103,7 @@ export function fetchRolePropById(id: string) {
 }
 // 根据role的id，获取其它属性值
 export function fetchRolePropValue(id: string, keyName: string) {
-  return fetchRolePropById(id)[keyName];
+  return fetchRolePropById(id)?.[keyName];
 }
 
 

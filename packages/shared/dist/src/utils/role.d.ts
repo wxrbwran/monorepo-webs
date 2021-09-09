@@ -15,6 +15,12 @@ interface RolesMap {
     PATIENT_VIP: RoleType;
     PATIENT: RoleType;
     ORG: RoleType;
+    PI: RoleType;
+    MAIN_PI: RoleType;
+    SUB_PI: RoleType;
+    PROJECT_LEADER: RoleType;
+    PROJECT_RESEARCHER: RoleType;
+    PROJECT_MEMBERS: RoleType;
     [propName: string]: RoleType;
 }
 export declare const Role: RolesMap;

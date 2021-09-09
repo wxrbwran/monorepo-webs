@@ -2,11 +2,8 @@ import React from 'react';
 import { Select, Form } from 'antd';
 
 const { Option } = Select;
-interface IOrg {
-  name: string;
-  orgId: string;
-}
 function Status() {
+
   const commonSelectStyle = { width: 106, marginLeft: 10, height: 34 };
   return (
     <Form.Item noStyle name="status">

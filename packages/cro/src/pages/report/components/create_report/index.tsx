@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button, message } from 'antd';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 
 interface IProps {
   children: string;

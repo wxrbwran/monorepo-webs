@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'umi';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { findIndex } from '@/utils/tools';
 import { IStandard, sexList } from '@/utils/consts';
 import { isEmpty } from 'lodash';

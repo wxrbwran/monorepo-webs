@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Tabs, Form, Button, message } from 'antd';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { Search } from 'xzl-web-shared/src/components/Selects';
+import DoctorRelatedOrg from '@/components/Selects/DoctorRelatedOrg';
 import GroupStandard from '../components/group_standard';
 import SendFile from '../components/send_file';
-import DoctorRelatedOrg from '@/components/Selects/DoctorRelatedOrg';
 import Sex from '../components/sex';
 import * as api from '@/services/api';
 import { handleSelection } from '@/utils/conditions';
@@ -12,7 +13,6 @@ import { useSelector } from 'umi';
 import '../index.scss';
 import { IState } from 'typings/global';
 import { SearchOutlined } from '@ant-design/icons';
-import Search from '@/components/Selects/Search';
 import { debounce } from 'lodash';
 
 const { TabPane } = Tabs;
@@ -136,7 +136,7 @@ function Patient() {
           columns={status === '0' ? noSendPatientColumns() : addedPatientColumns()}
           dataKey="teams"
           handleCallback={fetchData}
-          category="patientManage"
+          category="patientList"
           request={window.$api.patientManage.getPatientList}
           depOptions={tableOptions}
           noPagination={true}

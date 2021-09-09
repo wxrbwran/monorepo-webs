@@ -6,7 +6,7 @@ import './index.scss';
 import { CommonData, IState } from 'typings/global';
 import { InputNumber, message } from 'antd';
 import AddEditGroup from '../add_edit_group';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
 
 interface IProps {

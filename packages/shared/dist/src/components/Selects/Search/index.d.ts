@@ -4,6 +4,7 @@ interface IProps {
     searchKey: string;
     form: Store;
     value?: string;
+    focus?: boolean;
 }
 declare const Search: FC<IProps>;
 export default Search;

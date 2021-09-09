@@ -101,6 +101,7 @@ export declare const projectStatus: {
     1002: string;
     1003: string;
 };
+export declare const projectInviteStatus: CommonData;
 export declare const croLists: {
     1002: string;
     1001: string;

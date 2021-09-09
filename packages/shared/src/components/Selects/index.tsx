@@ -10,5 +10,7 @@ export { default as Title } from './Title';
 export { default as PatientLevel } from './PatientLevel';
 export { default as Province } from './Province';
 export { default as AccountStatus } from './AccountStatus';
+export { default as Status } from './Status';
+export { default as InviteStatus } from './InviteStatus';
 
 

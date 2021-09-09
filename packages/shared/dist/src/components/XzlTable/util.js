@@ -10,9 +10,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { Role, fetchRolePropValue } from '../../utils/role';
-// interface ITeam {
-//   members: ISubject[];
-// }
+import { projectInviteStatus, sexList } from '../../utils/consts';
+import dayjs from 'dayjs';
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
@@ -21,9 +20,13 @@ var handlePatientsTeamDataSource = function (data) {
         newObj = {};
         team.members.forEach(function (member) {
             switch (member.role) {
+                case Role.PROJECT_PATIENT.id: // 受试列表
                 case Role.PATIENT.id:
                 case Role.PATIENT_VIP.id:
                     newObj = __assign(__assign({}, newObj), member);
+                    break;
+                case Role.RESEARCH_PROJECT_DOCTOR.id:
+                    newObj.researchProjectDoctor = member.name;
                     break;
                 case Role.LOWER_DOCTOR.id:
                     newObj.lowerDoctor = member.name;
@@ -44,6 +47,22 @@ var handlePatientsTeamDataSource = function (data) {
         newPatients.push(newObj);
     });
     return newPatients;
+};
+// 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
+export var handleInviteMemberList = function (dataSource) {
+    var newData = [];
+    console.log('dataSource', dataSource);
+    dataSource.forEach(function (item) {
+        var _a;
+        var _b = item.subjectDetail || {}, title = _b.title, avatarUrl = _b.avatarUrl, firstProfessionCompany = _b.firstProfessionCompany, firstPracticeDepartment = _b.firstPracticeDepartment, name = _b.name, tel = _b.tel, provinceName = _b.provinceName, sex = _b.sex;
+        newData.push(__assign(__assign({}, item), { title: title,
+            avatarUrl: avatarUrl,
+            name: name, joinTime: ((_a = item === null || item === void 0 ? void 0 : item.interval) === null || _a === void 0 ? void 0 : _a.start) ? dayjs(item.interval.start).format('YYYY-MM-DD') : null, status: projectInviteStatus[item.status], tel: tel,
+            provinceName: provinceName, sex: sexList[sex], firstProfessionCompany: firstProfessionCompany,
+            firstPracticeDepartment: firstPracticeDepartment, role: fetchRolePropValue(item.role, 'desc'), roleId: item.role }));
+    });
+    console.log('newData', newData);
+    return newData;
 };
 var handleDoctorTeamDataSource = function (dataSource) {
     var res = [];
@@ -99,6 +118,8 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
                 return handlePatientTeamDataSource(dataSource);
             }
             return dataSource;
+        case 'infos':
+            return handleInviteMemberList(dataSource);
         default:
             return dataSource;
     }
@@ -107,7 +128,11 @@ export var handleTableRowKey = function (dataKey, record) {
     switch (dataKey) {
         case 'teams':
             return record.sid;
+        case 'infos':
+            return record.subjectId;
         case 'images':
+        case 'events':
+        case 'sendRecordList':
             return record.id;
         default:
             return record.sid || record.id;
