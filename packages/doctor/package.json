@@ -29,7 +29,7 @@
   },
   "lint-staged": {
     "*.ts?(x)": [
-      "pnpm lint"
+      "npm run lint"
     ]
   },
   "dependencies": {
