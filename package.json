@@ -14,7 +14,7 @@
   },
   "lint-staged": {
     "*.ts?(x)": [
-      "pnpm lint"
+      "pnpm run lint"
     ]
   },
   "scripts": {
