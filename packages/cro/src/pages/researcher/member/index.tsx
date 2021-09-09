@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  Form, Modal, Button, Space, message } from 'antd';
+import {  Form, Modal, message } from 'antd';
 import number from '@/assets/img/number.svg';
 import InviteMember from '../compontents/invite_member';
 import { Search, InviteStatus } from 'xzl-web-shared/src/components/Selects';
@@ -22,7 +22,7 @@ function Member() {
     projectNsId,
   });
   const projType = window.$storage.getItem('croLabel');
-  const projectSid = window.$storage.getItem('projectSid')!
+  const projectSid = window.$storage.getItem('projectSid')!;
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
@@ -31,34 +31,36 @@ function Member() {
     api.research.fetchMemberStatistics({
       projectNsId,
     }).then(res => {
-      setMemberCount(res.count)
-    })
-  }, [])
-
+      setMemberCount(res.count);
+    });
+  }, []);
+  console.log(2);
   const handleSelectChange = (changedValues: string[], allValues: CommonData) => {
+    console.log(changedValues);
     const params: CommonData = {};
     Object.keys(allValues).forEach((item: string) => {
       if (!!allValues[item]) {
-        params[item] = allValues[item]
+        params[item] = allValues[item];
       }
-    })
+    });
     setOptions({
       projectNsId,
       ...params,
-    })
+    });
   };
   const refreshList = () => {
     setOptions({
       ...depOptions,
-    })
-  }
+    });
+  };
   const detailColumn = {
     title: '',
     dataIndex: 'subjectId',
-    render: (text: any, record: any) => (
-      <MemberDetail record={record}>查看详情</MemberDetail>
-    )
-  }
+    render: (text: any, record: any) => {
+      console.log(text);
+      return <MemberDetail record={record}>查看详情</MemberDetail>;
+    },
+  };
   const handleUpgrade = () => {
     confirm({
       title: '升级成为多中心试验后不能再改为单中心试验',
@@ -79,27 +81,27 @@ function Member() {
               payload: projectSid,
             });
           }).catch(() => {
-            reject(false)
-          })
+            reject(false);
+          });
           // setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
         }).catch(() => console.log('Oops errors!'));
       },
       onCancel() {},
     });
-  }
+  };
   return (
     <div className={styles.member}>
       <div className={styles.title}>
         <h3>成员</h3><img src={number} alt=""/> <span>{memberCount}</span>
       </div>
-      <Form form={form} onValuesChange={handleSelectChange} style={{position: 'relative'}}>
+      <Form form={form} onValuesChange={handleSelectChange} style={{ position: 'relative' }}>
         <Search form={form} searchKey="var" placeholder="搜索姓名或手机号"  />
         <div className={styles.lists_head}>
           <InviteStatus />
           {
             [
               Role.MAIN_PI.id,
-              Role.PROJECT_LEADER.id
+              Role.PROJECT_LEADER.id,
             ].includes(croRoleType) && (
              <div>
                {
@@ -125,11 +127,11 @@ function Member() {
         noPagination={true}
         tableOptions={{
           rowSelection: false,
-          pagination: false
+          pagination: false,
         }}
       />
     </div>
-  )
+  );
 }
 
 export default Member;
