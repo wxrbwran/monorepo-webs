@@ -15,7 +15,7 @@ module.exports = {
     // "no-restricted-globals": ["error", "event", "fdescribe"]
     'import/no-extraneous-dependencies': 0,
     'react/jsx-wrap-multilines': 0,
-    'react/jsx-props-no-spreading': [{ explicitSpread: 'ignore' }], // 允许{...props}传递属性
+    'react/jsx-props-no-spreading': 0, // 允许{...props}传递属性
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/click-events-have-key-events': 0, // 由于ESLint检查强制非Button的 onClick 事件需要至少一个键盘事件。
     'no-console': 0,
