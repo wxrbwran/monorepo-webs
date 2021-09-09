@@ -13,7 +13,8 @@
     ]
   },
   "scripts": {
-    "lint": "eslint --ext ts,tsx --fix",
+    "prepare": "husky install",
+    "lint": "eslint --ext ts,tsx packages/**/src/ --fix",
     "clean:doctor": "pnpm clean --filter 'xzl-web-doctor'",
     "clean:nurse": "pnpm clean --filter 'xzl-web-nurse'",
     "clean:org": "pnpm clean --filter 'xzl-web-org'",
@@ -57,6 +58,7 @@
     "build-ts-watch:shard": "pnpm build-ts-watch --filter 'xzl-web-shared'"
   },
   "dependencies": {
+    "eslint": "^7.32.0",
     "husky": "7.0.2",
     "lint-staged": "^11.1.2",
     "rimraf": "^3.0.2"
