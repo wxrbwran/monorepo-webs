@@ -38,7 +38,6 @@ module.exports = {
     'react/destructuring-assignment': 0,
   },
   globals: {
-    moment: true,
     vis: true,
     echarts: true,
   },
