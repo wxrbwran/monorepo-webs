@@ -1,8 +1,8 @@
 import React from 'react';
 
 const TestAsd = () => {
-  const asdsdad = 222211122113;
-  return <div className="asd">{asdsdad}</div>;
+  const asddad = 222211122113;
+  return <div className="asd">{asddad}</div>;
 };
 
 export default TestAsd;
