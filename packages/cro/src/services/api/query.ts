@@ -26,8 +26,8 @@ export default {
     return http.get(`image/url?data=${JSON.stringify(data)}`);
   },
   // 获取所有字段
-  fetchFields(): Promise<any> {
-    return http.get('research/template');
+  fetchFields(type: string): Promise<any> {
+    return http.get('template/' + type);
   },
   // 获取填充值域
   fetchKvScope(data: any): Promise<any> {

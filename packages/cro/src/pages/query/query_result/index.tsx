@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import { history, useSelector, useDispatch } from 'umi';
-import ReportTable from '../../report/components/report_table';
-import Empty from '../components/empty';
+import QueryTable from '../components/query_table';
 import styles from './index.scss';
 import { IState } from 'typings/global';
-import { destroyLink } from '@/utils/mqtt';
+import * as api from '@/services/api';
+ 
 interface IProps {
   location: {
     pathname: string;
-    query : {
+    query: {
       reportName: string;
+      resultKey: string;
     }
   };
 }
@@ -20,48 +21,90 @@ function QueryResult({ location }: IProps) {
   const dispatch = useDispatch();
   const tableData = useSelector((state: IState) => state.query.tableData);
   const isQueryStop = useSelector((state: IState) => state.query.isQueryStop);
-  const [loading, setLoading] = useState(true);
+  const head = useSelector((state: IState) => state.query.head);
+  // const [loading, setLoading] = useState(true);
+
+  const retryTimes = useRef(1);
+  const timer = useRef();
+
+  // useEffect(() => {
+  //   if (tableData.length > 0) {
+  //     setLoading(false);
+  //   }
+  // }, [tableData])
+
+  const clearCurrentTimer = () => {
+
+    clearTimeout(timer.current);
+  };
+
+  const queryResult = async (resultKey: any, page: number) => {
+
+    const pageSize = 10;
+    const results = await api.query.fetchResearchStatistics({
+      actionLogId: resultKey,
+      page: page,
+      pageSize: pageSize,
+    }); 
+   
+    if (results.tableBody.length > 0) { // 有数据拼接数据
+
+      dispatch({
+        type: 'query/setQueryResult',
+        payload: [...results.tableBody],
+      });
+    }
+
+    if (results.tableBody.length < pageSize) {
+
+      if (page == 0 && retryTimes.current < 3) {
+        // 重试3次
+        retryTimes.current += 1;
+
+        clearCurrentTimer();
+        timer.current = setTimeout(() => {
+          queryResult(resultKey, 0);
+        }, retryTimes.current * 1000);
+
+      } else {
+        // 查询结束
+        dispatch({
+          type: 'query/setIsQueryStop',
+        });
+      }
+    } else {
+      queryResult(resultKey, page + 1);
+    }
+  };
 
   useEffect(() => {
-    // setTimeout(()=> {
 
-    // }, 10000)
-    if(tableData.length>0){
-      setLoading(false);
-    }
-  }, [tableData])
+    dispatch({
+      type: 'query/clearQueryResult',
+    });
 
-  useEffect(()=> {
-    // 从查询结果页返回别的页面时停止轮循查询
-    return () => {
-      clearInterval(window.$timer);
-    }
-  },[])
+    retryTimes.current = 1;
+    // 开始从0查询结果
+    queryResult(location.query.resultKey, 0); // 循环查询结果知道没内容返回
 
-  console.log('tableData', tableData);
+  }, []);
 
   return (
     <div className={styles.result}>
       <LeftOutlined
-        onClick={() => history.replace(`/query`)}
-        style={{marginBottom: 36}}
+        onClick={() => history.replace('/query')}
+        style={{ marginBottom: 36 }}
       />
-      {
-        !isQueryStop && !tableData.length ? <Spin tip="数据量较大，拼命查询中" className={styles.loading}/> :
-        <>
-          {
-            tableData.length>0 ? <>
-              <ReportTable
-                location={location}
-                tableData={tableData}
-              />
-              {!isQueryStop && <Spin tip="数据量较大，拼命查询中" className={styles.loading_append}/>}
-            </> : <Empty/>
-          }
-        </>
-      }
+
+      <QueryTable
+        location={location}
+        tableData={tableData}
+        head={head}
+      />
+      {!isQueryStop && <Spin tip="数据量较大，拼命查询中" className={styles.loading_append} />}
+
     </div>
-  )
+  );
 }
 
 export default QueryResult;
