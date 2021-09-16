@@ -19,7 +19,7 @@ function EndEvent({ children, row }:IProps) {
     dataIndex: row.tree.dataIndex,
     actionLogId: row.resultKey,
     page: 0,
-    pageSize: 1,
+    pageSize: 10,
   });
   const [showModal, setShowModal] = useState(false);
 
@@ -76,6 +76,7 @@ function EndEvent({ children, row }:IProps) {
                     rowSelection: false,
                     // pagination: false,
                   }}
+                  extra={row.value}
                 />
               </div>
           </DragModal>

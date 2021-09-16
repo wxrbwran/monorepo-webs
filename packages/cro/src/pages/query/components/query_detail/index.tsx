@@ -30,7 +30,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
   const [dataSource, setDataSource] = useState<any>([]);
   const [columns, setColumn] = useState<IColumns[]>([]);
   const [titleHead, setTitleHead] = useState('');
-  const [imgList, setImgList] = useState([]);
+  const [imgList, setImgList] = useState<any[]>([]);
 
   const queryResultDetail = (page: number) => {
 
@@ -43,8 +43,6 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
         page: page,
         pageSize: pageSize,
       }).then((results) => {
-
-      setImgList([]);
 
       if (page == 0) {
         setTitleHead(results?.resultKey);
@@ -69,6 +67,13 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
           const data = preDataSource || [];
           return [...data, ...results?.tableBody];
         });
+
+        setImgList((preImageList: any[]) => {
+
+          const preList = preImageList || [];
+          const newList = results?.tableBody.map((item: { url: string; }) => item?.url).filter((i: string) => !!i) || [];
+          return [...preList, ...newList];
+        });
       }
 
       if (pageSize * (page + 1) < row.value) {
@@ -84,6 +89,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
     // 开始从0查询结果
     if (showModal) {
       setDataSource([]);
+      setImgList([]);
       queryResultDetail(0); // 循环查询结果知道没内容返回
     }
   }, [showModal]);

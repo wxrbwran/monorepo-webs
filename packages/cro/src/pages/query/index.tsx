@@ -40,7 +40,7 @@ function Query({ }: IProps) {
   const [checkedField, setCheckedField] = useState<IChecked[]>([]);
   const [active, setActive] = useState<string[]>([]); // 用来控制菜单前面圆点的样式
   const [allFields, setAllFields] = useState<IFields>();
-  const [groupIds, setGroupIds] = useState<string[]>(['PROJECT_ALL']);
+  const [groupIds, setGroupIds] = useState<string[]>(['全部受试者']);
 
   const [groupList, setGroupList] = useState<any[]>([]);
 
@@ -66,7 +66,7 @@ function Query({ }: IProps) {
             // setGroupList(groupListTemplete);
             setGroupList((preList) => {
               return [...preList, ...items];
-            });
+            }); 
             
             let deleteIndex = item.items.indexOf(res.keys[0].items[i]);
             item.items.splice(deleteIndex, 1);

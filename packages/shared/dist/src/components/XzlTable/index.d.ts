@@ -9,6 +9,7 @@ interface IProps {
     tableOptions?: Store;
     category?: string;
     noPagination?: boolean;
+    extra?: any;
 }
 export interface XzlTableCallBackProps {
     selectedRowKeys?: ReactText[];
