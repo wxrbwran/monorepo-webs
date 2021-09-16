@@ -5,7 +5,7 @@ import { setAuthorizationToken } from '@/services/http';
 import '@/assets/styles/global.scss';
 import * as api from '@/services/api';
 import pkg from '../package.json';
-
+import 'antd/lib/table/style/index.css';
 
 window.$api = api;
 dayjs.locale('zh-cn');
