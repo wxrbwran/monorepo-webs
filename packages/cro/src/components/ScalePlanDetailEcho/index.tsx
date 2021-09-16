@@ -18,9 +18,10 @@ interface IProps {
   scaleId?: string;
   addPlans?: (params: { plans: [] }) => void;
   initPlans: any[];
+  groupId?: string;
 }
 const ScalePlanDetailEcho: FC<IProps> = (props) => {
-  const { scaleType, scaleId, initPlans, addPlans } = props;
+  const { scaleType, scaleId, initPlans, addPlans, groupId } = props;
   const projectSid = window.$storage.getItem('projectSid');
   const location = useLocation();
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
@@ -72,7 +73,9 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
       <div className="table-plan__title">
           <span>{scaleType === 'CRF' ? 'CRF' : '主观'}量表计划</span>
           {
-            window.$storage.getItem('isLeader') && window.$storage.getItem('projectStatus') != 1001 && (
+            window.$storage.getItem('isLeader')
+            && window.$storage.getItem('projectStatus') != 1001
+            && !groupId && (
               <PlanModal title="修改发送计划"
                 scaleId={scaleId}
                 plans={plans}

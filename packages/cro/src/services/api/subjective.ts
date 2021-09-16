@@ -9,21 +9,25 @@ export default {
   postSubjectiveScale(data?: any): Promise<any> {
     return http.post('research/subjective/scale', { data });
   },
-   // 创建CRF量表
-   postCrfScale(data?: any): Promise<any> {
+  // 修改主观量表
+  patchSubjectiveScale(data?: any): Promise<any> {
+    return http.patch('research/scale', { data });
+  },
+  // 创建CRF量表
+  postCrfScale(data?: any): Promise<any> {
     return http.post('research/crf/scale', { data });
   },
   // 获取主观量表详情
   getSubjectiveScale(groupId?: any): Promise<any> {
     return http.get(`research/subjective/scale/${groupId}`);
   },
-   // 获取CRF量表详情
-   getCrfScale(groupId?: any): Promise<any> {
+  // 获取CRF量表详情
+  getCrfScale(groupId?: any): Promise<any> {
     return http.get(`research/crf/scale/${groupId}`);
   },
   //添加客观量表
   addObjectiveScale(data?: any): Promise<any> {
-      return http.post('research/objective/scale',{data});
+    return http.post('research/objective/scale', { data });
   },
   updateObjectiveScale(data?: any): Promise<any> {
     return http.patch('objective/scale', { data });
@@ -81,8 +85,8 @@ export default {
   getScaleReplyList(data?: any): Promise<any> {
     return http.get(`research/scale_reply?data=${JSON.stringify(data)}`);
   },
-   //查看crf量表所有回复情况
-   getCrfScaleReplyList(data?: any): Promise<any> {
+  //查看crf量表所有回复情况
+  getCrfScaleReplyList(data?: any): Promise<any> {
     return http.get(`research/crf/scale_reply?data=${JSON.stringify(data)}`);
   },
   //查询列表回复和未回复列表
@@ -91,6 +95,10 @@ export default {
   },
   //提醒回复量表
   replyDoctorReminder(data?: any): Promise<any> {
-    return http.post(`research/send_remind`, { data });
+    return http.post('research/send_remind', { data });
+  },
+  // 删除量表
+  delScale(data?: any): Promise<any> {
+    return http.delete('research/scale', { data });
   },
 };

@@ -8,12 +8,12 @@ interface IProps {
       isTemp?: string;
       tempId?: string;
       modifyTemp?: string;
-    },
-    pathname: string,
-  },
+    };
+    pathname: string;
+  };
 }
 function Create(props: IProps) {
-  return <ScaleTableCreate {...props} scaleType="CRF" />
+  return <ScaleTableCreate {...props} scaleType="CRF" />;
 }
 
 export default Create;

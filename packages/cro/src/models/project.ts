@@ -7,59 +7,63 @@ import { patientManage, subjective } from '@/services/api';
 import { Role } from 'xzl-web-shared/src/utils/role';
 
 export interface ProjectModelState {
-  projectList: IProjectList[],
-  objectiveScaleList: IPlanInfos[],
-  reverData: object,
-  objectiveGroup: IGroup[],
-  formName: string,
-  projDetail: any,
+  projectList: IProjectList[];
+  objectiveScaleList: IPlanInfos[];
+  reverData: object;
+  objectiveGroup: IGroup[];
+  formName: string;
+  projDetail: any;
+  scaleGroupInfos: any;
 }
 interface ProjectModelType {
   namespace: 'project';
   state: ProjectModelState;
   effects: {
-    fetchProjectList: Effect
-    fetchObjectiveScale: Effect
-    fetchGroupList: Effect
-    fetchProjectDetail: Effect
-  },
+    fetchProjectList: Effect;
+    fetchObjectiveScale: Effect;
+    fetchGroupList: Effect;
+    fetchProjectDetail: Effect;
+    fetchScaleGroup: Effect;
+  };
   reducers: {
     saveProjectList: Reducer<ProjectModelState>;
     saveObjectiveScale: Reducer<ProjectModelState>;
-    setReverData:Reducer<ProjectModelState>;
+    setReverData: Reducer<ProjectModelState>;
     clearReverData: Reducer<ProjectModelState>;
     setGroupList: Reducer<ProjectModelState>;
     setProjectDetail: Reducer<ProjectModelState>;
+    setScaleGroup: Reducer<ProjectModelState>;
   };
 }
 interface IProjectList {
-  id: string,
-  name: string,
+  id: string;
+  name: string;
   detail: {
-    duration: number,
-    intro: string,
-    avatar: string,
-  }
-  status: string,
-  doctorId: string,
-  createdAt: number,
-  patientCount: number,
-  avgDay: number
+    duration: number;
+    intro: string;
+    avatar: string;
+  };
+  status: string;
+  doctorId: string;
+  createdAt: number;
+  patientCount: number;
+  avgDay: number;
 }
 export interface IGroup {
-  groupId: string,
-  groupName: string,
-  projectSid: string
+  groupId: string;
+  groupName: string;
+  projectSid: string;
 }
 
 export const projectState = {
   projectList: [],
   objectiveScaleList: [],
-  reverData:{},
+  reverData: {},
   objectiveGroup: [],
   formName: '',
   projDetail: {},
-}
+  scaleGroupInfos: [],
+};
 
 const ProjectModel: ProjectModelType = {
   namespace: 'project',
@@ -103,48 +107,61 @@ const ProjectModel: ProjectModelType = {
         payload: response,
       });
     },
+    *fetchScaleGroup({ payload }, { call, put }) {
+      const response = yield call(subjective.getScaleGroup, payload);
+      yield put({
+        type: 'setScaleGroup',
+        payload: response,
+      });
+    },
   },
   reducers: {
-    saveProjectList(state = projectState, { payload }): ProjectModelState{
+    saveProjectList(state = projectState, { payload }): ProjectModelState {
       return {
         ...state,
         projectList: payload,
       };
     },
-    saveObjectiveScale(state = projectState, { payload }): ProjectModelState{
-      console.log('payload888',payload);
+    saveObjectiveScale(state = projectState, { payload }): ProjectModelState {
+      console.log('payload888', payload);
       return {
         ...state,
         objectiveScaleList: payload.infos,
-        formName: payload.name
+        formName: payload.name,
       };
     },
-    setReverData(state = projectState, { payload }): ProjectModelState{
+    setReverData(state = projectState, { payload }): ProjectModelState {
       return {
         ...state,
         reverData: Object.assign({}, state.reverData, {
-          [payload.index]: {base: payload.base, plans: payload.plans},
+          [payload.index]: { base: payload.base, plans: payload.plans },
         }),
       };
     },
-    clearReverData(state = projectState, { payload }): ProjectModelState{
+    clearReverData(state = projectState, { payload }): ProjectModelState {
       return {
         ...state,
         reverData: {
-          [payload.index]: {}
+          [payload.index]: {},
         },
       };
     },
-    setGroupList(state = projectState, { payload }): ProjectModelState{
+    setGroupList(state = projectState, { payload }): ProjectModelState {
       return {
         ...state,
         objectiveGroup: payload,
       };
     },
-    setProjectDetail(state = projectState, { payload }): ProjectModelState{
+    setProjectDetail(state = projectState, { payload }): ProjectModelState {
       return {
         ...state,
         projDetail: payload,
+      };
+    },
+    setScaleGroup(state = projectState, { payload }): ProjectModelState {
+      return {
+        ...state,
+        scaleGroupInfos: payload,
       };
     },
   },
