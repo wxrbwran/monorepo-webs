@@ -19,7 +19,7 @@ export interface Ihospital {
 const { Option } = Select;
 
 function Hospitial({
-  setFieldsValue, nameKey, idKey, request, disabled,
+  setFieldsValue, nameKey, idKey, request,
 }: Iprops) {
   const [hospitals, setHospitals] = useState <Ihospital[]>([]);
   const [fetching, setFetching] = useState(false);
@@ -68,7 +68,7 @@ function Hospitial({
           onSelect={handleSelect}
           notFoundContent={fetching ? <Spin size="small" /> : null}
           style={{ width: '376px' }}
-          disabled={disabled}
+          // disabled={disabled}
         >
           {hospitals.map((medicine) => (
             <Option key={medicine.id} value={medicine.id}>
