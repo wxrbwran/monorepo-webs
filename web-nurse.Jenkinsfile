@@ -28,7 +28,7 @@ pipeline {
                         env.BUILD_SH = "pnpm prerelease:nurse"
                         env.ROOT_PATH = "/Users/xinzhilici/homebrew/var/www/n.test/xzl-web-nurse"
                     } else if (env.BRANCH_NAME == 'dev') {
-                        env.BUILD_SH = "pnpm dev-build:nurse"
+                        env.BUILD_SH = "pnpm dev-dist:nurse"
                         env.ROOT_PATH = "/Users/xinzhilici/homebrew/var/www/n.dev/xzl-web-nurse"
                     }
                     env.TARGET_HOST_IP = "172.16.10.126"
