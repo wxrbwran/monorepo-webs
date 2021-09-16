@@ -10,7 +10,7 @@ export function patchRoutes({ routes }) {
     path: '*',
     component: require('@/pages/404').default,
   });
-};
+}
 
 export const dva = {
   config: {
@@ -18,7 +18,7 @@ export const dva = {
       persistEnhancer({
         key: 'clinical-cro',
         storage,
-        blacklist: ['query'],
+        // blacklist: ['query'],
       }),
     ],
     onAction: createLogger(),
