@@ -13,6 +13,7 @@
     "dev": "NODE_ENV=development APP_ENV=dev umi dev",
     "debug": "NODE_ENV=development APP_ENV=test umi dev",
     "debug-prod": "NODE_ENV=development APP_ENV=prod umi dev",
+    "dev-dist": "NODE_ENV=production APP_ENV=dev umi build",
     "prerelease": "NODE_ENV=production APP_ENV=test umi build",
     "dist": "NODE_ENV=production APP_ENV=prod umi build",
     "test": "umi test --watch",
