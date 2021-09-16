@@ -106,8 +106,17 @@ var XzlTable = function (props) {
                         console.log('fetchTableDataSource res', res);
                         setCurrent(params.pageAt);
                         setSize(params.pageSize);
-                        setTotal(res.total);
-                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, category);
+                        if (dataKey == 'events_jsonb') {
+                            res.tableBody.forEach(function (element) {
+                                element.content = JSON.parse(element.content.value);
+                            });
+                            setTotal(1);
+                        }
+                        else {
+                            setTotal(res.total);
+                        }
+                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list || res.tableBody, category);
+                        console.log('+=============', handledData);
                         if (handleCallback) {
                             handleCallback(handledData);
                         }

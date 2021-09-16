@@ -273,7 +273,7 @@ export var noReplyNumber = {
 //   dataIndex: 'operate',
 //   // width: 200,
 //   className: 'action',
-//   render: (_text, _record) => (
+//   render: (_text) => (
 //     <div className="column_btn">
 //       <Button type="ghost" icon={<EditOutlined />}>
 //         编辑

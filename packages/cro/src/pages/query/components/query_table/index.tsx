@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import QueryDetail from '@/pages/query/components/query_detail';
 import XLSX from 'xlsx';
+import { Table } from 'antd';
 import EndEvent from '@/pages/query/components/end_event';
 import './index.scss';
 interface IProps {
