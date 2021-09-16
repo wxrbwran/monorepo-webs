@@ -18,7 +18,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Input, Form } from 'antd';
 var Item = Form.Item;
 var Search = function (props) {
-    var placeholder = props.placeholder, form = props.form, searchKey = props.searchKey, value = props.value, focus = props.focus;
+    var placeholder = props.placeholder, form = props.form, searchKey = props.searchKey, value = props.value, focus = props.focus, width = props.width;
     var _a = __read(useState(value), 2), wordKey = _a[0], setWordKey = _a[1];
     var inputRef = useRef(null);
     var formDispatch = form.getInternalHooks('RC_FORM_INTERNAL_HOOKS')
@@ -48,7 +48,7 @@ var Search = function (props) {
     return (React.createElement(React.Fragment, null,
         React.createElement(Item, { noStyle: true, name: searchKey },
             React.createElement(Input, { type: "hidden" })),
-        React.createElement(Input.Search, { placeholder: placeholder, value: wordKey, style: { width: 160, float: 'right' }, onSearch: handleSearchKey, onChange: handleChangeKey, ref: inputRef })));
+        React.createElement(Input.Search, { placeholder: placeholder, value: wordKey, style: { width: width || 160, float: 'right' }, onSearch: handleSearchKey, onChange: handleChangeKey, ref: inputRef })));
 };
 Search.defaultProps = { placeholder: '请输入关键词搜索', value: '' };
 export default Search;
