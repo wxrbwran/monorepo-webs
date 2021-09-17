@@ -25,9 +25,11 @@
   }
 }
 .proj-dropdown {
+  width: 132px;
   .ant-dropdown-menu-item {
     font-size: 14px;
     color: #181818;
+    padding: 15px;
     .anticon-delete {
       font-size: 14px
     }
