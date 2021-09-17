@@ -10,11 +10,12 @@ interface IProps {
   value?: string;
   focus?: boolean; // 是否主动获取焦点
   width?: number;
+  float?: string;
 }
 
 const Search: FC<IProps> = (props) => {
   const {
-    placeholder, form, searchKey, value, focus, width,
+    placeholder, form, searchKey, value, focus, width, float,
   } = props;
   const [wordKey, setWordKey] = useState(value);
   const inputRef = useRef<Input>(null);
@@ -50,7 +51,7 @@ const Search: FC<IProps> = (props) => {
       <Input.Search
         placeholder={placeholder}
         value={wordKey}
-        style={{ width: width || 160, float: 'right' }}
+        style={{ width: width || 160, float: float || 'right' }}
         onSearch={handleSearchKey}
         onChange={handleChangeKey}
         ref={inputRef}
