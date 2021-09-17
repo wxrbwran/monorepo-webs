@@ -75,8 +75,13 @@ function SendPlan({ onCancel, infoIndex, addPlan, mode, plans, question, isDisab
       setFrequency(filterConditions(plans, 'FREQUENCY'));
       setGroup(filterConditions(plans, 'GROUP'));
       if (question) setRemind(question);
+    } else {
+      setStartTime(initStart);
+      setFrequency(initFrequency);
+      setGroup(initGroup);
+      setRemind('');
     }
-  }, []);
+  }, [plans]);
   //问题
   const handleChangeRemind = (e: { target: { value: string } }) => {
     setRemind(e.target.value);
