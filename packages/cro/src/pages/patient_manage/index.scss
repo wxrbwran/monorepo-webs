@@ -1,0 +1,115 @@
+.patient-manage-cont {
+  font-size: 14px;;
+  // padding: 27px 30px 0;
+  .title {
+    font-size: 18px;
+    color: #181818;
+    line-height: 18px;
+    margin-bottom: 15px;
+  }
+  .tip {
+    color: #848484;
+    line-height: 14px;
+    a {
+      text-decoration: underline;
+    }
+  }
+  .selects {
+    margin-top: 20px;
+    margin-bottom: 12px;
+    form {
+      display: inline-block;
+    }
+  }
+  .patient-list {
+    position: relative;
+    .ant-tabs-tab {
+      font-size: 14px;
+      color: #999999;
+    }
+    .ant-table-cell {
+      a {
+        color: #000;
+      }
+    }
+    .ant-tabs-tab.ant-tabs-tab-active{
+      .ant-tabs-tab-btn {
+        color: #3195FA;
+      }
+    }
+    .send-btn {
+      position: absolute;
+      top: -23px;
+      right: 0;
+      button {
+        height: 60px;
+        border-radius: 3px;
+        font-size: 14px;
+        margin-left: 15px;
+        height: 55px;
+        line-height: 21px;
+      }
+    }
+    .send-btn-cro {
+      height: 40px;
+      border-radius: 3px;
+      font-size: 14px;
+      position: absolute;
+      right: 0;
+      top: 0px;
+      z-index: 2;
+    }
+    .ant-table-container {
+      border: 1px solid #EEEEEE;
+      max-height: calc(100vh - 302px);
+      overflow: auto;
+      tr {
+        td, th{
+          &:last-child {
+            padding-right: 45px;
+          }
+        }
+      }
+    }
+  }
+  .ant-tabs-top>.ant-tabs-nav::before {
+    border: none;
+  }
+  .table-operating {
+    color: #3296FA;
+    cursor: pointer;
+  }
+}
+.select-group-modal {
+  .select-group {
+    font-size: 14px;
+    text-align: center;
+    margin: 0 auto;
+    height: 255px;
+    .ant-select {
+      text-align: left;
+    }
+    .tit {
+      margin-right: 15px;
+    }
+  }
+}
+.submit-btn-style1 {
+  margin-top: 30px;
+  text-align: center;
+  .ant-btn {
+    width: 98px;
+    height: 40px;
+    font-size: 14px;
+    &:nth-child(2n) {
+      margin-left: 32px;
+    }
+  }
+}
+// 选择发送文件
+.choice-send-file {
+  .ant-checkbox-group-item {
+    display: block;
+    margin-bottom: 22px;
+  }
+}

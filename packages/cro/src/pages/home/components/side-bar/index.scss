@@ -1,0 +1,65 @@
+.sidebar {
+   flex: 0 0 350px;
+   font-size: 14px;
+ }
+ .desktop {
+   margin: 30px 50px 0;
+  //  background: #EEF2F4;
+   border-radius: 4px;
+   width: 247px;
+   height: 40px;
+   line-height: 40px;
+   @include flex(flex-start);
+   img {
+     width: 16px;
+     height: 16px;
+     margin: 0 12px 0 17px;
+   }
+   a{
+    color: #181818;
+   }
+   :global {
+    .anticon {
+      color: #181818;
+      margin: 0 12px 0 17px;
+    }
+   }
+   &.active {
+    background: #EEF2F4;
+    :global {
+      .anticon {
+        color: #3296FA;
+      }
+    }
+    a{
+      color: #3296FA;
+    }
+  }
+  &:nth-child(2) {
+    margin: 10px 50px 33px;
+  }
+ }
+ .project_title {
+   @include flex(flex-start);
+   color: #181818;
+   margin-left: 67px;
+  //  margin: 33px 0 0 67px;
+   img {
+     width: 16px;
+     height: 16px;
+     margin-right: 12px;
+   }
+ }
+ .project_list {
+   margin-left: 95px;
+ }
+ .project_item {
+    margin-top: 26px;
+    line-height: 18px;
+    width: 182px;
+    word-break: break-all;
+    a {
+      color: #717171;
+      cursor: pointer;
+    } 
+ }

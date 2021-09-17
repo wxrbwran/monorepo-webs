@@ -1,14 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import {
-  Form, Button, Popconfirm, message,
-} from 'antd';
+import { Form, Button, Popconfirm, message, Switch } from 'antd';
 import { useLocation, Location } from 'umi';
-import { Common, Source, Search } from '@/components/Selects';
-import XzlTable from '@/components/XzlTable';
+import { Common, Source, Search } from 'xzl-web-shared/src/components/Selects';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
-  indexName, indexUnits, indexAbbr, indexCommon, indexSource, columnCreator,
-} from '@/utils/columns';
+  indexName, indexUnits, indexAbbr, indexSource, columnCreator,
+} from 'xzl-web-shared/src/utils/columns';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import Initials from '../Initials';
@@ -31,11 +29,13 @@ const IndexList: FC = () => {
   const [form] = Form.useForm();
   const { getFieldValue } = form;
   // @ts-ignore
-  const { query: { documentId, documentType } } = useLocation<Location & ILocation>();
+  const {
+    query: { documentId, documentType },
+  } = useLocation<Location & ILocation>();
   const [total, setTotal] = useState(0);
   const initDepOptions = {
     documentId,
-    pageSize: 999999999999,
+    pageSize: 9999999,
     sourceSid: window.$storage.getItem('sid'),
   };
   const [depOptions, setOptions] = useState<IParams>(initDepOptions);
@@ -77,49 +77,84 @@ const IndexList: FC = () => {
   };
 
   const handleDel = (id: string) => {
-    api.indexLibrary.deleteIndexDocumentIndex(id).then(() => {
-      message.success('删除成功');
-      onSuccess();
-    });
+    api.indexLibrary
+      .deleteIndexDocumentIndex(id)
+      .then(() => {
+        message.success('删除成功');
+        onSuccess();
+      })
+      .catch((err) => {
+        message.error(err?.result ?? '删除失败');
+      });
   };
   const operation = {
     title: '操作',
     dataIndex: 'id',
     render: (text: string, record: any) => (
       <div className="operation-btn">
-        {
-          record.source === 'DOCTOR' && (
-            <>
-              <Popconfirm
-                title="确定删除此指标吗?"
-                onConfirm={() => handleDel(text)}
-                okText="是"
-                cancelText="否"
+        {record.source === 'DOCTOR' && (
+          <>
+            <Popconfirm
+              title="确定删除此指标吗?"
+              onConfirm={() => handleDel(text)}
+              okText="是"
+              cancelText="否"
+            >
+              <span>删除</span>
+            </Popconfirm>
+            {!record.used && (
+              <EditIndex
+                onSuccess={onSuccess}
+                initFormVal={record}
+                documentId={documentId}
+                level1Type={documentType}
+                source="libraryEdit"
               >
-                <span>删除</span>
-              </Popconfirm>
-              {
-                !record.used && (
-                  <EditIndex
-                    onSuccess={onSuccess}
-                    initFormVal={record}
-                    imgTypeId={documentId}
-                    level1Type={documentType}
-                    source="libraryEdit"
-                  >
-                    <span>编辑</span>
-                  </EditIndex>
-                )
-              }
-            </>
-          )
-        }
+                <span>编辑</span>
+              </EditIndex>
+            )}
+          </>
+        )}
       </div>
     ),
   };
   const handleCallback = (data: object[]) => {
     setTotal(data.length);
   };
+
+  const handleCommon = (common: boolean, editData: object, refreshList: () => void) => {
+    const params = {
+      ...editData,
+      common,
+    };
+    api.indexLibrary.patchIndexDocumentIndex(params).then(() => {
+      message.success('修改成功');
+      refreshList();
+    }).catch((err) => {
+      message.error(err?.result ?? '修改失败');
+    });
+  };
+  const indexCommon = (refreshList: () => void) => ({
+    title: () => (
+      <div>
+        <span>是否常用</span>
+      </div>
+    ),
+    dataIndex: 'common',
+    render: (_text: boolean, record: any) => (
+      <div className="table-operating">
+        <Switch
+          checkedChildren="是"
+          unCheckedChildren="否"
+          checked={_text}
+          disabled={record.source === 'SYSTEM' || !!record.used}
+          onChange={(e) => {
+            handleCommon(e, record, refreshList);
+          }}
+        />
+      </div>
+    ),
+  });
   const columns = [
     indexName,
     indexUnits,
@@ -143,14 +178,15 @@ const IndexList: FC = () => {
             <Form form={form} onValuesChange={handleSelectChange} id="height34">
               <Common />
               <Source />
-              <Search
-                form={form}
-                searchKey="name"
-                value={getFieldValue('name')}
-              />
+              <Search form={form} searchKey="name" value={getFieldValue('name')} />
             </Form>
           </div>
-          <EditIndex onSuccess={onSuccess} documentId={documentId} level1Type={documentType} source="libraryAdd">
+          <EditIndex
+            onSuccess={onSuccess}
+            documentId={documentId}
+            level1Type={documentType}
+            source="libraryAdd"
+          >
             <Button type="primary" className="create-btn">
               <PlusOutlined />
               新建
@@ -158,21 +194,19 @@ const IndexList: FC = () => {
           </EditIndex>
         </div>
       </div>
-      {
-        documentId && (
-          <XzlTable
-            columns={columns}
-            dataKey="list"
-            category="list"
-            request={api.indexLibrary.fetchIndexDocumentIndex}
-            depOptions={depOptions}
-            handleCallback={handleCallback}
-            tableOptions={{
-              rowSelection: false,
-            }}
-          />
-        )
-      }
+      {documentId && (
+        <XzlTable
+          columns={columns}
+          dataKey="list"
+          category="list"
+          request={api.indexLibrary.fetchIndexDocumentIndex}
+          depOptions={depOptions}
+          handleCallback={handleCallback}
+          tableOptions={{
+            rowSelection: false,
+          }}
+        />
+      )}
     </div>
   );
 };

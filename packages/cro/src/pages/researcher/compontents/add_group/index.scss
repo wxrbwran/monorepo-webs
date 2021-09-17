@@ -1,0 +1,67 @@
+.add_group {
+  min-height: 400px;
+}
+.group_name {
+  @include flex(flex-start, center);
+  font-size: 15px;
+  color: #666666;
+  span {
+    color: red;
+    font-weight: lighter;
+  }
+  input {
+    flex: 0 0 200px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #181818;
+    margin-left: 12px;
+  }
+}
+.group_leader {
+  font-size: 15px;
+  color: #666666;
+  margin: 20px 0;
+  span {
+    background: #FFFFFF;
+    border: 1px solid #3296FA;
+    border-radius: 12px;
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    margin-left: 15px;
+    font-size: 14px;
+    color: #3296FA;
+    text-align: center;
+    padding: 0 10px;
+  }
+}
+
+.update_btn {
+  font-size: 14px;
+  color: #3296FA;
+  margin-top: 25px;
+  cursor: pointer;
+}
+.later_btn {
+  font-size: 14px;
+  color: #181818;
+  margin-top: 25px;
+  span {
+    color: #3296FA;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+}
+
+.later_btn {
+  font-size: 14px;
+  color: #181818;
+  margin-top: 25px;
+  margin-bottom: 50px;
+  span {
+    color: #3296FA;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+}

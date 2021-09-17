@@ -21,15 +21,6 @@ const IndexTable: FC<IProps> = (props) => {
     let showDom: any = null;
     let indexListAll: CommonData = {};
     indexListAll = apiData;
-    // if (subName) {
-    //   // 在所有指标里过滤出子分类名称为当前tab的指标
-    //   indexListAll[type] = apiData[type].filter(
-    //     (item: ICommonItem) => item.subCategoryName === subName,
-    //   );
-    // } else {
-    //   indexListAll = apiData;
-    // }
-    console.log('indexListAll', indexListAll);
     showDom = indexListAll[type].map((item: ICommonItem, index: number) => (
       <div
         className={`${styles.item} ${styles.cont} ${type === 'noCommonItems' ? styles.bg_gray : ''}`}
@@ -38,12 +29,12 @@ const IndexTable: FC<IProps> = (props) => {
         <div>{indexListAll[type][index].name}</div>
         <div>{indexListAll[type][index]?.abbreviation || '--'}</div>
         <Form.Item name={`${item.formIndex}_value`}>
-          <InputNumber width={110} />
+          <InputNumber width={80} />
         </Form.Item>
         <Form.Item name={`${item.formIndex}_unit`}>
           {
-            indexListAll[type][index]?.units.length > 0 ? (
-              <Select style={{ maxWidth: 100 }}>
+            indexListAll[type][index]?.units?.length > 0 ? (
+              <Select style={{ maxWidth: 80 }}>
                 {
                   item.units?.map((unit: string) => (
                     <Option key={unit} value={unit}>{unit}</Option>
@@ -55,11 +46,11 @@ const IndexTable: FC<IProps> = (props) => {
         </Form.Item>
         <div className="flex items-start" style={{ minWidth: 170, paddingTop: 10 }}>
           <Form.Item name={`${item.formIndex}_minValue`} noStyle>
-            <InputNumber width={180} />
+            <InputNumber />
           </Form.Item>
           <span className="mr-10 ml-10">-</span>
           <Form.Item name={`${item.formIndex}_maxValue`} noStyle>
-            <InputNumber width={180} />
+            <InputNumber />
           </Form.Item>
         </div>
         {

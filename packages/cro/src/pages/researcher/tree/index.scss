@@ -1,0 +1,36 @@
+.tree {
+  background-color: #fff;
+}
+.title {
+  height: 44px;
+  background-color: #f2f9fc;
+}
+.full {
+  margin-top: 12px;
+  float: right;
+  margin-right: 50px;
+  color: #3296fa;
+  cursor: pointer;
+  > img {
+    margin-right: 6px;
+  }
+}
+.position {
+  margin-top: 10px;
+  @include flex(flex-start, center);
+  .label {
+    margin-left: 10px;
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    background-color: #f2f9fc;
+  }
+}
+.SVG {
+  svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+  }
+}

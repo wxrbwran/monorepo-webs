@@ -1,8 +1,8 @@
 import React from 'react';
-import { btnRender } from '@/utils/button';
 import QRCode from 'qrcode.react';
 import { useSelector } from 'umi';
-import { defaultAvatar } from '@/utils/consts';
+import { btnRender } from '@/utils/button';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import UserBaseInfos from '../../components/UserBaseInfos';
 import UserAvatar from '../../components/UserAvatar';
 import CertificateCard from '../CertificateCard';

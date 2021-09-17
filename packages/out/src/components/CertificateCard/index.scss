@@ -1,0 +1,55 @@
+.cert {
+  @include flex();
+  &__item {
+    margin-right: 10px;
+    img {
+      width: 150px;
+      height: 100px;
+    }
+  }
+  &__tit {
+    font-weight: normal;
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  &__imgs {
+    @include flex();
+  }
+  .qualif0,
+  .cert0,
+  .cert1,
+  .badge0 {
+    // @extend %pic-style;
+    background: url(../../assets/img/nav_bar/qualif_example.png) no-repeat
+      center center;
+    background-size: contain;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100px;
+
+    > span {
+      @include size(60px, 26px);
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.46);
+      @include flex(row, nowrap, center, center);
+    }
+  }
+  .cert0 {
+    background-image: url(../../assets/img/nav_bar/cert_example1.png);
+  }
+
+  .cert1 {
+    background-image: url('../../assets/img/nav_bar/cert_example2.png');
+  }
+
+  .badge0 {
+    background-image: url('../../assets/img/nav_bar/badge_example.png');
+  }
+}
+.btn {
+  margin: 24px 0;
+}

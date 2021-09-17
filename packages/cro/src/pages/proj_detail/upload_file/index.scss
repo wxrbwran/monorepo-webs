@@ -1,0 +1,25 @@
+.right_top {
+	font-size: 16px;
+	padding: 24px 20px 16px;
+	background: #fff;
+	.head {
+		font-size: 18px;
+		font-weight: 600;
+	}
+  .tip {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 330px;
+    background: #EBF5FF;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    :global {
+      .anticon-exclamation-circle {
+        color: #008af4;
+        margin-right: 3px;
+      }
+    }
+  }
+}

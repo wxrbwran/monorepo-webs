@@ -3,11 +3,11 @@ import { Empty, message } from 'antd';
 import { useSelector } from 'umi';
 import { debounce } from 'lodash';
 import hand from '@/assets/img/change.svg';
-import DragModal from '@/components/DragModal';
-import { defaultAvatar } from '@/utils/consts';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { btnRender } from '@/utils/button';
 import * as api from '@/services/api';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 
 interface IProps {

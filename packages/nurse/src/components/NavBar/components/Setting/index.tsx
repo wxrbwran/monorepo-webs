@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, Dropdown, Avatar } from 'antd';
-import config from '@/config';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import DragModal from '@/components/DragModal';
+import { useDispatch, useSelector } from 'umi';
+import config from '@/config';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UserSetting from '@/components/UserSetting';
 import changePassword from '@/assets/img/nav_bar/lock.svg';
 import logoutIcon from '@/assets/img/nav_bar/logout.svg';
-import { useDispatch, useSelector } from 'umi';
 import styles from './index.scss';
 
 interface Item {

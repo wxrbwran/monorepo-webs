@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import DiffShow from '@/components/AdjustMedicine//DiffShow';
 import { fetchRolePropValue } from '@/utils/role';
 import styles from '../index.scss';

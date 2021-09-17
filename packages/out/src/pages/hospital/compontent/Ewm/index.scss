@@ -1,0 +1,12 @@
+.ewm_wrap {
+  display: flex;
+  justify-content: space-around;
+  justify-items: center;
+  padding: 50px;
+  text-align: center;
+  img {
+    width: 126px;
+    height: 126px;
+    margin-bottom: 10px;
+  }
+}

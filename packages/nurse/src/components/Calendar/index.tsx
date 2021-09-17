@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 // @ts-ignore
-import events from '@/utils/events/eventEmitter';
+import events from 'xzl-web-shared/src/utils/events/eventEmitter';
 import DatePicker from './DatePicker';
-
-const dayjs = require('dayjs');
+import dayjs from 'dayjs';
 
 interface Iprops {
   year?: string | number,

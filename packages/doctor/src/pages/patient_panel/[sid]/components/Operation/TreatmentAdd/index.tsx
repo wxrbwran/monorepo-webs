@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import debounce from 'lodash/debounce';
 import { useParams } from 'umi';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import SearchHospital from '@/components/SearchHospital';
 import Calendar from '@/components/Calendar';
 import * as api from '@/services/api';

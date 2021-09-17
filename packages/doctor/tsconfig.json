@@ -1,28 +1,5 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "jsx": "react",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "strict": true,
-    "resolveJsonModule": true,
-    "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@@/*": [
-        "src/.umi/*"
-      ]
-    },
-    "typeRoots": [
-      "node",
-      "node_modules/@types",
-      "./typings"
-    ],
-    "allowSyntheticDefaultImports": true
-  }
+  "extends": "../../tsconfig"
+  // "include": ["src/**/*", "config/**/*"],
+  // "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
 }

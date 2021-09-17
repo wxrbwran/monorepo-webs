@@ -10,8 +10,9 @@ import * as api from '@/services/api';
 const { Option } = Select;
 interface IProps {
   sampleFroms: string[]; // 勾选的样本来源、检查部位
-  handleSelectTypeIndex: (params: ISearchDocumentItem) => void; // 选择了图片大分类或者 图片大分类+指标
-  imageId: string;
+  // 选择了图片大分类或者 图片大分类+指标
+  handleSelectTypeIndex: (params: ISearchDocumentItem, type?: string) => void;
+  // imageId: string;
   documentType: string; // HYD JCD
 }
 
@@ -55,7 +56,7 @@ const SearchTypeIndex: FC<IProps> = (props) => {
   };
   const addTypeSuccess = (params: any) => {
     console.log('添加大分类、指标成功', params);
-    handleSelectTypeIndex(params);
+    handleSelectTypeIndex(params, 'add');
   };
   return (
     <div className="mt-10 mb-10">
@@ -76,7 +77,7 @@ const SearchTypeIndex: FC<IProps> = (props) => {
       >
         {
           typeList.map((item, index) => (
-            <Option key={item.showName + item.indexId} value={index}>
+            <Option key={item.sampleFrom + item.documentName + item?.id} value={index}>
               {`${item?.sampleFrom} - ${item?.documentName}${item?.name ? ` - ${item?.name}` : ''}`}
             </Option>
           ))

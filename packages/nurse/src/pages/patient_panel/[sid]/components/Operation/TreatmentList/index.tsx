@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Popover, Popconfirm, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import * as api from '@/services/api';
 import dayjs from 'dayjs';
 import { useParams } from 'umi';
+import * as api from '@/services/api';
 import AddTreatment, { ItreatmentDataItem, Ihospital } from '../TreatmentAdd';
 import TumourTreatItem from '../TumourTreatItem';
 import styles from '../index.scss';

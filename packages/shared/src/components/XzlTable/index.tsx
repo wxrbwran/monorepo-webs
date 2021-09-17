@@ -1,8 +1,9 @@
 import React, {
-  useState, FC, useEffect, Key,
+  useState, FC, useEffect, Key, ReactText,
 } from 'react';
 import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
+import { pageSize } from '../../utils/consts';
 
 interface IProps {
   columns: Store[];
@@ -13,20 +14,33 @@ interface IProps {
   depOptions?: Store;
   tableOptions?: Store;
   category?: string;
+  noPagination?: boolean; // true：此值为true，则去除api参数pageAt、和pageSize
 }
 
+export interface XzlTableCallBackProps {
+  selectedRowKeys?: ReactText[];
+  currentPage?: number;
+  dataSource?: Store[];
+}
+
+interface IOnSelectChange {
+  (selectedRowKeys: React.ReactText[], selectedRows?: Store[]): void;
+}
+
+
 const XzlTable: FC<IProps> = (props) => {
-  console.log("this is table 2~");
+  console.log('this is table shared~111');
   const {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
-    handleCallbackSelectKeys, category,
+    handleCallbackSelectKeys, category, noPagination,
   } = props;
+  const [size, setSize] = useState(pageSize);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(0);
   const [dataSource, setDataSource] = useState<Store[]>([]);
   const [selectedRowKeys, setRowKeys] = useState<Key[]>([]);
   const [loading, setLoading] = useState(false);
-  const onSelectChange = (keys: Key[]) => {
+  const onSelectChange: IOnSelectChange = (keys: Key[]) => {
     setRowKeys(keys);
     if (handleCallbackSelectKeys) {
       handleCallbackSelectKeys(keys);
@@ -41,19 +55,26 @@ const XzlTable: FC<IProps> = (props) => {
     console.log('query', query);
     const params: Store = {
       pageAt: 1,
-      pageSize: 10,
+      pageSize: size,
       ...depOptions,
       ...query,
     };
+    // 处理不分页的api请求
+    if (noPagination) {
+      delete params.pageAt;
+      delete params.pageSize;
+    }
     console.log('fetchTableDataSource params', params);
     const res = await request(params);
     console.log('fetchTableDataSource res', res);
     setCurrent(params.pageAt);
+    setSize(params.pageSize);
     setTotal(res.total);
-    const handledData = handleTableDataSource(dataKey, res[dataKey], category);
+    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, category);
     if (handleCallback) {
       handleCallback(handledData);
     }
+    console.log('handledData*****', handledData);
     setDataSource(handledData);
     setLoading(false);
   };
@@ -62,11 +83,18 @@ const XzlTable: FC<IProps> = (props) => {
     fetchTableDataSource({});
   }, [depOptions]);
 
-  const handlePagerChange = (page: number) => {
-    if (!tableOptions?.handlePagerChange) {
-      const params: Store = { pageAt: page };
-      fetchTableDataSource(params);
+  const handlePagerChange = (page: number, changedSize: number | undefined) => {
+    console.log('handlePagerChange', page);
+    console.log('handlePagerChange', changedSize);
+    const params: Store = { pageAt: page };
+    if (changedSize) {
+      params.pageSize = changedSize;
     }
+    if (!tableOptions?.handlePagerChange) {
+      const data: Store = { pageAt: page };
+      fetchTableDataSource(data);
+    }
+    // fetchTableDataSource(params);
   };
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -77,7 +105,7 @@ const XzlTable: FC<IProps> = (props) => {
       columns={columns}
       dataSource={dataSource}
       pagination={{
-        pageSize: depOptions?.pageSize || 10,
+        pageSize: size,
         showQuickJumper: true,
         current,
         total,

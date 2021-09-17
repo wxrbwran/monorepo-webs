@@ -1,4 +1,4 @@
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 
 const IMState: IMModelState = {
   // 是否已连接

@@ -1,7 +1,7 @@
 import React, { useState, FC, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import { IImgStructuredApiData } from 'typings/imgStructured';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import ImgWrap from './compontents/ImgWrap';
 import StructuredDetail from './compontents/StructuredDetail';
@@ -27,6 +27,8 @@ const CheckImgStructured: FC<IProps> = (props) => {
     const params = {
       imageId,
       patientSid: window.$storage.getItem('patientSid'),
+      operatorId: window.$storage.getItem('sid'),
+      wcId: window.$storage.getItem('wcId'),
     };
     // 新指标库获取图片结构化数据指标
     api.image.fetchImageIndexes(params).then((res) => {
@@ -69,7 +71,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
         <div>
           {
             data ? (
-              <div className="flex justify-start items-start mt-10">
+              <div className="flex justify-start items-start mt-10" style={{ minWidth: 1200 }}>
                 <ImgWrap
                   imageUrl={data.url}
                   handleClose={() => setShowViewer(false)}

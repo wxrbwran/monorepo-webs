@@ -1,0 +1,8 @@
+.group_msg {
+  padding: 15px 70px 20px;
+  > ul {
+    height: 100%;
+    overflow: auto;
+    padding-right: 20px;
+  }
+}

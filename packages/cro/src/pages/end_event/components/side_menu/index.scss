@@ -1,0 +1,37 @@
+.end_event_side {
+  text-align: left;
+  padding-top: 15px;
+  font-size: 14px;
+  .menu {
+    padding-left: 20px;
+    min-height: 40px;
+    line-height: 28px;
+    padding: 8px 0 8px 20px;
+
+    &.active {
+      background: #EEF2F4;
+      border-radius: 3px;
+    }
+    a {
+      font-size: 14px;
+      color: #181818;
+      line-height: 14px;
+    }
+  }
+  :global {
+    .ant-collapse-header {
+      font-size: 16px;
+    }
+    .ant-collapse-content-box {
+      padding: 8px 0;
+    }
+    .ant-collapse {
+      max-height: calc(100vh - 190px);
+      overflow: auto;
+    }
+  }
+  .notable {
+    padding-left: 20px;
+    color: #000;
+  }
+}

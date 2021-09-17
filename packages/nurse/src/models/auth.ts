@@ -4,10 +4,10 @@
  */
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
-import { setAuthorizationToken } from '@/services/http';
-// import * as api from '@/services/api';
-import { Role } from '@/utils/role';
 import { history } from 'umi';
+import { setAuthorizationToken } from '@/services/http';
+import * as api from '@/services/api';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import config from '@/config';
 
 export interface AuthModelType {
@@ -38,8 +38,15 @@ const Model: AuthModelType = {
   effects: {
     * login({ payload }, { call, put }) {
       console.log(payload, call);
-      // const data = yield call(api.auth.token, payload);
-      const token = localStorage.getItem('xzl-web-nurse_token') || '';
+      let data;
+      let token;
+      if (process.env.NODE_ENV !== 'production') {
+        data = yield call(api.auth.token, payload);
+        token = JSON.stringify(data);
+      } else {
+        token = localStorage.getItem('xzl-web-nurse_token');
+      }
+
       if (!token) {
         window.location.href = config.LOGIN;
       } else {

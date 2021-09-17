@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import config from '@/config';
 import { message } from 'antd';
 import { useSelector } from 'umi';
+import config from '@/config';
 import * as api from '@/services/api';
-import DragModal from '@/components/DragModal';
-import { Role } from '@/utils/role';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import Tabs from '../components/Tabs';
 import DoctorInfo from './DoctorInfo';
 import DoctorList from './DoctorList';

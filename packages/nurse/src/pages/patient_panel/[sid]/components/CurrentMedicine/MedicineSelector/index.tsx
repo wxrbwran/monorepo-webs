@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Select, message, Spin } from 'antd';
+import debounce from 'lodash/debounce';
 import * as api from '@/services/api';
 // import { medicineList } from '@/utils/tools';
-import debounce from 'lodash/debounce';
 import styles from './index.scss';
 
 const { Option } = Select;

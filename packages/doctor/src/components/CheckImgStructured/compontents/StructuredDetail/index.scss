@@ -1,13 +1,6 @@
 .structrued {
   height: 90vh;
   overflow-y: scroll;
-  .level1type_wrap {
-    :global {
-      .ant-radio-wrapper {
-        line-height: inherit!important;
-      }
-    }
-  }
   .save_btn {
     position: absolute;
     right: 40px;
@@ -51,10 +44,10 @@
       font-size: 15px;
     }
     #structured_content {
-      max-width: 750px;
+      // max-width: 750px;
       .ant-tabs-card {
         .ant-tabs-nav-list {
-          width: 100%;
+          // width: 100%;
         }
         .ant-tabs-tab {
           flex: 0 0 50%;

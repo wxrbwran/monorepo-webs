@@ -50,8 +50,13 @@ export default (props: IProps) => {
   // 未登录，去往需验证等页面
   if (!isLogin && isNonAuthPage) {
     console.log(3331114);
-    child = null;
-    window.location.href = config.LOGIN;
+    if (process.env.NODE_ENV === 'production') {
+      child = null;
+      window.location.href = config.LOGIN;
+    } else {
+      child = children;
+    }
+
   }
   return (
     <ConfigProvider locale={zhCN}>

@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-/dist
 /storybook-static
 
 # testing
@@ -25,3 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 
 /.travis/id_rsa
+pmpm-lock.yaml

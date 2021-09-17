@@ -1,6 +1,6 @@
 import React from 'react';
 // import { useSelector } from 'umi';
-import errorHandler from '@/components/Error/ErrorHandler';
+import ErrorHandler from 'xzl-web-shared/src/components/Error/ErrorHandler';
 import Logo from './components/Logo';
 import MenuTab from './components/MenuTab';
 // import WorkingTime from './components/WorkingTime';
@@ -25,4 +25,4 @@ function NavBar() {
   );
 }
 
-export default errorHandler(NavBar);
+export default ErrorHandler(NavBar);

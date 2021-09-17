@@ -1,0 +1,28 @@
+.chart-patient-wrap {
+  position: relative;
+  .legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 17px;
+    width: 100%;
+    div {
+      display: flex;
+      align-items: center;
+      span {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin-right: 6px;
+        background: #8C8C8C;
+      }
+      &:first-child {
+        margin-right: 20px;
+        span {
+          background: #1B90FF;
+        }
+      }
+    }
+  }
+}

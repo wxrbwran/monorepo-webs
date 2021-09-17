@@ -1,0 +1,33 @@
+.search {
+  :global {
+    .ant-input {
+      font-size: 14px;
+    }
+  }
+}
+.lists_head {
+  @include flex-lay(row, nowrap, space-between, center);
+  margin: 0 0 15px;
+  font-size: 14px;
+  color: #181818;
+  :global {
+    .ant-select {
+      margin-right: 10px;
+    }
+  }
+}
+.btn {
+  text-align: center;
+  margin-top: 48px;
+  :global {
+    .ant-btn {
+      width: 98px;
+      height: 40px;
+      font-size: 14px;
+      &:nth-child(2n) {
+        margin-left: 32px;
+      }
+    }
+  }
+
+}

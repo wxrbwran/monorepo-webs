@@ -16,7 +16,7 @@ const config = {
   define: defineEnv,
   favicon: '/assets/favicon.ico',
   publicPath: process.env.NODE_ENV === 'development' ? '/' : `/${pkg.name}/`,
-  outputPath: pkg.name,
+  outputPath: `../../${pkg.name}`,
   ignoreMomentLocale: true,
   dva: {
     immer: false,
@@ -112,6 +112,11 @@ const config = {
       .plugin('replace')
       .use(require('webpack').ContextReplacementPlugin)
       .tap(() => [/moment[/\\]locale$/, /zh-cn/]);
+    config.module
+      .rule('xlsx')
+      .test(/.(xlsx)$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'));
     // config.plugin('umi-webpack-bundle-analyzer').use(BundleAnalyzerPlugin);
   },
 };

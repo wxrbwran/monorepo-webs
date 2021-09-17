@@ -1,0 +1,29 @@
+.table-plan {
+    &__title {
+      font-size: 16px;
+      color: #181818;
+      padding-right: 8px;
+      @include flex;
+      .anticon-form {
+        font-size: 14px;
+        color: #3296FA;
+      }
+    }
+    &__cont {
+      .item {
+        margin-top: 27px;
+        .tit {
+          font-size: 15px;
+          color: #181818;
+          @include flex(flex-start);
+          img {
+            margin-right: 5px;
+          }
+        }
+        .text {
+          font-size: 14px;
+          color: #666666;
+        }
+      }
+    }
+  }

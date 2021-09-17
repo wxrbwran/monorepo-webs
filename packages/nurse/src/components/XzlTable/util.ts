@@ -1,4 +1,4 @@
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 interface ITeam {
   members: ISubject[];

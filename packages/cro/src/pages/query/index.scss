@@ -1,0 +1,85 @@
+.query {
+	// @include flex-lay(row, nowrap, flex-start, flex-start);
+  height: 100%;
+  margin-top: 3px;
+  font-size: 14px;
+  color: #181818;
+  .left {
+    // flex: 0 0 150px;
+    height: 100%;
+    padding-left: 35px;
+    text-align: left;
+    div{
+      margin-bottom: 10px;
+      cursor: pointer;
+      span {
+        margin-right: 12px;
+        font-size: 25px;
+        color: #C5C5C5;
+      }
+    }
+    .active {
+      span {
+        color: #3296FA;
+      }
+    }
+  }
+  .right {
+    position: relative;
+    padding-right: 80px;
+    .scope {
+      font-weight: 600;
+    }
+    :global {
+      .ant-checkbox-group-item {
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+    }
+    .r_top {
+      @include flex-lay(row, wrap, flex-start, stretch);
+      max-height: 395px;
+      overflow: auto;
+      border-bottom: 1px solid #000;
+      :global {
+        .ant-card {
+          margin: 0 30px 30px 0;
+          box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
+        }
+        .ant-tree-node-selected {
+          background-color: initial;
+        }
+        .ant-tree-node-content-wrapper {
+          font-size: 14px;
+          min-height: 30px;
+        }
+        .ant-card-body {
+          max-height: 305px;
+          overflow: auto;
+          margin-top: 1px;
+        }
+        .ant-card-head .ant-card-head-title {
+          padding: 17px 0;
+          font-size: 14px;
+        }
+      }
+    }
+    .r_bottom {
+      display: inline-block;
+      border-top: 1px solid #ECECEC;
+      border-left: 1px solid #ECECEC;
+      margin-top: 30px;
+      // :global {
+      //   input, .ant-select-selector {
+      //     min-height: 49px;
+      //     min-width: 149px;
+      //     border: 0;
+      //   }
+      //   .ant-select .ant-select-selection-item, .ant-select .ant-select-selection-placeholder {
+      //     line-height: 49px;
+      //     text-align: center;
+      //   }
+      // }
+    }
+  }
+}

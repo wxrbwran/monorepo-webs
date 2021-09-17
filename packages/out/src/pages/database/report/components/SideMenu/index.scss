@@ -1,0 +1,25 @@
+.report-table-menu {
+  font-size: 14px;
+  .table-list {
+    margin-top: 15px;
+    .item {
+      height: 40px;
+      line-height: 40px;
+      color: #181818;
+      padding: 0 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+      a {
+        color: #181818;
+        display: block;
+      }
+
+      &.active {
+        background: #EEF2F4;
+        border-radius: 3px;
+      }
+    }
+  }
+}

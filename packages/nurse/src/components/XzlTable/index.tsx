@@ -1,6 +1,6 @@
 import React, { useState, FC, useEffect } from 'react';
-import config from '@/config';
 import { Table } from 'antd';
+import config from '@/config';
 import { handleTableDataSource, handleTableRowKey } from './util';
 
 interface IProps {

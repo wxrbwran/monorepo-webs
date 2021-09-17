@@ -1,0 +1,59 @@
+.tab {
+  margin-top: 50px;
+  .proj_item {
+    @include flex-lay(row, wrap, flex-start, center)
+  }
+  p {
+    width: 240px;
+    height: 135px;
+    // background-image: linear-gradient(-180deg, rgba(0,0,0,0.38) 0%, rgba(195,195,195,0.10) 100%);
+    border-radius: 5px;
+    margin: 0 16px 16px 0;
+    font-size: 16px;
+    color: #fff;
+    padding: 15px 0 0 18px;
+    position: relative;
+    text-shadow: #000 2px 1px 5px;
+    img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      width: 240px;
+      height: 100%;
+      object-fit: cover;
+    }
+    .proj_name {
+      max-width: 210px;
+      display: block;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+  }
+
+  h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #181818;
+  }
+  :global {
+    .ant-tabs-tabpane {
+      // @include flex-lay(row, wrap, flex-start, center)
+      padding-top: 30px;
+    }
+    .ant-tabs-nav {
+      &::before {
+        border-bottom: 0;
+      }
+    }
+    .ant-tabs-tab {
+      font-size: 14px;
+      color: #717171;
+    }
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #181818;
+    }
+  }
+}

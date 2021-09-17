@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'umi';
 import { btnRender } from '@/utils/button';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import UserBaseInfos from '../../components/UserBaseInfos';
 import UserAvatar from '../../components/UserAvatar';
 import CertificateCard from '../CertificateCard';

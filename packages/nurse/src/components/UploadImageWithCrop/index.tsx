@@ -6,8 +6,8 @@ import { message } from 'antd';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import './index.scss';
-import { http } from '@/services/http';
 import request from 'umi-request';
+import { http } from '@/services/http';
 
 interface IUploadParams {
   imageURL: string;

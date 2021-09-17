@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
 import { message, Popover } from 'antd';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import Viewer from '@/components/Viewer';
 import { btnRender } from '@/components/BtnRender';
 import { unitFlag, unitFlagRe } from '@/utils/tools';

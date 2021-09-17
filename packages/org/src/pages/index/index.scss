@@ -1,0 +1,8 @@
+@import '@/assets/styles/index.scss';
+
+.full {
+  position: absolute;
+  @include flex();
+  width: 100%;
+  height: 100%;
+}

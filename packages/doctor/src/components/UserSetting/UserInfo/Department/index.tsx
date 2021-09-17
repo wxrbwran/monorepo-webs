@@ -3,8 +3,8 @@ import {
   Form, Select, Input, Button, Radio,
 } from 'antd';
 import { debounce } from 'lodash';
-import DragModal from '@/components/DragModal';
-import { departmentType } from '@/utils/consts';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
+import { departmentType } from 'xzl-web-shared/src/utils/consts';
 
 interface Iprops {
   setFieldsValue: (params: any) => void;
@@ -51,7 +51,7 @@ function Department({
       });
     }
   };
-  const handleAddDep = (values: {labelType: string, departmentName: string}) => {
+  const handleAddDep = (values: { labelType: string, departmentName: string }) => {
     const { labelType, departmentName } = values;
     setFieldsValue({
       labelType,
@@ -60,6 +60,7 @@ function Department({
     });
     setshowModal(false);
   };
+  console.log(disabled);
   return (
     <>
       <Form.Item
@@ -90,7 +91,7 @@ function Department({
           filterOption={false}
           onSelect={handleSelect}
           style={{ width: '376px' }}
-          disabled={disabled}
+          // disabled={disabled}
         >
           {department.map((medicine) => (
             <Option key={medicine.id} value={medicine.id}>

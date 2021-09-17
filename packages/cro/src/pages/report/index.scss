@@ -1,0 +1,25 @@
+.report-empty {
+  font-size: 14px;
+  color: #666666;
+  height: 100%;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+
+  .no-data-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  button {
+    border-radius: 3px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 24px;
+  }
+}

@@ -5,7 +5,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 import * as api from '@/services/api';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 export interface UserModelType {
   namespace: string;

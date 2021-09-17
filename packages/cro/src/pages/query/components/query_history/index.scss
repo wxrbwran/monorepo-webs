@@ -1,0 +1,50 @@
+.query_history {
+  .info {
+    @include flex-lay(row, wrap, flex-start, center);
+    font-size: 14px;
+    color: #666;
+    padding: 15px 40px;
+    border-bottom: 1px solid #EFEFEF;
+    cursor: pointer;
+    &:hover {
+      color: #3296FA;
+      P {
+        &::after {
+          background: #3296FA;
+        }
+      }
+    }
+    p{
+      margin-right: 15px;
+      position: relative;
+      &::after {
+        position: absolute;
+        width:1px;
+        height:14px;
+        background:#666;
+        content:'';
+        top:6px;
+        right: -9px;
+      }
+      &:last-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+  .footer {
+    padding: 50px 0 30px;
+    text-align: center;
+  }
+  :global {
+    .ant-modal-body {
+      padding: 0;
+      max-height: 570px;
+      overflow: scroll;
+    }
+    .ant-pagination-options {
+      display: none;
+    }
+  }
+}

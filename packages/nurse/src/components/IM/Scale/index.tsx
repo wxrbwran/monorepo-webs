@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import React, { FC } from 'react';
-import scale from '@/assets/img/scale.png';
-import { defaultAvatar } from '@/utils/consts';
 import dayjs from 'dayjs';
+import scale from '@/assets/img/scale.png';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { getRole } from '@/utils/utils';
 import '../Project/index.scss';
 

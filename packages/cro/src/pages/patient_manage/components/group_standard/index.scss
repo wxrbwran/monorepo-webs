@@ -1,0 +1,24 @@
+.group-standard-show-btn {
+  font-size: 14px;
+  color: #3296FA;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.group-standard-show {
+  .item {
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .tit {
+      font-size: 15px;
+      color: #181818;
+      margin-right: 10px;
+    }
+    .value {
+      font-size: 15px;
+      color: #666666;
+      margin-bottom: 8px;
+    }
+  }
+}

@@ -5,7 +5,7 @@ import {
   DatePicker, Button, Spin, Tabs, message,
 } from 'antd';
 import moment from 'moment';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import config from '@/config';
 import LatestHealthHistoryTable from '../LatestHealthHistoryTable';

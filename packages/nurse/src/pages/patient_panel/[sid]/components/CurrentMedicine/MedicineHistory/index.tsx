@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import MedicineRecord from '../MedicineRecord';
 import MedicineSheet from '../MedicineSheet';
 import styles from './index.scss';

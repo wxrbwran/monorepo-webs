@@ -1,0 +1,49 @@
+.box {
+	width: 200px;
+	height: 160px;
+	text-align: center;
+	background: #FFFFFF;
+	border-radius: 8px;
+	@include flex(column, nowrap, center, center);
+	margin-top: 26px;
+	cursor: pointer;
+	position: relative;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.10);
+	// &:hover {
+	// 	.upload {
+	// 		display: block;
+	// 	}
+	// }
+}
+.upload {
+	img {
+		width: 16px;
+		height: 16px;
+		vertical-align: top;
+	}
+	font-size: 12px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	// display: none;
+	:global {
+		.ant-upload {
+			color: #C5C5C5;
+			&:hover {
+				color: #4FA5FA;
+			}
+		}
+	}
+  .btn {
+    color: #C5C5C5;
+    font-size: 14px;
+    position: relative;
+    top: 4px;
+    &:hover {
+      color: #4FA5FA;
+    }
+  }
+}
+.file {
+  margin: 15px 0 11px;
+}

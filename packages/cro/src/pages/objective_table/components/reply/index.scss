@@ -1,0 +1,36 @@
+.search {
+  text-align: right;
+}
+.img_title {
+  @include flex-lay(row, wrap, flex-start, center);
+  font-size: 16px;
+  p {
+    margin: 20px 50px 20px 0;
+  }
+  .name {
+    font-weight: 600;
+    position: relative;
+    padding-left: 10px;
+    &::before {
+      content: "";
+      width: 3px;
+      height:16px;
+      position: absolute;
+      top: 5px;
+      left: 0;
+      background: #3296FA;
+    }
+  }
+}
+.empty {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.img_list {
+  img {
+    width: 120px;
+    height: 120px;
+    margin: 0 8px 20px;
+  }
+}

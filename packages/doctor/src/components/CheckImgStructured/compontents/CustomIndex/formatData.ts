@@ -53,7 +53,7 @@ export const formatDataAddIndex = (data: IInitList, addIndexNum: number) => {
       : inx - addIndexNum;
     return {
       ...item,
-      formIndex: baseInx,
+      formIndex: item.formIndex ?? baseInx, // 如果存在formIndex那就用最初的，此值一经确定就不在改变
     };
   });
   newData.noCommonItems = data.noCommonItems.map((item:IIndexItem, inx: number) => {
@@ -61,8 +61,9 @@ export const formatDataAddIndex = (data: IInitList, addIndexNum: number) => {
     const baseInx = data.commonItems.length - addIndexNum;
     return {
       ...item,
-      formIndex: baseInx + inx,
+      formIndex: item.formIndex ?? baseInx + inx,
     };
   });
+  console.log('newData23222', newData);
   return newData;
 };

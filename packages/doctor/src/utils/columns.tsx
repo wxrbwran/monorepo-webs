@@ -1,7 +1,6 @@
 import React from 'react';
 import { message, Switch } from 'antd';
 import config from '@/config';
-// import { QuestionCircleFilled } from '@ant-design/icons';
 import * as api from '@/services/api';
 
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
@@ -67,6 +66,8 @@ const handleCommon = (common: boolean, editData: object, refreshList: () => void
   api.indexLibrary.patchIndexDocumentIndex(params).then(() => {
     message.success('修改成功');
     refreshList();
+  }).catch((err) => {
+    message.error(err?.result ?? '修改失败');
   });
 };
 export const indexCommon = (refreshList: () => void) => (

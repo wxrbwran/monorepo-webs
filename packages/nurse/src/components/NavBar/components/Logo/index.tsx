@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from '@/assets/img/logo.png';
 import { Link } from 'umi';
+import logo from '@/assets/img/logo.png';
 
 function Logo() {
   return (

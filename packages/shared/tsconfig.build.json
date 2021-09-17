@@ -4,17 +4,20 @@
     "outDir": "dist",
     "module": "ESNext",
     "target": "ES5",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "declaration": true,
     "jsx": "react",
     "moduleResolution": "node",
     "downlevelIteration": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "xzl-web-shared/src/*": ["src/*"]
     },
     "typeRoots": ["node", "node_modules/@types", "./typings"],
     "allowSyntheticDefaultImports": true
   },
   // "include": ["src"],
-  "exclude": ["src/**/*.test.tsx", "src/**/*.stories.tsx",  "./dist"]
+  "exclude": ["src/**/*.test.tsx", "src/**/*.stories.tsx",  "./dist", "./node_modules"]
 }

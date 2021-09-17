@@ -3,7 +3,7 @@ import { Menu, Dropdown, Avatar } from 'antd';
 import { CaretDownOutlined, UserOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'umi';
 import config from '@/config';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UserSetting from '@/components/UserSetting';
 import Code from '@/assets/img/nav_bar/code.svg';
 import info from '@/assets/img/nav_bar/info.svg';
@@ -130,7 +130,7 @@ function Setting() {
         </div>
       </Dropdown>
       <DragModal
-        title=""
+        title="用户设置"
         footer={null}
         width={1248}
         visible={showModal}

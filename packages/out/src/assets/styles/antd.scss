@@ -1,0 +1,46 @@
+.ant-card {
+  z-index: 1;
+}
+.ant-card-body {
+  height: 100%;
+}
+
+// 弹框modal样式-s
+.ant-modal-header {
+  padding: 0;
+  height: 50px;
+  border: 0;
+  border-bottom: 1px solid #ECECEC;
+  border-top: 2px solid #3296FA;
+  .build-title {
+    text-align: left;
+    font-size: 16px;
+    color: #181818;
+    padding-left: 40px;
+  }
+  .ant-modal-title {
+    // height: 50px;
+    // line-height: 50px;
+    margin-left: 20px;
+  }
+}
+// 弹框modal样式-e
+
+// 路由一级菜单字体设置
+.ant-menu-submenu-title {
+  font-weight: bold;
+  font-size: 15px;
+}
+// 路由二级菜单缩进
+.ant-layout-sider-children {
+  .ant-menu-item {
+    padding-left: 55px!important;
+  }
+  .ant-pro-sider-collapsed-button {
+    padding-left: 16px!important;
+  }
+}
+//  tab文字过长换行展示，以免直接hidden
+.ant-tabs-tab-btn {
+  white-space: break-spaces;
+}

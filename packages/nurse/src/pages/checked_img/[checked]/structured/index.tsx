@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
-import * as api from '@/services/api';
 import { history } from 'umi';
 import { isEmpty } from 'lodash';
 import { Spin } from 'antd';
+import * as api from '@/services/api';
 import StructuredDetail from './compontents/StructuredDetail';
 import ImgWrap from './compontents/ImgWrap';
 

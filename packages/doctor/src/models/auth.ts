@@ -8,7 +8,7 @@ import { history } from 'umi';
 import { message } from 'antd';
 import { setAuthorizationToken } from '@/services/http';
 import * as api from '@/services/api';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import config from '@/config';
 
 export interface AuthModelType {
@@ -28,7 +28,7 @@ export const authState: AuthModelState = {
   wcl: [],
   yxRegister: {
     accid: '',
-    token: '',
+    token: ""
   },
 };
 

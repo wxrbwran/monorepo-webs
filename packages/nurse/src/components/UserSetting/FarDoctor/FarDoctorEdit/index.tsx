@@ -1,8 +1,8 @@
 import React from 'react';
-import config from '@/config';
 import {
   Form, Button, Input, Select, Radio,
 } from 'antd';
+import config from '@/config';
 import { titleList } from '@/utils/tools';
 import styles from './index.scss';
 

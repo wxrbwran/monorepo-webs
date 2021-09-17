@@ -1,0 +1,64 @@
+.role_info {
+  padding: 0 10px;
+}
+.info {
+  @include flex(row, nowra, flex-start, flex-start);
+  .items {
+    :global(.ant-tabs-nav .ant-tabs-tab) {
+      padding: 8px 0;
+    }
+  }
+}
+
+.left {
+  flex: 0 0 100px;
+  > p {
+    font-size: 12px;
+    color: #666;
+    margin: 10px auto;
+  }
+}
+
+.right {
+  flex: 1 1 auto;
+  margin-left: 10px;
+}
+.items {
+  padding: 20px;
+  margin-bottom: 10px;
+  border: 1px solid #f2f7fe;
+}
+.cert_status {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  line-height: 32px;
+  font-size: 14px;
+  &.green {
+    color: #4caf50;
+  }
+  img {
+    margin-right: 10px;
+  }
+}
+.top_with_btn {
+  @include flex(row, nowrap, space-between, flex-start);
+}
+.top {
+  @include flex(row, wrap, flex-start, flex-start);
+}
+.label {
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.desc {
+  max-height: 150px;
+  overflow: auto;
+}
+.btns {
+  margin-top: 20px;
+  text-align: center;
+  button {
+    margin-right: 20px;
+  }
+}

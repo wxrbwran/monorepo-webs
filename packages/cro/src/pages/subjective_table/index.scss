@@ -1,0 +1,50 @@
+.subjective-table {
+  height: 100%;
+  .toogle-side__right {
+    padding: 0;
+    overflow: auto;
+  }
+}
+.follow-table-empty {
+  font-size: 14px;
+  color: #666666;
+  height: 100%;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  .no-data-img {
+    width: 100px;
+    height: 100px;
+  }
+  p {
+    text-align: center;
+  }
+  button {
+    border-radius: 3px;
+    height: 40px;
+    font-size: 14px;
+    margin-top: 24px;
+  }
+}
+.subjective-table-tab {
+  @include flex(flex-start);
+  background-color: #F5F5F5;
+  height: 50px;
+  .item {
+    width: 125px;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    &.active {
+      background-color: #FFf;
+    }
+    a {
+      font-size: 16px;
+      color: #666666;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

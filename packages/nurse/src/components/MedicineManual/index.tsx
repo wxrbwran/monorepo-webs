@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import DragModal from '@/components/DragModal';
-// import { message } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
+// import { message } from 'antd';
 import * as api from '@/services/api';
 import styles from './index.scss';
 

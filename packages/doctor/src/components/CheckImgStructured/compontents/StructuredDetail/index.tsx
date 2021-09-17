@@ -87,18 +87,23 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         Promise.all(Object.values(inspectionCallbackFns)
           .map((fn) => fn()))
           .then((documentList) => {
-            apiParams = {
-              ...apiParams,
-              documentList,
-              orgId: hospital?.hospitalId,
-              orgName: hospital?.hospitalName,
-            };
-            saveData(apiParams);
+            if (documentList.length > 0) {
+              apiParams = {
+                ...apiParams,
+                documentList,
+                orgId: hospital?.hospitalId,
+                orgName: hospital?.hospitalName,
+              };
+              saveData(apiParams);
+            } else {
+              message.warning('请选择具体化验单或检查单');
+            }
           }).catch((err) => {
             console.log('err', err);
             message.error('请完善检查单后提交！');
           });
       } else {
+        apiParams.documentList = [];
         saveData(apiParams);
       }
     } else {
@@ -120,9 +125,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   };
 
   const imgTypeOption = [{ label: '化验单', value: 'HYD' }, { label: '检查单', value: 'JCD' }];
-  const radioStyle = {
-    display: 'block', height: '30px', lineHeight: '30px', fontSize: 14,
-  };
+  const radioStyle = { fontSize: 14 };
   const level1Tabs: CommonData = {
     HYD: { label: '化验单: 组织体液化验的结果' },
     JCD: { label: '检查单: 器官结构和功能检查的结果' },
@@ -130,7 +133,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   return (
     <div className={`flex-1 mx-20 mt-10 ${styles.structrued}`}>
       <div className="flex justify-between items-center mb-25">
-        <div className={`flex items-center ${styles.level1type_wrap}`}>
+        <div className="flex items-center">
           <Checkbox.Group
             options={imgTypeOption}
             onChange={(e) => handleChangeType(e)}

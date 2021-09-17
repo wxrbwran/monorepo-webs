@@ -1,0 +1,21 @@
+.side_menu {
+ :global {
+    .ant-tabs-nav {
+      width: 100%;
+    }
+    .ant-tabs-left {
+      height: 100%;
+    }
+    .ant-tabs-tab-active {
+      background: #E7F7FF;
+      color: #1890FF;
+    }
+    .ant-tabs-ink-bar.ant-tabs-ink-bar-animated {
+      width: 4px;
+    }
+    .ant-tabs-tab-btn {
+      white-space: break-spaces;
+      text-align: left;
+    }
+  }
+}

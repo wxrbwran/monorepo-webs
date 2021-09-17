@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Form, Input, Button, message, Menu, Dropdown,
 } from 'antd';
-import { Button as Button1 } from 'xzl-web-shared/dist/src'
 import { CaretDownOutlined } from '@ant-design/icons';
 import QRCode from 'qrcode.react';
 import { FormProps } from 'antd/lib/form';
@@ -12,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import * as api from '@/services/api';
 import { setXzlClientId } from '@/services/http';
 // import config from '@/config';
-import { clientType } from '@/utils/consts';
+import { clientType } from 'xzl-web-shared/src/utils/consts';
 import logo from '@/assets/img/logo.svg';
 import refresh from '@/assets/img/refresh.svg';
 import styles from './index.scss';
@@ -136,7 +135,6 @@ function Login() {
 
   return (
     <div className={styles.login}>
-      <Button1>asdasd</Button1>
       <Dropdown overlay={menu} overlayClassName={styles.role}>
         <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
           {clientType[key]}
@@ -149,61 +147,77 @@ function Login() {
           <p>{codeLogin ? '请使用最新版医生端APP扫码登录' : '账号密码登录'}</p>
         </div>
         <div className="px-50 relative">
-          {codeLogin && (
-            <>
-              {showMask && (
-                <div className={styles.qrcode}>
-                  <p>您的二维码已失效</p>
-                  <p>点击下方刷新按钮</p>
-                  <img src={refresh} className="w-40 h-40 mt-10" alt="" onClick={createUuid} />
-                </div>
-              )}
-              <QRCode size={200} value={qrcode} />
-            </>
-          )}
-          {!codeLogin && (
-            <Form
-              name="basic"
-              initialValues={{ remember: true }}
-              onFinish={(value: FormProps) => onFinish(value)}
-              onFinishFailed={onFinishFailed}
-              id="height42"
-            >
-              <Form.Item noStyle>
-                <span className="text-base mb-13 inline-block">手机号</span>
-              </Form.Item>
-              <Form.Item
-                name="account"
-                rules={[{ required: true, message: '请输入用户名或手机号!' }]}
+          {
+            codeLogin && (
+              <>
+                {
+                  showMask && (
+                    <div className={styles.qrcode}>
+                      <p>您的二维码已失效</p>
+                      <p>点击下方刷新按钮</p>
+                      <img src={refresh} className="w-40 h-40 mt-10" alt="" onClick={createUuid} />
+                    </div>
+                  )
+                }
+                <QRCode size={200} value={qrcode} />
+              </>
+            )
+          }
+          {
+            !codeLogin && (
+              <Form
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={(value: FormProps) => onFinish(value)}
+                onFinishFailed={onFinishFailed}
+                id="height42"
               >
-                <Input />
-              </Form.Item>
-              <Form.Item noStyle>
-                <span className="text-base mb-13 inline-block">登录密码</span>
-              </Form.Item>
-              <Form.Item name="password" rules={[{ required: true, message: '请输入密码!' }]}>
-                <Input.Password className="passwod" placeholder="密码" />
-              </Form.Item>
-              <Form.Item noStyle>
-                <Button type="primary" htmlType="submit">
-                  登录
-                </Button>
-              </Form.Item>
-              {key !== 'OUTPATIENT' && (
                 <Form.Item noStyle>
-                  <div className={styles.forgot}>
-                    <Link to="/find_pwd">忘记密码?</Link>
-                  </div>
+                  <span className="text-base mb-13 inline-block">手机号</span>
                 </Form.Item>
-              )}
-            </Form>
-          )}
+                <Form.Item
+                  name="account"
+                  rules={[{ required: true, message: '请输入用户名或手机号!' }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item noStyle>
+                  <span className="text-base mb-13 inline-block">登录密码</span>
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[{ required: true, message: '请输入密码!' }]}
+                >
+                  <Input.Password
+                    className="passwod"
+                    placeholder="密码"
+                  />
+                </Form.Item>
+                <Form.Item noStyle>
+                  <Button type="primary" htmlType="submit">
+                    登录
+                  </Button>
+                </Form.Item>
+                {
+                  key !== 'OUTPATIENT' && (
+                    <Form.Item noStyle>
+                      <div className={styles.forgot}>
+                        <Link to="/find_pwd">忘记密码?</Link>
+                      </div>
+                    </Form.Item>
+                  )
+                }
+              </Form>
+            )
+          }
         </div>
-        {key === 'DOCTOR' && (
-          <div className={styles.footer} onClick={changeLoginWay}>
-            {codeLogin ? '账号密码登录' : '扫码登录'}
-          </div>
-        )}
+        {
+          key === 'DOCTOR' && (
+            <div className={styles.footer} onClick={changeLoginWay}>
+              { codeLogin ? '账号密码登录' : '扫码登录' }
+            </div>
+          )
+        }
       </div>
       {/* <a
         href={config.OUT_HOSPITAL_PATIENT}

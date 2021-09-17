@@ -1,0 +1,66 @@
+.invite {
+  // position: absolute;
+  // // top: 36px;
+  // top: 86px;
+  // right: 30px;
+  font-size: 14px;
+  width: 390px;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.13);
+  border-radius: 8px;
+  padding: 15px 0 15px 18px;
+  @include flex-lay(row, nowrap, flex-start, flex-start);
+  z-index: 1;
+  background-color: #fff;
+  margin-bottom: 10px;
+  img {
+    width: 29px;
+    height: 30px;
+    margin-right: 12px;
+  }
+  .btn {
+    margin-top: 19px;
+    p {
+      display: inline-block;
+      border: 1px solid #E0E0E0;
+      border-radius: 6px;
+      padding: 5px 14px;
+      color: #3296FA;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    .await {
+      color: #666;
+      border: 0;
+      padding: 0;
+    }
+    :global {
+      .anticon {
+        margin-right: 6px;
+      }
+    }
+  }
+  .target {
+    width: 20px;
+    height: 20px;
+    background: #555555;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #00cc89;
+    line-height: 20px;
+    font-size: 12px;
+    text-align: center;
+    z-index: 2;
+  }
+  .ball {
+    width: 8px;
+    height: 8px;
+    background: #3296FA;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 1;
+  }
+}

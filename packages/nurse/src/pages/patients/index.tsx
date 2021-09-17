@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form } from 'antd';
 import { useSelector } from 'umi';
 import { Organization } from '@/components/Selects';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
   name, tel, sex, org, dep, checked, imgCount, createTime,
 } from './columns';

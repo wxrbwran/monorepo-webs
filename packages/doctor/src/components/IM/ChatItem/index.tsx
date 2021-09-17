@@ -4,9 +4,9 @@ import React, {
 import { Popover } from 'antd';
 import classnames from 'classnames';
 import { useDispatch } from 'umi';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { getRole } from '@/utils/utils';
-import { Role } from '@/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
 // eslint-disable-next-line import/no-cycle
 import AdjustMedicineCustom from '../AdjustMedicineCustom';
@@ -21,7 +21,7 @@ import Video from '../Video';
 
 interface IMsg {
   rawMsg: Store;
-  myInfo: Store;
+  // myInfo: Store;
   avatarArr: IAvatar[];
 }
 interface IFile {

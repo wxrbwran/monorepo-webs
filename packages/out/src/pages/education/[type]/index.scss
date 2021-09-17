@@ -1,0 +1,16 @@
+.visite_list {
+  .upload {
+    // @include size(122px, 215px);
+    // @include size(220px, 120px);
+    // @extend %upload__btn;
+    @include upload__btn(220px, 120px);
+  }
+  .add {
+    @include size(86px);
+  }
+  .block {
+    >div {
+      margin: 0 40px 30px 0;
+    }
+  }
+}

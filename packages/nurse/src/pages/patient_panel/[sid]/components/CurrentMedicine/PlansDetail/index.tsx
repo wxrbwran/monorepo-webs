@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Popover } from 'antd';
-import { unitFlagRe } from '@/utils/tools';
 import { useDispatch, useSelector } from 'umi';
 import moment from 'moment';
+import { unitFlagRe } from '@/utils/tools';
 import styles from './index.scss';
 
 interface IFormatPlansItem {

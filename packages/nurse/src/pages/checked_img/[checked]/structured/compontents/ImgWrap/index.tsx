@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Viewer from '@/components/Viewer';
 import { history } from 'umi';
 import { CloseOutlined } from '@ant-design/icons';
+import Viewer from '@/components/Viewer';
 import styles from './index.scss';
 
 interface IProps {

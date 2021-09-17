@@ -3,11 +3,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import {
   Table, Button, message,
 } from 'antd';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import config from '@/config';
 import {
   clAvatar, clName, clTitle, clDepartment,
-} from '@/utils/columns';
+} from 'xzl-web-shared/src/utils/columns';
 import { getCondition } from '@/utils/utils';
 import { pageRender } from '@/utils/pager';
 import Title from '../../components/Selects/Title';

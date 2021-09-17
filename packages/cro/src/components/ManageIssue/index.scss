@@ -1,0 +1,23 @@
+.list {
+  li {
+    font-size: 14px;
+    color: #666;
+    height: 46px;
+    border-bottom: 1px solid #EFEFEF;
+    @include flex-lay(row, nowrap, space-between, center);
+    padding: 0 40px;
+    cursor: pointer;
+    &:first-child(), .del{
+      color: #3296FA;
+      justify-content: flex-start;
+    }
+  }
+  :global {
+    .ant-modal-body {
+      padding: 0 0 40px 0;
+    }
+    .anticon {
+      margin-right: 4px;
+    } 
+  }
+}

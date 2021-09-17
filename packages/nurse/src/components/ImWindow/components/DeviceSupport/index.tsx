@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
-import { btnRender } from '@/utils/button';
 import { useDispatch, useSelector } from 'umi';
+import { btnRender } from '@/utils/button';
 
 // 检查设备支持情况
 // netcall.js里当拨打和接听时，会进行webrtc是否支持与音视频设备检查，页面只需要在检查结果没返回时，显示检查中提示即可

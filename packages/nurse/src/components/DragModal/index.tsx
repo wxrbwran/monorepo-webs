@@ -1,35 +1,54 @@
-import React from 'react';
+/**
+ * Created by wuxiaoran on 2019/1/28.
+ */
+import React, { FC, useState } from 'react';
 import { Modal } from 'antd';
-import { ModalProps } from 'antd/lib/modal';
-import BuildTitle from './BuildTitle';
+import { ModalProps } from 'antd/lib/modal/Modal';
+import Draggable from 'react-draggable';
 
-interface IProps {
-  title: string | React.ReactElement;
-  // eslint-disable-next-line react/require-default-props
-  extra?: string;
-  children: React.ReactElement;
-  onCancel: () => void;
+interface IDMProps extends ModalProps {
+  title: string;
+  extra?: any;
 }
-
-function DragModal(props: IProps & ModalProps) {
-  const { title, extra, children } = props;
+/* eslint-disable */
+const AntdModalDrag: FC<IDMProps> = (props) => {
+  const { title, children } = props;
+  const [disabled, setDisabled] = useState(true);
   const titleNode = (
-    <BuildTitle
-      title={title}
-      extra={extra || ''}
-    />
+    <div
+      style={{
+        width: '100%',
+        cursor: 'move',
+      }}
+      onMouseOver={() => {
+        if (disabled) {
+          setDisabled(false);
+        }
+      }}
+      onMouseOut={() => {
+        setDisabled(true);
+      }}
+      // fix eslintjsx-a11y/mouse-events-have-key-events
+      // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
+      onFocus={() => {}}
+      onBlur={() => {}}
+      // end
+    >
+      {title}
+    </div>
   );
   return (
     <Modal
-      style={{ top: 0 }}
-      maskClosable
+      destroyOnClose
       {...props}
       title={titleNode}
-      destroyOnClose
+      modalRender={(modal) => (
+        <Draggable disabled={disabled}>{modal}</Draggable>
+      )}
     >
       {children}
     </Modal>
   );
-}
+};
 
-export default DragModal;
+export default AntdModalDrag;

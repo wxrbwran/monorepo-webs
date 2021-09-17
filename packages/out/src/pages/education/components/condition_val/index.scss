@@ -1,0 +1,9 @@
+.con_val {
+  @include flex(row, nowrap, center, baseline);
+  color: #666;
+  .label {
+    margin-left: 40px;
+    min-width: 56px;
+    text-align: right;
+  }
+}

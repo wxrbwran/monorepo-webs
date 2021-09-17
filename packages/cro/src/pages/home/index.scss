@@ -1,0 +1,39 @@
+.home {
+  @include flex(flex-start, flex-start);
+}
+.home_main {
+  flex: 1;
+  position: relative;
+}
+.create_project {
+  width: 350px;
+  height: 120px;
+  background: url(../../assets/img/create_project.png) no-repeat;
+  background-size: 100% 100%;
+  margin-top: 36px;
+  padding: 15px 0 0 41px;
+  font-size: 18px;
+  color: #555555;
+  line-height: 18px;
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+.charts {
+  @include flex(flex-start);
+  margin-top: 36px;
+}
+.charts_item {
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.06);
+  // width: 525px;
+  width: 48%;
+  height: 430px;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-right: 20px;
+
+}
+.charts_cont {
+  width: 100%;
+  height: 383px;
+}
+

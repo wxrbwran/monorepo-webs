@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'umi';
-import * as api from '@/services/api';
-
 import { Select, Form } from 'antd';
+import * as api from '@/services/api';
 
 const { Option } = Select;
 function Organization() {

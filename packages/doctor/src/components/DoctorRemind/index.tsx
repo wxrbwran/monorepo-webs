@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { useDispatch, useParams } from 'umi';
 import { debounce } from 'lodash';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { getIssueParams } from '@/utils/utils';
 import styles from './index.scss';
 

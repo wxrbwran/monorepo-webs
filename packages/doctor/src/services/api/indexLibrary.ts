@@ -40,5 +40,9 @@ export default {
   deleteIndexDocumentIndex(id: string): Promise<any> {
     return http.delete(`index/document/index/${id}`);
   },
+  // 同时新增单据及指标
+  putIndexDocumentAndIndex(data: CommonData): Promise<any> {
+    return http.put('index/documentAndIndex', { data });
+  },
   // 8月17xr接口-e
 };

@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useRef } from 'react';
 import classnames from 'classnames';
-import { defaultAvatar } from '@/utils/consts';
-import { getRole } from '@/utils/utils';
 import { useDispatch } from 'umi';
-import { Role } from '@/utils/role';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { getRole } from '@/utils/utils';
+import { Role } from 'xzl-web-shared/src/utils/role';
 // eslint-disable-next-line import/no-cycle
 import { IAvatar } from '../ChatList';
 import AdjustMedicineCustom from '../AdjustMedicineCustom';
@@ -18,7 +18,7 @@ import Video from '../Video';
 
 interface IMsg {
   rawMsg: Store;
-  myInfo: Store;
+  // myInfo: Store;
   avatarArr: IAvatar[];
 }
 interface IFile {

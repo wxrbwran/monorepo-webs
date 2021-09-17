@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import DragModal from '@/components/DragModal';
 import debounce from 'lodash/debounce';
-import SearchHospital from '@/components/SearchHospital';
-import Calendar from '@/components/Calendar';
 import dayjs from 'dayjs';
 import {
   Form, Select, Spin, Button, Input, message,
 } from 'antd';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
+import SearchHospital from '@/components/SearchHospital';
+import Calendar from '@/components/Calendar';
 import * as api from '@/services/api';
 import styles from './index.scss';
 

@@ -1,0 +1,175 @@
+// @import 'tailwindcss/base';
+// @import 'tailwindcss/components';
+// @import 'tailwindcss/utilities';
+@import '@tailwindcss/postcss7-compat/base';
+@import '@tailwindcss/postcss7-compat/components';
+@import '@tailwindcss/postcss7-compat/utilities';
+// 由 layout 引入
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+body .anticon svg {
+  display: block;
+}
+body {
+  min-width: 1200px;
+}
+.ant-modal-header {
+  background-color: #f5f5f5;
+}
+.ant-modal-body {
+  // max-height: calc(100vh - 102px);
+  max-height: 78vh;
+  overflow: auto;
+}
+.pointer {
+  cursor: pointer;
+}
+.white {
+  background-color: #fff;
+}
+.bg {
+  background-color: #f6f7fb;
+}
+.column_btn {
+  > * {
+    margin-right: 10px;
+  }
+}
+.ant-modal-footer {
+  text-align: center !important;
+}
+.hide_modal_cancel .ant-btn:first-child {
+  display: none;
+}
+.hide_modalform_cancel .ant-modal-footer .ant-space-item:first-child {
+  display: none;
+}
+.xzl-uni-selects {
+  .ant-select {
+    min-width: 100px;
+    margin-right: 10px;
+  }
+}

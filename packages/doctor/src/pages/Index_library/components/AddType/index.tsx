@@ -4,7 +4,7 @@ import {
   Form, Input, Button, message,
 } from 'antd';
 import { debounce } from 'lodash';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 
 interface IProps {

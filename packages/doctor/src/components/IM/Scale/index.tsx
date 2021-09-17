@@ -3,7 +3,7 @@
 import React, { FC } from 'react';
 import dayjs from 'dayjs';
 import scale from '@/assets/img/scale.png';
-import { defaultAvatar } from '@/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { getRole } from '@/utils/utils';
 import '../Project/index.scss';
 
@@ -32,7 +32,6 @@ interface IContent {
 
 const Scale: FC<IMsg> = (props) => {
   const { msg } = props;
-  console.log('msg666', msg);
   const { content, time } = msg;
   const { projectName } = content.content;
 

@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import {
   Select, Radio, InputNumber, message,
 } from 'antd';
-import medicineManual from '@/assets/img/medicineManual.svg';
 import { PlusOutlined } from '@ant-design/icons';
 import { RadioChangeEvent } from 'antd/lib/radio';
-import { unitFlagRe } from '@/utils/tools';
 import moment from 'moment';
+import { unitFlagRe } from '@/utils/tools';
+import medicineManual from '@/assets/img/medicineManual.svg';
 import MedicineManual from '@/components/MedicineManual';
 import { verifyTimeAction, verifyCountAction } from '../formatData';
 import { initPlanAction } from '../consts';

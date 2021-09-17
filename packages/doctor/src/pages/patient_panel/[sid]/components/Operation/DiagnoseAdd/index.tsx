@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import Calendar from '@/components/Calendar';
 import SearchHospital from '@/components/SearchHospital';
-import DragModal from '@/components/DragModal';
+import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import styles from './index.scss';
 

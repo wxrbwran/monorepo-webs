@@ -1,0 +1,72 @@
+.define {
+  position: relative;
+  padding: 30px;
+  .draft_img {
+    position: absolute;
+    @include size(90px);
+    top: 144px;
+    right: 154px;
+  }
+  form, .detail {
+    @include flex-lay(row, nowrap, space-between, flex-start);
+  }
+  .title {
+    font-size: 16px;
+  }
+  .sick {
+    padding-left: 100px;
+  }
+  .empty {
+    color: #aaa;
+    font-size: 14px;
+    margin: 18px 18px 50px;
+  }
+  .data {
+    margin: 20px 0 30px 70px;
+    @include flex-lay(row, wrap, flex-start, flex-start);
+    span {
+      margin-bottom: 15px;
+    }
+  }
+  .sick_item {
+    background: #FAFAFA;
+    border-radius: 2px;
+    border: 1px solid #D9D9D9;
+    padding: 5px;
+    margin: 0 7px;
+    font-size: 14px;
+  }
+  .draft {
+    margin-right: 10px;
+  }
+  :global {
+    .ant-btn {
+      font-size: 14px;
+    }
+  }
+}
+:global {
+  .ant-modal-confirm-content {
+    font-size: 15px!important;
+    color: #939495!important;
+  }
+  .ant-modal-confirm-btns {
+    .ant-btn {
+      font-size: 14px;
+    }
+  }
+}
+.draft {
+  :global {
+    .ant-btn:nth-child(1) {
+      display: none;
+    }
+  }
+}
+
+.end_event_main {
+  .toogle-side__right {
+    padding: 0;
+    overflow: auto;
+  }
+}

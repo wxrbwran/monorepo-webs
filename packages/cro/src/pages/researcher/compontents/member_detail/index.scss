@@ -1,0 +1,47 @@
+
+.text {
+  cursor: pointer;
+  color: #3296FA;
+}
+.info {
+  font-size: 15px;
+  color: #666;
+  :global {
+    .ant-input {
+      width: 220px;
+      height: 40px;
+      font-size: 14px;
+      color: #181818;
+      &[disabled] {
+        background-color: #fff;
+      }
+    }
+  }
+  ul {
+    @include flex-lay(row, wrap, space-between, center);
+    label {
+      display: inline-block;
+      min-width: 75px;
+      text-align: left;
+      margin-right: 10px;
+    }
+    li {
+      margin-bottom: 20px;
+    }
+  }
+  .split {
+    position: relative;
+    color: #999;
+    margin: 30px 0;
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 89%;
+      height: 1px;
+      position: absolute;
+      background: #E8E8E8;
+      top: 50%;
+      left: 80px;
+    }
+  }
+}
