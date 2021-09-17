@@ -99,7 +99,8 @@ function ScaleTableDetailEcho(props: IProps) {
             <div className={styles.item__issue}>
               {item.type === 'END' && <span className={styles.end}>终点事件</span>}
               {item.type !== 'COMPLETION' &&
-                (scaleType === 'CRF' ? item.detail.stem : item.code + '、' + item.detail.stem)}
+                // (scaleType === 'CRF' ? item.detail.stem : item.code + '、' + item.detail.stem)}
+                (item.code + '、' + item.detail.stem)}
             </div>
             <div>
               {item.type === 'RADIO' &&

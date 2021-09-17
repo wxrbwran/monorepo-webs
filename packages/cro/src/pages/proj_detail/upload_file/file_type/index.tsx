@@ -22,7 +22,7 @@ interface IKey {
   id: string;
 }
 
-function FileType({ name, name2, imgSrc, type}:IProps) {
+function FileType({ name, name2, imgSrc, type }:IProps) {
   const { projDetail } = useSelector((state: IState) =>  state.project);
   const projectSid = window.$storage.getItem('projectSid');
   const [isShowModal, setIsShowModal] = useState(false);
@@ -30,21 +30,58 @@ function FileType({ name, name2, imgSrc, type}:IProps) {
   const [loading, setLoading] = useState(false);
 
   const toogleUpload = () => {
-    setIsShowModal(!isShowModal)
-  }
+    setIsShowModal(!isShowModal);
+  };
+
+  //获取文件列表
+  const fetchFileList = () => {
+    if (projectSid){
+      api.detail.getProjectFileList({
+        projectSid,
+        type,
+      }).then((res) => {
+        const { fileInfoList } = res;
+        setFileList(fileInfoList);
+      })
+        .catch((err) => {
+          message.error(err);
+        });
+    }
+  };
 
   useEffect(()=> {
-    if(isShowModal){
-      setFileList([])
+    if (isShowModal){
+      setFileList([]);
       fetchFileList();
     }
-  },[isShowModal])
+  }, [isShowModal]);
 
-  const fetchUrlThenUpload = async (file:{name: string, type: string}) => {
-    console.log('fileeee', file)
-    setLoading(true)
-    api.base.filePrepare({businessType: 300}).then(res => {
-      console.log(432, res)
+  //上传
+  const handleSubmit = (rawUrl:string, fileName:string) => {
+    api.detail.addProjectFile({
+      address: rawUrl,
+      name:fileName,
+      projectSid,
+      type,
+    }).then(() => {
+      if (isShowModal){
+        setTimeout(() => {
+          setLoading(false);
+          message.success('文件上传成功');
+          fetchFileList();
+        }, 5000);
+      }
+    })
+      .catch((err) => {
+        message.error(err);
+      });
+  };
+
+  const fetchUrlThenUpload = async (file:{ name: string, type: string }) => {
+    console.log('fileeee', file);
+    setLoading(true);
+    api.base.filePrepare({ businessType: 300 }).then(res => {
+      console.log(432, res);
       const {
         accessId, encodePolicy, host, key, signature,
       } = res;
@@ -57,88 +94,51 @@ function FileType({ name, name2, imgSrc, type}:IProps) {
       formData.set('callback', '');
       formData.set('signature', signature);
       formData.set('file', file);
-      console.log('host', host)
+      console.log('host', host);
       request
         .post(host, {
           data: formData,
         })
         .then(() => {
-          handleSubmit(`${host}/${key}${file.name}`, file.name)
+          handleSubmit(`${host}/${key}${file.name}`, file.name);
         })
         .catch((err) => {
           console.log('error111', err);
         });
     }).catch(err => {
       console.log(err);
-      message.error(err)
-    })
-  }
+      message.error(err);
+    });
+  };
 
   const stopPropagation = (e:any) => {
     //ts
     e.stopPropagation();
-  }
+  };
 
   //删除文件
   const handleRemove = (fileId: string) => {
-    api.detail.deleteProfileFile(fileId).then((res) => {
+    api.detail.deleteProfileFile(fileId).then(() => {
       message.success('删除文件成功');
       fetchFileList();
     })
-    .catch((err) => {
-      message.error(err);
-    });
-  }
-
-  //获取文件列表
-  const fetchFileList = () => {
-    if(projectSid){
-      api.detail.getProjectFileList({
-        projectSid,
-        type,
-      }).then((res) => {
-        const { fileInfoList } = res;
-        setFileList(fileInfoList);
-      })
       .catch((err) => {
         message.error(err);
       });
-    }
-  }
-
-  //上传
-  const handleSubmit = (rawUrl:string, fileName:string) => {
-    api.detail.addProjectFile({
-      address: rawUrl,
-      name:fileName,
-      projectSid,
-      type,
-    }).then((res) => {
-      if(isShowModal){
-        setTimeout(() => {
-          setLoading(false);
-          message.success('文件上传成功');
-          fetchFileList();
-        }, 5000);
-      }
-    })
-    .catch((err) => {
-      message.error(err);
-    });
-  }
+  };
 
   const lookFile = (fileId: string) => {
     api.detail.getFileInfo(fileId).then((res) => {
-      const aEl = document.getElementById("upload")
-      if(aEl && res.convertAddress){
-        aEl.setAttribute("href",res.convertAddress);
+      const aEl = document.getElementById('upload');
+      if (aEl && res.convertAddress){
+        aEl.setAttribute('href', res.convertAddress);
         aEl.click();
       }
     })
-    .catch((err) => {
-      message.error(err);
-    });
-  }
+      .catch((err) => {
+        message.error(err);
+      });
+  };
   const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType);
   const isEdit = isLeader && projDetail.status !== 1001;
   return (
@@ -159,7 +159,7 @@ function FileType({ name, name2, imgSrc, type}:IProps) {
                 accept={type === 'INVITER_FILE' ? '.doc,.docx,.xlsx,.xls,.pdf' : ''}
                 onClick={stopPropagation}
                 // disabled={[Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(window.$storage.getItem('croRoleType'))}
-                disabled={true}
+                // disabled={true}
               >
                 <UploadOutlined />
                 <span>上传</span>
@@ -196,7 +196,7 @@ function FileType({ name, name2, imgSrc, type}:IProps) {
                           </>
                         )
                       }
-                      <a id="upload" style={{display: 'none'}} target="_blank"></a>
+                      <a id="upload" style={{ display: 'none' }} target="_blank"></a>
                       <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
                       {
                         isEdit &&  <span  onClick={() => handleRemove(item.id)}><DeleteOutlined /> 删除</span>
@@ -230,7 +230,7 @@ function FileType({ name, name2, imgSrc, type}:IProps) {
         </DragModal>
       ) }
     </>
-  )
+  );
 }
 
 export default FileType;
