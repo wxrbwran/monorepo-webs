@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Select, message} from 'antd';
+import { Button, Select, message } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { useSelector } from 'react-redux';
 import * as api from '@/services/api';
@@ -16,7 +16,7 @@ interface IProps {
 function SelectGroup(props: IProps) {
   const [isShowSelectGroup, setIsShowSelectGroup] = useState(false);
   const [selectGroup, setSelectGroup] = useState('');
-  const {projectNsId} = useSelector((state: IState) => state.project.projDetail)
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const groupList = useSelector((state: IState) => state.project.objectiveGroup);
   const handleShowGroup = () => {
     if (props.selectPatient.length === 0) {
@@ -25,26 +25,27 @@ function SelectGroup(props: IProps) {
       setIsShowSelectGroup(true);
     }
 
-  }
+  };
   const handleSelectGroup = (value: string) => {
-    setSelectGroup(value)
-  }
+    setSelectGroup(value);
+  };
   const handleJoinGroup = () => {
     if (!selectGroup){
-      message.error('请选择小组')
+      message.error('请选择小组');
     } else {
       const params = {
         projectNsId,
         groupId: selectGroup,
         patientSIds: props.selectPatient,
-      }
-      api.patientManage.postGroupPatient(params).then(res => {
+        projectSid: window.$storage.getItem('projectSid'),
+      };
+      api.patientManage.postGroupPatient(params).then(() => {
         message.success('加入成功');
         setIsShowSelectGroup(false);
         props.refreshList();
-      })
+      });
     }
-  }
+  };
   return (
     <>
       <Button
@@ -70,7 +71,7 @@ function SelectGroup(props: IProps) {
               groupList.map((item: IGroupList) => {
                 return (
                   <Option key={item.groupId} value={item.groupId}>{item.groupName}</Option>
-                )
+                );
               })
             }
           </Select>
@@ -81,7 +82,7 @@ function SelectGroup(props: IProps) {
         </div>
       </DragModal>
     </>
-  )
+  );
 }
 
 export default SelectGroup;
