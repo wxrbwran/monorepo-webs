@@ -95,7 +95,7 @@ function Member() {
         <h3>成员</h3><img src={number} alt=""/> <span>{memberCount}</span>
       </div>
       <Form form={form} onValuesChange={handleSelectChange} style={{ position: 'relative' }}>
-        <Search form={form} searchKey="var" placeholder="搜索姓名或手机号"  />
+        <Search form={form} searchKey="var" placeholder="搜索姓名或手机号"  float={'inherit'}/>
         <div className={styles.lists_head}>
           <InviteStatus />
           {
@@ -105,10 +105,10 @@ function Member() {
             ].includes(croRoleType) && (
              <div>
                {
-                 label === 'single_project' && <div className={styles.upgrade_btn} onClick={handleUpgrade}>升级成多中心试验</div>
+                 label === 'single_project' && status !== 1001 && <div className={styles.upgrade_btn} onClick={handleUpgrade}>升级成多中心试验</div>
                }
                {
-                 status !== 1001 && (
+                 status === 1001 && (
                   <InviteMember
                     refreshList={refreshList}
                   >

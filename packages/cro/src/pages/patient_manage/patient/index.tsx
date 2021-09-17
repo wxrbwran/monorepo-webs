@@ -19,23 +19,23 @@ const { TabPane } = Tabs;
 
 function Patient() {
   const [form] = Form.useForm();
-  const {projectNsId, projectSid} = useSelector((state: IState) => state.project.projDetail)
+  const { projectNsId, projectSid, status } = useSelector((state: IState) => state.project.projDetail);
   const [patientSids, setPatientSids] = useState<string[]>([]);
-  const [status, setStatus] = useState<string>('0'); // tab状态
+  const [tabStatus, setStatus] = useState<string>('0'); // tab状态
   const [tableOptions, setOptions] = useState({ projectNsId, type: 0, var: '林' });
   const [showSearch, setShowSearch] = useState(false);
 
   const refreshList = () => {
     setOptions({ ...tableOptions });
-  }
+  };
 
   const handleToggleTab = (key: string) => {
     setStatus(key);
     setOptions({ ...tableOptions, type: +key });
-  }
+  };
 
-  const handleSelectChange = (changedValues: string[], allValues: string[]) => {
-    console.log('allValues', allValues)
+  const handleSelectChange = (_changedValues: string[], allValues: string[]) => {
+    console.log('allValues', allValues);
     setOptions({ ...tableOptions, conditions: handleSelection(allValues) });
   };
 
@@ -46,50 +46,50 @@ function Patient() {
       projectNsId,
       patientSIds,
       patientWcIds,
-      type: selected ? 1 : 0
-    }
+      type: selected ? 1 : 0,
+    };
     api.patientManage.postCheckPatient(params).then(res => {
       console.log('勾选成功', res);
-    })
-  }
+    });
+  };
   const rowSelection = {
     selectedRowKeys: patientSids,
     onChange: (selectedRowKeys: never[], selectedRows: { sid: string }[]) => {
       const sids:any = [];
       selectedRows.forEach((item: { sid: string }) => {
         sids.push(item.sid);
-      })
+      });
       setPatientSids(Array.from(new Set(sids)));
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     onSelect: (record: any, selected: boolean ) => {
       handleCheckPatient(selected, [record.sid], [record.wcId]);
-     },
-     onSelectAll: (selected: boolean, selectedRows: { sid: string, wcId: string }[]) => {
-       const sids: string[] = [];
-       const wcIds: string[] = [];
-       selectedRows.forEach(item => {
-         sids.push(item.sid);
-         wcIds.push(item.wcId);
-       })
-       handleCheckPatient(selected, sids, wcIds);
-     },
-  }
+    },
+    onSelectAll: (selected: boolean, selectedRows: { sid: string, wcId: string }[]) => {
+      const sids: string[] = [];
+      const wcIds: string[] = [];
+      selectedRows.forEach(item => {
+        sids.push(item.sid);
+        wcIds.push(item.wcId);
+      });
+      handleCheckPatient(selected, sids, wcIds);
+    },
+  };
   const fetchData = (data: any[]) => {
     const selectArr: string[] = [];
     data.forEach(item => {
       if (item.checked) {
         selectArr.push(item.sid);
       }
-    })
+    });
     setPatientSids(selectArr);
-  }
+  };
   const handleJoinProject = () => {
-    api.patientManage.postJoinProject({ projectNsId, sid: projectSid }).then(res => {
+    api.patientManage.postJoinProject({ projectNsId, sid: projectSid }).then(() => {
       message.success('发送成功');
       refreshList();
-    })
-  }
+    });
+  };
   return (
     <div className="patient-manage-cont">
       <div className="title">全部患者</div>
@@ -117,11 +117,11 @@ function Patient() {
           </TabPane>
         </Tabs>
         {
-          status === '0' &&
+          tabStatus === '0' &&
           <div className="send-btn">
             <Button
               type="primary"
-              disabled={patientSids.length === 0}
+              disabled={patientSids.length === 0 || status !== 1001}
               onClick={debounce(handleJoinProject, 300)}
             >已签署同意书，<br/> 直接加入试验</Button>
             <SendFile
@@ -133,7 +133,7 @@ function Patient() {
           </div>
         }
         <XzlTable
-          columns={status === '0' ? noSendPatientColumns() : addedPatientColumns()}
+          columns={tabStatus === '0' ? noSendPatientColumns() : addedPatientColumns()}
           dataKey="teams"
           handleCallback={fetchData}
           category="patientList"
@@ -141,7 +141,7 @@ function Patient() {
           depOptions={tableOptions}
           noPagination={true}
           tableOptions={{
-            rowSelection: status === '0' ? {
+            rowSelection: tabStatus === '0' ? {
               ...rowSelection,
             } : false,
             pagination: false,
@@ -150,6 +150,6 @@ function Patient() {
 
       </div>
     </div>
-  )
+  );
 }
 export default Patient;
