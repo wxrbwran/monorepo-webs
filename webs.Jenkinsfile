@@ -29,14 +29,14 @@ pipeline {
             sh 'node -v'
             script {
               if (env.BRANCH_NAME == 'master') {
-                env.BUILD_SH = "pnpm dist:cro"
-                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n/clinical-cro'
-              } else if (env.BRANCH_NAME == 'test') {
-                env.BUILD_SH = "pnpm prerelease:cro"
-                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.test/clinical-cro'
-              } else if (env.BRANCH_NAME == 'dev') {
-                env.BUILD_SH = "pnpm dev-dist:cro"
-                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.dev/clinical-cro'
+                env.BUILD_SH = "pnpm dist:doctor"
+                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n/xzl-web-doctor'
+                        } else if (env.BRANCH_NAME == 'test') {
+                env.BUILD_SH = "pnpm prerelease:doctor"
+                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.test/xzl-web-doctor'
+                        } else if (env.BRANCH_NAME == 'dev') {
+                env.BUILD_SH = "pnpm dev-dist:doctor"
+                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.dev/xzl-web-doctor'
               }
               env.TARGET_HOST_IP = '172.16.10.126'
             }
@@ -46,8 +46,8 @@ pipeline {
         stage('checkout') {
           steps {
             git branch: "${BRANCH_NAME}",
-            credentialsId: 'gitlab-ssh-key',
-            url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
+                        credentialsId: 'gitlab-ssh-key',
+                        url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
             sh 'ls -lat'
           }
         }
@@ -64,12 +64,12 @@ pipeline {
           steps {
             script {
               if (env.BRANCH_NAME == 'master') {
-                sh 'AutoBuilder transfer  --rp ./clinical-cro --wp *'
+                sh 'AutoBuilder transfer  --rp ./xzl-web-doctor --wp *'
                 } else {
                 sshagent(credentials: ['jenkins-self-ssh-key']) {
                     sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "rm -rf ${ROOT_PATH} || true"'
                     sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "mkdir -p ${ROOT_PATH} || true"'
-                    sh 'scp -o StrictHostKeyChecking=no -r ./clinical-cro/* xinzhilici@${TARGET_HOST_IP}:"${ROOT_PATH}"'
+                    sh 'scp -o StrictHostKeyChecking=no -r ./xzl-web-doctor/* xinzhilici@${TARGET_HOST_IP}:"${ROOT_PATH}"'
                 }
               }
             }
