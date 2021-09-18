@@ -32,7 +32,7 @@ pipeline {
               list = env.BRANCH_NAME.split("-");
               env.PROJECT = list[0];
               env.BRANCH = list[1];
-              // doctor cro ...
+              // doctor cro nurse out org
               println("当前构建项目为： ${PROJECT}");
               // dev test master
               println("当前构建分支为： ${BRANCH}");
