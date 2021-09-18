@@ -29,18 +29,32 @@ pipeline {
           steps {
             sh 'node -v'
             script {
-              matchers = env.BRANCH_NAME =~'(cro|doctor|nurse|out|org)-(dev|test|master)'
-              println(matchers);
-              if (env.BRANCH_NAME == 'master') {
-                env.BUILD_SH = "pnpm dist:doctor"
-                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n/xzl-web-doctor'
-                        } else if (env.BRANCH_NAME == 'test') {
-                env.BUILD_SH = "pnpm prerelease:doctor"
-                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.test/xzl-web-doctor'
-                        } else if (env.BRANCH_NAME == 'dev') {
-                env.BUILD_SH = "pnpm dev-dist:doctor"
-                env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n.dev/xzl-web-doctor'
+              list = env.BRANCH_NAME.split("-");
+              env.PROJECT = list[0];
+              env.BRANCH = list[1];
+              // doctor cro ...
+              println("当前构建项目为： ${PROJECT}");
+              // dev test master
+              println("当前构建分支为： ${BRANCH}");
+
+              if (BRANCH == 'master') {
+                env.BUILD_SH = "pnpm dist:${PROJECT}"
+                env.SERVER_PATH = "n";
+              } else if (BRANCH == 'test') {
+                env.BUILD_SH = "pnpm prerelease:${PROJECT}"
+                env.SERVER_PATH = "n.test";
+              } else if (BRANCH == 'dev') {
+                env.BUILD_SH = "pnpm dev-dist:${PROJECT}"
+                env.SERVER_PATH = "n.dev";
               }
+              env.DIST = "xzl-web-${env.PROJECT}"
+              if (env.PROJECT == "cro") {
+                env.DIST = "clinical-cro"
+              }
+              if (env.PROJECT == "out") {
+                env.DIST = "out-hospital-patient"
+              }
+              env.ROOT_PATH = "/Users/xinzhilici/homebrew/var/www/${SERVER_PATH}/${DIST}";
               env.TARGET_HOST_IP = '172.16.10.126'
             }
           }
@@ -49,8 +63,8 @@ pipeline {
         stage('checkout') {
           steps {
             git branch: "${BRANCH_NAME}",
-                        credentialsId: 'gitlab-ssh-key',
-                        url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
+            credentialsId: 'gitlab-ssh-key',
+            url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
             sh 'ls -lat'
           }
         }
@@ -67,12 +81,12 @@ pipeline {
           steps {
             script {
               if (env.BRANCH_NAME == 'master') {
-                sh 'AutoBuilder transfer  --rp ./xzl-web-doctor --wp *'
+                sh "AutoBuilder transfer  --rp ./${DIST} --wp *"
                 } else {
                 sshagent(credentials: ['jenkins-self-ssh-key']) {
                     sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "rm -rf ${ROOT_PATH} || true"'
                     sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "mkdir -p ${ROOT_PATH} || true"'
-                    sh 'scp -o StrictHostKeyChecking=no -r ./xzl-web-doctor/* xinzhilici@${TARGET_HOST_IP}:"${ROOT_PATH}"'
+                    sh 'scp -o StrictHostKeyChecking=no -r ./${DIST}/* xinzhilici@${TARGET_HOST_IP}:"${ROOT_PATH}"'
                 }
               }
             }
