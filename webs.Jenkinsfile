@@ -1,8 +1,5 @@
 pipeline {
 
-    matchers = env.BRANCH_NAME =~'(cro|doctor|nurse|out|org)-(dev|test|master)'
-    println(matchers);
-
     agent {
         label 'YX_TEST'
     }
@@ -25,13 +22,15 @@ pipeline {
           steps {
             script {
               cleanWs()
-                }
             }
+          }
         }
         stage('prepare') {
           steps {
             sh 'node -v'
             script {
+              matchers = env.BRANCH_NAME =~'(cro|doctor|nurse|out|org)-(dev|test|master)'
+              println(matchers);
               if (env.BRANCH_NAME == 'master') {
                 env.BUILD_SH = "pnpm dist:doctor"
                 env.ROOT_PATH = '/Users/xinzhilici/homebrew/var/www/n/xzl-web-doctor'
