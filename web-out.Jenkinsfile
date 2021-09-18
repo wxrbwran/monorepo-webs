@@ -17,6 +17,13 @@ pipeline {
     }
 
     stages {
+      stage('clean') {
+          steps {
+            script {
+              cleanWs()
+                }
+            }
+        }
         stage('prepare') {
             steps {
                 sh 'node -v'
