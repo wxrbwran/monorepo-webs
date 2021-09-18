@@ -22,22 +22,22 @@ function Reply({ location }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [questions, setQuestions] = useState<IQuestions[]>([]);
   const [scaleName, setScaleName] = useState('');
-  const { projectNsId } = useSelector((state: IState) => state.project.projDetail)
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   useEffect(() => {
     api.subjective.getCrfScaleReplyList({
       scaleGroupId: location.query.id,
       projectNsId,
     }).then((res) => {
-      if(res.crfScaleReplyList.length>0){
+      if (res.crfScaleReplyList.length > 0){
         setDataSource(res.crfScaleReplyList);
         setScaleName(res.scaleName);
       }
-    })
+    });
   }, []);
-  const handleShowDetail = (data: {result: IQuestions[]}) => {
+  const handleShowDetail = (data: { result: IQuestions[] }) => {
     setQuestions(data.result);
     setShowModal(true);
-  }
+  };
   const columns: any = [
     {
       title: '研究者姓名',
@@ -47,15 +47,15 @@ function Reply({ location }: IProps) {
       title: '角色',
       dataIndex: 'roleType',
       render: (text: string) => {
-        const type = window.$storage.getItem('croLabel');
+        // const type = window.$storage.getItem('croLabel');
         if (!text) {
-          return '--'
+          return '--';
         } else if (text?.split('.')[1] === 'aeJk0w') {
-          return '暂未分配'
+          return '暂未分配';
         } else {
-          return fetchRolePropValue(text, 'desc')
+          return fetchRolePropValue(text, 'desc');
         }
-      }
+      },
     },
     {
       title: '受试者',
@@ -64,9 +64,9 @@ function Reply({ location }: IProps) {
     {
       title: '发送时间',
       dataIndex: 'createdAt',
-      render: (text: any, record: any) => (
+      render: (text: any, _record: any) => (
         <div>{moment(text).format('YYYY-MM-DD')}</div>
-      )
+      ),
     },
     {
       title: '填写状态',
@@ -75,8 +75,8 @@ function Reply({ location }: IProps) {
         return (
           text === 1 ? '未填写' :
           <Button type="link" onClick={() => handleShowDetail(record)}>点击查看</Button>
-        )
-      }
+        );
+      },
     },
 
   ];
@@ -86,7 +86,7 @@ function Reply({ location }: IProps) {
         <Table
           dataSource={dataSource}
           columns={columns}
-          pagination={false}
+          // pagination={false}
         />
       </div>
       <DragModal
@@ -101,6 +101,6 @@ function Reply({ location }: IProps) {
         <ScaleTableDetailEcho scaleType="CRF" scaleName={scaleName} questions={questions} />
       </DragModal>
     </div>
-  )
+  );
 }
 export default Reply;

@@ -133,7 +133,10 @@ function Detail({ location }: IProps) {
         message.success('添加成功');
         setEditStatus([]);
         setInfos([...infos]);
-        // fetchPlans();
+        dispatch({
+          type: 'project/fetchObjectiveScale',
+          payload: location.query.id,
+        });
       })
       .catch((err: string) => {
         message.error(err);
