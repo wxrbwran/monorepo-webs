@@ -102,7 +102,7 @@ pipeline {
       success {
         echo "构建成功"
         if (env.BRANCH == "master") {
-          git
+          git branch: "${BRANCH_NAME}",
            credentialsId: 'gitlab-ssh-key',
            url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
           script{
