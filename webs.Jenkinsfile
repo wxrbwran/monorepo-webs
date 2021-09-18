@@ -101,16 +101,16 @@ pipeline {
 
       success {
         echo "构建成功"
-        if (env.BRANCH == "master") {
           git branch: "${BRANCH_NAME}",
            credentialsId: 'gitlab-ssh-key',
            url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
           script{
-            def GIT_TAG = new Date().format(“yyyyMMddHHmmss”);
-            git tag -a -m “${GIT_TAG}” ${GIT_TAG}
-            git push origin --tags
+            if (env.BRANCH == "master") {
+              def GIT_TAG = new Date().format(“yyyyMMddHHmmss”);
+              git tag -a -m “${GIT_TAG}” ${GIT_TAG}
+              git push origin --tags
+            }
           }
-        }
       }
 
       failure {
