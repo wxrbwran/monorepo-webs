@@ -110,6 +110,7 @@ pipeline {
             git tag -a -m “${GIT_TAG}” ${GIT_TAG}
             git push origin --tags
           }
+        }
       }
 
       failure {
@@ -118,7 +119,7 @@ pipeline {
 
       aborted {
         echo "构建中断"
-     }
-  }
+      }
+    }
 }
 
