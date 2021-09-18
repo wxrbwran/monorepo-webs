@@ -8,6 +8,7 @@ xzl-web-org
 out-hospital-patient
 clinical-cro
 
+pnpm-lock.yaml
 
 # Logs
 *.log
