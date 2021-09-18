@@ -109,10 +109,11 @@
     "redux-logger": "^3.0.6",
     "rimraf": "^3.0.2",
     "store": "^2.0.12",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "@tailwindcss/postcss7-compat": "2.2.9",
     "umi": "^3.2.14",
     "umi-request": "^1.0.8",
-    "use-merge-value": "^1.0.1"
+    "use-merge-value": "^1.0.1",
+    "xzl-web-shared": "workspace:^1.0.0"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.0.2",

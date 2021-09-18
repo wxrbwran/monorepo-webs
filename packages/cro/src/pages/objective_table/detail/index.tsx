@@ -5,6 +5,7 @@ import { IPlanInfos } from '@/utils/consts';
 import { FormOutlined } from '@ant-design/icons';
 import create from '@/assets/img/create.svg';
 import { Input, message } from 'antd';
+import { history } from 'umi';
 import SendPlan from '@/components/SendPlan';
 import * as api from '@/services/api';
 import styles from '../index.scss';
@@ -52,6 +53,7 @@ function Detail({ location }: IProps) {
     const id = location.query.id;
     if (groupId !== id) {
       setGroupId(id);
+      setIsEdit(false);
       if (!!id) {
         dispatch({
           type: 'project/fetchObjectiveScale',
@@ -77,18 +79,23 @@ function Detail({ location }: IProps) {
     setScaleName(e.target.value);
   };
   const handleChangeName = () => {
-    setIsEdit(false);
-    api.subjective.patchSubjectiveScale({
-      name: scaleName,
-      projectSid: window.$storage.getItem('projectSid'),
-      scaleGroupId: location.query.id,
-    }).then(() => {
-      message.success('修改成功');
-      dispatch({
-        type: 'project/fetchObjectiveScale',
-        payload: location.query.id,
+    if (!scaleName) {
+      message.error('客观检查名称不能为空');
+    } else {
+      setIsEdit(false);
+      api.subjective.patchSubjectiveScale({
+        name: scaleName,
+        projectSid: window.$storage.getItem('projectSid'),
+        scaleGroupId: location.query.id,
+      }).then(() => {
+        message.success('修改成功');
+        dispatch({
+          type: 'project/fetchObjectiveScale',
+          payload: location.query.id,
+        });
+        history.push(`${location.pathname}?name=${scaleName}`);
       });
-    });
+    }
   };
   const changeIsEdit = () => {
     setIsEdit(true);
@@ -133,10 +140,6 @@ function Detail({ location }: IProps) {
         message.success('添加成功');
         setEditStatus([]);
         setInfos([...infos]);
-        dispatch({
-          type: 'project/fetchObjectiveScale',
-          payload: location.query.id,
-        });
       })
       .catch((err: string) => {
         message.error(err);
@@ -157,6 +160,15 @@ function Detail({ location }: IProps) {
         payload: location.query.id,
       });
     });
+  };
+
+  const changeEditStatus = (params: IPlanInfos, scaleId: string, index: number) => {
+    infos[index] = {
+      plans: [...params.plans],
+      questions: params.questions,
+      scaleId: scaleId,
+    };
+    setInfos([...infos]);
   };
 
   return (
@@ -208,7 +220,7 @@ function Detail({ location }: IProps) {
               itemIndex={index}
               key={index}
               location={location}
-              changeEditStatus={() => changeEditStatus(index)}
+              changeEditStatus={changeEditStatus}
               handleDel={() => handleDelPlan(item)}
             />
           );
