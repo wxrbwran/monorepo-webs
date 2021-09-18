@@ -15,7 +15,7 @@ const config = {
   hash: true,
   favicon: 'favicon.ico',
   define: defineEnv,
-  outputPath: pkg.name,
+  outputPath: `../../${pkg.name}`,
   publicPath: process.env.NODE_ENV === 'development' ? '/' : `/${pkg.name}/`,
   dva: {
     immer: true,
