@@ -20,7 +20,7 @@ export default defineConfig({
   hash: true,
   favicon: '/out-hospital-patient/assets/favicon.ico',
   antd: {},
-  outputPath: pjson.name,
+  outputPath: `../../${pjson.name}`,
   dva: {
     hmr: true,
   },
