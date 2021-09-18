@@ -1,4 +1,8 @@
 pipeline {
+
+    def matchers = env.BRANCH_NAME =~'(cro|doctor|nurse|out|org)-(dev|test|master)'
+    println(matchers);
+
     agent {
         label 'YX_TEST'
     }
