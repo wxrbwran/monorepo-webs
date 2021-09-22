@@ -7,4 +7,9 @@
     background-color: #fff;
     padding: 20px;
   }
+  :global {
+    .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+      text-align: center;
+    }
+  }
 }
