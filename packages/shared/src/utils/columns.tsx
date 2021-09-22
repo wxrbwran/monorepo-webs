@@ -31,7 +31,7 @@ export const clAvatar = {
 export const clDepartment = {
   title: '科室',
   dataIndex: 'department',
-  render: (text: { name: string}) => text.name,
+  render: (text: { name: string }) => text.name,
 };
 export const indexUnits = {
   title: () => (
@@ -109,7 +109,7 @@ export const sex = {
   title: '性别',
   dataIndex: 'sex',
   key: 'sex',
-  width: 50,
+  width: 100,
   render: (text: SexType) => <span>{sexList[+text]}</span>,
 };
 
@@ -250,6 +250,11 @@ export const department = {
   render: depRender,
 };
 
+export const departmentName = {
+  title: '执业科室',
+  dataIndex: 'departmentName',
+};
+
 export const adminDepartment = {
   title: '管理科室',
   dataIndex: 'adminDepartment',
@@ -348,22 +353,22 @@ export const noReplyNumber = {
 //   doctorCount,
 //   nurseCount,
 //   patientCount,
-  // {
-  //   title: '操作',
-  //   dataIndex: 'operate',
-  //   // width: 200,
-  //   className: 'action',
-  //   render: (_text, _record) => (
-  //     <div className="column_btn">
-  //       <Button type="ghost" icon={<EditOutlined />}>
-  //         编辑
-  //       </Button>
-  //       <Button type="ghost" icon={<DeleteOutlined />}>
-  //         删除
-  //       </Button>
-  //     </div>
-  //   ),
-  // },
+// {
+//   title: '操作',
+//   dataIndex: 'operate',
+//   // width: 200,
+//   className: 'action',
+//   render: (_text, _record) => (
+//     <div className="column_btn">
+//       <Button type="ghost" icon={<EditOutlined />}>
+//         编辑
+//       </Button>
+//       <Button type="ghost" icon={<DeleteOutlined />}>
+//         删除
+//       </Button>
+//     </div>
+//   ),
+// },
 // ];
 
 

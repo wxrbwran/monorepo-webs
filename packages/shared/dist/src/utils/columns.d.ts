@@ -179,6 +179,10 @@ export declare const department: {
     width: number;
     render: (text: any) => JSX.Element;
 };
+export declare const departmentName: {
+    title: string;
+    dataIndex: string;
+};
 export declare const adminDepartment: {
     title: string;
     dataIndex: string;

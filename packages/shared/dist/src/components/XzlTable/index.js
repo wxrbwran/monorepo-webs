@@ -68,6 +68,7 @@ import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
     console.log('this is table shared~111');
     var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination;
+    console.log(category);
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
     var _c = __read(useState(0), 2), current = _c[0], setCurrent = _c[1];
@@ -107,7 +108,7 @@ var XzlTable = function (props) {
                         setCurrent(params.pageAt);
                         setSize(params.pageSize);
                         setTotal(res.total);
-                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, category);
+                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
                         if (handleCallback) {
                             handleCallback(handledData);
                         }

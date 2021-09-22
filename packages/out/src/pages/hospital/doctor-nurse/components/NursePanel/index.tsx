@@ -8,7 +8,7 @@ import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import { PlusOutlined } from '@ant-design/icons';
 import { handleSelection } from '@/utils/conditions';
-import { name, tel, sex, department /* , status */ } from 'xzl-web-shared/src/utils/columns';
+import { name, tel, sex, departmentName /* , status */ } from 'xzl-web-shared/src/utils/columns';
 import AddDoctorNurse from '../AddDoctorNurse';
 // import AssignDepartment from '../AssignDepartment';
 import { Role } from 'xzl-web-shared/src/utils/role';
@@ -29,14 +29,14 @@ const Nurse: FC = () => {
   const [selectRows, setSelectRows] = useState<IDoctor[]>([]);
   const initOptions = isOpenSub
     ? {
-        targetNSId: upperOrgNsId(),
-        viewRole: Role.NURSE.id,
-      }
+      targetNSId: upperOrgNsId(),
+      viewRole: Role.NURSE.id,
+    }
     : {
-        sid: window.$storage.getItem('sid'),
-        sRole: Role.ORG_ADMIN.id,
-        viewRole: Role.NURSE.id,
-      };
+      sid: window.$storage.getItem('sid'),
+      sRole: Role.ORG_ADMIN.id,
+      viewRole: Role.NURSE.id,
+    };
   const [tableOptions, setOptions] = useState<Store>(initOptions);
   // const handleRefresh = () => {
   //   setOptions({
@@ -56,7 +56,7 @@ const Nurse: FC = () => {
   //     );
   //   },
   // };
-  const columns = [name, tel, sex, department /* , status */];
+  const columns = [name, tel, sex, departmentName /* , status */];
 
   const handleSelectChange = (_changedValues: string[], allValues: string[]) => {
     setOptions({ ...tableOptions, conditions: handleSelection(allValues) });
