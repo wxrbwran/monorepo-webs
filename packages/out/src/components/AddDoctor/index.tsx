@@ -1,9 +1,9 @@
-import type { FC, ReactText} from 'react';
+import type { FC, ReactText } from 'react';
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { message } from 'antd';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import type { XzlTableCallBackProps } from '@/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
 import { avatar, name, sex, title, patientNum, status } from 'xzl-web-shared/src/utils/columns';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { useLocation } from 'umi';

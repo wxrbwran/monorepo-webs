@@ -159,4 +159,5 @@ export declare const statusLists: {
     110: string;
     119: string;
     118: string;
+    117: string;
 };

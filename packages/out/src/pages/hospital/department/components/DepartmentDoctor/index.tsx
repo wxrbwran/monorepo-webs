@@ -1,10 +1,10 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, message } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { useLocation } from 'umi';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import type { XzlTableCallBackProps } from '@/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
 // import MoveOutHospital from '@/components/MoveOutHospital';
 import { Search } from 'xzl-web-shared/src/components/Selects';
 import { Role } from 'xzl-web-shared/src/utils/role';
