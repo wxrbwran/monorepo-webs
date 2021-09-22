@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Form, message, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Search } from 'xzl-web-shared/src/components/Selects';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
   organizationNameOut,
   adminName,
