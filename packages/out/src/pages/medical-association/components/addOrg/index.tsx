@@ -1,10 +1,10 @@
-import type { FC} from 'react';
-import { useEffect} from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Input, Button, message } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
 import {
   orgName,
   organizationCode,
@@ -57,10 +57,10 @@ const AddOrg: FC<IProps> = (props) => {
   };
   useEffect(() => {
     if (!showModal) {
-      setOptions({})
+      setOptions({});
       setNodata(true);
     }
-  }, [showModal])
+  }, [showModal]);
   const columns = [
     orgName,
     organizationCode,
@@ -97,7 +97,7 @@ const AddOrg: FC<IProps> = (props) => {
   const handleCallback = (data: any) => {
     // console.log('handleCallback', data?.dataSource?.length > 0)
     setNodata(!(data?.dataSource?.length > 0));
-    if(data?.dataSource?.length > 0) {
+    if (data?.dataSource?.length > 0) {
       setNodata(false);
     } else {
       message.warn('查询数据为空');

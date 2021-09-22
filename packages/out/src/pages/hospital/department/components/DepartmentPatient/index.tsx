@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Form } from 'antd';
 import { useLocation } from 'umi';
@@ -13,8 +13,8 @@ import {
 } from 'xzl-web-shared/src/utils/columns';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { handleSelection } from '@/utils/conditions';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import type { XzlTableCallBackProps } from '@/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
 import { Search } from 'xzl-web-shared/src/components/Selects';
 import styles from '../DepartmentDoctor/index.scss';
 

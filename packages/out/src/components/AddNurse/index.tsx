@@ -1,9 +1,9 @@
-import type { FC, ReactText} from 'react';
+import type { FC, ReactText } from 'react';
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { message } from 'antd';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import type { XzlTableCallBackProps } from '@/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { useLocation } from 'umi';
 import { isOpenSub as getIsOpenSub, upperOrgNsId } from '@/utils/tools';
@@ -29,14 +29,14 @@ const AddNurse: FC<IProps> = (props) => {
   const isOpenSub = getIsOpenSub();
   const initOptions = isOpenSub
     ? {
-        targetNSId: upperOrgNsId(),
-        viewRole: Role.NURSE.id,
-      }
+      targetNSId: upperOrgNsId(),
+      viewRole: Role.NURSE.id,
+    }
     : {
-        sid: window.$storage.getItem('sid'),
-        sRole: Role.ORG_ADMIN.id,
-        viewRole: Role.NURSE.id,
-      };
+      sid: window.$storage.getItem('sid'),
+      sRole: Role.ORG_ADMIN.id,
+      viewRole: Role.NURSE.id,
+    };
   const [tableOptions] = useState<Store>(initOptions);
   const depId = useLocation()?.query?.depId;
   // const orgBase = useSelector((state: IState) => state.org.currentOrg.orgBase);
@@ -69,7 +69,7 @@ const AddNurse: FC<IProps> = (props) => {
     onOk: handleSubmit,
     onCancel: () => setShow(!show),
   };
-  const columns = [avatar, name, sex, /* role,  workload, lastMonthWorkload, monthWorkload */];
+  const columns = [avatar, name, sex /* role,  workload, lastMonthWorkload, monthWorkload */];
   const handleCallback = (params: XzlTableCallBackProps) => {
     console.log(333332, params);
     setSelectIds(params?.selectedRowKeys || []);

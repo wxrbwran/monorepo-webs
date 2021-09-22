@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
 import { patientName, crostatus, orgaName, sendNumber as sendNumberCol, noReplyNumber } from 'xzl-web-shared/src/utils/columns';
 import * as api from '@/services/api';
 import AlreadyReplyTable from '../already_reply_table';
@@ -21,18 +21,18 @@ function Reply({ scaleGroupId }: IProps) {
     setOptions({
       projectNsId: window.$storage.getItem('projectNsId'),
       scaleGroupId,
-    })
-  }, [scaleGroupId])
-  const handleCallback = (params: { dataSource: IDataSource[]}) => {
-      let sendNum = 0;
-      let replyNum = 0;
-      params.dataSource.forEach((item: {sendNumber: number; replyNumber: number})=> {
-        sendNum += item.sendNumber;
-        replyNum += item.replyNumber
-      })
-      setSendNumber(sendNum);
-      setReplyNumber(replyNum);
-  }
+    });
+  }, [scaleGroupId]);
+  const handleCallback = (params: { dataSource: IDataSource[] }) => {
+    let sendNum = 0;
+    let replyNum = 0;
+    params.dataSource.forEach((item: { sendNumber: number; replyNumber: number })=> {
+      sendNum += item.sendNumber;
+      replyNum += item.replyNumber;
+    });
+    setSendNumber(sendNum);
+    setReplyNumber(replyNum);
+  };
   const replyNumberCol = {
     title: '已回复量表数量',
     dataIndex: 'replyNumber',
@@ -45,7 +45,7 @@ function Reply({ scaleGroupId }: IProps) {
         <span className={styles.number}>
           {text}
         </span>
-      </AlreadyReplyTable>
+      </AlreadyReplyTable>,
   };
   const scaleReplyColumns = [
     patientName,
@@ -54,13 +54,13 @@ function Reply({ scaleGroupId }: IProps) {
     sendNumberCol,
     replyNumberCol,
     noReplyNumber,
-  ]
+  ];
   return (
     <div className={styles.reply_wrap}>
       <div className={`text-gray-600 ${styles.count}`}>
         <span>已发出: {sendNumber}张</span>
         <span>已回复: {replyNumber}张</span>
-        <span>回复率: {sendNumber>0 ? Math.round((replyNumber/sendNumber)*100*100)/100 : 0}%</span>
+        <span>回复率: {sendNumber > 0 ? Math.round((replyNumber / sendNumber) * 100 * 100) / 100 : 0}%</span>
       </div>
       <div style={{ marginTop: 8 }}>
         {
@@ -82,6 +82,6 @@ function Reply({ scaleGroupId }: IProps) {
 
       </div>
     </div>
-  )
+  );
 }
 export default Reply;
