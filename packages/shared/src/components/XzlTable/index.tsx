@@ -34,6 +34,7 @@ const XzlTable: FC<IProps> = (props) => {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
     handleCallbackSelectKeys, category, noPagination,
   } = props;
+  console.log(category);
   const [size, setSize] = useState(pageSize);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(0);
@@ -70,7 +71,7 @@ const XzlTable: FC<IProps> = (props) => {
     setCurrent(params.pageAt);
     setSize(params.pageSize);
     setTotal(res.total);
-    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, category);
+    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
     if (handleCallback) {
       handleCallback(handledData);
     }
