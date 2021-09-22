@@ -117,7 +117,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
                 subTitle={item.subTitle}
                 question={item.question}
                 id={item.id}
-                isShowEdit={!item?.inSchedule}
+                isShowEdit={false}
               >
                 <img src={suifang} alt="" />
               </QuestionDetail>
