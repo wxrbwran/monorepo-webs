@@ -390,4 +390,5 @@ export var statusLists = (_b = {},
     // [UserStatus.InitState]: '未完成注册',
     _b[UserStatus.InitState] = '待审核',
     _b[UserStatus.Refused] = '审核失败',
+    _b[UserStatus.ToBeActivated] = '待激活',
     _b);
