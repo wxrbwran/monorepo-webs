@@ -422,5 +422,6 @@ export const statusLists = {
   // [UserStatus.InitState]: '未完成注册',
   [UserStatus.InitState]: '待审核',
   [UserStatus.Refused]: '审核失败',
+  [UserStatus.ToBeActivated]: '待激活',
 };
 

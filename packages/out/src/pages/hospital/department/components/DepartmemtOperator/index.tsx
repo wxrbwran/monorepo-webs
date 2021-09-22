@@ -1,8 +1,8 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, message } from 'antd';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from '@/components/XzlTable';
+import type { XzlTableCallBackProps } from '@/components/XzlTable';
 import { Search } from 'xzl-web-shared/src/components/Selects';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import AddNurse from '@/components/AddNurse';
@@ -129,7 +129,7 @@ const DepartmentOperator: FC = () => {
           <p className="text-center text-red-500">这是一个不可逆的操作，请谨慎对待！</p>
         </ModalForm>
       ),
-    }
+    },
   ];
 
   return (
