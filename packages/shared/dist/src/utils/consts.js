@@ -301,7 +301,7 @@ export var projectStatus = {
     1000: '待确认',
     1001: '已拒绝',
     1002: '进行中',
-    1003: '已结束'
+    1003: '已结束',
 };
 export var projectInviteStatus = {
     1000: '待确认',
