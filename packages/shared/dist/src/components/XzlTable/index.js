@@ -68,18 +68,24 @@ import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
     console.log('this is table shared~111');
     var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination;
-    console.log(category);
+    console.log(category, handleCallbackSelectKeys);
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
     var _c = __read(useState(0), 2), current = _c[0], setCurrent = _c[1];
     var _d = __read(useState([]), 2), dataSource = _d[0], setDataSource = _d[1];
     var _e = __read(useState([]), 2), selectedRowKeys = _e[0], setRowKeys = _e[1];
     var _f = __read(useState(false), 2), loading = _f[0], setLoading = _f[1];
+    var _g = __read(useState({}), 2), callbackStore = _g[0], setCBStore = _g[1];
+    var handleCallBackStore = function (data) {
+        var newStore = __assign(__assign({}, callbackStore), data);
+        setCBStore(newStore);
+        if (handleCallback) {
+            handleCallback(newStore);
+        }
+    };
     var onSelectChange = function (keys) {
         setRowKeys(keys);
-        if (handleCallbackSelectKeys) {
-            handleCallbackSelectKeys(keys);
-        }
+        handleCallBackStore({ selectedRowKeys: keys });
     };
     var rowSelection = {
         selectedRowKeys: selectedRowKeys,
@@ -109,9 +115,7 @@ var XzlTable = function (props) {
                         setSize(params.pageSize);
                         setTotal(res.total);
                         handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
-                        if (handleCallback) {
-                            handleCallback(handledData);
-                        }
+                        handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
                         console.log('handledData*****', handledData);
                         setDataSource(handledData);
                         setLoading(false);
