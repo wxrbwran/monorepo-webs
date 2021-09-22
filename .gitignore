@@ -9,6 +9,7 @@ out-hospital-patient
 clinical-cro
 
 pnpm-lock.yaml
+package-lock.json
 
 # Logs
 *.log

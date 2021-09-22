@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Card, Alert, Form, Button, Row, Col, message } from 'antd';
 import { Search, AccountStatus } from 'xzl-web-shared/src/components/Selects';
@@ -7,7 +7,7 @@ import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTab
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import RoleInfo from '@/components/RoleInfo';
 import { handleSelection } from '@/utils/conditions';
-import { name, tel, sex, title, patientNum, department, status } from 'xzl-web-shared/src/utils/columns';
+import { name, tel, sex, title, patientNum, departmentName, status } from 'xzl-web-shared/src/utils/columns';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import AddDoctorNurse from '../AddDoctorNurse';
 import { Role } from 'xzl-web-shared/src/utils/role';
@@ -30,14 +30,14 @@ const Doctor: FC = () => {
   const [acceptedStateCount, setAcceptedStateCount] = useState<number>(0);
   const initOptions = isOpenSub
     ? {
-        targetNSId: upperOrgNsId(),
-        viewRole: Role.DOCTOR.id,
-      }
+      targetNSId: upperOrgNsId(),
+      viewRole: Role.DOCTOR.id,
+    }
     : {
-        sid: window.$storage.getItem('sid'),
-        sRole: Role.ORG_ADMIN.id,
-        viewRole: Role.DOCTOR.id,
-      };
+      sid: window.$storage.getItem('sid'),
+      sRole: Role.ORG_ADMIN.id,
+      viewRole: Role.DOCTOR.id,
+    };
   const [tableOptions, setOptions] = useState<Store>(initOptions);
   const getCountStaff = () => {
     const staffNsid = isOpenSub ? upperOrgNsId() : window.$storage.getItem('nsId');
@@ -65,7 +65,7 @@ const Doctor: FC = () => {
       );
     },
   };
-  const columns = [modalName, tel, sex, title, patientNum, department, status];
+  const columns = [modalName, tel, sex, title, patientNum, departmentName, status];
 
   const handleSelectChange = (_changedValues: string[], allValues: string[]) => {
     const newConditions = handleSelection(allValues);
