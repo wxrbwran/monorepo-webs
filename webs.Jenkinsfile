@@ -80,7 +80,7 @@ pipeline {
         stage('deploy') {
           steps {
             script {
-              if (env.BRANCH_NAME == 'master') {
+              if (env.BRANCH == 'master') {
                 sh "AutoBuilder transfer  --rp ./${DIST} --wp *"
                 } else {
                 sshagent(credentials: ['jenkins-self-ssh-key']) {
