@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Input, Button, message } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import XzlTable from '@/components/XzlTable';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
   orgName,
   organizationCode,

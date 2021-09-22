@@ -34,18 +34,25 @@ const XzlTable: FC<IProps> = (props) => {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
     handleCallbackSelectKeys, category, noPagination,
   } = props;
-  console.log(category);
+  console.log(category, handleCallbackSelectKeys);
   const [size, setSize] = useState(pageSize);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(0);
   const [dataSource, setDataSource] = useState<Store[]>([]);
   const [selectedRowKeys, setRowKeys] = useState<Key[]>([]);
   const [loading, setLoading] = useState(false);
+  const [callbackStore, setCBStore] = useState<XzlTableCallBackProps>({});
+
+  const handleCallBackStore = (data: XzlTableCallBackProps) => {
+    const newStore = { ...callbackStore, ...data };
+    setCBStore(newStore);
+    if (handleCallback) {
+      handleCallback(newStore);
+    }
+  };
   const onSelectChange: IOnSelectChange = (keys: Key[]) => {
     setRowKeys(keys);
-    if (handleCallbackSelectKeys) {
-      handleCallbackSelectKeys(keys);
-    }
+    handleCallBackStore({ selectedRowKeys: keys });
   };
   const rowSelection = {
     selectedRowKeys,
@@ -72,9 +79,7 @@ const XzlTable: FC<IProps> = (props) => {
     setSize(params.pageSize);
     setTotal(res.total);
     const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
-    if (handleCallback) {
-      handleCallback(handledData);
-    }
+    handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
     console.log('handledData*****', handledData);
     setDataSource(handledData);
     setLoading(false);
