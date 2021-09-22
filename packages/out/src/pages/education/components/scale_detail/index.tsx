@@ -5,7 +5,7 @@ import { FormOutlined } from '@ant-design/icons';
 import type { IQuestions } from '../../const';
 import { useDispatch, history } from 'umi';
 
-const {TextArea} = Input;
+const { TextArea } = Input;
 
 interface IProps {
   title: string;
@@ -13,23 +13,29 @@ interface IProps {
   question: IQuestions[];
   source?: number,
   id: string;
+  isShowEdit?: boolean;
 }
 function ScaleDetail(props: IProps) {
-  const { title, subTitle, question } = props
-  console.log('props222', props)
+  const { title, subTitle, question, isShowEdit } = props;
+  console.log('props222', props);
   const dispatch = useDispatch();
   const handleEdit = () => {
     dispatch({
       type: 'suifang/saveCurrentEditScale',
       payload: props,
     });
-    history.push('/education/accompany/create')
-  }
+    history.push('/education/accompany/create');
+  };
   return (
     <div className={styles.detail}>
-      <div className="absolute right-50 top-80 text-blue-500 cursor-pointer" onClick={handleEdit}>
-        <FormOutlined /> 编辑
-      </div>
+      {
+        isShowEdit && history.location.pathname.includes('list') && (
+          <div className="absolute right-50 top-80 text-blue-500 cursor-pointer" onClick={handleEdit}>
+            <FormOutlined /> 编辑
+          </div>
+        )
+      }
+
       <p className={styles.first_title}>{title}</p>
       <p className={styles.second_title}>{subTitle}</p>
       {
@@ -69,7 +75,7 @@ function ScaleDetail(props: IProps) {
                 }
                 {
                   item.type === 'COMPLETION' && (
-                    <pre style={{color: '#000'}}>
+                    <pre style={{ color: '#000' }}>
                       {
                         (item.detail.stem as string[]).map((stemItem, index) => {
                           return (
@@ -81,7 +87,7 @@ function ScaleDetail(props: IProps) {
                                 )
                               }
                             </>
-                          )
+                          );
                         })
                       }
                     </pre>
@@ -89,10 +95,10 @@ function ScaleDetail(props: IProps) {
                 }
               </div>
             </div>
-          )
+          );
         })
       }
     </div>
-  )
+  );
 }
 export default ScaleDetail;

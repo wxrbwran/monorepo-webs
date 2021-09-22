@@ -18,7 +18,6 @@ import { getPlanDetail } from '@/utils/tools';
 import { message } from 'antd';
 import * as api from '@/services/api';
 import { IState } from 'typings/global';
-import { useDispatch } from 'umi';
 import SendRecord from '../send_record';
 import styles from './index.scss';
 
@@ -31,12 +30,11 @@ interface IProps {
     };
     pathname: string;
   };
-  changeEditStatus?: () => void;
+  changeEditStatus: () => void;
   handleDel?: () => void;
 }
 
 function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDel }: IProps) {
-  const dispatch = useDispatch();
   const [reverteData, setReverData] = useState<IVal>({});
   const groupList = useSelector((state: IGroup) => state.project.objectiveGroup);
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
@@ -52,7 +50,6 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
   }, [groupList, infoItem]);
 
   const updatePlan = (params: { plans: [], questions: string }) => {
-    const id = location.query.id;
     api.subjective
       .updateScalePlan({
         plan: params.plans,
@@ -63,10 +60,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
       })
       .then(() => {
         message.success('修改成功');
-        dispatch({
-          type: 'project/fetchObjectiveScale',
-          payload: id,
-        });
+        changeEditStatus(params, infoItem.scaleId, itemIndex);
       })
       .catch((err: string) => {
         message.error(err);
@@ -128,7 +122,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                   {window.$storage.getItem('isLeader') &&
                   status !== 1001 ? (
                     <p className={styles.detail}>
-                      <FormOutlined onClick={changeEditStatus}/>
+                      <FormOutlined/>
                       <span className="ml-5">编辑</span>
                     </p>
                     ) : (

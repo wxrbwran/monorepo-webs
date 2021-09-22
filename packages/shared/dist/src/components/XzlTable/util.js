@@ -77,6 +77,11 @@ var handleDoctorTeamDataSource = function (dataSource) {
     });
     return res;
 };
+var handleNurseTeamDataSource = function (dataSource) {
+    var res = [];
+    res = dataSource.map(function (member) { return member.members[0]; });
+    return res;
+};
 var handlePatientTeamDataSource = function (dataSource) {
     var res = [];
     dataSource.forEach(function (datum) {
@@ -114,6 +119,9 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             }
             if (Role.DOCTOR.id === category) {
                 return handleDoctorTeamDataSource(dataSource);
+            }
+            if ([Role.NURSE.id].includes(category)) {
+                return handleNurseTeamDataSource(dataSource);
             }
             if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category)) {
                 return handlePatientTeamDataSource(dataSource);

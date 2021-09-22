@@ -72,7 +72,7 @@ export var sex = {
     title: '性别',
     dataIndex: 'sex',
     key: 'sex',
-    width: 50,
+    width: 100,
     render: function (text) { return React.createElement("span", null, sexList[+text]); },
 };
 export var age = {
@@ -191,6 +191,10 @@ export var department = {
     dataIndex: 'department',
     width: 150,
     render: depRender,
+};
+export var departmentName = {
+    title: '执业科室',
+    dataIndex: 'departmentName',
 };
 export var adminDepartment = {
     title: '管理科室',
