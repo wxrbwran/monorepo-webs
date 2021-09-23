@@ -5,6 +5,10 @@ def tool = new com.xzlcorp.tools()
 
 String projectName = "xzl-webs"
 
+if (true) {
+  currentBuild.description = "Trigger by ${env.BUILD_USER}"
+}
+
 pipeline {
 
     agent {
