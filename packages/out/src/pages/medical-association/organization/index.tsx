@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState } from 'react';
 import { Form, message, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -12,7 +12,7 @@ import {
   doctorCount,
   nurseCount,
   patientCount,
- } from 'xzl-web-shared/src/utils/columns';
+} from 'xzl-web-shared/src/utils/columns';
 import AddOrg from '../components/addOrg';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { debounce } from 'lodash';

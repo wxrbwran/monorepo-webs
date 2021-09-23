@@ -60,7 +60,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
       })
       .then(() => {
         message.success('修改成功');
-        changeEditStatus(params, infoItem.scaleId, itemIndex);
+        changeEditStatus();
       })
       .catch((err: string) => {
         message.error(err);
@@ -130,7 +130,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                     )}
                 </PlanModal>
                 {
-                  status !== 1001 && (
+                  status !== 1001 && window.$storage.getItem('isLeader') && (
                     <>
                       <Divider type="vertical" />
                       <p className={`${styles.detail} inline-block text-base cursor-pointer`} onClick={() => setShowModal(!showModal)}>

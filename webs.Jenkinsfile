@@ -17,6 +17,26 @@ pipeline {
         nodejs 'NODEJS_14'
     }
 
+    triggers {
+        GenericTrigger (
+            // 构建时的标题
+            causeString: 'Triggered by $ref',
+            // 获取POST参数中的变量，key指的是变量名，通过$ref来访问对应的值，value指的是JSON匹配值（参考Jmeter的JSON提取器）
+            // ref指的是推送的分支，格式如：refs/heads/master
+            genericVariables: [[key: 'ref', value: '$.ref']],
+            // 打印获取的变量的key-value，此处会打印如：ref=refs/heads/master
+            printContributedVariables: true,
+            // 打印POST传递的参数
+            printPostContent: true,
+            // regexpFilterExpression与regexpFilterExpression成对使用
+            // 当两者相等时，会触发对应分支的构建
+            regexpFilterExpression: '^refs/heads/(cro|doctor|nurse|out|org)-(dev|test|master)$',
+            regexpFilterText: '$ref',
+            // 与webhook中配置的token参数值一致
+            token: 'xzl-webs-token'
+        )
+    }
+
     stages {
         stage('clean') {
           steps {
@@ -80,7 +100,7 @@ pipeline {
         stage('deploy') {
           steps {
             script {
-              if (env.BRANCH_NAME == 'master') {
+              if (env.BRANCH == 'master') {
                 sh "AutoBuilder transfer  --rp ./${DIST} --wp *"
                 } else {
                 sshagent(credentials: ['jenkins-self-ssh-key']) {
@@ -92,6 +112,24 @@ pipeline {
             }
           }
         }
+    }
+
+    post {
+      always {
+        echo "构建结束"
+      }
+
+      success {
+        echo "构建成功"
+      }
+
+      failure {
+        echo "构建失败"
+      }
+
+      aborted {
+        echo "构建中断"
+      }
     }
 }
 

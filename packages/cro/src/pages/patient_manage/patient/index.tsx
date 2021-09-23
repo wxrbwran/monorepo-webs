@@ -77,6 +77,7 @@ function Patient() {
   };
   const fetchData = (data: any[]) => {
     const selectArr: string[] = [];
+    console.log('data~~~~', data);
     data.forEach(item => {
       if (item.checked) {
         selectArr.push(item.sid);

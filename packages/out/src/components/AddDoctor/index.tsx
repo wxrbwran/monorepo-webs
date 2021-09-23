@@ -1,4 +1,4 @@
-import type { FC, ReactText} from 'react';
+import type { FC, ReactText } from 'react';
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { message } from 'antd';

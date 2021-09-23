@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, message } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';

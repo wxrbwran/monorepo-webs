@@ -78,6 +78,12 @@ const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   return res;
 };
 
+const handleNurseTeamDataSource = (dataSource: Store[]) => {
+  let res: Store[] = [];
+  res = dataSource.map((member) => member.members[0]);
+  return res;
+};
+
 const handlePatientTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource.forEach((datum) => {
@@ -115,6 +121,9 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       }
       if (Role.DOCTOR.id === category) {
         return handleDoctorTeamDataSource(dataSource);
+      }
+      if ([Role.NURSE.id].includes(category as string)) {
+        return handleNurseTeamDataSource(dataSource);
       }
       if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category as string)) {
         return handlePatientTeamDataSource(dataSource);
