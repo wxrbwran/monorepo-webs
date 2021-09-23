@@ -54,6 +54,8 @@ function Detail({ location }: IProps) {
     if (groupId !== id) {
       setGroupId(id);
       setIsEdit(false);
+      // 解决只要有编辑着没保存着的时候，location一切换到另一个表就有问题，所以置空；
+      setEditStatus([]);
       if (!!id) {
         dispatch({
           type: 'project/fetchObjectiveScale',
@@ -139,7 +141,10 @@ function Detail({ location }: IProps) {
       .then(() => {
         message.success('添加成功');
         setEditStatus([]);
-        setInfos([...infos]);
+        dispatch({
+          type: 'project/fetchObjectiveScale',
+          payload: location.query.id,
+        });
       })
       .catch((err: string) => {
         message.error(err);
@@ -162,13 +167,12 @@ function Detail({ location }: IProps) {
     });
   };
 
-  const changeEditStatus = (params: IPlanInfos, scaleId: string, index: number) => {
-    infos[index] = {
-      plans: [...params.plans],
-      questions: params.questions,
-      scaleId: scaleId,
-    };
-    setInfos([...infos]);
+  const changeEditStatus = () => {
+    setEditStatus([]);
+    dispatch({
+      type: 'project/fetchObjectiveScale',
+      payload: location.query.id,
+    });
   };
 
   return (
@@ -188,12 +192,12 @@ function Detail({ location }: IProps) {
         ) : (
           <p className={styles.title}>
             {formName}
-            {status !== 1001 && <FormOutlined onClick={changeIsEdit} />}
+            {status !== 1001 && window.$storage.getItem('isLeader') && <FormOutlined onClick={changeIsEdit} />}
           </p>
         )}
       </div>
       {
-        status !== 1001 &&
+        status !== 1001 && window.$storage.getItem('isLeader') &&
           <div className={styles.add} onClick={addInfo}>
             <img src={create} alt="" />
             创建新提醒
