@@ -69,6 +69,7 @@ function ScaleTableDetailEcho(props: IProps) {
         {scaleName}
         {
           status !== 1001
+          && window.$storage.getItem('isLeader')
           && !location.pathname.includes('reply')
           && !location.pathname.includes('template') && (
             <p className={`${styles.icon} mr-20 absolute right-0 top-0`}>
