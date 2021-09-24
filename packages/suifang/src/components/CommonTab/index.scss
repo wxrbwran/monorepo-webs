@@ -1,0 +1,48 @@
+.project-cont-tab{
+  // height: 39px;
+  border-bottom: 10px solid #f5f5f5;
+  background: #fff;
+  // padding: 0 30px 0 50px;
+  box-sizing: content-box;
+  // padding-left: 20px;
+  height: 42px;
+  .ant-tabs-nav-wrap {
+    background: #fff;
+    padding-left: 108px;
+  }
+  .ant-tabs-tab {
+    font-size: 16px;
+    margin-right: 40px;
+  }
+  .ant-tabs-nav {
+    &::before{
+      display: none;
+    }
+  }
+  .ant-dropdown-link {
+    position: relative;
+    left: -40px;
+  }
+}
+.proj-dropdown {
+  width: 132px;
+  .ant-dropdown-menu-item {
+    font-size: 14px;
+    color: #181818;
+    padding: 15px;
+    .anticon-delete {
+      font-size: 14px
+    }
+  }
+}
+.del_proj {
+  .tip {
+    font-size: 14px;
+    color: #181818;
+    margin-bottom:15px;
+  }
+  .ant-input {
+    height: 40px;
+    font-size: 14px;
+  }
+}
