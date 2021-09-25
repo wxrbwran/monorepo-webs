@@ -6,12 +6,15 @@ interface IProps {
   children: React.ReactElement[];
   location: {
     pathname: string;
+    query: {
+      groupId: string;
+    };
   };
 }
 function Patients(props: IProps) {
   return (
     <ToogleSide>
-      <SideMenu />
+      <SideMenu location={props.location} />
         <div>
           {props.children}
         </div>

@@ -51,7 +51,7 @@ const Search: FC<IProps> = (props) => {
       <Input.Search
         placeholder={placeholder}
         value={wordKey}
-        style={{ width: width || 160, float: float || 'right' }}
+        style={{ width: width || 160, float: float || 'right', marginBottom: 15, marginRight: 10 }}
         onSearch={handleSearchKey}
         onChange={handleChangeKey}
         ref={inputRef}

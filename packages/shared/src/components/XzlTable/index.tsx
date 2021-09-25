@@ -75,13 +75,15 @@ const XzlTable: FC<IProps> = (props) => {
     console.log('fetchTableDataSource params', params);
     const res = await request(params);
     console.log('fetchTableDataSource res', res);
-    setCurrent(params.pageAt);
-    setSize(params.pageSize);
-    setTotal(res.total);
-    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
-    handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
-    console.log('handledData*****', handledData);
-    setDataSource(handledData);
+    if (res) {
+      setCurrent(params.pageAt);
+      setSize(params.pageSize);
+      setTotal(res.total);
+      const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
+      handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
+      console.log('handledData*****', handledData);
+      setDataSource(handledData);
+    }
     setLoading(false);
   };
   useEffect(() => {

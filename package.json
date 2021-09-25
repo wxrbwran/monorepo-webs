@@ -65,7 +65,7 @@
     "dev-dist:out": "pnpm dev-dist --filter 'out-hospital-patient'",
     "dev-dist:cro": "pnpm dev-dist --filter 'clinical-cro'",
     "dev-dist:suifang": "pnpm dev-dist --filter 'out-hospital-suifang'",
-    "build-ts-watch:shared": "cd packages/shared && pnpm build-ts-watch"
+    "build-ts-watch:shared": "cd packages/shared && pnpm build-ts-watch && pnpm build-css"
   },
   "dependencies": {
     "rimraf": "^3.0.2"

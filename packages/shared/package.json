@@ -33,7 +33,8 @@
     "react-draggable": "^4.4.3",
     "react-transition-group": "^4.4.1",
     "store": "^2.0.12",
-    "style-loader": "^2.0.0"
+    "style-loader": "^2.0.0",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",

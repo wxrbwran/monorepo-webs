@@ -252,3 +252,15 @@ export declare const noReplyNumber: {
         noReplyNumber: number;
     }) => number;
 };
+export declare const patientGroup: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    render: (_text: any, record: any) => JSX.Element;
+};
+export declare const bindTime: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    render: (text: any, _record: any) => JSX.Element;
+};

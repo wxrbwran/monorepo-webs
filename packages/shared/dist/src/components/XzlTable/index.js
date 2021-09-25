@@ -111,13 +111,15 @@ var XzlTable = function (props) {
                     case 1:
                         res = _a.sent();
                         console.log('fetchTableDataSource res', res);
-                        setCurrent(params.pageAt);
-                        setSize(params.pageSize);
-                        setTotal(res.total);
-                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
-                        handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
-                        console.log('handledData*****', handledData);
-                        setDataSource(handledData);
+                        if (res) {
+                            setCurrent(params.pageAt);
+                            setSize(params.pageSize);
+                            setTotal(res.total);
+                            handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
+                            handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
+                            console.log('handledData*****', handledData);
+                            setDataSource(handledData);
+                        }
                         setLoading(false);
                         return [2 /*return*/];
                 }

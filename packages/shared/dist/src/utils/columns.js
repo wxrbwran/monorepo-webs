@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, Button } from 'antd';
 import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
 import { Role } from './role';
+import moment from 'moment';
 export var columnCreator = function (title, dataIndex, customRender) {
     if (customRender === void 0) { customRender = undefined; }
     var column = {
@@ -260,6 +261,18 @@ export var noReplyNumber = {
     sorter: function (a, b) {
         return a.noReplyNumber - b.noReplyNumber;
     },
+};
+export var patientGroup = {
+    title: '所在分组',
+    dataIndex: 'groups',
+    key: 'groups',
+    render: function (_text, record) { return (React.createElement("div", null, record.groups.join())); },
+};
+export var bindTime = {
+    title: '与医生绑定时间',
+    dataIndex: 'bindTime',
+    key: 'bindTime',
+    render: function (text, _record) { return (React.createElement("div", null, text ? moment(text).format('YYYY.MM.DD') : '--')); },
 };
 // export const rootOrgColumns = (params) => [
 //   organizationName(params),

@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, Button } from 'antd';
 import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
 import { Role } from './role';
+import moment from 'moment';
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
   const column: CommonData = {
     title,
@@ -339,6 +340,28 @@ export const noReplyNumber = {
   mock: '@integer(10,30)',
   sorter: (a: { noReplyNumber: number }, b: { noReplyNumber: number }) =>
     a.noReplyNumber - b.noReplyNumber,
+};
+
+export const patientGroup = {
+  title: '所在分组',
+  dataIndex: 'groups',
+  key: 'groups',
+  render: (_text: any, record: any) => (
+    <div>
+      {record.groups.join()}
+    </div>
+  ),
+};
+
+export const bindTime = {
+  title: '与医生绑定时间',
+  dataIndex: 'bindTime',
+  key: 'bindTime',
+  render: (text: any, _record: any) => (
+    <div>
+      {text ? moment(text).format('YYYY.MM.DD') : '--'}
+    </div>
+  ),
 };
 
 

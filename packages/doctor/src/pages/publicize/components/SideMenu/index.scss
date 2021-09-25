@@ -2,20 +2,12 @@
   text-align: left;
   padding-top: 15px;
   font-size: 14px;
-  position: relative;
-  height: 100%;
   .menu {
     padding-left: 20px;
     height: 40px;
     line-height: 40px;
-
-    &.active {
-      background: #EEF2F4;
-      border-radius: 3px;
-    }
-
     a {
-      font-size: 14px;
+      font-size: 16px;
       color: #181818;
       line-height: 14px;
     }
@@ -52,31 +44,11 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      @include flex(space-between, center);
-      .group_item {
-        span {
-          flex: 0 0 60px;
-          text-align: left;
-          &:nth-child(2) {
-            flex: 0 0 84px;
-          }
-        }
-        .name {
-          text-align: left;
-          text-overflow: ellipsis;
-          word-spacing: initial;
-          overflow: hidden;
-          flex: 0 0 108px;
-        }
-      }
-      .anticon {
-        color: #868686;
-        padding-right: 15px;
-        visibility: hidden;
-      }
       &:hover {
-        .anticon {
-          visibility: inherit;
+        a {
+          .anticon {
+            display: block;
+          }
         }
       }
       a {
@@ -84,18 +56,27 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        display: inline-block;
-        width: 100%;
+        font-size: 16px;
+        .anticon {
+          color: #868686;
+          display: none;
+          padding-right: 15px;
+        }
         .ant-input {
           height: 40px;
           padding-left: 20px;
         }
       }
       &.active {
-        background: #EEF2F4;
+        // background: #EEF2F4;
+        font-weight: bold;
         border-radius: 3px;
       }
-
+      .name {
+        padding-left: 20px;
+        overflow-x: auto;
+        width: 290px;
+      }
     }
   }
   .create-group {
@@ -103,11 +84,5 @@
     .ant-input {
       height: 40px;
     }
-  }
-  .patient_num {
-    position: absolute;
-    bottom:35px;
-    left: 8px;
-    color: #181818;
   }
 }
