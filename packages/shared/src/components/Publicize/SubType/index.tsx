@@ -1,34 +1,31 @@
 import React from 'react';
-import * as api from '@/services/api';
 import { Upload, message } from 'antd';
-import { UploadOutlined, FormOutlined } from '@ant-design/icons';
+// import { UploadOutlined, FormOutlined } from '@ant-design/icons';
 import request from 'umi-request';
 import { history } from 'umi';
-import { AcceptType, businessType } from '../../const';
-import styles from './index.scss';
+import { AcceptType, businessType } from '../const';
+import './index.css';
 
 interface IProps {
   name: string;
   type: string;
   icon: string;
+  uploadPublicizeRequest: (params: any) => Promise<any>;
+  filePrepareRequest: (params: any) => Promise<any>;
 }
 
-function subType({ name, icon, type }: IProps) {
-  const addPublicize = (params: {
+function SubType({ name, icon, type, uploadPublicizeRequest, filePrepareRequest }: IProps) {
+  const addPublicize = async (params: {
     content: { address: string; cover: null; filename: any; text: null };
     fromSid: string;
     type: string;
   }) => {
-    api.education
-      .addPublicize({ ...params })
-      .then(() => {
-        setTimeout(() => {
-          message.success('上传成功');
-        }, 200);
-      })
-      .catch((err: string) => {
-        console.log('err', err);
-      });
+    const res = await uploadPublicizeRequest(params);
+    if (res){
+      setTimeout(() => {
+        message.success('上传成功');
+      }, 200);
+    }
   };
   // 上传
   const handleSubmit = (rawUrl: string, file: any) => {
@@ -61,35 +58,31 @@ function subType({ name, icon, type }: IProps) {
     message.info({
       content: '正在上传',
     });
-    api.file
-      .filePrepare({ businessType: businessType[type] })
-      .then((res) => {
-        console.log(432, res);
-        const { accessId, encodePolicy, host, key, signature } = res;
-        const formData = new FormData();
-        formData.set('name', file.name);
-        formData.set('key', `${key}${file.name}`);
-        formData.set('policy', encodePolicy);
-        formData.set('OSSAccessKeyId', accessId);
-        formData.set('success_action_status', '200');
-        formData.set('callback', '');
-        formData.set('signature', signature);
-        formData.set('file', file);
-        console.log('host', host);
-        request
-          .post(host, {
-            data: formData,
-          })
-          .then(() => {
-            handleSubmit(`${host}/${key}${file.name}`, file.name);
-          })
-          .catch((err) => {
-            console.log('err', err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const res = await filePrepareRequest({ businessType: businessType[type] });
+    if (res){
+      console.log(432, res);
+      const { accessId, encodePolicy, host, key, signature } = res;
+      const formData = new FormData();
+      formData.set('name', file.name);
+      formData.set('key', `${key}${file.name}`);
+      formData.set('policy', encodePolicy);
+      formData.set('OSSAccessKeyId', accessId);
+      formData.set('success_action_status', '200');
+      formData.set('callback', '');
+      formData.set('signature', signature);
+      formData.set('file', file);
+      console.log('host', host);
+      request
+        .post(host, {
+          data: formData,
+        })
+        .then(() => {
+          handleSubmit(`${host}/${key}${file.name}`, file.name);
+        })
+        .catch((err) => {
+          console.log('err', err);
+        });
+    }
   };
 
   const stopPropagation = (e: any) => {
@@ -107,11 +100,12 @@ function subType({ name, icon, type }: IProps) {
 
   return (
     <>
-      <div className={styles.box} onClick={go2NewPage}>
-        <div className={styles.upload}>
+      <div className="box" onClick={go2NewPage}>
+        <div className="upload">
           {['accompany', 'article'].includes(type) ? (
-            <p onClick={go2CreatePage} className={styles.btn}>
-              <FormOutlined /> 创建
+            <p onClick={go2CreatePage} className="btn">
+              {/* <FormOutlined /> 创建 */}
+              创建
             </p>
           ) : (
             <Upload
@@ -122,12 +116,12 @@ function subType({ name, icon, type }: IProps) {
               accept={AcceptType[type]}
               onClick={stopPropagation}
             >
-              <UploadOutlined />
+              {/* <UploadOutlined /> */}
               <span>上传</span>
             </Upload>
           )}
         </div>
-        <p className={styles.file}>
+        <p className="file">
           <img src={icon} alt="" />
         </p>
         <p>{name}</p>
@@ -136,4 +130,4 @@ function subType({ name, icon, type }: IProps) {
   );
 }
 
-export default subType;
+export default SubType;
