@@ -56,8 +56,6 @@
     "graceful-fs": "^4.2.8",
     "husky": "4.3.8",
     "imagemin": "^8.0.1",
-    "imagemin-jpegtran": "^7.0.0",
-    "imagemin-pngquant": "^9.0.2",
     "junk": "^4.0.0",
     "less-loader": "^9.0.0",
     "onchange": "^7.1.0",
