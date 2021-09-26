@@ -1,11 +1,11 @@
 import React from 'react';
 import { Image, message, Popconfirm } from 'antd';
-import word from '@/assets/img/word.png';
-import excel from '@/assets/img/excel.png';
-import pdf from '@/assets/img/pdf.png';
-import suifang from '@/assets/img/suifang.png';
+import word from '@/assets/img/suifang/word.png';
+import excel from '@/assets/img/suifang/excel.png';
+import pdf from '@/assets/img/suifang/pdf.png';
+import suifang from '@/assets/img/suifang/suifang.png';
 import QuestionDetail from '../question_detail';
-import audio from '@/assets/img/audio.png';
+import audio from '@/assets/img/suifang/audio.png';
 import type { IList } from '../../const';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 import styles from './index.scss';
@@ -48,7 +48,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
       type: 'suifang/saveCurrentEditScale',
       payload: item,
     });
-    history.push('/education/accompany/create');
+    history.push('/publicize/files/accompany/create');
   };
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>

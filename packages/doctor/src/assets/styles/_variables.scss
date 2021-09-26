@@ -123,3 +123,14 @@ $user-height: 540px;
     color: #fff;
   }
 }
+
+%file__name {
+  display: inline-block!important;
+  width: 86px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  margin: 12px auto 0;
+  text-align: center;
+}

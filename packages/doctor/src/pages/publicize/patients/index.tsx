@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form } from 'antd';
+import { useSelector } from 'umi';
 import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
 import { clName, patientGroup, bindTime } from 'xzl-web-shared/src/utils/columns';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
@@ -15,6 +16,7 @@ function Patients() {
   const [tableOptions, setOptions] = useState<CommonData>({
     sid: window.$storage.getItem('sid'),
   });
+  const groupList = useSelector((state: IState) => state.education.groupList);
   const columns = [clName, patientGroup, bindTime];
 
   const handleCallback = (callbackStore: XzlTableCallBackProps) => {
@@ -62,9 +64,9 @@ function Patients() {
         <SelectGroup
           selectPatient={selectPatient}
           refreshList={refreshList}
-          // request={window.$api.patientManage.postGroupPatient}
-          request={() => {}}
-          groupList={[]}
+          request={window.$api.education.postGroupPatient}
+          // request={() => {}}
+          groupList={groupList}
         >
           加入试验分组
         </SelectGroup>

@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { Link } from 'umi';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useSelector } from 'umi';
 import { Input, message } from 'antd';
+import * as api from '@/services/api';
 import { PlusOutlined, FormOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import './index.scss';
@@ -22,35 +23,22 @@ function SideMenu(props: IProps) {
   const [activeIndex, setActiveIndex] = useState<number>(-1);//用于标识编辑状态还是非编辑状态
   const [modifyGroupName, setModifyGroupName] = useState('');
   const modifyInputRef = useRef<HTMLInputElement>(null);
-  // const groupList = useSelector((state: IState) => state.project.objectiveGroup);
+  const groupList = useSelector((state: IState) => state.education.groupList);
   // const {projectNsId} = useSelector((state: IState) => state.project.projDetail);
-  const groupList:any =  [{
-    'groupId': 'prod.exlgPe',
-    'groupName': 'A1',
-    'labels': ['research_patient_group'],
-    'note': {
-      'note1': '11',
-    },
-    'patientCount': 2,
-  }, {
-    'groupId': 'prod.WlAwZ4',
-    'groupName': 'B',
-    'labels': ['research_patient_group'],
-    'note': {
-      'note1': '12',
-    },
-    'patientCount': 0,
-  }];
-  const projectNsId = '';
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   const getGroupList = () => {
     //获取实验组
     dispatch({
-      type: 'project/fetchGroupList',
-      payload: projectNsId,
+      type: 'education/fetchGroupList',
+      payload: currentOrgInfo.sid,
     });
   };
+
+  useEffect(() => {
+    getGroupList();
+  }, [currentOrgInfo]);
   const handleChangeValues = (e: { target: { value: string } }) => {
     setAddGroupName(e.target.value);
   };
@@ -64,14 +52,18 @@ function SideMenu(props: IProps) {
   };
   const handleAddGroup = () => {
     if (!!addGroupName) {
-      // const params = {
-      //   projectNsId,
-      //   groupName: addGroupName,
-      // };
-      // api.patientManage.postAddGroup(params).then(res => {
-      //   message.success('添加成功');
-      //   getGroupList();
-      // });
+      const params = {
+        orgNSId: currentOrgInfo.nsId,
+        sid: window.$storage.getItem('sid'),
+        namespaceName: addGroupName,
+      };
+      api.education.addGroup(params).then(() => {
+        message.success('添加成功');
+        getGroupList();
+      })
+        .catch(() => {
+          message.error('添加失败');
+        });
     } else {
       message.error('组名不能为空');
     }
@@ -139,7 +131,7 @@ function SideMenu(props: IProps) {
       </div>
       <div className="group-list">
         {
-          groupList.map((item, index) => {
+          groupList?.map((item, index) => {
             return (
               <div className={['item', currentGroupId === item.groupId ? 'active' : ''].join(' ')} key={item.groupName}>
                 <Link to={`/publicize/patients/groups?groupId=${item.groupId}`} onClick={() => resetIndex(index)}>

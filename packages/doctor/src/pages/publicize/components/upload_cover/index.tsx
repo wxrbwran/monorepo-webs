@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { isEmpty } from 'lodash';
-import bg from '@/assets/img/article_bg.png';
-import article from '@/assets/img/article.png';
+import bg from '@/assets/img/suifang/article_bg.png';
+import article from '@/assets/img/suifang/article.png';
 import { useSelector } from 'umi';
-import UploadImageWithCrop from '@/components/UploadImageWithCrop';
+import UploadImageWithCrop from '../UploadImageWithCrop';
 import  './index.scss';
 
 interface IProps {
@@ -29,7 +29,7 @@ function UploadCover({ handleChangeCover }: IProps) {
       <UploadImageWithCrop type="logo" success={uploadSuccess} aspectRatio={1.7 / 1}>
           <img src={avatar || bg} alt="" className='w-320 h-180'/>
           <img src={article} alt="" className='absolute top-68 left-65 pointer'/>
-          <span className='absolute top-82 right-60 text-white pointer'>点击设置文章封面</span>
+          <span className='absolute top-82 right-60 text-white pointer text-base'>点击设置文章封面</span>
       </UploadImageWithCrop>
     </div>
   );

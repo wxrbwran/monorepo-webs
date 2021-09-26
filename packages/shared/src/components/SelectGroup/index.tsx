@@ -17,13 +17,11 @@ function SelectGroup(props: IProps) {
   const [isShowSelectGroup, setIsShowSelectGroup] = useState(false);
   const [selectGroup, setSelectGroup] = useState('');
   const handleShowGroup = () => {
-    // if (props.selectPatient.length === 0) {
-    //   message.error('请勾选患者');
-    // } else {
-    //   setIsShowSelectGroup(true);
-    // }
-    setIsShowSelectGroup(true);
-
+    if (props.selectPatient.length === 0) {
+      message.error('请勾选患者');
+    } else {
+      setIsShowSelectGroup(true);
+    }
   };
   const handleSelectGroup = (value: string) => {
     setSelectGroup(value);
@@ -33,10 +31,8 @@ function SelectGroup(props: IProps) {
       message.error('请选择小组');
     } else {
       const params = {
-        // projectNsId,
-        groupId: selectGroup,
-        patientSIds: props.selectPatient,
-        projectSid: window.$storage.getItem('projectSid'),
+        nsId: selectGroup,
+        sid: window.$storage.getItem('sid'),
       };
       const res = await props.request(params);
       if (res){

@@ -4,6 +4,22 @@ export default {
   filePrepare(data: object): Promise<any> {
     return http.get('base/file/prepare', { data });
   },
+  // 初始化随访团队
+  initContact(data: object): Promise<any> {
+    return http.post('doctor/init/contact', { data });
+  },
+  // 创建随访小组
+  addGroup(data: object): Promise<any> {
+    return http.post('doctor/contact/group', { data });
+  },
+  // 查询小组列表
+  getGroupList(orgId: any): Promise<any> {
+    return http.get(`doctor/contact/group/${orgId}`);
+  },
+  // 为患者分配小组
+  postGroupPatient(data: any): Promise<any> {
+    return http.post('doctor/contact/patient', { data });
+  },
   // 新增视频-文件-文章-图片
   addPublicize(data: any): Promise<any> {
     return http.post('publicize', { data });

@@ -24,7 +24,7 @@ function ScaleDetail(props: IProps) {
       type: 'suifang/saveCurrentEditScale',
       payload: props,
     });
-    history.push('/education/accompany/create');
+    history.push('/publicize/files/accompany/create');
   };
   return (
     <div className={styles.detail}>

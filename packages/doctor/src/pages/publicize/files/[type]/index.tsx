@@ -135,7 +135,7 @@ function List({ location }: IProps) {
     <div className={styles.visite_list}>
       <div onClick={() => history.goBack()}>
         <LeftOutlined style={{ marginBottom: 36 }} />{' '}
-        <span className="font-bold pointer">{EducationType[type]}</span>
+        <span className="font-bold pointer text-lg">{EducationType[type]}</span>
       </div>
       {type === 'article' ? (
         <ArticleList />
@@ -161,7 +161,7 @@ function List({ location }: IProps) {
           {type === 'accompany' && (
             <p
               className={`${styles.upload} ${styles.add}`}
-              onClick={() => history.push('/education/accompany/create')}
+              onClick={() => history.push('/publicize/files/accompany/create')}
             >
               <PlusOutlined />
             </p>

@@ -39,7 +39,7 @@ function ArticleList() {
       type: 'education/saveArticleContent',
       payload: { ...content },
     });
-    history.push('/education/article/create');
+    history.push('/publicize/files/article/create');
   };
   const handleDel = (id: string) => {
     api.education
@@ -79,7 +79,7 @@ function ArticleList() {
           </div>
         );
       })}
-      <p className={`${styles.upload}`} onClick={() => history.push('/education/article/create')}>
+      <p className={`${styles.upload}`} onClick={() => history.push('/publicize/files/article/create')}>
         <PlusOutlined />
       </p>
     </div>

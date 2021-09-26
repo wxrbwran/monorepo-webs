@@ -61,12 +61,12 @@ function SelectGroup(props) {
     var _a = __read(useState(false), 2), isShowSelectGroup = _a[0], setIsShowSelectGroup = _a[1];
     var _b = __read(useState(''), 2), selectGroup = _b[0], setSelectGroup = _b[1];
     var handleShowGroup = function () {
-        // if (props.selectPatient.length === 0) {
-        //   message.error('请勾选患者');
-        // } else {
-        //   setIsShowSelectGroup(true);
-        // }
-        setIsShowSelectGroup(true);
+        if (props.selectPatient.length === 0) {
+            message.error('请勾选患者');
+        }
+        else {
+            setIsShowSelectGroup(true);
+        }
     };
     var handleSelectGroup = function (value) {
         setSelectGroup(value);
@@ -81,10 +81,8 @@ function SelectGroup(props) {
                     return [3 /*break*/, 3];
                 case 1:
                     params = {
-                        // projectNsId,
-                        groupId: selectGroup,
-                        patientSIds: props.selectPatient,
-                        projectSid: window.$storage.getItem('projectSid'),
+                        nsId: selectGroup,
+                        sid: window.$storage.getItem('sid'),
                     };
                     return [4 /*yield*/, props.request(params)];
                 case 2:

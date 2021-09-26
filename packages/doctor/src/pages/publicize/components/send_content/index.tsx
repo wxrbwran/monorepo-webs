@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Checkbox, Row, Col, Radio } from 'antd';
 import { history, useDispatch } from 'umi';
 import type { IList } from '../../const';
-import ListItem from '../list_item';
+import ListItem from '../ListItem';
 import * as api from '@/services/api';
-import tip from '@/assets/img/tip.svg';
+import tip from '@/assets/img/suifang/tip.svg';
 import { WarningFilled } from '@ant-design/icons';
 import styles from './index.scss';
 
@@ -119,15 +119,16 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
         <img src={tip} alt="" className='mr-5 align-baseline'/>
         提示：如果你没有找到想发送的文件，
         <span
-          onClick={() => history.replace('/education/list')}
-          className={`${styles.link} cursor-pointer`}
+          onClick={() => history.replace('/publicize/files')}
+          className={`${styles.link} cursor-pointer mr-50`}
         >
           请点击这里创建
         </span>
-      </p>
-      <p className="text-center relative -top-54">
         <WarningFilled style={{ color: '#FF7664' }} /> 注意: 创建发送计划后随访表将不可修改或删除
       </p>
+      {/* <p className="text-center relative -top-54">
+        <WarningFilled style={{color: '#FF7664'}} /> 注意: 创建发送计划后随访表将不可修改或删除
+      </p> */}
       {
         isScale ? (
           <>

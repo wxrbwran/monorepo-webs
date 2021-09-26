@@ -115,7 +115,7 @@ var XzlTable = function (props) {
                             setCurrent(params.pageAt);
                             setSize(params.pageSize);
                             setTotal(res.total);
-                            handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
+                            handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
                             handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
                             console.log('handledData*****', handledData);
                             setDataSource(handledData);

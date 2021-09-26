@@ -1,0 +1,52 @@
+.patient_edu {
+  height: 100%;
+  overflow: auto;
+  padding: 30px 60px;
+  .card {
+    width: 1075px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  .tit{
+    position: relative;
+    padding-left: 10px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #3296FA;
+    &::before {
+      content: "";
+      width: 3px;
+      height:16px;
+      position: absolute;
+      left: 0;
+      background: #3296FA;
+    }
+  }
+  .block {
+    >div {
+      margin: 0 40px 30px 0;
+    }
+  }
+  .content {
+    background: #F8F8F8;
+    border-radius: 5px;
+    padding: 20px 30px;
+  }
+  .item {
+    flex: 35%;
+    font-size: 15px;
+    margin-bottom: 23px;
+    img {
+      vertical-align: top;
+    }
+    .con {
+      font-size: 14px;
+      color: #666;
+      margin-top: 8px;
+      line-height: 20px;
+    }
+  }
+}
