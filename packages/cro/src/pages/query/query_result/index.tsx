@@ -6,7 +6,7 @@ import QueryTable from '../components/query_table';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 import * as api from '@/services/api';
- 
+
 interface IProps {
   location: {
     pathname: string;
@@ -45,9 +45,9 @@ function QueryResult({ location }: IProps) {
       actionLogId: resultKey,
       page: page,
       pageSize: pageSize,
-    }); 
-   
-    if (results.tableBody.length > 0) { // 有数据拼接数据
+    });
+
+    if (results?.tableBody?.length > 0) { // 有数据拼接数据
 
       dispatch({
         type: 'query/setQueryResult',
@@ -55,7 +55,7 @@ function QueryResult({ location }: IProps) {
       });
     }
 
-    if (results.tableBody.length < pageSize) {
+    if (results?.tableBody?.length < pageSize) {
 
       if (page == 0 && retryTimes.current < 3) {
         // 重试3次
