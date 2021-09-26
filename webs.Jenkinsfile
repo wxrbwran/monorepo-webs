@@ -127,7 +127,7 @@ pipeline {
 
     post {
       always {
-        // echo "构建结束"
+        echo "构建结束"
       }
 
       success {

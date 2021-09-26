@@ -122,11 +122,8 @@ var XzlTable = function (props) {
                         else {
                             setTotal(res.total);
                         }
-                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list || res.tableBody, res.category);
+                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list || res.tableBody, category || res.category);
                         console.log('+=============', handledData);
-                        if (handleCallback) {
-                            handleCallback(handledData);
-                        }
                         handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
                         console.log('handledData*****', handledData);
                         setDataSource(handledData);

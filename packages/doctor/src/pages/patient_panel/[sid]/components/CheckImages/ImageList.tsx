@@ -5,11 +5,12 @@ import Viewer from '@/components/Viewer';
 import jgh from '@/assets/img/jgh.png';
 import CheckImgStructured from '@/components/CheckImgStructured';
 import styles from './index.scss';
+import { IImageItem } from 'typings/model';
 
 interface IProps {
-  typeNew: string;
   handleHideCont: () => void;
   refresh: () => void;
+  data: IImageItem;
 }
 interface IImg {
   imageId: string;
@@ -19,7 +20,7 @@ interface IImg {
   degree: number;
   reviewStatus: string; // 0待审核   TO_REVIEW,   4已审核 REVIEW
 }
-function ImageList({ typeNew, handleHideCont, refresh }: IProps) {
+function ImageList({ data, handleHideCont, refresh }: IProps) {
   const [showViewer, setShowViewer] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0); // 预览图片，当前选中第几张
   const [imageId, setImageId] = useState<string>();
@@ -27,12 +28,16 @@ function ImageList({ typeNew, handleHideCont, refresh }: IProps) {
   const [imgReview, setImgReview] = useState<IImg[]>([]); // 已结构化
   const [degree, setDegree] = useState(0);
   const fetchImgList = () => {
-    const params = {
-      typeNew,
+    const params: CommonData = {
       sid: window.$storage.getItem('patientSid'),
       wcId: window.$storage.getItem('patientWcId'),
     };
-    window.$api.image.fetchImageDetailNew(params).then((res: {imageInfos: IImg[]}) => {
+    if (data.imageIdList) {
+      params.imageIdList = data.imageIdList;
+    } else {
+      params.typeNew = data.typeNew;
+    }
+    window.$api.image.fetchImageDetailNew(params).then((res: { imageInfos: IImg[] }) => {
       const review: IImg[] = [];
       const toReview: IImg[] = [];
       res.imageInfos.forEach((item: IImg) => {
@@ -140,6 +145,7 @@ function ImageList({ typeNew, handleHideCont, refresh }: IProps) {
         onClose={hideViewer}
         onRotateClick={handleImageRotate}
         onMaskClick={hideViewer}
+        disableKeyboardSupport
         customToolbar={(config) => (
           [
             ...config,

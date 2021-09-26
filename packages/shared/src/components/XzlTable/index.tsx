@@ -79,7 +79,6 @@ const XzlTable: FC<IProps> = (props) => {
 
     setCurrent(params.pageAt);
     setSize(params.pageSize);
-
     if (dataKey == 'events_jsonb') {
       res.tableBody.forEach(element => {
         element.content = JSON.parse(element.content.value);
@@ -89,7 +88,7 @@ const XzlTable: FC<IProps> = (props) => {
       setTotal(res.total);
     }
 
-    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list || res.tableBody, res.category);
+    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list || res.tableBody, category || res.category);
     console.log('+=============', handledData);
     handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
     console.log('handledData*****', handledData);

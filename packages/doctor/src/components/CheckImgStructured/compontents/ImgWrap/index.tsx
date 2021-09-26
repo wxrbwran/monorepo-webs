@@ -50,6 +50,7 @@ const ImgWrap = (props: IProps) => {
         onRotateClick={handleImageRotate}
         container={document.getElementById('images')!}
         visible={show}
+        disableKeyboardSupport
         images={[
           {
             src: imageUrl,

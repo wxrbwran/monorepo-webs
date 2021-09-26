@@ -1,5 +1,5 @@
 import React, {
-  FC, useState, useMemo, useRef,
+  FC, useState, useMemo, useRef, useEffect,
 } from 'react';
 import { Tabs, Popconfirm } from 'antd';
 // import { IDocmentItem, IDocmentItemApi } from 'typings/checkimg';
@@ -10,15 +10,27 @@ import { CloseOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
 import SearchTypeIndex from '../SearchTypeIndex';
 import CustomIndex from '../CustomIndex';
+import SearchHospital from '@/components/SearchHospital';
+import ItemDate from '../ItemDate';
+import { isEmpty } from 'lodash';
 import styles from './index.scss';
 // 此组件具体到，化验单或检查单panel
 const { TabPane } = Tabs;
 interface IProps {
-  // imageId: string;
-  level1Type: string; // 一级tab：HYD或JCD
-  initData: IApiDocumentItem[];
+  imageId: string;
+  outTypeAndInx: string;// 一级tab
+  outType: string;
+  initData: {
+    documentList: IApiDocumentItem[];
+    orgId: string;
+    orgName: string;
+    outType: string;
+    unknownReport?: boolean;
+    measuredAt?: number;
+  };
   inspectionCallbackFns: any; // 保存时候的回调
-  setCallbackFns: (params: {[type: string]: () => void}) => void; // 设置callback function
+  setCallbackFns: (params: { [type: string]: () => void }) => void; // 设置callback function
+  isViewOnly: boolean;
 }
 // 渲染时需要这两个字段
 
@@ -30,14 +42,14 @@ interface ICheckTypesItem extends IApiDocumentItem {
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
 const StructuredDetailItem: FC<IProps> = (props) => {
   const {
-    inspectionCallbackFns, setCallbackFns, level1Type, initData,
+    inspectionCallbackFns, setCallbackFns, outTypeAndInx, outType, initData, imageId, isViewOnly,
   } = props;
   console.log('initDddd', initData);
-  const activeType1 = useRef();
+  const activeType1 = useRef('');
   let initSubType: string[] = [];
   const initCheckTypes: ICheckTypesItem[] = [];
-  if (initData) {
-    initData.forEach((item) => {
+  if (!isEmpty(initData)) {
+    initData.documentList.forEach((item) => {
       initSubType.push(item.sampleFroms?.[0] as string);
       initCheckTypes.push({
         ...item,
@@ -47,12 +59,19 @@ const StructuredDetailItem: FC<IProps> = (props) => {
     });
     initSubType = [...new Set(initSubType)];
   } else {
-    initSubType = level1Type === 'HYD' ? ['血液'] : [];
+    initSubType = ['血液'];
   }
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
   const [activeType, setActiveType] = useState<string>();
   const [sampleFroms, setSampleFroms] = useState<string[]>(initSubType);
+  const documentsCallbackFns = useRef({});
+  const timeAndOrg = useRef({
+    measuredAt: initData?.measuredAt || new Date().getTime(),
+    unknownReport: initData?.unknownReport,
+    orgId: initData?.orgId,
+    orgName: initData?.orgName,
+  });
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
   const handleSelectTypeIndex = (params: ISearchDocumentItem, type?: string) => {
@@ -94,14 +113,43 @@ const StructuredDetailItem: FC<IProps> = (props) => {
     console.log('===-2');
     setCheckTypes([...newCheckTypes]);
   };
-  const handleCallbackFns = ({ type, fn, action }: ICallbackFn) => {
-    if (action === 'add') {
-      inspectionCallbackFns[type] = fn;
-    } else if (action === 'remove') {
-      delete inspectionCallbackFns[type];
-    }
+  useEffect(() => {
+    console.log('level1Type', outTypeAndInx);
+    inspectionCallbackFns[outTypeAndInx] = () => new Promise((resolve) => {
+      Promise.all(Object.values(documentsCallbackFns.current)
+        .map((fn) => fn())).then((documentList) => {
+        // console.log('hospital', hospital);
+        resolve({
+          documentList,
+          imageId,
+          ...timeAndOrg.current,
+          outType,
+          operatorId: window.$storage.getItem('sid'),
+          sid: window.$storage.getItem('patientSid'),
+          wcId: window.$storage.getItem('patientWcId'),
+        });
+      });
+    });
+    // inspectionCallbackFns浅拷贝，不执行下面setCallbackFns， 也可以。
     setCallbackFns(inspectionCallbackFns);
+    return () => {
+      // 删除掉此tab要delete掉此项
+      delete inspectionCallbackFns[outTypeAndInx];
+      setCallbackFns(inspectionCallbackFns);
+    };
+  }, []);
+  // 获取所有大分类数据list
+  const handleDocumentsCallbackFns = ({ type, fn, action }: ICallbackFn) => {
+    const fns: CommonData = documentsCallbackFns.current;
+    if (action === 'add') {
+      fns[type] = fn;
+    } else if (action === 'remove') {
+      delete fns[type];
+    }
+    documentsCallbackFns.current = { ...fns };
+    // setDocumentsCallbackFns({ ...documentsCallbackFns });
   };
+
   function isMedicalIndexList(arg: ICheckTypesItem | ISearchDocumentItem): arg is ICheckTypesItem {
     return (arg as ICheckTypesItem).indexList !== undefined;
   }
@@ -157,33 +205,68 @@ const StructuredDetailItem: FC<IProps> = (props) => {
         }
       >
         <CustomIndex
-          handleCallbackFns={handleCallbackFns}
+          handleDocumentsCallbackFns={handleDocumentsCallbackFns}
           formKey={`${item.documentId}${item.sampleFrom}`}
-          level1Type={level1Type}
+          level1Type={outType}
           firstIndex={item.firstIndex as string}
           initList={getInitList(item)}
           selectIndex={item?.selectIndex}
         // 单据和来源等信息,加显时，接口返回的数组格式，需要处理取第一个元素即可，也只有一个元素
-          apiParams={
-          {
+          apiParams={{
             ...item,
             sampleFrom: isMedicalIndexList(item)
               ? item.sampleFroms[0] : item.sampleFrom,
-          }
-        }
+          }}
+          isViewOnly={isViewOnly}
         />
       </TabPane>
     ),
-  ), [checkTypes]);
+  ), [checkTypes, isViewOnly]);
   const handleActiveTab = (tab: string) => {
     console.log('===-1');
     activeType1.current = tab;
     setActiveType(tab);
   };
+  const handleSetTimeAndOrg = (newItem: any) => {
+    timeAndOrg.current = {
+      ...timeAndOrg.current,
+      ...newItem,
+    };
+  };
+  const handleSetHospital = (key: string, val: any) => {
+    console.log(11111112, key);
+    console.log(val);
+    // setHospital({ ...val });
+    handleSetTimeAndOrg({
+      orgId: val.hospitalId,
+      orgName: val.hospitalName,
+    });
+  };
   return (
     <div className={styles.structure_detail_item}>
+      <div className="flex text-sm items-center  mb-10">
+        <div className="font-medium mr-5"> 检查机构: </div>
+        <SearchHospital
+          placeholder="请输入检查机构"
+          callback={handleSetHospital}
+          fieldName="hospital"
+          style={{ flex: 1 }}
+          defaultValue={{
+            hospitalId: initData?.orgId,
+            hospitalName: initData?.orgName,
+          }}
+        />
+        <ItemDate
+          setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
+          setUnknow={(unknownReport: boolean) => handleSetTimeAndOrg({ unknownReport })}
+          // 如果是回显，就直接取回显的时间，没有就设置当前时间
+          initReportTime={initData?.measuredAt}
+          isUnknownTime={initData?.unknownReport}
+          type="HYD"
+        />
+      </div>
       <SubType
-        leve1Type={level1Type}
+        leve1Type={outType}
         handleChangeSubType={setSampleFroms}
         initSampleFrom={initSubType}
       />
@@ -194,16 +277,20 @@ const StructuredDetailItem: FC<IProps> = (props) => {
                 sampleFroms={sampleFroms}
                 handleSelectTypeIndex={handleSelectTypeIndex}
                 // imageId={imageId}
-                documentType={level1Type}
+                documentType={outType}
               />
-              <Tabs
-                activeKey={activeType}
-                onChange={(tab: string) => handleActiveTab(tab)}
-                type="editable-card"
-                hideAdd
-              >
-                {renderTabPane()}
-              </Tabs>
+              {
+                checkTypes.length > 0 && (
+                  <Tabs
+                    activeKey={activeType}
+                    onChange={(tab: string) => handleActiveTab(tab)}
+                    type="editable-card"
+                    hideAdd
+                  >
+                    {renderTabPane()}
+                  </Tabs>
+                )
+              }
             </>
           )
         }
