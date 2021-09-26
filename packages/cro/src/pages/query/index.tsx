@@ -34,8 +34,7 @@ const CheckboxGroup = Checkbox.Group;
 function Query({ }: IProps) {
   const dispatch = useDispatch();
   const projectSid = window.$storage.getItem('projectSid');
-  const { projectRoleType } = useSelector((state: IState) => state.project.projDetail);
-
+  const { projectRoleType, projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [card, setCard] = useState<IFieldItem[]>([]);
   const [checkedField, setCheckedField] = useState<IChecked[]>([]);
   const [active, setActive] = useState<string[]>([]); // 用来控制菜单前面圆点的样式
@@ -61,17 +60,17 @@ function Query({ }: IProps) {
         transformDynamicToStatic(res.keys[0].items[i], projectSid, projectRoleType).then((items: any) => {
 
           if (res.keys[0].items[i].name.includes('team')) {
-            
+
             // groupListTemplete = groupListTemplete.concat(items);
             // setGroupList(groupListTemplete);
             setGroupList((preList) => {
               return [...preList, ...items];
-            }); 
-            
+            });
+
             let deleteIndex = item.items.indexOf(res.keys[0].items[i]);
             item.items.splice(deleteIndex, 1);
           } else {
-                  
+
             let deleteIndex = item.items.indexOf(res.keys[0].items[i]);
             item.items.splice(deleteIndex, 1, ...items);
           }
@@ -218,8 +217,24 @@ function Query({ }: IProps) {
 
     const rules = handleFormatValues(values, checkedField, projectSid);
     console.log('rule', rules);
+
+    //   {
+    //     "sid": "12[科研项目sid]",
+    //     "ns": "12[科研项目空间]",
+    //     "role": "DOCTOR[科研sid的角色]"，
+    // },
+    // {
+    //     "sid": "12[登录者的sid]",
+    //     "ns": "12[登录者的空间]",
+    //     "role": "DOCTOR[登录者的所在项目的角色分pi]"
+    // }
+
+
+    // nsId: window.$storage.getItem("nsId"),
+    // sid: window.$storage.getItem('sid')
+
     if (rules) {
-      
+
       const params: any = {
         rules: [{
           match: {
@@ -228,7 +243,21 @@ function Query({ }: IProps) {
           },
         }],
         meta: {
-          businessType: 4,
+          sourceType: 4,
+          teamLocations: [
+            {
+              sid: projectSid,
+              ns: projectNsId,
+              role: projectRoleType,
+              tag: 'ownership',
+            },
+            {
+              sid: localStorage.getItem('xzl-web-doctor_sid'),
+              ns: localStorage.getItem('xzl-web-doctor_nsid'),
+              role: localStorage.getItem('xzl-web-doctor_roleId'),
+              tag: 'operator',
+            },
+          ],
         },
       };
       const head = await api.query.fetchQueryId(params);

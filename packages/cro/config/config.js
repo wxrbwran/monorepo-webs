@@ -47,12 +47,7 @@ const config = {
   history: { type: 'hash' },
   proxy: {
     '/api': {
-<<<<<<< HEAD
-      // target: 'http://192.168.101.30:8000/',
-      target: 'http://172.16.10.31:8000/',
-=======
       target: 'http://172.16.10.10:8000/',
->>>>>>> dev
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
