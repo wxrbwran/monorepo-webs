@@ -45,13 +45,6 @@ const config = {
     },
   },
   history: { type: 'hash' },
-  proxy: {
-    '/api': {
-      target: 'http://192.168.101.30:8000/',
-      changeOrigin: true,
-      pathRewrite: { '^/api': '' },
-    },
-  },
   extraPostCSSPlugins: [require('@tailwindcss/postcss7-compat')],
   // extraBabelPlugins: process.env.NODE_ENV === 'production' ? ['transform-remove-console'] : [],
   externals: {

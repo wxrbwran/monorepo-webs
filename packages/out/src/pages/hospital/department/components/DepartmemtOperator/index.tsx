@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, message } from 'antd';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
@@ -129,7 +129,7 @@ const DepartmentOperator: FC = () => {
           <p className="text-center text-red-500">这是一个不可逆的操作，请谨慎对待！</p>
         </ModalForm>
       ),
-    }
+    },
   ];
 
   return (

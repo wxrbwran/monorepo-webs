@@ -50,11 +50,6 @@
       }
     }
   }
-  .add {
-     @extend %create__btn;
-     cursor: pointer;
-     margin-left: 0;
-  }
   .operate {
     text-align: center;
     margin-top: 15px;
@@ -70,6 +65,11 @@
     }
   }
 }
+.add {
+  @extend %create__btn;
+  cursor: pointer;
+  margin-left: 0;
+}
 .table_name {
   text-align: center;
   font-size: 14px;
@@ -78,5 +78,11 @@
   .title {
     color: #181818;
     font-size: 20px;
+    :global {
+      .anticon {
+        margin-left: 5px;
+        color: #3296FA;
+      }
+    }
   }
 }

@@ -8,12 +8,13 @@ interface IProps {
       isTemp?: string;
       tempId?: string;
       modifyTemp?: string;
-    },
-    pathname: string,
-  },
+      groupId?: string;
+    };
+    pathname: string;
+  };
 }
 function Create(props: IProps) {
-  return <ScaleTableCreate {...props} scaleType="SUBJECTIVE" />
+  return <ScaleTableCreate {...props} scaleType="SUBJECTIVE" />;
 }
 
 export default Create;

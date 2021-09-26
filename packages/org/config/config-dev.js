@@ -51,6 +51,18 @@ const config = {
   externals: {
     echarts: 'window.echarts',
   },
-
+  chainWebpack: (config, { webpack }) => {
+    // 使用 dayjs 替换 moment.js
+    // config.plugin('antd-dayjs').use(AntdDayjsWebpackPlugin);
+    config
+      .plugin('replace')
+      .use(require('webpack').ContextReplacementPlugin)
+      .tap(() => [/moment[/\\]locale$/, /zh-cn/]);
+    config.module
+      .rule('xlsx')
+      .test(/.(xlsx)$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'));
+  },
 };
 export default config;

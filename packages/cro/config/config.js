@@ -1,6 +1,6 @@
 import path from 'path';
 import env from './env.json';
-import pkg from '../package.json'
+import pkg from '../package.json';
 
 const oriEnv = env[process.env.APP_ENV];
 const defineEnv = {};
@@ -15,7 +15,7 @@ const config = {
   hash: true,
   favicon: '/clinical-cro/assets/favicon.ico',
   publicPath: '/clinical-cro/',
-  outputPath: pkg.name,
+  outputPath: `../../${pkg.name}`,
   dva: {
     immer: true,
   },
@@ -47,7 +47,7 @@ const config = {
   history: { type: 'hash' },
   proxy: {
     '/api': {
-      target: 'http://192.168.101.30:8000/',
+      target: 'http://172.16.10.10:8000/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

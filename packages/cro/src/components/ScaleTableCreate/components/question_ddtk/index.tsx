@@ -17,32 +17,45 @@ interface IProps {
   scaleType: string;
 }
 function questionGapFilling(props: IProps) {
-  const {questions, changeQues, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex} = props;
+  const { questions, changeQues, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex } = props;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [cursorIndex, setCursorIndex] = useState();
 
+  const getStemString = (stem) => {
+    let newStem = stem;
+    if (stem instanceof Array){
+      newStem = '';
+      stem.forEach((i, idx) => {
+        if (idx !== stem.length - 1){
+          newStem = newStem + i + '＿＿＿';
+        }
+      });
+    }
+    return newStem;
+  };
   // 保存当前点击的位置
-  const handleSaveIndex = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleSaveIndex = () => {
     const dom =  document.getElementsByClassName(`ddtk_${quesIndex}`)[0];
     // @ts-ignore
     dom?.focus();
     // @ts-ignore
     setCursorIndex(dom?.selectionStart);
-  }
+  };
   // 添加填空符
   const handleAddSymbol = () => {
-    const oldStem = questions[quesIndex].detail.stem;
-    let newCont = questions[quesIndex].detail.stem + '＿＿＿';
+    let oldStem = getStemString(questions[quesIndex].detail.stem);
+    let newCont = oldStem + '＿＿＿';
     if (cursorIndex) {
       newCont = oldStem.slice(0, cursorIndex) + '＿＿＿' + oldStem.slice(cursorIndex);
     }
     questions[quesIndex].detail.stem =  newCont ;
     changeQues([...questions]);
-  }
+  };
   const handleChangeVal = (ev: React.ChangeEventHandler<HTMLTextAreaElement>) => {
     // 内容变化时，保存光标位置
     setCursorIndex(ev.target.value.length);
     handleSaveStem(ev, quesIndex);
-  }
+  };
   return (
     <div
       className={`topic-item ${styles.ddtk} ${(editIndex === quesIndex) ? 'edit' : ''}`}
@@ -51,11 +64,11 @@ function questionGapFilling(props: IProps) {
       <div className={styles.del}><img className="issue__delete" src={delIcon} onClick={() => handleDelStem(quesIndex)} /></div>
       <div className="answer-wrap">
 
-        <pre style={{position: 'relative'}}>
-          <div>{item.detail.stem}</div>
+        <pre style={{ position: 'relative' }}>
+          <div>{getStemString(item.detail.stem)}</div>
           <TextArea
             placeholder="请输入"
-            value={item.detail.stem}
+            value={getStemString(item.detail.stem)}
             onChange={(ev) => handleChangeVal(ev)}
             onClick={handleSaveIndex}
             className={`ddtk_${quesIndex}`}
@@ -64,7 +77,7 @@ function questionGapFilling(props: IProps) {
       </div>
       <div className={styles.add_btn} onClick={handleAddSymbol}>+ 添加填空符</div>
     </div>
-  )
+  );
 }
 
 export default questionGapFilling;

@@ -1,8 +1,6 @@
 import { Role } from './role';
-import { croStatus, UserStatus } from './enums'
+import { croStatus, UserStatus } from './enums';
 export const defaultAvatar = 'https://staff-avatars-prod.oss-cn-beijing.aliyuncs.com/default-avatar.jpg';
-import patientAvatar from '../assets/img/patientAvatar.jpg';
-
 
 export const imConfig = {
   // 本地消息显示数量，会影响性能
@@ -325,13 +323,14 @@ export const projectStatus = {
   1000: '待确认',
   1001: '已拒绝',
   1002: '进行中',
-  1003: '已结束'
-}
+  1003: '已结束',
+};
 export const projectInviteStatus: CommonData = {
   1000: '待确认',
   1001: '已拒绝',
-  1002: '已加入'
-}
+  1002: '已加入',
+  0: '未邀请',
+};
 export const croLists = {
   [croStatus.Running]: '进行中',
   [croStatus.Stopping]: '已结束',
@@ -423,5 +422,6 @@ export const statusLists = {
   // [UserStatus.InitState]: '未完成注册',
   [UserStatus.InitState]: '待审核',
   [UserStatus.Refused]: '审核失败',
+  [UserStatus.ToBeActivated]: '待激活',
 };
 
