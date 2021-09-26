@@ -189,9 +189,7 @@ interface IIlist {
   meta: IMeta;
 }
 export const formatJcdSubmitData = (jcdTabList: IJcdItem[], tempList: { data: any[] }, clickSaveTime: number) => {
-  // console.log('submitLis11t111', jcdTabList);
   const temps: any[] = filterTempData(fetchInitData(tempList));
-  // console.log('temps', temps);
   const list: IIlist[] = [];
   jcdTabList.forEach((jcdTabItem) => {
     const newJcdTabItem = cloneDeep(jcdTabItem);
@@ -223,10 +221,6 @@ export const formatJcdSubmitData = (jcdTabList: IJcdItem[], tempList: { data: an
     addTemps.push(addTabTemps);
   });
   // 过滤出新添加的模板-e
-  console.log('temps88888******', {
-    jcdList: list,
-    tempList: addTemps.flat(),
-  });
   return {
     jcdList: { list },
     tempList: addTemps.flat(),
