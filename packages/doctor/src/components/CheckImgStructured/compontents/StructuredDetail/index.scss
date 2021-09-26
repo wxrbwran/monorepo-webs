@@ -61,8 +61,8 @@
 .structured_content {
   flex: 1;
   :global {
-    .ant-checkbox-wrapper {
-      font-size: 15px;
+    .ant-checkbox-wrapper, .ant-radio-wrapper {
+      font-size: 14px;
     }
     .ant-tabs {
       width: 100%;

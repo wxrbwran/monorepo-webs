@@ -32,7 +32,7 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
       sid: window.$storage.getItem('patientSid'),
       wcId: window.$storage.getItem('patientWcId'),
     };
-    if (data.category === 1 || data.type === 1) {
+    if (data.imageIdList) {
       params.imageIdList = data.imageIdList;
     } else {
       params.typeNew = data.typeNew;

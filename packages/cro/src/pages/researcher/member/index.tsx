@@ -95,7 +95,7 @@ function Member() {
         <h3>成员</h3><img src={number} alt=""/> <span>{memberCount}</span>
       </div>
       <Form form={form} onValuesChange={handleSelectChange} style={{ position: 'relative' }}>
-        <Search form={form} searchKey="var" placeholder="搜索姓名或手机号"  float={'inherit'}/>
+        <Search form={form} searchKey="var" placeholder="搜索姓名或手机号" float={'inherit'}/>
         <div className={styles.lists_head}>
           <InviteStatus />
           {

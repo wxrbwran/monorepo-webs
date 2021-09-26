@@ -44,6 +44,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
       const qa = {
         question: item.question,
         answer: [],
+        question_type: item.question_type,
       };
       switch (item.question_type) {
         case 'BASE':

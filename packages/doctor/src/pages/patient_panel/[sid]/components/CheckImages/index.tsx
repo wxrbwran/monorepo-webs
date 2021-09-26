@@ -48,13 +48,8 @@ function CheckImages() {
       data: insImg,
     },
   ];
-  const jcdText: CommonData = {
-    JCD: '检查单',
-    OTHER: '其他单据',
-  };
   const renderItem = useMemo(() => (data: IImageItem[], hideDate?: boolean) => (
     data.map((item:IImageItem) => {
-      console.log('item83772937', item);
       return (
       // red green
       <div
@@ -64,7 +59,7 @@ function CheckImages() {
       className={(item.name === '待审核图片' && item.count > 0) ? styles.red : ''}
     >
       <span className={styles.name}>
-        {item.type === 1 || item.category === 1 ? jcdText?.[item.name] : item.name }
+        {item.name}
       </span>
       {
         !hideDate && (

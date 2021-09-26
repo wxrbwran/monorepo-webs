@@ -96,11 +96,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   };
   const saveJcdData = (params: any) => {
     // jcdData
-    const originIds = jcdData.map(item => item.meta.id);
-    if (!isEmpty(originIds)) {
-      params.originIds = originIds;
-    }
-    console.log('originIds', params);
+    params.originIds = jcdData.map(item => item.meta.id);
     api.image.putImageJcdAndOther(params).then(() => {
       console.log('添加检查单成功');
     }).catch(err => {
