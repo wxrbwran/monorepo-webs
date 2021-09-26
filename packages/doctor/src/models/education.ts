@@ -30,10 +30,9 @@ const EduModel: EduModelType = {
   effects: {
     *fetchGroupList({ payload }, { call, put }) {
       const response = yield call(education.getGroupList, payload);
-      console.log('response111', response);
       yield put({
         type: 'setGroupList',
-        payload: response.infos,
+        payload: response.nss,
       });
     },
   },

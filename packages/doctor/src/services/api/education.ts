@@ -16,6 +16,10 @@ export default {
   getGroupList(orgId: any): Promise<any> {
     return http.get(`doctor/contact/group/${orgId}`);
   },
+  // 修改随访小组名
+  modifyGroup(data: object): Promise<any> {
+    return http.patch('/doctor/contact/group', { data });
+  },
   // 为患者分配小组
   postGroupPatient(data: any): Promise<any> {
     return http.post('doctor/contact/patient', { data });

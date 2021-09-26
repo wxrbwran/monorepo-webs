@@ -86,14 +86,16 @@ function SideMenu(props: IProps) {
   const handleModifyGroup = (groupId: string) => {
     console.log(groupId);
     if (!!modifyGroupName) {
-      // const params = {
-      //   groupId: groupId,
-      //   groupName: modifyGroupName,
-      // };
-      // api.patientManage.modifyGroup(params).then(res => {
-      //   message.success('修改成功');
-      //   getGroupList();
-      // });
+      const params = {
+        namespaceName: modifyGroupName,
+        nsId: groupId,
+        orgNSId: currentOrgInfo.nsId,
+        sid: window.$storage.getItem('sid'),
+      };
+      api.education.modifyGroup(params).then(() => {
+        message.success('修改成功');
+        getGroupList();
+      });
     } else {
       message.error('组名不能为空');
     }
@@ -133,19 +135,19 @@ function SideMenu(props: IProps) {
         {
           groupList?.map((item, index) => {
             return (
-              <div className={['item', currentGroupId === item.groupId ? 'active' : ''].join(' ')} key={item.groupName}>
-                <Link to={`/publicize/patients/groups?groupId=${item.groupId}`} onClick={() => resetIndex(index)}>
+              <div className={['item', currentGroupId === item.id ? 'active' : ''].join(' ')} key={item.id}>
+                <Link to={`/publicize/patients/groups?groupId=${item.id}`} onClick={() => resetIndex(index)}>
                   {activeIndex === index ?
                     <Input
                       onDrop={(e) => { e.preventDefault(); }}
-                      defaultValue={item.groupName}
+                      defaultValue={item.name}
                       onFocus={(e) => { setModifyGroupName(e.target.value); }}
                       onChange={(e) => { setModifyGroupName(e.target.value); }}
-                      onBlur={() => handleModifyGroup(item.groupId)}
-                      onPressEnter={() => handleModifyGroup(item.groupId)}
+                      onBlur={() => handleModifyGroup(item.id)}
+                      onPressEnter={() => handleModifyGroup(item.id)}
                       ref={modifyInputRef}
                     />
-                    : <span className="name">{item.groupName}</span>}
+                    : <span className="name">{item.name}</span>}
                   {activeIndex !== index && <FormOutlined onClick={(e) => setEditIndex(e, index)} />}
                 </Link>
               </div>
