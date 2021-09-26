@@ -301,12 +301,13 @@ export var projectStatus = {
     1000: '待确认',
     1001: '已拒绝',
     1002: '进行中',
-    1003: '已结束'
+    1003: '已结束',
 };
 export var projectInviteStatus = {
     1000: '待确认',
     1001: '已拒绝',
-    1002: '已加入'
+    1002: '已加入',
+    0: '未邀请',
 };
 export var croLists = (_a = {},
     _a[croStatus.Running] = '进行中',
@@ -389,4 +390,5 @@ export var statusLists = (_b = {},
     // [UserStatus.InitState]: '未完成注册',
     _b[UserStatus.InitState] = '待审核',
     _b[UserStatus.Refused] = '审核失败',
+    _b[UserStatus.ToBeActivated] = '待激活',
     _b);

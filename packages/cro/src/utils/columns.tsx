@@ -52,7 +52,7 @@ export const status = {
   title: '状态',
   dataIndex: 'status',
   key: 'status',
-  render: (text:string) => <span>{statusObj[text]}</span>,
+  render: (text: string) => <span>{statusObj[text]}</span>,
 };
 
 export const patientName = {
@@ -65,7 +65,7 @@ export const patientStatus = {
   title: '患者状态',
   dataIndex: 'status',
   key: 'status',
-  render: (record: any) => (
+  render: (_text: any, record: any) => (
     <div>
       {statusObj[`${record.status}`]}
     </div>
@@ -76,7 +76,7 @@ export const patientGroup = {
   title: '所在分组',
   dataIndex: 'groups',
   key: 'groups',
-  render: ( record: any) => (
+  render: (_text: any, record: any) => (
     <div>
       {record.groups.map((item: string, index: number) => `${item} ${index !== record.groups.length - 1 ? '、' : ''}`)}
     </div>
@@ -87,7 +87,7 @@ export const inGroupAt = {
   title: '入组时间',
   dataIndex: 'interval',
   key: 'interval',
-  render: (text: any) => (
+  render: (text: any, _record: any) => (
     <div>
       {text?.start ? moment(text.start).format('YYYY.MM.DD') : '--'}
     </div>
@@ -105,11 +105,11 @@ export const outGroupAt = {
   ),
 };
 
-export const stopReason =  {
+export const stopReason = {
   title: '退出原因',
   dataIndex: 'etcNotes',
   key: 'etcNotes',
-  render: (text: any) => (
+  render: (text: any, _record: any) => (
     <div>
       {text ? exitReason[text?.exitReason] : '--'}
     </div>
@@ -120,7 +120,7 @@ export const testStatus = {
   title: '试验状态',
   dataIndex: 'status',
   key: 'status',
-  render: (record: any) => (
+  render: (_text: any, record: any) => (
     <div>
       {/* {record.status === 'RUN' ? '进行中' : '结束'} */}
       {statusObj[`${record.status}`]}
@@ -133,19 +133,26 @@ export const firstProfessionCompany = {
   dataIndex: 'firstProfessionCompany',
   key: 'firstProfessionCompany',
 };
-
 export const title = {
   title: '职称',
   dataIndex: 'title',
   key: 'title',
 };
-
 export const department = {
   title: '科室',
   dataIndex: 'firstPracticeDepartment',
   key: 'firstPracticeDepartment',
 };
-
+export const orgName = {
+  title: '互联网医院',
+  dataIndex: 'orgName',
+  key: 'orgName',
+};
+export const inviteStatus = {
+  title: '状态',
+  dataIndex: 'status',
+  key: 'status',
+};
 export const role = {
   title: '角色',
   dataIndex: 'role',
@@ -153,7 +160,6 @@ export const role = {
   render: (text: string) => fetchRolePropValue(text, 'desc'),
   // sorter: true,
 };
-
 export const researcherRole = {
   title: '角色',
   dataIndex: 'roleId',
@@ -170,55 +176,47 @@ export const researcherRole = {
     }
   },
 };
-
 export const tel = {
   title: '手机号',
   dataIndex: 'tel',
   key: 'tel',
 };
-
 export const patientCount = {
   title: '受试者人数',
   dataIndex: 'patientCount',
   key: 'patientCount',
 };
-
 export const memberStatus = {
   title: '状态',
   dataIndex: 'status',
   key: 'status',
 };
-
 export const groupName = {
   title: '分组',
   dataIndex: 'groupName',
   key: 'groupName',
 };
-
 export const researchProjectDoctor = {
   title: '研究者',
   dataIndex: 'researchProjectDoctor',
   key: 'researchProjectDoctor',
 };
-
 export const ethnicity = {
   title: '民族',
   dataIndex: 'ethnicity',
   key: 'ethnicity',
   render: (text: string) => text || '--',
 };
-
 // 全部患者列表-未邀请
-export const noSendPatientColumns  = () => [
+export const noSendPatientColumns = () => [
   name,
   age,
   address,
   sex,
   ethnicity,
 ];
-
 // 全部患者列表-已邀请
-export const addedPatientColumns  = () => [
+export const addedPatientColumns = () => [
   name,
   age,
   address,
@@ -226,7 +224,6 @@ export const addedPatientColumns  = () => [
   sex,
   ethnicity,
 ];
-
 // 全部受试者列表
 export const patientCroColumns = (params: Store) => [
   name,
@@ -236,7 +233,7 @@ export const patientCroColumns = (params: Store) => [
   {
     title: '操作',
     dataIndex: '',
-    render: (record: any) => (
+    render: (_text: any, record: any) => (
       <div className="table-operating">
         {
           record.status === 1002 ? (
@@ -261,14 +258,13 @@ export const patientCroColumns = (params: Store) => [
   {
     title: '受试者签名',
     dataIndex: '',
-    render: (record: any) => (
+    render: (_text: any, record: any) => (
       <div>
-        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)}/> : '--'}
+        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)} /> : '--'}
       </div>
     ),
   },
 ];
-
 export const patientCroStopColumns = () => [
   name,
   patientGroup,
@@ -326,7 +322,7 @@ export const eventType = {
   dataIndex: 'eventType',
   render: (text: string[]) => <span>
     {
-      text.map((item, index)=> (
+      text.map((item, index) => (
         <span>{eventList[+item]}{`${index === text.length - 1 ? '' : '、'}`}</span>
       ))
     }
@@ -335,7 +331,7 @@ export const eventType = {
 
 const eventClass = (key: string) => {
   let className = '';
-  if (key.indexOf('first_') > -1){
+  if (key.indexOf('first_') > -1) {
     className = 'event_label MAIN';
   }
   if (key.indexOf('second_') > -1) {
@@ -357,16 +353,16 @@ export const content = {
 
     return (
       <span>
-    {
-      text.map((item)=> (
-        Object.keys(item.detail).map((det)=> {
-          return (
-            <span className={eventClass(det)}>{item.detail[det]}</span>
-          );
-        })
-      ))
-    }
-  </span>
+        {
+          text.map((item) => (
+            Object.keys(item.detail).map((det) => {
+              return (
+                <span className={eventClass(det)}>{item.detail[det]}</span>
+              );
+            })
+          ))
+        }
+      </span>
     );
   },
 };

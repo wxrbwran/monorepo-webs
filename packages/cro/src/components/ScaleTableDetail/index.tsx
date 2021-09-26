@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { message } from 'antd';
-
-import { useSelector, useLocation } from 'umi';
-import { IVal } from '@/utils/consts';
-import { typeList, IGroup, sexList, IQuestions } from '@/utils/consts';
+import { useLocation } from 'umi';
+import { IQuestions } from '@/utils/consts';
 import * as api from '@/services/api';
 import ScaleTableDetailEcho from '@/components/ScaleTableDetailEcho';
 import ScalePlanDetailEcho from '@/components/ScalePlanDetailEcho';
@@ -15,7 +12,7 @@ interface IProps {
 interface ILocation {
   query: {
     id: string;
-  }
+  };
 }
 function ScaleTableDetail({ scaleType }: IProps) {
   const location: ILocation = useLocation();
@@ -25,18 +22,20 @@ function ScaleTableDetail({ scaleType }: IProps) {
 
   const [scaleId, setScaleId] = useState('');
   const [fromName, setFromName] = useState('');
+  const [subTit, setSubTit] = useState('');
   const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScale';
   useEffect(() => {
     const id = location.query.id;
     if (groupId !== id) {
       setGroupId(id);
-      if(!!id){
+      if (!!id) {
         api.subjective[apiName](id).then((res) => {
           setQuestions(res.questions);
           setPlans(res.plans);
           setScaleId(res.scaleId);
-          setFromName(res.name)
-        })
+          setFromName(res.name);
+          setSubTit(res.subtitle);
+        });
       }
     }
   }, [location.query.id]);
@@ -44,13 +43,24 @@ function ScaleTableDetail({ scaleType }: IProps) {
   return (
     <div className="follow-table-detail">
       <div className="left">
-        <ScaleTableDetailEcho scaleType={scaleType} scaleName={fromName} questions={questions} />
+        <ScaleTableDetailEcho
+          scaleType={scaleType}
+          scaleName={fromName}
+          questions={questions}
+          groupId={location.query.id}
+          subTit={subTit}
+          scaleId={scaleId}
+        />
       </div>
       <div className="right table-plan">
-        <ScalePlanDetailEcho scaleType={scaleType} scaleId={scaleId} initPlans={plans} />
+        <ScalePlanDetailEcho
+          scaleType={scaleType}
+          scaleId={scaleId}
+          initPlans={plans}
+        />
       </div>
     </div>
-  )
+  );
 }
 
 export default ScaleTableDetail;

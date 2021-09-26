@@ -109,7 +109,7 @@ export const sex = {
   title: '性别',
   dataIndex: 'sex',
   key: 'sex',
-  width: 50,
+  width: 100,
   render: (text: SexType) => <span>{sexList[+text]}</span>,
 };
 
@@ -250,6 +250,11 @@ export const department = {
   render: depRender,
 };
 
+export const departmentName = {
+  title: '执业科室',
+  dataIndex: 'departmentName',
+};
+
 export const adminDepartment = {
   title: '管理科室',
   dataIndex: 'adminDepartment',
@@ -275,7 +280,7 @@ export const organizationNameOut = (params: any) => ({
   dataIndex: 'orgName',
   align: 'center',
   mock: '@region',
-  render: (text:string, record: any) =>
+  render: (text: string, record: any) =>
     params.level === '下级机构' ? (
       <a
         className="header__link__clinical"
@@ -353,7 +358,7 @@ export const noReplyNumber = {
 //   dataIndex: 'operate',
 //   // width: 200,
 //   className: 'action',
-//   render: (_text) => (
+//   render: (_text, _record) => (
 //     <div className="column_btn">
 //       <Button type="ghost" icon={<EditOutlined />}>
 //         编辑

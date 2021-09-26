@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import styles from './index.scss'
+import styles from './index.scss';
 import type { IQuestions } from '../../const';
 import ScaleDetail from '../scale_detail';
 
@@ -11,9 +11,11 @@ interface IProps {
   question: IQuestions[];
   source?: number;
   id: string;
+  isShowEdit?: boolean;
 }
 
-function QuestionDetail({ children, title, subTitle, question, source, id }: IProps) {
+function QuestionDetail(props: IProps) {
+  const { children, title, subTitle, question, source, id, isShowEdit } = props;
   const [isShowModal, setIsShowModal] = useState(false);
   return (
     <>
@@ -35,12 +37,13 @@ function QuestionDetail({ children, title, subTitle, question, source, id }: IPr
               question={question}
               source={source}
               id={id}
+              isShowEdit={isShowEdit}
             />
           </DragModal>
         )
       }
     </>
-  )
+  );
 }
 
 export default QuestionDetail;
