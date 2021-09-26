@@ -31,7 +31,7 @@ interface IApiData {
 }
 
 interface IProps {
-  handleCallbackFns: (params: ICallbackFn) => void; // 图片审核大病历使用
+  handleDocumentsCallbackFns: (params: ICallbackFn) => void; // 图片审核大病历使用
   formKey: string; // 唯一性，【单据id+来源】
   level1Type: string; // 一级分类: 当前指标是化验单还是检查单类型，添加自定义指标时需要此参数
   firstIndex: string;
@@ -43,11 +43,12 @@ interface IProps {
     noCommonItems:IIndexItem[]
   } | null;
   selectIndex?: any;
+  isViewOnly: boolean;
 }
 
 const CustomIndex: FC<IProps> = (props) => {
   const {
-    handleCallbackFns, formKey, initList, level1Type, firstIndex, apiParams, selectIndex,
+    handleDocumentsCallbackFns, formKey, initList, level1Type, firstIndex, apiParams, selectIndex, isViewOnly,
   } = props;
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue, getFieldsValue } = form;
@@ -57,6 +58,7 @@ const CustomIndex: FC<IProps> = (props) => {
   };
   const [apiData, setApiData] = useState<IApiData>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
+  const [formInit, setFormInit] = useState({});
   // 把点击的指标移到第一行
   const formatFirshIndex = (commonItems: IIndexItemCustom[], noCommonItems:IIndexItemCustom[]) => {
     commonItems.forEach((item: IIndexItemCustom, index: number) => {
@@ -89,7 +91,7 @@ const CustomIndex: FC<IProps> = (props) => {
           sourceSid: window.$storage.getItem('sid'),
         };
         api.indexLibrary.fetchIndexDocumentIndex(params).then(
-          ({ list }: {list: IIndexItemCustom[]}) => {
+          ({ list }: { list: IIndexItemCustom[] }) => {
             const commonItems = list.filter((item) => item.common);
             const noCommonItems = list.filter((item) => !item.common);
             // 如果有指定首行展示哪个指标，这里移动到第一个
@@ -139,6 +141,7 @@ const CustomIndex: FC<IProps> = (props) => {
         sampleFroms: [sampleFrom],
         indexList: formatSubmitItems(values, itemsLength),
       };
+      console.log('params22221', params);
       resolve(params);
     }).catch((err) => {
       reject(err);
@@ -167,6 +170,7 @@ const CustomIndex: FC<IProps> = (props) => {
         [`${formIndex}_source`]: source,
       };
     });
+    setFormInit(initForm);
     setFieldsValue({
       ...initForm,
     });
@@ -175,16 +179,16 @@ const CustomIndex: FC<IProps> = (props) => {
     handleInitForm(); // 初始化表单
   }, [apiData]);
   useEffect(() => {
-    if (handleCallbackFns) {
-      handleCallbackFns({
+    if (handleDocumentsCallbackFns) {
+      handleDocumentsCallbackFns({
         action: 'add',
         type: apiParams.sampleFrom + apiParams.documentName,
         fn: handleSave,
       });
     }
     return () => {
-      if (handleCallbackFns) {
-        handleCallbackFns({
+      if (handleDocumentsCallbackFns) {
+        handleDocumentsCallbackFns({
           action: 'remove',
           type: apiParams.sampleFrom + apiParams.documentName,
         });
@@ -222,10 +226,10 @@ const CustomIndex: FC<IProps> = (props) => {
     }
   }, [selectIndex]);
   const renderItem = useMemo(() => (subName?: string) => {
-    const param: {apiData: any, subName?: string} = { apiData };
+    const param: any = { apiData, isViewOnly, getFieldsValue, formInit };
     if (subName) { param.subName = subName; }
     return <IndexTable {...param} />;
-  }, [apiData]);
+  }, [apiData, formInit, isViewOnly]);
 
   return (
     <div className={`${styles.biochemistry} relative`}>
