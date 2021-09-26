@@ -1,15 +1,16 @@
 export interface IImgStructuredApiData {
   degree: string;
+  list: IApiDocumentList[];
+  url: string;
+  imageId: string; // 自己添加上的属性
+}
+export interface IApiDocumentList {
   documentList: IApiDocumentItem[],
   outType: string;
   orgId?: string;
   orgName?: string;
-  reportTime?: number;
-  unknownReport: boolean;
-  url: string;
-  imageId: string; // 自己添加上的属性
+  unknownReport?: boolean;
 }
-
 // 后端接口返回的图片单据列表item
 export interface IApiDocumentItem {
   documentId: string; // 单据id
@@ -43,10 +44,14 @@ export interface IIndexItem extends IApiIndexItem {
 }
 
 export interface IStructuredDetailProps {
-  data: IImgStructuredApiData,
   imageId: string;
   handleRefresh?: () => void;
   handleClose: () => void;
+  hydData: IApiDocumentList[];
+  jcdData: ITopicItemApi[];
+  templatePart: ITopicTemplateItemApi[];
+  tempAll: ITopicTemplateItemApi[];
+  openTime: number;
 }
 
 // 搜索指标或者单据名称时，返回的item
@@ -59,4 +64,63 @@ export interface ISearchDocumentItem {
   documentId: string; // 单据id
   sourceSid: string;
   source: string;
+}
+
+export interface Ioptions {
+  content: string;
+  checked?: boolean;
+}
+export interface IQuestions {
+  question_type?: string; // RADIO  CHECKED...
+  isAdd?: boolean; // 是否新添加
+  question: string;
+  answer: string[];
+  options?: string[];
+}
+// export interface IQuestions {
+//   type: string;
+//   code?: number;
+//   isAdd: boolean;
+//   detail: {
+//     checkedArr?: string[] | string; // 多选题，h5填写完返回的是string[]。单选题，h5返回的是string
+//     stem: string | string[];
+//     options?: Ioptions[];
+//     answer?: string | string[];
+//   }
+// }
+export interface ITopicTemplateItemApi {
+  createdTime: number;
+  question: string;
+  answer?: string[];
+  question_type: string;
+  options?: string[];
+  sid: string;
+  group: string;
+  uuid?: string;
+  isAdd?: string;
+}
+export interface ITopicItemApi {
+  data: ITopicQaItemApi[],
+  meta: IMeta;
+}
+
+export interface ITopicQaItemApi {
+  answer: any[],
+  group: string;
+  question: string;
+  question_type: string;
+  createTime?: number;
+  sid?: string;
+  options: string[];
+
+  // 自已加的标识
+  isAdd?: boolean;
+}
+
+export interface IMeta {
+  id?: string;
+  createdTime: number;
+  title: string;
+  sid: string;
+  imageId: string;
 }

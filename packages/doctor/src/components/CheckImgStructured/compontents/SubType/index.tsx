@@ -5,7 +5,7 @@ import * as api from '@/services/api';
 // 子分类： 选择样品来源，检查部分
 const { Option } = Select;
 interface IProps {
-  leve1Type: string; // 'HYD' | 'JCD'
+  leve1Type: string;
   initSampleFrom: string[];
   handleChangeSubType: (params: string[]) => void;
 }
@@ -27,7 +27,7 @@ const SubType: FC<IProps> = (props) => {
   return (
     <div className="flex justify-start items-center">
       <span className="font-bold mr-5 text-sm">
-        {leve1Type === 'HYD' ? '选择样品来源: ' : '选择检查部位: '}
+        选择样品来源:
       </span>
       <Select
         mode="multiple"

@@ -231,7 +231,7 @@ type TPrice = {
 };
 
 interface ICallbackFn {
-  action: string;
+  action?: string;
   type: string;
   fn?: () => void;
 }

@@ -1,6 +1,24 @@
 .structrued {
   height: 90vh;
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  &.disabled {
+    :global {
+      .ant-tabs-content-holder {
+        position: relative;
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 99;
+        }
+      }
+    }
+  }
   .save_btn {
     position: absolute;
     right: 40px;
@@ -39,90 +57,68 @@
       }
     }
   }
+}
+.structured_content {
+  flex: 1;
   :global {
     .ant-checkbox-wrapper {
       font-size: 15px;
     }
-    #structured_content {
-      // max-width: 750px;
-      .ant-tabs-card {
-        .ant-tabs-nav-list {
-          // width: 100%;
+    .ant-tabs {
+      width: 100%;
+      height: 100%;
+    }
+    .ant-tabs-card {
+      .ant-tabs-tab {
+        // flex: 0 0 50%;
+        margin: 0;
+        padding: 5px 22px;
+        font-size: 14px;
+        background-color: #fff;
+        border: none;
+        border-bottom: 1px solid #d8d8d8;
+        border-top: 3px solid transparent;
+        &.ant-tabs-tab-active {
+          border-color: #007ADA #d8d8d8 #fff;
+          border-style: solid;
+          border-width: 3px 1px 1px;
         }
-        .ant-tabs-tab {
-          flex: 0 0 50%;
-          margin: 0;
-          padding: 5px 22px;
-          font-size: 14px;
-          background-color: #fff;
+        .ant-tabs-tab-btn {
+          margin: 0 auto;
+        }
+      }
+      .ant-tabs-nav {
+        margin-bottom: 0;
+        .ant-tabs-nav-add {
+          position: relative;
+          width: 90px;
+          background: #fff;
           border: none;
-          border-bottom: 1px solid #d8d8d8;
-          border-top: 3px solid transparent;
-          &.ant-tabs-tab-active {
-            border-color: #007ADA #d8d8d8 #fff;
-            border-style: solid;
-            border-width: 3px 1px 1px;
+          font-size: 14px;
+          margin-left: 10px;
+          height: 36px;
+          line-height: 36px;
+          span svg {
+            display: none;
           }
-          .ant-tabs-tab-btn {
-            margin: 0 auto;
-          }
-        }
-        .ant-tabs-nav {
-          margin-bottom: 0;
-        }
-        .ant-tabs-content-holder {
-          border: 1px solid #d8d8d8;
-          border-top: none;
-          padding: 20px;
-        }
-        &.ant-tabs-editable-card {
-          .ant-tabs-content-holder {
-            border: none;
-            padding: 0px;
-            padding-top: 20px;
-          }
-          .ant-tabs-nav {
-            border-bottom: 1px solid #d8d8d8;
-          }
-          .anticon-close {
-            font-size: 12px;
-          }
-          .ant-tabs-tab {
-            flex: 0 0 auto;
-            margin: 0;
-            padding: 5px 22px;
-            font-size: 14px;
-            background-color: #fff;
-            border: none;
-            border-bottom: 3px solid transparent;
-            &.ant-tabs-tab-active {
-              // border-bottom: 3px solid #007ADA;
-              position: relative;
-              &::before {
-                content: "";
-                position: absolute;
-                left: 25%;
-                width: 50%;
-                height: 3px;
-                background-color: #007ADA;
-                bottom: -3px;
-              }
-            }
+          &::before {
+            content: '+ 添加新单据';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #007ADA;
           }
         }
       }
-      .sub_tab {
-        .ant-tabs-tab {
-          &.ant-tabs-tab-active {
-            border: none;
-            border-bottom: 3px solid #007ADA;
-          }
-        }
-        .ant-tabs-content-holder {
-          border:none;
-        }
+      .ant-tabs-content-holder {
+        // height: calc(100vh - 196px);
+        overflow-y: auto;
+      }
+      .ant-tabs-content-holder {
+        border: 1px solid #d8d8d8;
+        border-top: none;
+        padding: 20px;
       }
     }
   }
-
 }

@@ -106,7 +106,8 @@ export interface IImageItem {
   name: string;
   status: number; // 0是红色  1是绿色  2是灰色
   type: number;
-  typeNew: string;
+  typeNew?: string;
+  imageIdList?: string[]; // 检查单有此字段
 }
 export interface ImageModelState {
   images: IImageItem[];

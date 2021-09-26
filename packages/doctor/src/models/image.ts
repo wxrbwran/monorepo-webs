@@ -46,7 +46,7 @@ const Model: ImageModelType = {
       const otherImg: IImageItem[] = [];
       payload.images.forEach((item: IImageItem) => {
         // category: 0 化验单，1检查单，2其他图片
-        if (item.category === 1) {
+        if (item.category === 1 || item?.type === 1) {
           insImg.push(item);
         } else if (item.category === 0) {
           anaImg.push(item);
