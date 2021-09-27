@@ -215,7 +215,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       <div className="flex justify-between items-center mb-25">
         <div className="flex items-center">
           {
-            Object.keys(outTypes).map(outType =>
+            !isViewOnly && Object.keys(outTypes).map(outType =>
               <Button key={outType} className="mr-15" onClick={() => handleAddLevel1(outType)}>{outTypes[outType]}</Button>,
             )
           }
