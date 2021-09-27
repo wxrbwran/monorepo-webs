@@ -32,6 +32,7 @@ interface IParams {
 }
 function SuifangCreate({ location, scaleType }: IProps) {
   const initSf = useSelector((state: IState) => state.suifang);
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
   const initQuestion = () => {
     if (initSf.question) {
       return initSf.question.map((item) => {
@@ -170,8 +171,10 @@ function SuifangCreate({ location, scaleType }: IProps) {
       return true;
     }
     const params = {
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
       operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid: currentOrgInfo.sid,
       question: questions,
       title: formTit,
       subTitle: subTit,

@@ -37,7 +37,7 @@ function RichText({ handleChange, value }: IProps) {
     handleChange(editor.getHTML(), editor.getText());
   };
   const uploadFile = (file: any) => new Promise((resolve, reject) => {
-    api.file
+    api.education
       .filePrepare({ businessType: 2 })
       .then((res) => {
         const {

@@ -84,7 +84,7 @@ const UploadImageWithCrop: FC<IProps> = (props) => {
           // filename,
           businessType: 0,
         };
-        const data = await window.$api.file.filePrepare(params);
+        const data = await window.$api.education.filePrepare(params);
         console.log(4443432222222, blob);
         const { accessId, encodePolicy, host, key, signature } = data;
         try {

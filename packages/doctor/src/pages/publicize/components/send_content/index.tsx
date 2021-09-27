@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Checkbox, Row, Col, Radio } from 'antd';
-import { history, useDispatch } from 'umi';
+import { history, useDispatch, useSelector } from 'umi';
 import type { IList } from '../../const';
 import ListItem from '../ListItem';
 import * as api from '@/services/api';
@@ -20,12 +20,17 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
   const isScale = location.pathname.includes('scale');
   const [pubList, setPubList] = useState<IList[]>([]);
   const [scaleList, setScaleList] = useState<IList[]>([]);
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
 
   // 查询视频、文件列表
   const getPublicizeList = () => {
     api.education.getPublicizeList({
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
       types: ['DOCUMENT', 'VIDEO', 'ARTICLE', 'AUDIO', 'PICTURE'],
+      operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid: currentOrgInfo.sid,
+      roleType: window.$storage.getItem('roleId'),
     }).then((res) => {
       setPubList(res.list);
       dispatch({
@@ -40,7 +45,10 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
   // 查询随访表列表
   const getPublicizeScaleList = () => {
     api.education.getPublicizeScale({
-      fromSid: window.$storage.getItem('orgSid'),
+      operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid: currentOrgInfo.sid,
+      roleType: window.$storage.getItem('roleId'),
     }).then((res) => {
       setScaleList(res.list);
       dispatch({
@@ -49,7 +57,7 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
       });
     })
       .catch((err: string) => {
-        console.log('err', err);
+        message.error(err?.result);
       });
   };
 

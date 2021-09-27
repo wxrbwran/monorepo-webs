@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { history, useDispatch } from 'umi';
+import { history, useDispatch, useSelector } from 'umi';
 import * as api from '@/services/api';
 import { Popconfirm, message } from 'antd';
 import styles from './index.scss';
@@ -18,11 +18,17 @@ interface IList {
 function ArticleList() {
   const dispatch = useDispatch();
   const [sourceList, setSourceList] = useState<IList[]>([]);
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+
   const getPublicizeList = () => {
     api.education
       .getPublicizeList({
-        fromSid: window.$storage.getItem('orgSid'),
+        // fromSid: window.$storage.getItem('orgSid'),
         types: ['ARTICLE'],
+        operatorSid: window.$storage.getItem('sid'),
+        operatorWcId: window.$storage.getItem('wcId'),
+        ownershipSid: currentOrgInfo.sid,
+        roleType: window.$storage.getItem('roleId'),
       })
       .then((res) => {
         setSourceList(res.list);

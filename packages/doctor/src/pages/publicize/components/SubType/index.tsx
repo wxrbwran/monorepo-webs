@@ -3,7 +3,7 @@ import * as api from '@/services/api';
 import { Upload, message } from 'antd';
 import { UploadOutlined, FormOutlined } from '@ant-design/icons';
 import request from 'umi-request';
-import { history } from 'umi';
+import { history, useSelector } from 'umi';
 import { AcceptType, businessType } from '../../const';
 import styles from './index.scss';
 
@@ -14,9 +14,11 @@ interface IProps {
 }
 
 function SubType({ name, icon, type }: IProps) {
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+
   const addPublicize = (params: {
     content: { address: string; cover: null; filename: any; text: null };
-    fromSid: string;
+    // fromSid: string;
     type: string;
   }) => {
     api.education
@@ -36,11 +38,14 @@ function SubType({ name, icon, type }: IProps) {
       content: {
         address: rawUrl,
         cover: null,
-        filename: file.name,
+        filename: file,
         text: null,
       },
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
       type: type.toUpperCase(),
+      operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid: currentOrgInfo.sid,
     };
     if (type === 'document') {
       params.content.size = file.size;
@@ -58,10 +63,11 @@ function SubType({ name, icon, type }: IProps) {
     }
   };
   const fetchUrlThenUpload = async (file: { name: string; type: string }) => {
+    console.log('file111', file);
     message.info({
       content: '正在上传',
     });
-    api.file
+    api.education
       .filePrepare({ businessType: businessType[type] })
       .then((res) => {
         console.log(432, res);

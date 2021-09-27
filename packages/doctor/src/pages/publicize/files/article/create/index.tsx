@@ -13,6 +13,7 @@ const { TextArea } = Input;
 function ArticleCreate() {
   const dispatch = useDispatch();
   const richText = useSelector((state: IState) => state.education.richText);
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
   // const [rickText, setRichText] = useState('');
   // const [title, setTitle] = useState('');
 
@@ -66,8 +67,11 @@ function ArticleCreate() {
     if (richText?.id) {
       params.id = richText.id;
     } else {
-      params.fromSid = window.$storage.getItem('orgSid');
+      // params.fromSid = window.$storage.getItem('orgSid');
       params.type = 'ARTICLE';
+      params.operatorSid = window.$storage.getItem('sid');
+      params.operatorWcId = window.$storage.getItem('wcId');
+      params.ownershipSid = currentOrgInfo.sid;
     }
     const education = richText?.id ? patchPublicize(params) : addPublicize(params);
     education
@@ -94,7 +98,7 @@ function ArticleCreate() {
       .replace(/class="ql-video"/g, videoCover);
     const aFileParts: string[] = [`${beforeEl}${formatHtmlTxt}${alfterEl}`];
     const oMyBlob = new Blob(aFileParts, { type: 'text/html' });
-    api.file
+    api.education
       .filePrepare({ businessType: 300 })
       .then((res) => {
         const { accessId, encodePolicy, host, key, signature } = res;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, message, Image } from 'antd';
 import { LeftOutlined, PlusOutlined } from '@ant-design/icons';
-import { useParams, history } from 'umi';
+import { useParams, history, useSelector } from 'umi';
 import * as api from '@/services/api';
 import request from 'umi-request';
 import type { IList } from '../../const';
@@ -18,12 +18,16 @@ interface IProps {
 function List({ location }: IProps) {
   const { type } = useParams<{ type: string }>();
   const [sourceList, setSourceList] = useState<IList[]>([]);
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
   // 查询非随访表列表
   const getPublicizeList = () => {
     api.education
       .getPublicizeList({
-        fromSid: window.$storage.getItem('orgSid'),
         types: [type.toUpperCase()],
+        operatorSid: window.$storage.getItem('sid'),
+        operatorWcId: window.$storage.getItem('wcId'),
+        ownershipSid: currentOrgInfo.sid,
+        roleType: window.$storage.getItem('roleId'),
       })
       .then((res) => {
         setSourceList(res.list);
@@ -36,13 +40,16 @@ function List({ location }: IProps) {
   const getPublicizeScaleList = () => {
     api.education
       .getPublicizeScale({
-        fromSid: window.$storage.getItem('orgSid'),
+        operatorSid: window.$storage.getItem('sid'),
+        operatorWcId: window.$storage.getItem('wcId'),
+        ownershipSid: currentOrgInfo.sid,
+        roleType: window.$storage.getItem('roleId'),
       })
       .then((res) => {
         setSourceList(res.list);
       })
       .catch((err: string) => {
-        console.log('err', err);
+        message.error(err?.result);
       });
   };
   const fetchListData = () => {
@@ -78,8 +85,11 @@ function List({ location }: IProps) {
         filename: file.name,
         text: null,
       },
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
       type: type.toUpperCase(),
+      operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid: currentOrgInfo.sid,
     };
     if (['document', 'picture'].includes(type)) {
       params.content.size = file.size;
@@ -101,7 +111,7 @@ function List({ location }: IProps) {
       content: '正在上传',
     });
     console.log('file666', file);
-    api.file
+    api.education
       .filePrepare({ businessType: businessType[type] })
       .then((res) => {
         const { accessId, encodePolicy, host, key, signature } = res;

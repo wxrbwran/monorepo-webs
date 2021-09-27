@@ -36,7 +36,7 @@ function subType({ name, icon, type }: IProps) {
       content: {
         address: rawUrl,
         cover: null,
-        filename: file.name,
+        filename: file,
         text: null,
       },
       fromSid: window.$storage.getItem('orgSid'),
