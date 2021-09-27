@@ -47,7 +47,7 @@ function QueryResult({ location }: IProps) {
       pageSize: pageSize,
     });
 
-    if (results?.tableBody?.length > 0) { // 有数据拼接数据
+    if ((results?.tableBody?.length ?? 0) > 0) { // 有数据拼接数据
 
       dispatch({
         type: 'query/setQueryResult',
@@ -55,7 +55,7 @@ function QueryResult({ location }: IProps) {
       });
     }
 
-    if (results?.tableBody?.length < pageSize) {
+    if ((results?.tableBody?.length ?? 0) < pageSize) {
 
       if (page == 0 && retryTimes.current < 3) {
         // 重试3次
