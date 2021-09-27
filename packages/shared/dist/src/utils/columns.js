@@ -262,16 +262,22 @@ export var noReplyNumber = {
         return a.noReplyNumber - b.noReplyNumber;
     },
 };
-export var patientGroup = {
-    title: '所在分组',
-    dataIndex: 'groups',
-    key: 'groups',
-    render: function (_text, record) { return (React.createElement("div", null, record.groups.join())); },
+export var pname = {
+    title: '姓名',
+    dataIndex: 'pname',
+    width: 100,
+    render: function (text) { return React.createElement("span", null, text); },
 };
-export var bindTime = {
+export var groupName = {
+    title: '所在分组',
+    dataIndex: 'groupName',
+    key: 'groupName',
+    render: function (_text, record) { return (React.createElement("div", null, record.groupName.join())); },
+};
+export var initAt = {
     title: '与医生绑定时间',
-    dataIndex: 'bindTime',
-    key: 'bindTime',
+    dataIndex: 'initAt',
+    key: 'initAt',
     render: function (text, _record) { return (React.createElement("div", null, text ? moment(text).format('YYYY.MM.DD') : '--')); },
 };
 // export const rootOrgColumns = (params) => [

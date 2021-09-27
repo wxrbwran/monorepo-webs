@@ -3,7 +3,7 @@ import { Form } from 'antd';
 import { useSelector } from 'umi';
 import  * as api from '@/services/api';
 import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import { clName, patientGroup, bindTime } from 'xzl-web-shared/src/utils/columns';
+import { pname, groupName, initAt } from 'xzl-web-shared/src/utils/columns';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import SelectGroup from 'xzl-web-shared/src/components/SelectGroup';
 import { Search } from 'xzl-web-shared/src/components/Selects';
@@ -17,7 +17,7 @@ function Patients() {
   const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
   const [tableOptions, setOptions] = useState<CommonData>();
   const groupList = useSelector((state: IState) => state.education.groupList);
-  const columns = [clName, patientGroup, bindTime];
+  const columns = [pname, groupName, initAt];
 
   const handleCallback = (callbackStore: XzlTableCallBackProps) => {
     setSelectPatient(callbackStore.selectedRows);
@@ -27,8 +27,7 @@ function Patients() {
     api.education
       .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
       .then((res) => {
-        console.log('res111', res);
-        setOptions({ actionLogId: res.actionLogId });
+        setOptions({ actionLogId: res.id });
       })
       .catch((err: string) => {
         console.log('err', err);
@@ -36,7 +35,14 @@ function Patients() {
   };
 
   useEffect(() => {
-    changeTableOption('');
+    changeTableOption(window.$storage.getItem('keyWord'));
+  }, [currentOrgInfo]);
+
+  useEffect(() => {
+    window.$storage.setItem('keyWord', '');
+    return () => {
+      window.$storage.setItem('keyWord', '');
+    };
   }, []);
 
   const refreshList = () => {
@@ -50,6 +56,7 @@ function Patients() {
 
   const handleSelectChange = (_changedValues: string[], allValues: { keyword: string }) => {
     changeTableOption(allValues.keyword);
+    window.$storage.setItem('keyWord', allValues.keyword);
     // setOptions({ ...tableOptions, keyword: allValues.keyword });
   };
 
@@ -91,8 +98,7 @@ function Patients() {
       {
         <XzlTable
           columns={[...columns, action]}
-          category="patientList"
-          dataKey="teams"
+          dataKey="lists"
           request={tableOptions ? window.$api.education.getPatientsList : () => {}}
           // request={() => {}}
           depOptions={tableOptions}

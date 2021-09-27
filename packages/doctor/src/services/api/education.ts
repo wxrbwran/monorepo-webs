@@ -26,7 +26,7 @@ export default {
   },
   // 获取列表logId
   getLogId(data: any): Promise<any> {
-    return http.get('contact/patient/rule', { data });
+    return http.post('contact/patient/rule', { data });
   },
   // 获取全部患者列表
   getPatientsList(data: any): Promise<any> {

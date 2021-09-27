@@ -342,21 +342,28 @@ export const noReplyNumber = {
     a.noReplyNumber - b.noReplyNumber,
 };
 
-export const patientGroup = {
+export const pname = {
+  title: '姓名',
+  dataIndex: 'pname',
+  width: 100,
+  render: (text: string) => <span>{text}</span>,
+};
+
+export const groupName = {
   title: '所在分组',
-  dataIndex: 'groups',
-  key: 'groups',
+  dataIndex: 'groupName',
+  key: 'groupName',
   render: (_text: any, record: any) => (
     <div>
-      {record.groups.join()}
+      {record.groupName.join()}
     </div>
   ),
 };
 
-export const bindTime = {
+export const initAt = {
   title: '与医生绑定时间',
-  dataIndex: 'bindTime',
-  key: 'bindTime',
+  dataIndex: 'initAt',
+  key: 'initAt',
   render: (text: any, _record: any) => (
     <div>
       {text ? moment(text).format('YYYY.MM.DD') : '--'}
