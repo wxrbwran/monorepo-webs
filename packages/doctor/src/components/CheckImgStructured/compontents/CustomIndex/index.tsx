@@ -232,8 +232,8 @@ const CustomIndex: FC<IProps> = (props) => {
   }, [apiData, formInit, isViewOnly]);
 
   return (
-    <div className={`${styles.biochemistry} relative structured-edit-wrap`}>
-      <div className="flex justify-end absolute -top-52 -right-10">
+    <div className={`${styles.biochemistry} relative`}>
+      <div className="flex justify-end absolute -top-52 -right-10 ">
         <EditIndex
           onSuccess={addIndexSuccess}
           level1Type={level1Type}
