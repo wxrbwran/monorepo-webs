@@ -49,28 +49,32 @@ function CheckImages() {
     },
   ];
   const renderItem = useMemo(() => (data: IImageItem[], hideDate?: boolean) => (
-    data.map((item:IImageItem) => (
+    data.map((item:IImageItem) => {
+      return (
       // red green
       <div
-        // className={styles[color[item.status]]}
-        onClick={() => handleShowImages(item)}
-        key={item.name}
-        className={(item.name === '待审核图片' && item.count > 0) ? styles.red : ''}
-      >
-        <span className={styles.name}>{item.name}</span>
-        {
-          !hideDate && (
-            <span className={styles.date}>
-              {getDate(item)}
-            </span>
-          )
-        }
-        <span className={styles.count}>
-          {`${item.count}张`}
-          <RightOutlined />
-        </span>
-      </div>
-    ))), [anaImg, insImg, otherImg]);
+      // className={styles[color[item.status]]}
+      onClick={() => handleShowImages(item)}
+      key={item.name}
+      className={(item.name === '待审核图片' && item.count > 0) ? styles.red : ''}
+    >
+      <span className={styles.name}>
+        {item.name}
+      </span>
+      {
+        !hideDate && (
+          <span className={styles.date}>
+            {getDate(item)}
+          </span>
+        )
+      }
+      <span className={styles.count}>
+        {`${item.count}张`}
+        <RightOutlined />
+      </span>
+    </div>
+      );
+    })), [anaImg, insImg, otherImg]);
   return (
     <>
       {
@@ -110,7 +114,7 @@ function CheckImages() {
       >
         <div className={styles.images_wrap}>
           <ImageList
-            typeNew={activeItem?.typeNew as string}
+            data={activeItem as IImageItem}
             handleHideCont={() => setHideCont(!hideCont)}
             refresh={fetchImages}
           />

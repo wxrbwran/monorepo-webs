@@ -15,7 +15,7 @@ const reCalcAllMessageTime = (msglist) => {
   // console.log('tempArr', tempArr);
   tempArr.forEach((msg, index) => {
     if (index === 0) {
-      console.log('msg5555', msglist);
+      // console.log('msg5555', msglist);
       /* eslint-disable no-param-reassign */
       msg.displayTimeHeader = util.calcTimeHeader(msg.time);
     } else {

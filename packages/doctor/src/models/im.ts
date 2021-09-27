@@ -326,7 +326,7 @@ const IMModel: any = {
     TOGGLE_VIEWER(state: IMModelState, action: Store) {
       const images = state.images.map((img) => img.src);
       const src = action.payload.src;
-      console.log('images, src', images, src);
+      // console.log('images, src', images, src);
       const index = images.indexOf(src);
       return { ...state, imageVisible: action.payload.isShow, activeImageIndex: index };
     },

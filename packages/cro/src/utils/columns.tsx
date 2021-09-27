@@ -52,7 +52,7 @@ export const status = {
   title: '状态',
   dataIndex: 'status',
   key: 'status',
-  render: (text:string) => <span>{statusObj[text]}</span>,
+  render: (text: string) => <span>{statusObj[text]}</span>,
 };
 
 export const patientName = {
@@ -105,7 +105,7 @@ export const outGroupAt = {
   ),
 };
 
-export const stopReason =  {
+export const stopReason = {
   title: '退出原因',
   dataIndex: 'etcNotes',
   key: 'etcNotes',
@@ -208,7 +208,7 @@ export const ethnicity = {
   render: (text: string) => text || '--',
 };
 // 全部患者列表-未邀请
-export const noSendPatientColumns  = () => [
+export const noSendPatientColumns = () => [
   name,
   age,
   address,
@@ -216,7 +216,7 @@ export const noSendPatientColumns  = () => [
   ethnicity,
 ];
 // 全部患者列表-已邀请
-export const addedPatientColumns  = () => [
+export const addedPatientColumns = () => [
   name,
   age,
   address,
@@ -260,7 +260,7 @@ export const patientCroColumns = (params: Store) => [
     dataIndex: '',
     render: (_text: any, record: any) => (
       <div>
-        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)}/> : '--'}
+        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)} /> : '--'}
       </div>
     ),
   },
@@ -322,7 +322,7 @@ export const eventType = {
   dataIndex: 'eventType',
   render: (text: string[]) => <span>
     {
-      text.map((item, index)=> (
+      text.map((item, index) => (
         <span>{eventList[+item]}{`${index === text.length - 1 ? '' : '、'}`}</span>
       ))
     }
@@ -331,7 +331,7 @@ export const eventType = {
 
 const eventClass = (key: string) => {
   let className = '';
-  if (key.indexOf('first_') > -1){
+  if (key.indexOf('first_') > -1) {
     className = 'event_label MAIN';
   }
   if (key.indexOf('second_') > -1) {
@@ -349,17 +349,22 @@ const eventClass = (key: string) => {
 export const content = {
   title: '内容',
   dataIndex: 'content',
-  render: (text: Store[]) => <span>
-    {
-      text.map((item)=> (
-        Object.keys(item.detail).map((det)=> {
-          return (
-            <span className={eventClass(det)}>{item.detail[det]}</span>
-          );
-        })
-      ))
-    }
-  </span>,
+  render: (text: Store[]) => {
+
+    return (
+      <span>
+        {
+          text.map((item) => (
+            Object.keys(item.detail).map((det) => {
+              return (
+                <span className={eventClass(det)}>{item.detail[det]}</span>
+              );
+            })
+          ))
+        }
+      </span>
+    );
+  },
 };
 
 export const createdAt = {

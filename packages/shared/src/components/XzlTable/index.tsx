@@ -15,6 +15,7 @@ interface IProps {
   tableOptions?: Store;
   category?: string;
   noPagination?: boolean; // true：此值为true，则去除api参数pageAt、和pageSize
+  extra?: any; // 针对不同类型可能会额外传参数，比如查询终点事件的total数量事由外面传过来的
 }
 
 export interface XzlTableCallBackProps {
@@ -32,7 +33,7 @@ const XzlTable: FC<IProps> = (props) => {
   console.log('this is table shared~111');
   const {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
-    handleCallbackSelectKeys, category, noPagination,
+    handleCallbackSelectKeys, category, noPagination, extra,
   } = props;
   console.log(category, handleCallbackSelectKeys);
   const [size, setSize] = useState(pageSize);
@@ -75,10 +76,20 @@ const XzlTable: FC<IProps> = (props) => {
     console.log('fetchTableDataSource params', params);
     const res = await request(params);
     console.log('fetchTableDataSource res', res);
+
     setCurrent(params.pageAt);
     setSize(params.pageSize);
-    setTotal(res.total);
-    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
+    if (dataKey == 'events_jsonb') {
+      res.tableBody.forEach(element => {
+        element.content = JSON.parse(element.content.value);
+      });
+      setTotal(extra);
+    } else {
+      setTotal(res.total);
+    }
+
+    const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list || res.tableBody, category || res.category);
+    console.log('+=============', handledData);
     handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
     console.log('handledData*****', handledData);
     setDataSource(handledData);

@@ -6,7 +6,7 @@ interface IProps {
     value?: string;
     focus?: boolean;
     width?: number;
-    float?: string;
+    float?: any;
 }
 declare const Search: FC<IProps>;
 export default Search;

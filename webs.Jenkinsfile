@@ -1,3 +1,14 @@
+@Library('jenkins-libs-web@master') _
+
+def gitlab = new com.xzlcorp.gitlab()
+def tool = new com.xzlcorp.tools()
+
+String projectName = "xzl-webs"
+
+if (true) {
+  currentBuild.description = "Trigger by ${env.BUILD_USER}"
+}
+
 pipeline {
 
     agent {
@@ -120,7 +131,16 @@ pipeline {
       }
 
       success {
-        echo "构建成功"
+        // echo "构建成功"
+        script {
+          if (env.BRANCH == "master") {
+            projectId = gitlab.GetProjectID(projectName)
+            tool.PrintMsg("打tag start","blue")
+            String tagString = "v${new Date().format("yy.MMdd.HHmm")}"
+            gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+            tool.PrintMsg("打tag end","blue")
+          }
+        }
       }
 
       failure {

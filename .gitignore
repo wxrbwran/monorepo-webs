@@ -11,6 +11,7 @@ clinical-cro
 pnpm-lock.yaml
 
 package-lock.json
+.DS_Store
 
 # Logs
 *.log
