@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { IMeta, IQuestions, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
+import { IMeta, IQuestions, ITmpList, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import uuid from 'react-uuid';
 
 export const outTypes: CommonData = {
@@ -98,9 +98,9 @@ export const fetchSubmitDataDdtk = (questions: IQues[], startInx: number, clickS
   return backData;
 };
 
-
-// 多段填空，需要把模板格式转成ui需要的多维数组格式(先根据uuid分组，然后组内排序)
+// 多段填空，需要把模板格式转成ui需要的多维数组格式(先根据uuid分组，然后组内排序)   模板--->ui
 export const formatTempDdtk = (tkTmpList: any[]) => {
+  console.log(399939392832);
   const groupDdtk: CommonData = {};
   const ddtk: ITopicTemplateItemApi[][] = [];
   tkTmpList.forEach(item => {
@@ -142,9 +142,8 @@ export const findPosition = (item: ITopicQaItemApi, topicAll: any[], dimension: 
     findPosition(item, topicAll[Number(spArr[dimension])], dimension + 1);
   }
 };
-// 后端api返回的平铺格式转成ui格式
+// 后端api返回的平铺格式转成ui格式   api--->ui
 export const fetchInitData = (initData: { data: any[] }) => {
-  console.log('initData9839', initData);
   const topicAll: any[] = [[], [], [], []]; // 多维数组
   initData?.data?.forEach(item => {
     findPosition(item, topicAll, 0);
@@ -165,7 +164,7 @@ interface IJcdItem {
   meta: IMeta;
 }
 
-// 过滤掉空的
+// 过滤掉空的：模板返回的group并不是依次排列的，例如 3-0-0，3-0-1，下一个可能 就是5-0-0 5-0-1。4的位置就是空的了，过滤掉
 const filterTempData = (data:any) => {
   const temList: any[] = [];
   data.forEach((tempitem: any, inx: number) => {
@@ -184,18 +183,44 @@ const filterTempData = (data:any) => {
   console.log('aa110', temList);
   return temList;
 };
+const filterTypeTemps = (data:any) => {
+  // filterTempData
+  const newData: CommonData = {};
+  Object.keys(data).forEach(typeKey => {
+    newData[typeKey] = filterTempData(data[typeKey]);
+  });
+  return newData;
+};
 interface IIlist {
   data: ITopicTemplateItemApi[];
   meta: IMeta;
 }
-export const formatJcdSubmitData = (jcdTabList: IJcdItem[], tempList: { data: any[] }, clickSaveTime: number) => {
-  const temps: any[] = filterTempData(fetchInitData(tempList));
+interface ITempItem {
+  data: ITopicTemplateItemApi;
+  meta: IMeta;
+}
+// 处理停留时间段产生的模板，根据title(type)分类
+const formatTempGroup = (tempList: ITempItem[]) => {
+  console.log('tempList', tempList);
+  const tempData: ITmpList = {};
+  tempList.forEach((item: ITempItem) => {
+    const type = item.meta.title;
+    if (!tempData[type]) {
+      tempData[type] = [];
+    }
+    tempData[type] = fetchInitData({ data: tempData[type].concat(item.data) });
+  });
+  return tempData;
+};
+// 提交时，ui结构转成大平层格式，返回jcd列表（把当前列表和时间段产生的模板拼接起来）和模板列表   ui--->api
+export const formatJcdSubmitData = (jcdTabList: IJcdItem[], tempList: { list: ITempItem[] }, clickSaveTime: number) => {
+  const temps: CommonData = filterTypeTemps(formatTempGroup(tempList.list));
   const list: IIlist[] = [];
   jcdTabList.forEach((jcdTabItem) => {
     const newJcdTabItem = cloneDeep(jcdTabItem);
     // @ts-ignore     0 basic 1ddtk 2xzt 3wdt
     jcdTabItem.data.forEach((topic, inx) => {
-      const jcdAmdTemp = jcdTabItem.data[inx].data.concat(temps[inx]);
+      const jcdAmdTemp = jcdTabItem.data[inx].data.concat(temps?.[jcdTabItem.meta.title]?.[inx] || []);
       // @ts-ignore
       newJcdTabItem.data[inx] = inx === 1 ? fetchSubmitDataDdtk(jcdAmdTemp, topic.groupInx, clickSaveTime) : fetchSubmitData(jcdAmdTemp, topic.groupInx, clickSaveTime);
     });
@@ -203,10 +228,10 @@ export const formatJcdSubmitData = (jcdTabList: IJcdItem[], tempList: { data: an
     list.push(newJcdTabItem);
   });
   console.log('submitLis11t112', list);
-  const addTemps: any[] = [];
+  const addTypeTemps: CommonData = {};
   // 过滤出新添加的模板-s
   list.forEach(item => {
-    const addTabTemps = item.data.filter(qaItem => qaItem.isAdd).map(qi => {
+    const currTabTemps = item.data.filter(qaItem => qaItem.isAdd).map(qi => {
       const rItem: CommonData = {
         answer: qi.answer?.map(() => '  '),
         question: qi.question,
@@ -218,11 +243,20 @@ export const formatJcdSubmitData = (jcdTabList: IJcdItem[], tempList: { data: an
       if (qi?.uuid) { rItem.uuid = qi.uuid; }
       return rItem;
     });
-    addTemps.push(addTabTemps);
+    const type = item.meta.title;
+    if (currTabTemps) {
+      if (addTypeTemps[type]) {
+        addTypeTemps[type].data = addTypeTemps[type].data.concat(currTabTemps);
+      } else {
+        addTypeTemps[type] = { data: currTabTemps, meta: item.meta };
+      }
+    }
   });
+  console.log('addTypeTemps', addTypeTemps);
   // 过滤出新添加的模板-e
   return {
     jcdList: { list },
-    tempList: addTemps.flat(),
+    tempList: Object.values(addTypeTemps),
+    // tempList: addTypeTemps.flat(),
   };
 };

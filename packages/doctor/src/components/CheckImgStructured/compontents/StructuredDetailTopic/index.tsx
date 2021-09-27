@@ -5,7 +5,7 @@ import TopicProblem from '../TopicProblem';
 import TopicDdtk from '../TopicDdtk';
 import styles from './index.scss';
 import { isEmpty, cloneDeep } from 'lodash';
-import { ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
+import { ITmpList, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import { formatTempDdtk, fetchInitData } from '../utils';
 
 interface IProps {
@@ -21,8 +21,8 @@ interface IProps {
       createdTime: number;
     }
   };
-  templatePart: ITopicTemplateItemApi[];
-  tempAll: ITopicTemplateItemApi[];
+  templatePart: ITmpList;
+  tempAll: ITmpList;
   isViewOnly: boolean;
   // templateData: ITopicTemplateItemApi[];
 }
@@ -37,13 +37,13 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
   // 模板-s
   const formatTemplate = () => {
     // 如果初始数据为空，表示第一次打开，模板使用全部。否则模板使用上次添加后添加的模板
-    const concatTemp = isEmpty(initData) ? tempAll : templatePart;
+    const concatTemp = isEmpty(initData) ? (tempAll[outType] || []) : (templatePart?.[outType] || []);
     const topicArr: any[][] = initTmp;
     concatTemp.forEach(item => {
       console.log('29329832', item);
       const qa = {
         question: item.question,
-        answer: [],
+        answer: item.answer,
         question_type: item.question_type,
       };
       switch (item.question_type) {
@@ -121,7 +121,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     return (initTopic?.[inx] || []).concat((templateTopic?.[inx] || []));
   };
   return (
-    <div className={styles.topic_list}>
+    <div className={`${styles.topic_list} structured-edit-wrap`}>
       <TopicBaseInfo outType={outType} initData={[...initTopic?.[0] || []]} {...subProps} />
       <TopicDdtk initData={dataAndTemp(1)} {...subProps} />
       <TopicChoice initData={dataAndTemp(2)} {...subProps} />
