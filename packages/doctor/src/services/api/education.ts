@@ -24,6 +24,14 @@ export default {
   postGroupPatient(data: any): Promise<any> {
     return http.post('doctor/contact/patient', { data });
   },
+  // 获取列表logId
+  getLogId(data: any): Promise<any> {
+    return http.get('contact/patient/rule', { data });
+  },
+  // 获取全部患者列表
+  getPatientsList(data: any): Promise<any> {
+    return http.get(`contact/patient/${data.actionLogId}`);
+  },
   // 新增视频-文件-文章-图片
   addPublicize(data: any): Promise<any> {
     return http.post('publicize', { data });
