@@ -1,5 +1,5 @@
 var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
+    __assign = Object.assign || function (t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
@@ -19,8 +19,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -113,8 +113,17 @@ var XzlTable = function (props) {
                         console.log('fetchTableDataSource res', res);
                         setCurrent(params.pageAt);
                         setSize(params.pageSize);
-                        setTotal(res.total);
-                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, category || res.category);
+                        if (dataKey == 'events_jsonb') {
+                            res.tableBody.forEach(function (element) {
+                                element.content = JSON.parse(element.content.value);
+                            });
+                            setTotal(extra);
+                        }
+                        else {
+                            setTotal(res.total);
+                        }
+                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list || res.tableBody, category || res.category);
+                        console.log('+=============', handledData);
                         handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
                         console.log('handledData*****', handledData);
                         setDataSource(handledData);
@@ -142,7 +151,8 @@ var XzlTable = function (props) {
         // fetchTableDataSource(params);
     };
     /* eslint-disable react/jsx-props-no-spreading */
-    return (React.createElement(Table, __assign({ loading: loading, rowKey: function (record) { return handleTableRowKey(dataKey, record); }, rowSelection: rowSelection, columns: columns, dataSource: dataSource, pagination: {
+    return (React.createElement(Table, __assign({
+        loading: loading, rowKey: function (record) { return handleTableRowKey(dataKey, record); }, rowSelection: rowSelection, columns: columns, dataSource: dataSource, pagination: {
             pageSize: size,
             showQuickJumper: true,
             current: current,
@@ -150,7 +160,8 @@ var XzlTable = function (props) {
             onChange: handlePagerChange,
             showSizeChanger: false,
             hideOnSinglePage: true,
-        } }, tableOptions)));
+        }
+    }, tableOptions)));
 };
 XzlTable.defaultProps = {
     depOptions: {},

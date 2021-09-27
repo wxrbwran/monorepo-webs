@@ -13,37 +13,38 @@ interface IField {
   description: string;
   items: any[];
   name: string;
+  assign: any;
 }
 
 function FieldCard({ currentCardFields, onValueChange, closeCard, handleExpand }: IProps) {
 
-  const onSelect = (selectedKeys: React.Key[], info: any) => {
-    console.log('selected', selectedKeys, info);
-  };
+  // const onSelect = (selectedKeys: React.Key[], info: any) => {
+  //   console.log('selected', selectedKeys, info);
+  // };
 
   const onCheck = (checkedKeys: React.Key[], info: any) => {
     console.log('onCheck', checkedKeys, info);
-    if(info.node?.children?.length === 0){
+    if (info.node?.children?.length === 0){
       onValueChange(info.node, info.checked);
     } else {
       info.node.children.forEach((item: IChecked) => {
         onValueChange(item, info.checked);
-      })
+      });
     }
   };
 
-  const onLoadData = ({ key, children }: any) => {
+  const onLoadData = ({ children }: any) => {
     return new Promise<void>(resolve => {
       if (children) {
         resolve();
         return;
       }
     });
-  }
+  };
 
   const onExpand = (expandedKeysValue: React.Key[], el: any) => {
     console.log('onExpand', expandedKeysValue, el);
-    if(['结构化数据'].includes(el.node.parent) && el.node.children.length === 0){
+    if (['结构化数据'].includes(el.node.parent) && el.node.children.length === 0){
       handleExpand(el.node);
     }
   };
@@ -55,19 +56,23 @@ function FieldCard({ currentCardFields, onValueChange, closeCard, handleExpand }
     title: item.description,
     key: `${item.name}_${index}`,
     parent: currentCardFields?.description,
+    parentName: currentCardFields?.name,
     children: item?.items ? item.items?.filter(t => !!t.show).map((i: IField, idx: number) => ({
       title: i.description,
-      key: `${i.name}_${index+1}${idx}`,
+      key: `${i.name}_${index + 1}${idx}`,
       parent: currentCardFields?.description,
+      parentName: currentCardFields?.name,
       subParent: item.description,
+      subParentName: item.name,
+      subParentAssign: item.assign,
       children: [],
       isLeaf: !(i?.items && i?.items[0]?.type.includes('dynamic')),
-      ...i
+      ...i,
     })) : [],
     isLeaf: ['终点事件'].includes(currentCardFields.description) ? false : !(item?.items && item?.items[0].type.includes('dynamic')),
-    disabled: item?.items && item?.items[0].type.includes('dynamic') && item?.items.length===1,
-    ...item
-  }))
+    disabled: item?.items && item?.items[0].type.includes('dynamic') && item?.items.length === 1,
+    ...item,
+  }));
 
   console.log('formatData', formatData);
   console.log('currentCardFields', currentCardFields);
@@ -88,7 +93,8 @@ function FieldCard({ currentCardFields, onValueChange, closeCard, handleExpand }
         treeData={formatData}
       />
     </Card>
-  )
+  );
 }
 
 export default FieldCard;
+
