@@ -22,6 +22,7 @@ interface ITopicParams {
   }
 }
 const { TabPane } = Tabs;
+let levelInx = 0;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const {
     hydData, jcdData, imageId, handleRefresh, handleClose, tempAll, templatePart, openTime,
@@ -37,6 +38,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     jcdData.forEach((jcdItem: ITopicItemApi, jcdInx) => {
       level1.push(jcdItem.meta.title + jcdInx);
     });
+    levelInx = level1.length === 0 ? 1 : level1.length - 1;
     return level1.length === 0 ? ['HYD0'] : level1;
   };
   // 一级分类 化验单、检查单、图片不清晰、非单据
@@ -50,7 +52,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   useEffect(() => {
     setLevel1Types(fetchLevel1());
     setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
-    console.log('fifjeifje', !isEmpty(hydData) || !isEmpty(jcdData));
   }, [hydData, jcdData]);
   useEffect(() => () => {
     // 在组件销毁时判断：如果保存成功了，刷新下单据列表，更新数据
@@ -63,6 +64,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     const params = { from: openTime,  to };
     const data = api.image.fetchImageTopicTemplate(params);
     return data;
+    // return tmpppppList.list;
   };
   const fetchAllTypes = () => {
     const allTypes = level1Types.map(item => item.replace(/\d+/g, ''));
@@ -85,8 +87,8 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       message.error(err?.result || '保存失败');
     });
   };
-  const saveTemplate = (data: ITopicParams[], createdTime: number) => {
-    const params = { data, meta: { imageId, sid, createdTime } };
+  const saveTemplate = (list: ITopicParams[]) => {
+    const params = { list };
     console.log('tmpppp', params);
     api.image.putImageTopicTemplate(params).then(() => {
       console.log('添加问题模板成功');
@@ -148,12 +150,16 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   };
 
   const handelTabsEdit = (targetKey: string) => {
+    console.log('targetKey', targetKey);
+    console.log('level1Types', level1Types);
+    console.log('hydData', hydData);
     setLevel1Types((prev) => prev.filter(item => item !== targetKey));
   };
 
   const handleAddLevel1 = (type: string) => {
-    const inx = level1Types.filter(item => item.startsWith(type));
-    setLevel1Types([...level1Types, `${type}${inx.length}`]);
+    // const inx = level1Types.filter(item => item.startsWith(type));
+    setLevel1Types([...level1Types, `${type}${levelInx}`]);
+    levelInx = levelInx + 1;
   };
   const fetchHydInit = useMemo(() => (inx: number) => {
     return hydData?.[inx] || [];
@@ -164,6 +170,10 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   }, [jcdData]);
   const renderTabPane = useMemo(() => {
     return (type: string, level1Inx: number) => {
+      console.log('level1Types211', level1Types);
+      console.log('level1Inx', level1Inx);
+      console.log('hydData', hydData);
+
       let dom: any = null;
       const typeStart = type.replace(/\d+/g, ''); // HYD1->HYD
       const baseProps = {

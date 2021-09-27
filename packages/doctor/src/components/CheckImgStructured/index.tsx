@@ -1,6 +1,6 @@
 import React, { useState, FC, useEffect } from 'react';
 import { Spin, message } from 'antd';
-import { IApiDocumentList, IImgStructuredApiData, ITopicItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
+import { IApiDocumentList, IImgStructuredApiData, IMeta, ITmpList, ITopicItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import ImgWrap from './compontents/ImgWrap';
@@ -15,6 +15,10 @@ interface IProps {
     imageUrl?: string;
   }
 }
+interface ITempItem {
+  data: ITopicTemplateItemApi;
+  meta: IMeta;
+}
 const CheckImgStructured: FC<IProps> = (props) => {
   const { children, imageInfo, handleRefresh } = props;
   const [showViewer, setShowViewer] = useState(false);
@@ -24,9 +28,9 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [openTime, setOpenTime] = useState(new Date().getTime()); // 打开图片结构化的时间
   // 编辑：后增加的模板
-  const [templatePart, setTemplatePart] = useState<ITopicTemplateItemApi[]>([]);
+  const [templatePart, setTemplatePart] = useState<ITmpList>({});
   // 全部模板 from ： 0
-  const [tempAll, settempAll] = useState([]);
+  const [tempAll, settempAll] = useState<ITmpList>({});
   const patientSid = window.$storage.getItem('patientSid');
   const handleStructured = () => {
     setShowViewer(true);
@@ -38,11 +42,20 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const fetchTemplate = (from: number, to: number) => {
     const params = { from, to: to || openTime };
     api.image.fetchImageTopicTemplate(params).then(res => {
+      console.log(3443222, res);
+      const tempData: ITmpList = {};
+      res.list.forEach((item: ITempItem) => {
+        const type = item.meta.title;
+        if (!tempData[type]) {
+          tempData[type] = [];
+        }
+        tempData[type] = tempData[type].concat(item.data);
+      });
       if (from) {
-        setTemplatePart(res.data);
+        setTemplatePart(tempData);
         setIsLoaded(true);
       } else {
-        settempAll(res.data);
+        settempAll(tempData);
       }
     });
   };
@@ -98,7 +111,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
     } else {
       setHydData([]);
       setJcdData([]);
-      setTemplatePart([]);
+      setTemplatePart({});
       setIsLoaded(false);
       setOpenTime(0);
     }

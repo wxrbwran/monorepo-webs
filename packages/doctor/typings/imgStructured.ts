@@ -49,8 +49,8 @@ export interface IStructuredDetailProps {
   handleClose: () => void;
   hydData: IApiDocumentList[];
   jcdData: ITopicItemApi[];
-  templatePart: ITopicTemplateItemApi[];
-  tempAll: ITopicTemplateItemApi[];
+  templatePart: ITmpList;
+  tempAll: ITmpList;
   openTime: number;
 }
 
@@ -77,17 +77,7 @@ export interface IQuestions {
   answer: string[];
   options?: string[];
 }
-// export interface IQuestions {
-//   type: string;
-//   code?: number;
-//   isAdd: boolean;
-//   detail: {
-//     checkedArr?: string[] | string; // 多选题，h5填写完返回的是string[]。单选题，h5返回的是string
-//     stem: string | string[];
-//     options?: Ioptions[];
-//     answer?: string | string[];
-//   }
-// }
+
 export interface ITopicTemplateItemApi {
   createdTime: number;
   question: string;
@@ -123,4 +113,7 @@ export interface IMeta {
   title: string;
   sid: string;
   imageId: string;
+}
+export interface ITmpList {
+  [key: string]: ITopicTemplateItemApi[];
 }

@@ -245,31 +245,33 @@ const StructuredDetailItem: FC<IProps> = (props) => {
   return (
     <div className={styles.structure_detail_item}>
       <div className="flex text-sm items-center  mb-10">
-        <div className="font-medium mr-5"> 检查机构: </div>
-        <SearchHospital
-          placeholder="请输入检查机构"
-          callback={handleSetHospital}
-          fieldName="hospital"
-          style={{ flex: 1 }}
-          defaultValue={{
-            hospitalId: initData?.orgId,
-            hospitalName: initData?.orgName,
-          }}
-        />
-        <ItemDate
-          setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
-          setUnknow={(unknownReport: boolean) => handleSetTimeAndOrg({ unknownReport })}
-          // 如果是回显，就直接取回显的时间，没有就设置当前时间
-          initReportTime={initData?.measuredAt}
-          isUnknownTime={initData?.unknownReport}
-          type="HYD"
-        />
-      </div>
-      <SubType
-        leve1Type={outType}
-        handleChangeSubType={setSampleFroms}
-        initSampleFrom={initSubType}
-      />
+        <div className="structured-edit-wrap">
+          <div className="font-medium mr-5"> 检查机构: </div>
+            <SearchHospital
+              placeholder="请输入检查机构"
+              callback={handleSetHospital}
+              fieldName="hospital"
+              style={{ flex: 1 }}
+              defaultValue={{
+                hospitalId: initData?.orgId,
+                hospitalName: initData?.orgName,
+              }}
+            />
+            <ItemDate
+              setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
+              setUnknow={(unknownReport: boolean) => handleSetTimeAndOrg({ unknownReport })}
+              // 如果是回显，就直接取回显的时间，没有就设置当前时间
+              initReportTime={initData?.measuredAt}
+              isUnknownTime={initData?.unknownReport}
+              type="HYD"
+            />
+          </div>
+          <SubType
+            leve1Type={outType}
+            handleChangeSubType={setSampleFroms}
+            initSampleFrom={initSubType}
+          />
+        </div>
       {
           sampleFroms.length > 0 && (
             <>
