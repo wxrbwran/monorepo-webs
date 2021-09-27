@@ -35,7 +35,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
 
   useEffect(() => {
     api.education
-      .getRules()
+      .getRules(isScale ? 'FOLLOW' : 'PUBLICIZE_EDUCATION')
       .then((res) => {
         console.log('resrules', res);
         setRules(res);
