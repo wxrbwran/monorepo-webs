@@ -1,6 +1,5 @@
 import type { Reducer, Effect } from 'umi';
 import { setAuthorizationToken } from '@/services/http';
-import config from '@/config';
 // import * as api from '@/services/api';
 
 export interface AuthModelType {
@@ -32,16 +31,17 @@ const Model: AuthModelType = {
       console.log('login', payload, call);
       window.$storage.clear();
       // const { data } = yield call(api.auth.token, payload);
-      const token = localStorage.getItem('xzl-web-out-org_token') || ''
-      if(!token){
-        window.location.href = config.LOGIN;
-      }else{
+      const token = localStorage.getItem('xzl-web-out-org_token') || '';
+      if (!token) {
+        // window.location.href = config.LOGIN;
+      } else {
         const data = JSON.parse(token);
         console.log('dataaaaaa', data);
         window.$storage.setItem('access_token', data.accessToken);
         window.$storage.setItem('sid', data.wcl[0].roles[0].subject.id);
         window.$storage.setItem('nsId', data.wcl[0].ns.id);
         window.$storage.setItem('wcId', data.wcl[0].wcId);
+        window.$storage.setItem('roleId', data.wcl[0].roles[0].id);
         setAuthorizationToken(data.accessToken);
         yield put({
           type: 'changeLoginStatus',

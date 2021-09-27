@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { Input, Tooltip, Button, message } from 'antd';
 import { history, useSelector } from 'umi';
@@ -10,7 +10,7 @@ import QuestionChoice from './components/question_choice';
 import QuestionText from './components/question_text';
 import QuestionDdtk from './components/question_ddtk';
 import { useDispatch } from 'umi';
-import {isArray} from 'lodash';
+import { isArray } from 'lodash';
 
 import './index.scss';
 
@@ -30,20 +30,20 @@ interface IParams {
   subTitle: string;
   title: string;
 }
-function SuifangCreate({ location, scaleType}: IProps){
-  const initSf = useSelector((state: IState) => state.suifang)
+function SuifangCreate({ location, scaleType }: IProps) {
+  const initSf = useSelector((state: IState) => state.suifang);
   const initQuestion = () => {
     if (initSf.question) {
       return initSf.question.map(item => {
         const newItem = { ...item };
-        if (item.type=== 'COMPLETION' && isArray(item.detail.stem)) {
+        if (item.type === 'COMPLETION' && isArray(item.detail.stem)) {
           newItem.detail.stem = item.detail.stem.join('＿＿＿');
         }
         return newItem;
-      })
+      });
     }
-    return []
-  }
+    return [];
+  };
   const [formTit, setFormTit] = useState(initSf.title || '');
   const [questions, setQuestions] = useState<IQuestions[]>(initQuestion);
   const [editIndex, setEditIndex] = useState(0);
@@ -56,34 +56,34 @@ function SuifangCreate({ location, scaleType}: IProps){
         type: 'suifang/saveCurrentEditScale',
         payload: {},
       });
-    }
-  }, [initSf])
+    };
+  }, [initSf]);
   // const { projectNsId } = useSelector((state: IState) => state.project.projDetail)
   // 随访表标题
   const handleFormTit = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormTit(e.target.value);
-  }
+  };
   // 添加题
   const handleAddQuestion = (addItem: any) => {
     const currentEdit = questions.length;
     setQuestions([...questions, addItem]);
     // 新添加的题目选项卡为编辑状态
     setEditIndex(currentEdit);
-  }
+  };
   // 保存输入的问题
   const handleSaveStem = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
     questions[quesIndex].detail.stem = ev.target.value;
     setQuestions([...questions]);
-  }
+  };
   // 删除问题
   const handleDelStem = (quesIndex: number) => {
-    const newQuestions = questions.filter((_item, index) => { return index !== quesIndex });
+    const newQuestions = questions.filter((_item, index) => { return index !== quesIndex; });
     setQuestions([...newQuestions]);
     setEditIndex(-1); // 设置当前编辑未选中
-  }
+  };
   const changeQues = (newQues: any) => {
     setQuestions([...newQues]);
-  }
+  };
 
   // 创建量表
   const handleCreate = (params: IParams) => {
@@ -92,36 +92,36 @@ function SuifangCreate({ location, scaleType}: IProps){
       message.success('添加成功');
       setLoading(false);
       history.goBack();
-    })
-  }
+    });
+  };
   const handleEdit = (params: IParams) => {
     setLoading(true);
     api.education.patchPublicizeScale(params).then(() => {
       message.success('修改成功');
       setLoading(false);
       history.goBack();
-    })
-  }
+    });
+  };
   const checkOptionsValue = (options: Ioptions[]) => {
     const validOptions: Ioptions[] = [];
     options.forEach((item: Ioptions) => {
-      if(item.content) {
+      if (item.content) {
         validOptions.push(item);
       }
-    })
+    });
     return validOptions;
-  }
+  };
 
   const handleSubmit = () => {
-    if(!formTit.trim() || !subTit.trim()) {
+    if (!formTit.trim() || !subTit.trim()) {
       message.error('请输入表单标题及副标题!');
       return false;
     }
     let isEmpty = false;
-    console.log('questions', questions)
-    for(let i=0; i<questions.length; i++) {
-      if (typeof(questions[i].detail.stem) === 'string' && !questions[i].detail.stem?.trim()) {
-        message.error('问题不能为空!')
+    console.log('questions', questions);
+    for (let i = 0; i < questions.length; i++) {
+      if (typeof (questions[i].detail.stem) === 'string' && !questions[i].detail.stem?.trim()) {
+        message.error('问题不能为空!');
         isEmpty = true;
         break;
       } else {
@@ -135,7 +135,7 @@ function SuifangCreate({ location, scaleType}: IProps){
               isRepeat = true;
             }
             optionsCont.push(item.content);
-          })
+          });
           if (isRepeat) {
             message.error('存在重复选项');
             isEmpty = true;
@@ -163,33 +163,37 @@ function SuifangCreate({ location, scaleType}: IProps){
         question: questions,
         title: formTit,
         subTitle: subTit,
-      }
+      };
       handleEdit(params);
       return true;
     }
-      const params = {
-        fromSid: window.$storage.getItem('orgSid'),
-        operatorSid: window.$storage.getItem('sid'),
-        question: questions,
-        title: formTit,
-        subTitle: subTit
-      }
-      handleCreate(params);
-      return true;
+    const params = {
+
+      ownershipSid: window.$storage.getItem('orgSid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      operatorSid: window.$storage.getItem('sid'),
+
+      // fromSid: window.$storage.getItem('orgSid'),
+      question: questions,
+      title: formTit,
+      subTitle: subTit,
+    };
+    handleCreate(params);
+    return true;
   };
 
   const handleSetEditIndex = (inx: number) => {
-    setEditIndex(inx)
-  }
-  console.log('questions333s', questions)
-  return(
+    setEditIndex(inx);
+  };
+  console.log('questions333s', questions);
+  return (
     <div className="follow-table-create">
       <div className="left">
         <div className="title">
           <LeftOutlined onClick={() => history.goBack()} />
           <div className="text-box">
             <Tooltip placement="top" title='点击可进行编辑'>
-              <Input placeholder={`输入随访表标题`} className="edit-input" value={formTit} onChange={handleFormTit} />
+              <Input placeholder={'输入随访表标题'} className="edit-input" value={formTit} onChange={handleFormTit} />
             </Tooltip>
           </div>
         </div>
@@ -198,7 +202,7 @@ function SuifangCreate({ location, scaleType}: IProps){
             placeholder='输入副标题'
             style={{ width: '200px' }}
             defaultValue={subTit}
-            onChange={(e)=> setSubTit(e.target.value)}
+            onChange={(e) => setSubTit(e.target.value)}
           />
         </div>
         <div className="cont">
@@ -214,23 +218,23 @@ function SuifangCreate({ location, scaleType}: IProps){
             {
               questions.map((item, quesIndex) => {
                 const props = {
-                   questions, changeQues, editIndex, quesIndex, handleSaveStem, handleDelStem, item,
-                   setEditIndex:handleSetEditIndex, scaleType
-                }
-                if (['RADIO', 'CHECKBOX'].includes(item.type) ) {
+                  questions, changeQues, editIndex, quesIndex, handleSaveStem, handleDelStem, item,
+                  setEditIndex: handleSetEditIndex, scaleType,
+                };
+                if (['RADIO', 'CHECKBOX'].includes(item.type)) {
                   return (
                     <QuestionChoice {...props} key={item.type} />
-                  )
+                  );
                 } if (['TEXT', 'END'].includes(item.type)) {
                   return (
                     <QuestionText {...props} key={item.type} />
-                  )
+                  );
                 } if (item.type === 'COMPLETION') {
                   return (
                     <QuestionDdtk {...props} key={item.type} />
-                  )
+                  );
                 }
-                return true
+                return true;
               })
             }
           </div>
@@ -250,7 +254,7 @@ function SuifangCreate({ location, scaleType}: IProps){
         />
       </div>
     </div>
-  )
+  );
 }
 
 export default SuifangCreate;
