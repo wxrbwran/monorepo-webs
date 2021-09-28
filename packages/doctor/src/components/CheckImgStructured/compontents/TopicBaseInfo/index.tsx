@@ -90,7 +90,7 @@ const TopicBaseInfo: FC<IProps> = ({ initData, changeCallbackFns, outType }) => 
   };
 
   return (
-    <div className={`border p-15 ${styles.topic_base}`}>
+    <div className={`border p-15 ${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
       <Form
         name="topicBaseInfo"
