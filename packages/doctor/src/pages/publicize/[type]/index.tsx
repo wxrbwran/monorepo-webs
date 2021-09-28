@@ -21,13 +21,20 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
     (state: Store) => state?.org?.currentOrg?.pureDepartmentList,
   );
   const [sendContent, setSendContent] = useState([]);
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
 
   useEffect(() => {
     api.education
       .getSendContent({
-        businessType: isScale ? 'FOLLOW' : 'PUBLICIZE_EDUCATION',
+        sourceType: isScale ? 2 : 3,
         pageSize: 9999,
         page: 1,
+        operatorSid: window.$storage.getItem('sid'),
+        operatorRole: window.$storage.getItem('currRoleId'),
+        operatorNsId: window.$storage.getItem('nsId'),
+        ownershipSid: currentOrgInfo.sid,
+        ownershipRole: currentOrgInfo.role,
+        ownershipNsId: currentOrgInfo.nsId,
       })
       .then((res) => {
         setSendContent(res.rules);

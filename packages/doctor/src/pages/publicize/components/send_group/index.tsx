@@ -9,11 +9,11 @@ interface IProps {
 }
 
 function SendGroup({ form }: IProps) {
-  const pureDepartmentList = useSelector((state: Store) => state?.org?.currentOrg?.pureDepartmentList);
+  const groupList = useSelector((state: IState) => state.education.groupList);
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
 
-  const options = pureDepartmentList.map((item: { name: string, id: string })=> ({
+  const options = groupList.map((item: { name: string, id: string })=> ({
     label: item.name,
     value: item.id,
   }));

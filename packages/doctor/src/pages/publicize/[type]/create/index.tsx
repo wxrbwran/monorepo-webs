@@ -20,6 +20,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   const [checked, setChecked] = useState<string>(''); // 选择的要发送的内容的id
   const [rules, setRules] = useState<IRule>();
   const [initFormVal, setInitFormVal] = useState({ frequencyType: 'normal' });
+  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
 
   const next = () => {
     if (!checked) {
@@ -35,7 +36,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
 
   useEffect(() => {
     api.education
-      .getRules()
+      .getRules(isScale ? 'FOLLOW' : 'PUBLICIZE_EDUCATION')
       .then((res) => {
         console.log('resrules', res);
         setRules(res);
@@ -87,7 +88,16 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
         ],
         meta: {
           sid: window.$storage.getItem('sid'),
-          businessType: isScale ? 2 : 3,
+          sourceType: isScale ? 2 : 3,
+          teamLocations: [{
+            sid: window.$storage.getItem('sid'),
+            ns: window.$storage.getItem('nsId'),
+            role: window.$storage.getItem('currRoleId'),
+          }, {
+            sid: currentOrgInfo.sid,
+            ns: currentOrgInfo.nsId,
+            role: currentOrgInfo.role,
+          }],
         },
       };
       console.log('params666', params);

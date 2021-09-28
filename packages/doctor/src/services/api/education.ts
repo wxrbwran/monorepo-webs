@@ -79,8 +79,8 @@ export default {
     return http.get(`research/project/file/info/${fileId}`);
   },
   // 获取规则
-  getRules(): Promise<any> {
-    return http.get('management/template');
+  getRules(source_type: string): Promise<any> {
+    return http.get(`template/${source_type}`);
   },
   // 发送计划
   sendPlan(data?: any): Promise<any> {
