@@ -17,6 +17,10 @@
           z-index: 99;
         }
       }
+      .qa-wrap {
+        max-height: 168px;
+        overflow-y: auto;
+      }
     }
   }
   .save_btn {

@@ -121,7 +121,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     return (initTopic?.[inx] || []).concat((templateTopic?.[inx] || []));
   };
   return (
-    <div className={`${styles.topic_list} structured-edit-wrap`}>
+    <div className={`${styles.topic_list}`}>
       <TopicBaseInfo outType={outType} initData={[...initTopic?.[0] || []]} {...subProps} />
       <TopicDdtk initData={dataAndTemp(1)} {...subProps} />
       <TopicChoice initData={dataAndTemp(2)} {...subProps} />
