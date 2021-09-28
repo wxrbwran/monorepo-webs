@@ -99,7 +99,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                     <img src={frequency} alt="" /> 发送频率
                   </p>
                   <p className={styles.con}>
-                    {frequencyType === 'normal' ? '第' : '每'}
+                    {frequencyType === 'once' ? '第' : '每'}
                     {custom.join()}天发送一次
                   </p>
                 </div>

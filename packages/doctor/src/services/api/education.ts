@@ -44,6 +44,10 @@ export default {
   getPublicizeList(data: any): Promise<any> {
     return http.get('publicize/list', { data });
   },
+  // 动态获取节点
+  fetchNodeEl(url: string, data: any): Promise<any> {
+    return http.get(`${url}`, { data });
+  },
   // 新增随访表
   addPublicizeScale(data: any): Promise<any> {
     return http.post('publicize/scale', { data });
@@ -84,11 +88,11 @@ export default {
   },
   // 发送计划
   sendPlan(data?: any): Promise<any> {
-    return http.post('out_hospital/rule', { data });
+    return http.post('rules', { data });
   },
   // 获取已发送内容
   getSendContent(data?: any): Promise<any> {
-    return http.get('out_hospital/rule', { data });
+    return http.get('rules', { data });
   },
   // 查询诊断处理
   fetchKvScope(data: any): Promise<any> {

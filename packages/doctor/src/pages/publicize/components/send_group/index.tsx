@@ -37,7 +37,7 @@ function SendGroup({ form }: IProps) {
 
   const onCheckAllChange = e => {
     form.setFieldsValue({
-      group:  e.target.checked ? ['PATIENT_ALL', ...options.map(item => item.value)] : [],
+      group:  e.target.checked ? ['PATIENT_ALL', ...options.map(item => item.label)] : [],
     });
     setIndeterminate(false);
     setCheckAll(e.target.checked);
@@ -65,7 +65,7 @@ function SendGroup({ form }: IProps) {
           {
             options.map(item => (
               <Tooltip title={item.label}>
-                <Checkbox value={item.value} onChange={onChange}> {item.label}</Checkbox>
+                <Checkbox value={item.label} onChange={onChange}> {item.label}</Checkbox>
               </Tooltip>
             ))
           }

@@ -67,7 +67,7 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
     } else {
       getPublicizeList();
     }
-  }, []);
+  }, [currentOrgInfo]);
 
   const onChange = (e: any) => {
     console.log('checkedValues', isScale ? e.target.value : e);
@@ -103,7 +103,7 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
       {
         !!pubList.filter(p => p.type === item.code).length && (
           <>
-            <p className='font-bold mb-15'>{`·${ item.name}`}</p>
+            <p className='font-bold mb-15 text-base'>{`·${ item.name}`}</p>
             <Row wrap>
               {
                 pubList.filter(p => p.type === item.code).map(i => (

@@ -1,14 +1,42 @@
 import { message } from 'antd';
+import  * as api from '@/services/api';
 import type { IRule, IValues } from './const';
 
 export const handleFormatValues = (
   // values: IValues, rules: IRule, isScale: boolean, checked: string
-  values: IValues, rules: IRule, isScale: boolean, checked: string, sid: string, role: string, scopeItems: any[],
+  values: IValues, rules: IRule, isScale: boolean, checked: string, sid: string, role: string, nsId: string,
 ) => {
   const { conditions, group, frequencyType, custom } = values;
   const filterCondition = conditions.filter(item => !!item?.type);
   console.log('isScale', isScale, rules);
   const conditionItems = rules.filter(item => item.name === 'condition')[0];
+  const scopeListApi = rules.filter(item => item.name === 'scope')[0].assign.value;
+  let scopeItems: any[] = [];
+  console.log('conditionItems', conditionItems, scopeListApi);
+  if (scopeListApi){
+    const params = {
+      sourceType: isScale ? 2 : 3,
+      kp: 'team',
+      rsList: [{
+        sid:  window.$storage.getItem('sid'),
+        roleType: window.$storage.getItem('currRoleId'),
+        nsId:  window.$storage.getItem('nsId'),
+      }, {
+        sid,
+        roleType: role,
+        nsId: nsId,
+      }],
+    };
+    api.education
+      .fetchNodeEl(scopeListApi, params)
+      .then((res) => {
+        console.log('res333', res.items);
+        scopeItems = [...res.items];
+      })
+      .catch((err: string) => {
+        console.log('err', err);
+      });
+  }
   // if(!checked){
   //   message.error('请在上一步选择发送内容!');
   //   return;
@@ -66,11 +94,16 @@ export const handleFormatValues = (
     }
     // 诊断
     if (item.type === 'diagnosis'){
-      const filterItem = conditionItems.items.filter(i => i.description === '疾病')[0];
+      const filterItem = conditionItems.items.filter(i => i.description === '诊断')[0];
       const key: any = filterItem?.name;
+      const uidKey: any = filterItem?.items[0]?.name;
       // const key: any = 'diagnose.disease'
       // const uidKey: any = 'diagnose.disease.uid'
       mapObj[key] = {
+        operator: '=',
+        value: item.value,
+      };
+      mapObj[uidKey] = {
         operator: '=',
         value: item.id,
       };
@@ -79,9 +112,14 @@ export const handleFormatValues = (
     if (item.type === 'treatment'){
       const filterItem = conditionItems.items.filter(i => i.description === '处理')[0];
       const key: any = filterItem?.name;
+      const uidKey: any = filterItem?.items[0]?.name;
       // const key: any = 'diagnose.treatment'
       // const uidKey: any = 'diagnose.treatment.uid'
       mapObj[key] = {
+        operator: '=',
+        value: item.value,
+      };
+      mapObj[uidKey] = {
         operator: '=',
         value: item.id,
       };
