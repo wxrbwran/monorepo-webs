@@ -1,5 +1,5 @@
 var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function (t) {
+    __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
@@ -19,8 +19,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -67,7 +67,7 @@ import { handleTableDataSource, handleTableRowKey } from './util';
 import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
     console.log('this is table shared~111');
-    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination;
+    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination, extra = props.extra;
     console.log(category, handleCallbackSelectKeys);
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
@@ -151,8 +151,7 @@ var XzlTable = function (props) {
         // fetchTableDataSource(params);
     };
     /* eslint-disable react/jsx-props-no-spreading */
-    return (React.createElement(Table, __assign({
-        loading: loading, rowKey: function (record) { return handleTableRowKey(dataKey, record); }, rowSelection: rowSelection, columns: columns, dataSource: dataSource, pagination: {
+    return (React.createElement(Table, __assign({ loading: loading, rowKey: function (record) { return handleTableRowKey(dataKey, record); }, rowSelection: rowSelection, columns: columns, dataSource: dataSource, pagination: {
             pageSize: size,
             showQuickJumper: true,
             current: current,
@@ -160,8 +159,7 @@ var XzlTable = function (props) {
             onChange: handlePagerChange,
             showSizeChanger: false,
             hideOnSinglePage: true,
-        }
-    }, tableOptions)));
+        } }, tableOptions)));
 };
 XzlTable.defaultProps = {
     depOptions: {},

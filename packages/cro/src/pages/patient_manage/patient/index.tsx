@@ -75,10 +75,10 @@ function Patient() {
       handleCheckPatient(selected, sids, wcIds);
     },
   };
-  const fetchData = (data: any[]) => {
+  const fetchData = (data: any) => {
     const selectArr: string[] = [];
     console.log('data~~~~', data);
-    data.forEach(item => {
+    data.dataSource.forEach(item => {
       if (item.checked) {
         selectArr.push(item.sid);
       }
