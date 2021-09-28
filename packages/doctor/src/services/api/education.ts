@@ -24,6 +24,10 @@ export default {
   postGroupPatient(data: any): Promise<any> {
     return http.post('doctor/contact/patient', { data });
   },
+  // 获取小组下患者列表
+  getGroupPatientList(data: any): Promise<any> {
+    return http.get(`doctor/contact/group/patient/${data.groupId}`);
+  },
   // 获取列表logId
   getLogId(data: any): Promise<any> {
     return http.post('contact/patient/rule', { data });

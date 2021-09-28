@@ -47,8 +47,8 @@ function GroupDetails({ location }: IProps) {
           // columns={groupDetailColumns()}
           columns={[...columns, action]}
           dataKey="teams"
-          // request={window.$api.patientManage.getGroupPatient}
-          request={() => {}}
+          request={window.$api.education.getGroupPatientList}
+          // request={() => {}}
           noPagination={true}
           tableOptions={{
             rowSelection: false,
