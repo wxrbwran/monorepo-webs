@@ -180,23 +180,26 @@ function Ddtk(props: IProps) {
     setEditIndex(quesIndex);
   };
   console.log('------最新questions', questions);
+  let hidtCount = 0;
   return (
     <div className="border p-15 my-15">
       <TopicTitle number="一" handleAdd={debounce(handleAddTopic, 300)} btnText='添加新的多段填空' />
       {
         questions.map((item, quesIndex: number) => {
           let isShow = false;
+          hidtCount++;
           if (isViewOnly) {
             item.qa.forEach(qaItem => {
               qaItem.answer.forEach(ansItem => {
-                console.log('ansItem', !!ansItem.trim());
-                if (!!ansItem.trim()) {
+                if (ansItem && !!ansItem?.trim()) {
                   isShow = true;
+                  hidtCount--;
                 }
               });
             });
           } else {
             isShow = true;
+            hidtCount--;
           }
           if (isShow) {
             if (editIndex === quesIndex) {
@@ -246,7 +249,7 @@ function Ddtk(props: IProps) {
                   )
                 }
                 {
-                  !isViewOnly && <span className='mt-5'>{quesIndex + 1}.</span>
+                 <span className='mt-5'>{quesIndex - hidtCount + 1}.</span>
                 }
                 {
                   item.qa.map((qaItem, qaInx) => (
