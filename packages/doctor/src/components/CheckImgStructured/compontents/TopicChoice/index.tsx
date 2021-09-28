@@ -19,10 +19,10 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
   const [editIndex, setEditIndex] = useState(-1);
   const handleSave = (a) => new Promise((resolve) => {
-    console.log('hhhhh232', a);
+    console.log(a);
     // resolve(fetchSubmitData(questions, 2));
     resolve({
-      data: questions,
+      data: questions.filter(item => !!item.question.trim()),
       groupInx: 2,
     });
   });

@@ -221,7 +221,7 @@ const StructuredDetailItem: FC<IProps> = (props) => {
         />
       </TabPane>
     ),
-  ), [checkTypes, isViewOnly]);
+  ), [checkTypes, isViewOnly, initData]);
   const handleActiveTab = (tab: string) => {
     console.log('===-1');
     activeType1.current = tab;
