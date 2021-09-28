@@ -86,7 +86,7 @@ const IndexTable: FC<IProps> = (props) => {
   };
 
   return (
-    <div className={styles.list_wrap}>
+    <div className={`${styles.list_wrap} structured-edit-wrap`}>
       <div className={`${styles.item} ${styles.bg_gray} ${styles.header}`}>
         <div>名称</div>
         <div>缩写</div>

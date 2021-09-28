@@ -21,7 +21,7 @@ function TopicProblem(props: IProps) {
   const handleSave = () => new Promise((resolve) => {
     // resolve(fetchSubmitData(questions, 3));
     resolve({
-      data: questions,
+      data: questions.filter(item => !!item.question.trim()),
       groupInx: 3,
     });
   });
@@ -93,7 +93,7 @@ function TopicProblem(props: IProps) {
         questions.map((item, quesIndex: number) => {
           const isEdit = editIndex === quesIndex;
           let isShow = true;
-          if (isViewOnly && !item.answer[0]) {
+          if (isViewOnly && !item.answer[0]?.trim()) {
             isShow = false;
             ++emptyAnsNum;
           }
@@ -134,7 +134,7 @@ function TopicProblem(props: IProps) {
                   <TextArea
                     placeholder="请输入"
                     onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
-                    value={item.answer[0]}
+                    value={item.answer?.[0]}
                   />
                 </div>
               </div>

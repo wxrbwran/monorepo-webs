@@ -7,6 +7,7 @@ import ImgWrap from './compontents/ImgWrap';
 import StructuredDetail from './compontents/StructuredDetail';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
+import uuid from 'react-uuid';
 
 interface IProps {
   handleRefresh?: () => void;
@@ -42,7 +43,6 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const fetchTemplate = (from: number, to: number) => {
     const params = { from, to: to || openTime };
     api.image.fetchImageTopicTemplate(params).then(res => {
-      console.log(3443222, res);
       const tempData: ITmpList = {};
       res.list.forEach((item: ITempItem) => {
         const type = item.meta.title;
@@ -77,8 +77,13 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const fetchData = (id: string, toTime: number) => {
     Promise.all([fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
       const [hData, jData] = res;
-      setHydData(hData.list);
-      setJcdData(jData.list);
+      setHydData(hData.list.map(item => {
+        return ({ ...item, key: uuid() });
+      }));
+      // setJcdData(jData.list);
+      setJcdData(jData.list.map(item => {
+        return ({ ...item, key: uuid() });
+      }));
       setImgData({ ...hData, imageId: id });
       if (!isEmpty(jData.list)) {
         fetchTemplate(jData.list[0].meta.createdTime, toTime);
@@ -117,6 +122,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
     }
   }, [showViewer]);
   // console.log('templatePart223', templatePart);
+  // params.originIds = jcdData.map(item => item.meta.id);
   return (
     <>
       <span onClick={handleStructured}>{ children }</span>
@@ -145,6 +151,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
                     <StructuredDetail
                       hydData={hydData}
                       jcdData={jcdData}
+                      jcdOriginIds={jcdData.map(item => item.meta.id)}
                       imageId={imgData?.imageId}
                       handleRefresh={handleRefresh}
                       handleClose={() => setShowViewer(false)}
