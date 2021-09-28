@@ -244,8 +244,8 @@ const StructuredDetailItem: FC<IProps> = (props) => {
   };
   return (
     <div className={styles.structure_detail_item}>
-      <div className="flex text-sm items-center  mb-10">
-        <div className="font-medium mr-5"> 检查机构: </div>
+      <div className="flex text-sm items-center mb-10 structured-edit-wrap">
+        <div className="font-medium mr-5 "> 检查机构: </div>
         <SearchHospital
           placeholder="请输入检查机构"
           callback={handleSetHospital}
@@ -265,20 +265,24 @@ const StructuredDetailItem: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      <SubType
-        leve1Type={outType}
-        handleChangeSubType={setSampleFroms}
-        initSampleFrom={initSubType}
-      />
+          <div className="structured-edit-wrap">
+            <SubType
+              leve1Type={outType}
+              handleChangeSubType={setSampleFroms}
+              initSampleFrom={initSubType}
+            />
+          </div>
       {
           sampleFroms.length > 0 && (
             <>
-              <SearchTypeIndex
-                sampleFroms={sampleFroms}
-                handleSelectTypeIndex={handleSelectTypeIndex}
-                // imageId={imageId}
-                documentType={outType}
-              />
+              <div className="structured-edit-wrap">
+                <SearchTypeIndex
+                  sampleFroms={sampleFroms}
+                  handleSelectTypeIndex={handleSelectTypeIndex}
+                  // imageId={imageId}
+                  documentType={outType}
+                />
+              </div>
               {
                 checkTypes.length > 0 && (
                   <Tabs

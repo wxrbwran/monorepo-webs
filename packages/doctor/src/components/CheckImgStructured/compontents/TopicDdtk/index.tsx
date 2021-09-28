@@ -30,7 +30,6 @@ function Ddtk(props: IProps) {
       };
     });
   };
-  console.log('fetchInitData()', fetchInitData());
   const [cursorIndex, setCursorIndex] = useState(0); // 光标位置
   const [questions, setQuestions] = useState<IQues[]>(initData ? fetchInitData() : []);
   const [editIndex, setEditIndex] = useState(-1); // 当前编辑第几题

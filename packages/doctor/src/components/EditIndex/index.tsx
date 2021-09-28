@@ -53,7 +53,7 @@ const EditIndex: FC<IProps> = (props) => {
         onSuccess();
       }
       setshowModal(false);
-    }).catch((err: {result: string}) => {
+    }).catch((err: { result: string }) => {
       console.log(932932, err);
       message.error(err.result || '操作失败');
     });
@@ -129,7 +129,7 @@ const EditIndex: FC<IProps> = (props) => {
   const rules = [{ required: true, message: '请输入' }];
   const isHyd = !!(level1Type === 'HYD');
   return (
-    <div>
+    <div className="structured-edit-wrap">
       <span onClick={handleShowModal}>{children}</span>
       <DragModal
         wrapClassName="ant-modal-wrap-center new-header"
