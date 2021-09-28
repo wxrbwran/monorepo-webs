@@ -58,9 +58,7 @@ function RePlyTable({ children, planRuleId, sid, status }: IProps) {
       dataIndex: 'updatedAt',
       render: (_text: string, record: any) =>
         <QuestionDetail
-          title={record.scaleName}
-          subTitle={record.scaleSubName}
-          questions={record.questions}
+          id={record.id}
         >
           <span className={styles.look}>
             查看回复内容

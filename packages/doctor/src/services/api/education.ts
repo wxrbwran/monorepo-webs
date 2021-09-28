@@ -74,6 +74,10 @@ export default {
   getScalePatientReply(data?: any): Promise<any> {
     return http.get('reply/list', { data });
   },
+  // 查看随访回复详情
+  getScaleDetail(id: any): Promise<any> {
+    return http.get(`reply/follow/${id}`);
+  },
   // 提醒回复量表
   replyDoctorReminder(data?: any): Promise<any> {
     return http.post('research/send_remind', { data });
