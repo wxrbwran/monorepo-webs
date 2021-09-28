@@ -8,6 +8,7 @@ import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import SelectGroup from 'xzl-web-shared/src/components/SelectGroup';
 import { Search } from 'xzl-web-shared/src/components/Selects';
 import { SearchOutlined } from '@ant-design/icons';
+import { isEmpty } from 'lodash';
 import DiagnosisDetail from '../components/DiagnosisDetail';
 // import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 
@@ -16,7 +17,7 @@ function Patients() {
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
   const [showSearch, setShowSearch] = useState(false);
   const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
-  const [tableOptions, setOptions] = useState<CommonData>();
+  const [tableOptions, setOptions] = useState<CommonData>({});
   const groupList = useSelector((state: IState) => state.education.groupList);
   const columns = [pname, groupName, initAt];
 
@@ -32,7 +33,7 @@ function Patients() {
         if (res?.id){
           setOptions({ actionLogId: res.id });
         } else {
-          setOptions(null);
+          setOptions({});
         }
       })
       .catch((err: string) => {
@@ -52,7 +53,8 @@ function Patients() {
   }, []);
 
   const refreshList = () => {
-    setOptions({ ...tableOptions }); //刷新列表
+    // setOptions({ ...tableOptions }); //刷新列表
+    changeTableOption(window.$storage.getItem('keyWord'));
     // 刷新分组列表
     //  dispatch({
     //   type: 'project/fetchGroupList',
@@ -107,7 +109,7 @@ function Patients() {
         <XzlTable
           columns={[...columns, action]}
           dataKey="lists"
-          request={tableOptions ? window.$api.education.getPatientsList : () => {}}
+          request={!isEmpty(tableOptions) ? window.$api.education.getPatientsList : () => {}}
           // request={() => {}}
           depOptions={tableOptions}
           handleCallback={handleCallback}

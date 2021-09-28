@@ -120,6 +120,9 @@ var XzlTable = function (props) {
                             console.log('handledData*****', handledData);
                             setDataSource(handledData);
                         }
+                        else {
+                            setDataSource([]);
+                        }
                         setLoading(false);
                         return [2 /*return*/];
                 }

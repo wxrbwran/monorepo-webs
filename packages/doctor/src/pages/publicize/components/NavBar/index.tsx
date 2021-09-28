@@ -42,7 +42,7 @@ function NavBar() {
     if (!!filterOrgs.length) {
       setSelectOrgList(filterOrgs);
       setCurrentOrg(filterOrgs[0]);
-      initContact(filterOrgs[0].nsId);
+      // initContact(filterOrgs[0].nsId);
     }
   }, [filterOrgs]);
 

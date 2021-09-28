@@ -83,6 +83,8 @@ const XzlTable: FC<IProps> = (props) => {
       handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
       console.log('handledData*****', handledData);
       setDataSource(handledData);
+    } else {
+      setDataSource([]);
     }
     setLoading(false);
   };
