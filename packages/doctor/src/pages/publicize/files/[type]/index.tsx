@@ -61,7 +61,7 @@ function List({ location }: IProps) {
   };
   useEffect(() => {
     fetchListData();
-  }, []);
+  }, [currentOrgInfo]);
 
   const addPublicize = (params) => {
     api.education

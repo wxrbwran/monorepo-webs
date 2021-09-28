@@ -42,7 +42,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
       .catch((err: string) => {
         console.log('err', err);
       });
-  }, []);
+  }, [currentOrgInfo]);
 
   const type = {
     1: 'video',

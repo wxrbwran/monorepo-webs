@@ -16,8 +16,9 @@ interface IProps {
 function SelectGroup(props: IProps) {
   const [isShowSelectGroup, setIsShowSelectGroup] = useState(false);
   const [selectGroup, setSelectGroup] = useState('');
+  console.log('props.selectPatient', props.selectPatient);
   const handleShowGroup = () => {
-    if (props.selectPatient.length === 0) {
+    if (props.selectPatient?.length === 0) {
       message.error('请勾选患者');
     } else {
       setIsShowSelectGroup(true);
@@ -34,12 +35,10 @@ function SelectGroup(props: IProps) {
         nsId: selectGroup,
         sid: window.$storage.getItem('sid'),
       };
-      const res = await props.request(params);
-      if (res){
-        message.success('加入成功');
-        setIsShowSelectGroup(false);
-        props.refreshList();
-      }
+      await props.request(params);
+      message.success('加入成功');
+      setIsShowSelectGroup(false);
+      props.refreshList();
     }
   };
   return (
@@ -66,7 +65,7 @@ function SelectGroup(props: IProps) {
             {
               props.groupList.map((item: IGroupList) => {
                 return (
-                  <Option key={item.groupId} value={item.groupId}>{item.groupName}</Option>
+                  <Option key={item.id} value={item.id}>{item.name}</Option>
                 );
               })
             }
@@ -81,4 +80,5 @@ function SelectGroup(props: IProps) {
   );
 }
 
+SelectGroup.defaultProps = { selectPatient: [] };
 export default SelectGroup;

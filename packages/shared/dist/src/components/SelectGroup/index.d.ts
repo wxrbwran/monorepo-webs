@@ -8,4 +8,9 @@ interface IProps {
     groupList: [];
 }
 declare function SelectGroup(props: IProps): JSX.Element;
+declare namespace SelectGroup {
+    var defaultProps: {
+        selectPatient: any[];
+    };
+}
 export default SelectGroup;

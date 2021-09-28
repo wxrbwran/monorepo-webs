@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Button } from 'antd';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { clName, bindTime } from 'xzl-web-shared/src/utils/columns';
+import { pname, initAt } from 'xzl-web-shared/src/utils/columns';
+import DiagnosisDetail from '../../components/DiagnosisDetail';
 // import { groupDetailColumns } from '@/utils/columns';
 // import { useSelector } from 'umi';
 // import { IState } from 'typings/global';
@@ -16,7 +18,7 @@ function GroupDetails({ location }: IProps) {
   // const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [groupId, setGroupId] = useState(location.query.groupId);
   const [tableOptions, setOptions] = useState({ groupId: location.query.groupId });
-  const columns = [clName, bindTime];
+  const columns = [pname, initAt];
 
   useEffect(() => {
     if (groupId !== location.query.groupId) {
@@ -31,8 +33,10 @@ function GroupDetails({ location }: IProps) {
     dataIndex: 'diagnosis',
     align: 'center',
     className: 'action',
-    render: (_text: string, _record: any) => (
-      <div>诊断</div>
+    render: (_text: string, record: any) => (
+      <DiagnosisDetail sid={record.sid}>
+        <Button type="link">查看详情</Button>
+      </DiagnosisDetail>
     ),
   };
 

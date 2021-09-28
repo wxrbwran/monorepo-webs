@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form } from 'antd';
+import { Form, Button } from 'antd';
 import { useSelector } from 'umi';
 import  * as api from '@/services/api';
 import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
@@ -8,6 +8,7 @@ import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import SelectGroup from 'xzl-web-shared/src/components/SelectGroup';
 import { Search } from 'xzl-web-shared/src/components/Selects';
 import { SearchOutlined } from '@ant-design/icons';
+import DiagnosisDetail from '../components/DiagnosisDetail';
 // import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 
 function Patients() {
@@ -20,14 +21,19 @@ function Patients() {
   const columns = [pname, groupName, initAt];
 
   const handleCallback = (callbackStore: XzlTableCallBackProps) => {
-    setSelectPatient(callbackStore.selectedRows);
+    console.log('callbackStore', callbackStore);
+    setSelectPatient(callbackStore.selectedRowKeys);
   };
 
   const changeTableOption = (keyword: string) => {
     api.education
       .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
       .then((res) => {
-        setOptions({ actionLogId: res.id });
+        if (res?.id){
+          setOptions({ actionLogId: res.id });
+        } else {
+          setOptions(null);
+        }
       })
       .catch((err: string) => {
         console.log('err', err);
@@ -65,8 +71,10 @@ function Patients() {
     dataIndex: 'operate',
     align: 'center',
     className: 'action',
-    render: (_text: string, _record: any) => (
-      <div>诊断</div>
+    render: (_text: string, record: any) => (
+      <DiagnosisDetail sid={record.sid}>
+        <Button type="link" className="text-base">查看详情</Button>
+      </DiagnosisDetail>
     ),
   };
 

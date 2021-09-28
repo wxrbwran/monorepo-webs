@@ -60,8 +60,10 @@ function SelectGroup(props) {
     var _this = this;
     var _a = __read(useState(false), 2), isShowSelectGroup = _a[0], setIsShowSelectGroup = _a[1];
     var _b = __read(useState(''), 2), selectGroup = _b[0], setSelectGroup = _b[1];
+    console.log('props.selectPatient', props.selectPatient);
     var handleShowGroup = function () {
-        if (props.selectPatient.length === 0) {
+        var _a;
+        if (((_a = props.selectPatient) === null || _a === void 0 ? void 0 : _a.length) === 0) {
             message.error('请勾选患者');
         }
         else {
@@ -72,7 +74,7 @@ function SelectGroup(props) {
         setSelectGroup(value);
     };
     var handleJoinGroup = function () { return __awaiter(_this, void 0, void 0, function () {
-        var params, res;
+        var params;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -86,12 +88,10 @@ function SelectGroup(props) {
                     };
                     return [4 /*yield*/, props.request(params)];
                 case 2:
-                    res = _a.sent();
-                    if (res) {
-                        message.success('加入成功');
-                        setIsShowSelectGroup(false);
-                        props.refreshList();
-                    }
+                    _a.sent();
+                    message.success('加入成功');
+                    setIsShowSelectGroup(false);
+                    props.refreshList();
                     _a.label = 3;
                 case 3: return [2 /*return*/];
             }
@@ -103,10 +103,11 @@ function SelectGroup(props) {
             React.createElement("div", { className: "select-group" },
                 React.createElement("span", { className: "tit" }, "\u5C0F\u7EC4\u540D\u79F0"),
                 React.createElement(Select, { defaultValue: "\u4E0B\u62C9\u9009\u62E9\u5C0F\u7EC4", style: { width: 300 }, onChange: handleSelectGroup }, props.groupList.map(function (item) {
-                    return (React.createElement(Option, { key: item.groupId, value: item.groupId }, item.groupName));
+                    return (React.createElement(Option, { key: item.id, value: item.id }, item.name));
                 })),
                 React.createElement("div", { className: "submit-btn-style1" },
                     React.createElement(Button, { onClick: function () { return setIsShowSelectGroup(false); } }, " \u53D6\u6D88 "),
                     React.createElement(Button, { type: "primary", onClick: debounce(handleJoinGroup, 300) }, " \u786E\u5B9A "))))));
 }
+SelectGroup.defaultProps = { selectPatient: [] };
 export default SelectGroup;

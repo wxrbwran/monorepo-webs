@@ -39,7 +39,7 @@ function ArticleList() {
   };
   useEffect(() => {
     getPublicizeList();
-  }, []);
+  }, [currentOrgInfo]);
   const go2NewPage = (content: IList) => {
     dispatch({
       type: 'education/saveArticleContent',
