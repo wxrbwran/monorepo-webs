@@ -27,7 +27,7 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
     });
   });
   useEffect(() => {
-    if (initData) {
+    if (initData && isEmpty(questions)) {
       setQuestions(initData);
     }
   }, [initData]);

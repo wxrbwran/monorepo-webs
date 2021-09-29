@@ -4,10 +4,11 @@ import Viewer from '@/components/Viewer';
 // import { Button } from 'antd';
 // import { UpOutlined, DownOutlined } from '@ant-design/icons';
 import styles from './index.scss';
+import { IImageItem } from 'typings/imgStructured';
 
 interface IProps {
-  typeNew: string;
   handleHideCont: () => void;
+  data: IImageItem;
 }
 interface IImg {
   imageId: number;
@@ -16,7 +17,7 @@ interface IImg {
   status: number; // 0是异常 1是正常
   degree: number;
 }
-function ImageList({ typeNew, handleHideCont }: IProps) {
+function ImageList({ data, handleHideCont }: IProps) {
   const [showViewer, setShowViewer] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0); // 预览图片，当前选中第几张
   const [degree, setDegree] = useState(0);
@@ -24,12 +25,16 @@ function ImageList({ typeNew, handleHideCont }: IProps) {
   const [imageId, setImageId] = useState<number | null>();
   const [imgList, setImgList] = useState<IImg[]>([]);
   useEffect(() => {
-    const params = {
-      typeNew,
+    const params: any = {
       sid: window.$storage.getItem('patientSid'),
       wcId: window.$storage.getItem('patientWcId'),
     };
-    window.$api.image.fetchImageDetailNew(params).then((res: {imageInfos: IImg[]}) => {
+    if (data.imageIdList) {
+      params.imageIdList = data.imageIdList;
+    } else {
+      params.typeNew = data.typeNew;
+    }
+    window.$api.image.fetchImageDetailNew(params).then((res: { imageInfos: IImg[] }) => {
       setImgList(res.imageInfos);
     });
   }, []);
