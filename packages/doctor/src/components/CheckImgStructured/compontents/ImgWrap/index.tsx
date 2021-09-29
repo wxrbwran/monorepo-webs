@@ -19,7 +19,7 @@ const ImgWrap = (props: IProps) => {
     setShow(true);
     setTimeout(() => {
       const domKey = degree > 0 ? 'rotateRight' : 'rotateLeft';
-      const degreeDom = document.querySelector(`.react-viewer-btn[data-key="${domKey}"]`);
+      const degreeDom = document.querySelector(`.structured_viewer .react-viewer-btn[data-key="${domKey}"]`);
       const clickNum = (degree / 90) % 4;
       for (let i = 0; i < Math.abs(clickNum); i++) {
         // @ts-ignore
@@ -27,7 +27,7 @@ const ImgWrap = (props: IProps) => {
       }
       isRotateInit.current = true;
     }, 300);
-  }, []);
+  }, [degree]);
   const handleImageRotate = (degreeNum: number) => {
     if (imageId && isRotateInit.current) {
       const params = {
@@ -43,6 +43,7 @@ const ImgWrap = (props: IProps) => {
     <div className={styles.img_box}>
       <div className={styles.img_wrap} id="images" />
       <Viewer
+        className="structured_viewer"
         noClose
         onClose={() => {}}
         onMaskClick={() => { }}
