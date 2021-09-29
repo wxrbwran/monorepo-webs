@@ -136,7 +136,7 @@ body {
   img,
   svg {
     display: inline-block;
-    vertical-align: initial;
+    vertical-align: bottom;
   }
   svg {
     vertical-align: initial;
@@ -630,5 +630,28 @@ body {
 .ant-form {
   label {
     font-size: 14px!important;
+  }
+}
+// 搜索框的搜索按钮
+.ant-input-search-button {
+  height: 35px!important;
+}
+.ant-input-search {
+  input {
+    height: 35px;
+    font-size: 14px;
+  }
+}
+.ant-select.ant-select-single.ant-select-show-arrow {
+  .ant-select-selector {
+    height: 34px;
+  }
+  .ant-select-selection-placeholder {
+    line-height: 34px;
+    font-size: 14px;
+  }
+  .ant-select-selection-item {
+    font-size: 14px;
+    line-height: 34px;
   }
 }

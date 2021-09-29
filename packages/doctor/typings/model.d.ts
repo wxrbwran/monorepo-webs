@@ -123,4 +123,35 @@ declare interface IState {
   issue: IssueModelState;
   im: IMModelState;
   image: ImageModelState;
+  education: EduModelState;
+  suifang: SuifangModelState;
 }
+interface EduModelState {
+  richText: {
+    content: {
+      cover: string;
+      filename: string;
+      text: {
+        ops: []
+      }
+    },
+    id: string;
+  };
+  sendList: []
+}
+interface IQuestions {
+  type: string;
+  code?: number;
+  detail: {
+    checkedArr?: string[] | string; // 多选题，h5填写完返回的是string[]。单选题，h5返回的是string
+    stem: string | string[];
+    options: Ioptions[];
+    answer?: string | string[];
+  }
+}
+interface SuifangModelState {
+  id?: string;
+  subTitle?: string;
+  title?: string;
+  question?: IQuestions[]
+};

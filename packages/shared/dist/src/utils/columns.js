@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, Button } from 'antd';
 import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
 import { Role } from './role';
+import moment from 'moment';
 export var columnCreator = function (title, dataIndex, customRender) {
     if (customRender === void 0) { customRender = undefined; }
     var column = {
@@ -260,6 +261,30 @@ export var noReplyNumber = {
     sorter: function (a, b) {
         return a.noReplyNumber - b.noReplyNumber;
     },
+};
+export var pname = {
+    title: '姓名',
+    dataIndex: 'pname',
+    width: 100,
+    render: function (text) { return React.createElement("span", null, text); },
+};
+export var groupName = {
+    title: '所在分组',
+    dataIndex: 'groupName',
+    key: 'groupName',
+    render: function (_text, record) { return (React.createElement("div", null, record.groupName.join())); },
+};
+export var initAt = {
+    title: '与医生绑定时间',
+    dataIndex: 'initAt',
+    key: 'initAt',
+    render: function (text, _record) { return (React.createElement("div", null, text ? moment(text).format('YYYY.MM.DD') : '--')); },
+};
+export var bindAt = {
+    title: '与医生绑定时间',
+    dataIndex: 'bindAt',
+    key: 'bindAt',
+    render: function (text, _record) { return (React.createElement("div", null, text ? moment(text).format('YYYY.MM.DD') : '--')); },
 };
 // export const rootOrgColumns = (params) => [
 //   organizationName(params),

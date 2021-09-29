@@ -1,0 +1,35 @@
+.send_content {
+  .name {
+    @extend %file__name;
+    margin-top: 0;
+  }
+  .link {
+    color: #3296FA;
+  }
+  :global {
+    .ant-col {
+      // @include size(136px);
+      background-color: #EFF7FD;
+      border-radius: 5px;
+    }
+    .ant-checkbox-wrapper, .ant-radio-wrapper {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    .ant-checkbox, .ant-radio {
+      display: block;
+      margin: 5px 0 0 5px;
+      @include size(16px);
+    }
+    // .ant-radio-wrapper {
+    //   span {
+    //     display: flex;
+    //     flex-direction: column;
+    //   }
+    // }
+    .ant-checkbox + span, span.ant-radio + * {
+      padding: 0 25px;
+    }
+  }
+}

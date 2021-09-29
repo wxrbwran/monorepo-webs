@@ -47,6 +47,24 @@ export const hospital = {
       locale: false,
       component: './hospital/doctor-nurse',
     },
+    // {
+    //   path: 'suifang-department',
+    //   name: '科室',
+    //   icon: 'crown',
+    //   locale: false,
+    //   flatMenu: true,
+    //   component: './hospital/suifang-department',
+    //   routes: [
+    //     {
+    //       path: 'list',
+    //       name: '随访/宣教科室',
+    //       icon: 'crown',
+    //       locale: false,
+    //       component: './hospital/suifang-department/[depId]',
+    //     },
+    //     page404,
+    //   ],
+    // },
     page404,
   ],
 };

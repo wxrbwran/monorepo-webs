@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="70px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52 (66869) - http://www.bohemiancoding.com/sketch -->
+    <title>切片</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FD7E6F" offset="0%"></stop>
+            <stop stop-color="#F94344" offset="100%"></stop>
+        </linearGradient>
+        <path d="M22,17 L48,17 C49.1045695,17 50,17.8954305 50,19 L50,52 C50,53.1045695 49.1045695,54 48,54 L22,54 C20.8954305,54 20,53.1045695 20,52 L20,19 C20,17.8954305 20.8954305,17 22,17 Z M27,24 C26.4477153,24 26,24.4477153 26,25 L26,27 C26,27.5522847 26.4477153,28 27,28 L43,28 C43.5522847,28 44,27.5522847 44,27 L44,25 C44,24.4477153 43.5522847,24 43,24 L27,24 Z M24.5,33 C24.2238576,33 24,33.2238576 24,33.5 C24,33.7761424 24.2238576,34 24.5,34 L45.5,34 C45.7761424,34 46,33.7761424 46,33.5 C46,33.2238576 45.7761424,33 45.5,33 L24.5,33 Z M24.5,39 C24.2238576,39 24,39.2238576 24,39.5 C24,39.7761424 24.2238576,40 24.5,40 L45.1327873,40 C45.4089297,40 45.6327873,39.7761424 45.6327873,39.5 C45.6327873,39.2238576 45.4089297,39 45.1327873,39 L24.5,39 Z M24.5,45 C24.2238576,45 24,45.2238576 24,45.5 C24,45.7761424 24.2238576,46 24.5,46 L45.1327873,46 C45.4089297,46 45.6327873,45.7761424 45.6327873,45.5 C45.6327873,45.2238576 45.4089297,45 45.1327873,45 L24.5,45 Z" id="path-2"></path>
+        <filter x="-20.0%" y="-16.2%" width="140.0%" height="132.4%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.537254902   0 0 0 0 0.592156863   0 0 0 0 0.807843137  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="宣教文件/随访表" transform="translate(-1165.000000, -163.000000)">
+            <g id="上传文章" transform="translate(1165.000000, 163.000000)">
+                <g id="分组-5">
+                    <circle id="椭圆形" fill="url(#linearGradient-1)" opacity="0.7" cx="35" cy="35" r="35"></circle>
+                    <g id="合并形状">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                        <use fill="#FFFFFE" fill-rule="evenodd" xlink:href="#path-2"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

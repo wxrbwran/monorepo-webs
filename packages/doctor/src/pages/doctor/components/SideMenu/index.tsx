@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Menu } from 'antd';
-import { UserOutlined, BarChartOutlined } from '@ant-design/icons';
+import { UserOutlined, BarChartOutlined, ProfileOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import config from '@/config';
 import { Role } from 'xzl-web-shared/src/utils/role';
@@ -99,6 +99,12 @@ function SideMenu({ location }: Iprops) {
           <BarChartOutlined />
           <span className="ml-8">结构数据展示</span>
         </a>
+        <p>
+          <a href={config.PUBLICIZE} target="_blank" className={styles.structure} rel="noopener noreferrer">
+            <ProfileOutlined />
+            <span className="ml-8">患者宣教、患者随访</span>
+          </a>
+        </p>
       </Menu>
     </div>
   );

@@ -31,7 +31,7 @@ function subType({ name, icon, type }: IProps) {
       content: {
         address: rawUrl,
         cover: null,
-        filename: file.name,
+        filename: file,
         text: null,
       },
       // fromSid: window.$storage.getItem('orgSid'),
@@ -97,7 +97,7 @@ function subType({ name, icon, type }: IProps) {
     history.push(`/education/list/${type.toLowerCase()}`);
   };
 
-  const go2CreatePage = (e: { stopPropagation: (arg0: any) => void; }) => {
+  const go2CreatePage = (e: { stopPropagation: (arg0: any) => void }) => {
     e.stopPropagation(e);
     history.push(`/education/${type}/create`);
   };
@@ -125,7 +125,9 @@ function subType({ name, icon, type }: IProps) {
               </Upload>
           }
         </div>
-        <p className={styles.file}><img src={icon} alt="" /></p>
+        <p className={styles.file}>
+          <img src={icon} alt="" />
+        </p>
         <p>{name}</p>
       </div>
     </>
