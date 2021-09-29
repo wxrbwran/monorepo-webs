@@ -270,3 +270,9 @@ export declare const initAt: {
     key: string;
     render: (text: any, _record: any) => JSX.Element;
 };
+export declare const bindAt: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    render: (text: any, _record: any) => JSX.Element;
+};

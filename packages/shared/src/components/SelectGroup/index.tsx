@@ -33,7 +33,7 @@ function SelectGroup(props: IProps) {
     } else {
       const params = {
         nsId: selectGroup,
-        sid: window.$storage.getItem('sid'),
+        sid: [...props.selectPatient],
       };
       await props.request(params);
       message.success('加入成功');

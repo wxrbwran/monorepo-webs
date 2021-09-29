@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { pname, initAt } from 'xzl-web-shared/src/utils/columns';
+import { name, bindAt } from 'xzl-web-shared/src/utils/columns';
 import DiagnosisDetail from '../../components/DiagnosisDetail';
 // import { groupDetailColumns } from '@/utils/columns';
 // import { useSelector } from 'umi';
@@ -18,7 +18,7 @@ function GroupDetails({ location }: IProps) {
   // const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [groupId, setGroupId] = useState(location.query.groupId);
   const [tableOptions, setOptions] = useState({ groupId: location.query.groupId });
-  const columns = [pname, initAt];
+  const columns = [name, bindAt];
 
   useEffect(() => {
     if (groupId !== location.query.groupId) {
@@ -35,7 +35,7 @@ function GroupDetails({ location }: IProps) {
     className: 'action',
     render: (_text: string, record: any) => (
       <DiagnosisDetail sid={record.sid}>
-        <Button type="link">查看详情</Button>
+        <Button type="link" className="text-base">查看详情</Button>
       </DiagnosisDetail>
     ),
   };

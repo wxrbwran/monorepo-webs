@@ -22,6 +22,7 @@
       height:16px;
       position: absolute;
       left: 0;
+      top: 4px;
       background: #3296FA;
     }
   }
@@ -40,7 +41,7 @@
     font-size: 15px;
     margin-bottom: 23px;
     img {
-      vertical-align: top;
+      vertical-align: baseline;
     }
     .con {
       font-size: 14px;

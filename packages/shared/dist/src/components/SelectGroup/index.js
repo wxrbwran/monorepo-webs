@@ -50,6 +50,11 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 import React, { useState } from 'react';
 import { Button, Select, message } from 'antd';
 import DragModal from '../DragModal';
@@ -84,7 +89,7 @@ function SelectGroup(props) {
                 case 1:
                     params = {
                         nsId: selectGroup,
-                        sid: window.$storage.getItem('sid'),
+                        sid: __spreadArray([], __read(props.selectPatient)),
                     };
                     return [4 /*yield*/, props.request(params)];
                 case 2:

@@ -17,7 +17,7 @@ interface IProps {
 }
 function SendContent({ location, changeContent, defaultChecked }: IProps) {
   const dispatch = useDispatch();
-  const isScale = location.pathname.includes('scale');
+  const isScale = location.pathname.includes('suifang');
   const [pubList, setPubList] = useState<IList[]>([]);
   const [scaleList, setScaleList] = useState<IList[]>([]);
   const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);

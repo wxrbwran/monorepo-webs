@@ -5,7 +5,6 @@ import * as api from '@/services/api';
 import { ProfileOutlined } from '@ant-design/icons';
 import CreateBox from '../components/create_box';
 import ListItem from '../components/ListItem';
-import { getCheckedContent } from '../utils';
 // import type { IValues } from '../const';
 import ReplyDetail from '../components/reply_detail';
 import time from '@/assets/img/suifang/time.svg';
@@ -17,9 +16,6 @@ import styles from './index.scss';
 
 const PatientEducation: FC<ILocation> = ({ location }) => {
   const isScale = location.pathname.includes('suifang');
-  const pureDepartmentList = useSelector(
-    (state: Store) => state?.org?.currentOrg?.pureDepartmentList,
-  );
   const [sendContent, setSendContent] = useState([]);
   const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
 
@@ -42,7 +38,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
       .catch((err: string) => {
         console.log('err', err);
       });
-  }, [currentOrgInfo]);
+  }, [currentOrgInfo, location]);
 
   const type = {
     1: 'video',
@@ -64,7 +60,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
           <div className={styles.card}>
             <div>
               <div className={`${styles.tit} flex justify-between center`}>
-                <p className="text-gray-900">发送内容</p>
+                <p className="text-gray-900 text-base">发送内容</p>
                 {isScale && (
                   // <p className="cursor-pointer">
                   //   <ProfileOutlined /> 回复详情
@@ -110,9 +106,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                   <p className={styles.con}>
                     {group.includes('PATIENT_ALL')
                       ? '全部患者'
-                      : [...getCheckedContent(group, pureDepartmentList)]
-                        .map((i) => i.name)
-                        .join(', ')}
+                      : group}
                   </p>
                 </div>
                 <div className={styles.item}>

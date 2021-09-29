@@ -280,6 +280,12 @@ export var initAt = {
     key: 'initAt',
     render: function (text, _record) { return (React.createElement("div", null, text ? moment(text).format('YYYY.MM.DD') : '--')); },
 };
+export var bindAt = {
+    title: '与医生绑定时间',
+    dataIndex: 'bindAt',
+    key: 'bindAt',
+    render: function (text, _record) { return (React.createElement("div", null, text ? moment(text).format('YYYY.MM.DD') : '--')); },
+};
 // export const rootOrgColumns = (params) => [
 //   organizationName(params),
 //   // organizationCategory,

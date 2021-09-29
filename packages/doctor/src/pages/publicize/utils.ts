@@ -93,10 +93,11 @@ export const handleFormatValues = (
   let should_1: any = [];
   if (group.includes('PATIENT_ALL')){
     const mapObj: { operator?: string, value?: string } = {};
-    scopeItems.items.forEach((item) => {
-      mapObj[item.name] = {
+    const currentGroup = scopeItems.filter(scope => scope.description === '全部患者')[0];
+    currentGroup.items.forEach((i) => {
+      mapObj[i.name] = {
         operator: '=',
-        value: item.assign.value,
+        value: i.assign.value,
       };
     });
     should_1 = [...should_1, mapObj];
@@ -122,7 +123,9 @@ export const handleFormatValues = (
         delay: 32400,
         period: item,
         unit: 'day',
-        sourceMember: checked.split(','),
+        sourceMember: checked.split(',').map((ck)=>({
+          sourceId: ck,
+        })),
       },
     };
     actions = [...actions, mapObj];
@@ -140,6 +143,7 @@ export function getCheckedContent(idArr: string[], listArr: []){
   // if (idArr.includes('PATIENT_ALL')) {
   //   return '全部患者'
   // }
+  console.log('listArr', listArr);
   let result: any = [];
   idArr.forEach((item) => {
     listArr.forEach((lItem: { id: string }) => {

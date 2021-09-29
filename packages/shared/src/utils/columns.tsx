@@ -371,6 +371,17 @@ export const initAt = {
   ),
 };
 
+export const bindAt = {
+  title: '与医生绑定时间',
+  dataIndex: 'bindAt',
+  key: 'bindAt',
+  render: (text: any, _record: any) => (
+    <div>
+      {text ? moment(text).format('YYYY.MM.DD') : '--'}
+    </div>
+  ),
+};
+
 
 // export const rootOrgColumns = (params) => [
 //   organizationName(params),

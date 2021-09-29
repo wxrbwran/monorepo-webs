@@ -12,7 +12,7 @@ import * as api from '@/services/api';
 const { Step } = Steps;
 type IAbled = Record<string, boolean>;
 const EducationCreate: FC<ILocation> = ({ location }) => {
-  const isScale = location.pathname.includes('scale');
+  const isScale = location.pathname.includes('suifang');
   const sendList = useSelector((state: IState) => state.education.sendList);
   const [form] = Form.useForm();
   const [current, setCurrent] = useState(0);
