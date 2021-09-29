@@ -11,10 +11,7 @@ import { IState } from 'typings/global';
 function NavBar() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [avatar, setAvatar] = useState(config.defaultAvatar);
-  const user = useSelector((state: IState) => state.user.user);
   const wrapper = React.createRef();
-  const avatarUrl = useSelector((state: IState) =>  state.user?.user?.roles?.[0]?.subject?.avatarUrl);
   const filterOrgs: ISubject[] = useSelector((state: IState) => state.user.filterOrgs);
   const [selectOrgList, setSelectOrgList] = useState<ISubject[]>(filterOrgs);
   const [currentOrg, setCurrentOrg] = useState();
@@ -67,13 +64,6 @@ function NavBar() {
     }
   }, [filterOrgs]);
 
-  // 用户头像
-  useEffect(() => {
-    if (user.avatar) {
-      setAvatar(user.avatar);
-    }
-  }, [user]);
-
   // 存储当前机构信息
   useEffect(() => {
     if (currentOrg){
@@ -125,7 +115,7 @@ function NavBar() {
         </Dropdown>
       </div>
       <div className="header-navbar__right">
-        <img className="avatar" src={avatarUrl || avatar} alt="" />
+        <img className="avatar" src={window.$storage.getItem('userAvatarUrl') || config.defaultAvatar} alt="" />
       </div>
     </header>
   );
