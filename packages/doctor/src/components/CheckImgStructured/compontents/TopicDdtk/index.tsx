@@ -190,13 +190,13 @@ function Ddtk(props: IProps) {
             let isShow = true;
             if (isViewOnly) {
               isShow = false;
-              count = count - 1;
+              count = count + 1;
               item.qa.forEach(qaItem => {
                 // 一个问题的有效答案
                 const hasVals = qaItem.answer.filter(ansItem => !!ansItem.trim());
                 if (!isEmpty(hasVals)) { isShow = true;}
               });
-              if (isShow) { count = count + 1;}
+              if (isShow) { count = count - 1;}
             }
             if (isShow) {
               if (editIndex === quesIndex) {
