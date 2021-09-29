@@ -43,7 +43,7 @@ function Ddtk(props: IProps) {
     });
   });
   useEffect(() => {
-    if (initData) {
+    if (initData && isEmpty(questions)) {
       setQuestions( fetchInitData());
     }
   }, [initData]);

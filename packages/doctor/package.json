@@ -12,7 +12,6 @@
     "debug": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=test umi dev",
     "debug-prod": "pnpm todev && NODE_ENV=development APP_ENV=prod umi dev",
     "dev-shared": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=dev umi dev",
-    "debug-shared": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=dev umi dev",
     "dev-dist": "pnpm toprod && NODE_ENV=production APP_ENV=dev umi build",
     "prerelease": "pnpm toprod && NODE_ENV=production APP_ENV=test umi build",
     "dist": "pnpm toprod && NODE_ENV=production APP_ENV=prod umi build",

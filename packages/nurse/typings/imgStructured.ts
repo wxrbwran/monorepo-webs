@@ -60,3 +60,14 @@ export interface ISearchDocumentItem {
   sourceSid: string;
   source: string;
 }
+
+export interface IImageItem {
+  category: number; // 0化验单  1检查单
+  count: number;
+  lastReportAt: number;
+  name: string;
+  status: number; // 0是红色  1是绿色  2是灰色
+  type: number;
+  typeNew?: string;
+  imageIdList?: string[]; // 检查单有此字段
+}
