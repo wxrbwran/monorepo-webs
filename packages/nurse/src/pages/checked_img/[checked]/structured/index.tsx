@@ -103,7 +103,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
     <div>
       {
         imgData ? (
-          <div className="flex justify-start items-start mt-10" style={{ minWidth: 1200 }}>
+          <div className="flex justify-start items-start" style={{ minWidth: 1200 }}>
             <ImgWrap
               imageUrl={imgData.url}
               handleClose={() => history.goBack()}
@@ -134,7 +134,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
       }
       {
         imgData && (
-          <div className="pl-18 flex">
+          <div className="pl-18 flex -mt-10">
             <ExclamationCircleFilled style={{ color: '#FFCA4D', paddingTop: '4px' }} />
             <div className="ml-3">
               <p>1.如果图片内含多张单据，点击顶部选择图片类型</p>
