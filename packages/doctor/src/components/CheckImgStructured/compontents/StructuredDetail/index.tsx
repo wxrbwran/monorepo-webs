@@ -10,7 +10,7 @@ import StructuredDetailTopic from '../StructuredDetailTopic';
 import Nodata from '../Nodata';
 import { outTypes, formatJcdSubmitData } from '../utils';
 import styles from './index.scss';
-import { isEmpty, cloneDeep } from 'lodash';
+import { isEmpty, cloneDeep, debounce } from 'lodash';
 import uuid from 'react-uuid';
 
 interface ITopicParams {
@@ -216,7 +216,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             )
           }
         </div>
-        <Button className={styles.save_btn} type="primary" onClick={handleSaveClick}>
+        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 500)}>
           {isViewOnly ? '修改结果' : '保存并退出'}
         </Button>
       </div>
