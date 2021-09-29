@@ -31,6 +31,18 @@ function NavBar() {
     });
   };
 
+  // 记录当前机构位置
+  const postContactLocation = (nsId?: string) => {
+    api.education.postContactLocation({
+      orgSId: nsId,
+      sid: window.$storage.getItem('sid'),
+    }).then(() => {
+      console.log('成功');
+    }).catch((err: any) => {
+      message.error(err?.result);
+    });
+  };
+
   // 获取/设置机构列表
   useEffect(() => {
     dispatch({
@@ -42,7 +54,15 @@ function NavBar() {
   useEffect(() => {
     if (!!filterOrgs.length) {
       setSelectOrgList(filterOrgs);
-      setCurrentOrg(filterOrgs[0]);
+      api.education.getContactLocation().then((res) => {
+        if (res){
+          setCurrentOrg({ ...filterOrgs.filter(item => item.sid === res.location)[0] });
+        } else {
+          setCurrentOrg(filterOrgs[0]);
+        }
+      }).catch((err: any) => {
+        message.error(err?.result);
+      });
       // initContact(filterOrgs[0].nsId);
     }
   }, [filterOrgs]);
@@ -70,6 +90,7 @@ function NavBar() {
         type: 'education/fetchGroupList',
         payload: currentOrg?.sid,
       });
+      postContactLocation(currentOrg?.sid);
     }
   }, [currentOrg]);
 

@@ -122,4 +122,12 @@ export default {
   postPublicizeBatchStatus(data?: any): Promise<any> {
     return http.post('publicize/batch/status', { data });
   },
+  // 记录随访当前机构位置
+  postContactLocation(data?: any): Promise<any> {
+    return http.post('doctor/contact/location', { data });
+  },
+  // 获取随访当前机构位置
+  getContactLocation(data?: any): Promise<any> {
+    return http.get('doctor/contact/location', { data });
+  },
 };

@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useSelector } from 'umi';
 import { Input, message } from 'antd';
 import * as api from '@/services/api';
 import { PlusOutlined, FormOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
 import './index.scss';
 // import { IState } from 'typings/global';
 interface IProps {
@@ -16,7 +15,6 @@ interface IProps {
 }
 
 function SideMenu(props: IProps) {
-  const dispatch = useDispatch();
   const [isShowAdd, setIsShowAdd] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [addGroupName, setAddGroupName] = useState('');
@@ -27,18 +25,6 @@ function SideMenu(props: IProps) {
   // const {projectNsId} = useSelector((state: IState) => state.project.projDetail);
   const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-  const getGroupList = () => {
-    //获取实验组
-    dispatch({
-      type: 'education/fetchGroupList',
-      payload: currentOrgInfo.sid,
-    });
-  };
-
-  useEffect(() => {
-    getGroupList();
-  }, [currentOrgInfo]);
   const handleChangeValues = (e: { target: { value: string } }) => {
     setAddGroupName(e.target.value);
   };

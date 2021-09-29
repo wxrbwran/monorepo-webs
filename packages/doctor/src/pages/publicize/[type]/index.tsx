@@ -106,7 +106,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                   <p className={styles.con}>
                     {group.includes('PATIENT_ALL')
                       ? '全部患者'
-                      : group}
+                      : group.join()}
                   </p>
                 </div>
                 <div className={styles.item}>

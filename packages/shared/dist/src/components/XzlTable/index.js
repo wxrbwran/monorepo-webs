@@ -93,21 +93,21 @@ var XzlTable = function (props) {
     };
     var fetchTableDataSource = function (query) {
         if (query === void 0) { query = {}; }
-        return __awaiter(void 0, void 0, void 0, function () {
-            var params, res, handledData;
+        setLoading(true);
+        console.log('query', query);
+        var params = __assign(__assign({ pageAt: 1, pageSize: size }, depOptions), query);
+        // 处理不分页的api请求
+        if (noPagination) {
+            delete params.pageAt;
+            delete params.pageSize;
+        }
+        console.log('fetchTableDataSource params', params);
+        var timeOut = (tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.timeOut) ? 2000 : 0;
+        setTimeout(function () { return __awaiter(void 0, void 0, void 0, function () {
+            var res, handledData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        setLoading(true);
-                        console.log('query', query);
-                        params = __assign(__assign({ pageAt: 1, pageSize: size }, depOptions), query);
-                        // 处理不分页的api请求
-                        if (noPagination) {
-                            delete params.pageAt;
-                            delete params.pageSize;
-                        }
-                        console.log('fetchTableDataSource params', params);
-                        return [4 /*yield*/, request(params)];
+                    case 0: return [4 /*yield*/, request(params)];
                     case 1:
                         res = _a.sent();
                         console.log('fetchTableDataSource res', res);
@@ -127,7 +127,7 @@ var XzlTable = function (props) {
                         return [2 /*return*/];
                 }
             });
-        });
+        }); }, timeOut);
     };
     useEffect(function () {
         console.log('depOptions', depOptions);

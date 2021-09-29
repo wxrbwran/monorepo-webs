@@ -116,6 +116,7 @@ function Patients() {
           // noPagination={true}
           tableOptions={{
             pagination: false,
+            timeOut: true,
           }}
         />
       }
