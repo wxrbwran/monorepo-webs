@@ -10,7 +10,7 @@ interface IProps {
   value?: string;
   focus?: boolean; // 是否主动获取焦点
   width?: number;
-  float?: string;
+  float?: any;
 }
 
 const Search: FC<IProps> = (props) => {
@@ -51,7 +51,7 @@ const Search: FC<IProps> = (props) => {
       <Input.Search
         placeholder={placeholder}
         value={wordKey}
-        style={{ width: width || 160, float: float || 'right', marginBottom: 15, marginRight: 10 }}
+        style={{ width, float }}
         onSearch={handleSearchKey}
         onChange={handleChangeKey}
         ref={inputRef}
@@ -60,5 +60,5 @@ const Search: FC<IProps> = (props) => {
   );
 };
 
-Search.defaultProps = { placeholder: '请输入关键词搜索', value: '' };
+Search.defaultProps = { placeholder: '请输入关键词搜索', value: '', float: 'right', width: 160 };
 export default Search;

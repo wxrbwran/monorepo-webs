@@ -67,7 +67,7 @@ import { handleTableDataSource, handleTableRowKey } from './util';
 import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
     console.log('this is table shared~111');
-    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination;
+    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination, extra = props.extra;
     console.log(category, handleCallbackSelectKeys);
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
@@ -114,7 +114,15 @@ var XzlTable = function (props) {
                         if (res) {
                             setCurrent(params.pageAt);
                             setSize(params.pageSize);
-                            setTotal(res.total);
+                            if (dataKey == 'events_jsonb') {
+                                res.tableBody.forEach(function (element) {
+                                    element.content = JSON.parse(element.content.value);
+                                });
+                                setTotal(extra);
+                            }
+                            else {
+                                setTotal(res.total);
+                            }
                             handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
                             handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
                             console.log('handledData*****', handledData);

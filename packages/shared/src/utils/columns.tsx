@@ -281,7 +281,7 @@ export const organizationNameOut = (params: any) => ({
   dataIndex: 'orgName',
   align: 'center',
   mock: '@region',
-  render: (text:string, record: any) =>
+  render: (text: string, record: any) =>
     params.level === '下级机构' ? (
       <a
         className="header__link__clinical"

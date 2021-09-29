@@ -11,7 +11,6 @@ import * as api from '@/services/api';
 import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
 import { imMsgType } from '@/utils/tools';
 import reCalcAllMessageTime from '@/utils/reCalcAllMessageTime';
-// eslint-disable-next-line import/no-cycle
 import CheckImgStructured from '@/components/CheckImgStructured';
 import jgh from '@/assets/img/jgh.png';
 import ChatItem, { IAvatar } from '../ChatItem';
@@ -272,6 +271,7 @@ const ChatList: FC = () => {
         onClose={closeImageViewer}
         images={images}
         onChange={handleChangeViewerPic}
+        disableKeyboardSupport
         customToolbar={(config) => (
           [
             ...config,

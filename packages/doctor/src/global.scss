@@ -498,6 +498,9 @@ body {
         }
       }
     }
+    .ant-modal {
+      top: 0;
+    }
   }
   // 全屏modal、化验单检查单审核图片时使用
   .ant-modal-wrap-full {
@@ -510,6 +513,7 @@ body {
     .ant-modal {
       margin: 0;
       height: 100%;
+      top: 0;
     }
     .ant-modal-content {
       height: 100%;

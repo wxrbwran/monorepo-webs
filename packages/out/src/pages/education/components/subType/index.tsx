@@ -14,18 +14,13 @@ interface IProps {
 }
 
 function subType({ name, icon, type }: IProps) {
-  const addPublicize = (params: {
-    content: { address: string; cover: null; filename: any; text: null };
-    fromSid: string;
-    type: string;
-  }) => {
-    api.education
-      .addPublicize({ ...params })
-      .then(() => {
-        setTimeout(() => {
-          message.success('上传成功');
-        }, 200);
-      })
+
+  const addPublicize = (params: { content: { address: string; cover: null; filename: any; text: null; }; fromSid: string; type: string; }) => {
+    api.education.addPublicize({ ...params }).then(() => {
+      setTimeout(() => {
+        message.success('上传成功');
+      }, 200);
+    })
       .catch((err: string) => {
         console.log('err', err);
       });
@@ -39,7 +34,10 @@ function subType({ name, icon, type }: IProps) {
         filename: file,
         text: null,
       },
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
+      ownershipSid: window.$storage.getItem('orgSid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      operatorSid: window.$storage.getItem('sid'),
       type: type.toUpperCase(),
     };
     if (type === 'document') {
@@ -57,39 +55,38 @@ function subType({ name, icon, type }: IProps) {
       });
     }
   };
-  const fetchUrlThenUpload = async (file: { name: string; type: string }) => {
+  const fetchUrlThenUpload = async (file: { name: string, type: string }) => {
     message.info({
       content: '正在上传',
     });
-    api.file
-      .filePrepare({ businessType: businessType[type] })
-      .then((res) => {
-        console.log(432, res);
-        const { accessId, encodePolicy, host, key, signature } = res;
-        const formData = new FormData();
-        formData.set('name', file.name);
-        formData.set('key', `${key}${file.name}`);
-        formData.set('policy', encodePolicy);
-        formData.set('OSSAccessKeyId', accessId);
-        formData.set('success_action_status', '200');
-        formData.set('callback', '');
-        formData.set('signature', signature);
-        formData.set('file', file);
-        console.log('host', host);
-        request
-          .post(host, {
-            data: formData,
-          })
-          .then(() => {
-            handleSubmit(`${host}/${key}${file.name}`, file.name);
-          })
-          .catch((err) => {
-            console.log('err', err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    api.file.filePrepare({ businessType: businessType[type] }).then(res => {
+      console.log(432, res);
+      const {
+        accessId, encodePolicy, host, key, signature,
+      } = res;
+      const formData = new FormData();
+      formData.set('name', file.name);
+      formData.set('key', `${key}${file.name}`);
+      formData.set('policy', encodePolicy);
+      formData.set('OSSAccessKeyId', accessId);
+      formData.set('success_action_status', '200');
+      formData.set('callback', '');
+      formData.set('signature', signature);
+      formData.set('file', file);
+      console.log('host', host);
+      request
+        .post(host, {
+          data: formData,
+        })
+        .then(() => {
+          handleSubmit(`${host}/${key}${file.name}`, file.name);
+        })
+        .catch((err) => {
+          console.log('err', err);
+        });
+    }).catch(err => {
+      console.log(err);
+    });
   };
 
   const stopPropagation = (e: any) => {
@@ -109,23 +106,24 @@ function subType({ name, icon, type }: IProps) {
     <>
       <div className={styles.box} onClick={go2NewPage}>
         <div className={styles.upload}>
-          {['accompany', 'article'].includes(type) ? (
-            <p onClick={go2CreatePage} className={styles.btn}>
-              <FormOutlined /> 创建
-            </p>
-          ) : (
-            <Upload
-              multiple={false}
-              listType="text"
-              beforeUpload={fetchUrlThenUpload}
-              showUploadList={false}
-              accept={AcceptType[type]}
-              onClick={stopPropagation}
-            >
-              <UploadOutlined />
-              <span>上传</span>
-            </Upload>
-          )}
+          {
+            ['accompany', 'article'].includes(type) ?
+              <p onClick={go2CreatePage} className={styles.btn}>
+                <FormOutlined /> 创建
+              </p>
+              :
+              <Upload
+                multiple={false}
+                listType="text"
+                beforeUpload={fetchUrlThenUpload}
+                showUploadList={false}
+                accept={AcceptType[type]}
+                onClick={stopPropagation}
+              >
+                <UploadOutlined />
+                <span>上传</span>
+              </Upload>
+          }
         </div>
         <p className={styles.file}>
           <img src={icon} alt="" />

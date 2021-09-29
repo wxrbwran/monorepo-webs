@@ -48,7 +48,7 @@ var Search = function (props) {
     return (React.createElement(React.Fragment, null,
         React.createElement(Item, { noStyle: true, name: searchKey },
             React.createElement(Input, { type: "hidden" })),
-        React.createElement(Input.Search, { placeholder: placeholder, value: wordKey, style: { width: width || 160, float: float || 'right', marginBottom: 15, marginRight: 10 }, onSearch: handleSearchKey, onChange: handleChangeKey, ref: inputRef })));
+        React.createElement(Input.Search, { placeholder: placeholder, value: wordKey, style: { width: width, float: float }, onSearch: handleSearchKey, onChange: handleChangeKey, ref: inputRef })));
 };
-Search.defaultProps = { placeholder: '请输入关键词搜索', value: '' };
+Search.defaultProps = { placeholder: '请输入关键词搜索', value: '', float: 'right', width: 160 };
 export default Search;

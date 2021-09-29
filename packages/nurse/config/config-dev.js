@@ -15,7 +15,7 @@ for (const key in oriEnv) {
 console.log('building ... ', pkg.name, pkg.version);
 
 const config = {
-  mfsu: {},
+  // mfsu: {},
   hash: true,
   define: defineEnv,
   outputPath: pkg.name,
