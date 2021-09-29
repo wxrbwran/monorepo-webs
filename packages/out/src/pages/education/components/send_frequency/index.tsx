@@ -16,12 +16,12 @@ function SendFrequency({ form }: IProps) {
 
   useEffect(() => {
     setFieldsValue({ custom: [''] });
-  }, [])
+  }, []);
 
   const handleChangeType = () => {
     // setType(value);
     setFieldsValue({ custom: [''] });
-  }
+  };
 
   return (
     <>
@@ -30,7 +30,7 @@ function SendFrequency({ form }: IProps) {
       <FormItem
         name={'frequencyType'}
         noStyle
-        initialValue='normal'
+        initialValue='once'
       >
         <Select style={{ width: 180 }} onChange={handleChangeType}>
           {sendType.map(item => (
@@ -45,7 +45,7 @@ function SendFrequency({ form }: IProps) {
       </FormItem>
       <div className='ml-50'>
         {
-          getFieldValue('frequencyType') === 'normal' ? (
+          getFieldValue('frequencyType') === 'once' ? (
             <Form.List
               name="custom"
             >
@@ -108,7 +108,7 @@ function SendFrequency({ form }: IProps) {
       </div>
     </div>
     </>
-  )
+  );
 }
 
 export default SendFrequency;

@@ -19,7 +19,8 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   const [disabled, setDisabled] = useState<IAbled>({}); // 年龄性别是否禁用状态
   const [checked, setChecked] = useState<string>(''); // 选择的要发送的内容的id
   const [rules, setRules] = useState<IRule>();
-  const [initFormVal, setInitFormVal] = useState({ frequencyType: 'normal' });
+  const [initFormVal, setInitFormVal] = useState({ frequencyType: 'once' });
+  const [scopeItems, setScopeItems] = useState([]);
 
   const next = () => {
     if (!checked) {
@@ -38,7 +39,31 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
       .getRules(isScale ? 'FOLLOW' : 'PUBLICIZE_EDUCATION')
       .then((res) => {
         console.log('resrules', res);
-        setRules(res);
+        setRules(res.keys);
+        const scopeListApi = res.keys.filter(item => item.name === 'scope')[0].assign.value;
+        if (scopeListApi){
+          const params = {
+            sourceType: isScale ? 2 : 3,
+            kp: 'team',
+            rsList: [{
+              sid:  window.$storage.getItem('sid'),
+              roleType: window.$storage.getItem('currRoleId'),
+              nsId:  window.$storage.getItem('nsId'),
+            }, {
+              sid: window.$storage.getItem('orgSid'),
+              roleType:  window.$storage.getItem('orgRole'),
+              // nsId: currentOrgInfo.nsId,
+            }],
+          };
+          api.education
+            .fetchNodeEl(scopeListApi, params)
+            .then((r) => {
+              setScopeItems([...r.items]);
+            })
+            .catch((err: string) => {
+              console.log('err', err);
+            });
+        }
       })
       .catch((err: string) => {
         console.log('err', err);
@@ -62,7 +87,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   };
   const onFinish = (values: IValues) => {
     console.log('Received values of form:', values);
-    const result = handleFormatValues(values, rules, isScale, checked);
+    const result = handleFormatValues(values, rules, isScale, checked, currentOrgInfo.sid, currentOrgInfo.role, scopeItems);
     if (result) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const { start, must, should_1, actions } = result;
@@ -86,8 +111,20 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
           },
         ],
         meta: {
-          sid: window.$storage.getItem('sid'),
-          businessType: isScale ? 2 : 3,
+          // sid: window.$storage.getItem('sid'),
+          sourceType: isScale ? 2 : 3,
+          teamLocations: [{
+            sid: window.$storage.getItem('sid'),
+            ns: window.$storage.getItem('nsId'),
+            role: window.$storage.getItem('currRoleId'),
+            tag: 'operator',
+          }, {
+            sid: window.$storage.getItem('orgSid'),
+            // ns: currentOrgInfo.nsId,
+            role: window.$storage.getItem('orgRole'),
+            tag: 'ownership',
+          }],
+
         },
       };
       console.log('params666', params);

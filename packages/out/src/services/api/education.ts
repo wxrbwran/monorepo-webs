@@ -51,16 +51,16 @@ export default {
     return http.get(`research/project/file/info/${fileId}`);
   },
   // 获取规则
-  getRules(type: string): Promise<any> {
-    return http.get(`template/${type}`);
+  getRules(source_type: string): Promise<any> {
+    return http.get(`template/${source_type}`);
   },
   // 发送计划
   sendPlan(data?: any): Promise<any> {
-    return http.post('out_hospital/rule', { data });
+    return http.post('rules', { data });
   },
   // 获取已发送内容
   getSendContent(data?: any): Promise<any> {
-    return http.get('out_hospital/rule', { data });
+    return http.get('rules', { data });
   },
   // 查询诊断处理
   fetchKvScope(data: any): Promise<any> {
@@ -81,5 +81,13 @@ export default {
   // 发送计划后，批量更改各个涉及的宣教类型状态
   postPublicizeBatchStatus(data?: any): Promise<any> {
     return http.post('publicize/batch/status', { data });
+  },
+  // 动态获取节点
+  fetchNodeEl(url: string, data: any): Promise<any> {
+    return http.get(`${url}`, { data });
+  },
+  // 查看随访回复详情
+  getScaleDetail(id: any): Promise<any> {
+    return http.get(`reply/follow/${id}`);
   },
 };
