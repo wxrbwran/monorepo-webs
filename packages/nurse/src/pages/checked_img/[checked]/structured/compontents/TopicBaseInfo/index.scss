@@ -1,0 +1,13 @@
+.topic_base {
+ :global {
+  .ant-form-item {
+    margin-bottom: 0px!important;
+  }
+  .ant-col-12 {
+    margin-bottom: 10px;
+  }
+  label {
+    font-weight: 500;
+  }
+ }
+}
