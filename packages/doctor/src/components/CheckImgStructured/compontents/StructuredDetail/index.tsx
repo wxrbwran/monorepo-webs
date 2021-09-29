@@ -95,7 +95,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   };
   const saveJcdData = (params: any) => {
     params.originIds = jcdOriginIds;
-    console.log('gggx', params);
     api.image.putImageJcdAndOther(params).then(() => {
       console.log('添加检查单成功');
     }).catch(err => {
@@ -134,7 +133,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
             const { tempList, jcdList } = formatJcdSubmitData(list, timeSlotTemp, clickSaveTime);
-            saveTemplate(tempList, clickSaveTime);
+            saveTemplate(tempList);
             saveJcdData(jcdList);
           }).catch((err) => {
             console.log('err', err);

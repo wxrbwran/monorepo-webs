@@ -5,6 +5,7 @@ import { Form } from 'antd';
 import {
   IApiDocumentItem, IIndexItem, ISearchDocumentItem,
 } from 'typings/imgStructured';
+import { isEmpty } from 'lodash';
 import * as api from '@/services/api';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
 import IndexTable from '../IndexTable';
@@ -27,7 +28,7 @@ interface IApiData {
 }
 
 interface IProps {
-  handleCallbackFns: (params: ICallbackFn) => void; // 图片审核大病历使用
+  handleDocumentsCallbackFns: (params: ICallbackFn) => void; // 图片审核大病历使用
   formKey: string; // 唯一性，【单据id+来源】
   level1Type: string; // 一级分类: 当前指标是化验单还是检查单类型，添加自定义指标时需要此参数
   firstIndex: string;
@@ -38,11 +39,13 @@ interface IProps {
     commonItems: IIndexItem[],
     noCommonItems:IIndexItem[]
   } | null;
+  selectIndex?: any;
+  isViewOnly: boolean;
 }
 
 const CustomIndex: FC<IProps> = (props) => {
   const {
-    handleCallbackFns, formKey, initList, level1Type, firstIndex, apiParams,
+    handleDocumentsCallbackFns, formKey, initList, level1Type, firstIndex, apiParams, selectIndex, isViewOnly,
   } = props;
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue, getFieldsValue } = form;
@@ -51,6 +54,8 @@ const CustomIndex: FC<IProps> = (props) => {
     noCommonItems: [],
   };
   const [apiData, setApiData] = useState<IApiData>(initApiData);
+  const [addIndexNum, setaddIndexNum] = useState(0);
+  const [formInit, setFormInit] = useState({});
   // 把点击的指标移到第一行
   const formatFirshIndex = (commonItems: IIndexItemCustom[], noCommonItems:IIndexItemCustom[]) => {
     commonItems.forEach((item: IIndexItemCustom, index: number) => {
@@ -71,27 +76,32 @@ const CustomIndex: FC<IProps> = (props) => {
     };
   };
   useEffect(() => {
-    if (initList) {
-      setApiData(formatDataAddIndex(initList, 0));
-    } else {
-      const params = {
-        documentId: apiParams.documentId,
-        sampleFroms: [apiParams.sampleFrom],
-        source: 'SYSTEM',
-      };
-      api.indexLibrary.fetchIndexDocumentIndex(params).then(
-        ({ list }: {list: IIndexItemCustom[]}) => {
-          const commonItems = list.filter((item) => item.common);
-          const noCommonItems = list.filter((item) => !item.common);
-          // 如果有指定首行展示哪个指标，这里移动到第一个
-          const data: IApiData = firstIndex
-            ? formatFirshIndex(commonItems, noCommonItems) : {
-              commonItems,
-              noCommonItems,
-            };
-          setApiData({ ...formatDataAddIndex(data, 0) });
-        },
-      );
+    // 首次渲染
+    if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
+      if (initList) {
+        console.log('=====+1,initList有数据时');
+        setApiData(formatDataAddIndex(initList, addIndexNum));
+      } else {
+        const params = {
+          documentId: apiParams.documentId,
+          sampleFroms: [apiParams.sampleFrom],
+          source: 'SYSTEM',
+        };
+        api.indexLibrary.fetchIndexDocumentIndex(params).then(
+          ({ list }: { list: IIndexItemCustom[] }) => {
+            const commonItems = list.filter((item) => item.common);
+            const noCommonItems = list.filter((item) => !item.common);
+            // 如果有指定首行展示哪个指标，这里移动到第一个
+            const data: IApiData = firstIndex
+              ? formatFirshIndex(commonItems, noCommonItems) : {
+                commonItems,
+                noCommonItems,
+              };
+            console.log('=====+2,initList没数据，请求接口时');
+            setApiData({ ...formatDataAddIndex(data, addIndexNum) });
+          },
+        );
+      }
     }
   }, [initList]);
 
@@ -127,6 +137,7 @@ const CustomIndex: FC<IProps> = (props) => {
         sampleFroms: [sampleFrom],
         indexList: formatSubmitItems(values, itemsLength),
       };
+      console.log('params22221', params);
       resolve(params);
     }).catch((err) => {
       reject(err);
@@ -155,6 +166,7 @@ const CustomIndex: FC<IProps> = (props) => {
         [`${formIndex}_source`]: source,
       };
     });
+    setFormInit(initForm);
     setFieldsValue({
       ...initForm,
     });
@@ -163,28 +175,57 @@ const CustomIndex: FC<IProps> = (props) => {
     handleInitForm(); // 初始化表单
   }, [apiData]);
   useEffect(() => {
-    if (handleCallbackFns) {
-      handleCallbackFns({
+    if (handleDocumentsCallbackFns) {
+      handleDocumentsCallbackFns({
         action: 'add',
         type: apiParams.sampleFrom + apiParams.documentName,
         fn: handleSave,
       });
     }
     return () => {
-      if (handleCallbackFns) {
-        handleCallbackFns({
+      if (handleDocumentsCallbackFns) {
+        handleDocumentsCallbackFns({
           action: 'remove',
           type: apiParams.sampleFrom + apiParams.documentName,
         });
       }
     };
   }, [apiData]);
-
+  const addIndexSuccess = (newItemData: any) => {
+    // 保存一下用户已经输入的form表单值，在apiData渲染完之后，这里重新设置回去。解决添加新指标后丢失用户输入数据问题
+    // 备注：由于上面监听了apiData的改变，只要此状态更新，就会走initForm方法（这里是为了把新添加的指标，也set一下，主
+    // 要是设置一下隐藏域indexIdNew的值。由于handleInitForm里的apiData是最原始的数据，所以会丢失用记输入的数据。所以这里需要重新设置回去）
+    const curFormData = getFieldsValue(true);
+    const newApiData = {
+      ...apiData,
+      commonItems: [newItemData, ...apiData.commonItems],
+    };
+    const newAddInx = addIndexNum + 1;
+    setaddIndexNum((pre) => pre + 1);
+    console.log('=====+4,当前页面添加了新的指标时');
+    setApiData({ ...formatDataAddIndex(newApiData, newAddInx) });
+    setTimeout(() => {
+      // 这里重新设置回去
+      setFieldsValue({
+        ...curFormData,
+      });
+    }, 300);
+  };
+  useEffect(() => {
+    // 点击搜索的， 如果当前指标列表中不存在此指标数据，则添加进来，否则这里不做处理
+    if (selectIndex) {
+      const isHasIndex = [...apiData.commonItems, ...apiData.noCommonItems]
+        .filter((item) => item.id === selectIndex.id || item.indexId === selectIndex.indexId);
+      if (isHasIndex.length === 0) {
+        addIndexSuccess(selectIndex);
+      }
+    }
+  }, [selectIndex]);
   const renderItem = useMemo(() => (subName?: string) => {
-    const param: {apiData: any, subName?: string} = { apiData };
+    const param: any = { apiData, isViewOnly, getFieldsValue, formInit };
     if (subName) { param.subName = subName; }
     return <IndexTable {...param} />;
-  }, [apiData]);
+  }, [apiData, formInit, isViewOnly]);
 
   return (
     <div className={`${styles.biochemistry} relative`}>

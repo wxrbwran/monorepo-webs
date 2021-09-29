@@ -19,7 +19,7 @@ function QuestionDetail(props: IProps) {
   const { children, source, id, isShowEdit } = props;
   const [title, setTitle] = useState('');
   const [subTitle, setSubTitle] = useState('');
-  const [question, setQuestion] = useState<IQuestions[]>();
+  const [question, setQuestion] = useState<IQuestions[]>(props?.question || []);
   const [isShowModal, setIsShowModal] = useState(false);
 
   useEffect(() => {
