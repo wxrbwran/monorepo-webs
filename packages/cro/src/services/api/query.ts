@@ -26,8 +26,8 @@ export default {
     return http.get(`image/url?data=${JSON.stringify(data)}`);
   },
   // 获取所有字段
-  fetchFields(): Promise<any> {
-    return http.get('research/template');
+  fetchFields(type: string): Promise<any> {
+    return http.get('template/' + type);
   },
   // 获取填充值域
   fetchKvScope(data: any): Promise<any> {
@@ -39,11 +39,15 @@ export default {
   },
   // 开始查询
   fetchQueryId(data: any): Promise<any> {
-    return http.post('research/rules', { data });
+    return http.post('rules', { data });
   },
   // 轮循查询
   fetchQueryResult(data: any): Promise<any> {
     return http.get(`research/result/${data}`);
+  },
+  // 查询结果弹窗详情
+  fetchQueryResultDetail(data: any): Promise<any> {
+    return http.get(`research/statistics/detail?data=${JSON.stringify(data)}`);
   },
   // 查询结果弹窗详情
   fetchQueryDetail(data: any): Promise<any> {
@@ -56,6 +60,11 @@ export default {
   // 量表类型查看回复内容
   fetchReplyDetail(data: any): Promise<any> {
     return http.get(`research/scale_patient/${data}`);
+  },
+  // 智能科研查询结果接口
+  // 轮循查询
+  fetchResearchStatistics(data: any): Promise<any> {
+    return http.get(`research/statistics?data=${JSON.stringify(data)}`);
   },
 };
 

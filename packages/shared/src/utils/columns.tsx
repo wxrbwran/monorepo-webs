@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, Button } from 'antd';
 import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
 import { Role } from './role';
+import moment from 'moment';
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
   const column: CommonData = {
     title,
@@ -280,7 +281,7 @@ export const organizationNameOut = (params: any) => ({
   dataIndex: 'orgName',
   align: 'center',
   mock: '@region',
-  render: (text:string, record: any) =>
+  render: (text: string, record: any) =>
     params.level === '下级机构' ? (
       <a
         className="header__link__clinical"
@@ -339,6 +340,46 @@ export const noReplyNumber = {
   mock: '@integer(10,30)',
   sorter: (a: { noReplyNumber: number }, b: { noReplyNumber: number }) =>
     a.noReplyNumber - b.noReplyNumber,
+};
+
+export const pname = {
+  title: '姓名',
+  dataIndex: 'pname',
+  width: 100,
+  render: (text: string) => <span>{text}</span>,
+};
+
+export const groupName = {
+  title: '所在分组',
+  dataIndex: 'groupName',
+  key: 'groupName',
+  render: (_text: any, record: any) => (
+    <div>
+      {record.groupName.join()}
+    </div>
+  ),
+};
+
+export const initAt = {
+  title: '与医生绑定时间',
+  dataIndex: 'initAt',
+  key: 'initAt',
+  render: (text: any, _record: any) => (
+    <div>
+      {text ? moment(text).format('YYYY.MM.DD') : '--'}
+    </div>
+  ),
+};
+
+export const bindAt = {
+  title: '与医生绑定时间',
+  dataIndex: 'bindAt',
+  key: 'bindAt',
+  render: (text: any, _record: any) => (
+    <div>
+      {text ? moment(text).format('YYYY.MM.DD') : '--'}
+    </div>
+  ),
 };
 
 

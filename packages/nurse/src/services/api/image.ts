@@ -58,5 +58,21 @@ export default {
   putImageImageIndexes(data: CommonData): Promise<any> {
     return http.put('image/indexes', { data });
   },
+  // 获取检查单、其它单据
+  fetchImageJcdAndOther(data: CommonData): Promise<any> {
+    return http.get(`image/jcd?data=${JSON.stringify(data)}`);
+  },
+  // 新增检查单、其它单据
+  putImageJcdAndOther(data: CommonData): Promise<any> {
+    return http.put('image/jcd', { data });
+  },
+  // 获取检查单问题模板
+  fetchImageTopicTemplate(data: CommonData): Promise<any> {
+    return http.get(`image/template?data=${JSON.stringify(data)}`);
+  },
+  // 新增检查单问题模板
+  putImageTopicTemplate(data: CommonData): Promise<any> {
+    return http.put('image/template', { data });
+  },
   // 结构化xr-s
 };

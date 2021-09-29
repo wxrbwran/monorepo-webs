@@ -17,52 +17,61 @@ interface IProps {
 }
 function List({ location }: IProps) {
   const { type } = useParams<{ type: string }>();
-  const [ sourceList, setSourceList ] = useState<IList[]>([]);
+  const [sourceList, setSourceList] = useState<IList[]>([]);
   // 查询非随访表列表
   const getPublicizeList = () => {
     api.education.getPublicizeList({
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
       types: [type.toUpperCase()],
+      ownershipSid: window.$storage.getItem('orgSid'),
+      roleType: window.$storage.getItem('roleId'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      operatorSid: window.$storage.getItem('sid'),
     }).then((res) => {
       setSourceList(res.list);
     })
-    .catch((err: string) => {
-      console.log('err', err);
-    });
-  }
+      .catch((err: string) => {
+        console.log('err', err);
+      });
+  };
   // 查询随访表列表
   const getPublicizeScaleList = () => {
     api.education.getPublicizeScale({
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
+      ownershipSid: window.$storage.getItem('orgSid'),
+      roleType: window.$storage.getItem('roleId'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      operatorSid: window.$storage.getItem('sid'),
+
     }).then((res) => {
       setSourceList(res.list);
     })
-    .catch((err: string) => {
-      console.log('err', err);
-    });
-  }
+      .catch((err: string) => {
+        console.log('err', err);
+      });
+  };
   const fetchListData = () => {
-    if(type === 'accompany'){
-      getPublicizeScaleList()
-    }else if (type !=='article') {
+    if (type === 'accompany') {
+      getPublicizeScaleList();
+    } else if (type !== 'article') {
       getPublicizeList();
     }
-  }
+  };
   useEffect(() => {
     fetchListData();
-  }, [])
+  }, []);
 
   const addPublicize = (params) => {
-    api.education.addPublicize({...params}).then(() => {
+    api.education.addPublicize({ ...params }).then(() => {
       setTimeout(() => {
         message.success('上传成功');
         getPublicizeList();
       }, 200);
     })
-    .catch((err: string) => {
-      console.log('err', err);
-    });
-  }
+      .catch((err: string) => {
+        console.log('err', err);
+      });
+  };
   // 上传
   const handleSubmit = (rawUrl: string, file: any) => {
     const params = {
@@ -70,32 +79,35 @@ function List({ location }: IProps) {
         address: rawUrl,
         cover: null,
         filename: file.name,
-        text: null
+        text: null,
       },
-      fromSid: window.$storage.getItem('orgSid'),
+      // fromSid: window.$storage.getItem('orgSid'),
+      ownershipSid: window.$storage.getItem('orgSid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      operatorSid: window.$storage.getItem('sid'),
       type: type.toUpperCase(),
-    }
-    if(['document', 'picture'].includes(type)){
+    };
+    if (['document', 'picture'].includes(type)) {
       params.content.size = file.size;
     }
     if (type !== 'audio') {
-      addPublicize({...params});
-    }else{
+      addPublicize({ ...params });
+    } else {
       // 获取录音时长
-     const url = URL.createObjectURL(file);
-     const audioElement = new Audio(url);
-     audioElement.addEventListener("loadedmetadata", (_event) => {
-        params.content.duration = parseInt(_event.path[0].duration*1000, 10);
-        addPublicize({...params});
-     });
+      const url = URL.createObjectURL(file);
+      const audioElement = new Audio(url);
+      audioElement.addEventListener('loadedmetadata', (_event) => {
+        params.content.duration = parseInt(_event.path[0].duration * 1000, 10);
+        addPublicize({ ...params });
+      });
     }
-  }
-  const fetchUrlThenUpload = async (file: {name: string, type: string}) => {
+  };
+  const fetchUrlThenUpload = async (file: { name: string, type: string }) => {
     message.info({
       content: '正在上传',
     });
     console.log('file666', file);
-    api.file.filePrepare({businessType: businessType[type]}).then(res => {
+    api.file.filePrepare({ businessType: businessType[type] }).then(res => {
       const {
         accessId, encodePolicy, host, key, signature,
       } = res;
@@ -108,67 +120,67 @@ function List({ location }: IProps) {
       formData.set('callback', '');
       formData.set('signature', signature);
       formData.set('file', file);
-      console.log('host', host)
+      console.log('host', host);
       request
         .post(host, {
           data: formData,
         })
         .then(() => {
-          handleSubmit(`${host}/${key}${file.name}`, file)
+          handleSubmit(`${host}/${key}${file.name}`, file);
         })
         .catch((err) => {
           console.log('err-aly', err);
         });
     }).catch(err => {
       console.log(err);
-    })
-  }
+    });
+  };
 
 
   return (
     <div className={styles.visite_list}>
       <div onClick={() => history.goBack()}>
         <LeftOutlined
-          style={{marginBottom: 36}}
+          style={{ marginBottom: 36 }}
         /> <span className="font-bold pointer">{EducationType[type]}</span>
       </div>
       {
         type === 'article' ? <ArticleList />
-        :
-        <div className={`${ styles.block } flex justify-start  flex-start flex-wrap`}>
-          <Image.PreviewGroup>
+          :
+          <div className={`${styles.block} flex justify-start  flex-start flex-wrap`}>
+            <Image.PreviewGroup>
+              {
+                sourceList.map((item) => <ListItem type={type} item={item} location={location} onSuccess={fetchListData} />)
+              }
+            </Image.PreviewGroup>
             {
-              sourceList.map((item) => <ListItem type={type} item={item} location={location} onSuccess={fetchListData}/>)
+              ['video', 'document', 'article', 'picture', 'audio'].includes(type) && (
+                <Upload
+                  multiple={false}
+                  listType="text"
+                  beforeUpload={fetchUrlThenUpload}
+                  showUploadList={false}
+                  accept={AcceptType[type]}
+                  className={`${styles.upload} ${type === 'video' ? '' : styles.add}`}
+                >
+                  <PlusOutlined />
+                </Upload>
+              )
             }
-          </Image.PreviewGroup>
-          {
-            ['video', 'document', 'article', 'picture', 'audio'].includes(type) && (
-              <Upload
-                multiple={false}
-                listType="text"
-                beforeUpload={fetchUrlThenUpload}
-                showUploadList={false}
-                accept={AcceptType[type]}
-                className={`${styles.upload} ${type === 'video' ? '' : styles.add}`}
-              >
-                <PlusOutlined />
-              </Upload>
-            )
-          }
-          {
-            type === 'accompany' && (
-              <p
-                className={`${styles.upload} ${styles.add}`}
-                onClick={() => history.push('/education/accompany/create')}
-              >
-                <PlusOutlined />
-              </p>
-            )
-          }
-        </div>
+            {
+              type === 'accompany' && (
+                <p
+                  className={`${styles.upload} ${styles.add}`}
+                  onClick={() => history.push('/education/accompany/create')}
+                >
+                  <PlusOutlined />
+                </p>
+              )
+            }
+          </div>
       }
     </div>
-  )
+  );
 }
 
 export default List;

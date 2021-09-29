@@ -252,3 +252,27 @@ export declare const noReplyNumber: {
         noReplyNumber: number;
     }) => number;
 };
+export declare const pname: {
+    title: string;
+    dataIndex: string;
+    width: number;
+    render: (text: string) => JSX.Element;
+};
+export declare const groupName: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    render: (_text: any, record: any) => JSX.Element;
+};
+export declare const initAt: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    render: (text: any, _record: any) => JSX.Element;
+};
+export declare const bindAt: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    render: (text: any, _record: any) => JSX.Element;
+};

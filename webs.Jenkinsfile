@@ -1,3 +1,14 @@
+@Library('jenkins-libs-web@master') _
+
+def gitlab = new com.xzlcorp.gitlab()
+def tool = new com.xzlcorp.tools()
+
+String projectName = "xzl-webs"
+
+if (true) {
+  currentBuild.description = "Trigger by ${env.BUILD_USER}"
+}
+
 pipeline {
 
     agent {
@@ -15,6 +26,26 @@ pipeline {
 
     tools {
         nodejs 'NODEJS_14'
+    }
+
+    triggers {
+        GenericTrigger (
+            // 构建时的标题
+            causeString: 'Triggered by $ref',
+            // 获取POST参数中的变量，key指的是变量名，通过$ref来访问对应的值，value指的是JSON匹配值（参考Jmeter的JSON提取器）
+            // ref指的是推送的分支，格式如：refs/heads/master
+            genericVariables: [[key: 'ref', value: '$.ref']],
+            // 打印获取的变量的key-value，此处会打印如：ref=refs/heads/master
+            printContributedVariables: true,
+            // 打印POST传递的参数
+            printPostContent: true,
+            // regexpFilterExpression与regexpFilterExpression成对使用
+            // 当两者相等时，会触发对应分支的构建
+            regexpFilterExpression: '^refs/heads/(cro|doctor|nurse|out|org)-(dev|test|master)$',
+            regexpFilterText: '$ref',
+            // 与webhook中配置的token参数值一致
+            token: 'xzl-webs-token'
+        )
     }
 
     stages {
@@ -100,7 +131,16 @@ pipeline {
       }
 
       success {
-        echo "构建成功"
+        // echo "构建成功"
+        script {
+          if (env.BRANCH == "master") {
+            projectId = gitlab.GetProjectID(projectName)
+            tool.PrintMsg("打tag start","blue")
+            String tagString = "v${new Date().format("yy.MMdd.HHmm")}"
+            gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+            tool.PrintMsg("打tag end","blue")
+          }
+        }
       }
 
       failure {

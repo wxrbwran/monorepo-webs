@@ -11,7 +11,7 @@ interface IProps {
 }
 
 function SecurityLayout({ children, location }: IProps) {
-  const excludeRouter = ['patient_panel', 'login', 'find_pwd', 'index_library']; // 不显示导航的页面
+  const excludeRouter = ['patient_panel', 'login', 'find_pwd', 'index_library', 'publicize']; // 不显示导航的页面
   const pathname = location.pathname.split('/')[1];
   console.log('location.pathname', location.pathname);
   // 初始化im-s

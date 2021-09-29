@@ -1,60 +1,73 @@
 import React, {
   FC, useEffect, useState, useRef, useMemo,
 } from 'react';
-import {
-  Radio, Checkbox, Button, Tabs, message,
-} from 'antd';
+import { Button, Tabs, message } from 'antd';
 import { useDispatch } from 'umi';
-import { isArray } from 'lodash';
-import { IApiDocumentItem, IStructuredDetailProps } from 'typings/imgStructured';
-import SearchHospital from '@/components/SearchHospital';
+import { IStructuredDetailProps, ITopicQaItemApi } from 'typings/imgStructured';
 import * as api from '@/services/api';
-import ItemDate from '../ItemDate';
 import StructuredDetailItem from '../StructuredDetailItem';
+import StructuredDetailTopic from '../StructuredDetailTopic';
+import Nodata from '../Nodata';
+import { outTypes, formatJcdSubmitData } from '../utils';
 import styles from './index.scss';
-// 此组件区分是化验单还是检查单分类
-interface IInitList {
-  HYD?: IApiDocumentItem[];
-  JCD?: IApiDocumentItem[];
+import { isEmpty, cloneDeep, debounce } from 'lodash';
+import uuid from 'react-uuid';
+
+interface ITopicParams {
+  data: ITopicQaItemApi[];
+  meta: {
+    imageId: string;
+    sid: string;
+    createdTime: number;
+    title?: string;
+  }
 }
 const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const {
-    data, imageId, handleRefresh, handleClose,
+    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll, templatePart,
+    openTime, jcdOriginIds,
   } = props;
+  console.log('hydData232', hydData);
+  console.log('jcdData', jcdData);
+  const sid = window.$storage.getItem('sid');
   const dispatch = useDispatch();
   const isRefreshParent = useRef(false);
-  const initLevel1 = data?.outType === 'HYD_JCD' ? ['HYD', 'JCD'] : [data?.outType];
-  const initOrg = { hospitalId: data?.orgId, hospitalName: data?.orgName };
-  // 一级分类 化验单、检查单、图片不清晰、非单据
-  const [level1Types, setLevel1Types] = useState<string[]>(data?.outType ? initLevel1 : ['']);
-  const [inspectionCallbackFns, setCallbackFns] = useState<CommonData>({}); // 保存各个分类的方法队列
-  const [hospital, setHospital] = useState(initOrg);
-  const [reportTime, setreporttime] = useState<number>(data?.reportTime || new Date().getTime());
-  const [unknownReport, setunknownReport] = useState(data?.unknownReport); // 采样时间是否不详
-  const fetchInitFormat = useMemo(() => () => {
-    if (data.documentList.length > 0) {
-      const initHyd: IApiDocumentItem[] = [];
-      const initJcd: IApiDocumentItem[] = [];
-      data.documentList.forEach((item: IApiDocumentItem) => {
-        if (item.documentType === 'HYD') {
-          initHyd.push(item);
-        } else {
-          initJcd.push(item);
-        }
-      });
-      return { HYD: initHyd, JCD: initJcd };
-    }
-    return {};
-  }, [data]);
-  const initList:IInitList = fetchInitFormat(); // 获取init数据
+  const fetchLevel1 = () => {
+    const datas = [...hydData, ...jcdData];
+    return isEmpty(datas) ? [{ outType: 'HYD', key: uuid() }] : datas;
+  };
+  // 保存各个分类的方法队列 - 检查单、图片不清晰、非医学单据
+  const [inspectionCallbackFns, setCallbackFns] = useState<CommonData>({});
+  const [hydCallbackFns, setHydCallbackFns] = useState<CommonData>({});
+  // // true仅查看 false编辑中
+  const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData));
+  const [typeTabs, setTypeTabs] = useState <any[]>(fetchLevel1());
+
+  useEffect(() => {
+    setTypeTabs(fetchLevel1());
+    setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
+  }, [hydData, jcdData]);
   useEffect(() => () => {
     // 在组件销毁时判断：如果保存成功了，刷新下单据列表，更新数据
     if (isRefreshParent.current && handleRefresh) {
       handleRefresh();
     }
   }, []);
-  const saveData = (params: any) => {
+  // 获取打开的时间 到点击保存时间段内新增的模板
+  const fetchTimeSlotTemplate =  (to: number) => {
+    const params = { from: openTime,  to };
+    const data = api.image.fetchImageTopicTemplate(params);
+    return data;
+    // return tmpppppList.list;
+  };
+  const fetchAllTypes = () => {
+    const allTypes = typeTabs.map(item => {
+      return item?.meta?.title || item.outType;
+    });
+    return [...new Set(allTypes)];
+  };
+  const saveHydData = (params: any) => {
     api.image.putImageImageIndexes(params).then(() => {
       message.success('保存成功');
       // im进入的没有刷新函数，此时直接调用redux里的更新化验单/检查单接口
@@ -71,113 +84,154 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       message.error(err?.result || '保存失败');
     });
   };
-  const handleSaveClick = () => {
-    if (level1Types[0]) {
-      let apiParams: CommonData = {
-        imageId,
-        unknownReport,
-        reportTime: unknownReport ? null : reportTime,
-        operatorId: window.$storage.getItem('sid'),
-        sid: window.$storage.getItem('patientSid'),
-        wcId: window.$storage.getItem('patientWcId'),
-        outType: level1Types.length > 1 ? 'HYD_JCD' : level1Types[0],
-      };
-      // 化验检查单
-      if (level1Types.includes('HYD') || level1Types.includes('JCD')) {
+  const saveTemplate = (list: ITopicParams[]) => {
+    const params = { list };
+    console.log('tmpppp', params);
+    api.image.putImageTopicTemplate(params).then(() => {
+      console.log('添加问题模板成功');
+    }).catch(err => {
+      console.log('添加问题模板失败：', err);
+    });
+  };
+  const saveJcdData = (params: any) => {
+    params.originIds = jcdOriginIds;
+    api.image.putImageJcdAndOther(params).then(() => {
+      console.log('添加检查单成功');
+    }).catch(err => {
+      console.log('添加检查单失败', err);
+    });
+  };
+
+  const handleSaveClick = async () => {
+    if (isViewOnly) {
+      setisViewOnly(false);
+    } else {
+      const clickSaveTime = new Date().getTime();
+      const timeSlotTemp = await fetchTimeSlotTemplate(clickSaveTime);
+      if (!isEmpty(typeTabs)) {
+        const apiParams: CommonData = {
+          imageId,
+          allTypes: fetchAllTypes(),
+          operatorId: sid,
+          sid: window.$storage.getItem('patientSid'),
+          wcId:window.$storage.getItem('patientWcId'),
+          list: [],
+        };
+        // 化验、图片不清晰、非医学单据
         Promise.all(Object.values(inspectionCallbackFns)
           .map((fn) => fn()))
           .then((documentList) => {
-            if (documentList.length > 0) {
-              apiParams = {
-                ...apiParams,
-                documentList,
-                orgId: hospital?.hospitalId,
-                orgName: hospital?.hospitalName,
-              };
-              saveData(apiParams);
-            } else {
-              message.warning('请选择具体化验单或检查单');
-            }
+            apiParams.list = [...documentList];
+            saveHydData(apiParams);
+          }).catch((err) => {
+            console.log('err', err);
+            message.error('请完善化验单后提交！');
+          });
+        // 检查单、其它单据
+        console.log('clickSaveTime', clickSaveTime);
+        Promise.all(Object.values(hydCallbackFns)
+          .map((fn) => fn(clickSaveTime)))
+          .then((list) => {
+            const { tempList, jcdList } = formatJcdSubmitData(list, timeSlotTemp, clickSaveTime);
+            saveTemplate(tempList);
+            saveJcdData(jcdList);
           }).catch((err) => {
             console.log('err', err);
             message.error('请完善检查单后提交！');
           });
       } else {
-        apiParams.documentList = [];
-        saveData(apiParams);
+        message.error('请选择图片类型');
       }
-    } else {
-      message.error('请选择图片类型');
-    }
-  };
-  // 切换一级分类
-  const handleChangeType = (e: any) => {
-    if (isArray(e)) {
-      setLevel1Types(e);
-    } else {
-      setLevel1Types([e.target.value]);
     }
   };
 
-  const handleSetHospital = (key: string, val: any) => {
-    console.log(key);
-    setHospital({ ...val });
+  const handelTabsEdit = (targetKey: string) => {
+    const newTabs = typeTabs.filter(item => item.key !== targetKey);
+    setTypeTabs(cloneDeep(newTabs));
   };
 
-  const imgTypeOption = [{ label: '化验单', value: 'HYD' }, { label: '检查单', value: 'JCD' }];
-  const radioStyle = { fontSize: 14 };
-  const level1Tabs: CommonData = {
-    HYD: { label: '化验单: 组织体液化验的结果' },
-    JCD: { label: '检查单: 器官结构和功能检查的结果' },
+  const handleAddLevel1 = (type: string) => {
+    if (['JCD', 'OTHER'].includes(type)) {
+      typeTabs.push({ meta: { title: type }, key: uuid() });
+    } else {
+      typeTabs.push({ outType: type, key: uuid() });
+    }
+    setTypeTabs(cloneDeep(typeTabs));
   };
+
+  const fetInitData = (inx: number) => {
+    if (typeTabs[inx]?.documentList || typeTabs[inx]?.data) {
+      return typeTabs?.[inx];
+    }
+    return [];
+  };
+  const renderTabPane = useMemo(() => {
+    return (itemTab: any, inx: number) => {
+      let dom: any = null;
+      const typeStart = itemTab?.outType || itemTab?.meta?.title;
+      const baseProps = {
+        outType: typeStart,
+        outTypeAndInx: itemTab.key,
+        imageId,
+        isViewOnly,
+      };
+      switch (typeStart) {
+        case 'HYD':
+          dom = <StructuredDetailItem
+            setCallbackFns={setCallbackFns}
+            inspectionCallbackFns={inspectionCallbackFns}
+            {...baseProps}
+            initData={fetInitData(inx)}
+          />;
+          break;
+        case 'OTHER':
+        case 'JCD':
+          dom = <StructuredDetailTopic
+            initData={fetInitData(inx)}
+            templatePart={templatePart}
+            hydCallbackFns={hydCallbackFns}
+            setHydCallbackFns={setHydCallbackFns}
+            tempAll={tempAll}
+            {...baseProps}
+          />;
+          break;
+        default:
+          dom = <Nodata {...baseProps} inspectionCallbackFns={inspectionCallbackFns} />;
+          break;
+      }
+      return dom;
+    };
+  }, [isViewOnly, typeTabs]);
+  console.log('typeTabs21', typeTabs);
   return (
-    <div className={`flex-1 mx-20 mt-10 ${styles.structrued}`}>
+    <div className={`flex-1 mx-20 mt-10 ${styles.structrued} ${isViewOnly ? styles.disabled : ''}`}>
       <div className="flex justify-between items-center mb-25">
         <div className="flex items-center">
-          <Checkbox.Group
-            options={imgTypeOption}
-            onChange={(e) => handleChangeType(e)}
-            value={level1Types}
-          />
-          <Radio.Group onChange={handleChangeType} value={level1Types[0]} style={{ display: 'flex' }}>
-            <Radio style={radioStyle} value="NOT_CLEAR"> 图片不清晰 </Radio>
-            <Radio style={radioStyle} value="NOT_HYD_JCD"> 非化验检查单 </Radio>
-          </Radio.Group>
+          {
+            !isViewOnly && (
+              Object.keys(outTypes).map(outType =>
+                <Button key={outType} className="mr-15" onClick={() => handleAddLevel1(outType)}>{outTypes[outType]}</Button>,
+              )
+            )
+          }
         </div>
-        <Button className={styles.save_btn} type="primary" onClick={handleSaveClick}>保存并退出</Button>
+        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 500)}>
+          {isViewOnly ? '修改结果' : '保存并退出'}
+        </Button>
       </div>
       {
-        (level1Types.includes('HYD') || level1Types.includes('JCD')) && (
+        typeTabs.length > 0 && (
           <>
-            <div className="flex text-sm items-center">
-              <div className="font-medium mr-5"> 检查机构: </div>
-              <SearchHospital
-                placeholder="请输入检查机构"
-                callback={handleSetHospital}
-                fieldName="hospital"
-                style={{ flex: 1 }}
-                defaultValue={initOrg?.hospitalId ? initOrg : undefined}
-              />
-              <ItemDate
-                setReporttime={(time: number | null) => setreporttime(time)}
-                setUnknow={(isUnknown: boolean) => setunknownReport(isUnknown)}
-                // 如果是回显，就直接取回显的时间，没有就设置当前时间
-                initReportTime={reportTime}
-                isUnknownTime={data?.unknownReport}
-              />
-            </div>
-            <div id="structured_content" className="mt-15">
-              <Tabs type="card">
+            <div className={`mt-15 ${styles.structured_content}`}>
+              <Tabs type="editable-card" onEdit={handelTabsEdit} hideAdd>
                 {
-                  level1Types.map((level1Type: string) => (
-                    <TabPane tab={level1Tabs[level1Type].label} key={level1Type}>
-                      <StructuredDetailItem
-                        inspectionCallbackFns={inspectionCallbackFns}
-                        setCallbackFns={setCallbackFns}
-                        level1Type={level1Type}
-                        imageId={imageId}
-                        initData={initList[level1Type]}
-                      />
+                  typeTabs.map((itemTab: any, inx) => (
+                    <TabPane
+                      tab={outTypes?.[itemTab?.outType || itemTab?.meta?.title]}
+                      key={itemTab.key}
+                      forceRender={true}
+                    >
+                      {renderTabPane(itemTab, inx)}
                     </TabPane>
                   ))
                 }

@@ -1,0 +1,25 @@
+.add_item {
+  margin-bottom: 10px;
+  :global {
+    .ant-input-number {
+      border: none;
+      flex: 1;
+      margin: 0 10px;
+    }
+    .ant-form-item-control-input-content {
+      @include flex-lay(row, nowrap, space-between, center);
+    }
+  }
+  &_left {
+    width: 250px;
+    height: 40px;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    overflow: hidden;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 10px;
+  }
+}

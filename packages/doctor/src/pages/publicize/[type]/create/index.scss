@@ -1,0 +1,37 @@
+.send_form {
+  height: 100%;
+  overflow: auto;
+}
+.edu_create {
+  font-size: 14px;
+  :global {
+    .ant-steps {
+      width: 50%;
+      margin: 0 auto;
+      margin-bottom: 30px;
+    }
+    .ant-steps-item-icon {
+      @include size(24px);
+      line-height: 24px;
+    }
+    .ant-steps-item-title {
+      line-height: 24px;
+      font-size: 16px;
+      &::after {
+        top: 13px;
+      }
+    }
+    .steps-action {
+      // position: absolute;
+      // bottom: 80px;
+      // text-align: center;
+      // left: 50%;
+      // transform: translateX(-50%);
+      text-align: center;
+    }
+    .ant-btn {
+      @include size(150px, 40px);
+      margin: 0 16px;
+    }
+  }
+}

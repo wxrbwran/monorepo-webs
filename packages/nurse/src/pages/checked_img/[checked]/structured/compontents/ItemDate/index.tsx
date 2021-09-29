@@ -7,13 +7,15 @@ import styles from './index.scss';
 
 interface IProps {
   setReporttime: (params: null | number) => void;
-  setUnknow: (params: boolean) => void;
+  setUnknow?: (params: boolean) => void;
   initReportTime?: number;
-  isUnknownTime: boolean;
+  isUnknownTime?: boolean;
+  type?: string;
+  style?: object;
 }
 function ItemDate(props: IProps) {
   const {
-    initReportTime, isUnknownTime, setReporttime, setUnknow,
+    initReportTime, isUnknownTime, setReporttime, setUnknow, type, style,
   } = props;
   console.log('initReportTime', initReportTime);
   const [unknownTime, setUnknownTime] = useState(isUnknownTime);
@@ -33,20 +35,22 @@ function ItemDate(props: IProps) {
     if (dateArr[0]) {
       const reportTime = new Date(val).getTime();
       setReporttime(reportTime);
-      setUnknow(false);
+      if (setUnknow) {
+        setUnknow(false);
+      }
     }
     setUnknownTime(false);
   };
   // 点击时间不详
   const handleTimeUnkown = () => {
     setUnknownTime(!unknownTime);
-    setUnknow(!unknownTime);
+    setUnknow!(!unknownTime);
   };
   const dateFormat = 'YYYY/MM/DD';
   const disabledDate = (current: any) => current && current > moment().endOf('day');
   return (
     <div className="flex items-center">
-      <div className="text-sm ml-17 font-medium">采样时间：</div>
+      <div className="text-sm ml-17 font-medium w-70 text-right">{type === 'HYD' ? '采样' : ''}时间：</div>
       <DatePicker
         disabledDate={disabledDate}
         onChange={(momentDate, dateString) => handleSetFieldsVal(dateString, momentDate)}
@@ -55,13 +59,18 @@ function ItemDate(props: IProps) {
         size="large"
         disabled={unknownTime}
         allowClear={false}
+        style={style}
       />
-      <div
-        className={`ml-10 ${styles.date_button} ${unknownTime ? styles.selected : ''}`}
-        onClick={handleTimeUnkown}
-      >
-        时间不详
-      </div>
+      {
+        type === 'HYD' && (
+          <div
+            className={`ml-10 ${styles.date_button} ${unknownTime ? styles.selected : ''}`}
+            onClick={handleTimeUnkown}
+          >
+            时间不详
+          </div>
+        )
+      }
     </div>
   );
 }

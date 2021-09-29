@@ -67,19 +67,25 @@ import { handleTableDataSource, handleTableRowKey } from './util';
 import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
     console.log('this is table shared~111');
-    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination;
-    console.log(category);
+    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination, extra = props.extra;
+    console.log(category, handleCallbackSelectKeys);
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
     var _c = __read(useState(0), 2), current = _c[0], setCurrent = _c[1];
     var _d = __read(useState([]), 2), dataSource = _d[0], setDataSource = _d[1];
     var _e = __read(useState([]), 2), selectedRowKeys = _e[0], setRowKeys = _e[1];
     var _f = __read(useState(false), 2), loading = _f[0], setLoading = _f[1];
+    var _g = __read(useState({}), 2), callbackStore = _g[0], setCBStore = _g[1];
+    var handleCallBackStore = function (data) {
+        var newStore = __assign(__assign({}, callbackStore), data);
+        setCBStore(newStore);
+        if (handleCallback) {
+            handleCallback(newStore);
+        }
+    };
     var onSelectChange = function (keys) {
         setRowKeys(keys);
-        if (handleCallbackSelectKeys) {
-            handleCallbackSelectKeys(keys);
-        }
+        handleCallBackStore({ selectedRowKeys: keys });
     };
     var rowSelection = {
         selectedRowKeys: selectedRowKeys,
@@ -87,38 +93,49 @@ var XzlTable = function (props) {
     };
     var fetchTableDataSource = function (query) {
         if (query === void 0) { query = {}; }
-        return __awaiter(void 0, void 0, void 0, function () {
-            var params, res, handledData;
+        setLoading(true);
+        console.log('query', query);
+        var params = __assign(__assign({ pageAt: 1, pageSize: size }, depOptions), query);
+        // 处理不分页的api请求
+        if (noPagination) {
+            delete params.pageAt;
+            delete params.pageSize;
+        }
+        console.log('fetchTableDataSource params', params);
+        var timeOut = (tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.timeOut) ? 2000 : 0;
+        setTimeout(function () { return __awaiter(void 0, void 0, void 0, function () {
+            var res, handledData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        setLoading(true);
-                        console.log('query', query);
-                        params = __assign(__assign({ pageAt: 1, pageSize: size }, depOptions), query);
-                        // 处理不分页的api请求
-                        if (noPagination) {
-                            delete params.pageAt;
-                            delete params.pageSize;
-                        }
-                        console.log('fetchTableDataSource params', params);
-                        return [4 /*yield*/, request(params)];
+                    case 0: return [4 /*yield*/, request(params)];
                     case 1:
                         res = _a.sent();
                         console.log('fetchTableDataSource res', res);
-                        setCurrent(params.pageAt);
-                        setSize(params.pageSize);
-                        setTotal(res.total);
-                        handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category);
-                        if (handleCallback) {
-                            handleCallback(handledData);
+                        if (res) {
+                            setCurrent(params.pageAt);
+                            setSize(params.pageSize);
+                            if (dataKey == 'events_jsonb') {
+                                res.tableBody.forEach(function (element) {
+                                    element.content = JSON.parse(element.content.value);
+                                });
+                                setTotal(extra);
+                            }
+                            else {
+                                setTotal(res.total);
+                            }
+                            handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
+                            handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
+                            console.log('handledData*****', handledData);
+                            setDataSource(handledData);
                         }
-                        console.log('handledData*****', handledData);
-                        setDataSource(handledData);
+                        else {
+                            setDataSource([]);
+                        }
                         setLoading(false);
                         return [2 /*return*/];
                 }
             });
-        });
+        }); }, timeOut);
     };
     useEffect(function () {
         console.log('depOptions', depOptions);
