@@ -5,11 +5,12 @@ import * as api from '@/services/api';
 import './index.scss';
 import logo from '../../img/logo.png';
 import config from '@/config';
-import { Link, useSelector, useDispatch } from 'umi';
+import { Link, useSelector, useDispatch, useLocation, history } from 'umi';
 import { IState } from 'typings/global';
 
 function NavBar() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [avatar, setAvatar] = useState(config.defaultAvatar);
   const user = useSelector((state: IState) => state.user.user);
   const wrapper = React.createRef();
@@ -61,6 +62,14 @@ function NavBar() {
         payload: currentOrg,
       });
       initContact(currentOrg?.nsId);
+      if (location.pathname.includes('groups')){
+        history.push('/publicize/patients');
+      }
+      //获取实验组
+      dispatch({
+        type: 'education/fetchGroupList',
+        payload: currentOrg?.sid,
+      });
     }
   }, [currentOrg]);
 
