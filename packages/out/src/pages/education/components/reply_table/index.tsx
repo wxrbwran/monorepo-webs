@@ -20,67 +20,65 @@ function RePlyTable({ children, planRuleId, sid, status }: IProps) {
   const [current, setCurrent] = useState(1);
 
   useEffect(() => {
-    if(showModal){
+    if (showModal){
       api.education.getScalePatientReply({
         planRuleId,
         sid,
         status,
         pageAt: current,
-        pageSize
-      }).then((res: {list: [], total: number}) => {
+        pageSize,
+      }).then((res: { list: [], total: number }) => {
         setDataSource(res.list);
         setTotal(res.total);
-      })
+      });
     }
   }, [showModal, current]);
 
   const handlePagerChange = (pagination: number) => {
     setCurrent(pagination);
-  }
+  };
 
   const columns: any = [
     {
       title: '发送日期',
       dataIndex: 'createdAt',
       render: (text: number) => {
-        return dayjs(text).format('YYYY-MM-DD')
-      }
+        return dayjs(text).format('YYYY-MM-DD');
+      },
     },
     {
       title: '回复日期',
       dataIndex: 'replyAt',
       render: (text: number) => {
-        return dayjs(text).format('YYYY-MM-DD')
-      }
+        return dayjs(text).format('YYYY-MM-DD');
+      },
     },
     {
       title: '',
       dataIndex: 'updatedAt',
       render: (_text: string, record: any) =>
         <QuestionDetail
-          title={record.scaleName}
-          subTitle={record.scaleSubName}
-          questions={record.questions}
+          id={record.id}
         >
           <span className={styles.look}>
             查看回复内容
           </span>
-        </QuestionDetail>
-    }
+        </QuestionDetail>,
+    },
   ];
   const columnsNotReply: any = [
     {
       title: '发送日期',
       dataIndex: 'createdAt',
       render: (text: number) => {
-        return dayjs(text).format('YYYY-MM-DD')
-      }
+        return dayjs(text).format('YYYY-MM-DD');
+      },
     },
     {
       title: '状态',
       dataIndex: 'status',
-      render: (_text: any) => (<span>未回复</span>)
-    }
+      render: (_text: any) => (<span>未回复</span>),
+    },
   ];
   return (
     <>
@@ -107,6 +105,6 @@ function RePlyTable({ children, planRuleId, sid, status }: IProps) {
         </DragModal>
       ) }
     </>
-  )
+  );
 }
 export default RePlyTable;

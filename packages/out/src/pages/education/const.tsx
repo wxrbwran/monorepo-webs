@@ -82,7 +82,7 @@ export const businessType = {
 };
 export const sendType = [
   {
-    key: 'normal',
+    key: 'once',
     value: '自定义',
   },
   {
