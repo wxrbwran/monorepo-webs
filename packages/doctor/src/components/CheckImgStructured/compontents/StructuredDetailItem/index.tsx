@@ -242,6 +242,13 @@ const StructuredDetailItem: FC<IProps> = (props) => {
       orgName: val.hospitalName,
     });
   };
+  const handleUnknownReport = (unknownReport: boolean) => {
+    const params: CommonData = { unknownReport };
+    if (unknownReport) {
+      params.measuredAt = null;
+    }
+    handleSetTimeAndOrg(params);
+  };
   return (
     <div className={styles.structure_detail_item}>
       <div className="flex text-sm items-center mb-10 structured-edit-wrap">
@@ -258,9 +265,9 @@ const StructuredDetailItem: FC<IProps> = (props) => {
         />
         <ItemDate
           setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
-          setUnknow={(unknownReport: boolean) => handleSetTimeAndOrg({ unknownReport })}
+          setUnknow={(unknownReport: boolean) => handleUnknownReport(unknownReport)}
           // 如果是回显，就直接取回显的时间，没有就设置当前时间
-          initReportTime={initData?.measuredAt}
+          initReportTime={initData?.measuredAt || new Date().getTime()}
           isUnknownTime={initData?.unknownReport}
           type="HYD"
         />

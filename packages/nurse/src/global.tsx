@@ -3,6 +3,8 @@ import * as api from '@/services/api';
 import storage from 'xzl-web-shared/src/utils/storage';
 import pkg from '../package.json';
 // 此文件会在入口文件的最前面被自动引入，可以在这里加载补丁，做一些初始化的操作等。
+import 'antd/lib/table/style/index.css';
+import 'antd/lib/pagination/style/index.css';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
