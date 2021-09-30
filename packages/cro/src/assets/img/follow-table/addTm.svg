@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52 (66869) - http://www.bohemiancoding.com/sketch -->
+    <title>添加题目</title>
+    <desc>Created with Sketch.</desc>
+    <g id="添加题目" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M6.5,6.5 L6.5,0.5 C6.5,0.223857625 6.72385763,-1.69088438e-17 7,-2.46519033e-32 C7.27614237,1.69088438e-17 7.5,0.223857625 7.5,0.5 L7.5,6.5 L13.5,6.5 C13.7761424,6.5 14,6.72385763 14,7 C14,7.27614237 13.7761424,7.5 13.5,7.5 L7.5,7.5 L7.5,13.5 C7.5,13.7761424 7.27614237,14 7,14 C6.72385763,14 6.5,13.7761424 6.5,13.5 L6.5,7.5 L0.5,7.5 C0.223857625,7.5 3.38176876e-17,7.27614237 0,7 C-3.38176876e-17,6.72385763 0.223857625,6.5 0.5,6.5 L6.5,6.5 Z" id="合并形状-copy-2" fill="#999999"></path>
+    </g>
+</svg>
