@@ -5,7 +5,7 @@ import type { IList } from '../../const';
 import ListItem from '../ListItem';
 import * as api from '@/services/api';
 import tip from '@/assets/img/suifang/tip.svg';
-import { WarningFilled } from '@ant-design/icons';
+// import { WarningFilled } from '@ant-design/icons';
 import styles from './index.scss';
 
 interface IProps {
@@ -132,7 +132,7 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
         >
           请点击这里创建
         </span>
-        <WarningFilled style={{ color: '#FF7664' }} /> 注意: 创建发送计划后随访表将不可修改或删除
+        {/* <WarningFilled style={{ color: '#FF7664' }} /> 注意: 创建发送计划后随访表将不可修改或删除 */}
       </p>
       {/* <p className="text-center relative -top-54">
         <WarningFilled style={{color: '#FF7664'}} /> 注意: 创建发送计划后随访表将不可修改或删除
