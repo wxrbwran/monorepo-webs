@@ -47,7 +47,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
             kp: 'team',
             rsList: [{
               sid:  window.$storage.getItem('sid'),
-              roleType: window.$storage.getItem('currRoleId'),
+              roleType: window.$storage.getItem('roleId'),
               nsId:  window.$storage.getItem('nsId'),
             }, {
               sid: window.$storage.getItem('orgSid'),
@@ -116,7 +116,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
           teamLocations: [{
             sid: window.$storage.getItem('sid'),
             ns: window.$storage.getItem('nsId'),
-            role: window.$storage.getItem('currRoleId'),
+            role: window.$storage.getItem('roleId'),
             tag: 'operator',
           }, {
             sid: window.$storage.getItem('orgSid'),
@@ -171,7 +171,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
       ),
     },
     {
-      title: '定制发送计划',
+      title: '制定发送计划',
       content: <SendPlan form={form} disabled={disabled} />,
     },
   ];

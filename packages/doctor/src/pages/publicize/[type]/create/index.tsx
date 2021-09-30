@@ -171,7 +171,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
       ),
     },
     {
-      title: '定制发送计划',
+      title: '制定发送计划',
       content: <SendPlan form={form} disabled={disabled} />,
     },
   ];
