@@ -77,7 +77,7 @@ function SubType(_a) {
             content: {
                 address: rawUrl,
                 cover: null,
-                filename: file,
+                filename: file.name,
                 text: null,
             },
             fromSid: window.$storage.getItem('orgSid'),
@@ -128,7 +128,7 @@ function SubType(_a) {
                             data: formData,
                         })
                             .then(function () {
-                            handleSubmit(host_1 + "/" + key_1 + file.name, file.name);
+                            handleSubmit(host_1 + "/" + key_1 + file.name, file);
                         })
                             .catch(function (err) {
                             console.log('err', err);
