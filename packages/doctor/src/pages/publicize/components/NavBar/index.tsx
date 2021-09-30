@@ -78,7 +78,7 @@ function NavBar() {
       //获取实验组
       dispatch({
         type: 'education/fetchGroupList',
-        payload: currentOrg?.sid,
+        payload: currentOrg?.nsId,
       });
       postContactLocation(currentOrg?.sid);
     }
