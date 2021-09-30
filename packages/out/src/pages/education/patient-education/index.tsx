@@ -27,7 +27,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
       operatorNsId: window.$storage.getItem('nsId'),
       ownershipSid: window.$storage.getItem('orgSid'),
       ownershipRole: window.$storage.getItem('orgRole'),
-      // ownershipNsId: currentOrgInfo.nsId,
+      ownershipNsId: window.$storage.getItem('nsId'),
 
     }).then((res) => {
       setSendContent(res.rules);
