@@ -33,7 +33,7 @@ function SubType({ name, icon, type, uploadPublicizeRequest, filePrepareRequest 
       content: {
         address: rawUrl,
         cover: null,
-        filename: file,
+        filename: file.name,
         text: null,
       },
       fromSid: window.$storage.getItem('orgSid'),
@@ -77,7 +77,7 @@ function SubType({ name, icon, type, uploadPublicizeRequest, filePrepareRequest 
           data: formData,
         })
         .then(() => {
-          handleSubmit(`${host}/${key}${file.name}`, file.name);
+          handleSubmit(`${host}/${key}${file.name}`, file);
         })
         .catch((err) => {
           console.log('err', err);

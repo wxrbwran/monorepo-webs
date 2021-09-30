@@ -87,7 +87,9 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   };
   const onFinish = (values: IValues) => {
     console.log('Received values of form:', values);
-    const result = handleFormatValues(values, rules, isScale, checked, currentOrgInfo.sid, currentOrgInfo.role, scopeItems);
+    const orgSid = window.$storage.getItem('orgSid');
+    const orgRole =   window.$storage.getItem('orgRole');
+    const result = handleFormatValues(values, rules, isScale, checked, orgSid, orgRole, scopeItems);
     if (result) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const { start, must, should_1, actions } = result;

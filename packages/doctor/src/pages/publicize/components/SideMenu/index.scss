@@ -6,6 +6,10 @@
     padding-left: 20px;
     height: 40px;
     line-height: 40px;
+    &.active {
+      background: #EEF2F4;
+      border-radius: 3px;
+    }
     a {
       font-size: 16px;
       color: #181818;
@@ -68,8 +72,7 @@
         }
       }
       &.active {
-        // background: #EEF2F4;
-        font-weight: bold;
+        background: #EEF2F4;
         border-radius: 3px;
       }
       .name {

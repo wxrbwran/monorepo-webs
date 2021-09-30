@@ -38,7 +38,7 @@ function SubType({ name, icon, type }: IProps) {
       content: {
         address: rawUrl,
         cover: null,
-        filename: file,
+        filename: file.name,
         text: null,
       },
       // fromSid: window.$storage.getItem('orgSid'),
@@ -87,7 +87,7 @@ function SubType({ name, icon, type }: IProps) {
             data: formData,
           })
           .then(() => {
-            handleSubmit(`${host}/${key}${file.name}`, file.name);
+            handleSubmit(`${host}/${key}${file.name}`, file);
           })
           .catch((err) => {
             console.log('err', err);
