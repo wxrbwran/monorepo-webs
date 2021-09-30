@@ -89,9 +89,10 @@ function Patients() {
               <Search
                 form={form}
                 searchKey="keyword"
-                placeholder="搜索姓名或手机号"
+                placeholder="搜索姓名或诊断名称"
                 focus={true}
                 float='inherit'
+                width={170}
               />
             : <SearchOutlined onMouseEnter={() => setShowSearch(true)} className="mr-10"/>
         }
