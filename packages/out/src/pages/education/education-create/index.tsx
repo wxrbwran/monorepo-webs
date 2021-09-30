@@ -52,7 +52,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
             }, {
               sid: window.$storage.getItem('orgSid'),
               roleType:  window.$storage.getItem('orgRole'),
-              // nsId: currentOrgInfo.nsId,
+              nsId:  window.$storage.getItem('nsId'),
             }],
           };
           api.education
@@ -120,7 +120,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
             tag: 'operator',
           }, {
             sid: window.$storage.getItem('orgSid'),
-            // ns: currentOrgInfo.nsId,
+            ns: window.$storage.getItem('nsId'),
             role: window.$storage.getItem('orgRole'),
             tag: 'ownership',
           }],
