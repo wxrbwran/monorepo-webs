@@ -43,7 +43,7 @@ function CheckImages() {
       sid: window.$storage.getItem('patientSid'),
       wcId: window.$storage.getItem('patientWcId'),
     };
-    window.$api.image.fetchImageCountNew(params).then((res: {images: IImageItem[]}) => {
+    window.$api.image.fetchImageCountNew(params).then((res: { images: IImageItem[] }) => {
       const { images } = res;
       const anaImg: IImageItem[] = [];
       const insImg: IImageItem[] = [];
@@ -131,7 +131,7 @@ function CheckImages() {
       >
         <div className={styles.images_wrap}>
           <ImageList
-            typeNew={activeItem?.typeNew as string}
+            data={activeItem as IImageItem}
             handleHideCont={() => setHideCont(!hideCont)}
           />
           <div />

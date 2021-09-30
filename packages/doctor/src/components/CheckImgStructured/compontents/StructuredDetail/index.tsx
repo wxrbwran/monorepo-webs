@@ -3,14 +3,15 @@ import React, {
 } from 'react';
 import { Button, Tabs, message } from 'antd';
 import { useDispatch } from 'umi';
-import { IStructuredDetailProps, ITopicItemApi, ITopicQaItemApi } from 'typings/imgStructured';
+import { IStructuredDetailProps, ITopicQaItemApi } from 'typings/imgStructured';
 import * as api from '@/services/api';
 import StructuredDetailItem from '../StructuredDetailItem';
 import StructuredDetailTopic from '../StructuredDetailTopic';
 import Nodata from '../Nodata';
 import { outTypes, formatJcdSubmitData } from '../utils';
 import styles from './index.scss';
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep, debounce } from 'lodash';
+import uuid from 'react-uuid';
 
 interface ITopicParams {
   data: ITopicQaItemApi[];
@@ -22,35 +23,29 @@ interface ITopicParams {
   }
 }
 const { TabPane } = Tabs;
-let levelInx = 0;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const {
-    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll, templatePart, openTime,
+    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll, templatePart,
+    openTime, jcdOriginIds,
   } = props;
+  console.log('hydData232', hydData);
+  console.log('jcdData', jcdData);
   const sid = window.$storage.getItem('sid');
   const dispatch = useDispatch();
   const isRefreshParent = useRef(false);
   const fetchLevel1 = () => {
-    const level1: string[] = [];
-    hydData.forEach((hytItem, hydInx: number) => {
-      level1.push(hytItem.outType + hydInx);
-    });
-    jcdData.forEach((jcdItem: ITopicItemApi, jcdInx) => {
-      level1.push(jcdItem.meta.title + jcdInx);
-    });
-    levelInx = level1.length === 0 ? 1 : level1.length - 1;
-    return level1.length === 0 ? ['HYD0'] : level1;
+    const datas = [...hydData, ...jcdData];
+    return isEmpty(datas) ? [{ outType: 'HYD', key: uuid() }] : datas;
   };
-  // 一级分类 化验单、检查单、图片不清晰、非单据
-  const [level1Types, setLevel1Types] = useState<string[]>(fetchLevel1());
   // 保存各个分类的方法队列 - 检查单、图片不清晰、非医学单据
   const [inspectionCallbackFns, setCallbackFns] = useState<CommonData>({});
   const [hydCallbackFns, setHydCallbackFns] = useState<CommonData>({});
   // // true仅查看 false编辑中
   const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData));
+  const [typeTabs, setTypeTabs] = useState <any[]>(fetchLevel1());
 
   useEffect(() => {
-    setLevel1Types(fetchLevel1());
+    setTypeTabs(fetchLevel1());
     setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
   }, [hydData, jcdData]);
   useEffect(() => () => {
@@ -67,7 +62,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     // return tmpppppList.list;
   };
   const fetchAllTypes = () => {
-    const allTypes = level1Types.map(item => item.replace(/\d+/g, ''));
+    const allTypes = typeTabs.map(item => {
+      return item?.meta?.title || item.outType;
+    });
     return [...new Set(allTypes)];
   };
   const saveHydData = (params: any) => {
@@ -97,8 +94,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     });
   };
   const saveJcdData = (params: any) => {
-    // jcdData
-    params.originIds = jcdData.map(item => item.meta.id);
+    params.originIds = jcdOriginIds;
     api.image.putImageJcdAndOther(params).then(() => {
       console.log('添加检查单成功');
     }).catch(err => {
@@ -112,7 +108,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     } else {
       const clickSaveTime = new Date().getTime();
       const timeSlotTemp = await fetchTimeSlotTemplate(clickSaveTime);
-      if (level1Types[0]) {
+      if (!isEmpty(typeTabs)) {
         const apiParams: CommonData = {
           imageId,
           allTypes: fetchAllTypes(),
@@ -137,7 +133,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
             const { tempList, jcdList } = formatJcdSubmitData(list, timeSlotTemp, clickSaveTime);
-            saveTemplate(tempList, clickSaveTime);
+            saveTemplate(tempList);
             saveJcdData(jcdList);
           }).catch((err) => {
             console.log('err', err);
@@ -150,35 +146,32 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   };
 
   const handelTabsEdit = (targetKey: string) => {
-    console.log('targetKey', targetKey);
-    console.log('level1Types', level1Types);
-    console.log('hydData', hydData);
-    setLevel1Types((prev) => prev.filter(item => item !== targetKey));
+    const newTabs = typeTabs.filter(item => item.key !== targetKey);
+    setTypeTabs(cloneDeep(newTabs));
   };
 
   const handleAddLevel1 = (type: string) => {
-    // const inx = level1Types.filter(item => item.startsWith(type));
-    setLevel1Types([...level1Types, `${type}${levelInx}`]);
-    levelInx = levelInx + 1;
+    if (['JCD', 'OTHER'].includes(type)) {
+      typeTabs.push({ meta: { title: type }, key: uuid() });
+    } else {
+      typeTabs.push({ outType: type, key: uuid() });
+    }
+    setTypeTabs(cloneDeep(typeTabs));
   };
-  const fetchHydInit = useMemo(() => (inx: number) => {
-    return hydData?.[inx] || [];
-  }, [hydData]);
-  const fetchJcdInit = useMemo(() => (inx: number) => {
-    const index = inx - hydData.length;
-    return jcdData?.[index] || [];
-  }, [jcdData]);
-  const renderTabPane = useMemo(() => {
-    return (type: string, level1Inx: number) => {
-      console.log('level1Types211', level1Types);
-      console.log('level1Inx', level1Inx);
-      console.log('hydData', hydData);
 
+  const fetInitData = (inx: number) => {
+    if (typeTabs[inx]?.documentList || typeTabs[inx]?.data) {
+      return typeTabs?.[inx];
+    }
+    return [];
+  };
+  const renderTabPane = useMemo(() => {
+    return (itemTab: any, inx: number) => {
       let dom: any = null;
-      const typeStart = type.replace(/\d+/g, ''); // HYD1->HYD
+      const typeStart = itemTab?.outType || itemTab?.meta?.title;
       const baseProps = {
         outType: typeStart,
-        outTypeAndInx: type,
+        outTypeAndInx: itemTab.key,
         imageId,
         isViewOnly,
       };
@@ -188,18 +181,17 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             setCallbackFns={setCallbackFns}
             inspectionCallbackFns={inspectionCallbackFns}
             {...baseProps}
-            initData={fetchHydInit(level1Inx)}
+            initData={fetInitData(inx)}
           />;
           break;
         case 'OTHER':
         case 'JCD':
           dom = <StructuredDetailTopic
-            initData={fetchJcdInit(level1Inx)}
+            initData={fetInitData(inx)}
             templatePart={templatePart}
             hydCallbackFns={hydCallbackFns}
             setHydCallbackFns={setHydCallbackFns}
             tempAll={tempAll}
-            openTime={openTime}
             {...baseProps}
           />;
           break;
@@ -209,34 +201,37 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       }
       return dom;
     };
-  }, [level1Types, isViewOnly]);
+  }, [isViewOnly, typeTabs]);
+  console.log('typeTabs21', typeTabs);
   return (
     <div className={`flex-1 mx-20 mt-10 ${styles.structrued} ${isViewOnly ? styles.disabled : ''}`}>
       <div className="flex justify-between items-center mb-25">
         <div className="flex items-center">
           {
-            !isViewOnly && Object.keys(outTypes).map(outType =>
-              <Button key={outType} className="mr-15" onClick={() => handleAddLevel1(outType)}>{outTypes[outType]}</Button>,
+            !isViewOnly && (
+              Object.keys(outTypes).map(outType =>
+                <Button key={outType} className="mr-15" onClick={() => handleAddLevel1(outType)}>{outTypes[outType]}</Button>,
+              )
             )
           }
         </div>
-        <Button className={styles.save_btn} type="primary" onClick={handleSaveClick}>
+        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 500)}>
           {isViewOnly ? '修改结果' : '保存并退出'}
         </Button>
       </div>
       {
-        level1Types.length > 0 && (
+        typeTabs.length > 0 && (
           <>
             <div className={`mt-15 ${styles.structured_content}`}>
               <Tabs type="editable-card" onEdit={handelTabsEdit} hideAdd>
                 {
-                  level1Types.map((level1Type: string, level1Inx) => (
+                  typeTabs.map((itemTab: any, inx) => (
                     <TabPane
-                      tab={outTypes[level1Type.replace(/\d+/g, '')]}
-                      key={level1Type}
+                      tab={outTypes?.[itemTab?.outType || itemTab?.meta?.title]}
+                      key={itemTab.key}
                       forceRender={true}
                     >
-                      {renderTabPane(level1Type, level1Inx)}
+                      {renderTabPane(itemTab, inx)}
                     </TabPane>
                   ))
                 }

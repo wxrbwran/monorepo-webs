@@ -19,15 +19,15 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
   const [editIndex, setEditIndex] = useState(-1);
   const handleSave = (a) => new Promise((resolve) => {
-    console.log('hhhhh232', a);
+    console.log(a);
     // resolve(fetchSubmitData(questions, 2));
     resolve({
-      data: questions,
+      data: questions.filter(item => !!item.question.trim()),
       groupInx: 2,
     });
   });
   useEffect(() => {
-    if (initData) {
+    if (initData && isEmpty(questions)) {
       setQuestions(initData);
     }
   }, [initData]);
@@ -159,12 +159,15 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
   return (
     <div className="border p-15 my-15">
       <TopicTitle number="二" handleAdd={debounce(handleAddTopic, 300)} btnText='添加新的选择题' />
+      <div className="qa-wrap">
       {
         questions.map((item: IQuestions, quesIndex: number) => {
           let isShow = true;
-          if (isViewOnly && isEmpty(item.answer)) {
-            isShow = false;
-            ++emptyAnsNum;
+          if (isViewOnly) {
+            if (isEmpty(item.answer) || !item.answer?.[0]?.trim()) {
+              isShow = false;
+              ++emptyAnsNum;
+            }
           }
           if (isShow) {
             if (editIndex === quesIndex) {
@@ -247,7 +250,7 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
                     >
                       {
                         item.options!.map((option, optionInx) => (
-                          <Radio key={optionInx} value={option}>{option}</Radio>
+                          <Radio key={optionInx} value={option} disabled={isViewOnly}>{option}</Radio>
                         ))
                       }
                     </Radio.Group>
@@ -256,6 +259,7 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
                       options={item.options}
                       onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
                       value={item.answer}
+                      disabled={isViewOnly}
                     />
                   )
                 }
@@ -264,6 +268,7 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
           }
         })
       }
+      </div>
     </div>
   );
 }

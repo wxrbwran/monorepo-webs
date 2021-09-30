@@ -21,12 +21,12 @@ function TopicProblem(props: IProps) {
   const handleSave = () => new Promise((resolve) => {
     // resolve(fetchSubmitData(questions, 3));
     resolve({
-      data: questions,
+      data: questions.filter(item => !!item.question.trim()),
       groupInx: 3,
     });
   });
   useEffect(() => {
-    if (initData) {
+    if (initData && isEmpty(questions)) {
       setQuestions(initData);
     }
   }, [initData]);
@@ -89,59 +89,62 @@ function TopicProblem(props: IProps) {
   return (
     <div className="border p-15 my-15">
       <TopicTitle number="三" handleAdd={debounce(handleAddTopic, 300)} btnText='添加新的问答题' />
-      {
-        questions.map((item, quesIndex: number) => {
-          const isEdit = editIndex === quesIndex;
-          let isShow = true;
-          if (isViewOnly && !item.answer[0]) {
-            isShow = false;
-            ++emptyAnsNum;
-          }
-          return (
-            isShow ? (
-              <div
-                className={`${(isEdit) ? 'edit topic-item' : ' topic-item-show'}`}
-                key={quesIndex}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {
-                  isEdit ? (
-                    <>
-                      <div className="bg-gray-50 mb-5 p-8">
-                        <div className="mr-40 pl-5">示例：影像表现</div>
-                        <div className="border p-5"> 膀胱充盈良好，膀胱充盈良好 </div>
-                      </div>
-                      <div className={`issue ${!!item.question ? '' : 'input-empty'} pl0`}>
-                        <span className="issue__index">{quesIndex - emptyAnsNum + 1}、</span>
-                        <Input
-                          placeholder="请输入问题"
-                          value={item.question}
-                          onChange={(ev: any) => handleSaveStem(ev, quesIndex)}
-                        />
-                        <img className="issue__delete" src={delIcon} onClick={() => handleDelStem(quesIndex)} />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      {
-                        item.isAdd && <EditOutlined onClick={(e: any) => handleClickItem(e, quesIndex)} />
-                      }
-                      <div className="pl-12">{quesIndex - emptyAnsNum + 1}、{item.question}</div>
-                    </>
-                  )
-                }
-                <div className="answer-wrap">
-                  <TextArea
-                    placeholder="请输入"
-                    onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
-                    value={item.answer[0]}
-                  />
+      <div className="qa-wrap">
+        {
+          questions.map((item, quesIndex: number) => {
+            const isEdit = editIndex === quesIndex;
+            let isShow = true;
+            if (isViewOnly && !item.answer[0]?.trim()) {
+              isShow = false;
+              ++emptyAnsNum;
+            }
+            return (
+              isShow ? (
+                <div
+                  className={`${(isEdit) ? 'edit topic-item' : ' topic-item-show'}`}
+                  key={quesIndex}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {
+                    isEdit ? (
+                      <>
+                        <div className="bg-gray-50 mb-5 p-8">
+                          <div className="mr-40 pl-5">示例：影像表现</div>
+                          <div className="border p-5"> 膀胱充盈良好，膀胱充盈良好 </div>
+                        </div>
+                        <div className={`issue ${!!item.question ? '' : 'input-empty'} pl0`}>
+                          <span className="issue__index">{quesIndex - emptyAnsNum + 1}、</span>
+                          <Input
+                            placeholder="请输入问题"
+                            value={item.question}
+                            onChange={(ev: any) => handleSaveStem(ev, quesIndex)}
+                          />
+                          <img className="issue__delete" src={delIcon} onClick={() => handleDelStem(quesIndex)} />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {
+                          item.isAdd && <EditOutlined onClick={(e: any) => handleClickItem(e, quesIndex)} />
+                        }
+                        <div className="pl-12">{quesIndex - emptyAnsNum + 1}、{item.question}</div>
+                      </>
+                    )
+                  }
+                  <div className="answer-wrap">
+                    <TextArea
+                      placeholder="请输入"
+                      onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
+                      value={item.answer?.[0]}
+                      disabled={isViewOnly}
+                    />
+                  </div>
                 </div>
-              </div>
-            ) : <></>
-          );
-        })
-      }
+              ) : <></>
+            );
+          })
+        }
+      </div>
     </div>
   );
 }

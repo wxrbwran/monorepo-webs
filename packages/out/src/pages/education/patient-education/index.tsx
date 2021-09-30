@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import type { FC } from 'react';
-import { useSelector } from 'umi';
 import * as api from '@/services/api';
 import { ProfileOutlined } from '@ant-design/icons';
 import CreateBox from '../components/create_box';
 import ListItem from '../components/list_item';
-import { getCheckedContent } from '../utils';
 // import type { IValues } from '../const';
 import ReplyDetail from '../components/reply_detail';
 import time from '@/assets/img/time.svg';
@@ -17,28 +15,34 @@ import styles from './index.scss';
 
 const PatientEducation: FC<ILocation> = ({ location }) => {
   const isScale = location.pathname.includes('scale');
-  const pureDepartmentList = useSelector((state: Store) => state?.org?.currentOrg?.pureDepartmentList);
   const [sendContent, setSendContent] = useState([]);
 
   useEffect(() => {
     api.education.getSendContent({
-      businessType: isScale ? 'FOLLOW' : 'PUBLICIZE_EDUCATION',
+      sourceType: isScale ? 2 : 3,
       pageSize: 9999,
-      page: 1
+      page: 1,
+      operatorSid: window.$storage.getItem('sid'),
+      operatorRole: window.$storage.getItem('currRoleId'),
+      operatorNsId: window.$storage.getItem('nsId'),
+      ownershipSid: window.$storage.getItem('orgSid'),
+      ownershipRole: window.$storage.getItem('orgRole'),
+      // ownershipNsId: currentOrgInfo.nsId,
+
     }).then((res) => {
       setSendContent(res.rules);
     })
-    .catch((err: string) => {
-      console.log('err', err);
-    });
-  }, [])
+      .catch((err: string) => {
+        console.log('err', err);
+      });
+  }, []);
 
   const type = {
     1: 'video',
     2: 'document',
     3: 'article',
     4: 'picture',
-    6: 'audio'
+    6: 'audio',
   };
 
   return (
@@ -87,7 +91,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                       <img src={frequency} alt="" /> 发送频率
                     </p>
                     <p className={styles.con}>
-                      {frequencyType === 'normal' ? '第' : '每'}
+                      {frequencyType === 'once' ? '第' : '每'}
                       {custom.join()}天发送一次
                     </p>
                   </div>
@@ -97,7 +101,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                     </p>
                     <p className={styles.con}>
                       {
-                        group.includes('PATIENT_ALL') ? '全部患者' : [...getCheckedContent(group, pureDepartmentList)].map(i => i.name).join(', ')
+                        group.includes('PATIENT_ALL') ? '全部患者' : group.join()
                       }
                     </p>
                   </div>
@@ -127,7 +131,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                 </div>
               </div>
             </div>
-          )
+          );
         })
       }
     </div>

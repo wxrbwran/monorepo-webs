@@ -1,0 +1,88 @@
+.patient-manage-side {
+  text-align: left;
+  padding-top: 15px;
+  font-size: 14px;
+  .menu {
+    padding-left: 20px;
+    height: 40px;
+    line-height: 40px;
+    a {
+      font-size: 16px;
+      color: #181818;
+      line-height: 14px;
+    }
+  }
+
+  .group-title {
+    @include flex;
+    margin-top: 27px;
+    color: #868686;
+    padding: 0 5px 13px;
+  }
+
+  .creact-tip {
+    background: #F7F7F7;
+    border-radius: 4px;
+    width: 195px;
+    height: 114px;
+    color: #B9B9B9;
+    padding: 13px;
+    line-height: 20px;
+    .btn {
+      color: #3296FA;
+      cursor: pointer;
+      margin-top: 13px;
+      line-height: 14px;
+    }
+  }
+  .group-list {
+    .item {
+      height: 40px;
+      line-height: 40px;
+      color: #181818;
+      // padding: 0 0 0 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &:hover {
+        a {
+          .anticon {
+            display: block;
+          }
+        }
+      }
+      a {
+        color: #181818;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px;
+        .anticon {
+          color: #868686;
+          display: none;
+          padding-right: 15px;
+        }
+        .ant-input {
+          height: 40px;
+          padding-left: 20px;
+        }
+      }
+      &.active {
+        // background: #EEF2F4;
+        font-weight: bold;
+        border-radius: 3px;
+      }
+      .name {
+        padding-left: 20px;
+        overflow-x: auto;
+        width: 290px;
+      }
+    }
+  }
+  .create-group {
+    margin-bottom: 20px;
+    .ant-input {
+      height: 40px;
+    }
+  }
+}

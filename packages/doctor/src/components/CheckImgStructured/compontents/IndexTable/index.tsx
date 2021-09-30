@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const IndexTable: FC<IProps> = (props) => {
-  const { apiData, subName, isViewOnly, getFieldsValue, formInit } = props;
+  const { apiData, subName, isViewOnly, formInit } = props;
   const [showAll, setshowAll] = useState(isViewOnly);
   console.log('formInit', formInit);
   useEffect(() => {
@@ -29,10 +29,6 @@ const IndexTable: FC<IProps> = (props) => {
     let indexListAll: CommonData = {};
     indexListAll = apiData;
     showDom = indexListAll[type].map((item: CommonData, index: number) => {
-      console.log('isViewOnly', isViewOnly);
-      console.log('88888849', getFieldsValue(`${item.formIndex}_value`) );
-      console.log(323, formInit[`${item.formIndex}_value`]);
-      // console.log(9999, getFieldsValue(`${item.formIndex}_minValue`));
       // 查看时，隐藏空值的~~~*********
       let isShow = true;
       if (isViewOnly) {
@@ -86,7 +82,7 @@ const IndexTable: FC<IProps> = (props) => {
   };
 
   return (
-    <div className={styles.list_wrap}>
+    <div className={`${styles.list_wrap} structured-edit-wrap`}>
       <div className={`${styles.item} ${styles.bg_gray} ${styles.header}`}>
         <div>名称</div>
         <div>缩写</div>

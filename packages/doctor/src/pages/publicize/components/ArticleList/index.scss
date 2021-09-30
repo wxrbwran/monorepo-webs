@@ -1,0 +1,44 @@
+.upload {
+  // @include size(240px, 135px);
+  // @extend %upload__btn;
+  @include upload__btn(240px, 135px);
+}
+.filename {
+  height: 47px;
+  background-color: rgba(0,0,0, 0.5);
+  color: #fff;
+  cursor: pointer;
+  span {
+    @include line-clamp(2);
+    word-break: break-all;
+  }
+}
+
+.item_wrap {
+  &:hover {
+    .del_wrap {
+      height: 25px;
+    }
+  }
+  .del_wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: rgba(0, 0, 0, 0.3);
+    line-height: 25px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    text-align: right;
+    z-index: 2;
+    transition: all 0.2s;
+    overflow: hidden;
+    :global {
+      .anticon {
+        color: #Fff;
+        cursor: pointer;
+      }
+    }
+  }
+}

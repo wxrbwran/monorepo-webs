@@ -34,12 +34,10 @@
   *zoom: 1;
 }
 
-@mixin line-clamp($lines-to-show, $font-size, $line-height) {
+@mixin line-clamp($lines-to-show) {
   display: block; // Fallback for non-webkit browsers
   display: -webkit-box;
-  font-size: $font-size;
   //height: ($font-size * $line-height * $lines-to-show); // Fallback for non-webkit browsers
-  line-height: $line-height;
   height: auto;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -50,4 +48,44 @@
 @mixin card-shadow {
   box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.13);
   border-radius: 4px;
+}
+
+@mixin upload__btn($width, $height) {
+  width: $width;
+  height: $height;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  :global {
+    .anticon-plus {
+      font-size: 30px;
+      color: #4f96f3;
+    }
+    .ant-upload {
+      width: $width;
+      height: $height;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+@mixin rich-text($content, $width: 35px) {
+  position: relative;
+  &:hover {
+    &::before {
+      content: $content;
+      position: absolute;
+      z-index: 1;
+      width: $width;
+      top: -15px;
+      left: -10px;
+      font-weight: bold;
+    }
+  }
 }

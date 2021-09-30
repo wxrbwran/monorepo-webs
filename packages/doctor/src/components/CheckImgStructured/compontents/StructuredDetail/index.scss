@@ -17,8 +17,13 @@
           z-index: 99;
         }
       }
+      .qa-wrap {
+        max-height: 168px;
+        overflow-y: auto;
+      }
     }
   }
+
   .save_btn {
     position: absolute;
     right: 40px;
@@ -61,6 +66,44 @@
 .structured_content {
   flex: 1;
   :global {
+    // 多段填空禁止编辑时，ui不要显示灰色处理-s
+    .ant-input[disabled] {
+      color: #000;
+      background-color: #fff;
+    }
+    .ant-checkbox-disabled + span, .ant-radio-disabled + span {
+      color: #000;
+    }
+    .ant-checkbox-disabled  {
+      .ant-checkbox-inner {
+        background-color: #fff;
+        border: 1px solid #d9d9d9;
+      }
+      &.ant-checkbox-checked {
+        .ant-checkbox-inner {
+          background-color: #1890ff;
+          border-color: #1890ff;
+          &::after {
+            border-color: #fff;
+          }
+        }
+      }
+    }
+    .ant-radio-disabled  {
+      .ant-radio-inner {
+        background-color: #fff;
+        border: 1px solid #d9d9d9;
+      }
+      &.ant-radio-checked {
+        .ant-radio-inner {
+          border-color: #1890ff!important;
+          &::after {
+            background-color: #1890ff;
+          }
+        }
+      }
+    }
+    // 多段填空禁止编辑时，ui不要显示灰色处理-s
     .ant-checkbox-wrapper, .ant-radio-wrapper {
       font-size: 14px;
     }

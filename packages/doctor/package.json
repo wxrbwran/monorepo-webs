@@ -9,10 +9,9 @@
     "todev": "./config/todev.sh",
     "toprod": "./config/toprod.sh",
     "dev": "pnpm todev && NODE_ENV=development APP_ENV=dev umi dev",
-    "debug": "pnpm todev && NODE_ENV=development APP_ENV=test umi dev",
+    "debug": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=test umi dev",
     "debug-prod": "pnpm todev && NODE_ENV=development APP_ENV=prod umi dev",
     "dev-shared": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=dev umi dev",
-    "debug-shared": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=dev umi dev",
     "dev-dist": "pnpm toprod && NODE_ENV=production APP_ENV=dev umi build",
     "prerelease": "pnpm toprod && NODE_ENV=production APP_ENV=test umi build",
     "dist": "pnpm toprod && NODE_ENV=production APP_ENV=prod umi build",
@@ -66,7 +65,8 @@
     "umi-request": "^1.3.9",
     "umi-types": "^0.5.14",
     "update": "^0.7.4",
-    "xzl-web-shared": "workspace:^1.0.0"
+    "xzl-web-shared": "workspace:^1.0.0",
+    "react-quill": "^1.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

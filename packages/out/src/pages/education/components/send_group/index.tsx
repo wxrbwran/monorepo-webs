@@ -13,7 +13,7 @@ function SendGroup({ form }: IProps) {
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
 
-  const options = pureDepartmentList.map((item: {name: string, id: string})=> ({
+  const options = pureDepartmentList.map((item: { name: string, id: string })=> ({
     label: item.name,
     value: item.id,
   }));
@@ -28,17 +28,17 @@ function SendGroup({ form }: IProps) {
   const onChange = list => {
     setIndeterminate(!!list.length && list.length < options.length);
     setCheckAll(list.length === options.length);
-    if(list.length === options.length){
-      form.setFieldsValue({ group: ['PATIENT_ALL', ...list]})
-    }else{
-      form.setFieldsValue({ group: list})
+    if (list.length === options.length){
+      form.setFieldsValue({ group: ['PATIENT_ALL', ...list] });
+    } else {
+      form.setFieldsValue({ group: list });
     }
   };
 
   const onCheckAllChange = e => {
     form.setFieldsValue({
-      group:  e.target.checked ? ['PATIENT_ALL', ...options.map(item => item.value)] : []
-    })
+      group:  e.target.checked ? ['PATIENT_ALL', ...options.map(item => item.label)] : [],
+    });
     setIndeterminate(false);
     setCheckAll(e.target.checked);
   };
@@ -65,14 +65,14 @@ function SendGroup({ form }: IProps) {
           {
             options.map(item => (
               <Tooltip title={item.label}>
-                <Checkbox value={item.value} onChange={onChange}> {item.label}</Checkbox>
+                <Checkbox value={item.label} onChange={onChange}> {item.label}</Checkbox>
               </Tooltip>
             ))
           }
         </CheckboxGroup>
       </FormItem>
     </div>
-  )
+  );
 }
 
 export default SendGroup;

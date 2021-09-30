@@ -11,3 +11,4 @@ export { default as doctor } from './doctor';
 export { default as event } from './event';
 export { default as research } from './research';
 export { default as indexLibrary } from './indexLibrary';
+export { default as education } from './education';

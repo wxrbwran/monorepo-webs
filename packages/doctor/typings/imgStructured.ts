@@ -52,6 +52,7 @@ export interface IStructuredDetailProps {
   templatePart: ITmpList;
   tempAll: ITmpList;
   openTime: number;
+  jcdOriginIds: string;
 }
 
 // 搜索指标或者单据名称时，返回的item

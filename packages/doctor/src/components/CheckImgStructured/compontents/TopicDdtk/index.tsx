@@ -43,7 +43,7 @@ function Ddtk(props: IProps) {
     });
   });
   useEffect(() => {
-    if (initData) {
+    if (initData && isEmpty(questions)) {
       setQuestions( fetchInitData());
     }
   }, [initData]);
@@ -180,97 +180,98 @@ function Ddtk(props: IProps) {
     setEditIndex(quesIndex);
   };
   console.log('------最新questions', questions);
+  let count = 0;
   return (
     <div className="border p-15 my-15">
       <TopicTitle number="一" handleAdd={debounce(handleAddTopic, 300)} btnText='添加新的多段填空' />
-      {
-        questions.map((item, quesIndex: number) => {
-          let isShow = false;
-          if (isViewOnly) {
-            item.qa.forEach(qaItem => {
-              qaItem.answer.forEach(ansItem => {
-                console.log('ansItem', !!ansItem.trim());
-                if (!!ansItem.trim()) {
-                  isShow = true;
-                }
+      <div className='qa-wrap'>
+        {
+          questions.map((item, quesIndex: number) => {
+            let isShow = true;
+            if (isViewOnly) {
+              isShow = false;
+              count = count + 1;
+              item.qa.forEach(qaItem => {
+                // 一个问题的有效答案
+                const hasVals = qaItem.answer.filter(ansItem => !!ansItem.trim());
+                if (!isEmpty(hasVals)) { isShow = true;}
               });
-            });
-          } else {
-            isShow = true;
-          }
-          if (isShow) {
-            if (editIndex === quesIndex) {
-              return (
-                <div
-                  className={`topic-item ${styles.ddtk} ${styles.edit}`}
-                  onClick={(e) => e.stopPropagation()}
-                  key={quesIndex}
-                  // onClick={() => setEditIndex(quesIndex)}
-                >
-                  <div className="flex justify-end items-center mb-15">
-                    <div className={styles.add_btn} onClick={() => handleAddSymbol()}>+ 添加填空项</div>
-                    <img className="ml-10" src={delIcon} onClick={(e: any) => handleDelQuestion(e, quesIndex)} />
-                  </div>
-                  <div>
-                    <span>示例:</span>
-                    {
-                      example.map(exItem => (
-                        <span key={exItem.q}>
-                          <span className="ml-15">{exItem.q}:</span>
-                          <span className="border w-74 inline-block px-5 rounded">{exItem.a}</span>
-                        </span>
-                      ))
-                    }
-                  </div>
-                  <div className="answer-wrap">
-                    <pre style={{ position: 'relative' }}>
-                      <div>{editCont}</div>
-                      <TextArea
-                        placeholder="请按照示例输入问题和答案"
-                        value={editCont}
-                        onChange={(ev: any) => handleChangeVal(ev)}
-                        onClick={handleSaveIndex}
-                        className='edit_input'
-                      />
-                    </pre>
-                  </div>
-
-                </div>
-              );
+              if (isShow) { count = count - 1;}
             }
-            return (
-              <pre className={`${styles.ddtk} ${styles.done}` }  key={quesIndex}>
-                {
-                  item.isAdd && (
-                    <EditOutlined onClick={() => handleClickEdit(quesIndex)} />
-                  )
-                }
-                {
-                  !isViewOnly && <span className='mt-5'>{quesIndex + 1}.</span>
-                }
-                {
-                  item.qa.map((qaItem, qaInx) => (
-                    <span key={qaInx}>
-                      <span className='mt-5'>{qaItem.question}</span>
+            if (isShow) {
+              if (editIndex === quesIndex) {
+                return (
+                  <div
+                    className={`topic-item ${styles.ddtk} ${styles.edit}`}
+                    onClick={(e) => e.stopPropagation()}
+                    key={quesIndex}
+                    // onClick={() => setEditIndex(quesIndex)}
+                  >
+                    <div className="flex justify-end items-center mb-15">
+                      <div className={styles.add_btn} onClick={() => handleAddSymbol()}>+ 添加填空项</div>
+                      <img className="ml-10" src={delIcon} onClick={(e: any) => handleDelQuestion(e, quesIndex)} />
+                    </div>
+                    <div>
+                      <span>示例:</span>
                       {
-                        qaItem?.answer?.map((ansItem, ansInx) => (
-                          <span
-                            key={ansInx}
-                            className={styles.edit_span}
-                            contentEditable="true"
-                            suppressContentEditableWarning
-                            onBlur={(e) => changeAnswer(e, quesIndex, qaInx, ansInx)}
-                          >{ansItem}</span>
+                        example.map(exItem => (
+                          <span key={exItem.q}>
+                            <span className="ml-15">{exItem.q}:</span>
+                            <span className="border w-74 inline-block px-5 rounded">{exItem.a}</span>
+                          </span>
                         ))
                       }
-                    </span>
-                  ))
-                }
-              </pre>
-            );
-          }
-        })
-      }
+                    </div>
+                    <div className="answer-wrap">
+                      <pre style={{ position: 'relative' }}>
+                        <div>{editCont}</div>
+                        <TextArea
+                          placeholder="请按照示例输入问题和答案"
+                          value={editCont}
+                          onChange={(ev: any) => handleChangeVal(ev)}
+                          onClick={handleSaveIndex}
+                          className='edit_input'
+                        />
+                      </pre>
+                    </div>
+
+                  </div>
+                );
+              }
+              return (
+                <pre className={`${styles.ddtk} ${styles.done}` }  key={quesIndex}>
+                  {
+                    item.isAdd && (
+                      <EditOutlined onClick={() => handleClickEdit(quesIndex)} />
+                    )
+                  }
+                  {
+                  <span className='mt-5'>{quesIndex - count + 1}.</span>
+                  }
+                  {
+                    item.qa.map((qaItem, qaInx) => (
+                      <span key={qaInx}>
+                        <span className='mt-5'>{qaItem.question}</span>
+                        {
+                          qaItem?.answer?.map((ansItem, ansInx) => (
+                            <span
+                              key={ansInx}
+                              className={styles.edit_span}
+                              contentEditable={!isViewOnly}
+                              suppressContentEditableWarning
+                              onBlur={(e) => changeAnswer(e, quesIndex, qaInx, ansInx)}
+                            >{ansItem}</span>
+                          ))
+                        }
+                      </span>
+                    ))
+                  }
+                </pre>
+              );
+            }
+          })
+        }
+      </div>
     </div>
 
   );

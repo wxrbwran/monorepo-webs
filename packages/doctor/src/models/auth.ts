@@ -56,7 +56,7 @@ const Model: AuthModelType = {
           window.$storage.setItem('sdktoken', data.yxRegister.token); // 连接IM用
           window.$storage.setItem('uid', data.yxRegister.accid);
           window.$storage.setItem('currRoleId', Role.ALONE_DOCTOR.id);
-          window.$storage.setItem('nsid', data.wcl[0].ns.id);
+          window.$storage.setItem('nsId', data.wcl[0].ns.id);
           setAuthorizationToken(data.accessToken);
           yield put({
             type: 'saveLoginInfo',
