@@ -65,7 +65,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                   // <p className="cursor-pointer">
                   //   <ProfileOutlined /> 回复详情
                   // </p>
-                  <ReplyDetail id={sen.docId}>
+                  <ReplyDetail id={sen.id}>
                     <p className="cursor-pointer">
                       <ProfileOutlined /> 回复详情
                     </p>

@@ -113,7 +113,7 @@ function Patients() {
           // request={() => {}}
           depOptions={tableOptions}
           handleCallback={handleCallback}
-          // noPagination={true}
+          noPagination={true}
           tableOptions={{
             pagination: false,
             timeOut: true,
