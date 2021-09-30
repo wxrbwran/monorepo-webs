@@ -141,6 +141,22 @@ pipeline {
             tool.PrintMsg("打tag end","blue")
           }
         }
+        // 2ef24721-68a1-4b41-b312-1d8bfad05a70
+        dingtalk (
+
+                robot: '44a10d89-4870-47e9-aead-37bbb4afb34c',
+
+                type:'MARKDOWN',
+
+                atAll: false,
+
+                title: "xzl-webs/${BRANCH_NAME}构建成功。",
+
+                messageUrl: "https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/doctor-dev/${BUILD_ID}/console",
+
+                text: ["- 成功构建:${JOB_NAME}项目!\n- 分支:${branch}\n- 数据数据初始化:${iDb}\n- 持续时间:${currentBuild.durationString}\n- 任务:#${BUILD_ID}"],
+
+            )
       }
 
       failure {
