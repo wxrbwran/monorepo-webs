@@ -251,18 +251,20 @@ const StructuredDetailItem: FC<IProps> = (props) => {
   };
   return (
     <div className={styles.structure_detail_item}>
-      <div className="flex text-sm items-center mb-10 structured-edit-wrap">
-        <div className="font-medium mr-5 "> 检查机构: </div>
-        <SearchHospital
-          placeholder="请输入检查机构"
-          callback={handleSetHospital}
-          fieldName="hospital"
-          style={{ flex: 1 }}
-          defaultValue={{
-            hospitalId: initData?.orgId,
-            hospitalName: initData?.orgName,
-          }}
-        />
+      <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
+        <div className="flex" style={{ flex: '0 0 47%' }}>
+          <div className="font-medium mr-5" style={{ flex: '0 0 63px' }}> 检查机构: </div>
+          <SearchHospital
+            placeholder="请输入检查机构"
+            callback={handleSetHospital}
+            fieldName="hospital"
+            style={{ flex: 1, maxWidth: '78%' }}
+            defaultValue={{
+              hospitalId: initData?.orgId,
+              hospitalName: initData?.orgName,
+            }}
+          />
+        </div>
         <ItemDate
           setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
           setUnknow={(unknownReport: boolean) => handleUnknownReport(unknownReport)}
