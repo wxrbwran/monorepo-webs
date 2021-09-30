@@ -34,9 +34,12 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   // // true仅查看 false编辑中
   const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData));
   const [typeTabs, setTypeTabs] = useState <any[]>(fetchLevel1());
+  const [activeType, setActiveType] = useState(fetchLevel1()[0].key);
 
   useEffect(() => {
-    setTypeTabs(fetchLevel1());
+    const tabs = fetchLevel1();
+    setTypeTabs(tabs);
+    setActiveType(tabs[0].key);
     setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
   }, [hydData, jcdData]);
   useEffect(() => () => {
@@ -138,6 +141,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
 
   const handelTabsEdit = (targetKey: string) => {
     const newTabs = typeTabs.filter(item => item.key !== targetKey);
+    if (targetKey === activeType) {
+      setActiveType(newTabs?.[newTabs?.length - 1]?.key);
+    }
     setTypeTabs(cloneDeep(newTabs));
   };
 
@@ -147,6 +153,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     } else {
       typeTabs.push({ outType: type, key: uuid() });
     }
+    setActiveType(typeTabs?.[typeTabs.length - 1].key);
     setTypeTabs(cloneDeep(typeTabs));
   };
 
@@ -214,7 +221,13 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         typeTabs.length > 0 && (
           <>
             <div className={`mt-15 ${styles.structured_content}`}>
-              <Tabs type="editable-card" onEdit={handelTabsEdit} hideAdd>
+              <Tabs
+                type="editable-card"
+                onEdit={handelTabsEdit}
+                hideAdd
+                activeKey={activeType}
+                onChange={(tab: string) => setActiveType(tab)}
+              >
                 {
                   typeTabs.map((itemTab: any, inx) => (
                     <TabPane

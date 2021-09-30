@@ -60,12 +60,12 @@ function Patients() {
   const handleCallback = (selected: string[]) => {
     console.log(selected);
   };
-  const handlePagerChange = (pageAt: number) => {
+  const handlePagerChange = (pagination: { current: number }) => {
     setOptions({
       ...depOptions,
-      pageAt,
+      pageAt: pagination.current,
     });
-    sessionStorage.setItem('pageAt', pageAt);
+    sessionStorage.setItem('pageAt', pagination.current.toString());
   };
 
   const columns: CommonData[] = [
@@ -88,7 +88,7 @@ function Patients() {
             depOptions={depOptions}
             handleCallback={handleCallback}
             tableOptions={{
-              handlePagerChange,
+              onChange: handlePagerChange,
               rowSelection: false,
             }}
           />
