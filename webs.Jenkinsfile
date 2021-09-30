@@ -136,7 +136,7 @@ pipeline {
           if (env.BRANCH == "master") {
             projectId = gitlab.GetProjectID(projectName)
             tool.PrintMsg("打tag start","blue")
-            String tagString = "v${new Date().format("yy.MMdd.HHmm")}"
+            String tagString = "v${new Date().format("yy.MMdd.HHmmssSSSSSS")}"
             gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
             tool.PrintMsg("打tag end","blue")
           }
