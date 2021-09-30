@@ -136,7 +136,7 @@ function ArticleCreate() {
     <div className="py-30 px-60">
       <div className="flex justify-between  center">
         <LeftOutlined style={{ marginBottom: 36 }} onClick={goBack} />
-        <Button type="primary" onClick={uploadOss}>
+        <Button type="primary" onClick={uploadOss} disabled={richText?.edit === false}>
           保存
         </Button>
       </div>

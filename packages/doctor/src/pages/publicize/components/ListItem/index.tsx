@@ -53,7 +53,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>
       {
-        !item?.edit && isList && (
+        item?.edit && isList && (
           <div className={styles.del_wrap}>
             {
               type === 'accompany' && (

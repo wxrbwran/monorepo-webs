@@ -21,27 +21,28 @@ function Account() {
     if (openSub || isOpenSub) {
       params = {
         targetNSId: location?.query.nsId || upperOrgNsId(),
-      }
+      };
     } else {
       params = {
         sid: window.$storage.getItem('sid'),
         sRole: Role.ORG_ADMIN.id,
-      }
+      };
     }
     api.org.getOrgInfo(params).then(res => {
-      setOrgInfo({...res});
-      setIntro(res?.intro)
+      setOrgInfo({ ...res });
+      setIntro(res?.intro);
       window.$storage.setItem('orgSid', res.orgSid);
+      window.$storage.setItem('orgRole', res.orgRole);
       if (isOpenSub) {
         sessionStorage.setItem('upperOrgName', res.orgName); // 树状图使用
       } else {
         window.$storage.setItem('orgName', res.orgName); // 树状图使用
       }
 
-    })
-  }
+    });
+  };
   useEffect(() => {
-    if(isLogin){
+    if (isLogin){
       fetchOrgInfo();
       if (openSub) { // 查看下级机构详情，默认打开此页面，此时页面参数带有下级机构关键信息。要存到本地，后面页面接口使用
         sessionStorage.setItem('upperOrgSid', sid);
@@ -52,25 +53,25 @@ function Account() {
   const count = [
     { key: 'doctorCount', tit: '医生人数' },
     { key: 'patientCount', tit: '患者人数' },
-  ]
+  ];
   const baseInfo = {
-    adminAccount: "管理员账号",
+    adminAccount: '管理员账号',
     uuCode: '机构识别码',
-    orgName: '机构名称'
-  }
+    orgName: '机构名称',
+  };
   const handleSave = (e: React.ChangeEvent<HTMLInputElement>) => {
     const params = {
-      "context": e.target.value,
-      "sid": org.orgSid,
-    }
+      'context': e.target.value,
+      'sid': org.orgSid,
+    };
     api.org.patchOrgInfo(params).then(() => {
       message.success('医院介绍修改成功');
       fetchOrgInfo();
-    })
-  }
+    });
+  };
   const changeIntro = (e: { target: { value: string } }) => {
-    setIntro(e.target.value)
-  }
+    setIntro(e.target.value);
+  };
   return (
     <div className={`h-full relative ${styles.account}`}>
       <Row>
@@ -107,7 +108,7 @@ function Account() {
         <Col span={12}>
           <div className="flex justify-around items-center h-full">
             {count
-            .map((item) => (
+              .map((item) => (
               <div
                 className="flex"
                 key={item.key}
@@ -122,7 +123,7 @@ function Account() {
                   </Col>
                 </Row>
               </div>
-            ))}
+              ))}
           </div>
         </Col>
       </Row>

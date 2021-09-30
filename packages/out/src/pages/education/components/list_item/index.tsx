@@ -116,7 +116,6 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
                 title={item.title}
                 subTitle={item.subTitle}
                 question={item.question}
-                id={item.id}
                 isShowEdit={false}
               >
                 <img src={suifang} alt="" />

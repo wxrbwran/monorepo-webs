@@ -12,7 +12,7 @@ interface IProps {
   subTitle: string;
   question: IQuestions[];
   source?: number,
-  id: string;
+  id?: string;
   isShowEdit?: boolean;
 }
 function ScaleDetail(props: IProps) {
