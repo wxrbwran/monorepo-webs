@@ -23,7 +23,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
       pageSize: 9999,
       page: 1,
       operatorSid: window.$storage.getItem('sid'),
-      operatorRole: window.$storage.getItem('currRoleId'),
+      operatorRole: window.$storage.getItem('roleId'),
       operatorNsId: window.$storage.getItem('nsId'),
       ownershipSid: window.$storage.getItem('orgSid'),
       ownershipRole: window.$storage.getItem('orgRole'),
