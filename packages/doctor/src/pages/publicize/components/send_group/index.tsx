@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Checkbox, Tooltip } from 'antd';
 import { useSelector } from 'umi';
 
@@ -10,50 +10,51 @@ interface IProps {
 
 function SendGroup({ form }: IProps) {
   const groupList = useSelector((state: IState) => state.education.groupList);
-  const [indeterminate, setIndeterminate] = useState(true);
-  const [checkAll, setCheckAll] = useState(false);
+  // const [indeterminate, setIndeterminate] = useState(true);
+  // const [checkAll, setCheckAll] = useState(false);
 
   const options = groupList.map((item: { name: string, id: string })=> ({
     label: item.name,
     value: item.id,
   }));
 
-  // options.unshift(
-  //   {
-  //     label: "全部患者",
-  //     value: 'PATIENT_ALL',
-  //   }
-  // )
+  options.unshift(
+    {
+      label: '全部患者',
+      value: 'PATIENT_ALL',
+    },
+  );
 
   const onChange = list => {
-    setIndeterminate(!!list.length && list.length < options.length);
-    setCheckAll(list.length === options.length);
-    if (list.length === options.length){
-      form.setFieldsValue({ group: ['PATIENT_ALL', ...list] });
-    } else {
-      form.setFieldsValue({ group: list });
-    }
+    // setIndeterminate(!!list.length && list.length < options.length);
+    // setCheckAll(list.length === options.length);
+    // if (list.length === options.length){
+    //   form.setFieldsValue({ group: ['PATIENT_ALL', ...list] });
+    // } else {
+    //   form.setFieldsValue({ group: list });
+    // }
+    form.setFieldsValue({ group: list });
   };
 
-  const onCheckAllChange = e => {
-    form.setFieldsValue({
-      group:  e.target.checked ? ['PATIENT_ALL', ...options.map(item => item.label)] : [],
-    });
-    setIndeterminate(false);
-    setCheckAll(e.target.checked);
-  };
+  // const onCheckAllChange = e => {
+  //   form.setFieldsValue({
+  //     group:  e.target.checked ? ['PATIENT_ALL', ...options.map(item => item.label)] : [],
+  //   });
+  //   setIndeterminate(false);
+  //   setCheckAll(e.target.checked);
+  // };
 
   return (
     <div className='mb-30'>
       <p className='font-bold text-base mt-30'>·发送对象：</p>
-      <Checkbox
+      {/* <Checkbox
         value="PATIENT_ALL"
         indeterminate={indeterminate}
         onChange={onCheckAllChange}
         checked={checkAll}
       >
         全部患者
-      </Checkbox>
+      </Checkbox> */}
       <FormItem
         name={'group'}
         // noStyle
