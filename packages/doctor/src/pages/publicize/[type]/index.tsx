@@ -17,7 +17,7 @@ import styles from './index.scss';
 const PatientEducation: FC<ILocation> = ({ location }) => {
   const isScale = location.pathname.includes('suifang');
   const [sendContent, setSendContent] = useState([]);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
   useEffect(() => {
     api.education

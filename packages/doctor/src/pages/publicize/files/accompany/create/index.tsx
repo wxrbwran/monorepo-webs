@@ -32,7 +32,7 @@ interface IParams {
 }
 function SuifangCreate({ location, scaleType }: IProps) {
   const initSf = useSelector((state: IState) => state.suifang);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   const initQuestion = () => {
     if (initSf.question) {
       return initSf.question.map((item) => {
