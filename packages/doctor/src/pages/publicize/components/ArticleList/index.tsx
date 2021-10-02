@@ -18,7 +18,7 @@ interface IList {
 function ArticleList() {
   const dispatch = useDispatch();
   const [sourceList, setSourceList] = useState<IList[]>([]);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
   const getPublicizeList = () => {
     api.education
