@@ -20,7 +20,7 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
   const isScale = location.pathname.includes('suifang');
   const [pubList, setPubList] = useState<IList[]>([]);
   const [scaleList, setScaleList] = useState<IList[]>([]);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
   // 查询视频、文件列表
   const getPublicizeList = () => {
