@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Table } from 'antd';
+import { Form, Button, Table, Spin } from 'antd';
 import { useSelector, useLocation } from 'umi';
 import  * as api from '@/services/api';
 import { pname, groupName, initAt } from 'xzl-web-shared/src/utils/columns';
@@ -8,6 +8,7 @@ import { Search } from 'xzl-web-shared/src/components/Selects';
 import { SearchOutlined } from '@ant-design/icons';
 import DiagnosisDetail from '../components/DiagnosisDetail';
 import { isEmpty } from 'lodash';
+import styles from './index.scss';
 // import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 
 interface IOnSelectChange {
@@ -38,6 +39,7 @@ function Patients() {
   const fetchPatientList = (actionLogId: string) => {
     api.education.getPatientsList({ actionLogId })
       .then((res) => {
+        setDataSource(res.lists);
         let newLen = [...len, res.lists.length];
         if (len.length === 3){
           len = [res.lists.length];
@@ -47,7 +49,7 @@ function Patients() {
         }
         if (newLen.length === 3){
           if (Array.from(new Set(newLen)).length === 1){
-            setDataSource(res.lists);
+            // setDataSource(res.lists);
             setLoading(false);
             clearInterval(timer);
           }
@@ -146,12 +148,15 @@ function Patients() {
       </Form>
       {
         <Table
-          loading={loading}
+          // loading={loading}
           rowKey={(record) => record.sid}
           rowSelection={rowSelection}
           columns={[...columns, action]}
           dataSource={dataSource}
         />
+      }
+      {
+        loading && <Spin tip="数据量较大，拼命查询中" className={styles.loading_append} />
       }
     </div>
   );
