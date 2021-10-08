@@ -212,7 +212,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   console.log('typeTabs21', typeTabs);
   return (
     <div className={`flex-1 mx-20 mt-10 ${styles.structrued} ${isViewOnly ? styles.disabled : ''}`}>
-      <div className="flex justify-between items-center mb-25">
+      <div className="flex justify-between items-center mb-5">
         <div className="flex items-center">
           {
             !isViewOnly && (
