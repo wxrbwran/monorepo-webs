@@ -26,7 +26,7 @@ function SideMenu(props: IProps) {
   const modifyInputRef = useRef<HTMLInputElement>(null);
   const groupList = useSelector((state: IState) => state.education.groupList);
   // const {projectNsId} = useSelector((state: IState) => state.project.projDetail);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
   useEffect(() => {
     const currentPathname = props.location.pathname.split('/').pop();

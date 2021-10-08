@@ -13,7 +13,7 @@ const { TextArea } = Input;
 function ArticleCreate() {
   const dispatch = useDispatch();
   const richText = useSelector((state: IState) => state.education.richText);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   // const [rickText, setRichText] = useState('');
   // const [title, setTitle] = useState('');
 

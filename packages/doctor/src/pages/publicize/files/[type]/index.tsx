@@ -18,7 +18,7 @@ interface IProps {
 function List({ location }: IProps) {
   const { type } = useParams<{ type: string }>();
   const [sourceList, setSourceList] = useState<IList[]>([]);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   // 查询非随访表列表
   const getPublicizeList = () => {
     api.education

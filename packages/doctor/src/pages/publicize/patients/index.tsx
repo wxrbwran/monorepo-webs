@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Table } from 'antd';
-import { useSelector } from 'umi';
+import { useSelector, useLocation } from 'umi';
 import  * as api from '@/services/api';
 import { pname, groupName, initAt } from 'xzl-web-shared/src/utils/columns';
 import SelectGroup from 'xzl-web-shared/src/components/SelectGroup';
@@ -16,10 +16,11 @@ interface IOnSelectChange {
 let timer: any = null;
 let len = [];
 function Patients() {
+  const location = useLocation();
   const [form] = Form.useForm();
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
   const [showSearch, setShowSearch] = useState(false);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   const groupList = useSelector((state: IState) => state.education.groupList);
   const columns = [pname, groupName, initAt];
   const [dataSource, setDataSource] = useState<Store[]>([]);
@@ -73,8 +74,16 @@ function Patients() {
   useEffect(() => {
     if (!isEmpty(currentOrgInfo)){
       changeTableOption(window.$storage.getItem('keyWord'));
+      len = [];
+      setLoading(true);
     }
   }, [currentOrgInfo]);
+
+  useEffect(() => {
+    clearInterval(timer);
+    len = [];
+    setLoading(true);
+  }, [location]);
 
   useEffect(() => {
     window.$storage.setItem('keyWord', '');
