@@ -50,27 +50,33 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
     });
     history.push('/education/accompany/create');
   };
+  // 是否显示编辑或者删除按钮
+  const isShowBtn = (type === 'accompany' && item?.edit) || (!item?.inSchedule && item?.del);
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>
       {
-        !item?.inSchedule && isList && (
+        isList && isShowBtn && (
           <div className={styles.del_wrap}>
             {
-              type === 'accompany' && (
+              type === 'accompany' && item?.edit && (
                 <>
                   <FormOutlined onClick={handleEdit} />
                   <span className="mx-5 text-white">|</span>
                 </>
               )
             }
-            <Popconfirm
-              title="是否删除?"
-              onConfirm={() => handleDel(item?.id)}
-              okText="确定"
-              cancelText="取消"
-            >
-              <DeleteOutlined className="text-white" />
-            </Popconfirm>
+            {
+              !item?.inSchedule && item?.del && (
+                <Popconfirm
+                  title="是否删除?"
+                  onConfirm={() => handleDel(item?.id)}
+                  okText="确定"
+                  cancelText="取消"
+                >
+                  <DeleteOutlined className="text-white" />
+                </Popconfirm>
+              )
+            }
           </div>
         )
       }
