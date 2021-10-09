@@ -64,16 +64,20 @@ function ArticleList() {
         const { filename, cover } = item.content;
         return (
           <div key={cover} className={`mr-40 mb-30 relative ${styles.item_wrap}`}>
-            <div className={styles.del_wrap}>
-              <Popconfirm
-                title="是否删除?"
-                onConfirm={() => handleDel(item.id)}
-                okText="确定"
-                cancelText="取消"
-              >
-                <DeleteOutlined className="text-white" />
-              </Popconfirm>
-            </div>
+            {
+              !item?.inSchedule && item?.del && (
+                <div className={styles.del_wrap}>
+                  <Popconfirm
+                    title="是否删除?"
+                    onConfirm={() => handleDel(item.id)}
+                    okText="确定"
+                    cancelText="取消"
+                  >
+                    <DeleteOutlined className="text-white" />
+                  </Popconfirm>
+                </div>
+              )
+            }
             <p className="relative" onClick={() => go2NewPage(item)}>
               <img src={cover} alt="" className="rounded w-240 h-135" />
               <div
