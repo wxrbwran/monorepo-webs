@@ -14,7 +14,7 @@ interface IProps {
 }
 
 function SubType({ name, icon, type }: IProps) {
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
   const addPublicize = (params: {
     content: { address: string; cover: null; filename: any; text: null };
