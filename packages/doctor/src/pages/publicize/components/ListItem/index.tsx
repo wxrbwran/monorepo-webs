@@ -52,6 +52,8 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   };
   // 是否显示编辑或者删除按钮
   const isShowBtn = (type === 'accompany' && item?.edit) || (!item?.inSchedule && item?.del);
+  // 是否显示分隔线
+  const isShowSplit = (type === 'accompany' && item?.edit) && (!item?.inSchedule && item?.del);
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>
       {
@@ -61,9 +63,11 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
               type === 'accompany' && item?.edit && (
                 <>
                   <FormOutlined onClick={handleEdit} />
-                  <span className="mx-5 text-white">|</span>
                 </>
               )
+            }
+            {
+              isShowSplit && <span className="mx-5 text-white">|</span>
             }
             {
               !item?.inSchedule && item?.del && (
