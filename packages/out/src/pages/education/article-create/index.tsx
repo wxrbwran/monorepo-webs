@@ -130,7 +130,9 @@ function ArticleCreate() {
     <div>
       <div className='flex justify-between  center'>
         <LeftOutlined style={{ marginBottom: 36 }} onClick={goBack} />
-        <Button type='primary' onClick={uploadOss}>保存</Button>
+        <Button type='primary' onClick={uploadOss} disabled={richText?.edit === false}>
+          保存
+        </Button>
       </div>
       <div className='main'>
         <div className='flex justify-between  items-end mb-20'>
