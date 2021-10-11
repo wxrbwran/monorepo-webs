@@ -47,7 +47,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
             kp: 'team',
             rsList: [{
               sid:  window.$storage.getItem('sid'),
-              roleType: window.$storage.getItem('currRoleId'),
+              roleType: window.$storage.getItem('roleId'),
               nsId:  window.$storage.getItem('nsId'),
             }, {
               sid: window.$storage.getItem('orgSid'),
@@ -87,7 +87,9 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   };
   const onFinish = (values: IValues) => {
     console.log('Received values of form:', values);
-    const result = handleFormatValues(values, rules, isScale, checked, currentOrgInfo.sid, currentOrgInfo.role, scopeItems);
+    const orgSid = window.$storage.getItem('orgSid');
+    const orgRole =   window.$storage.getItem('orgRole');
+    const result = handleFormatValues(values, rules, isScale, checked, orgSid, orgRole, scopeItems);
     if (result) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const { start, must, should_1, actions } = result;
@@ -116,7 +118,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
           teamLocations: [{
             sid: window.$storage.getItem('sid'),
             ns: window.$storage.getItem('nsId'),
-            role: window.$storage.getItem('currRoleId'),
+            role: window.$storage.getItem('roleId'),
             tag: 'operator',
           }, {
             sid: window.$storage.getItem('orgSid'),
@@ -171,7 +173,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
       ),
     },
     {
-      title: '定制发送计划',
+      title: '制定发送计划',
       content: <SendPlan form={form} disabled={disabled} />,
     },
   ];

@@ -20,7 +20,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   const [checked, setChecked] = useState<string>(''); // 选择的要发送的内容的id
   const [rules, setRules] = useState<IRule>();
   const [initFormVal, setInitFormVal] = useState({ frequencyType: 'once' });
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   const [scopeItems, setScopeItems] = useState([]);
 
   const next = () => {
@@ -171,7 +171,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
       ),
     },
     {
-      title: '定制发送计划',
+      title: '制定发送计划',
       content: <SendPlan form={form} disabled={disabled} />,
     },
   ];

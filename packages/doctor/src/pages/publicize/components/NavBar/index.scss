@@ -1,8 +1,8 @@
 .org-dropdown {
-  width: 120px;
   .ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
     font-size: 14px!important;
     padding: 10px 8px!important;
+    text-align: left;
   }
 }
 .header-navbar {

@@ -20,6 +20,7 @@ export interface UserModelType {
     saveUserOrg: Reducer;
     saveUserPrice: Reducer;
     saveUserFilterOrg: Reducer;
+    setCurrentOrgInfo: Reducer;
   };
 }
 
@@ -32,6 +33,7 @@ const userState: UserModelState = {
     total: 0,
   },
   filterOrgs: [],
+  currentOrgInfo: {},
 };
 
 const Model: UserModelType = {
@@ -118,6 +120,12 @@ const Model: UserModelType = {
       return {
         ...state,
         filterOrgs: filterOrgList,
+      };
+    },
+    setCurrentOrgInfo(state, action) {
+      return {
+        ...state,
+        currentOrgInfo: { ...action.payload },
       };
     },
   },

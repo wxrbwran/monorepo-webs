@@ -1,39 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'antd';
-import { useSelector } from 'umi';
+import { Form, Button, Table, Spin } from 'antd';
+import { useSelector, useLocation } from 'umi';
 import  * as api from '@/services/api';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
 import { pname, groupName, initAt } from 'xzl-web-shared/src/utils/columns';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import SelectGroup from 'xzl-web-shared/src/components/SelectGroup';
 import { Search } from 'xzl-web-shared/src/components/Selects';
 import { SearchOutlined } from '@ant-design/icons';
-import { isEmpty } from 'lodash';
 import DiagnosisDetail from '../components/DiagnosisDetail';
+import { isEmpty } from 'lodash';
+import styles from './index.scss';
 // import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 
+interface IOnSelectChange {
+  (selectedRowKeys: React.ReactText[], selectedRows?: Store[]): void;
+}
+let timer: any = null;
+let len = [];
 function Patients() {
+  const location = useLocation();
   const [form] = Form.useForm();
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
   const [showSearch, setShowSearch] = useState(false);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
-  const [tableOptions, setOptions] = useState<CommonData>({});
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   const groupList = useSelector((state: IState) => state.education.groupList);
   const columns = [pname, groupName, initAt];
+  const [dataSource, setDataSource] = useState<Store[]>([]);
+  const [loading, setLoading] = useState(true);
+  // const [len, setLen] = useState<number[]>([]);
 
-  const handleCallback = (callbackStore: XzlTableCallBackProps) => {
-    console.log('callbackStore', callbackStore);
-    setSelectPatient(callbackStore.selectedRowKeys);
+  const onSelectChange: IOnSelectChange = (keys: any[]) => {
+    setSelectPatient(keys);
+  };
+  const rowSelection = {
+    selectedRowKeys: selectPatient,
+    onChange: onSelectChange,
   };
 
-  const changeTableOption = (keyword: string) => {
-    api.education
-      .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
+  const fetchPatientList = (actionLogId: string) => {
+    api.education.getPatientsList({ actionLogId })
       .then((res) => {
-        if (res?.id){
-          setOptions({ actionLogId: res.id });
+        setDataSource(res.lists);
+        let newLen = [...len, res.lists.length];
+        if (len.length === 3){
+          len = [res.lists.length];
+          newLen = [res.lists.length];
         } else {
-          setOptions({});
+          len = [...newLen];
+        }
+        if (newLen.length === 3){
+          if (Array.from(new Set(newLen)).length === 1){
+            // setDataSource(res.lists);
+            setLoading(false);
+            clearInterval(timer);
+          }
         }
       })
       .catch((err: string) => {
@@ -41,25 +60,46 @@ function Patients() {
       });
   };
 
+  const changeTableOption = (keyword: string) => {
+    api.education
+      .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
+      .then((res) => {
+        timer = setInterval(() => {
+          fetchPatientList(res?.id);
+        }, 2000);
+      })
+      .catch((err: string) => {
+        console.log('err', err);
+      });
+  };
+
   useEffect(() => {
-    changeTableOption(window.$storage.getItem('keyWord'));
+    if (!isEmpty(currentOrgInfo)){
+      changeTableOption(window.$storage.getItem('keyWord'));
+      len = [];
+      setLoading(true);
+    }
   }, [currentOrgInfo]);
+
+  useEffect(() => {
+    clearInterval(timer);
+    len = [];
+    setLoading(true);
+  }, [location]);
 
   useEffect(() => {
     window.$storage.setItem('keyWord', '');
     return () => {
       window.$storage.setItem('keyWord', '');
+      // dispatch({
+      //   type: 'education/setCurrentOrgInfo',
+      //   payload: {},
+      // });
     };
   }, []);
 
   const refreshList = () => {
-    // setOptions({ ...tableOptions }); //刷新列表
     changeTableOption(window.$storage.getItem('keyWord'));
-    // 刷新分组列表
-    //  dispatch({
-    //   type: 'project/fetchGroupList',
-    //   payload: projectNsId,
-    // });
   };
 
   const handleSelectChange = (_changedValues: string[], allValues: { keyword: string }) => {
@@ -89,9 +129,10 @@ function Patients() {
               <Search
                 form={form}
                 searchKey="keyword"
-                placeholder="搜索姓名或手机号"
+                placeholder="搜索姓名或诊断名称"
                 focus={true}
                 float='inherit'
+                width={170}
               />
             : <SearchOutlined onMouseEnter={() => setShowSearch(true)} className="mr-10"/>
         }
@@ -106,19 +147,16 @@ function Patients() {
         </SelectGroup>
       </Form>
       {
-        <XzlTable
+        <Table
+          // loading={loading}
+          rowKey={(record) => record.sid}
+          rowSelection={rowSelection}
           columns={[...columns, action]}
-          dataKey="lists"
-          request={!isEmpty(tableOptions) ? window.$api.education.getPatientsList : () => {}}
-          // request={() => {}}
-          depOptions={tableOptions}
-          handleCallback={handleCallback}
-          // noPagination={true}
-          tableOptions={{
-            pagination: false,
-            timeOut: true,
-          }}
+          dataSource={dataSource}
         />
+      }
+      {
+        loading && <Spin tip="数据量较大，拼命查询中" className={styles.loading_append} />
       }
     </div>
   );

@@ -9,10 +9,11 @@ export const transformDynamicToStatic = (item: { type: string, name: string, ass
 
     if (item.type.includes('dynamic')) {
       // 动态加载
-      const params: { kp: string, value?: string, rsList: { sid: string, roleType?: string }[], scaleType?: string } = {
+      const params: { kp: string, value?: string, rsList: { sid: string, roleType?: string }[], scaleType?: string, sourceType: string } = {
         kp: item.name,
         value: value,
         rsList: [{ sid: projectSid, roleType: projectRoleType }],
+        sourceType: '4',
       };
 
       api.query.fetchNodeEl(
@@ -181,7 +182,7 @@ export const handleFormValues = (values: any, checkedField: any[], projectSid: s
     const number = field.key.split(field.name + '_')[1];
 
     let oneGroup: {} = {};
- 
+
 
     // 没写，operator为=，value为* ,
     // 写了， value是字符串类型，operator为~=
@@ -207,7 +208,7 @@ export const handleFormValues = (values: any, checkedField: any[], projectSid: s
       // 2.如果是结构化数据name==medical-img，则拼一个父级
       if (field.parentName == 'medical-img') {
 
-        
+
         const tmpP: any = { operator: '=', value: field.subParentAssign.value };
         oneGroup = {
           ...oneGroup,
@@ -259,7 +260,7 @@ export const handleShouldValues = (groupList: Array<any>, checkedField: Array<st
   for (let i = 0; i < groupList.length; i++) {
 
     if (checkedField.includes(groupList[i].description)) {
- 
+
       let oneGroup: {} = {};
       for (let j = 0; j < groupList[i].items.length; j++) {
 
@@ -315,7 +316,7 @@ export const handleFormatValues = (values: any, checkedField: any[], projectSid:
     //   //   formatValues[`${keySplitArr[0]}_value_${keySplitArr[1]}`] = 0
     //   // }
     // }
-  } 
+  }
   // for (let key in formatValues) {
   //   // 姓名、性别、手机号为''，数值可填0，这几类情况是均不用校验的，所以此处判断[undefined, null]的情况
   //   // undefined是未填写的状态，null是填写了又删掉的状态
