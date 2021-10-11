@@ -17,7 +17,7 @@ import styles from './index.scss';
 const PatientEducation: FC<ILocation> = ({ location }) => {
   const isScale = location.pathname.includes('suifang');
   const [sendContent, setSendContent] = useState([]);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
   useEffect(() => {
     api.education
@@ -65,7 +65,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                   // <p className="cursor-pointer">
                   //   <ProfileOutlined /> 回复详情
                   // </p>
-                  <ReplyDetail id={sen.docId}>
+                  <ReplyDetail id={sen.id}>
                     <p className="cursor-pointer">
                       <ProfileOutlined /> 回复详情
                     </p>

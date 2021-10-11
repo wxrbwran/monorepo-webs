@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Link, useSelector } from 'umi';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useSelector, useDispatch } from 'umi';
 import { Input, message } from 'antd';
 import * as api from '@/services/api';
 import { PlusOutlined, FormOutlined } from '@ant-design/icons';
@@ -15,6 +15,9 @@ interface IProps {
 }
 
 function SideMenu(props: IProps) {
+  const dispatch = useDispatch();
+  const pathname = props.location.pathname.split('/').pop();
+  const [activeMenu, setActiveMenu] = useState(pathname);
   const [isShowAdd, setIsShowAdd] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [addGroupName, setAddGroupName] = useState('');
@@ -23,7 +26,22 @@ function SideMenu(props: IProps) {
   const modifyInputRef = useRef<HTMLInputElement>(null);
   const groupList = useSelector((state: IState) => state.education.groupList);
   // const {projectNsId} = useSelector((state: IState) => state.project.projDetail);
-  const currentOrgInfo = useSelector((state: IState) => state.education.currentOrgInfo);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
+
+  useEffect(() => {
+    const currentPathname = props.location.pathname.split('/').pop();
+    if (currentPathname !== activeMenu) {
+      setActiveMenu(currentPathname);
+    }
+  }, [props]);
+
+  const getGroupList = () => {
+    //获取实验组
+    dispatch({
+      type: 'education/fetchGroupList',
+      payload: currentOrgInfo.nsId,
+    });
+  };
 
   const handleChangeValues = (e: { target: { value: string } }) => {
     setAddGroupName(e.target.value);
@@ -107,7 +125,7 @@ function SideMenu(props: IProps) {
       {
         routerList.map((item) => {
           return (
-            <div className="menu font-bold" key={item.name}>
+            <div className={['menu', activeMenu === item.pathName ? 'active' : ''].join(' ')} key={item.name}>
               <Link to={`/publicize/${item.pathName}`}>{item.name}</Link>
             </div>
           );

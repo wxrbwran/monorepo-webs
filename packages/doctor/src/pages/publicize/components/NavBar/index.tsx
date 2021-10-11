@@ -68,7 +68,7 @@ function NavBar() {
   useEffect(() => {
     if (currentOrg){
       dispatch({
-        type: 'education/setCurrentOrgInfo',
+        type: 'user/setCurrentOrgInfo',
         payload: currentOrg,
       });
       initContact(currentOrg?.nsId);
