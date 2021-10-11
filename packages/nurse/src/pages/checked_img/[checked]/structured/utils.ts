@@ -11,25 +11,26 @@ export const outTypes: CommonData = {
 };
 
 export const checkboxData = {
-  'question_type': 'RADIO',
-  'isAdd': true,
-  'question': '',
-  'answer': [],
-  'options': ['', ''],
+  question_type: 'RADIO',
+  isAdd: true,
+  question: '',
+  answer: [],
+  options: ['', ''],
 };
 
 export const textData = {
-  'question_type': 'TEXT',
-  'isAdd': true,
-  'question': '',
-  'answer': [],
+  question_type: 'TEXT',
+  isAdd: true,
+  question: '',
+  answer: [],
 };
 
 // 多段填空是二维数组嵌套qa里面每个item是多个问答组成的一道题
 export const ddtkData = {
-  isAdd: true,
   question_type: 'Completion',
-  qa: [],
+  isAdd: true,
+  question: '',
+  answer: [],
 };
 
 export const ddtkExample = [
@@ -78,21 +79,13 @@ export const fetchSubmitData = (questions: IQuestions[], startInx: number | stri
   return backData;
 };
 
-interface IQues {
-  isAdd: boolean; // add 新加
-  qa: IQuestions[]
-}
 // 提交多段填空时，多段填空转成api结构
-export const fetchSubmitDataDdtk = (questions: IQues[], startInx: number, clickSaveTime: number ) => {
+export const fetchSubmitDataDdtk = (questions: IQuestions[], startInx: number, clickSaveTime: number ) => {
   const backData: any[] = [];
   console.log('ddtkkkkkquestions', questions);
-  questions.forEach((groupItem, groupInx) => {
-    const qaList = fetchSubmitData(groupItem.qa, `${startInx}-${groupInx}`, clickSaveTime, groupItem.isAdd ? uuid() : undefined);
-    if (groupItem.isAdd) {
-      backData.push(...qaList.map(qaItem => ({ ...qaItem, isAdd: true })));
-    } else {
-      backData.push(...qaList);
-    }
+  questions.forEach((ddtkQaList, groupInx) => {
+    const qaList = fetchSubmitData(ddtkQaList, `${startInx}-${groupInx}`, clickSaveTime, ddtkQaList[0].isAdd ? uuid() : undefined);
+    backData.push(...qaList);
   });
   console.log('backData', backData);
   return backData;
@@ -172,7 +165,9 @@ const filterTempData = (data:any) => {
       let validTemp = tempitem.filter((item: any) => !!item);
       if (inx === 1) { // 多段填空
         validTemp = validTemp.map((qa:ITopicTemplateItemApi ) => {
-          return { isAdd: false, qa };
+          return qa.map((qaitem: any) => {
+            return { ...qaitem, idAdd: false };
+          });
         });
       }
       temList.push(validTemp);
@@ -184,7 +179,6 @@ const filterTempData = (data:any) => {
   return temList;
 };
 const filterTypeTemps = (data:any) => {
-  // filterTempData
   const newData: CommonData = {};
   Object.keys(data).forEach(typeKey => {
     newData[typeKey] = filterTempData(data[typeKey]);

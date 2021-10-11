@@ -40,7 +40,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     const concatTemp = isEmpty(initData) ? (tempAll[outType] || []) : (templatePart?.[outType] || []);
     const topicArr: any[][] = initTmp;
     concatTemp.forEach(item => {
-      console.log('29329832', item);
+      // console.log('29329832', item);
       const qa = {
         question: item.question,
         answer: item.answer,
