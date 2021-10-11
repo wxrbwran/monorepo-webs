@@ -3,4 +3,3 @@ umi g 是 umi generate 的别名，可用于快速生成 component、page、layo
 ```
 local Storage中需存在当前医生的 access_token、wcId、sId
 
-11
