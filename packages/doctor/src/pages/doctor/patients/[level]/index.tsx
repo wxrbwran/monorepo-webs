@@ -82,7 +82,7 @@ function Patients() {
     setPageAt(1);
     sessionStorage.setItem(level, JSON.stringify(localParams));
   };
-  const handlePagerChange = (pagination: {current: number}) => {
+  const handlePagerChange = (pagination: { current: number }) => {
   //  保存分布参数到本地，2保存页码，当修改级别和备注时，需要刷新本页
     setPageAt(pagination.current);
     const localParams = {
@@ -92,7 +92,7 @@ function Patients() {
     sessionStorage.setItem(level, JSON.stringify(localParams));
   };
 
-  const refresh = (params: {pageAt: number} = { pageAt }) => {
+  const refresh = (params: { pageAt: number } = { pageAt }) => {
     setOptions({ ...depOptions, ...params });
   };
   const changeDoctor = {
@@ -123,6 +123,7 @@ function Patients() {
   if (level === 'alone') {
     columns.push(changeDoctor);
   }
+  console.log('为构建添加console');
   return (
     <div className={styles.patients}>
       {/* <div className={styles.header_tab}>
