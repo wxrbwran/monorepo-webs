@@ -23,7 +23,7 @@ interface IState {
 }
 
 function Home(props: IProps) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [isShowProject, setIsShowProject] = useState(false);
   const projectList = useSelector((state:IState)=>state.project.projectList);
   useEffect(() => {
@@ -31,7 +31,8 @@ function Home(props: IProps) {
       type: 'project/fetchProjectList',
       payload: null,
     });
-  }, [])
+  }, []);
+  console.log('为构建添加console');
   return (
     <div className={styles.home}>
       <SideBar projectList={projectList} location={props.location}/>
