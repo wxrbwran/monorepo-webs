@@ -4,7 +4,6 @@ import { CaretDownOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
 import './index.scss';
 import logo from '../../img/logo.png';
-import config from '@/config';
 import { Link, useSelector, useDispatch, useLocation, history } from 'umi';
 import { IState } from 'typings/global';
 
@@ -115,7 +114,7 @@ function NavBar() {
         </Dropdown>
       </div>
       <div className="header-navbar__right">
-        <img className="avatar" src={window.$storage.getItem('userAvatarUrl') || config.defaultAvatar} alt="" />
+        <img className="avatar" src={window.$storage.getItem('userAvatarUrl')} alt="" />
       </div>
     </header>
   );

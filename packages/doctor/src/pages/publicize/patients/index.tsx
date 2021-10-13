@@ -64,9 +64,15 @@ function Patients() {
     api.education
       .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
       .then((res) => {
-        timer = setInterval(() => {
-          fetchPatientList(res?.id);
-        }, 2000);
+        if (res) {
+          timer = setInterval(() => {
+            fetchPatientList(res?.id);
+          }, 2000);
+        } else {
+          clearInterval(timer);
+          setDataSource([]);
+          setLoading(false);
+        }
       })
       .catch((err: string) => {
         console.log('err', err);
