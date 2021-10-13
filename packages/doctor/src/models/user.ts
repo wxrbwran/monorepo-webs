@@ -5,6 +5,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 import * as api from '@/services/api';
+import config from '@/config';
 import { Role } from 'xzl-web-shared/src/utils/role';
 
 export interface UserModelType {
@@ -54,7 +55,7 @@ const Model: UserModelType = {
       const data = yield call(api.user.getUserInfo, payload);
       const { subject, rsConfig } = data.wcl[0].roles[0];
       window.$storage.setItem('userName', subject.name);
-      window.$storage.setItem('userAvatarUrl', subject.avatarUrl);
+      window.$storage.setItem('userAvatarUrl', subject.avatarUrl || config.defaultAvatar);
       yield put({
         type: 'saveUserInfo',
         payload: {
