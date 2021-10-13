@@ -7,65 +7,72 @@ import styles from './index.scss';
 import { isEmpty, cloneDeep } from 'lodash';
 import { ITmpList, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import { formatTempDdtk, fetchInitData } from '../utils';
+import { IMeta } from 'packages/doctor/typings/imgStructured';
 
 interface IProps {
-  outTypeAndInx: string;
+  tabKey: string;
   outType: string;
   hydCallbackFns: any; // 保存时候的回调
   setHydCallbackFns: (params: { [type: string]: () => void }) => void;
   imageId: string;
   initData: {
     data: ITopicQaItemApi[],
-    meta: {
-      id: string;
-      createdTime: number;
-    }
+    meta: IMeta;
   };
-  templatePart: ITmpList;
   tempAll: ITmpList;
   isViewOnly: boolean;
-  // templateData: ITopicTemplateItemApi[];
 }
 
 const StructuredDetailTopic: FC<IProps> = (props) => {
-  const { initData, outTypeAndInx, hydCallbackFns, setHydCallbackFns, isViewOnly,
-    imageId, outType, tempAll, templatePart } = props;
+  console.log('gggprops', props);
+  const { initData, tabKey, hydCallbackFns, setHydCallbackFns, isViewOnly,
+    imageId, outType, tempAll } = props;
   const initTmp: ITopicTemplateItemApi[][] = [[], [], [], []];
   // 编辑：后增加的模板问题
-  const [templateTopic, setTempTopic] = useState<ITopicTemplateItemApi[][]>(initTmp);
+  const [templateTopic, setTempTopic] = useState<ITopicTemplateItemApi[][]>(cloneDeep(initTmp));
+  const [isLoad, setIsLoad] = useState(false);
+  let initTempKey = undefined;
+  if (outType === 'JCD') {
+    initTempKey = isEmpty(initData) ? undefined : initData.meta.method + initData.meta.part;
+  } else {
+    initTempKey = outType; // other
+  }
+  const [tempKey, setTempKey] = useState(initTempKey);
 
   // 模板-s
   const formatTemplate = () => {
+    // test-s
+    console.log('tempAll[outType]', tempAll[tempKey]);
+    console.log('initData', initData.data);
+    let newTemps = [];
+    if (isEmpty(initData)) {
+      newTemps = tempAll[tempKey];
+    } else {
+      newTemps = tempAll[tempKey]?.filter(item => {
+        // 如果原有问题列表不存在此模板问题，则需追加上
+        return isEmpty(initData?.data.filter(originItem => originItem?.uuid === item.uuid));
+      });
+    }
+    // test-e
     // 如果初始数据为空，表示第一次打开，模板使用全部。否则模板使用上次添加后添加的模板
-    const concatTemp = isEmpty(initData) ? (tempAll[outType] || []) : (templatePart?.[outType] || []);
-    const topicArr: any[][] = initTmp;
+    const concatTemp = newTemps || [];
+    const topicArr: any[][] = cloneDeep(initTmp);
     concatTemp.forEach(item => {
-      // console.log('29329832', item);
-      const qa = {
-        question: item.question,
-        answer: item.answer,
-        question_type: item.question_type,
-      };
+      const newItem = item;
+      delete newItem.sid;
       switch (item.question_type) {
         case 'BASE':
-          topicArr[0].push(qa);
+          topicArr[0].push(newItem);
           break;
         case 'COMPLETION':
-          topicArr[1].push({
-            ...qa,
-            group: item.group,
-            uuid: item.uuid,
-          });
+          topicArr[1].push(newItem);
           break;
         case 'RADIO':
         case 'CHECKBOX':
-          topicArr[2].push({
-            ...qa,
-            options: item?.options || [],
-          });
+          topicArr[2].push(newItem);
           break;
         case 'TEXT':
-          topicArr[3].push(qa);
+          topicArr[3].push(newItem);
           break;
         default:
           break;
@@ -73,20 +80,41 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     });
     console.log('topicArr', topicArr);
     setTempTopic(cloneDeep(topicArr));
+    setIsLoad(true);
   };
   // 模板-e
   const [initTopic, setinitTopic] = useState(initData ? fetchInitData(initData) : []);
   const topicCallbackFns = useRef({});
   useEffect(() => {
     setinitTopic(fetchInitData(initData));
-    formatTemplate();
   }, [initData]);
+
+  // 监听到所属方法+部分，发生改变后，重新渲染问题列表
   useEffect(() => {
-    hydCallbackFns[outTypeAndInx] = (clickSaveTime: number) => new Promise((resolve) => {
+    console.log('************11');
+    if (!!tempKey) {
+      formatTemplate();
+    }
+  }, [tempKey]);
+
+  const changeJcdBaseInfo = (info: any) => {
+    // 后面根据方法+部分动态加载对应问题的模板 使用
+    const { method, part } = info;
+    if (method + part !== tempKey) {
+      setIsLoad(false);
+    }
+    if (method !== undefined && part !== undefined) {
+      setTempKey(method + part);
+    } else {
+      setTempKey(undefined);
+    }
+    console.log('changeJcdBaseInfo', info);
+  };
+  useEffect(() => {
+    hydCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
       Promise.all(Object.values(topicCallbackFns.current)
         .map((fn) => fn())).then((topicList) => {
         resolve({
-          // data: topicList.flat(1), // 数组扁平化
           data: topicList,
           meta: {
             imageId,
@@ -101,7 +129,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     setHydCallbackFns(hydCallbackFns);
     return () => {
       // 删除掉此tab要delete掉此项
-      delete hydCallbackFns[outTypeAndInx];
+      delete hydCallbackFns[tabKey];
       setHydCallbackFns(hydCallbackFns);
     };
   }, []);
@@ -111,21 +139,40 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     topicCallbackFns.current = { ...fns };
   };
 
-  const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly };
+  const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly, tabKey };
   const dataAndTemp = (inx: number) => {
+    console.log('initTopic?.[inx]', initTopic?.[inx]);
+    console.log('templateTopic?.[inx]', templateTopic?.[inx]);
+    let originInitTopic = [];
+    // 如果有初始化数据 ，判断初始化数据的方法+部位 与当前用户输入的方法+部位是否一致，不一致的情况，清空之前的问题列表。
+    if (!isEmpty(initData) && tempKey !== initData.meta.method + initData.meta.part) {
+      originInitTopic = [];
+    } else {
+      originInitTopic = initTopic?.[inx];
+    }
     if (inx === 1) {
       const ddtk = formatTempDdtk(templateTopic?.[1]);
       console.log('处理后的模板数据格式', ddtk);
-      return (initTopic?.[inx] || []).concat(ddtk);
+      return originInitTopic.concat(ddtk);
     }
-    return (initTopic?.[inx] || []).concat((templateTopic?.[inx] || []));
+    return originInitTopic.concat((templateTopic?.[inx] || []));
   };
   return (
     <div className={`${styles.topic_list}`}>
-      <TopicBaseInfo outType={outType} initData={[...initTopic?.[0] || []]} {...subProps} />
-      <TopicDdtk initData={dataAndTemp(1)} {...subProps} />
-      <TopicChoice initData={dataAndTemp(2)} {...subProps} />
-      <TopicProblem initData={dataAndTemp(3)} {...subProps} />
+      <TopicBaseInfo
+        outType={outType}
+        initData={[...initTopic?.[0] || []]}
+        {...subProps}
+        changeJcdBaseInfo={changeJcdBaseInfo} />
+      {
+        isLoad ? (
+          <>
+            <TopicDdtk initData={dataAndTemp(1)} {...subProps} />
+            <TopicChoice initData={dataAndTemp(2)} {...subProps} />
+            <TopicProblem initData={dataAndTemp(3)} {...subProps} />
+          </>
+        ) : <></>
+      }
     </div>
   );
 };

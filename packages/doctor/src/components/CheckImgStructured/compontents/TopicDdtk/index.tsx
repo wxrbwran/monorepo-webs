@@ -7,6 +7,7 @@ import { ddtkData, ddtkExample as example } from '../utils';
 import { EditOutlined } from '@ant-design/icons';
 import { isEmpty, debounce } from 'lodash';
 import { IQuestions } from 'typings/imgStructured';
+import uuid from 'react-uuid';
 
 
 const { TextArea } = Input;
@@ -80,6 +81,7 @@ function Ddtk(props: IProps) {
     // const str = '大小：「 1.5×1×1 」,边缘：「 清清清清10%，尚可* 」';
     const strArr = str.split('「');
     let qas: IQuestions[] = [];
+    const editUuid = questions[editIndex][0].uuid;
     strArr.forEach((item: string, inx: number) => {
       console.log('itemmm', item);
       // 包含答案
@@ -87,16 +89,15 @@ function Ddtk(props: IProps) {
         const a = item.split('」');
         // 存在答案：检索把答案放到对应的问题里
         if (a[0]) {
-          qas = [ ...findAnswerIndex(qas, inx - 1, a[0]) ];
-          console.log('qaa2', qas);
+          qas = [ ...findAnswerIndex(qas, inx - 1, a[0].trim()) ];
         }
         // 存在问题:把问题push进去
         if (a[1]) {
-          qas.push({ question: a[1], answer:[], question_type: 'COMPLETION', isAdd: true });
+          qas.push({ question: a[1], answer:[], question_type: 'COMPLETION', isAdd: true, uuid: editUuid });
         }
       } else {
         // 仅是问题
-        qas.push({ question: item, answer: [], question_type: 'COMPLETION', isAdd: true  });
+        qas.push({ question: item, answer: [], question_type: 'COMPLETION', isAdd: true, uuid: editUuid  });
       }
     });
     console.log('qqqqqqqqa', qas);
@@ -156,7 +157,7 @@ function Ddtk(props: IProps) {
   const handleAddTopic = (e: Event) => {
     e.stopPropagation();
     const inx = questions.length;
-    setQuestions([...questions, [ddtkData]]);
+    setQuestions([...questions, [{ ...ddtkData, uuid: uuid() }]]);
     setEditIndex(inx);
   };
   // 删除整道题
@@ -192,7 +193,7 @@ function Ddtk(props: IProps) {
               count = count + 1;
               item.forEach(qaItem => {
                 // 一个问题的有效答案
-                const hasVals = qaItem.answer.filter(ansItem => !!ansItem.trim());
+                const hasVals = qaItem.answer.filter(ansItem => !!ansItem?.trim());
                 if (!isEmpty(hasVals)) { isShow = true;}
               });
               if (isShow) { count = count - 1;}
@@ -250,7 +251,7 @@ function Ddtk(props: IProps) {
                   {
                     item.map((qaItem, qaInx) => (
                       <span key={qaInx}>
-                        <span className='mt-5'>{qaItem.question}</span>
+                        <span className={`mt-5 ${styles.ques_span}`}>{qaItem.question}</span>
                         {
                           qaItem?.answer?.map((ansItem, ansInx) => (
                             <span
@@ -259,7 +260,7 @@ function Ddtk(props: IProps) {
                               contentEditable={!isViewOnly}
                               suppressContentEditableWarning
                               onBlur={(e) => changeAnswer(e, quesIndex, qaInx, ansInx)}
-                            >{ansItem}</span>
+                            >{ansItem ? ansItem : ''}</span>
                           ))
                         }
                       </span>
@@ -272,7 +273,6 @@ function Ddtk(props: IProps) {
         }
       </div>
     </div>
-
   );
 }
 

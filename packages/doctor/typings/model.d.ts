@@ -115,6 +115,11 @@ export interface ImageModelState {
   anaImg: IImageItem[];
   otherImg: IImageItem[];
 }
+export interface StructuredModelState {
+  editTabKey: string;
+  editQa:  IQuestions[] | IQuestions[][],
+  actionType: string; // edit 编辑|添加  del删除
+}
 declare interface IState {
   auth: AuthModelState;
   user: UserModelState;
@@ -125,6 +130,7 @@ declare interface IState {
   image: ImageModelState;
   education: EduModelState;
   suifang: SuifangModelState;
+  structured: StructuredModelState;
 }
 interface EduModelState {
   richText: {
@@ -139,7 +145,7 @@ interface EduModelState {
   };
   sendList: []
 }
-interface IQuestions {
+interface ISuiFangQuestions {
   type: string;
   code?: number;
   detail: {
@@ -153,5 +159,5 @@ interface SuifangModelState {
   id?: string;
   subTitle?: string;
   title?: string;
-  question?: IQuestions[]
+  question?: ISuiFangQuestions[]
 };

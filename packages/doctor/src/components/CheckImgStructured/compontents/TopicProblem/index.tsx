@@ -6,6 +6,7 @@ import TopicTitle from '../TopicTitle';
 import { EditOutlined } from '@ant-design/icons';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
 import { textData } from '../utils';
+import uuid from 'react-uuid';
 
 const { TextArea } = Input;
 interface IProps {
@@ -69,7 +70,7 @@ function TopicProblem(props: IProps) {
   const handleAddTopic = (e: Event) => {
     e.stopPropagation();
     const inx = questions.length;
-    setQuestions([...questions, cloneDeep(textData)]);
+    setQuestions([...questions, { ...cloneDeep(textData), uuid: uuid() }]);
     setEditIndex(inx);
   };
   const handleClickItem = (e: Event, inx: number) => {

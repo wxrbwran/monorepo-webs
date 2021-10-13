@@ -2,7 +2,7 @@ import React, {
   FC, useEffect, useState, useRef, useMemo,
 } from 'react';
 import { Button, Tabs, message } from 'antd';
-import { useDispatch } from 'umi';
+import { useDispatch } from 'react-redux';
 import { IStructuredDetailProps, ITopicQaItemApi } from 'typings/imgStructured';
 import * as api from '@/services/api';
 import StructuredDetailItem from '../StructuredDetailItem';
@@ -25,8 +25,8 @@ interface ITopicParams {
 const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const {
-    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll, templatePart,
-    openTime, jcdOriginIds,
+    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll,
+    jcdOriginIds,
   } = props;
   console.log('hydData232', hydData);
   console.log('jcdData', jcdData);
@@ -57,13 +57,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       handleRefresh();
     }
   }, []);
-  // 获取打开的时间 到点击保存时间段内新增的模板
-  const fetchTimeSlotTemplate =  (to: number) => {
-    const params = { from: openTime,  to };
-    const data = api.image.fetchImageTopicTemplate(params);
-    return data;
-    // return tmpppppList.list;
-  };
   const fetchAllTypes = () => {
     const allTypes = typeTabs.map(item => {
       return item?.meta?.title || item.outType;
@@ -83,26 +76,30 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         });
       }
       handleClose();
-    }).catch((err) => {
+    }).catch((err: any) => {
       message.error(err?.result || '保存失败');
     });
   };
   const saveTemplate = (list: ITopicParams[]) => {
-    const params = { list };
-    console.log('tmpppp', params);
-    api.image.putImageTopicTemplate(params).then(() => {
-      console.log('添加问题模板成功');
-    }).catch(err => {
-      console.log('添加问题模板失败：', err);
-    });
+    if (!isEmpty(list)) {
+      const params = { list };
+      api.image.putImageTopicTemplate(params).then(() => {
+        console.log('添加问题模板成功');
+      }).catch((err: any) => {
+        console.log('添加问题模板失败：', err);
+      });
+    }
   };
   const saveJcdData = (params: any) => {
-    params.originIds = jcdOriginIds;
-    api.image.putImageJcdAndOther(params).then(() => {
-      console.log('添加检查单成功');
-    }).catch(err => {
-      console.log('添加检查单失败', err);
-    });
+    // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
+    if (!isEmpty(jcdOriginIds) ||  !isEmpty(params.list)) {
+      params.originIds = jcdOriginIds;
+      api.image.putImageJcdAndOther(params).then(() => {
+        console.log('添加检查单成功');
+      }).catch((err: any) => {
+        console.log('添加检查单失败', err);
+      });
+    }
   };
 
   const handleSaveClick = async () => {
@@ -110,7 +107,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       setisViewOnly(false);
     } else {
       const clickSaveTime = new Date().getTime();
-      const timeSlotTemp = await fetchTimeSlotTemplate(clickSaveTime);
       if (!isEmpty(typeTabs)) {
         const apiParams: CommonData = {
           imageId,
@@ -131,11 +127,10 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             message.error('请完善化验单后提交！');
           });
         // 检查单、其它单据
-        console.log('clickSaveTime', clickSaveTime);
         Promise.all(Object.values(hydCallbackFns)
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
-            const { tempList, jcdList } = formatJcdSubmitData(list, timeSlotTemp, clickSaveTime);
+            const { tempList, jcdList } = formatJcdSubmitData(list, clickSaveTime);
             saveTemplate(tempList);
             saveJcdData(jcdList);
           }).catch((err) => {
@@ -164,6 +159,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     }
     setActiveType(typeTabs?.[typeTabs.length - 1].key);
     setTypeTabs(cloneDeep(typeTabs));
+    console.log('typeTab1212s', typeTabs);
   };
 
   const fetInitData = (inx: number) => {
@@ -178,7 +174,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       const typeStart = itemTab?.outType || itemTab?.meta?.title;
       const baseProps = {
         outType: typeStart,
-        outTypeAndInx: itemTab.key,
+        tabKey: itemTab.key,
         imageId,
         isViewOnly,
       };
@@ -195,7 +191,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         case 'JCD':
           dom = <StructuredDetailTopic
             initData={fetInitData(inx)}
-            templatePart={templatePart}
             hydCallbackFns={hydCallbackFns}
             setHydCallbackFns={setHydCallbackFns}
             tempAll={tempAll}

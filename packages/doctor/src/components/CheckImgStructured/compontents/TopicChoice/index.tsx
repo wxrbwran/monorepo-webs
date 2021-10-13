@@ -7,15 +7,20 @@ import TopicTitle from '../TopicTitle';
 import { checkboxData } from '../utils';
 import { IQuestions } from 'typings/imgStructured';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
+import uuid from 'react-uuid';
+// import { useDispatch } from 'react-redux';
 
 interface IProps {
   changeCallbackFns: (params: ICallbackFn) => void;
   initData: IQuestions[] | undefined;
   isViewOnly: boolean;
+  tabKey: string;
 }
-function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
-  console.log('choice', initData);
-  console.log('xxg', initData ? initData : []);
+// saveAddQa
+function TopicChoice(props: IProps) {
+  const { changeCallbackFns, initData, isViewOnly } = props;
+  console.log('choiceProps', props);
+  // const dispatch = useDispatch();
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
   const [editIndex, setEditIndex] = useState(-1);
   const handleSave = (a) => new Promise((resolve) => {
@@ -54,6 +59,16 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
           message.error('请输入问题');
         } else {
           setQuestions([...questions]);
+          // 同步同步同步高雪雪
+          // console.log('questions455', questions[editIndex]);
+          // dispatch({
+          //   type: 'structured/saveAddQa',
+          //   payload: {
+          //     editTabKey: tabKey, // 是哪个tab添加的
+          //     editQa: [questions[editIndex]],
+          //     actionType: null,
+          //   },
+          // });
           setEditIndex(999);
         }
       }
@@ -150,7 +165,7 @@ function TopicChoice({ changeCallbackFns, initData, isViewOnly }: IProps) {
   const handleAddTopic = (e: Event) => {
     e.stopPropagation();
     const inx = questions.length;
-    setQuestions([...questions, { ...cloneDeep(checkboxData) }]);
+    setQuestions([...questions, { ...cloneDeep(checkboxData), uuid: uuid() }]);
     setEditIndex(inx);
   };
 
