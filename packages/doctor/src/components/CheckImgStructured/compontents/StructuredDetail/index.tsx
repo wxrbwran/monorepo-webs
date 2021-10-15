@@ -44,6 +44,8 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData));
   const [typeTabs, setTypeTabs] = useState <any[]>(fetchLevel1());
   const [activeType, setActiveType] = useState(fetchLevel1()[0].key);
+  // 1表示检查单接口或化验单接口其中一个保存成功，2表示两个都成功，此时关闭弹框
+  const [saveSuccess, setSaveSuccess] = useState(0);
 
   useEffect(() => {
     const tabs = fetchLevel1();
@@ -56,15 +58,15 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     if (isRefreshParent.current && handleRefresh) {
       handleRefresh();
     }
-  }, []);
-  const fetchAllTypes = () => {
-    const allTypes = typeTabs.map(item => {
-      return item?.meta?.title || item.outType;
+    setSaveSuccess(0);
+    dispatch({
+      type: 'structured/saveAddQa',
+      payload: {},
     });
-    return [...new Set(allTypes)];
-  };
-  const saveHydData = (params: any) => {
-    api.image.putImageImageIndexes(params).then(() => {
+  }, []);
+  useEffect(() => {
+    console.log('saveSuccess', saveSuccess);
+    if (saveSuccess === 2) {
       message.success('保存成功');
       // im进入的没有刷新函数，此时直接调用redux里的更新化验单/检查单接口
       if (handleRefresh) {
@@ -76,6 +78,17 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         });
       }
       handleClose();
+    }
+  }, [saveSuccess]);
+  const fetchAllTypes = () => {
+    const allTypes = typeTabs.map(item => {
+      return item?.meta?.title || item.outType;
+    });
+    return [...new Set(allTypes)];
+  };
+  const saveHydData = (params: any) => {
+    api.image.putImageImageIndexes(params).then(() => {
+      setSaveSuccess(prev => prev + 1);
     }).catch((err: any) => {
       message.error(err?.result || '保存失败');
     });
@@ -96,9 +109,12 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       params.originIds = jcdOriginIds;
       api.image.putImageJcdAndOther(params).then(() => {
         console.log('添加检查单成功');
+        setSaveSuccess(prev => prev + 1);
       }).catch((err: any) => {
         console.log('添加检查单失败', err);
       });
+    } else {
+      setSaveSuccess(prev => prev + 1);
     }
   };
 
@@ -106,6 +122,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     if (isViewOnly) {
       setisViewOnly(false);
     } else {
+      setSaveSuccess(0);
       const clickSaveTime = new Date().getTime();
       if (!isEmpty(typeTabs)) {
         const apiParams: CommonData = {
@@ -123,7 +140,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             apiParams.list = [...documentList];
             saveHydData(apiParams);
           }).catch((err) => {
-            console.log('err', err);
+            console.log('请完善化验单后提交！err', err);
             message.error('请完善化验单后提交！');
           });
         // 检查单、其它单据
@@ -134,7 +151,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             saveTemplate(tempList);
             saveJcdData(jcdList);
           }).catch((err) => {
-            console.log('err', err);
+            console.log('请完善检查单后提交！err', err);
             message.error('请完善检查单后提交！');
           });
       } else {

@@ -33,16 +33,22 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
   const [isLoad, setIsLoad] = useState(false);
   let initTempKey = undefined;
   if (outType === 'JCD') {
-    initTempKey = isEmpty(initData) ? undefined : initData.meta.method + initData.meta.part;
+    // initTempKey = isEmpty(initData) ? undefined : initData.meta.method + initData.meta.part;
+    initTempKey = isEmpty(initData) ? undefined : JSON.stringify({ method:initData.meta.method, part: initData.meta.part });
   } else {
     initTempKey = outType; // other
   }
+  console.log('isEmpty(initData)', initData.meta);
+  console.log('initTempKey', initTempKey);
   const [tempKey, setTempKey] = useState(initTempKey);
+  const tempKeyRef = useRef(initTempKey);
 
   // 模板-s
   const formatTemplate = () => {
     // test-s
     console.log('tempAll[outType]', tempAll[tempKey]);
+    console.log('tempAll', tempAll);
+    console.log('tempKey', tempKey);
     console.log('initData', initData.data);
     let newTemps = [];
     if (isEmpty(initData)) {
@@ -104,9 +110,11 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
       setIsLoad(false);
     }
     if (method !== undefined && part !== undefined) {
-      setTempKey(method + part);
+      setTempKey(JSON.stringify({ method, part }));
+      tempKeyRef.current = JSON.stringify({ method, part });
     } else {
       setTempKey(undefined);
+      tempKeyRef.current = undefined;
     }
     console.log('changeJcdBaseInfo', info);
   };
@@ -114,6 +122,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     hydCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
       Promise.all(Object.values(topicCallbackFns.current)
         .map((fn) => fn())).then((topicList) => {
+        const { method, part } = JSON.parse(tempKeyRef.current as string);
         resolve({
           data: topicList,
           meta: {
@@ -122,6 +131,8 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
             createdTime: clickSaveTime,
             title: outType,
             id: initData?.meta?.id || null,
+            method,
+            part,
           },
         });
       });
@@ -139,13 +150,13 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     topicCallbackFns.current = { ...fns };
   };
 
-  const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly, tabKey };
+  const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly, tabKey, tempKey };
   const dataAndTemp = (inx: number) => {
     console.log('initTopic?.[inx]', initTopic?.[inx]);
-    console.log('templateTopic?.[inx]', templateTopic?.[inx]);
+    console.log('templateTopic?.[inx]', templateTopic);
     let originInitTopic = [];
     // 如果有初始化数据 ，判断初始化数据的方法+部位 与当前用户输入的方法+部位是否一致，不一致的情况，清空之前的问题列表。
-    if (!isEmpty(initData) && tempKey !== initData.meta.method + initData.meta.part) {
+    if (!isEmpty(initData) && tempKey !== JSON.stringify({ method: initData.meta.method, part: initData.meta.part })) {
       originInitTopic = [];
     } else {
       originInitTopic = initTopic?.[inx];

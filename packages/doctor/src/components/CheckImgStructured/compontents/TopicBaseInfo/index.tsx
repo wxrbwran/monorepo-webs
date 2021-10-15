@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
-import { Form, Input, Row, Col } from 'antd';
+import { Form, Input, Row, Col, message } from 'antd';
 import { baseField } from '../utils';
 import styles from './index.scss';
 import { IQuestions } from 'typings/imgStructured';
@@ -58,10 +58,8 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           question_type: 'BASIC',
           group: `0-${baseField[item].inx}`,
           sid: window.$storage.getItem('sid'),
-          // createdTime: new Date().getTime(),
         });
       });
-      // resolve(questions);
       resolve({
         data: questions,
         groupInx: 0,
@@ -69,6 +67,13 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       console.log('questions', questions);
     }).catch((err: any) => {
       console.log('基本信息err', err);
+      message.error({
+        content: '请输入检查部位和检查方法',
+        maxCount: 1,
+      });
+      message.config({
+        maxCount: 1,
+      });
       reject(err);
     });
   });

@@ -3,12 +3,13 @@ import delIcon from '@/assets/img/doctor_patients/delete-icon.svg';
 import styles from './index.scss';
 import { Input, message } from 'antd';
 import TopicTitle from '../TopicTitle';
-import { ddtkData, ddtkExample as example } from '../utils';
+import { ddtkData, ddtkExample as example, handleDelUserTopic, handleEditUserTopic, watchUserTopicChange } from '../utils';
 import { EditOutlined } from '@ant-design/icons';
-import { isEmpty, debounce } from 'lodash';
+import { isEmpty, debounce, cloneDeep } from 'lodash';
 import { IQuestions } from 'typings/imgStructured';
 import uuid from 'react-uuid';
-
+import { useSelector } from 'react-redux';
+import { IState } from 'packages/doctor/typings/model';
 
 const { TextArea } = Input;
 interface IProps {
@@ -18,7 +19,8 @@ interface IProps {
 }
 function Ddtk(props: IProps) {
   console.log('ddtkprops', props);
-  const { changeCallbackFns, initData, isViewOnly } = props;
+  const { changeCallbackFns, initData, isViewOnly, tempKey, tabKey } = props;
+  const userAddTopic = useSelector((state: IState) => state.structured);
   const fetchInitData = () => {
     return initData.map(item => {
       return item.map(qaItem => {
@@ -55,7 +57,12 @@ function Ddtk(props: IProps) {
       });
     }
   }, [questions]);
-
+  useEffect(() => {
+    const newQues = watchUserTopicChange(userAddTopic, questions, tempKey, tabKey, ['COMPLETION'], true);
+    if (newQues) {
+      setQuestions(cloneDeep(newQues));
+    }
+  }, [userAddTopic]);
   // @ts-ignore
   const findAnswerIndex = (qas: IQuestions[], inx: number, currAns: string) => {
     if (inx >= 0) {
@@ -63,9 +70,9 @@ function Ddtk(props: IProps) {
       // 如果存在这一项问答，并且有问题，那直接操作放入answer,否则向前继续寻找，直到找到为止
       if (newQa[inx] && newQa[inx]?.question) {
         if (newQa[inx]?.answer) {
-          newQa[inx]?.answer?.push(currAns);
+          newQa[inx]?.answer?.push(currAns === '' ? null : currAns);
         } else {
-          newQa[inx].answer = [currAns];
+          newQa[inx].answer = [currAns === '' ? null : currAns];
         }
         return newQa;
       } else {
@@ -110,12 +117,14 @@ function Ddtk(props: IProps) {
         const editData = stringToArray(editCont);
         if (!isEmpty(editData)) {
           questions[editIndex] = editData;
+          handleEditUserTopic(userAddTopic, questions, tempKey, editIndex, tabKey, true); // 处理用户新加问题多tab共享 -add/edit
           setQuestions(questions);
           setEditCont('');
           setEditIndex(999);
         }
       } else {
         questions.pop();
+        handleEditUserTopic(userAddTopic, questions, tempKey, editIndex, tabKey, true); // 处理用户新加问题多tab共享 -add/edit
         setQuestions(questions);
         setEditIndex(999);
       }
@@ -161,10 +170,11 @@ function Ddtk(props: IProps) {
     setEditIndex(inx);
   };
   // 删除整道题
-  const handleDelQuestion = (e: Event, inx: number) => {
+  const handleDelQuestion = (e: Event) => {
     e.stopPropagation();
-    questions.splice(inx, 1);
-    setQuestions([...questions]);
+    // questions.splice(inx, 1);
+    // setQuestions([...questions]);
+    handleDelUserTopic(userAddTopic, questions, tempKey, editIndex, true ); // 处理用户新加问题多tab共享-del
     setEditCont('');
     setEditIndex(999);
   };
@@ -173,7 +183,7 @@ function Ddtk(props: IProps) {
     let editStr = '';
     questions[quesIndex].forEach(item => {
       let ansStr = '';
-      item?.answer?.forEach(ansItem => ansStr += `「${ansItem}」`);
+      item?.answer?.forEach(ansItem => ansStr += `「${ansItem ? ansItem : '  '}」`);
       editStr += item.question + ansStr;
     });
     setEditCont(editStr);
@@ -241,7 +251,7 @@ function Ddtk(props: IProps) {
               return (
                 <pre className={`${styles.ddtk} ${styles.done}` }  key={quesIndex}>
                   {
-                    item[0].isAdd && (
+                    item[0]?.isAdd && (
                       <EditOutlined onClick={() => handleClickEdit(quesIndex)} />
                     )
                   }

@@ -11,9 +11,13 @@ export interface StructrueModelType {
 }
 
 export const structuredState = {
-  editTabKey: null, // 是哪个tab添加的
-  editQa: [],
-  actionType: null, // edit 编辑|添加  del删除
+  // ct头部: [
+  //   {
+  //     actionType: 'edit',
+  //     qaType: 'RADIO',
+  //     qa: [],
+  //   },
+  // ],
 };
 
 const Model: StructrueModelType = {

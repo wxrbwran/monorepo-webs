@@ -4,23 +4,25 @@ import delIcon from '@/assets/img/doctor_patients/delete-icon.svg';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { BorderOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import TopicTitle from '../TopicTitle';
-import { checkboxData } from '../utils';
+import { checkboxData, handleDelUserTopic, handleEditUserTopic, watchUserTopicChange } from '../utils';
 import { IQuestions } from 'typings/imgStructured';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
 import uuid from 'react-uuid';
-// import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { IState } from 'packages/doctor/typings/model';
 
 interface IProps {
   changeCallbackFns: (params: ICallbackFn) => void;
   initData: IQuestions[] | undefined;
   isViewOnly: boolean;
   tabKey: string;
+  tempKey: string;
 }
 // saveAddQa
 function TopicChoice(props: IProps) {
-  const { changeCallbackFns, initData, isViewOnly } = props;
   console.log('choiceProps', props);
-  // const dispatch = useDispatch();
+  const { changeCallbackFns, initData, isViewOnly, tempKey, tabKey } = props;
+  const userAddTopic = useSelector((state: IState) => state.structured);
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
   const [editIndex, setEditIndex] = useState(-1);
   const handleSave = (a) => new Promise((resolve) => {
@@ -44,8 +46,15 @@ function TopicChoice(props: IProps) {
       });
     }
   }, [questions]);
+
+  useEffect(() => {
+    const newQues = watchUserTopicChange(userAddTopic, questions, tempKey, tabKey, ['RADIO', 'CHECKBOX']);
+    if (newQues) {
+      setQuestions(cloneDeep(newQues));
+    }
+  }, [userAddTopic]);
+
   const changeEditIndex = () => {
-    console.log('hhhhhhh12');
     if (editIndex !== -1 && editIndex !== 999) {
       if (!isEmpty(questions)) {
         const addOptions = questions[editIndex].options!.filter(option => !!option);
@@ -59,16 +68,7 @@ function TopicChoice(props: IProps) {
           message.error('请输入问题');
         } else {
           setQuestions([...questions]);
-          // 同步同步同步高雪雪
-          // console.log('questions455', questions[editIndex]);
-          // dispatch({
-          //   type: 'structured/saveAddQa',
-          //   payload: {
-          //     editTabKey: tabKey, // 是哪个tab添加的
-          //     editQa: [questions[editIndex]],
-          //     actionType: null,
-          //   },
-          // });
+          handleEditUserTopic(userAddTopic, cloneDeep(questions), tempKey, editIndex, tabKey); // 处理用户新加问题多tab共享 -add/edit
           setEditIndex(999);
         }
       }
@@ -82,14 +82,14 @@ function TopicChoice(props: IProps) {
   }, [editIndex]);
   // 保存输入的问题
   const handleSaveStem = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
-    // const oldQues = JSON.parse(JSON.stringify(questions));
     questions[quesIndex].question = ev.target.value;
     setQuestions([...questions]);
   };
   // 删除选项
-  const handleDelStem = (inx: number) => {
-    questions.splice(inx, 1);
-    setQuestions([...questions]);
+  const handleDelStem = () => {
+    handleDelUserTopic(userAddTopic, questions, tempKey, editIndex ); // 处理用户新加问题多tab共享-del
+    // questions.splice(inx, 1); //  废弃，由redux的userAddTopic控制
+    // setQuestions([...questions]);
     setEditIndex(999);
   };
   const handleDelOptions = (quesIndex: number, optionIndex: number, option?: string) => {
@@ -206,7 +206,7 @@ function TopicChoice(props: IProps) {
                       value={item.question}
                       onChange={(ev: any) => handleSaveStem(ev, quesIndex)}
                     />
-                    <img className="issue__delete" src={delIcon} onClick={() => handleDelStem(quesIndex)} />
+                    <img className="issue__delete" src={delIcon} onClick={handleDelStem} />
                   </div>
                   <div className="options-list">
                     {item.options!.map((option, oIndex) => {
@@ -287,5 +287,4 @@ function TopicChoice(props: IProps) {
     </div>
   );
 }
-
 export default TopicChoice;

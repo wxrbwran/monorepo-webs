@@ -40,7 +40,9 @@ const CheckImgStructured: FC<IProps> = (props) => {
     api.image.fetchImageTopicTemplate(params).then((res: any) => {
       const tempData: ITmpList = {};
       res.list.forEach((item: ITempItem) => {
-        const type = item.meta.title === 'JCD' ? item.meta.method + item.meta.part : item.meta.title;
+        const { method, part, title } = item.meta;
+        const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
+        // const type = item.meta.title === 'JCD' ? item.meta.method + item.meta.part : item.meta.title;
         if (!tempData[type]) {
           tempData[type] = [];
         }
