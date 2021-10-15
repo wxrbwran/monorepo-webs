@@ -123,9 +123,14 @@ function Ddtk(props: IProps) {
           setEditIndex(999);
         }
       } else {
-        questions.pop();
-        handleEditUserTopic(userAddTopic, questions, tempKey, editIndex, tabKey, true); // 处理用户新加问题多tab共享 -add/edit
-        setQuestions(questions);
+        if (userAddTopic[tempKey] && questions[editIndex][0].question !== '') {
+          // 添加过，又删除为空了
+          handleDelUserTopic(userAddTopic, questions, tempKey, editIndex, true );
+        } else {
+          // 空的问题
+          questions.pop();
+          setQuestions(questions);
+        }
         setEditIndex(999);
       }
     }
