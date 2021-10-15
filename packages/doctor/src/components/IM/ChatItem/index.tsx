@@ -8,7 +8,6 @@ import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { getRole } from '@/utils/utils';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
-// eslint-disable-next-line import/no-cycle
 import AdjustMedicineCustom from '../AdjustMedicineCustom';
 import BloodCustom from '../BloodCustom';
 import DoctorTip from '../DoctorTip';
@@ -122,7 +121,7 @@ const ChatItem: FC<IMsg> = (props) => {
     }
   };
 
-  const playAudio = (msgItem:{file:IFile, flow: string}, event: any) => {
+  const playAudio = (msgItem:{ file:IFile, flow: string }, event: any) => {
     let $target;
     if (!~event.target.className.indexOf('msg-audio')) {
       $target = event.target.parentElement;
@@ -200,8 +199,8 @@ const ChatItem: FC<IMsg> = (props) => {
         'item-tip': msg.type === 'tip',
       })}`}
     >
-      {/* 103 调整治疗方案 123app调整用药 119 项目邀请 124CRF量表 */}
-      {[103].includes(msg.content?.type)
+      {/* 103 调整治疗方案 123app调整用药 119 项目邀请 124CRF量表, 127医生智能助手私聊 */}
+      {[103, 127].includes(msg.content?.type)
         ? '' : <div className="time">{msg.displayTimeHeader}</div>}
       {/* {msg.type === 'tip' && <div className="tip">{msg.showText}</div>} */}
       {
