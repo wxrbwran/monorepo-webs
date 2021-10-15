@@ -169,7 +169,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       const typeStart = itemTab?.outType || itemTab?.meta?.title;
       const baseProps = {
         outType: typeStart,
-        outTypeAndInx: itemTab.key,
+        tabKey: itemTab.key,
         imageId,
         isViewOnly,
       };

@@ -3,35 +3,37 @@ import delIcon from '@/assets/img/doctor_patients/delete-icon.svg';
 import styles from './index.scss';
 import { Input, message } from 'antd';
 import TopicTitle from '../TopicTitle';
-import { ddtkData, ddtkExample as example } from '../utils';
+import { ddtkData, ddtkExample as example, handleDelUserTopic, handleEditUserTopic, watchUserTopicChange } from '../utils';
 import { EditOutlined } from '@ant-design/icons';
-import { isEmpty, debounce } from 'lodash';
+import { isEmpty, debounce, cloneDeep } from 'lodash';
 import { IQuestions } from 'typings/imgStructured';
-
+import uuid from 'react-uuid';
+import { useSelector } from 'react-redux';
+import { IState } from 'packages/doctor/typings/model';
 
 const { TextArea } = Input;
-interface IQues {
-  isAdd: boolean; // add 新加
-  qa: IQuestions[]
-}
 interface IProps {
   changeCallbackFns: (params: ICallbackFn) => void;
-  initData: IQuestions[][];
+  initData: IQuestions[];
   isViewOnly: boolean;
 }
 function Ddtk(props: IProps) {
   console.log('ddtkprops', props);
-  const { changeCallbackFns, initData, isViewOnly } = props;
+  const { changeCallbackFns, initData, isViewOnly, tempKey, tabKey } = props;
+  const userAddTopic = useSelector((state: IState) => state.structured);
   const fetchInitData = () => {
     return initData.map(item => {
-      return {
-        isAdd: false,
-        qa: item,
-      };
+      return item.map(qaItem => {
+        return {
+          ...qaItem,
+          isAdd: false,
+        };
+      });
+
     });
   };
   const [cursorIndex, setCursorIndex] = useState(0); // 光标位置
-  const [questions, setQuestions] = useState<IQues[]>(initData ? fetchInitData() : []);
+  const [questions, setQuestions] = useState<IQuestions[][]>(initData ? fetchInitData() : []);
   const [editIndex, setEditIndex] = useState(-1); // 当前编辑第几题
   const [editCont, setEditCont] = useState(''); // 当前编辑的问题+答案 文本格式
 
@@ -55,21 +57,26 @@ function Ddtk(props: IProps) {
       });
     }
   }, [questions]);
-
+  useEffect(() => {
+    const newQues = watchUserTopicChange(userAddTopic, questions, tempKey, tabKey, ['COMPLETION'], true);
+    if (newQues) {
+      setQuestions(cloneDeep(newQues));
+    }
+  }, [userAddTopic]);
   // @ts-ignore
-  const findAnswerIndex = (qa: IQuestions[], inx: number, currAns: string) => {
+  const findAnswerIndex = (qas: IQuestions[], inx: number, currAns: string) => {
     if (inx >= 0) {
-      const newQa: IQuestions[] = JSON.parse(JSON.stringify(qa));
+      const newQa: IQuestions[] = JSON.parse(JSON.stringify(qas));
       // 如果存在这一项问答，并且有问题，那直接操作放入answer,否则向前继续寻找，直到找到为止
       if (newQa[inx] && newQa[inx]?.question) {
         if (newQa[inx]?.answer) {
-          newQa[inx]?.answer?.push(currAns);
+          newQa[inx]?.answer?.push(currAns === '' ? null : currAns);
         } else {
-          newQa[inx].answer = [currAns];
+          newQa[inx].answer = [currAns === '' ? null : currAns];
         }
         return newQa;
       } else {
-        return findAnswerIndex(qa, inx - 1, currAns);
+        return findAnswerIndex(qas, inx - 1, currAns);
       }
     } else {
       message.error('请先输入问题再添加填空，请参考示例', 8);
@@ -80,7 +87,8 @@ function Ddtk(props: IProps) {
   const stringToArray = (str: string) => {
     // const str = '大小：「 1.5×1×1 」,边缘：「 清清清清10%，尚可* 」';
     const strArr = str.split('「');
-    let qa: IQuestions[] = [];
+    let qas: IQuestions[] = [];
+    const editUuid = questions[editIndex][0].uuid;
     strArr.forEach((item: string, inx: number) => {
       console.log('itemmm', item);
       // 包含答案
@@ -88,20 +96,19 @@ function Ddtk(props: IProps) {
         const a = item.split('」');
         // 存在答案：检索把答案放到对应的问题里
         if (a[0]) {
-          qa = [ ...findAnswerIndex(qa, inx - 1, a[0]) ];
-          console.log('qaa2', qa);
+          qas = [ ...findAnswerIndex(qas, inx - 1, a[0].trim()) ];
         }
         // 存在问题:把问题push进去
         if (a[1]) {
-          qa.push({ question: a[1], answer:[], question_type: 'COMPLETION' });
+          qas.push({ question: a[1], answer:[], question_type: 'COMPLETION', isAdd: true, uuid: editUuid });
         }
       } else {
         // 仅是问题
-        qa.push({ question: item, answer: [], question_type: 'COMPLETION' });
+        qas.push({ question: item, answer: [], question_type: 'COMPLETION', isAdd: true, uuid: editUuid  });
       }
     });
-    console.log('qqqqqqqqa', qa);
-    return qa;
+    console.log('qqqqqqqqa', qas);
+    return qas;
   };
 
   const changeSaveEdit = () => {
@@ -109,13 +116,15 @@ function Ddtk(props: IProps) {
       if (!!editCont) {
         const editData = stringToArray(editCont);
         if (!isEmpty(editData)) {
-          questions[editIndex].qa = editData;
+          questions[editIndex] = editData;
+          handleEditUserTopic(userAddTopic, questions, tempKey, editIndex, tabKey, true); // 处理用户新加问题多tab共享 -add/edit
           setQuestions(questions);
           setEditCont('');
           setEditIndex(999);
         }
       } else {
         questions.pop();
+        handleEditUserTopic(userAddTopic, questions, tempKey, editIndex, tabKey, true); // 处理用户新加问题多tab共享 -add/edit
         setQuestions(questions);
         setEditIndex(999);
       }
@@ -150,30 +159,31 @@ function Ddtk(props: IProps) {
   // 展示时：保存输入的回答quesInx:第几组题，qaInx组里面的第几个问题,ansInx问题里的第几个答案
   const changeAnswer = (e: any, quesInx: number, qaInx: number, ansInx: number) => {
     // @ts-ignore
-    questions[quesInx].qa[qaInx].answer[ansInx] = e.target.innerText as string;
+    questions[quesInx][qaInx].answer[ansInx] = e.target.innerText as string;
     setQuestions(questions);
   };
   // 添加题
   const handleAddTopic = (e: Event) => {
     e.stopPropagation();
     const inx = questions.length;
-    setQuestions([...questions, { ...ddtkData }]);
+    setQuestions([...questions, [{ ...ddtkData, uuid: uuid() }]]);
     setEditIndex(inx);
   };
   // 删除整道题
-  const handleDelQuestion = (e: Event, inx: number) => {
+  const handleDelQuestion = (e: Event) => {
     e.stopPropagation();
-    questions.splice(inx, 1);
-    setQuestions([...questions]);
+    // questions.splice(inx, 1);
+    // setQuestions([...questions]);
+    handleDelUserTopic(userAddTopic, questions, tempKey, editIndex, true ); // 处理用户新加问题多tab共享-del
     setEditCont('');
     setEditIndex(999);
   };
   // 编辑题
   const handleClickEdit = (quesIndex: number) => {
     let editStr = '';
-    questions[quesIndex].qa.forEach(item => {
+    questions[quesIndex].forEach(item => {
       let ansStr = '';
-      item?.answer?.forEach(ansItem => ansStr += `「${ansItem}」`);
+      item?.answer?.forEach(ansItem => ansStr += `「${ansItem ? ansItem : '  '}」`);
       editStr += item.question + ansStr;
     });
     setEditCont(editStr);
@@ -191,9 +201,9 @@ function Ddtk(props: IProps) {
             if (isViewOnly) {
               isShow = false;
               count = count + 1;
-              item.qa.forEach(qaItem => {
+              item.forEach(qaItem => {
                 // 一个问题的有效答案
-                const hasVals = qaItem.answer.filter(ansItem => !!ansItem.trim());
+                const hasVals = qaItem.answer.filter(ansItem => !!ansItem?.trim());
                 if (!isEmpty(hasVals)) { isShow = true;}
               });
               if (isShow) { count = count - 1;}
@@ -241,7 +251,7 @@ function Ddtk(props: IProps) {
               return (
                 <pre className={`${styles.ddtk} ${styles.done}` }  key={quesIndex}>
                   {
-                    item.isAdd && (
+                    item[0]?.isAdd && (
                       <EditOutlined onClick={() => handleClickEdit(quesIndex)} />
                     )
                   }
@@ -249,9 +259,9 @@ function Ddtk(props: IProps) {
                   <span className='mt-5'>{quesIndex - count + 1}.</span>
                   }
                   {
-                    item.qa.map((qaItem, qaInx) => (
+                    item.map((qaItem, qaInx) => (
                       <span key={qaInx}>
-                        <span className='mt-5'>{qaItem.question}</span>
+                        <span className={`mt-5 ${styles.ques_span}`}>{qaItem.question}</span>
                         {
                           qaItem?.answer?.map((ansItem, ansInx) => (
                             <span
@@ -260,7 +270,7 @@ function Ddtk(props: IProps) {
                               contentEditable={!isViewOnly}
                               suppressContentEditableWarning
                               onBlur={(e) => changeAnswer(e, quesIndex, qaInx, ansInx)}
-                            >{ansItem}</span>
+                            >{ansItem ? ansItem : ''}</span>
                           ))
                         }
                       </span>
@@ -273,7 +283,6 @@ function Ddtk(props: IProps) {
         }
       </div>
     </div>
-
   );
 }
 

@@ -3,14 +3,14 @@ import noDocument from '@/assets/img/doctor_patients/icon_nodocument.png';
 import vague from '@/assets/img/doctor_patients/icon_vague.png';
 
 interface IProps {
-  outTypeAndInx: string;
+  tabKey: string;
   outType: string;
   inspectionCallbackFns: any; // 保存时候的回调
   imageId: string;
 }
-const Nodata: FC<IProps> = ({ outTypeAndInx, outType, inspectionCallbackFns, imageId }) => {
+const Nodata: FC<IProps> = ({ tabKey, outType, inspectionCallbackFns, imageId }) => {
   useEffect(() => {
-    inspectionCallbackFns[outTypeAndInx] = () => new Promise((resolve) => {
+    inspectionCallbackFns[tabKey] = () => new Promise((resolve) => {
       resolve({
         imageId,
         outType,
