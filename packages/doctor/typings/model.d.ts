@@ -115,6 +115,19 @@ export interface ImageModelState {
   anaImg: IImageItem[];
   otherImg: IImageItem[];
 }
+export interface IUserAddTopicItem  {
+  actionType: string,
+  actionTabKey: string; // 表示最新编辑此问题的tabkey，当前tab渲染问题时要显示模板里的answer，其余tab均作清空处理
+  qaType: string,
+  qa: IQuestions | IQuestions[],
+  uuid: string;
+}
+export interface StructuredModelState {
+  // editTabKey: string;
+  // editQa:  IQuestions[] | IQuestions[][],
+  // actionType: string; // edit 编辑|添加  del删除
+  [key: any]: IUserAddTopicItem[],
+}
 declare interface IState {
   auth: AuthModelState;
   user: UserModelState;
@@ -125,6 +138,7 @@ declare interface IState {
   image: ImageModelState;
   education: EduModelState;
   suifang: SuifangModelState;
+  structured: StructuredModelState;
 }
 interface EduModelState {
   richText: {
@@ -139,7 +153,7 @@ interface EduModelState {
   };
   sendList: []
 }
-interface IQuestions {
+interface ISuiFangQuestions {
   type: string;
   code?: number;
   detail: {
@@ -153,5 +167,5 @@ interface SuifangModelState {
   id?: string;
   subTitle?: string;
   title?: string;
-  question?: IQuestions[]
+  question?: ISuiFangQuestions[]
 };

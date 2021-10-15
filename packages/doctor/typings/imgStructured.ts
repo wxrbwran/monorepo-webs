@@ -49,9 +49,7 @@ export interface IStructuredDetailProps {
   handleClose: () => void;
   hydData: IApiDocumentList[];
   jcdData: ITopicItemApi[];
-  templatePart: ITmpList;
   tempAll: ITmpList;
-  openTime: number;
   jcdOriginIds: string;
 }
 
@@ -77,6 +75,7 @@ export interface IQuestions {
   question: string;
   answer: string[];
   options?: string[];
+  uuid: string;
 }
 
 export interface ITopicTemplateItemApi {
@@ -114,6 +113,8 @@ export interface IMeta {
   title: string;
   sid: string;
   imageId: string;
+  method: string;
+  part: string;
 }
 export interface ITmpList {
   [key: string]: ITopicTemplateItemApi[];

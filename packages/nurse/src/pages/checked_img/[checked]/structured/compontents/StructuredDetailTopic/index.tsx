@@ -9,7 +9,7 @@ import { ITmpList, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStr
 import { formatTempDdtk, fetchInitData } from '../../utils';
 
 interface IProps {
-  outTypeAndInx: string;
+  tabKey: string;
   outType: string;
   hydCallbackFns: any; // 保存时候的回调
   setHydCallbackFns: (params: { [type: string]: () => void }) => void;
@@ -28,7 +28,7 @@ interface IProps {
 }
 
 const StructuredDetailTopic: FC<IProps> = (props) => {
-  const { initData, outTypeAndInx, hydCallbackFns, setHydCallbackFns, isViewOnly,
+  const { initData, tabKey, hydCallbackFns, setHydCallbackFns, isViewOnly,
     imageId, outType, tempAll, templatePart } = props;
   const initTmp: ITopicTemplateItemApi[][] = [[], [], [], []];
   // 编辑：后增加的模板问题
@@ -40,7 +40,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     const concatTemp = isEmpty(initData) ? (tempAll[outType] || []) : (templatePart?.[outType] || []);
     const topicArr: any[][] = initTmp;
     concatTemp.forEach(item => {
-      console.log('29329832', item);
+      // console.log('29329832', item);
       const qa = {
         question: item.question,
         answer: item.answer,
@@ -82,7 +82,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     formatTemplate();
   }, [initData]);
   useEffect(() => {
-    hydCallbackFns[outTypeAndInx] = (clickSaveTime: number) => new Promise((resolve) => {
+    hydCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
       Promise.all(Object.values(topicCallbackFns.current)
         .map((fn) => fn())).then((topicList) => {
         resolve({
@@ -101,7 +101,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     setHydCallbackFns(hydCallbackFns);
     return () => {
       // 删除掉此tab要delete掉此项
-      delete hydCallbackFns[outTypeAndInx];
+      delete hydCallbackFns[tabKey];
       setHydCallbackFns(hydCallbackFns);
     };
   }, []);
@@ -111,7 +111,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     topicCallbackFns.current = { ...fns };
   };
 
-  const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly };
+  const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly, tabKey };
   const dataAndTemp = (inx: number) => {
     if (inx === 1) {
       const ddtk = formatTempDdtk(templateTopic?.[1]);

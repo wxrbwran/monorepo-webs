@@ -18,7 +18,7 @@ import styles from './index.scss';
 const { TabPane } = Tabs;
 interface IProps {
   imageId: string;
-  outTypeAndInx: string;// 一级tab
+  tabKey: string;// 一级tab
   outType: string;
   initData: {
     documentList: IApiDocumentItem[];
@@ -42,7 +42,7 @@ interface ICheckTypesItem extends IApiDocumentItem {
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
 const StructuredDetailItem: FC<IProps> = (props) => {
   const {
-    inspectionCallbackFns, setCallbackFns, outTypeAndInx, outType, initData, imageId, isViewOnly,
+    inspectionCallbackFns, setCallbackFns, tabKey, outType, initData, imageId, isViewOnly,
   } = props;
   console.log('initDddd', initData);
   const activeType1 = useRef('');
@@ -114,8 +114,8 @@ const StructuredDetailItem: FC<IProps> = (props) => {
     setCheckTypes([...newCheckTypes]);
   };
   useEffect(() => {
-    console.log('level1Type', outTypeAndInx);
-    inspectionCallbackFns[outTypeAndInx] = () => new Promise((resolve) => {
+    console.log('level1Type', tabKey);
+    inspectionCallbackFns[tabKey] = () => new Promise((resolve) => {
       Promise.all(Object.values(documentsCallbackFns.current)
         .map((fn) => fn())).then((documentList) => {
         // console.log('hospital', hospital);
@@ -134,7 +134,7 @@ const StructuredDetailItem: FC<IProps> = (props) => {
     setCallbackFns(inspectionCallbackFns);
     return () => {
       // 删除掉此tab要delete掉此项
-      delete inspectionCallbackFns[outTypeAndInx];
+      delete inspectionCallbackFns[tabKey];
       setCallbackFns(inspectionCallbackFns);
     };
   }, []);

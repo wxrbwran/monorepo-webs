@@ -19,7 +19,7 @@ export const dva = {
       persistEnhancer({
         key: 'doctor',
         storage,
-        blacklist: ['im', 'user'],
+        blacklist: ['im', 'user', 'structured'],
       }),
     ],
     onAction: createLogger(),
@@ -36,7 +36,6 @@ export const dva = {
 //   console.log('______2', routes);
 //   console.log('______3', action);
 // }
-// eslint-disable-next-line import/prefer-default-export
 // export const dva = {
 //   config: {
 //     onAction: createLogger(),
