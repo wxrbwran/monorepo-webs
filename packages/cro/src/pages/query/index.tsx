@@ -5,7 +5,7 @@ import { history, useSelector, useDispatch } from 'umi';
 import ToogleSide from '@/components/ToogleSide';
 import FieldCard from './components/field_card';
 import PreTable from './components/pre_table';
-import { handleFormatValues, handleShouldValues, transformDynamicToStatic } from './util';
+import { handleFormatValues, handleShouldValues, ResearchSourceType, transformDynamicToStatic } from './util';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 interface IProps {
@@ -57,7 +57,7 @@ function Query({ }: IProps) {
       // 循环判断每个item是不是dynimic
       for (let i = 0; i < res.keys[0].items.length; i++) {
 
-        transformDynamicToStatic(res.keys[0].items[i], projectSid, projectRoleType).then((items: any) => {
+        transformDynamicToStatic(res.keys[0].items[i], projectSid, projectRoleType, ResearchSourceType).then((items: any) => {
 
           if (res.keys[0].items[i].name.includes('team')) {
 
@@ -109,7 +109,7 @@ function Query({ }: IProps) {
 
     if (info.type.includes('dynamic')) {
 
-      transformDynamicToStatic(info, projectSid, projectRoleType).then((items) => {
+      transformDynamicToStatic(info, projectSid, projectRoleType, ResearchSourceType).then((items) => {
 
         // '终点事件' '主观量表', '客观检查', 'CRF量表' 有全选功能
         if (allFields && items?.length > 0) {
@@ -190,7 +190,7 @@ function Query({ }: IProps) {
 
   const handleExpand = (node: IChecked) => {
     // 点击下拉箭头，异步加载数据
-    transformDynamicToStatic(node.items[0], projectSid, projectRoleType, node?.description).then((items) => {
+    transformDynamicToStatic(node.items[0], projectSid, projectRoleType, ResearchSourceType, node?.description).then((items) => {
 
       if (allFields) {
         const { parentIndex, childIndex } = deepTree(node.parent, node.description);
@@ -253,7 +253,7 @@ function Query({ }: IProps) {
             },
             {
               sid: localStorage.getItem('xzl-web-doctor_sid'),
-              ns: localStorage.getItem('xzl-web-doctor_nsid'),
+              ns: localStorage.getItem('xzl-web-doctor_nsId'),
               role: localStorage.getItem('xzl-web-doctor_roleId'),
               tag: 'operator',
             },

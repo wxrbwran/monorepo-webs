@@ -7,6 +7,7 @@ export default {
   },
   // 创建主观量表
   postSubjectiveScale(data?: any): Promise<any> {
+    console.log('=============== postSubjectiveScale', JSON.stringify(data));
     return http.post('research/subjective/scale', { data });
   },
   // 修改主观量表
