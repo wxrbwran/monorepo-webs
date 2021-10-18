@@ -35,22 +35,22 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const hideViewer = () => {
     setShowViewer(false);
   };
-  const fetchTemplate = (from: number, to: number) => {
-    const params = { from, to };
-    api.image.fetchImageTopicTemplate(params).then((res: any) => {
-      const tempData: ITmpList = {};
-      res.list.forEach((item: ITempItem) => {
-        const { method, part, title } = item.meta;
-        const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
-        // const type = item.meta.title === 'JCD' ? item.meta.method + item.meta.part : item.meta.title;
-        if (!tempData[type]) {
-          tempData[type] = [];
-        }
-        tempData[type] = tempData[type].concat(item.data);
-      });
-      console.log('tempData991', tempData);
-      settempAll(tempData);
+  const formatTemplate = (res) => {
+    const tempData: ITmpList = {};
+    res.list.forEach((item: ITempItem) => {
+      const { method, part, title } = item.meta;
+      const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
+      if (!tempData[type]) {
+        tempData[type] = [];
+      }
+      tempData[type] = tempData[type].concat(item.data);
     });
+    settempAll(tempData);
+  };
+  const fetchTemplate = async (from: number, to: number) => {
+    const params = { from, to };
+    const data = api.image.fetchImageTopicTemplate(params);
+    return data;
   };
   const fetchImageJcds = async (imageId: string) => {
     const params = { meta: { imageId,  sid: patientSid } };
@@ -67,9 +67,10 @@ const CheckImgStructured: FC<IProps> = (props) => {
     const data = await api.image.fetchImageIndexes(params);
     return data;
   };
-  const fetchData = (id: string) => {
-    Promise.all([fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
-      const [hData, jData] = res;
+  const fetchData = (id: string, oTime: number) => {
+    Promise.all([fetchTemplate(0, oTime), fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
+      const [tempData, hData, jData ] = res;
+      formatTemplate(tempData);
       setHydData(hData.list.map(item => {
         return ({ ...item, key: uuid() });
       }));
@@ -84,10 +85,9 @@ const CheckImgStructured: FC<IProps> = (props) => {
   useEffect(() => {
     if (showViewer) {
       const oTime = new Date().getTime();
-      fetchTemplate(0, oTime);
       const { imageId, imageUrl } = imageInfo;
       if (imageId) {
-        fetchData(imageId);
+        fetchData(imageId, oTime);
       } else if (imageUrl) {
         // im入口点击 图片，先获取图片id
         api.image.putImage({
