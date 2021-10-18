@@ -127,10 +127,14 @@ const formatTemps = (temps: StructuredModelState, createdTime: number, imageId: 
         groupItem.qa.map((ddtkItem: IQuestions, inx: number) => {
           qaItem = cloneDeep({ ...ddtkItem, sid });
           delete qaItem.isAdd;
-          curTypeTemps.data.push( { ...qaItem, group: `1-0-${inx}` });
+          curTypeTemps.data.push( {
+            ...qaItem,
+            group: `1-0-${inx}`,
+            answer: qaItem.answer.map(() => null),
+          });
         });
       } else {
-        qaItem = cloneDeep({ ...groupItem.qa, sid });
+        qaItem = cloneDeep({ ...groupItem.qa, answer: [], sid });
         delete qaItem.isAdd;
         curTypeTemps.data.push( qaItem );
       }
