@@ -111,7 +111,8 @@ function Ddtk(props: IProps) {
     return qas;
   };
 
-  const changeSaveEdit = () => {
+  const changeSaveEdit = (e) => {
+    console.log('*****11', e.target);
     if (editIndex !== 999 && editIndex !== -1) {
       if (!!editCont) {
         const editData = stringToArray(editCont);
@@ -142,7 +143,8 @@ function Ddtk(props: IProps) {
     };
   }, [editCont, editIndex]);
   // 保存当前点击的位置
-  const handleSaveIndex = () => {
+  const handleSaveIndex = (e) => {
+    e.stopPropagation();
     const dom =  document.getElementsByClassName('edit_input')[0];
     // @ts-ignore
     setCursorIndex(dom?.selectionStart);

@@ -97,7 +97,6 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
 
   // 监听到所属方法+部分，发生改变后，重新渲染问题列表
   useEffect(() => {
-    console.log('************11');
     if (!!tempKey) {
       formatTemplate();
     }
@@ -106,17 +105,16 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
   const changeJcdBaseInfo = (info: any) => {
     // 后面根据方法+部分动态加载对应问题的模板 使用
     const { method, part } = info;
-    if (method + part !== tempKey) {
+    if (JSON.stringify({ method, part }) !== tempKey) {
       setIsLoad(false);
+      if (method !== undefined && part !== undefined) {
+        setTempKey(JSON.stringify({ method, part }));
+        tempKeyRef.current = JSON.stringify({ method, part });
+      } else {
+        setTempKey(undefined);
+        tempKeyRef.current = undefined;
+      }
     }
-    if (method !== undefined && part !== undefined) {
-      setTempKey(JSON.stringify({ method, part }));
-      tempKeyRef.current = JSON.stringify({ method, part });
-    } else {
-      setTempKey(undefined);
-      tempKeyRef.current = undefined;
-    }
-    console.log('changeJcdBaseInfo', info);
   };
   useEffect(() => {
     hydCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
