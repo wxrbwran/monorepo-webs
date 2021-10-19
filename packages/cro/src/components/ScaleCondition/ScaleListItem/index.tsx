@@ -9,11 +9,11 @@ const { Option } = Select;
 
 interface IProps {
   item: {
-    choseItem: {
+    chooseItem: {
       name: string,
       description: string,
     },
-    choseValue: {
+    chooseValue: {
       min: number, // 针对年龄
       max: number, // 针对年龄
       value: number | string,
@@ -31,7 +31,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
 
   const [fetching, setFetchStatus] = useState(false);//搜索是否显示loading
   const [diagnosisList, setDiagnosis] = useState([]);//获取诊断
-  const [treatments, setTreatments] = useState([]);//获取处理方式
+  const [treatmentsList, setTreatments] = useState([]);//获取处理方式
 
   //获取诊断
   const fetchDiagnosis = (value: string) => {
@@ -62,15 +62,16 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
       clearTimeout(timer);
       timer = setTimeout(() => {
         api.detail.fetchTreatment({ name: value }).then((res) => {
-          const { resTreatments } = res;
-          if (resTreatments.length > 0) {
-            setTreatments(resTreatments);
+          const { treatments } = res;
+          if (treatments.length > 0) {
+            setTreatments(treatments);
           } else {
             message.info('没有治疗方式信息!');
           }
         })
           .catch((err) => {
-            message.error(err);
+            console.log('============== fetchTreatment', JSON.stringify(err));
+            // message.error(err);
           });
         setFetchStatus(false);
       }, 800);
@@ -80,7 +81,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
   return (
     <>
       {
-        item.choseItem.description === '年龄' && (
+        item.chooseItem.description === '年龄' && (
           <div className={styles.item_value}>
             <span className={styles.label}>范围：</span>
             <InputNumber
@@ -88,10 +89,10 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               onChange={(value: number) => {
 
                 console.log('========= onChange min', value);
-                item.choseValue.min = value;
+                item.chooseValue.min = value;
                 changeStateByValue(item);
               }}
-              value={item.choseValue.min}
+              value={item.chooseValue.min}
             />
             <span className={styles.split}>-</span>
             <InputNumber
@@ -99,15 +100,15 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               onChange={(value: number) => {
 
                 console.log('========= onChange max', value);
-                item.choseValue.max = value;
+                item.chooseValue.max = value;
                 changeStateByValue(item);
-              }} value={item.choseValue.max}
+              }} value={item.chooseValue.max}
             />
           </div>
         )
       }
       {
-        item.choseItem.description === '诊断' && (
+        item.chooseItem.description === '诊断' && (
           <div className={styles.item_value}>
             <span className={styles.label}>诊断：</span>
             <Select
@@ -118,13 +119,13 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               notFoundContent={fetching ? <Spin size="small" /> : null}
               filterOption={false}
               onSearch={fetchDiagnosis}
-              value={item.choseValue.value}
+              value={item.chooseValue.value}
               onChange={(value: string | number | undefined) => {
 
                 console.log('========= onChange min', value);
                 const vals = String(value).split('_zsh_');
-                item.choseValue.value = vals[1];
-                item.choseValue.id = vals[0];
+                item.chooseValue.value = vals[1];
+                item.chooseValue.id = vals[0];
                 changeStateByValue(item);
               }}
             >
@@ -143,7 +144,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
         )
       }
       {
-        item.choseItem.description === '处理' && (
+        item.chooseItem.description === '处理' && (
           <div className={styles.item_value}>
             <span className={styles.label}>处理：</span>
             <Select
@@ -154,17 +155,17 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               notFoundContent={fetching ? <Spin size="small" /> : null}
               filterOption={false}
               onSearch={fetchTreatment}
-              value={item.choseValue.value}
+              value={item.chooseValue.value}
               onChange={(value: string | number | undefined) => {
 
                 console.log('========= onChange min', value);
                 const vals = String(value).split('_zsh_');
-                item.choseValue.value = vals[1];
-                item.choseValue.id = vals[0];
+                item.chooseValue.value = vals[1];
+                item.chooseValue.id = vals[0];
                 changeStateByValue(item);
               }}
             >
-              {treatments.map((treItem: Ikey) => (
+              {treatmentsList.map((treItem: Ikey) => (
                 <Option
                   key={treItem.id}
                   value={treItem.id + '_zsh_' + treItem.name}
@@ -179,7 +180,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
         )
       }
       {
-        item.choseItem.description === '性别' && (
+        item.chooseItem.description === '性别' && (
           <div className={styles.item_value}>
             <span className={styles.label}>性别：</span>
             <Select
@@ -187,11 +188,11 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               onChange={(value: string | number) => {
 
                 console.log('========= onChange min', value);
-                item.choseValue.value = value;
+                item.chooseValue.value = value;
                 changeStateByValue(item);
               }}
               placeholder='请选择性别'
-              value={item.choseValue.value}
+              value={item.chooseValue.value}
             >
               <Option value={'男'}>男</Option>
               <Option value={'女'}>女</Option>

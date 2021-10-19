@@ -45,11 +45,11 @@ interface IItem {
 }
 
 interface ICondition {
-  choseItem: IItem;
-  choseValue: {
+  chooseItem: IItem;
+  chooseValue: {
     min: number; // 针对年龄
     max: number; // 针对年龄
-    value: number | string;
+    value: string;
     id: string;
   },
 }
@@ -75,7 +75,7 @@ const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRole
           subItem.starting = true;
         }
       }
-    } else if (item.name === 'diagnose.treatmen') {
+    } else if (item.name === 'diagnose.treatment') {
       for (let j = 0; j < item.items.length; j++) {
         const subItem = item.items[j];
         subItem.operator = '=';
@@ -89,6 +89,23 @@ const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRole
     }
   }
 };
+
+const fillValueInScopeKey = (scopeKey: IItem) => {
+
+  if (scopeKey.items && scopeKey.items.length == 0) {
+    return;
+  }
+  for (let i = 0; i < scopeKey.items.length; i++) {
+    const item = scopeKey.items[i];
+    item.value = item.assign?.value ?? '';
+
+    for (let j = 0; j < item.items.length; j++) {
+      const subItem = item.items[j];
+      subItem.value = subItem.assign?.value ?? '';
+    }
+  }
+};
+
 
 const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: String) => {
 
@@ -119,7 +136,6 @@ const tileChooseToArray = (item: IItem) => {
   }
   array[cloneItem.name] = cloneItem;
 
-  console.log('========= tileChooseToArray', JSON.stringify(array));
   return array;
 };
 
@@ -127,48 +143,52 @@ const tileChooseConditionToArray = (conditions: ICondition[]) => {
 
   const array = [];
   for (let i = 0; i < conditions.length; i++) {
-    if (conditions[i].choseItem.name == 'basic.sex') {
-      conditions[i].choseItem.operator = '=';
-      conditions[i].choseItem.value = conditions[i].choseValue.value;
-    } else if (conditions[i].choseItem.name == 'diagnose.disease.uid') {
-      conditions[i].choseItem.operator = '=';
-      conditions[i].choseItem.value = conditions[i].choseValue.id;
-    } else if (conditions[i].choseItem.name == 'diagnose.disease.uid') {
-      conditions[i].choseItem.operator = '=';
-      conditions[i].choseItem.value = conditions[i].choseValue.id;
-    } else if (conditions[i].choseItem.name == 'basic.age') {
-      conditions[i].choseItem.operator = '<>';
-      conditions[i].choseItem.value = '[' + conditions[i].choseValue.min + ',' + conditions[i].choseValue.max + ')';
+    if (conditions[i].chooseItem.name == 'basic.age') {
+      conditions[i].chooseItem.operator = '<>';
+      conditions[i].chooseItem.value = '[' + conditions[i].chooseValue.min + ',' + conditions[i].chooseValue.max + ')';
+    } else if (conditions[i].chooseItem.name == 'basic.sex') {
+      conditions[i].chooseItem.operator = '=';
+      conditions[i].chooseItem.value = conditions[i].chooseValue.value;
     } else {
-      continue;
+      conditions[i].chooseItem.operator = '=';
+      conditions[i].chooseItem.value = conditions[i].chooseValue.id;
+      conditions[i].chooseItem.description = conditions[i].chooseValue.value;
     }
-
-    array.push({ [conditions[i].choseItem.name]: conditions[i].choseItem });
+    array.push({ [conditions[i].chooseItem.name]: conditions[i].chooseItem });
   }
   return array;
 };
 
-const tileAllChoosesToArray = (chooseStartTime: IItem, choseConditions: ICondition[], choseScope: IItem) => {
+const tileChooseScopeToArray = (chooseScope: IItem[]) => {
+
+  const array = [];
+  for (let i = 0; i < chooseScope.length; i++) {
+
+    array.push(tileChooseToArray(chooseScope[i]));
+  }
+  return array;
+};
+
+const tileAllChoosesToArray = (chooseStartTime: IItem, choseConditions: ICondition[], chooseScope: IItem[]) => {
+
 
   const param = {
     must: [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)],
-    should_1: [tileChooseToArray(choseScope)],
+    should_1: tileChooseScopeToArray(chooseScope),
   };
-
-  console.log('============= array', JSON.stringify(param));
 
   return param;
 };
 
-const tileAllFrequencyToArray = (frequency: { detail: { frequency: string, custom: string[] } }) => {
+const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[] }) => {
 
   // 自定义
   const arrary = [];
   const delay = 9 * 60 * 60; // 9个小时的毫秒值
-  if (frequency.detail.frequency === 'CUSTOM') {
-    for (let i = 0; i < frequency.detail.custom.length; i++) {
+  if (frequency.frequency === 'CUSTOM') {
+    for (let i = 0; i < frequency.custom.length; i++) {
 
-      const period = frequency.detail.custom[i];
+      const period = frequency.custom[i];
       arrary.push({
         type: 'once',
         params: {
@@ -198,19 +218,16 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
   //起始发送时间默认值
   //发送频率默认值
   const initFrequency = {
-    type: 'FREQUENCY',
-    detail: {
-      frequency: 'CUSTOM',
-      custom: [''],
-    },
+    frequency: 'CUSTOM',
+    custom: [''],
   };
 
   const initItems = {
-    choseItem: {
+    chooseItem: {
       name: '',
       description: '',
     },
-    choseValue: {
+    chooseValue: {
 
     },
   };
@@ -234,7 +251,7 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
   const [chooseTreatmentId, setChooseTreatmentId] = useState(); //存储患者做处理的时间-->处理方式
 
   const [scopeKey, setScopeKey] = useState<IItem>({}); //选中的起始发送时间子item
-  const [choseScope, setChoseScope] = useState<IItem>({}); //选中的起始发送时间子item
+  const [choseScope, setChoseScope] = useState<IItem[]>([]); //选中的起始发送时间子item
 
   const [conditionKey, setConditionKey] = useState<IItem>({}); //选中的起始发送时间子item
   const [choseConditions, setChoseConditions] = useState<ICondition[]>([initItems]); //选中的起始发送时间子item
@@ -272,8 +289,9 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
             if (element.type == 'dynamic') {
               transformDynamicToStatic(element, window.$storage.getItem('projectSid'), projectRoleType, SubectiveScaleSourceType).then((items: any) => {
                 res.keys[i].items = items;
+                fillValueInScopeKey(res.keys[i]);
                 setScopeKey(res.keys[i]);
-                setChoseScope(res.keys[i].items[0]);
+                setChoseScope([res.keys[i].items[0]]);
               }).catch(() => {
 
               });
@@ -299,9 +317,10 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
   //发送实验组-zhou
   const handleChangeGroup = (checkedValues: any[]) => {
 
-    console.log('=================', checkedValues);
-    const choseList = scopeKey.items.filter(item => item.description === checkedValues[0]);
-    setChoseScope(choseList[0]);
+    const choseList = scopeKey.items.filter(item => checkedValues.includes(item.description));
+
+    console.log('================= checkedValues choseList', checkedValues, choseList);
+    setChoseScope(choseList);
   };
 
   const onUpdateChoseConditions = (conditions: any[]) => {
@@ -323,28 +342,28 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
   };
   //改变发送频率类型
   const handleGetType = (value: string) => {
-    frequency.detail.frequency = value;
-    frequency.detail.custom = [''];
+    frequency.frequency = value;
+    frequency.custom = [''];
     setFrequency({ ...frequency });
   };
   //添加发送频率
   const handleAddDayEdit = () => {
-    frequency.detail.custom.push('');
+    frequency.custom.push('');
     setFrequency({ ...frequency });
   };
   //修改发送频率
   const handleChangeCustomCycleDay = (e: any, index: number) => {
-    frequency.detail.custom[index] = e;
+    frequency.custom[index] = e;
     setFrequency({ ...frequency });
   };
   //删除自定义发送频率
   const handleDeleteDay = (index: number) => {
-    frequency.detail.custom.splice(index, 1);
+    frequency.custom.splice(index, 1);
     setFrequency({ ...frequency });
   };
   //循环下发天数
   const handleChangeCycleDay = (day: number) => {
-    frequency.detail.custom = [day];
+    frequency.custom = [day];
     setFrequency({ ...frequency });
   };
   //格式化’发送试验组‘
@@ -382,7 +401,7 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
     // }
 
     //去重、过滤空数据
-    frequency.detail.custom = Array.from(new Set(frequency.detail.custom)).filter((item) => !!item);
+    frequency.custom = Array.from(new Set(frequency.custom)).filter((item) => !!item);
     console.log('============= chooseStartTime', JSON.stringify(chooseStartTime));
     console.log('============= choseConditions', JSON.stringify(choseConditions));
     console.log('============= choseScope', JSON.stringify(choseScope));
@@ -416,6 +435,12 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
           },
         ],
       },
+      // localRules: {
+      //   // chooseStartTime: chooseStartTime,
+      //   // choseConditions: choseConditions,
+      //   // choseScope: choseScope,
+      //   // frequency: frequency,
+      // },
     };
 
     addPlan({
@@ -450,8 +475,8 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
     }
   };
   //存在空记录不可提交
-  const isEmptyCustom = frequency.detail.custom.length === 1 && !frequency.detail.custom[0];
-  const isEmptyGroup = !choseScope;
+  const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];
+  const isEmptyGroup = choseScope.length == 0;
   const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
   const disabled =
     isShowTextArea ? !remind || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
@@ -461,6 +486,9 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
     label: item.description,
     value: item.description,
   }));
+
+  const des = choseScope.map(item => item.description);
+  console.log('================ choseScope.map', des);
 
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
@@ -517,17 +545,17 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
         <span className={styles.start}>*</span>发送频率：
       </h2>
       <div className={styles.send_type}>
-        <Select style={{ width: 180 }} onChange={handleGetType} value={frequency.detail.frequency}>
+        <Select style={{ width: 180 }} onChange={handleGetType} value={frequency.frequency}>
           {sendType.map((item) => (
             <Option value={item.key} key={item.key}>
               {item.value}
             </Option>
           ))}
         </Select>
-        {frequency.detail.frequency === 'CUSTOM' ? (
+        {frequency.frequency === 'CUSTOM' ? (
           <div className={styles.self}>
             <div className={styles.self_content}>
-              {frequency.detail.custom.map((item: any, index) => (
+              {frequency.custom.map((item: any, index) => (
                 <div className={styles.add_item} key={index}>
                   <div className={styles.add_item_left}>
                     <span>第</span>
@@ -562,7 +590,7 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
               style={{ width: 50 }}
               min={1}
               max={9999}
-              value={frequency.detail.custom[0]}
+              value={frequency.custom[0]}
               onChange={handleChangeCycleDay}
             />{' '}
             天下发一次
@@ -581,7 +609,7 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
       <CheckboxGroup
         options={options}
         onChange={handleChangeGroup}
-        value={choseScope?.description}
+        value={des}
       />
       <div className={styles.submit}>
         <Button onClick={handCancel}>取消</Button>

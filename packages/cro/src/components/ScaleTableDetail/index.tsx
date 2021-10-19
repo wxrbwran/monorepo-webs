@@ -18,20 +18,22 @@ function ScaleTableDetail({ scaleType }: IProps) {
   const location: ILocation = useLocation();
   const [groupId, setGroupId] = useState('');
   const [questions, setQuestions] = useState<IQuestions[]>([]);
-  const [plans, setPlans] = useState([]);
+  const [ruleDoc, setRuleDoc] = useState({ rules: [] });
 
   const [scaleId, setScaleId] = useState('');
   const [fromName, setFromName] = useState('');
   const [subTit, setSubTit] = useState('');
-  const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScale';
+  const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScaleDetail';
   useEffect(() => {
     const id = location.query.id;
     if (groupId !== id) {
       setGroupId(id);
       if (!!id) {
         api.subjective[apiName](id).then((res) => {
+
+          console.log('================ api.subjective', JSON.stringify(res));
           setQuestions(res.questions);
-          setPlans(res.plans);
+          setRuleDoc(res.ruleDoc);
           setScaleId(res.scaleId);
           setFromName(res.name);
           setSubTit(res.subtitle);
@@ -56,7 +58,7 @@ function ScaleTableDetail({ scaleType }: IProps) {
         <ScalePlanDetailEcho
           scaleType={scaleType}
           scaleId={scaleId}
-          initPlans={plans}
+          initRule={ruleDoc.rules[0]}
         />
       </div>
     </div>

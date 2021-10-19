@@ -54,6 +54,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     setEditIndex(currentEdit);
   };
   useEffect(() => {
+    console.log('==============  ScaleTableCreate useEffect');
     if (location.query.tempId) {
       //调接口反显
       api.subjective.scaleTemplateDtail(location.query.tempId).then((res: any) => {
@@ -62,7 +63,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       });
     }
     // 编辑
-    if (groupId){
+    if (groupId) {
       api.subjective.getSubjectiveScale(groupId).then((res: any) => {
         setFormTit(res.name);
         setSubTit(res.subtitle);
@@ -173,7 +174,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
           } else {
             questions[i].detail.options = options;
           }
-        } else if (questions[i].type === 'COMPLETION' && typeof(questions[i].detail.stem) === 'string') {
+        } else if (questions[i].type === 'COMPLETION' && typeof (questions[i].detail.stem) === 'string') {
           questions[i].detail.stem = questions[i].detail.stem?.split('＿＿＿');
         }
         questions[i].code = i + 1;
@@ -200,7 +201,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         handleTempCreate(formTit);
         return false;
       }
-      if (groupId){
+      if (groupId) {
         params.scaleGroupId = groupId;
       }
       console.log('params22', JSON.stringify(params));

@@ -61,6 +61,12 @@ function PlanModal({ children, title, infoIndex, plans, updatePlan, question, lo
           footer={null}
           className={styles.send_plan}
         >
+          {/* <ScaleTemplate
+            mode='Edit'
+            onCancel={() => history.go(-1)}
+            addPlan={addPlan}
+          /> */}
+
           <SendPlan
             mode='Edit'
             onCancel={() => setShowModal(false)}

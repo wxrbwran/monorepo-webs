@@ -41,14 +41,13 @@ function Template(props: IProps) {
     const params = {
       name,
       ruleDoc: plans.ruleDoc,
-      // plans: plans.plans,
       projectSid: window.$storage.getItem('projectSid'),
       type: 'SUBJECTIVE',
       info: { questions },
       projectName: window.$storage.getItem('projectName'),
       projectNsId,
     };
-    api.subjective.postSubjectiveScale(params).then(() => {
+    api.subjective.addSubjectiveScale(params).then(() => {
       message.success('添加成功');
       history.push(`/subjective_table/detail?name=${name}`);
     });

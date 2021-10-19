@@ -6,6 +6,7 @@ import styles from './index.scss';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';
 import { Role } from 'xzl-web-shared/src/utils/role';
+import { ICondition } from '../../pages/subjective_table/util';
 
 const { Option } = Select;
 
@@ -24,25 +25,15 @@ interface IItem {
   items: IItem[];
 }
 
-interface ICondition {
-  choseItem: IItem;
-  choseValue: {
-    min: number; // 针对年龄
-    max: number; // 针对年龄
-    value: number | string;
-    id: string;
-  },
-}
-
 function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
 
 
   const initItems: ICondition = {
-    choseItem: {
+    chooseItem: {
       name: '',
       description: '',
     },
-    choseValue: {
+    chooseValue: {
 
     },
   };
@@ -74,7 +65,7 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
   //年龄性别只能添加一次，之后状态禁用
   useEffect(() => {
     const disableObj = [];
-    const vals = choseConditions.map(item => item.choseItem.description);
+    const vals = choseConditions.map(item => item.chooseItem.description);
     if (vals.includes('年龄')) { disableObj.push('年龄'); }
     if (vals.includes('性别')) { disableObj.push('性别'); }
     setDisabled(disableObj);
@@ -106,8 +97,8 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
     console.log('========= handleChange', value, index);
 
     const choseList = conditions.items.filter(item => item.description == value);
-    choseConditions[index].choseItem = choseList[0];
-    choseConditions[index].choseValue = {};
+    choseConditions[index].chooseItem = choseList[0];
+    choseConditions[index].chooseValue = {};
     setChoseConditions([...choseConditions]);
 
     console.log('========= handleChange', value, index);
@@ -163,7 +154,7 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
                 style={{ width: 290, height: 40 }}
                 onChange={(value: string) => { handleChange(value, index); }}
                 placeholder='请选择选项'
-                value={item.choseItem.description}
+                value={item.chooseItem.description}
               >
                 {conditions.items.map(con => (
                   <Option
