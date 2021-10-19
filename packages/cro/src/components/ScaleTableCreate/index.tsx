@@ -33,6 +33,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const [formTit, setFormTit] = useState('');
   const [subTit, setSubTit] = useState('');
   const [questions, setQuestions] = useState<IQuestions[]>([]);
+  const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]);
   const [editIndex, setEditIndex] = useState(0);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -87,6 +88,12 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   };
   const changeQues = (newQues: any) => {
     setQuestions([...newQues]);
+  };
+  const changeDdtkQues = (newQues: any) => {
+    setAlfterQuestions([...newQues]);
+  };
+  const handSaveDdtkModify = () => {
+    setQuestions([...alfterQuestions]);
   };
   const checkOptionsValue = (options: Ioptions[]) => {
     const validOptions: Ioptions[] = [];
@@ -179,6 +186,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         questions[i].code = i + 1;
       }
     }
+    console.log('questionsResult', questions);
     if (isEmpty) {
       return false;
     } else {
@@ -203,7 +211,6 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       if (groupId){
         params.scaleGroupId = groupId;
       }
-      console.log('params22', JSON.stringify(params));
       if (plans.length === 0) {
         // confirm({
         //   title: '您还没有配置发送计划，如果没有发送计划，量表将无法发送!',
@@ -280,7 +287,12 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
               } else if (['TEXT', 'END'].includes(item.type)) {
                 return <QuestionText {...props} key={quesIndex} />;
               } else if (item.type === 'COMPLETION') {
-                return <QuestionDdtk {...props} key={quesIndex} />;
+                return <QuestionDdtk
+                  {...props}
+                  key={quesIndex}
+                  changeDdtkQues={changeDdtkQues}
+                  handSaveDdtkModify={handSaveDdtkModify}
+                />;
               }
             })}
           </div>
