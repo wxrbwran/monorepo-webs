@@ -55,6 +55,11 @@
     th {
       background: #F5F5F5;
     }
+    tr {
+      td:nth-child(1){
+        cursor: pointer;
+      }
+    }
     :global {
       .ant-table-cell {
         font-size: 16px;

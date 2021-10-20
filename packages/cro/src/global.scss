@@ -9,6 +9,27 @@
 }
 
 body {
+  // button按钮样式
+  .common__btn {
+    text-align: center;
+    button {
+      margin-right: 40px;
+      min-width: 130px;
+      height: 42px;
+      font-size: 16px;
+      @extend %border-btn;
+      border-radius: 2px;
+
+      &.finish {
+        margin-right: 0;
+        @extend %fill-btn;
+      }
+    }
+
+    .ant-btn-primary {
+      color: #fff;
+    }
+  }
   // background: #f7f7f7;
   .anticon {
     font-size: 16px;
