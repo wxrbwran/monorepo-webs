@@ -1,6 +1,4 @@
 
-
-
 export interface IItem {
   name: string;
   type: string;
@@ -21,6 +19,53 @@ export interface ICondition {
     id: string;
   },
 }
+
+export interface IRuleDoc {
+  rules: IRules[];
+}
+
+export interface IRules {
+  meta: IMeta;
+  rules: IRule[];
+  id: string;
+}
+
+export interface IMeta {
+  sourceType: number;
+  actionId: number;
+  teamLocations: [];
+  sourceMembers: [];
+}
+
+export interface IRule {
+  match: {
+    should_1: [];
+    must: [];
+  };
+  actions: IAction[];
+}
+
+export interface IAction {
+  type: string;
+  params: {
+    period: number;
+    unit: string;
+    delay: number;
+    sourceMember: [];
+  };
+}
+
+
+export interface IChooseValues {
+  chooseStartTime: IItem;
+  choseConditions: ICondition[];
+  choseScope: [],
+  frequency: {
+    frequency: string,
+    custom: [],
+  },
+}
+
 
 
 export function getHierarchyFromItem(originItem: {}) {
@@ -61,7 +106,16 @@ export function getChooseValueFromItem(item: {}) {
   }
 }
 
-export function getChooseValuesKeyFromRules(rule: { match: { should_1: [], must: [] } }) {
+export function changeDescritionWithItem(item: IItem) {
+
+  if (item.name.includes('disease')) {
+    item.description = '诊断';
+  } else if (item.name.includes('treatment')) {
+    item.description = '处理';
+  }
+}
+
+export function getChooseValuesKeyFromRules(rule: IRule) {
 
   console.log('========== getStartTimeKeyFromRules', JSON.stringify(rule));
   let chooseStartTime;
@@ -81,6 +135,7 @@ export function getChooseValuesKeyFromRules(rule: { match: { should_1: [], must:
         chooseItem: item,
         chooseValue: getChooseValueFromItem(item),
       });
+      changeDescritionWithItem(item);
     }
   }
 

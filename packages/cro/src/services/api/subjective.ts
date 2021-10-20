@@ -5,7 +5,6 @@ export default {
   getScaleGroup(data?: any): Promise<any> {
     return http.get(`research/scale_group?data=${JSON.stringify(data)}`);
   },
-
   // 添加主观量表-新
   addSubjectiveScale(data?: any): Promise<any> {
     console.log('=============== addSubjectiveScale', JSON.stringify(data));
@@ -14,6 +13,10 @@ export default {
   // 获取主观量表详情-新
   getSubjectiveScaleDetail(groupId?: any): Promise<any> {
     return http.get(`research/scale/${groupId}`);
+  },
+  //更新计划-新
+  updateScaleRule(data?: any): Promise<any> {
+    return http.patch('rules', { data });
   },
 
   // 创建主观量表

@@ -7,6 +7,7 @@ import ScaleCondition from '@/components/ScaleCondition';
 import styles from './index.scss';
 import { SubectiveScaleSourceType, transformDynamicToStatic } from '../../pages/query/util';
 import { isEmpty, cloneDeep } from 'lodash';
+import { IChooseValues, ICondition, IItem, IRuleDoc } from '../../pages/subjective_table/util';
 
 
 const { TextArea } = Input;
@@ -17,41 +18,15 @@ interface IProps {
   mode: string;
   onCancel: Function;
   addPlan: Function;
-  plans?: IPlanItem[];
-  isDisabled?: string;
+  originRuleDoc: IRuleDoc;
+  chooseValues: IChooseValues;
   location?: {
     pathname: string,
-  }
-}
-interface IItem {
-  groupName: string;
-  groupId: string;
-}
-interface IState {
-  project: {
-    objectiveGroup: IItem[];
   };
-}
 
-interface IItem {
-  name: string;
-  type: string;
-  level: string;
-  description: string;
-  value: string | number;
-  items: IItem[];
-  starting: boolean;
-  operator: string;
-}
 
-interface ICondition {
-  chooseItem: IItem;
-  chooseValue: {
-    min: number; // 针对年龄
-    max: number; // 针对年龄
-    value: string;
-    id: string;
-  },
+  plans?: IPlanItem[];
+  isDisabled?: string;
 }
 
 
@@ -97,29 +72,44 @@ const fillValueInScopeKey = (scopeKey: IItem) => {
   }
   for (let i = 0; i < scopeKey.items.length; i++) {
     const item = scopeKey.items[i];
+    item.operator = '=';
     item.value = item.assign?.value ?? '';
 
     for (let j = 0; j < item.items.length; j++) {
       const subItem = item.items[j];
+      subItem.operator = '=';
       subItem.value = subItem.assign?.value ?? '';
     }
   }
 };
 
 
-const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: String) => {
+const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
 
-  for (let i = 0; i < timeKey.items.length; i++) {
-    const item = timeKey.items[i];
-    if (item.name === 'diagnose.treatmen') {
-      for (let j = 0; j < item.items.length; j++) {
-        const subItem = item.items[j];
-        if (subItem.name === 'diagnose.treatment.uid') {
-          subItem.value = treatmentId;
-        }
+  if (timeKey.name === 'diagnose.treatment') {
+    for (let j = 0; j < timeKey.items.length; j++) {
+      const subItem = timeKey.items[j];
+      if (subItem.name === 'diagnose.treatment.uid') {
+        subItem.value = treatmentId;
+        subItem.description = treatmentDes;
+
+        console.log('====================== subItem.description', JSON.stringify(subItem));
       }
     }
   }
+};
+
+const getTreatmentDesInStartTimeKey = (timeKey: IItem) => {
+
+  if (timeKey.name === 'diagnose.treatment') {
+    for (let j = 0; j < timeKey.items.length; j++) {
+      const subItem = timeKey.items[j];
+      if (subItem.name === 'diagnose.treatment.uid') {
+        return subItem.description;
+      }
+    }
+  }
+  return '';
 };
 
 const tileChooseToArray = (item: IItem) => {
@@ -154,7 +144,9 @@ const tileChooseConditionToArray = (conditions: ICondition[]) => {
       conditions[i].chooseItem.value = conditions[i].chooseValue.id;
       conditions[i].chooseItem.description = conditions[i].chooseValue.value;
     }
-    array.push({ [conditions[i].chooseItem.name]: conditions[i].chooseItem });
+    if (conditions[i].chooseItem.name.length > 0) {
+      array.push({ [conditions[i].chooseItem.name]: conditions[i].chooseItem });
+    }
   }
   return array;
 };
@@ -180,33 +172,44 @@ const tileAllChoosesToArray = (chooseStartTime: IItem, choseConditions: IConditi
   return param;
 };
 
-const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[] }) => {
+const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[] }, sourceMember?: []) => {
 
   // 自定义
   const arrary = [];
   const delay = 9 * 60 * 60; // 9个小时的毫秒值
+
   if (frequency.frequency === 'CUSTOM') {
     for (let i = 0; i < frequency.custom.length; i++) {
 
       const period = frequency.custom[i];
-      arrary.push({
+      const action: any = {
         type: 'once',
         params: {
           delay: delay,
           period: period,
           unit: 'day',
         },
-      });
+      };
+      if (sourceMember) {
+        action.params.sourceMember = sourceMember;
+      }
+      arrary.push(action);
     }
   } else {
-    arrary.push({
+
+    const period = frequency.custom[0];
+    const action: any = {
       type: 'rolling',
       params: {
         delay: delay,
-        period: 1,
+        period: period,
         unit: 'day',
       },
-    });
+    };
+    if (sourceMember) {
+      action.params.sourceMember = sourceMember;
+    }
+    arrary.push(action);
   }
 
   console.log('============= array', JSON.stringify(arrary));
@@ -214,7 +217,8 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
 };
 
 
-function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }: IProps) {
+function ScaleTemplate({ onCancel, mode, isDisabled, location, originRuleDoc,
+  chooseValues }: IProps) {
   //起始发送时间默认值
   //发送频率默认值
   const initFrequency = {
@@ -248,7 +252,7 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
 
   const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
   const [chooseStartTime, setChooseStartTime] = useState<IItem>({}); //选中的起始发送时间子item
-  const [chooseTreatmentId, setChooseTreatmentId] = useState(); //存储患者做处理的时间-->处理方式
+  const [chooseTreatmentDes, setChooseTreatmentDes] = useState<string>(); //存储患者做处理的时间-->处理方式
 
   const [scopeKey, setScopeKey] = useState<IItem>({}); //选中的起始发送时间子item
   const [choseScope, setChoseScope] = useState<IItem[]>([]); //选中的起始发送时间子item
@@ -257,21 +261,6 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
   const [choseConditions, setChoseConditions] = useState<ICondition[]>([initItems]); //选中的起始发送时间子item
 
   useEffect(() => {
-    //设置编辑反显过来的值
-    //plan.length>1而不能设置为>0，是为了满足客观量表’添加提醒‘时
-    // if (plans && plans.length > 1) {
-    //   console.log('plansss', plans);
-    //   // setStartTime(filterConditions(plans, 'START'));
-    //   // setFrequency(filterConditions(plans, 'FREQUENCY'));
-    //   // setGroup(filterConditions(plans, 'GROUP'));
-    //   // if (question) setRemind(question);
-    // } else {
-    //   setStartTime(initStart);
-    //   setFrequency(initFrequency);
-    //   setGroup(initGroup);
-    //   setRemind('');
-    // }
-
     api.query.fetchFields('SUBJECTIVE_SCALE').then((res) => {
       console.log('==============fetchFields==============  ', JSON.stringify(res));
       // 循环判断每个item是不是dynimic
@@ -279,8 +268,15 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
         if (res.keys[i].name == 'start') {
           fillValueInStartTimeKey(res.keys[i], projectSid, projectRoleType);
           setStartTimeKey(res.keys[i]);
-          setChooseStartTime(res.keys[i].items[0]);
+
+          setChooseStartTime((preState) => {
+            if (isEmpty(preState)) {
+              return res.keys[i].items[0];
+            }
+            return preState;
+          });
           console.log('===============', JSON.stringify(res.keys[i]));
+
         } else if (res.keys[i].name == 'scope') {
 
           for (let j = 0; j < res.keys[i].items.length; j++) {
@@ -291,7 +287,13 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
                 res.keys[i].items = items;
                 fillValueInScopeKey(res.keys[i]);
                 setScopeKey(res.keys[i]);
-                setChoseScope([res.keys[i].items[0]]);
+
+                setChoseScope((preState) => {
+                  if (isEmpty(preState)) {
+                    return [res.keys[i].items[0]];
+                  }
+                  return preState;
+                });
               }).catch(() => {
 
               });
@@ -302,8 +304,21 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
         }
       }
     });
+  }, []);
 
-  }, [plans]);
+  useEffect(() => {
+
+    if (chooseValues) {
+      console.log('==================== chooseStartTime ,', JSON.stringify(chooseValues.choseConditions));
+      setChooseStartTime(chooseValues.chooseStartTime);
+      setChoseScope(chooseValues.choseScope);
+      setChoseConditions(chooseValues.choseConditions);
+      setFrequency(chooseValues.frequency);
+
+      const des = getTreatmentDesInStartTimeKey(chooseValues.chooseStartTime);
+      setChooseTreatmentDes(des);
+    }
+  }, [originRuleDoc]);
 
 
   //改变起始发送时间类型-zhou
@@ -336,9 +351,9 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
   //更改 患者做处理的时间-->处理方式
   const changeStateByValue = (value: string) => {
 
-    console.log('+===========changeStateByValue', value);
-    fillTreatmentInStartTimeKey(chooseStartTime, value);
-    setChooseTreatmentId(value);
+    const vals = String(value).split('_zsh_');
+    fillTreatmentInStartTimeKey(chooseStartTime, vals[0], vals[1]);
+    setChooseTreatmentDes(vals[1]);
   };
   //改变发送频率类型
   const handleGetType = (value: string) => {
@@ -408,44 +423,44 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
     console.log('============= frequency', JSON.stringify(frequency));
     const arrParma = tileAllChoosesToArray(chooseStartTime, choseConditions, choseScope);
 
-
     setLoading(false);
+    // 如果是添加
+    let meta: any = {
+      sourceType: SubectiveScaleSourceType,
+      teamLocations: [
+        {
+          sid: projectSid,
+          ns: projectNsId,
+          role: projectRoleType,
+          tag: 'ownership',
+        },
+        {
+          sid: localStorage.getItem('xzl-web-doctor_sid'),
+          ns: localStorage.getItem('xzl-web-doctor_nsId'),
+          role: localStorage.getItem('xzl-web-doctor_roleId'),
+          tag: 'operator',
+        },
+      ],
+    };
+    if (originRuleDoc) { // 说明是修改
+      meta = originRuleDoc.rules[0].meta;
+    }
 
-
-    console.log('======== localStorage.getItem(xzl-web-doctor_nsid)', localStorage.getItem('xzl-web-doctor_nsid'));
+    const actions = originRuleDoc ? tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
     const params: any = {
       rules: [{
         match: arrParma,
-        actions: tileAllFrequencyToArray(frequency),
+        actions: actions,
       }],
-      meta: {
-        sourceType: SubectiveScaleSourceType,
-        teamLocations: [
-          {
-            sid: projectSid,
-            ns: projectNsId,
-            role: projectRoleType,
-            tag: 'ownership',
-          },
-          {
-            sid: localStorage.getItem('xzl-web-doctor_sid'),
-            ns: localStorage.getItem('xzl-web-doctor_nsId'),
-            role: localStorage.getItem('xzl-web-doctor_roleId'),
-            tag: 'operator',
-          },
-        ],
-      },
-      // localRules: {
-      //   // chooseStartTime: chooseStartTime,
-      //   // choseConditions: choseConditions,
-      //   // choseScope: choseScope,
-      //   // frequency: frequency,
-      // },
+      meta: meta,
     };
+    if (originRuleDoc) {
+      params.id = originRuleDoc.rules[0].id;
+    }
 
-    addPlan({
-      ruleDoc: params,
-    });
+    // addPlan({
+    //   ruleDoc: params,
+    // });
   };
   //取消
   const handCancel = () => {
@@ -488,7 +503,9 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
   }));
 
   const des = choseScope.map(item => item.description);
-  console.log('================ choseScope.map', des);
+  console.log('================ choseScope.map choseConditions', JSON.stringify(choseScope));
+
+  console.log('================= des des chooseTreatmentDes', des);
 
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
@@ -525,13 +542,13 @@ function ScaleTemplate({ onCancel, addPlan, mode, plans, isDisabled, location }:
                 notFoundContent={fetching ? <Spin size="small" /> : null}
                 filterOption={false}
                 onSearch={fetchTreatment}
-                value={chooseTreatmentId}
+                value={chooseTreatmentDes}
                 onChange={(value: string) => {
                   changeStateByValue(value);
                 }}
               >
                 {treatment.map((item: { id: string; name: string }) => (
-                  <Option key={item.id} value={item.id} title={item.name}>
+                  <Option key={item.id} value={item.id + '_zsh_' + item.name} title={item.name}>
                     {item.name}
                   </Option>
                 ))}

@@ -81,7 +81,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
   return (
     <>
       {
-        item.chooseItem.description === '年龄' && (
+        item.chooseItem.name === 'basic.age' && (
           <div className={styles.item_value}>
             <span className={styles.label}>范围：</span>
             <InputNumber
@@ -108,7 +108,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
         )
       }
       {
-        item.chooseItem.description === '诊断' && (
+        item.chooseItem.name === 'diagnose.disease.uid' && (
           <div className={styles.item_value}>
             <span className={styles.label}>诊断：</span>
             <Select
@@ -144,7 +144,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
         )
       }
       {
-        item.chooseItem.description === '处理' && (
+        item.chooseItem.name === 'diagnose.treatment.uid' && (
           <div className={styles.item_value}>
             <span className={styles.label}>处理：</span>
             <Select

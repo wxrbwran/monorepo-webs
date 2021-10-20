@@ -8,11 +8,13 @@ import iconGroup from '@/assets/img/follow-table/icon_group.svg';
 // import { IGroup, IVal } from '@/utils/consts';
 // import { IGroup } from '@/utils/consts';
 // import { useSelector, useLocation } from 'umi';
-// import * as api from '@/services/api';
+import * as api from '@/services/api';
+import { useLocation } from 'umi';
 // import { IState } from 'typings/global';
-// import { message } from 'antd';
+import { message } from 'antd';
 import './index.scss';
-import { getChooseValuesKeyFromRules, getConditionDescriptionFromConditionss } from '../../pages/subjective_table/util';
+import { getChooseValuesKeyFromRules, getConditionDescriptionFromConditionss, IChooseValues, IRuleDoc } from '../../pages/subjective_table/util';
+import { isEmpty } from 'lodash';
 
 
 interface IProps {
@@ -20,42 +22,64 @@ interface IProps {
   scaleId?: string;
   addPlans?: (params: { plans: [] }) => void;
   // initPlans: any[];
-  initRule: { meta: {}, rules: any[] };
+  initRule: IRuleDoc;
   groupId?: string;
 }
 const ScalePlanDetailEcho: FC<IProps> = (props) => {
   const { scaleType, scaleId, initRule, addPlans, groupId } = props;
   // const projectSid = window.$storage.getItem('projectSid');
-  // const location = useLocation();
+  const location = useLocation();
   // const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   // const groupList = useSelector((state: IGroup) => state.project.objectiveGroup);
-  const [rule, setRules] = useState<any[]>([]);
+  const [ruleDoc, setRuleDoc] = useState({});
   // const [val, setVal] = useState<IVal>({});
-  // const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScale';
+  const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScaleDetail';
 
-  const [chooseValues, setChooseValues] = useState({ chooseStartTime: {}, choseConditions: {}, choseScope: [], frequency: { frequency: '', custom: [] } });
+  const [chooseValues, setChooseValues] = useState<IChooseValues>({ chooseStartTime: {}, choseConditions: [], choseScope: [], frequency: { custom: [] } });
   const [conditionDescription, setConditionDescription] = useState();
 
 
   useEffect(() => {
 
-
     if (initRule) {
-      setRules(initRule.rules);
-
-      const chooseValuesKey = getChooseValuesKeyFromRules(initRule.rules[0]);
-
-      const conditionDes = getConditionDescriptionFromConditionss(chooseValuesKey.choseConditions);
-      console.log('====================== useEffect(() conditionDes', JSON.stringify(conditionDes));
-      console.log('====================== useEffect(() chooseValues', JSON.stringify(chooseValues));
-      setChooseValues(chooseValues);
-      setConditionDescription(conditionDes);
+      setRuleDoc(initRule);
     }
 
   }, [initRule]);
+
+
+  useEffect(() => {
+
+    if (!isEmpty(ruleDoc)) {
+      const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc.rules[0].rules[0]);
+
+      const conditionDes = getConditionDescriptionFromConditionss(chooseValuesKey.choseConditions);
+      console.log('====================== useEffect(() conditionDes', JSON.stringify(conditionDes));
+      console.log('====================== useEffect(() chooseValues', JSON.stringify(chooseValuesKey));
+      setChooseValues(chooseValuesKey);
+      setConditionDescription(conditionDes);
+    }
+
+  }, [ruleDoc]);
+
   //更新计划
   const updatePlan = (params: { plans: [] }) => {
     if (scaleId) {
+
+      const id = location.query.id;
+      console.log('======================== updateScaleRule', params, id);
+      api.subjective.updateScaleRule(params.ruleDoc).then(() => {
+        console.log('======================== updateScaleRule', params);
+
+        api.subjective[apiName](id).then((res) => {
+
+          setRuleDoc(res.ruleDoc);
+        });
+      })
+        .catch((err: string) => {
+          message.error(err);
+        });
+
       // 从量表详情进入，更新计划调用接口
       // const id = location.query.id;
       // api.subjective.updateScalePlan({
@@ -90,8 +114,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   //   };
   // }, [groupList, plans]);
 
-  const des = chooseValues.choseScope.map(item => item.description).join(',');
-  console.log('================ choseScope.map', JSON.stringify(chooseValues.frequency));
+  const des = chooseValues ? chooseValues.choseScope.map(item => item.description).join(',') : '';
 
   return (
     <>
@@ -103,12 +126,22 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
           && !groupId && (
             <PlanModal title="修改发送计划"
               scaleId={scaleId}
-              plans={rule}
+              ruleDoc={ruleDoc}
+              chooseValues={chooseValues}
               updatePlan={updatePlan}
               infoIndex={0}
             >
               <FormOutlined />
             </PlanModal>
+            /* <PlanModal title="修改发送计划"
+            scaleId={scaleId}
+            plans={rule}
+            chooseValues={}
+            updatePlan={updatePlan}
+            infoIndex={0}
+            >
+            <FormOutlined />
+            </PlanModal> */
           )
         }
       </div>

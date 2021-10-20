@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import SendPlan from '@/components/SendPlan';
-import { IPlanInfos } from '@/utils/consts';
 import styles from './index.scss';
+import { IChooseValues, IRuleDoc } from '../../pages/subjective_table/util';
+import ScaleTemplate from '../ScaleTemplate';
 
 interface IProps {
+
   children: React.ReactElement;
   title: string;
   infoIndex: number;
   scaleId?: string;
-  plans?: IPlanInfos[];
+  // plans?: IPlanInfos[];
+  ruleDoc: IRuleDoc;
+  chooseValues: IChooseValues;
   updatePlan?: Function;
   question?: string;
   location?: {
@@ -17,34 +20,14 @@ interface IProps {
   }
 }
 
-function PlanModal({ children, title, infoIndex, plans, updatePlan, question, location }: IProps) {
+function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const addPlan = (params: object, index: number) => {
     setShowModal(false);
     if (updatePlan) updatePlan(params, index);
-
-    // const { pathname } = location;
-    // const id = location.query.id;
-    // if(pathname.includes('objective_table/detail')){
-    //   api.subjective.updateScalePlan({
-    //     plan: params.plans,
-    //     scaleId,
-    //     projectNsId,
-    //   }).then((res) => {
-    //     message.success('修改成功111')
-    //     dispatch({
-    //       type: 'project/fetchObjectiveScale',
-    //       payload: id,
-    //     });
-    //   })
-    //   .catch((err:string) => {
-    //     message.error(err);
-    //   });
-    // }else{
-    //   if(updatePlan)  updatePlan(params,index)
-    // }
   };
 
+  console.log('============================== PlanModal');
   return (
     <>
       <div style={{ display: 'inline' }} onClick={() => setShowModal(!showModal)}>
@@ -61,13 +44,15 @@ function PlanModal({ children, title, infoIndex, plans, updatePlan, question, lo
           footer={null}
           className={styles.send_plan}
         >
-          {/* <ScaleTemplate
+          <ScaleTemplate
             mode='Edit'
             onCancel={() => history.go(-1)}
             addPlan={addPlan}
-          /> */}
+            originRuleDoc={ruleDoc}
+            chooseValues={chooseValues}
+          />
 
-          <SendPlan
+          {/* <SendPlan
             mode='Edit'
             onCancel={() => setShowModal(false)}
             addPlan={addPlan}
@@ -75,7 +60,7 @@ function PlanModal({ children, title, infoIndex, plans, updatePlan, question, lo
             plans={plans}
             question={question}
             location={location}
-          />
+          /> */}
         </DragModal>
       )}
     </>

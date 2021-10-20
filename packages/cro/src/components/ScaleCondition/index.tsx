@@ -28,6 +28,7 @@ interface IItem {
 function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
 
 
+  console.log('===================== ScaleCondition values', JSON.stringify(values));
   const initItems: ICondition = {
     chooseItem: {
       name: '',
@@ -61,6 +62,10 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
   //     }
   //   }
   // }, [sendTime])
+
+  useEffect(() => {
+    setChoseConditions(values);
+  }, [values]);
 
   //年龄性别只能添加一次，之后状态禁用
   useEffect(() => {
@@ -126,7 +131,7 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
     setChoseConditions([...choseConditions]);
   };
 
-  console.log('========= isLeader  status  roleType', isLeader, status, roleType, disabled);
+  console.log('========= isLeader  status  roleType', JSON.stringify(choseConditions));
   // true 1002 dev.NeEd4M
 
   return (

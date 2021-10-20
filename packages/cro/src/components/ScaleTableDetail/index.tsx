@@ -18,7 +18,7 @@ function ScaleTableDetail({ scaleType }: IProps) {
   const location: ILocation = useLocation();
   const [groupId, setGroupId] = useState('');
   const [questions, setQuestions] = useState<IQuestions[]>([]);
-  const [ruleDoc, setRuleDoc] = useState({ rules: [] });
+  const [ruleDoc, setRuleDoc] = useState();
 
   const [scaleId, setScaleId] = useState('');
   const [fromName, setFromName] = useState('');
@@ -58,7 +58,7 @@ function ScaleTableDetail({ scaleType }: IProps) {
         <ScalePlanDetailEcho
           scaleType={scaleType}
           scaleId={scaleId}
-          initRule={ruleDoc.rules[0]}
+          initRule={ruleDoc}
         />
       </div>
     </div>
