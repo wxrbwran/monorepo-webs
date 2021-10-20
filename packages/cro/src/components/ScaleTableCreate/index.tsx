@@ -70,6 +70,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         setFormTit(res.name);
         setSubTit(res.subtitle);
         setQuestions(res.questions);
+        setOriginQue(res.questions);
         setPlans(res.plans);
         setEditIndex(res.questions.length - 1);
       });
