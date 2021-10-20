@@ -2,7 +2,7 @@ import React, {
   FC, useEffect, useState, useRef, useMemo,
 } from 'react';
 import { Button, Tabs, message } from 'antd';
-import { useDispatch } from 'umi';
+import { useDispatch } from 'react-redux';
 import { IStructuredDetailProps, ITopicQaItemApi } from 'typings/imgStructured';
 import * as api from '@/services/api';
 import StructuredDetailItem from '../StructuredDetailItem';
@@ -25,8 +25,8 @@ interface ITopicParams {
 const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const {
-    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll, templatePart,
-    openTime, jcdOriginIds,
+    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll,
+    jcdOriginIds,
   } = props;
   console.log('hydData232', hydData);
   console.log('jcdData', jcdData);
@@ -44,6 +44,8 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData));
   const [typeTabs, setTypeTabs] = useState <any[]>(fetchLevel1());
   const [activeType, setActiveType] = useState(fetchLevel1()[0].key);
+  // 1表示检查单接口或化验单接口其中一个保存成功，2表示两个都成功，此时关闭弹框
+  const [saveSuccess, setSaveSuccess] = useState(0);
 
   useEffect(() => {
     const tabs = fetchLevel1();
@@ -56,22 +58,15 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     if (isRefreshParent.current && handleRefresh) {
       handleRefresh();
     }
-  }, []);
-  // 获取打开的时间 到点击保存时间段内新增的模板
-  const fetchTimeSlotTemplate =  (to: number) => {
-    const params = { from: openTime,  to };
-    const data = api.image.fetchImageTopicTemplate(params);
-    return data;
-    // return tmpppppList.list;
-  };
-  const fetchAllTypes = () => {
-    const allTypes = typeTabs.map(item => {
-      return item?.meta?.title || item.outType;
+    setSaveSuccess(0);
+    dispatch({
+      type: 'structured/saveAddQa',
+      payload: {},
     });
-    return [...new Set(allTypes)];
-  };
-  const saveHydData = (params: any) => {
-    api.image.putImageImageIndexes(params).then(() => {
+  }, []);
+  useEffect(() => {
+    console.log('saveSuccess', saveSuccess);
+    if (saveSuccess === 2) {
       message.success('保存成功');
       // im进入的没有刷新函数，此时直接调用redux里的更新化验单/检查单接口
       if (handleRefresh) {
@@ -83,34 +78,52 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         });
       }
       handleClose();
-    }).catch((err) => {
+    }
+  }, [saveSuccess]);
+  const fetchAllTypes = () => {
+    const allTypes = typeTabs.map(item => {
+      return item?.meta?.title || item.outType;
+    });
+    return [...new Set(allTypes)];
+  };
+  const saveHydData = (params: any) => {
+    api.image.putImageImageIndexes(params).then(() => {
+      setSaveSuccess(prev => prev + 1);
+    }).catch((err: any) => {
       message.error(err?.result || '保存失败');
     });
   };
   const saveTemplate = (list: ITopicParams[]) => {
-    const params = { list };
-    console.log('tmpppp', params);
-    api.image.putImageTopicTemplate(params).then(() => {
-      console.log('添加问题模板成功');
-    }).catch(err => {
-      console.log('添加问题模板失败：', err);
-    });
+    if (!isEmpty(list)) {
+      const params = { list };
+      api.image.putImageTopicTemplate(params).then(() => {
+        console.log('添加问题模板成功');
+      }).catch((err: any) => {
+        console.log('添加问题模板失败：', err);
+      });
+    }
   };
   const saveJcdData = (params: any) => {
-    params.originIds = jcdOriginIds;
-    api.image.putImageJcdAndOther(params).then(() => {
-      console.log('添加检查单成功');
-    }).catch(err => {
-      console.log('添加检查单失败', err);
-    });
+    // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
+    if (!isEmpty(jcdOriginIds) ||  !isEmpty(params.list)) {
+      params.originIds = jcdOriginIds;
+      api.image.putImageJcdAndOther(params).then(() => {
+        console.log('添加检查单成功');
+        setSaveSuccess(prev => prev + 1);
+      }).catch((err: any) => {
+        console.log('添加检查单失败', err);
+      });
+    } else {
+      setSaveSuccess(prev => prev + 1);
+    }
   };
 
   const handleSaveClick = async () => {
     if (isViewOnly) {
       setisViewOnly(false);
     } else {
+      setSaveSuccess(0);
       const clickSaveTime = new Date().getTime();
-      const timeSlotTemp = await fetchTimeSlotTemplate(clickSaveTime);
       if (!isEmpty(typeTabs)) {
         const apiParams: CommonData = {
           imageId,
@@ -127,19 +140,18 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             apiParams.list = [...documentList];
             saveHydData(apiParams);
           }).catch((err) => {
-            console.log('err', err);
+            console.log('请完善化验单后提交！err', err);
             message.error('请完善化验单后提交！');
           });
         // 检查单、其它单据
-        console.log('clickSaveTime', clickSaveTime);
         Promise.all(Object.values(hydCallbackFns)
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
-            const { tempList, jcdList } = formatJcdSubmitData(list, timeSlotTemp, clickSaveTime);
+            const { tempList, jcdList } = formatJcdSubmitData(list, clickSaveTime);
             saveTemplate(tempList);
             saveJcdData(jcdList);
           }).catch((err) => {
-            console.log('err', err);
+            console.log('请完善检查单后提交！err', err);
             message.error('请完善检查单后提交！');
           });
       } else {
@@ -164,6 +176,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     }
     setActiveType(typeTabs?.[typeTabs.length - 1].key);
     setTypeTabs(cloneDeep(typeTabs));
+    console.log('typeTab1212s', typeTabs);
   };
 
   const fetInitData = (inx: number) => {
@@ -178,7 +191,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       const typeStart = itemTab?.outType || itemTab?.meta?.title;
       const baseProps = {
         outType: typeStart,
-        outTypeAndInx: itemTab.key,
+        tabKey: itemTab.key,
         imageId,
         isViewOnly,
       };
@@ -195,7 +208,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         case 'JCD':
           dom = <StructuredDetailTopic
             initData={fetInitData(inx)}
-            templatePart={templatePart}
             hydCallbackFns={hydCallbackFns}
             setHydCallbackFns={setHydCallbackFns}
             tempAll={tempAll}

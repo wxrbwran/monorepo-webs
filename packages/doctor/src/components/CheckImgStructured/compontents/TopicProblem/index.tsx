@@ -5,16 +5,22 @@ import { IQuestions } from 'typings/imgStructured';
 import TopicTitle from '../TopicTitle';
 import { EditOutlined } from '@ant-design/icons';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
-import { textData } from '../utils';
+import { textData, handleDelUserTopic, handleEditUserTopic, watchUserTopicChange } from '../utils';
+import uuid from 'react-uuid';
+import { useSelector } from 'react-redux';
+import { IState } from 'packages/doctor/typings/model';
 
 const { TextArea } = Input;
 interface IProps {
   changeCallbackFns: (params: ICallbackFn) => void;
   initData: IQuestions[];
   isViewOnly: boolean;
+  tempKey: string;
+  tabKey: string;
 }
 function TopicProblem(props: IProps) {
-  const { changeCallbackFns, initData, isViewOnly } = props;
+  const { changeCallbackFns, initData, isViewOnly, tempKey, tabKey } = props;
+  const userAddTopic = useSelector((state: IState) => state.structured);
   console.log('initDatatext', initData);
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
   const [editIndex, setEditIndex] = useState(-1);
@@ -38,6 +44,12 @@ function TopicProblem(props: IProps) {
       });
     }
   }, [questions]);
+  useEffect(() => {
+    const newQues = watchUserTopicChange(userAddTopic, questions, tempKey, tabKey, ['TEXT']);
+    if (newQues) {
+      setQuestions(cloneDeep(newQues));
+    }
+  }, [userAddTopic]);
   const changeEditIndex = () => {
     if (editIndex !== -1 && editIndex !== 999) {
       if (!isEmpty(questions)) {
@@ -46,6 +58,7 @@ function TopicProblem(props: IProps) {
         if (question.trim() === '' && isEmpty(answer)) {
           questions.splice(editIndex, 1);
           setQuestions(questions);
+          handleEditUserTopic(userAddTopic, cloneDeep(questions), tempKey, editIndex, tabKey); // 处理用户新加问题多tab共享 -add/edit
           setEditIndex(999);
         } else if (question.trim() === '') {
           message.error('请输入问题');
@@ -62,14 +75,16 @@ function TopicProblem(props: IProps) {
     };
   }, [editIndex]);
   const handleDelStem = (inx: number) => {
-    questions.splice(inx, 1);
-    setQuestions([...questions]);
+    console.log(inx);
+    // questions.splice(inx, 1);
+    // setQuestions([...questions]);
+    handleDelUserTopic(userAddTopic, questions, tempKey, editIndex ); // 处理用户新加问题多tab共享-del
     setEditIndex(999);
   };
   const handleAddTopic = (e: Event) => {
     e.stopPropagation();
     const inx = questions.length;
-    setQuestions([...questions, cloneDeep(textData)]);
+    setQuestions([...questions, { ...cloneDeep(textData), uuid: uuid() }]);
     setEditIndex(inx);
   };
   const handleClickItem = (e: Event, inx: number) => {
@@ -78,6 +93,7 @@ function TopicProblem(props: IProps) {
   };
   const handleSaveStem = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
     questions[quesIndex].question = ev.target.value;
+    handleEditUserTopic(userAddTopic, cloneDeep(questions), tempKey, editIndex, tabKey); // 处理用户新加问题多tab共享 -add/edit
     setQuestions([...questions]);
   };
   const handleSaveAnswer = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
