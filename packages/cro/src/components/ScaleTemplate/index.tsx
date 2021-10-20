@@ -217,7 +217,7 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
 };
 
 
-function ScaleTemplate({ onCancel, mode, isDisabled, location, originRuleDoc,
+function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRuleDoc,
   chooseValues }: IProps) {
   //起始发送时间默认值
   //发送频率默认值
@@ -443,10 +443,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, location, originRuleDoc,
       ],
     };
     if (originRuleDoc) { // 说明是修改
-      meta = originRuleDoc.rules[0].meta;
+      meta = originRuleDoc.meta;
     }
 
-    const actions = originRuleDoc ? tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
+    const actions = originRuleDoc ? tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
     const params: any = {
       rules: [{
         match: arrParma,
@@ -455,12 +455,12 @@ function ScaleTemplate({ onCancel, mode, isDisabled, location, originRuleDoc,
       meta: meta,
     };
     if (originRuleDoc) {
-      params.id = originRuleDoc.rules[0].id;
+      params.id = originRuleDoc.id;
     }
 
-    // addPlan({
-    //   ruleDoc: params,
-    // });
+    addPlan({
+      ruleDoc: params,
+    });
   };
   //取消
   const handCancel = () => {

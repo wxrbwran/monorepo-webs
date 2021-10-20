@@ -21,10 +21,6 @@ export interface ICondition {
 }
 
 export interface IRuleDoc {
-  rules: IRules[];
-}
-
-export interface IRules {
   meta: IMeta;
   rules: IRule[];
   id: string;

@@ -15,9 +15,19 @@ export default {
     return http.get(`research/scale/${groupId}`);
   },
   //更新计划-新
-  updateScaleRule(data?: any): Promise<any> {
-    return http.patch('rules', { data });
+  //删除主观量表里的计划-新
+  deleteScaleRule(data?: any): Promise<any> {
+    return http.delete(`/rules/${data}`);
   },
+  //新增主观量表里的计划-新
+  addScaleRule(data?: any): Promise<any> {
+    return http.post('rules', { data });
+  },
+  // 修改主观量表
+  patchSubjectiveScale(data?: any): Promise<any> {
+    return http.patch('research/scale', { data });
+  },
+
 
   // 创建主观量表
   postSubjectiveScale(data?: any): Promise<any> {
@@ -25,10 +35,7 @@ export default {
     return http.post('research/subjective/scale', { data });
   },
 
-  // 修改主观量表
-  patchSubjectiveScale(data?: any): Promise<any> {
-    return http.patch('research/scale', { data });
-  },
+
   // 创建CRF量表
   postCrfScale(data?: any): Promise<any> {
     return http.post('research/crf/scale', { data });

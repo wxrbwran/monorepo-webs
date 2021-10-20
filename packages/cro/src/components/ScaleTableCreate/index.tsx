@@ -14,6 +14,7 @@ import PlanModal from '@/components/PlanModal';
 import ScalePlanDetailEcho from '@/components/ScalePlanDetailEcho';
 
 import './index.scss';
+import { IRuleDoc, IRules } from '../../pages/subjective_table/util';
 // const { confirm } = Modal;
 
 interface IProps {
@@ -34,7 +35,9 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const [subTit, setSubTit] = useState('');
   const [questions, setQuestions] = useState<IQuestions[]>([]);
   const [editIndex, setEditIndex] = useState(0);
-  const [plans, setPlans] = useState([]);
+  // const [plans, setPlans] = useState([]);
+  const [ruleDoc, setRuleDoc] = useState<IRuleDoc>();
+
   const [loading, setLoading] = useState(false);
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const groupId = location.query.groupId;
@@ -64,12 +67,19 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     }
     // 编辑
     if (groupId) {
-      api.subjective.getSubjectiveScale(groupId).then((res: any) => {
+      api.subjective.getSubjectiveScaleDetail(groupId).then((res: any) => {
         setFormTit(res.name);
         setSubTit(res.subtitle);
         setQuestions(res.questions);
-        setPlans(res.plans);
+        // setPlans(res.plans);
         setEditIndex(res.questions.length - 1);
+
+        setRuleDoc(res.ruleDoc);
+
+        // setRuleDoc(res.ruleDoc);
+        // setScaleId(res.scaleId);
+        // setFromName(res.name);
+
       });
     }
   }, []);
@@ -127,7 +137,11 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         history.push(`/end_event/detail?name=${tit}`);
       });
     } else {
-      const apiName = groupId ? 'patchSubjectiveScale' : 'postSubjectiveScale';
+      // const apiName = groupId ? 'patchSubjectiveScale' : 'postSubjectiveScale';
+
+      const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
+
+      console.log('======================= groupId', apiName, groupId, JSON.stringify(params));
       api.subjective[apiName](params).then(() => {
         // message.success('修改成功');
         setLoading(false);
@@ -136,6 +150,8 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     }
   };
   const handleSubmit = () => {
+
+    // 周注释
     if (!formTit.trim()) {
       message.error('请输入表单标题!');
       return false;
@@ -185,7 +201,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     } else {
       const params = {
         name: formTit,
-        plans: [...plans],
+        // plans: [...plans],
         projectSid: window.$storage.getItem('projectSid'),
         type: scaleType,
         info: { questions },
@@ -204,8 +220,18 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       if (groupId) {
         params.scaleGroupId = groupId;
       }
-      console.log('params22', JSON.stringify(params));
-      if (plans.length === 0) {
+      console.log('params22 ----- 11', JSON.stringify(params));
+
+      console.log('params22 ----- 222', JSON.stringify(ruleDoc));
+      if (!groupId) { // 说明是新增
+
+        if (ruleDoc) {
+          params.ruleDoc = ruleDoc;
+          handleCreate(params, formTit);
+        } else {
+          const spanEl = document.getElementById('add_plan') as HTMLElement;
+          spanEl.click();
+        }
         // confirm({
         //   title: '您还没有配置发送计划，如果没有发送计划，量表将无法发送!',
         //   content: '确定完成吗？',
@@ -217,16 +243,19 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         //     console.log('Cancel');
         //   },
         // });
-        const spanEl = document.getElementById('add_plan') as HTMLElement;
-        spanEl.click();
       } else {
         handleCreate(params, formTit);
       }
     }
   };
-  const addPlans = (params: { plans: [] }) => {
-    const plan = params.plans;
-    setPlans([...plan]);
+  const addPlans = (params: { ruleDoc: IRules }) => {
+
+    console.log('===================== addPlans zhou', JSON.stringify(params));
+
+    setRuleDoc(params.ruleDoc);
+    // 周注释
+    // const plan = params.plans;
+    // setPlans([...plan]);
   };
 
   const handleSetEditIndex = (inx: number) => {
@@ -295,13 +324,19 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         )}
       </div>
       <div className="right">
-        {plans.length > 0 ? (
+        {ruleDoc ? (
           <ScalePlanDetailEcho
-            addPlans={addPlans}
             scaleType={scaleType}
-            initPlans={plans}
             groupId={groupId}
+            initRule={ruleDoc}
+            addPlans={addPlans}
           />
+          // <ScalePlanDetailEcho
+          //   addPlans={addPlans}
+          //   scaleType={scaleType}
+          //   initPlans={plans}
+          //   groupId={groupId}
+          // />
         ) : (
           !location.query.isTemp && (
             <div className="send-plan">

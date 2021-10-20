@@ -51,7 +51,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   useEffect(() => {
 
     if (!isEmpty(ruleDoc)) {
-      const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc.rules[0].rules[0]);
+      const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc.rules[0]);
 
       const conditionDes = getConditionDescriptionFromConditionss(chooseValuesKey.choseConditions);
       console.log('====================== useEffect(() conditionDes', JSON.stringify(conditionDes));
@@ -68,18 +68,22 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
       const id = location.query.id;
       console.log('======================== updateScaleRule', params, id);
-      api.subjective.updateScaleRule(params.ruleDoc).then(() => {
+
+      api.subjective.deleteScaleRule(params.ruleDoc.id).then(() => {
         console.log('======================== updateScaleRule', params);
 
-        api.subjective[apiName](id).then((res) => {
+        delete params.ruleDoc.id;
+        api.subjective.addScaleRule(params.ruleDoc).then(() => {
+          api.subjective[apiName](id).then((res) => {
 
-          setRuleDoc(res.ruleDoc);
+            setRuleDoc(res.ruleDoc);
+          });
         });
+
       })
         .catch((err: string) => {
           message.error(err);
         });
-
       // 从量表详情进入，更新计划调用接口
       // const id = location.query.id;
       // api.subjective.updateScalePlan({
@@ -99,6 +103,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
       //   });
     } else if (addPlans) {
       // 从量表创建进入，更新计划，把计划提交到父组件
+      console.log('============ 从量表创建进入，更新计划，把计划提交到父组件');
       addPlans(params);
     }
   };
