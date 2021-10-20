@@ -52,6 +52,11 @@ function QuestionChoice(props: IProps) {
       changeQues([...questions]);
     }
   };
+
+  const changeRequired = (e: any) => {
+    questions[qIndex].detail.required = e.target.checked;
+    changeQues([...questions]);
+  };
   return (
     <div
       className={`topic-item ${(editIndex === quesIndex) ? 'edit' : ''}`}
@@ -89,6 +94,7 @@ function QuestionChoice(props: IProps) {
       <div className="choice-tx">
         <div className="add-options" onClick={() => handleAddOptions(quesIndex)}>+添加选项</div>
         <div>
+          <Checkbox onChange={(e) => changeRequired(e)} checked={item.detail.required}>必填</Checkbox>
           <Radio.Group onChange={(e) => handleChangeTx(e, quesIndex)} defaultValue={item.type}>
             <Radio value="RADIO">单选</Radio>
             <Radio value='CHECKBOX'>多选</Radio>

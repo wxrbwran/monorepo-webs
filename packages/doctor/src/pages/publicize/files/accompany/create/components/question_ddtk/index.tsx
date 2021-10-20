@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import type { IQuestions } from '../../../../../const';
 import delIcon from '@/assets/img/suifang/delete-icon.svg';
+import DdtkModal from '../ddtk_modal';
 import styles from './index.scss';
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
 
 const { TextArea } = Input;
 interface IProps {
@@ -14,9 +15,12 @@ interface IProps {
   quesIndex: number;
   editIndex: number;
   item: IQuestions;
+  changeDdtkQues: (newQues: IQuestions[]) => void;
+  handSaveDdtkModify: () => void;
+  originQue: IQuestions[];
 }
 function questionGapFilling(props: IProps) {
-  const { questions, changeQues, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex } = props;
+  const { questions, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex, changeDdtkQues, handSaveDdtkModify } = props;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [cursorIndex, setCursorIndex] = useState();
 
@@ -36,7 +40,7 @@ function questionGapFilling(props: IProps) {
       newCont = `${oldStem.slice(0, cursorIndex)  }＿＿＿${  oldStem.slice(cursorIndex)}`;
     }
     questions[quesIndex].detail.stem =  newCont ;
-    changeQues([...questions]);
+    changeDdtkQues([...questions]);
   };
   const handleChangeVal = (ev: React.ChangeEventHandler<HTMLTextAreaElement>) => {
     // 内容变化时，保存光标位置
@@ -62,7 +66,19 @@ function questionGapFilling(props: IProps) {
           />
         </pre>
       </div>
-      <div className={styles.add_btn} onClick={handleAddSymbol}>+ 添加填空符</div>
+      <div className="flex justify-between">
+        <div className={styles.add_btn} onClick={handleAddSymbol}>+ 添加填空符</div>
+        <Button type="primary" ghost>
+          <DdtkModal
+            questions={questions}
+            changeQues={changeDdtkQues}
+            quesIndex={quesIndex}
+            item={item}
+            handSaveDdtkModify={handSaveDdtkModify}
+            originQue={props.originQue}
+          ><span>修改填空题型</span></DdtkModal>
+        </Button>
+      </div>
     </div>
   );
 }
