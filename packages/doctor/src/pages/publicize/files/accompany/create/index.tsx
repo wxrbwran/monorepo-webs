@@ -46,7 +46,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
     return [];
   };
   const [formTit, setFormTit] = useState(initSf.title || '');
-  const [questions, setQuestions] = useState<IQuestions[]>(initQuestion);
+  const [questions, setQuestions] = useState<IQuestions[]>(initQuestion); //修改题目填写题目时一直变化的questions
   const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]); // 修改完点击”确定“后的questions
   const [originQue, setOriginQue] = useState<IQuestions[]>(initQuestion); // 修改完但点了”取消“后questions
   const [editIndex, setEditIndex] = useState(0);

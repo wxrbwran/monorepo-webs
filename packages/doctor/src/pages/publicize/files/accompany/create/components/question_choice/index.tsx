@@ -54,7 +54,7 @@ function QuestionChoice(props: IProps) {
   };
 
   const changeRequired = (e: any) => {
-    questions[qIndex].detail.required = e.target.checked;
+    questions[quesIndex].detail.required = e.target.checked;
     changeQues([...questions]);
   };
   return (
