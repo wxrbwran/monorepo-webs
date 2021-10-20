@@ -61,7 +61,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     setSaveSuccess(0);
     dispatch({
       type: 'structured/saveAddQa',
-      payload: {},
+      payload: {
+        currEditData: {},
+      },
     });
   }, []);
   useEffect(() => {

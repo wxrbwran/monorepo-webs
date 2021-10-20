@@ -116,8 +116,7 @@ export interface ImageModelState {
   otherImg: IImageItem[];
 }
 export interface IUserAddTopicItem  {
-  actionType: string,
-  actionTabKey: string; // 表示最新编辑此问题的tabkey，当前tab渲染问题时要显示模板里的answer，其余tab均作清空处理
+  actionType: string, // add edit delete
   qaType: string,
   qa: IQuestions | IQuestions[],
   uuid: string;
@@ -127,6 +126,14 @@ export interface StructuredModelState {
   // editQa:  IQuestions[] | IQuestions[][],
   // actionType: string; // edit 编辑|添加  del删除
   [key: any]: IUserAddTopicItem[],
+  currEditData: {
+    uuid: string, // 当前编辑的问题的uuid
+    qaType: string, // 当前编辑的问题的类型question_type
+    actionType, // 当前操作： add  edit delete
+    tempKey: string, // 当前变化的是哪种分类
+    tabKey: string,
+
+  },
 }
 declare interface IState {
   auth: AuthModelState;
