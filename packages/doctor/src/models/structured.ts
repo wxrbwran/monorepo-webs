@@ -11,13 +11,7 @@ export interface StructrueModelType {
 }
 
 export const structuredState = {
-  // ct头部: [
-  //   {
-  //     actionType: 'edit',
-  //     qaType: 'RADIO',
-  //     qa: [],
-  //   },
-  // ],
+  currEditData: {},
 };
 
 const Model: StructrueModelType = {

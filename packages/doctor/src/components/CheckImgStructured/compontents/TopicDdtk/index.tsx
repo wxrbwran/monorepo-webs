@@ -80,6 +80,9 @@ function Ddtk(props: IProps) {
       }
     } else {
       message.error('请先输入问题再添加填空，请参考示例', 8);
+      message.config({
+        maxCount: 1,
+      });
       return [];
     }
 
@@ -112,13 +115,21 @@ function Ddtk(props: IProps) {
   };
 
   const changeSaveEdit = (e) => {
-    console.log('*****11', e.target);
     if (editIndex !== 999 && editIndex !== -1) {
+      console.log('*****11', e.target);
       if (!!editCont) {
         const editData = stringToArray(editCont);
         if (!isEmpty(editData)) {
           questions[editIndex] = editData;
-          handleEditUserTopic(userAddTopic, questions, tempKey, editIndex, tabKey, true); // 处理用户新加问题多tab共享 -add/edit
+          const params = {
+            userAddTopic,
+            questions,
+            tempKey,
+            editIndex,
+            tabKey,
+            questionsType: 'COMPLETION',
+          };
+          handleEditUserTopic(params); // 处理用户新加问题多tab共享 -add/edit
           setQuestions(questions);
           setEditCont('');
           setEditIndex(999);
@@ -126,9 +137,15 @@ function Ddtk(props: IProps) {
       } else {
         if (userAddTopic[tempKey] && questions[editIndex][0].question !== '') {
           // 添加过，又删除为空了
-          handleDelUserTopic(userAddTopic, questions, tempKey, editIndex, true );
+          const delParams = { userAddTopic, questions, tempKey, editIndex, questionsType: 'COMPLETION', tabKey };
+          handleDelUserTopic(delParams); // // 通知其它同类型tab删除此问题-del
+
+          questions.splice(editIndex, 1);
+          setQuestions([...questions]);
         } else {
           // 空的问题
+          const delParams = { userAddTopic, questions, tempKey, editIndex, questionsType: 'COMPLETION', tabKey };
+          handleDelUserTopic(delParams); // 处理用户新加问题多tab共享-del
           questions.pop();
           setQuestions(questions);
         }
@@ -177,11 +194,13 @@ function Ddtk(props: IProps) {
     setEditIndex(inx);
   };
   // 删除整道题
-  const handleDelQuestion = (e: Event) => {
+  const handleDelQuestion = (e: Event, inx: number) => {
     e.stopPropagation();
-    // questions.splice(inx, 1);
-    // setQuestions([...questions]);
-    handleDelUserTopic(userAddTopic, questions, tempKey, editIndex, true ); // 处理用户新加问题多tab共享-del
+    const delParams = { userAddTopic, questions, tempKey, editIndex, questionsType: 'COMPLETION', tabKey };
+    handleDelUserTopic(delParams); // 处理用户新加问题多tab共享-del
+
+    questions.splice(inx, 1);
+    setQuestions([...questions]);
     setEditCont('');
     setEditIndex(999);
   };

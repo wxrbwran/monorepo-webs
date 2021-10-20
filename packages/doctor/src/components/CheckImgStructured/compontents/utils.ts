@@ -111,35 +111,38 @@ const formatTemps = (temps: StructuredModelState, createdTime: number, imageId: 
   const addTempList: any[] = [];
   const sid = window.$storage.getItem('sid');
   Object.keys(temps).forEach((type: string) => {
-    const curTypeTemps: any = {
-      data: [],
-      meta: { createdTime, imageId, sid },
-    };
-    if (type === 'OTHER') {
-      curTypeTemps.meta.title = 'OTHER';
-    } else {
-      const { part, method } = JSON.parse(type);
-      curTypeTemps.meta = { ...curTypeTemps.meta, title: 'JCD', part, method };
-    }
-    let qaItem: IQuestions | IQuestions[] = {};
-    temps[type].forEach((groupItem: IUserAddTopicItem) => {
-      if (groupItem.qaType === 'COMPLETION') {
-        groupItem.qa.map((ddtkItem: IQuestions, inx: number) => {
-          qaItem = cloneDeep({ ...ddtkItem, sid });
-          delete qaItem.isAdd;
-          curTypeTemps.data.push( {
-            ...qaItem,
-            group: `1-0-${inx}`,
-            answer: qaItem.answer.map(() => null),
-          });
-        });
+    if (type !== 'currEditData') {
+      const curTypeTemps: any = {
+        data: [],
+        meta: { createdTime, imageId, sid },
+      };
+      if (type === 'OTHER') {
+        curTypeTemps.meta.title = 'OTHER';
       } else {
-        qaItem = cloneDeep({ ...groupItem.qa, answer: [], sid });
-        delete qaItem.isAdd;
-        curTypeTemps.data.push( qaItem );
+        const { part, method } = JSON.parse(type);
+        curTypeTemps.meta = { ...curTypeTemps.meta, title: 'JCD', part, method };
       }
-    });
-    addTempList.push(curTypeTemps);
+      let qaItem: IQuestions | IQuestions[] = {};
+      temps[type].filter((tempsItem: IUserAddTopicItem) => tempsItem?.actionType !== 'delete')
+        .forEach((groupItem: IUserAddTopicItem) => {
+          if (groupItem.qaType === 'COMPLETION') {
+            groupItem.qa.map((ddtkItem: IQuestions, inx: number) => {
+              qaItem = cloneDeep({ ...ddtkItem, sid });
+              delete qaItem.isAdd;
+              curTypeTemps.data.push( {
+                ...qaItem,
+                group: `1-0-${inx}`,
+                answer: qaItem.answer.map(() => null),
+              });
+            });
+          } else {
+            qaItem = cloneDeep({ ...groupItem.qa, answer: [], sid });
+            delete qaItem.isAdd;
+            curTypeTemps.data.push( qaItem );
+          }
+        });
+      addTempList.push(curTypeTemps);
+    }
   });
   return addTempList;
 };
@@ -160,47 +163,6 @@ export const formatJcdSubmitData = (jcdTabList: IJcdItem[], clickSaveTime: numbe
     newJcdTabItem.data = newJcdTabItem.data.flat(); //  flat用于将嵌套的数组“拉平”，变成一维数组
     list.push(newJcdTabItem);
   });
-
-  // const addTypeTemps: CommonData = {};
-  // 过滤出新添加的模板-s
-  // list.forEach(item => {
-  //   let type = item.meta.title === 'JCD' ? '' : item.meta.title; // 检查单type = 方法+部位
-  //   const currTabTemps = item.data.filter((qaItem) => {
-  //     const { isAdd, question, answer } =  qaItem;
-  //     if (item.meta.title === 'JCD' && qaItem.question_type === 'BASIC' && ['检查部位', '检查方法'].includes(question)) {
-  //       const ans = answer?.[0];
-  //       console.log('list555', list);
-  //       if (question === '检查方法') {
-  //         type = ans + type;
-  //         item.meta.method = ans;
-  //       } else {
-  //         type = type + ans;
-  //         item.meta.part = ans;
-  //       }
-  //     }
-  //     return isAdd;
-  //   }).map(qi => {
-  //     const rItem: CommonData = {
-  //       answer: qi.answer?.map(() => null),
-  //       question: qi.question,
-  //       group: qi.group,
-  //       sid: qi.sid,
-  //       question_type: qi.question_type,
-  //     };
-  //     if (qi.options) { rItem.options = qi.options; }
-  //     if (qi?.uuid) { rItem.uuid = qi.uuid; }
-  //     return rItem;
-  //   });
-
-  //   if (!isEmpty(currTabTemps)) {
-  //     if (addTypeTemps[type]) {
-  //       addTypeTemps[type].data = addTypeTemps[type].data.concat(currTabTemps);
-  //     } else {
-  //       addTypeTemps[type] = { data: currTabTemps, meta: item.meta };
-  //     }
-  //   }
-  // });
-  // 过滤出新添加的模板-e
   let addTypeTemps = [];
   const userAddTemps = getDvaApp()._store.getState().structured;
   if (!isEmpty(jcdTabList) && !isEmpty(userAddTemps)) {
@@ -213,7 +175,6 @@ export const formatJcdSubmitData = (jcdTabList: IJcdItem[], clickSaveTime: numbe
     tempList: addTypeTemps,
   };
 };
-
 
 // 回显时2：处理检查单类型数据回显---s  dimension维度，第几层。 递归根据group找到所在位置 api->ui
 export const findPosition = (item: ITopicQaItemApi, topicAll: any[], dimension: number) => {
@@ -275,23 +236,27 @@ export const formatTempDdtk = (tkTmpList: any[]) => {
 };
 
 // 处理用户新加问题多tab共享-s
-// 添加或编辑
-export const handleEditUserTopic = (
+interface IEditTopicProps {
   userAddTopic: StructuredModelState,
   questions: IQuestions,
   tempKey: string,
   editIndex: number,
   tabKey: string,
-  isDdtk?: boolean,
-) => {
+  questionsType?: string,
+}
+// 添加或编辑
+export const handleEditUserTopic = (props: IEditTopicProps) => {
+  const { userAddTopic, questions, tempKey, editIndex, tabKey, questionsType } = props;
+  const qadata = questionsType === 'COMPLETION' ? questions[editIndex][0] : questions[editIndex];
   const returnAddData = (actionType: string) => {
-    const qadata = isDdtk ? questions[editIndex][0] : questions[editIndex];
     return {
       actionType,
       qaType: qadata.question_type,
-      qa: questions[editIndex],
-      actionTabKey: tabKey, // 表示最后修改此问题的是哪个tab，此tab可以使用模板里存的答案，其余tab答案清空
       uuid: qadata.uuid,
+      // 模板里的问题答案清空
+      qa: questionsType === 'COMPLETION' ? questions[editIndex].map((item: IQuestions[] | IQuestions) => {
+        return { ...item, answer: item.answer.map(() => null) };
+      }) : { ...questions[editIndex], answer: [] },
     };
   };
   const newTopicData = cloneDeep(userAddTopic);
@@ -300,8 +265,7 @@ export const handleEditUserTopic = (
     let isHas = false;
     newTopicData[tempKey].forEach((item: any, inx: number) => {
       // 判断当前操作的问题id是否存在，如果存在则更新问题，否则添加。
-      const quesUuid = isDdtk ? questions[editIndex][0] : questions[editIndex];
-      if (item.uuid === quesUuid.uuid) {
+      if (item.uuid === qadata.uuid) {
         isHas = true;
         newTopicData[tempKey][inx] = returnAddData('edit');
       }
@@ -314,43 +278,72 @@ export const handleEditUserTopic = (
   }
   getDvaApp()._store.dispatch({
     type: 'structured/saveAddQa',
+    // 保存下，当前编辑的问题的id.监听到变了，并且问题列表里有id，那就做出更新处理，如果是当前tabkey，则保留 问题答案，否则清空答案
     payload: {
       ...newTopicData,
+      currEditData: {
+        uuid: qadata.uuid, // 当前编辑的问题的uuid
+        qaType: qadata.question_type, // 当前编辑的问题的类型
+        tempKey, // 当前变化的是哪种分类
+        tabKey,
+      },
     },
   });
 };
+interface IDelTopicProps {
+  userAddTopic: StructuredModelState,
+  questions: IQuestions,
+  tempKey: string,
+  editIndex: number,
+  questionsType?: string,
+  tabKey: string;
+}
 // 删除
-export const handleDelUserTopic = (userAddTopic: StructuredModelState, questions: IQuestions, tempKey: string, editIndex: number, isDdtk?: boolean) => {
+export const handleDelUserTopic = (props: IDelTopicProps) => {
+  const { userAddTopic, questions, tempKey, editIndex, questionsType, tabKey } = props;
   const newTopicData = cloneDeep(userAddTopic);
-  newTopicData[tempKey].forEach((item: any, index: number) => {
-    const quesUuid = isDdtk ?  questions[editIndex][0] :  questions[editIndex];
+  // 是否redux中存有些条问题：存在，表示用户添加过又清空问题的，不存在，表示用户添加新题后啥也没填，就点击其它区域的情况
+  // 返回此字段，组件根据返回值做判断是否操作question
+  let isHas = false;
+  const quesUuid = questionsType === 'COMPLETION' ?  questions[editIndex][0] :  questions[editIndex];
+  newTopicData[tempKey]?.forEach((item: any, index: number) => {
     if (item.uuid === quesUuid.uuid) {
       newTopicData[tempKey][index].actionType = 'delete';
+      isHas = true;
+      getDvaApp()._store.dispatch({
+        type: 'structured/saveAddQa',
+        payload: {
+          ...newTopicData,
+          currEditData: {
+            uuid: quesUuid.uuid, // 当前编辑的问题的uuid
+            qaType: quesUuid.question_type, // 当前编辑的问题的类型
+            tempKey, // 当前变化的是哪种分类
+            tabKey,
+          },
+        },
+      });
     }
   });
-  getDvaApp()._store.dispatch({
-    type: 'structured/saveAddQa',
-    payload: {
-      ...newTopicData,
-    },
-  });
+  return isHas;
 };
-// 监听到usertopic有变化，在tempkey相同的基本上根据userAddTopic与当前questions做对比，做增删改操作
+// 监听到usertopic有变化
 export const watchUserTopicChange = (
   userAddTopic: StructuredModelState,
   questions: IQuestions,
   tempKey: string,
   tabKey: string,
-  questionType: string[],
+  questionType: string[],  // ['RADIO', 'CHECKBOX'] ['COMPLETION'] ['TEXT']根据题型过滤
   isDdtk?: boolean,
 ) => {
+  const { tabKey: curTabKey, uuid: curUuid } = userAddTopic.currEditData || {};
 
-  if (!isEmpty(userAddTopic) && userAddTopic[tempKey]) {
-    const choiceTopic = userAddTopic[tempKey]
-    //questionType: ['RADIO', 'CHECKBOX'] ['COMPLETION'] ['TEXT']根据题型过滤
+  if (!isEmpty(userAddTopic) && userAddTopic[tempKey] && tabKey !== curTabKey) {
+    // 先过滤出模板中同类型的问题
+    const methodPartTopic = userAddTopic[tempKey]
       .filter((item: IUserAddTopicItem) => questionType.includes(item.qaType));
-    choiceTopic.forEach((uItem: IUserAddTopicItem) => {
-      let hasUuid = false; // 是否有uuid
+
+    methodPartTopic.forEach((uItem: IUserAddTopicItem) => {
+      let hasUuid = false; // 是否有uuid 有uuid，表示之前添加过了，此次为edit或del
       let currQaInx = 0; // 当前匹配到的qa项的索引
       // 匹配出当前项在ques是否存在，存在的话，把索引存起来
       questions.forEach((qaItem: any, inx: number) => {
@@ -361,28 +354,20 @@ export const watchUserTopicChange = (
         }
       });
 
-      // answer处理：当前tab: 显示模板里的answer，其余tab均作清空处理
-      const editQa = cloneDeep(uItem.qa);
-      if (uItem.actionTabKey !== tabKey) {
-        if (isDdtk) {
-          editQa.forEach((uqaItem: IQuestions) => {
-            uqaItem.answer = uqaItem.answer.map(() => null);
-          });
-        } else {
-          editQa.answer = [];
-        }
-      }
-      // 有uuid，表示之前添加过了，此次为edit或del
-      if (hasUuid) {
-        if (uItem.actionType === 'edit') {
-          questions[currQaInx] = editQa;
+      // 有uuid，表示之前添加过了(此次是edit或del)，并且当前编辑的uuid是此项的uuid
+      if (hasUuid && curUuid === uItem.uuid) {
+        if (uItem.actionType === 'edit' ) {
+          questions[currQaInx] = cloneDeep(uItem.qa);
         } else if (uItem.actionType === 'delete') {
           questions.splice(currQaInx, 1);
         }
-      } else if (uItem.actionType !== 'delete') {  // 当前questions列表没有此uuid两种情况 1新添加的，2已删除的.
-        questions.push(editQa);
+      }
+      // 当前questions列表没有此uuid两种情况 1新添加的，2已删除的. 3新增加的tab选项卡(init时所有temp里的问题都不存在)
+      if (!hasUuid && uItem.actionType !== 'delete') {
+        questions.push(cloneDeep(uItem.qa));
       }
     });
+    console.log('returnquestions', questions);
     return questions;
   } else {
     return false;

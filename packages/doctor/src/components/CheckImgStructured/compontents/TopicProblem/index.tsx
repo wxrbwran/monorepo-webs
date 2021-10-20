@@ -25,7 +25,6 @@ function TopicProblem(props: IProps) {
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
   const [editIndex, setEditIndex] = useState(-1);
   const handleSave = () => new Promise((resolve) => {
-    // resolve(fetchSubmitData(questions, 3));
     resolve({
       data: questions.filter(item => !!item.question.trim()),
       groupInx: 3,
@@ -46,6 +45,7 @@ function TopicProblem(props: IProps) {
   }, [questions]);
   useEffect(() => {
     const newQues = watchUserTopicChange(userAddTopic, questions, tempKey, tabKey, ['TEXT']);
+    console.log('newQues232', newQues);
     if (newQues) {
       setQuestions(cloneDeep(newQues));
     }
@@ -55,14 +55,23 @@ function TopicProblem(props: IProps) {
       if (!isEmpty(questions)) {
         const { question, answer } = questions[editIndex];
         // 如果问题和答案都是空，则删除此项
-        if (question.trim() === '' && isEmpty(answer)) {
+        if (question.trim() === '' && (isEmpty(answer) || !answer?.[0])) {
+          handleDelUserTopic({ userAddTopic, questions, tempKey, editIndex, tabKey }); // 通知其它同类型tab删除此问题-del
           questions.splice(editIndex, 1);
-          setQuestions(questions);
-          handleEditUserTopic(userAddTopic, cloneDeep(questions), tempKey, editIndex, tabKey); // 处理用户新加问题多tab共享 -add/edit
+          setQuestions([...questions]);
           setEditIndex(999);
         } else if (question.trim() === '') {
           message.error('请输入问题');
         } else {
+          const params = {
+            userAddTopic,
+            questions: [...questions],
+            tempKey,
+            editIndex,
+            tabKey,
+            questionsType: 'TEXT',
+          };
+          handleEditUserTopic(params);
           setEditIndex(999);
         }
       }
@@ -73,12 +82,12 @@ function TopicProblem(props: IProps) {
     return () => {
       window.removeEventListener('click', changeEditIndex);
     };
-  }, [editIndex]);
+  }, [editIndex, questions]);
   const handleDelStem = (inx: number) => {
-    console.log(inx);
-    // questions.splice(inx, 1);
-    // setQuestions([...questions]);
-    handleDelUserTopic(userAddTopic, questions, tempKey, editIndex ); // 处理用户新加问题多tab共享-del
+    handleDelUserTopic( { userAddTopic, questions, tempKey, editIndex, tabKey }); // 通知其它同类型tab删除此问题-del
+
+    questions.splice(inx, 1);
+    setQuestions([...questions]);
     setEditIndex(999);
   };
   const handleAddTopic = (e: Event) => {
@@ -93,14 +102,15 @@ function TopicProblem(props: IProps) {
   };
   const handleSaveStem = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
     questions[quesIndex].question = ev.target.value;
-    handleEditUserTopic(userAddTopic, cloneDeep(questions), tempKey, editIndex, tabKey); // 处理用户新加问题多tab共享 -add/edit
     setQuestions([...questions]);
   };
+  // 当前编辑的tab，问题和答案都要存到redux中，当渲染时，会根据如果问题的tabkey与当前一致，会采用redux中的答案
   const handleSaveAnswer = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
+    ev.stopPropagation();
     questions[quesIndex].answer = [ev.target.value];
     setQuestions([...questions]);
   };
-  console.log('最新question', questions);
+  console.log('最新question text', questions);
   let emptyAnsNum = 0;
   return (
     <div className="border p-15 my-15">

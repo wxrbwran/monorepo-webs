@@ -61,6 +61,7 @@ function TopicChoice(props: IProps) {
         questions[editIndex].options = addOptions;
         // 如果问题和选项都 空，则删除添加的此项
         if (isEmpty(addOptions) && !questions[editIndex].question.trim()) {
+          handleDelUserTopic({ userAddTopic, questions, tempKey, editIndex, tabKey }); // 通知其它同类型tab删除此问题-del
           questions.splice(editIndex, 1);
           setQuestions([...questions]);
           setEditIndex(999);
@@ -68,7 +69,15 @@ function TopicChoice(props: IProps) {
           message.error('请输入问题');
         } else {
           setQuestions([...questions]);
-          handleEditUserTopic(userAddTopic, cloneDeep(questions), tempKey, editIndex, tabKey); // 处理用户新加问题多tab共享 -add/edit
+          const params = {
+            userAddTopic,
+            questions: cloneDeep(questions),
+            tempKey,
+            editIndex,
+            tabKey,
+            questionsType: questions[editIndex].question_type,
+          };
+          handleEditUserTopic(params); // 处理用户新加问题多2tab共享 -add/edit
           setEditIndex(999);
         }
       }
@@ -86,10 +95,10 @@ function TopicChoice(props: IProps) {
     setQuestions([...questions]);
   };
   // 删除选项
-  const handleDelStem = () => {
-    handleDelUserTopic(userAddTopic, questions, tempKey, editIndex ); // 处理用户新加问题多tab共享-del
-    // questions.splice(inx, 1); //  废弃，由redux的userAddTopic控制
-    // setQuestions([...questions]);
+  const handleDelStem = (inx: number) => {
+    handleDelUserTopic({ userAddTopic, questions, tempKey, editIndex, tabKey }); // 通知其它同类型tab删除此问题-del
+    questions.splice(inx, 1);
+    setQuestions([...questions]);
     setEditIndex(999);
   };
   const handleDelOptions = (quesIndex: number, optionIndex: number, option?: string) => {
@@ -206,7 +215,7 @@ function TopicChoice(props: IProps) {
                       value={item.question}
                       onChange={(ev: any) => handleSaveStem(ev, quesIndex)}
                     />
-                    <img className="issue__delete" src={delIcon} onClick={handleDelStem} />
+                    <img className="issue__delete" src={delIcon} onClick={() => handleDelStem(quesIndex)} />
                   </div>
                   <div className="options-list">
                     {item.options!.map((option, oIndex) => {
