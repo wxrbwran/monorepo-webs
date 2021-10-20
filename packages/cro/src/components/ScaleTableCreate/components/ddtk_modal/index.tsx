@@ -130,7 +130,7 @@ const AddPatient = (props: IProps) => {
   };
 
   const questionContent = (record: any) => {
-    // console.log('record', record.key, questions);
+    // console.log('record', record.key);
     switch (questions[quesIndex].detail.content[record.key].type) {
       case 'date':
         return '由答题者选择年月日';
