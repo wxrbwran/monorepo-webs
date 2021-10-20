@@ -31,7 +31,6 @@ function ScaleTableDetail({ scaleType }: IProps) {
       if (!!id) {
         api.subjective[apiName](id).then((res) => {
 
-          console.log('================ api.subjective', JSON.stringify(res));
           setQuestions(res.questions);
           setRuleDoc(res.ruleDoc);
           setScaleId(res.scaleId);

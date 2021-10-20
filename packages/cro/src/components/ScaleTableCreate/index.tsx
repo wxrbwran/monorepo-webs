@@ -137,7 +137,6 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         history.push(`/end_event/detail?name=${tit}`);
       });
     } else {
-      // const apiName = groupId ? 'patchSubjectiveScale' : 'postSubjectiveScale';
 
       const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
 

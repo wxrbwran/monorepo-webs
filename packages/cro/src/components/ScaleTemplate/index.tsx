@@ -40,7 +40,6 @@ const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRole
       for (let j = 0; j < item.items.length; j++) {
         const subItem = item.items[j];
         subItem.operator = '=';
-        console.log('============ fillValueInStartTimeKey subItem', JSON.stringify(subItem));
         if (subItem.name === 'team.role') {
           subItem.value = projectRoleType;
         } else if (subItem.name === 'team.subject') {
@@ -92,8 +91,6 @@ const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatm
       if (subItem.name === 'diagnose.treatment.uid') {
         subItem.value = treatmentId;
         subItem.description = treatmentDes;
-
-        console.log('====================== subItem.description', JSON.stringify(subItem));
       }
     }
   }
@@ -212,7 +209,6 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
     arrary.push(action);
   }
 
-  console.log('============= array', JSON.stringify(arrary));
   return arrary;
 };
 
@@ -262,7 +258,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
 
   useEffect(() => {
     api.query.fetchFields('SUBJECTIVE_SCALE').then((res) => {
-      console.log('==============fetchFields==============  ', JSON.stringify(res));
       // 循环判断每个item是不是dynimic
       for (let i = 0; i < res.keys.length; i++) {
         if (res.keys[i].name == 'start') {
@@ -275,13 +270,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
             }
             return preState;
           });
-          console.log('===============', JSON.stringify(res.keys[i]));
 
         } else if (res.keys[i].name == 'scope') {
 
           for (let j = 0; j < res.keys[i].items.length; j++) {
             const element = res.keys[i].items[j];
-            console.log('==========', JSON.stringify(element));
             if (element.type == 'dynamic') {
               transformDynamicToStatic(element, window.$storage.getItem('projectSid'), projectRoleType, SubectiveScaleSourceType).then((items: any) => {
                 res.keys[i].items = items;
@@ -309,7 +302,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
   useEffect(() => {
 
     if (chooseValues) {
-      console.log('==================== chooseStartTime ,', JSON.stringify(chooseValues.choseConditions));
       setChooseStartTime(chooseValues.chooseStartTime);
       setChoseScope(chooseValues.choseScope);
       setChoseConditions(chooseValues.choseConditions);
@@ -324,7 +316,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
   //改变起始发送时间类型-zhou
   const handleChangeType = (value: string) => {
 
-    console.log('================= handleChangeType', value);
     const choseList = startTimeKey.items.filter(item => item.name === value);
     setChooseStartTime(choseList[0]);
   };
@@ -334,12 +325,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
 
     const choseList = scopeKey.items.filter(item => checkedValues.includes(item.description));
 
-    console.log('================= checkedValues choseList', checkedValues, choseList);
     setChoseScope(choseList);
   };
 
   const onUpdateChoseConditions = (conditions: any[]) => {
-    console.log('=================onUpdateChoseConditions', JSON.stringify(conditions));
     setChoseConditions(conditions);
   };
 
@@ -503,10 +492,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
   }));
 
   const des = choseScope.map(item => item.description);
-  console.log('================ choseScope.map choseConditions', JSON.stringify(choseScope));
-
-  console.log('================= des des chooseTreatmentDes', des);
-
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
       {isShowTextArea && (

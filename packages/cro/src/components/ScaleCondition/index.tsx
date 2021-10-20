@@ -28,7 +28,6 @@ interface IItem {
 function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
 
 
-  console.log('===================== ScaleCondition values', JSON.stringify(values));
   const initItems: ICondition = {
     chooseItem: {
       name: '',
@@ -99,14 +98,11 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
   //修改conditions
   const handleChange = (value: String, index: number) => {
 
-    console.log('========= handleChange', value, index);
 
     const choseList = conditions.items.filter(item => item.description == value);
     choseConditions[index].chooseItem = choseList[0];
     choseConditions[index].chooseValue = {};
     setChoseConditions([...choseConditions]);
-
-    console.log('========= handleChange', value, index);
   };
 
   //添加条件
@@ -119,7 +115,6 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
   // 删除条件
   const delCondition = (index: number) => {
 
-    console.log('===== delCondition', index);
     const newChoseConditions = choseConditions.filter((_item, vIndex) => vIndex !== index);
     setChoseConditions([...newChoseConditions]);
   };
@@ -127,11 +122,9 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
   //修改conditions
   const changeStateByValue = (item: any) => {
 
-    console.log('======= changeStateByValue changeStateByValue', JSON.stringify(item), JSON.stringify(choseConditions));
     setChoseConditions([...choseConditions]);
   };
 
-  console.log('========= isLeader  status  roleType', JSON.stringify(choseConditions));
   // true 1002 dev.NeEd4M
 
   return (

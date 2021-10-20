@@ -70,8 +70,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
           }
         })
           .catch((err) => {
-            console.log('============== fetchTreatment', JSON.stringify(err));
-            // message.error(err);
+            message.error(err);
           });
         setFetchStatus(false);
       }, 800);
@@ -88,7 +87,6 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               min={1}
               onChange={(value: number) => {
 
-                console.log('========= onChange min', value);
                 item.chooseValue.min = value;
                 changeStateByValue(item);
               }}
@@ -99,7 +97,6 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               min={1}
               onChange={(value: number) => {
 
-                console.log('========= onChange max', value);
                 item.chooseValue.max = value;
                 changeStateByValue(item);
               }} value={item.chooseValue.max}
@@ -122,7 +119,6 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               value={item.chooseValue.value}
               onChange={(value: string | number | undefined) => {
 
-                console.log('========= onChange min', value);
                 const vals = String(value).split('_zsh_');
                 item.chooseValue.value = vals[1];
                 item.chooseValue.id = vals[0];
@@ -158,7 +154,6 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               value={item.chooseValue.value}
               onChange={(value: string | number | undefined) => {
 
-                console.log('========= onChange min', value);
                 const vals = String(value).split('_zsh_');
                 item.chooseValue.value = vals[1];
                 item.chooseValue.id = vals[0];
@@ -187,7 +182,6 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
               style={{ width: 237, height: 40 }}
               onChange={(value: string | number) => {
 
-                console.log('========= onChange min', value);
                 item.chooseValue.value = value;
                 changeStateByValue(item);
               }}

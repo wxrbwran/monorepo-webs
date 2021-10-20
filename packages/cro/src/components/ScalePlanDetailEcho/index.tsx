@@ -31,7 +31,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   const location = useLocation();
   // const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   // const groupList = useSelector((state: IGroup) => state.project.objectiveGroup);
-  const [ruleDoc, setRuleDoc] = useState({});
+  const [ruleDoc, setRuleDoc] = useState<IRuleDoc>({});
   // const [val, setVal] = useState<IVal>({});
   const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScaleDetail';
 
@@ -51,6 +51,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   useEffect(() => {
 
     if (!isEmpty(ruleDoc)) {
+
       const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc.rules[0]);
 
       const conditionDes = getConditionDescriptionFromConditionss(chooseValuesKey.choseConditions);

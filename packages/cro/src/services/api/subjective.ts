@@ -23,26 +23,18 @@ export default {
   addScaleRule(data?: any): Promise<any> {
     return http.post('rules', { data });
   },
+
   // 修改主观量表
   patchSubjectiveScale(data?: any): Promise<any> {
     return http.patch('research/scale', { data });
   },
 
 
-  // 创建主观量表
-  postSubjectiveScale(data?: any): Promise<any> {
-    console.log('=============== postSubjectiveScale', JSON.stringify(data));
-    return http.post('research/subjective/scale', { data });
-  },
 
 
   // 创建CRF量表
   postCrfScale(data?: any): Promise<any> {
     return http.post('research/crf/scale', { data });
-  },
-  // 获取主观量表详情
-  getSubjectiveScale(groupId?: any): Promise<any> {
-    return http.get(`research/subjective/scale/${groupId}`);
   },
   // 获取CRF量表详情
   getCrfScale(groupId?: any): Promise<any> {

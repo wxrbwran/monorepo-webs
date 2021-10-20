@@ -27,7 +27,6 @@ function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues }: IProp
     if (updatePlan) updatePlan(params, index);
   };
 
-  console.log('============================== PlanModal');
   return (
     <>
       <div style={{ display: 'inline' }} onClick={() => setShowModal(!showModal)}>
