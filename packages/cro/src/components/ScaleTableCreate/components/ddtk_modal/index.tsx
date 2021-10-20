@@ -27,9 +27,6 @@ const AddPatient = (props: IProps) => {
   const [dataSource, setDataSource] = useState<IData[]>([]);
   const [currentStem, setCurrentStem] = useState('');
 
-  const [questionJson, setQuestionJson] = useState<any>([]);
-  const [typeArr, setTypeArr] = useState<string[]>([]);
-
   useEffect(() => {
     if (showModal){
       let stemArr = [];
@@ -86,38 +83,8 @@ const AddPatient = (props: IProps) => {
     },
   ];
 
-  const elements = (type: string) => {
-    switch (type) {
-      case 'date':
-        return {
-          name: '',
-          type: 'text',
-          inputType: 'date',
-          title: '',
-          isRequired: true,
-          startWithNewLine: false,
-          titleLocation: 'left',
-        };
-      default:
-        return {
-          name: '',
-          type: 'text',
-          title: '',
-          isRequired: true,
-          startWithNewLine: false,
-          titleLocation: 'left',
-        };
-    }
-  };
-
   const changeQuestionType = (value: string, record: any) => {
     console.log('record', record);
-    questionJson[record.key] = { ...elements(value) };
-    questionJson[record.key].name = `${record.name}:`;
-    questionJson[record.key].title = `${record.name}:`;
-    typeArr[record.key] = value;
-    setQuestionJson([...questionJson]);
-    setTypeArr([...typeArr]);
 
     if (['radio', 'checkbox'].includes(value)){
       questions[quesIndex].detail.content[record.key] = {

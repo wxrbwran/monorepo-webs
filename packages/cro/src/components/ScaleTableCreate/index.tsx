@@ -32,9 +32,9 @@ interface IProps {
 function ScaleTableCreate({ location, scaleType }: IProps) {
   const [formTit, setFormTit] = useState('');
   const [subTit, setSubTit] = useState('');
-  const [questions, setQuestions] = useState<IQuestions[]>([]);
-  const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]);
-  const [originQue, setOriginQue] = useState<IQuestions[]>([]);
+  const [questions, setQuestions] = useState<IQuestions[]>([]); //修改题目填写题目时一直变化的questions
+  const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]); // 修改完点击”确定“后的questions
+  const [originQue, setOriginQue] = useState<IQuestions[]>([]); // 修改完但点了”取消“后questions
   const [editIndex, setEditIndex] = useState(0);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
