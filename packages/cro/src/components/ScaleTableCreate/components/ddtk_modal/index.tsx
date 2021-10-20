@@ -15,24 +15,20 @@ interface IProps {
   item: IQuestions;
   children: React.ReactElement;
   handSaveDdtkModify: () => void;
+  originQue: IQuestions[];
 }
 interface IData {
   key: number;
   name: string;
 }
 const AddPatient = (props: IProps) => {
-  const { questions, changeQues, quesIndex, item, children, handSaveDdtkModify } = props;
-  console.log('questions', questions, item);
+  const { questions, changeQues, quesIndex, item, children, handSaveDdtkModify, originQue } = props;
   const [showModal, setShowModal] = useState(false);
   const [dataSource, setDataSource] = useState<IData[]>([]);
   const [currentStem, setCurrentStem] = useState('');
 
   const [questionJson, setQuestionJson] = useState<any>([]);
   const [typeArr, setTypeArr] = useState<string[]>([]);
-
-  useEffect(() => {
-    console.log('questionJson', questionJson);
-  }, [questionJson]);
 
   useEffect(() => {
     if (showModal){
@@ -46,6 +42,9 @@ const AddPatient = (props: IProps) => {
       }
       // 去掉最后一个元素
       stemArr.pop();
+      questions.forEach((_item, _idx) => {
+        questions[_idx] = JSON.parse(JSON.stringify(originQue))[_idx];
+      });
 
       stemArr.forEach((_item: string, idx: number) => {
         dataSource[idx] = {

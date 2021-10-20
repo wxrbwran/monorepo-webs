@@ -34,6 +34,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const [subTit, setSubTit] = useState('');
   const [questions, setQuestions] = useState<IQuestions[]>([]);
   const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]);
+  const [originQue, setOriginQue] = useState<IQuestions[]>([]);
   const [editIndex, setEditIndex] = useState(0);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -53,6 +54,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     setQuestions([...questions, addItem]);
     // 新添加的题目选项卡为编辑状态
     setEditIndex(currentEdit);
+    setOriginQue([...questions, addItem]);
   };
   useEffect(() => {
     if (location.query.tempId) {
@@ -94,6 +96,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   };
   const handSaveDdtkModify = () => {
     setQuestions([...alfterQuestions]);
+    setOriginQue([...alfterQuestions]);
   };
   const checkOptionsValue = (options: Ioptions[]) => {
     const validOptions: Ioptions[] = [];
@@ -292,6 +295,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
                   key={quesIndex}
                   changeDdtkQues={changeDdtkQues}
                   handSaveDdtkModify={handSaveDdtkModify}
+                  originQue={originQue}
                 />;
               }
             })}

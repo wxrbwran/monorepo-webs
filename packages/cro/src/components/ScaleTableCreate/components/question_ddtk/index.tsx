@@ -18,6 +18,7 @@ interface IProps {
   scaleType: string;
   changeDdtkQues: (newQues: IQuestions[]) => void;
   handSaveDdtkModify: () => void;
+  originQue: IQuestions[];
 }
 function questionGapFilling(props: IProps) {
   const { questions, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex, changeDdtkQues, handSaveDdtkModify } = props;
@@ -88,6 +89,7 @@ function questionGapFilling(props: IProps) {
             quesIndex={quesIndex}
             item={item}
             handSaveDdtkModify={handSaveDdtkModify}
+            originQue={props.originQue}
           ><span>修改填空题型</span></DdtkModal>
         </Button>
       </div>
