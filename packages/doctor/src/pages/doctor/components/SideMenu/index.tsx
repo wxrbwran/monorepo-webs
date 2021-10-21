@@ -100,7 +100,7 @@ function SideMenu({ location }: Iprops) {
           <span className="ml-8">结构数据展示</span>
         </a>
         <p>
-          <a href={'http://localhost:8000/#/publicize'} target="_blank" className={styles.structure} rel="noopener noreferrer">
+          <a href={config.PUBLICIZE} target="_blank" className={styles.structure} rel="noopener noreferrer">
             <ProfileOutlined />
             <span className="ml-8">患者宣教、患者随访</span>
           </a>
