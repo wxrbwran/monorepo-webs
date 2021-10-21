@@ -42,6 +42,7 @@ const AddPatient = (props: IProps) => {
       questions.forEach((_item, _idx) => {
         questions[_idx] = JSON.parse(JSON.stringify(originQue))[_idx];
       });
+
       if (!questions[quesIndex].detail.content){
         questions[quesIndex].detail = {
           ...questions[quesIndex].detail,
