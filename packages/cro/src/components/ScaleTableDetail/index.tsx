@@ -23,7 +23,7 @@ function ScaleTableDetail({ scaleType }: IProps) {
   const [scaleId, setScaleId] = useState('');
   const [fromName, setFromName] = useState('');
   const [subTit, setSubTit] = useState('');
-  const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScaleDetail';
+  const apiName = scaleType === 'CRF' ? 'getSubjectiveScaleDetail' : 'getSubjectiveScaleDetail';
   useEffect(() => {
     const id = location.query.id;
     if (groupId !== id) {

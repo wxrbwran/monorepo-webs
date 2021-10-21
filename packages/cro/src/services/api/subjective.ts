@@ -29,21 +29,11 @@ export default {
     return http.patch('research/scale', { data });
   },
 
-
-
-
-  // 创建CRF量表
-  postCrfScale(data?: any): Promise<any> {
-    return http.post('research/crf/scale', { data });
-  },
-  // 获取CRF量表详情
-  getCrfScale(groupId?: any): Promise<any> {
-    return http.get(`research/crf/scale/${groupId}`);
-  },
-  //添加客观量表
+  //添加客观量表-不改
   addObjectiveScale(data?: any): Promise<any> {
     return http.post('research/objective/scale', { data });
   },
+
   updateObjectiveScale(data?: any): Promise<any> {
     return http.patch('objective/scale', { data });
   },
@@ -60,10 +50,18 @@ export default {
   getPatientScale(data?: any): Promise<any> {
     return http.get('patient/scale', { data });
   },
+  // //更新计划
+  // updateScalePlan(data?: any): Promise<any> {
+  //   return http.patch('research/scale_plan', { data });
+  // },
+
   //更新计划
   updateScalePlan(data?: any): Promise<any> {
-    return http.patch('research/scale_plan', { data });
+    return http.patch('research/objective/rule', { data });
   },
+
+
+
   // 创建量表模板
   postScaleTemplate(data?: any): Promise<any> {
     return http.post('scale/template', { data });

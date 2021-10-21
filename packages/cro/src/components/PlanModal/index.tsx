@@ -10,6 +10,7 @@ interface IProps {
   title: string;
   infoIndex: number;
   scaleId?: string;
+  scaleType: string;
   // plans?: IPlanInfos[];
   ruleDoc: IRuleDoc;
   chooseValues: IChooseValues;
@@ -20,12 +21,13 @@ interface IProps {
   }
 }
 
-function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues }: IProps) {
+function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues, scaleType, question }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const addPlan = (params: object, index: number) => {
     setShowModal(false);
     if (updatePlan) updatePlan(params, index);
   };
+
 
   return (
     <>
@@ -49,6 +51,10 @@ function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues }: IProp
             addPlan={addPlan}
             originRuleDoc={ruleDoc}
             chooseValues={chooseValues}
+            scaleType={scaleType}
+            question={question}
+
+          // const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScaleDetail';
           />
 
           {/* <SendPlan

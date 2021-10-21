@@ -5,7 +5,7 @@ import { sendType, IPlanItem } from '@/utils/consts';
 import { useSelector } from 'umi';
 import ScaleCondition from '@/components/ScaleCondition';
 import styles from './index.scss';
-import { SubectiveScaleSourceType, transformDynamicToStatic } from '../../pages/query/util';
+import { CrfScaleSourceType, SubectiveScaleSourceType, transformDynamicToStatic, ObjectiveSourceType } from '../../pages/query/util';
 import { isEmpty, cloneDeep } from 'lodash';
 import { IChooseValues, ICondition, IItem, IRuleDoc } from '../../pages/subjective_table/util';
 
@@ -23,7 +23,8 @@ interface IProps {
   location?: {
     pathname: string,
   };
-
+  scaleType: string;
+  question?: string;
 
   plans?: IPlanItem[];
   isDisabled?: string;
@@ -213,8 +214,8 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
 };
 
 
-function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRuleDoc,
-  chooseValues }: IProps) {
+function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
+  chooseValues, scaleType, question }: IProps) {
   //起始发送时间默认值
   //发送频率默认值
   const initFrequency = {
@@ -236,15 +237,13 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
   const [fetching, setFetchStatus] = useState(false); //搜索是否显示loading
   const [treatment, setTreatment] = useState([]); //获取处理方式
 
-  const [remind, setRemind] = useState(''); //问题
-
-
-  const [frequency, setFrequency] = useState(initFrequency); //发送频率
   const [loading, setLoading] = useState(false);
+
 
 
   const { projectSid, projectRoleType, projectNsId } = useSelector((state: IState) => state.project.projDetail);
 
+  const [remind, setRemind] = useState(''); //问题
 
   const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
   const [chooseStartTime, setChooseStartTime] = useState<IItem>({}); //选中的起始发送时间子item
@@ -256,6 +255,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
   const [conditionKey, setConditionKey] = useState<IItem>({}); //选中的起始发送时间子item
   const [choseConditions, setChoseConditions] = useState<ICondition[]>([initItems]); //选中的起始发送时间子item
 
+  const [frequency, setFrequency] = useState(initFrequency); //发送频率
+
+  const sourceType = scaleType === 'CRF' ? CrfScaleSourceType : (scaleType === 'OBJECTIVE' ? ObjectiveSourceType : SubectiveScaleSourceType);
+
+  console.log('==================== sourceType', sourceType);
   useEffect(() => {
     api.query.fetchFields('SUBJECTIVE_SCALE').then((res) => {
       // 循环判断每个item是不是dynimic
@@ -276,7 +280,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
           for (let j = 0; j < res.keys[i].items.length; j++) {
             const element = res.keys[i].items[j];
             if (element.type == 'dynamic') {
-              transformDynamicToStatic(element, window.$storage.getItem('projectSid'), projectRoleType, SubectiveScaleSourceType).then((items: any) => {
+              transformDynamicToStatic(element, window.$storage.getItem('projectSid'), projectRoleType, sourceType).then((items: any) => {
                 res.keys[i].items = items;
                 fillValueInScopeKey(res.keys[i]);
                 setScopeKey(res.keys[i]);
@@ -311,6 +315,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
       setChooseTreatmentDes(des);
     }
   }, [originRuleDoc]);
+
+  useEffect(() => {
+
+    setRemind(question);
+  }, [question]);
 
 
   //改变起始发送时间类型-zhou
@@ -404,6 +413,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
     //   }
     // }
 
+    const set = Array.from(new Set(frequency.custom));
+    const filter = set.filter((item) => !!item);
+    frequency.custom = filter;
+    console.log('============= frequency 11', JSON.stringify(filter), JSON.stringify(frequency.custom));
+
     //去重、过滤空数据
     frequency.custom = Array.from(new Set(frequency.custom)).filter((item) => !!item);
     console.log('============= chooseStartTime', JSON.stringify(chooseStartTime));
@@ -415,7 +429,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
     setLoading(false);
     // 如果是添加
     let meta: any = {
-      sourceType: SubectiveScaleSourceType,
+      sourceType: sourceType,
       teamLocations: [
         {
           sid: projectSid,
@@ -449,6 +463,13 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
 
     addPlan({
       ruleDoc: params,
+      questions: remind,
+      chooseValues: {
+        chooseStartTime: chooseStartTime,
+        choseConditions: choseConditions,
+        choseScope: choseScope,
+        frequency: frequency,
+      },
     });
   };
   //取消
@@ -481,10 +502,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, location, originRu
   //存在空记录不可提交
   const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];
   const isEmptyGroup = choseScope.length == 0;
-  const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
+  // const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
+
+  const isShowTextArea = scaleType === 'OBJECTIVE';
   const disabled =
     isShowTextArea ? !remind || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
-
 
   const options = isEmpty(scopeKey) ? [] : scopeKey.items.map((item: IItem) => ({
     label: item.description,

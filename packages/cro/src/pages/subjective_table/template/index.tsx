@@ -36,6 +36,7 @@ function Template(props: IProps) {
 
   //利用模板创建量表成功
   const addPlan = (plans: IPlanInfos) => {
+
     const params = {
       name,
       ruleDoc: plans.ruleDoc,

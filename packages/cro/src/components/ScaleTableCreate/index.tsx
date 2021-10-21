@@ -57,7 +57,6 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     setEditIndex(currentEdit);
   };
   useEffect(() => {
-    console.log('==============  ScaleTableCreate useEffect');
     if (location.query.tempId) {
       //调接口反显
       api.subjective.scaleTemplateDtail(location.query.tempId).then((res: any) => {
@@ -130,7 +129,10 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const handleCreate = (params: any, tit: string) => {
     setLoading(true);
     if (scaleType === 'CRF') {
-      const apiName = groupId ? 'patchSubjectiveScale' : 'postCrfScale';
+      // const apiName = groupId ? 'patchSubjectiveScale' : 'postCrfScale';
+      const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
+
+      console.log('================ CRF', JSON.stringify(params));
       api.subjective[apiName](params).then(() => {
         // message.success('添加成功');
         setLoading(false);
@@ -140,7 +142,6 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
 
       const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
 
-      console.log('======================= groupId', apiName, groupId, JSON.stringify(params));
       api.subjective[apiName](params).then(() => {
         // message.success('修改成功');
         setLoading(false);
@@ -219,9 +220,6 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       if (groupId) {
         params.scaleGroupId = groupId;
       }
-      console.log('params22 ----- 11', JSON.stringify(params));
-
-      console.log('params22 ----- 222', JSON.stringify(ruleDoc));
       if (!groupId) { // 说明是新增
 
         if (ruleDoc) {
@@ -249,12 +247,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   };
   const addPlans = (params: { ruleDoc: IRules }) => {
 
-    console.log('===================== addPlans zhou', JSON.stringify(params));
-
     setRuleDoc(params.ruleDoc);
-    // 周注释
-    // const plan = params.plans;
-    // setPlans([...plan]);
   };
 
   const handleSetEditIndex = (inx: number) => {
@@ -330,18 +323,12 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
             initRule={ruleDoc}
             addPlans={addPlans}
           />
-          // <ScalePlanDetailEcho
-          //   addPlans={addPlans}
-          //   scaleType={scaleType}
-          //   initPlans={plans}
-          //   groupId={groupId}
-          // />
         ) : (
           !location.query.isTemp && (
             <div className="send-plan">
               <p>请添加随访计划，我们将按计划发送量表</p>
               <span>
-                <PlanModal title="添加发送计划" updatePlan={addPlans} infoIndex={0}>
+                <PlanModal title="添加发送计划" updatePlan={addPlans} infoIndex={0} scaleType={scaleType}>
                   <span id="add_plan">添加发送计划</span>
                 </PlanModal>
               </span>

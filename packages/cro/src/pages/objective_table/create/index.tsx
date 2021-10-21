@@ -5,10 +5,11 @@ import { LeftOutlined } from '@ant-design/icons';
 import { Input, Button, message } from 'antd';
 import { IPlanInfos } from '@/utils/consts';
 import create from '@/assets/img/create.svg';
-import SendPlan from '@/components/SendPlan';
 import HistoryPlan from '../components/history_plan';
 import styles from '../index.scss';
 import { IState } from 'typings/global';
+import ScaleTemplate from '@/components/ScaleTemplate';
+import { cloneDeep } from 'lodash';
 
 interface IProps {
   children: React.ReactElement[];
@@ -21,12 +22,12 @@ interface IProps {
 }
 function Create({ location }: IProps) {
   let initInfos: IPlanInfos = {
-    plans: [
-      {
-        type: '',
-        detail: {},
-      },
-    ],
+    // plans: [
+    //   {
+    //     type: '',
+    //     detail: {},
+    //   },
+    // ],
     questions: '',
     scaleId: '',
   };
@@ -55,6 +56,8 @@ function Create({ location }: IProps) {
   };
   //提醒计划的确定按钮回传回来的数据
   const addPlan = (params: IPlanInfos, index: number) => {
+
+    console.log('===================== addPlan', JSON.stringify(params), index);
     infos[index] = params;
     setInfos([...infos]);
     status[index] = 'lock';
@@ -72,16 +75,23 @@ function Create({ location }: IProps) {
       message.error('请输入提醒类型');
       setLoading(false);
     } else {
-      console.log(99999);
+      const ruleList = cloneDeep(infos);
+      for (let i = 0; i < ruleList.length; i++) {
+        delete ruleList[i].chooseValues;
+      }
+
+      const params = {
+        infos: ruleList,
+        name: formName,
+        type: 'OBJECTIVE',
+        projectSid,
+        projectName: window.$storage.getItem('projectName'),
+        projectNsId,
+      };
+      console.log('================= 客观检查添加参数', JSON.stringify(params));
+      console.log('================= 客观检查添加参数旧==', JSON.stringify(infos));
       api.subjective
-        .addObjectiveScale({
-          infos,
-          name: formName,
-          type: 'OBJECTIVE',
-          projectSid,
-          projectName: window.$storage.getItem('projectName'),
-          projectNsId,
-        })
+        .addObjectiveScale(params)
         .then(() => {
           message.success('添加成功');
           setLoading(false);
@@ -127,14 +137,25 @@ function Create({ location }: IProps) {
       </div>
       {infos.map((item, index) =>
         status[index] === 'open' ? (
-          <SendPlan
+          // <SendPlan
+          //   key={index}
+          //   mode="Add"
+          //   onCancel={() => handleCancel(index)}
+          //   infoIndex={index}
+          //   addPlan={addPlan}
+          //   plans={item.plans}
+          //   question={item.questions}
+          // />
+          <ScaleTemplate
             key={index}
             mode="Add"
             onCancel={() => handleCancel(index)}
             infoIndex={index}
-            addPlan={addPlan}
-            plans={item.plans}
+            addPlan={(params) => addPlan(params, index)}
+            scaleType={'OBJECTIVE'}
             question={item.questions}
+            originRuleDoc={item.ruleDoc}
+            chooseValues={item.chooseValues}
           />
         ) : (
           <HistoryPlan

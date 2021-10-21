@@ -5,7 +5,7 @@ import * as api from '@/services/api';
 export const ResearchSourceType = '4';
 export const SubectiveScaleSourceType = '5';
 export const CrfScaleSourceType = '6';
-export const SubectiveSourceType = '7';
+export const ObjectiveSourceType = '7';
 
 // 将动态的item请求接口转换成真实的静态items，(请求自己的真实内容)
 export const transformDynamicToStatic = (item: { type: string, name: string, assign: { value: string } }, projectSid: string, projectRoleType: string, sourceType: string, value?: string) => {

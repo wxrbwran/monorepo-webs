@@ -55,8 +55,6 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
       const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc.rules[0]);
 
       const conditionDes = getConditionDescriptionFromConditionss(chooseValuesKey.choseConditions);
-      console.log('====================== useEffect(() conditionDes', JSON.stringify(conditionDes));
-      console.log('====================== useEffect(() chooseValues', JSON.stringify(chooseValuesKey));
       setChooseValues(chooseValuesKey);
       setConditionDescription(conditionDes);
     }
@@ -68,10 +66,8 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
     if (scaleId) {
 
       const id = location.query.id;
-      console.log('======================== updateScaleRule', params, id);
 
       api.subjective.deleteScaleRule(params.ruleDoc.id).then(() => {
-        console.log('======================== updateScaleRule', params);
 
         delete params.ruleDoc.id;
         api.subjective.addScaleRule(params.ruleDoc).then(() => {
@@ -136,6 +132,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
               chooseValues={chooseValues}
               updatePlan={updatePlan}
               infoIndex={0}
+              scaleType={scaleType}
             >
               <FormOutlined />
             </PlanModal>
