@@ -97,6 +97,33 @@ table {
 
 body {
   min-width: 1200px;
+  // button按钮样式
+  .common__btn {
+    text-align: center;
+    button {
+      margin-right: 40px;
+      min-width: 130px;
+      height: 42px;
+      font-size: 16px;
+      border: 1px solid #007ADA;
+      color: #007ADA;
+
+      text-align: center;
+      border-radius: 2px;
+
+      &.finish {
+        margin-right: 0;
+        background-color: #007ADA;
+        color: #fff;
+        padding: 10px;
+        border-radius: 2px;
+      }
+    }
+
+    .ant-btn-primary {
+      color: #fff;
+    }
+  }
 }
 
 .pointer {

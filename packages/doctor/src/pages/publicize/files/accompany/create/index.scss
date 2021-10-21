@@ -196,8 +196,11 @@
       @include flex-lay(row, nowrap, space-between);
       margin-top: 10px;
       display: none;
-      .ant-radio-wrapper {
+      .ant-checkbox-wrapper span, .ant-radio-wrapper {
         font-size: 14px;
+      }
+      .ant-checkbox-wrapper {
+        margin-right: 10px;
       }
     }
     .options-list {
@@ -242,6 +245,13 @@
       textarea.ant-input {
         resize: none;
         height: 99px;
+      }
+    }
+    .text-checkbox {
+      text-align: right;
+      margin: 10px 15px 0 0;
+      .ant-checkbox-wrapper span {
+        font-size: 14px;
       }
     }
   }

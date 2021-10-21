@@ -1,7 +1,7 @@
 import React from 'react';
 import type { IQuestions } from '../../../../../const';
 import delIcon from '@/assets/img/suifang/delete-icon.svg';
-import { Input } from 'antd';
+import { Input, Checkbox } from 'antd';
 
 interface IProps {
   questions: IQuestions[];
@@ -15,7 +15,13 @@ interface IProps {
 }
 const { TextArea } = Input;
 function QuestionText(props: IProps) {
-  const { quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex } = props;
+  const { questions, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex, changeQues } = props;
+
+  const changeRequired = (e: any) => {
+    questions[quesIndex].detail.required = e.target.checked;
+    changeQues([...questions]);
+  };
+
   return (
     <div
       className={`topic-item ${(editIndex === quesIndex) ? 'edit' : ''}`}
@@ -39,6 +45,9 @@ function QuestionText(props: IProps) {
         <TextArea
           placeholder="请输入"
         />
+      </div>
+      <div className="text-checkbox">
+        <Checkbox checked={item.detail.required} onChange={(e) => changeRequired(e)}>必填</Checkbox>
       </div>
     </div>
   );
