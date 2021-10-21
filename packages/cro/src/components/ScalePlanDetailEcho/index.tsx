@@ -33,7 +33,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   // const groupList = useSelector((state: IGroup) => state.project.objectiveGroup);
   const [ruleDoc, setRuleDoc] = useState<IRuleDoc>({});
   // const [val, setVal] = useState<IVal>({});
-  const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScaleDetail';
+  const apiName = scaleType === 'CRF' ? 'getSubjectiveScaleDetail' : 'getSubjectiveScaleDetail';
 
   const [chooseValues, setChooseValues] = useState<IChooseValues>({ chooseStartTime: {}, choseConditions: [], choseScope: [], frequency: { custom: [] } });
   const [conditionDescription, setConditionDescription] = useState();
@@ -71,6 +71,8 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
         delete params.ruleDoc.id;
         api.subjective.addScaleRule(params.ruleDoc).then(() => {
+
+          console.log('================== apiName', apiName);
           api.subjective[apiName](id).then((res) => {
 
             setRuleDoc(res.ruleDoc);

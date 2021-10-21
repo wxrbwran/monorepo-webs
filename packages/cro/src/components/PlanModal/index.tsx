@@ -54,7 +54,6 @@ function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues, scaleTy
             scaleType={scaleType}
             question={question}
 
-          // const apiName = scaleType === 'CRF' ? 'getCrfScale' : 'getSubjectiveScaleDetail';
           />
 
           {/* <SendPlan
