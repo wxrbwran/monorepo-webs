@@ -15,8 +15,8 @@ interface IProps {
   editIndex: number;
   item: IQuestions;
 }
-function question_choice(props: IProps) {
-  const {questions, changeQues, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex} = props;
+function QuestionChoice(props: IProps) {
+  const { questions, changeQues, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex } = props;
   // 删除选项
   const handleDelOptions = (qIndex: number, oIndex: number) => {
     const newOptions = questions[qIndex].detail.options.filter((quesItem: any, index: number) => {
@@ -25,23 +25,23 @@ function question_choice(props: IProps) {
     });
     questions[quesIndex].detail.options = newOptions;
     changeQues([...questions]);
-  }
+  };
   // 添加选项 index表示第几题
   const handleAddOptions = (qIndex: number) => {
     // const newOptions = questions;
     questions[qIndex].detail.options.push({
-      "content": "",
-      "checked": false
-    })
+      'content': '',
+      'checked': false,
+    });
     changeQues([...questions]);
-  }
+  };
   // 修改题型
   const handleChangeTx = (e: RadioChangeEvent, qIndex: number) => {
-    console.log(33, e.target.value)
-    console.log(questions[qIndex])
+    console.log(33, e.target.value);
+    console.log(questions[qIndex]);
     questions[qIndex].type = e.target.value;
     changeQues([...questions]);
-  }
+  };
 
 
   // 保存输入的选项   保存后不可再编辑，只能删除
@@ -51,7 +51,12 @@ function question_choice(props: IProps) {
       questions[qIndex].detail.options[oIndex].content = val;
       changeQues([...questions]);
     }
-  }
+  };
+
+  const changeRequired = (e: any) => {
+    questions[quesIndex].detail.required = e.target.checked;
+    changeQues([...questions]);
+  };
   return (
     <div
       className={`topic-item ${(editIndex === quesIndex) ? 'edit' : ''}`}
@@ -60,7 +65,7 @@ function question_choice(props: IProps) {
     >
       <div className={['issue', item.detail.stem ? '' : 'input-empty', 'pl0'].join(' ')}>
         <Input
-          placeholder={`请输入问题`}
+          placeholder={'请输入问题'}
           value={item.detail.stem}
           onChange={(ev) => handleSaveStem(ev, quesIndex)}
         />
@@ -74,21 +79,22 @@ function question_choice(props: IProps) {
                 <Checkbox>{option.content}</Checkbox>
                 <CloseOutlined onClick={() => handleDelOptions(quesIndex, oIndex)} />
               </div>
-            )
+            );
           }
-            return (
+          return (
               <div className="item input-empty" key={oIndex}>
                 <BorderOutlined />
                 <Input placeholder={`选项${oIndex + 1}`} onBlur={(ev) => handleSaveOption(ev, quesIndex, oIndex)} />
                 <CloseOutlined onClick={() => handleDelOptions(quesIndex, oIndex)} />
               </div>
-            )
+          );
 
         })}
       </div>
       <div className="choice-tx">
         <div className="add-options" onClick={() => handleAddOptions(quesIndex)}>+添加选项</div>
         <div>
+          <Checkbox onChange={(e) => changeRequired(e)} checked={item.detail.required}>必填</Checkbox>
           <Radio.Group onChange={(e) => handleChangeTx(e, quesIndex)} defaultValue={item.type}>
             <Radio value="RADIO">单选</Radio>
             <Radio value='CHECKBOX'>多选</Radio>
@@ -96,7 +102,7 @@ function question_choice(props: IProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default question_choice;
+export default QuestionChoice;

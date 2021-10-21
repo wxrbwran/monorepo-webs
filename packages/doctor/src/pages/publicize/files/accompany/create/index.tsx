@@ -46,7 +46,9 @@ function SuifangCreate({ location, scaleType }: IProps) {
     return [];
   };
   const [formTit, setFormTit] = useState(initSf.title || '');
-  const [questions, setQuestions] = useState<IQuestions[]>(initQuestion);
+  const [questions, setQuestions] = useState<IQuestions[]>(initQuestion); //修改题目填写题目时一直变化的questions
+  const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]); // 修改完点击”确定“后的questions
+  const [originQue, setOriginQue] = useState<IQuestions[]>(initQuestion); // 修改完但点了”取消“后questions
   const [editIndex, setEditIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [subTit, setSubTit] = useState(initSf.subTitle || '');
@@ -70,6 +72,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
     setQuestions([...questions, addItem]);
     // 新添加的题目选项卡为编辑状态
     setEditIndex(currentEdit);
+    setOriginQue([...questions, addItem]);
   };
   // 保存输入的问题
   const handleSaveStem = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
@@ -86,6 +89,13 @@ function SuifangCreate({ location, scaleType }: IProps) {
   };
   const changeQues = (newQues: any) => {
     setQuestions([...newQues]);
+  };
+  const changeDdtkQues = (newQues: any) => {
+    setAlfterQuestions([...newQues]);
+  };
+  const handSaveDdtkModify = () => {
+    setQuestions([...alfterQuestions]);
+    setOriginQue([...alfterQuestions]);
   };
 
   // 创建量表
@@ -238,7 +248,13 @@ function SuifangCreate({ location, scaleType }: IProps) {
                 return <QuestionText {...props} key={item.type} />;
               }
               if (item.type === 'COMPLETION') {
-                return <QuestionDdtk {...props} key={item.type} />;
+                return <QuestionDdtk
+                  {...props}
+                  key={quesIndex}
+                  changeDdtkQues={changeDdtkQues}
+                  handSaveDdtkModify={handSaveDdtkModify}
+                  originQue={originQue}
+                />;
               }
               return true;
             })}

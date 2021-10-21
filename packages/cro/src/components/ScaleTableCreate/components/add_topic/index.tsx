@@ -43,7 +43,8 @@ function AddTopic(props: IProps) {
       img: wdt,
     },
   ];
-  if (scaleType === 'CRF') {
+  console.log('scaleType', scaleType);
+  if (['SUBJECTIVE', 'CRF'].includes(scaleType)) {
     questionType.push({
       type: 'COMPLETION',
       name: '多段填空',
