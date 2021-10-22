@@ -5,9 +5,8 @@ import * as api from '@/services/api';
 import ImgWrap from './compontents/ImgWrap';
 import StructuredDetail from './compontents/StructuredDetail';
 import { ExclamationCircleFilled } from '@ant-design/icons';
-import { isEmpty } from 'lodash';
-import uuid from 'react-uuid';
 import { history } from 'umi';
+import uuid from 'react-uuid';
 
 interface IProps {
   handleRefresh?: () => void;
@@ -17,38 +16,32 @@ interface ITempItem {
   meta: IMeta;
 }
 const CheckImgStructured: FC<IProps> = (props) => {
-  const { handleRefresh } = props;
   const { imageId } = history.location.query;
+  const { handleRefresh } = props;
   const [hydData, setHydData] = useState<IApiDocumentList[]>([]);
   const [jcdData, setJcdData] = useState<ITopicItemApi[]>([]);
   const [imgData, setImgData] = useState<IImgStructuredApiData>();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [openTime, setOpenTime] = useState(new Date().getTime()); // 打开图片结构化的时间
-  // 编辑：后增加的模板
-  const [templatePart, setTemplatePart] = useState<ITmpList>({});
   // 全部模板 from ： 0
   const [tempAll, settempAll] = useState<ITmpList>({});
   const patientSid = window.$storage.getItem('patientSid');
 
-  // 获取问题模板: 取上面接口返回的第一个list里的createtime  ，list为空表示是初次， form传0
-  const fetchTemplate = (from: number, to: number) => {
-    const params = { from, to: to || openTime };
-    api.image.fetchImageTopicTemplate(params).then(res => {
-      const tempData: ITmpList = {};
-      res.list.forEach((item: ITempItem) => {
-        const type = item.meta.title;
-        if (!tempData[type]) {
-          tempData[type] = [];
-        }
-        tempData[type] = tempData[type].concat(item.data);
-      });
-      if (from) {
-        setTemplatePart(tempData);
-        setIsLoaded(true);
-      } else {
-        settempAll(tempData);
+  const formatTemplate = (res) => {
+    const tempData: ITmpList = {};
+    res.list.forEach((item: ITempItem) => {
+      const { method, part, title } = item.meta;
+      const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
+      if (!tempData[type]) {
+        tempData[type] = [];
       }
+      tempData[type] = tempData[type].concat(item.data);
     });
+    settempAll(tempData);
+  };
+  const fetchTemplate = async (from: number, to: number) => {
+    const params = { from, to };
+    const data = api.image.fetchImageTopicTemplate(params);
+    return data;
   };
   const fetchImageJcds = async () => {
     const params = { meta: { imageId,  sid: patientSid } };
@@ -65,45 +58,35 @@ const CheckImgStructured: FC<IProps> = (props) => {
     const data = await api.image.fetchImageIndexes(params);
     return data;
   };
-  const fetchData = (id: string, toTime: number) => {
-    Promise.all([fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
-      const [hData, jData] = res;
+  const fetchData = (oTime: number) => {
+    Promise.all([fetchTemplate(0, oTime), fetchImageIndexes(), fetchImageJcds()]).then((res: any[]) => {
+      const [tempData, hData, jData ] = res;
+      formatTemplate(tempData);
       setHydData(hData.list.map(item => {
         return ({ ...item, key: uuid() });
       }));
-      // setJcdData(jData.list);
       setJcdData(jData.list.map(item => {
         return ({ ...item, key: uuid() });
       }));
-      setImgData({ ...hData, imageId: id });
-      if (!isEmpty(jData.list)) {
-        fetchTemplate(jData.list[0].meta.createdTime, toTime);
-      } else {
-        setIsLoaded(true);
-      }
+      setImgData({ ...hData, imageId });
+      setIsLoaded(true);
     });
   };
 
   useEffect(() => {
     const oTime = new Date().getTime();
-    setOpenTime(oTime);
-    fetchTemplate(0, oTime);
-    fetchData(imageId, oTime);
+    fetchData(oTime);
     return () => {
       setHydData([]);
       setJcdData([]);
-      setTemplatePart({});
       setIsLoaded(false);
-      setOpenTime(0);
     };
   }, []);
-  // console.log('templatePart223', templatePart);
-  // params.originIds = jcdData.map(item => item.meta.id);
   return (
     <div>
       {
         imgData ? (
-          <div className="flex justify-start items-start" style={{ minWidth: 1200 }}>
+          <div className="flex justify-start items-start mt-10" style={{ minWidth: 1200 }}>
             <ImgWrap
               imageUrl={imgData.url}
               handleClose={() => history.goBack()}
@@ -119,14 +102,10 @@ const CheckImgStructured: FC<IProps> = (props) => {
                   imageId={imgData?.imageId}
                   handleRefresh={handleRefresh}
                   handleClose={() => history.goBack()}
-                  templatePart={templatePart}
                   tempAll={tempAll}
-                  openTime={openTime}
-                  // openTime={1632463461030}
                 />
               )
             }
-
           </div>
         ) : (
           <div className="h-500 w-full flex items-center justify-center"><Spin size="large" /></div>
@@ -134,7 +113,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
       }
       {
         imgData && (
-          <div className="pl-18 flex -mt-10">
+          <div className="pl-18 flex">
             <ExclamationCircleFilled style={{ color: '#FFCA4D', paddingTop: '4px' }} />
             <div className="ml-3">
               <p>1.如果图片内含多张单据，点击顶部选择图片类型</p>
