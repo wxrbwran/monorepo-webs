@@ -95,7 +95,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
           sid: patientSid,
           wcId: window.$storage.getItem('wcId'),
         }).then((res: { id: string }) => {
-          fetchData(res.id);
+          fetchData(res.id, oTime);
         });
       } else {
         message.error('获取图片信息失败');
