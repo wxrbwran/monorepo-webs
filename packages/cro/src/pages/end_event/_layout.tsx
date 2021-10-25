@@ -14,6 +14,7 @@ interface IProps {
       id: string;
       name: string;
       isTemp?: string;
+      ruleId: string;
     };
   };
 }

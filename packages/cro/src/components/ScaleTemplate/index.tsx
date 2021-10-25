@@ -241,7 +241,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
 
 
-  const { projectSid, projectRoleType, projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const { projectSid, projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
 
   const [remind, setRemind] = useState(''); //问题
 
@@ -439,8 +439,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         },
         {
           sid: localStorage.getItem('xzl-web-doctor_sid'),
-          ns: localStorage.getItem('xzl-web-doctor_nsId'),
-          role: localStorage.getItem('xzl-web-doctor_roleId'),
+          ns: projectNsId,
+          role: roleType,
           tag: 'operator',
         },
       ],

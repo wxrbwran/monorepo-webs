@@ -5,11 +5,11 @@ import { Link, useSelector } from 'umi';
 import { IState } from 'typings/global';
 
 export default () => {
-  const { status } = useSelector((state: IState) => state.project.projDetail)
+  const { status } = useSelector((state: IState) => state.project.projDetail);
   return (
     // 无主观量表展示
     <div className="follow-table-empty">
-      <img className="no-data-img" src={noTable} alt="暂无主观量表"/>
+      <img className="no-data-img" src={noTable} alt="暂无主观量表" />
       <p>
         您的项目内暂无主观量表，
       </p>
@@ -19,4 +19,4 @@ export default () => {
       </Button>
     </div>
   );
-}
+};

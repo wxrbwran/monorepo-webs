@@ -26,7 +26,7 @@ function Reply({ scaleGroupId }: IProps) {
   const handleCallback = (params: { dataSource: IDataSource[] }) => {
     let sendNum = 0;
     let replyNum = 0;
-    params.dataSource.forEach((item: { sendNumber: number; replyNumber: number })=> {
+    params.dataSource.forEach((item: { sendNumber: number; replyNumber: number }) => {
       sendNum += item.sendNumber;
       replyNum += item.replyNumber;
     });
@@ -69,7 +69,7 @@ function Reply({ scaleGroupId }: IProps) {
               noPagination={true}
               request={api.overview.getScaleReplyList}
               columns={scaleReplyColumns}
-              dataKey="subScaleReplyInfos"
+              dataKey="researchScaleList"
               handleCallback={handleCallback}
               tableOptions={{
                 rowSelection: false,

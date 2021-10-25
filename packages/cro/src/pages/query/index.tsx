@@ -34,7 +34,7 @@ const CheckboxGroup = Checkbox.Group;
 function Query({ }: IProps) {
   const dispatch = useDispatch();
   const projectSid = window.$storage.getItem('projectSid');
-  const { projectRoleType, projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const { projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
   const [card, setCard] = useState<IFieldItem[]>([]);
   const [checkedField, setCheckedField] = useState<IChecked[]>([]);
   const [active, setActive] = useState<string[]>([]); // 用来控制菜单前面圆点的样式
@@ -253,8 +253,8 @@ function Query({ }: IProps) {
             },
             {
               sid: localStorage.getItem('xzl-web-doctor_sid'),
-              ns: localStorage.getItem('xzl-web-doctor_nsId'),
-              role: localStorage.getItem('xzl-web-doctor_roleId'),
+              ns: projectNsId,
+              role: roleType,
               tag: 'operator',
             },
           ],

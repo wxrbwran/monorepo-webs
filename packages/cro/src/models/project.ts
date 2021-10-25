@@ -80,6 +80,14 @@ const ProjectModel: ProjectModelType = {
     },
     *fetchObjectiveScale({ payload }, { call, put }) {
       const response = yield call(subjective.getObjectiveScale, payload);
+      // if (response.infos.length == 0) {
+      //   const projectSid = window.$storage.getItem('projectSid');
+      //   api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+      //     if (res.scaleGroupInfos.length > 0) {
+      //       history.replace((`/objective_table/detail?id=${res.scaleGroupInfos[0].id}`));
+      //     }
+      //   });
+      // }
       // 处理数据，添加chooseValues内容
       for (let i = 0; i < response.infos.length; i++) {
         const chooseValuesKey = getChooseValuesKeyFromRules(response.infos[i].ruleDoc.rules[0]);

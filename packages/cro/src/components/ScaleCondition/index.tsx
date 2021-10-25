@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { PlusSquareOutlined, DeleteOutlined } from '@ant-design/icons';
-import ScaleListItem from './ScaleListItem';
+import ScaleListItem from './ListItem';
 import styles from './index.scss';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';
@@ -120,7 +120,7 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
   };
 
   //修改conditions
-  const changeStateByValue = (item: any) => {
+  const changeStateByValue = () => {
 
     setChoseConditions([...choseConditions]);
   };

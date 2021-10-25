@@ -1,17 +1,20 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import TableSendRecord from '@/components/TableSendRecord';
 
 interface IProps {
   children: React.ReactElement;
-  scaleGroupId: string;
+  scaleId: string;
+  ruleId: string;
 }
 
-function SendRecord({ children, scaleGroupId }: IProps) {
-  const [showModal, setshowModal] = useState(false)
+function SendRecord({ children, scaleId, ruleId }: IProps) {
+
+  const [showModal, setshowModal] = useState(false);
   const handleShowModal = () => {
-    setshowModal(true)
-  }
+    setshowModal(true);
+  };
+  console.log('ruleId============= SendRecord scaleId scaleId scaleId scaleId', scaleId);
   return (
     <div>
       <div onClick={handleShowModal}>{children}</div>
@@ -24,10 +27,10 @@ function SendRecord({ children, scaleGroupId }: IProps) {
         maskClosable
         footer={null}
       >
-        <TableSendRecord source="objective" scaleGroupId={scaleGroupId}  />
+        <TableSendRecord source="objective" ruleId={ruleId} scaleId={scaleId} />
       </DragModal>
     </div>
   );
-};
+}
 
 export default SendRecord;
