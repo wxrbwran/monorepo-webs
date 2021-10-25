@@ -33,7 +33,9 @@ interface IProps {
 function ScaleTableCreate({ location, scaleType }: IProps) {
   const [formTit, setFormTit] = useState('');
   const [subTit, setSubTit] = useState('');
-  const [questions, setQuestions] = useState<IQuestions[]>([]);
+  const [questions, setQuestions] = useState<IQuestions[]>([]); //修改题目填写题目时一直变化的questions
+  const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]); // 修改完点击”确定“后的questions
+  const [originQue, setOriginQue] = useState<IQuestions[]>([]); // 修改完但点了”取消“后questions
   const [editIndex, setEditIndex] = useState(0);
   // const [plans, setPlans] = useState([]);
   const [ruleDoc, setRuleDoc] = useState<IRuleDoc>();
@@ -55,6 +57,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     setQuestions([...questions, addItem]);
     // 新添加的题目选项卡为编辑状态
     setEditIndex(currentEdit);
+    setOriginQue([...questions, addItem]);
   };
   useEffect(() => {
     if (location.query.tempId) {
@@ -71,6 +74,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         setSubTit(res.subtitle);
         setQuestions(res.questions);
         // setPlans(res.plans);
+        setOriginQue(res.questions);
         setEditIndex(res.questions.length - 1);
 
         setRuleDoc(res.ruleDoc);
@@ -97,6 +101,13 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   };
   const changeQues = (newQues: any) => {
     setQuestions([...newQues]);
+  };
+  const changeDdtkQues = (newQues: any) => {
+    setAlfterQuestions([...newQues]);
+  };
+  const handSaveDdtkModify = () => {
+    setQuestions([...alfterQuestions]);
+    setOriginQue([...alfterQuestions]);
   };
   const checkOptionsValue = (options: Ioptions[]) => {
     const validOptions: Ioptions[] = [];
@@ -196,6 +207,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         questions[i].code = i + 1;
       }
     }
+    console.log('questionsResult', questions);
     if (isEmpty) {
       return false;
     } else {
@@ -302,7 +314,13 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
               } else if (['TEXT', 'END'].includes(item.type)) {
                 return <QuestionText {...props} key={quesIndex} />;
               } else if (item.type === 'COMPLETION') {
-                return <QuestionDdtk {...props} key={quesIndex} />;
+                return <QuestionDdtk
+                  {...props}
+                  key={quesIndex}
+                  changeDdtkQues={changeDdtkQues}
+                  handSaveDdtkModify={handSaveDdtkModify}
+                  originQue={originQue}
+                />;
               }
             })}
           </div>

@@ -1,0 +1,122 @@
+// .topic-list {
+//   .options-list {
+//     .item {
+//       display: flex;
+//       align-items: center;
+//       .ant-input {
+//         background-color: inherit;
+//       }
+//     }
+//   }
+//   .topic-item {
+//     margin: 0 auto;
+//     padding: 0;
+//   }
+// }
+.topic-list {
+  font-size: 14px;
+  .topic-item {
+    margin: 0 auto;
+    padding: 0;
+    &.edit {
+      box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.10);
+      border-radius: 3px;
+      .del-icon,
+      .anticon-close {
+        display: inline-block;
+      }
+      .choice-tx {
+        display: flex;
+      }
+      .issue__delete {
+        display: inline-block;
+      }
+    }
+  }
+  .issue {
+    color: #181818;
+    position: relative;
+    .ant-input {
+      border: none;
+      font-size: 16px;
+      margin-right: 5px;
+      color: #181818;
+      width: 96%;
+    }
+    &.input-empty {
+      padding-left: 0;
+      .ant-input {
+        border-bottom: 1px solid #3296FA;
+      }
+    }
+    &__index {
+      position: absolute;
+      left: 0px;
+      font-size: 16px;
+      top: 3px;
+    }
+    &__delete {
+      display: none;
+    }
+  }
+
+  .add-options {
+    color: #3296FA;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .choice-tx {
+    @include flex();
+    margin-top: 10px;
+    .ant-radio-wrapper {
+      font-size: 14px;
+    }
+  }
+  .options-list {
+    .item {
+      display: flex;
+      align-items: center;
+      margin-top: 24px;
+      position: relative;
+      .anticon-border {
+        color: #C1C1C1;
+        margin-right: 10px;
+        position: absolute;
+        left: 0;
+        top: 10px;
+        z-index: 2;
+      }
+
+      .ant-input {
+        border: none;
+        font-size: 14px;
+        margin-right: 5px;
+        padding-left: 26px;
+        width: 96%;
+        background-color: inherit;
+        height: 42px;
+        font-size: 14px!important;
+      }
+      .ant-checkbox-wrapper {
+        width: 96%;
+        font-size: 14px;
+      }
+      &.input-empty {
+        .ant-input {
+          border-bottom: 1px solid #3296FA;
+        }
+      }
+
+      .anticon-close {
+        color: #C1C1C1;
+      }
+    }
+  }
+  .answer-wrap {
+    margin-top: 10px;
+    textarea.ant-input {
+      resize: none;
+      height: 99px;
+    }
+  }
+}

@@ -34,9 +34,14 @@ function ObjectiveTable(props: IProps) {
     console.log('==================== 跳转到所创建的表详情页面', newUrlName);
     if (newUrlName) {
       api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
-        setTableList(res.scaleGroupInfos);
-        const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
-        history.replace((`/objective_table/detail?id=${id}`));
+        if (res.scaleGroupInfos.length > 0) {
+          setTableList(res.scaleGroupInfos);
+          const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
+          history.replace((`/objective_table/detail?id=${id}`));
+        } else {
+          setTableList([]);
+          history.replace(('/objective_table'));
+        }
       });
     }
   }, [props]);

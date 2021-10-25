@@ -20,61 +20,65 @@ function AddTopic(props: IProps) {
     {
       type: 'RADIO',
       name: '选择题',
-      img: dxt
+      img: dxt,
     },
     {
       type: 'TEXT',
       name: '问答题',
-      img: wdt
+      img: wdt,
     },
     {
       type: 'COMPLETION',
       name: '多段填空',
-      img: zdsj
-    }
+      img: zdsj,
+    },
   ];
   const checkboxData = {
-    "type": "RADIO",
-    "detail": {
-      "checkedArr": [],
-      "stem": "",
-      "options": [
+    'type': 'RADIO',
+    'detail': {
+      'checkedArr': [],
+      'stem': '',
+      'required': true,
+      'options': [
         {
-          "content": "",
-          "checked": false
+          'content': '',
+          'checked': false,
         },
         {
-          "content": "",
-          "checked": false
+          'content': '',
+          'checked': false,
         },
-      ]
-    }
+      ],
+    },
   };
   const textData = {
-    "type": 'TEXT',
-    "detail": {
-      "stem": '',
-      "answer": ''
-    }
+    'type': 'TEXT',
+    'detail': {
+      'stem': '',
+      'answer': '',
+      'required': true,
+    },
   };
   const endData = {
-    "type": 'END',
-    "detail": {
-      "stem": '',
-      "answer": ''
-    }
+    'type': 'END',
+    'detail': {
+      'stem': '',
+      'answer': '',
+      'required': true,
+    },
   };
   const ddtkData = {
-    "type": 'COMPLETION',
-    "detail": {
-      "stem": '填空1＿＿＿，填空2＿＿＿',
-      "answer": []
-    }
+    'type': 'COMPLETION',
+    'detail': {
+      'stem': '填空1＿＿＿，填空2＿＿＿',
+      'answer': [],
+      'content': [],
+    },
   };
 
   const handleAddTm = (type: string) => {
-    let addObj = {}
-    console.log('type',type);
+    let addObj = {};
+    console.log('type', type);
     switch (type) {
       case 'RADIO':
         addObj = checkboxData;
@@ -82,20 +86,20 @@ function AddTopic(props: IProps) {
       case 'CHECKBOX':
         addObj = checkboxData;
         break;
-      case "TEXT":
+      case 'TEXT':
         addObj = textData;
         break;
-      case "END":
+      case 'END':
         addObj = endData;
         break;
-      case "COMPLETION":
+      case 'COMPLETION':
         addObj = ddtkData;
         break;
       default:
-        addObj = {}
+        addObj = {};
     }
-    props.handleAddQuestion(addObj)
-  }
+    props.handleAddQuestion(addObj);
+  };
 
   return (
     <>
@@ -110,12 +114,12 @@ function AddTopic(props: IProps) {
                 </div>
                 <div className='plus'><PlusOutlined /></div>
               </div>
-            )
+            );
           })
         }
       </div>
     </>
-  )
+  );
 }
 
 export default AddTopic;

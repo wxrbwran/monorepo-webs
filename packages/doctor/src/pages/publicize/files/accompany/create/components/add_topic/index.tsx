@@ -38,6 +38,7 @@ function AddTopic(props: IProps) {
     'detail': {
       'checkedArr': [],
       'stem': '',
+      'required': true,
       'options': [
         {
           'content': '',
@@ -55,6 +56,7 @@ function AddTopic(props: IProps) {
     'detail': {
       'stem': '',
       'answer': '',
+      'required': true,
     },
   };
   const endData = {
@@ -62,6 +64,7 @@ function AddTopic(props: IProps) {
     'detail': {
       'stem': '',
       'answer': '',
+      'required': true,
     },
   };
   const ddtkData = {
@@ -69,6 +72,7 @@ function AddTopic(props: IProps) {
     'detail': {
       'stem': '填空1＿＿＿，填空2＿＿＿',
       'answer': [],
+      'content': [],
     },
   };
 

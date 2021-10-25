@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 
 interface IProps {
   number: string;
-  btnText: string;
-  handleAdd: (e: any) => void;
+  // btnText: string;
+  // handleAdd: (e: any) => void;
 }
 const TopicTitle: FC<IProps> = (props) => {
   // const { number, btnText, handleAdd } = props;
