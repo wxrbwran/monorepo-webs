@@ -5,6 +5,9 @@ import detail from '@/services/api/detail';
 import { IPlanInfos } from '@/utils/consts';
 import { patientManage, subjective } from '@/services/api';
 import { Role } from 'xzl-web-shared/src/utils/role';
+import { getChooseValuesKeyFromRules } from '../pages/subjective_table/util';
+import * as api from '@/services/api';
+import { history } from 'umi';
 
 export interface ProjectModelState {
   projectList: IProjectList[];
@@ -79,6 +82,21 @@ const ProjectModel: ProjectModelType = {
     },
     *fetchObjectiveScale({ payload }, { call, put }) {
       const response = yield call(subjective.getObjectiveScale, payload);
+      if (response.infos.length == 0) {
+        const projectSid = window.$storage.getItem('projectSid');
+        api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+          if (res.scaleGroupInfos.length > 0) {
+            history.replace((`/objective_table/detail?name=${res.scaleGroupInfos[0].name}`));
+          } else {
+            history.replace(('/objective_table/detail?name=_zsh_null'));
+          }
+        });
+      }
+      // 处理数据，添加chooseValues内容
+      for (let i = 0; i < response.infos.length; i++) {
+        const chooseValuesKey = getChooseValuesKeyFromRules(response.infos[i].ruleDoc.rules[0]);
+        response.infos[i].chooseValues = chooseValuesKey;
+      }
       yield put({
         type: 'saveObjectiveScale',
         payload: response,

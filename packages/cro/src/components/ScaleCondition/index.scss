@@ -1,0 +1,76 @@
+.condition {
+	// &:nth-child(2) {
+	// 	margin-top: 36px;
+	// }
+	.title {
+		@include flex-lay(row, nowrap, space-between, center);
+		color: #3296FA;
+		margin-bottom: 20px;
+	}
+	.is_plan {
+		margin: 30px 0 15px;
+		.head {
+			font-size: 15px;
+		}
+	}
+	.head {
+		font-size: 18px;
+		font-weight: 600;
+		color: #181818;
+	}
+	.add {
+		cursor: pointer;
+    color: #3296FA;
+	}
+	.edit {
+		@include flex-lay(row, nowrap, flex-start, center);
+		color: #C5C5C5;
+		font-size: 14px;
+		margin-bottom: 20px;
+		.label {
+			color: #666;
+			margin-left: 40px;
+			min-width: 56px;
+			text-align: right;
+		}
+		.icon {
+			margin-left: 20px;
+			font-size: 18px;
+		}
+		.split {
+			margin: 0 16px;
+		}
+		.item_value {
+			@include flex-lay(row, nowrap, center, center);
+			position: relative;
+      width: 100%;
+			:global {
+				.ant-select-selector {
+					width: 237px!important;
+				}
+				.anticon-question-circle {
+					position: absolute;
+					right: -20px;
+					top: -10px;
+				}
+			}
+		}
+		:global {
+			.ant-select-selector {
+				width: 290px!important;
+				height: 40px!important;
+				border-radius: 3px;
+				.ant-select-selection-item,.ant-select-selection-placeholder {
+					line-height: 40px!important;
+					font-size: 14px;
+				}
+			}
+			.ant-select-selection-search-input, .ant-input-number-input {
+				height: 40px;
+			}
+			.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input {
+				height: 40px;
+			}
+		}
+	}
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './index.scss';
 import ToogleSide from '@/components/ToogleSide';
 import SideMenu from './components/side_menu';
-import { Link, history } from 'umi';
+import { history } from 'umi';
 import * as api from '@/services/api';
 
 interface IProps {
@@ -26,19 +26,25 @@ function ObjectiveTable(props: IProps) {
       if (res.scaleGroupInfos.length > 0) {
         history.replace((`/objective_table/detail?id=${res.scaleGroupInfos[0].id}`));
       }
-    })
-  }, [])
+    });
+  }, []);
   // 创建成功，跳转到所创建的表详情页面
   useEffect(() => {
     const newUrlName = props.location.query.name;
+    console.log('==================== 跳转到所创建的表详情页面', newUrlName);
     if (newUrlName) {
       api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
-        setTableList(res.scaleGroupInfos);
-        const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
-        history.replace((`/objective_table/detail?id=${id}`));
-      })
+        if (res.scaleGroupInfos.length > 0) {
+          setTableList(res.scaleGroupInfos);
+          const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
+          history.replace((`/objective_table/detail?id=${id}`));
+        } else {
+          setTableList([]);
+          history.replace(('/objective_table'));
+        }
+      });
     }
-  }, [props])
+  }, [props]);
   const isShowSideMenu = props.location.pathname !== '/objective_table/create'; // 创建页面不显示侧边栏
   return (
     <>
@@ -46,7 +52,7 @@ function ObjectiveTable(props: IProps) {
         isShowSideMenu ? (
           <ToogleSide>
             <SideMenu tableList={tableList} location={props.location} />
-            <div style={{height: '100%'}}>
+            <div style={{ height: '100%' }}>
               {props.children}
             </div>
           </ToogleSide>
@@ -56,7 +62,7 @@ function ObjectiveTable(props: IProps) {
       }
     </>
 
-  )
+  );
 }
 
 export default ObjectiveTable;
