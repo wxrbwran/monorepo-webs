@@ -105,7 +105,9 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   // console.log('handlePatientTeamDataSource res', res);
   return res;
 };
-
+const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
+  return dataSource.map((member) => member.members[0]);
+};
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
   console.log('dataSource', dataSource);
   console.log('dataKey', dataKey);
@@ -127,6 +129,9 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       }
       if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category as string)) {
         return handlePatientTeamDataSource(dataSource);
+      }
+      if (category === 'relatedDoctors') {
+        return handleRelatedDoctorsDataSource(dataSource);
       }
       return dataSource;
     case 'infos':

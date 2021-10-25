@@ -76,7 +76,7 @@ function Department({
         <Input type="hidden" />
       </Form.Item>
       <Form.Item
-        label="第一执业医院所在科室"
+        label=""
         name={nameKey}
         rules={[{
           required: true,

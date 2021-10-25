@@ -6,7 +6,7 @@ interface IProps {
   onClose: () => void;
 }
 function UserInfo({ onClose }: IProps) {
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState(true);
   const handleToggleEdit = () => {
     setIsEdit(!isEdit);
   };

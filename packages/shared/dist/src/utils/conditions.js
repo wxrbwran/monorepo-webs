@@ -33,6 +33,14 @@ export var handleSelection = function (allValues) {
                 return getCondition('cr.namespace', val);
             case 'searchByName':
                 return getCondition("sj.details->>'name',sj.details->>'tel'", val, 'like');
+            case 'name':
+            case 'tel':
+            case 'department':
+                return getCondition("sj.details->>'" + select + "'", val, 'like');
+            case 'role_tag':
+                return getCondition('role_tag', val, 'like');
+            case 'practice_areas':
+                return getCondition("practice_areas->>'name'", val, 'like');
             default:
                 return {};
         }

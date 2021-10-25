@@ -56,13 +56,13 @@ export const Role: RolesMap = {
   PATIENT_VIP: roleType('nWgX4b', 89, 80, 88, 'VIP 患者'), // 9
   PATIENT_FAMILY: roleType('70MG43', 99, 90, 98, '患者家属'), // 10
   NURSE: roleType('2Wmj4M', 109, 100, 108, '护士(角色默认在 xinzhili - 护士团队)'), // 11
-  DOCTOR: roleType('n41zeZ', 119, 110, 118, '医生(角色默认在xinzhili - 全科'), // 12
+  DOCTOR: roleType('n41zeZ', 119, 110, 118, '医生'), // 12 医生(角色默认在xinzhili - 全科
   SYS_DOCTOR: roleType('ZW7Qew', 129, 120, 128, '系统智能医生'), // 13
   UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '上级医生'), // 14
   LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '下级医生'), // 15
   ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
 
-  COUNSELOR_DOCTOR: roleType( '2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)', ), // 17
+  COUNSELOR_DOCTOR: roleType( '2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)' ), // 17
   CONSOLE_ROOT: roleType('6exPeb', 179, 170, 178, '后台系统Root管理员'), // 18
   CRO_ORG: roleType('YWQD0z', 189, 180, 188, 'CRO 机构'), // 19
   NONE: roleType('bWlZez', 199, 190, 198, '任何角色都没有，即没有任何身份，默认都进入xinzhili空间'), // 20

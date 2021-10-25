@@ -105,6 +105,9 @@ var handlePatientTeamDataSource = function (dataSource) {
     // console.log('handlePatientTeamDataSource res', res);
     return res;
 };
+var handleRelatedDoctorsDataSource = function (dataSource) {
+    return dataSource.map(function (member) { return member.members[0]; });
+};
 export var handleTableDataSource = function (dataKey, dataSource, category) {
     console.log('dataSource', dataSource);
     console.log('dataKey', dataKey);
@@ -125,6 +128,9 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             }
             if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category)) {
                 return handlePatientTeamDataSource(dataSource);
+            }
+            if (category === 'relatedDoctors') {
+                return handleRelatedDoctorsDataSource(dataSource);
             }
             return dataSource;
         case 'infos':
