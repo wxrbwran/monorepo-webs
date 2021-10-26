@@ -1,9 +1,7 @@
 import React from 'react';
 import { useSelector } from 'umi';
 import { btnRender } from '@/utils/button';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import UserBaseInfos from '../../components/UserBaseInfos';
-import UserAvatar from '../../components/UserAvatar';
 import CertificateCard from '../CertificateCard';
 import styles from '../index.scss';
 
@@ -17,13 +15,6 @@ function UserInfoCard({ handleToggleEdit, onClose }: Iprops) {
   return (
     <div className={styles.user_info}>
       <div className={styles.base}>
-        <div className={styles.left}>
-          <UserAvatar avatarUrl={userInfo.avatarUrl || defaultAvatar} status={userInfo.status} />
-          <div className={styles.doctor_code}>
-            医生识别码:
-            {userInfo.uuCode}
-          </div>
-        </div>
         <UserBaseInfos userInfo={userInfo} />
       </div>
       <CertificateCard userInfo={userInfo} />

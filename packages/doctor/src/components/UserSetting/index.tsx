@@ -65,7 +65,7 @@ function UserSetting(props: Iprops) {
   };
   return (
     <div className={styles.user_setting}>
-      <Tabs defaultActiveKey={activeTab} onChange={callback}>
+      <Tabs defaultActiveKey={activeTab} onChange={callback} className={styles.tab_box} renderTabBar={() => <></>}>
         {tabName.map((item) => (
           <TabPane tab={item.value} key={item.key}>
             {item.components}

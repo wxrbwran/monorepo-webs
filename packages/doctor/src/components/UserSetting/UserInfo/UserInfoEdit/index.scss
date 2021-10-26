@@ -1,6 +1,6 @@
 .far_doctor {
   margin-top: 20px;
-  padding: 0 70px;
+  padding: 0 35px;
   .info_wrap {
     @include flex(flex-start, flex-start);
     margin: 0 auto;
@@ -111,6 +111,22 @@
         }
       }
     }
+    .hospital_wrap {
+      position: relative;
+      .btn {
+        position: absolute;
+        right: -55px;
+        top: 5px;
+        width: 50px;
+      }
+      :global {
+        .ant-form-item-label {
+          width: 120px;
+          text-align: right;
+          margin-right: 12px;
+        }
+      }
+    }
     .right_input {
       :global {
         .ant-form-item-label {
@@ -129,6 +145,26 @@
         }
         .ant-input {
           width: 610px;
+        }
+      }
+    }
+    .role_tags {
+      :global {
+        .ant-select-selection-item {
+          line-height: 20px;
+          background: #fff;
+          border: 1px solid #D79A36;
+          color: #D79A36;
+        }
+        .anticon-close {
+          color: #D79A36;
+          font-size: 12px;
+        }
+        .ant-select-selection-overflow-item {
+          margin-right: 10px;
+        }
+        .ant-select-selection-overflow {
+          line-height: 27px;
         }
       }
     }

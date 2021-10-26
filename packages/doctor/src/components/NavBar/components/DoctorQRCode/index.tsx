@@ -9,6 +9,7 @@ import OrgListBtn from './OrgListBtn';
 import DoctorDetailEwm from './OrgDetail/ewm';
 // import DoctorDetailWxEwm from './OrgDetail/wxEwm';
 import styles from './index.scss';
+import { IState } from 'packages/doctor/typings/model';
 
 const { TabPane } = Tabs;
 const DoctorQRCode:FC = ({ children }) => {
@@ -99,9 +100,9 @@ const DoctorQRCode:FC = ({ children }) => {
         {children}
       </div>
       <DragModal
-        title="二维码"
+        title="我的名片"
         footer={null}
-        width={600}
+        width={800}
         visible={showModal}
         onCancel={hadleHideModal}
         maskClosable
@@ -123,6 +124,7 @@ const DoctorQRCode:FC = ({ children }) => {
             onChange={handleToggleTab}
             className={styles.qr_tabs}
             centered
+            renderTabBar={() => <></>}
           >
             <TabPane tab="二维码" key="ewm">
               <OrgListBtn

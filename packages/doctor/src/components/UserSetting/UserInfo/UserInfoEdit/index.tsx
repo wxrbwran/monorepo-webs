@@ -7,6 +7,7 @@ import moment from 'moment';
 import { IState } from 'typings/model';
 import UploadAvatar from '@/components/UploadAvatar';
 import { titleList, banksName } from '@/utils/tools';
+import { roleTags } from 'xzl-web-shared/src/utils/consts';
 import config from '@/config';
 import EditTextArea from '../EditTextArea';
 import CertificateEdit from '../CertificateEdit';
@@ -24,6 +25,7 @@ const { Option } = Select;
 const RadioGroup = Radio.Group;
 function UserInfoEdit({ toggleEdit }: Iporps) {
   const { userInfo } = useSelector((state:IState) => state.user);
+  console.log('userInfo232', userInfo);
   const [avatar, setAvatar] = useState<string>(userInfo.avatarUrl || config.defaultAvatar);
   const [form] = Form.useForm();
   const { getFieldValue, setFieldsValue } = form;
@@ -36,6 +38,20 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
     mentor: '',
     ...userInfo,
     certificates: formatCert(userInfo.certificates as ICert),
+    practiceAreas: userInfo.practiceAreas ? userInfo.practiceAreas.map(item => {
+      const { name, standardId, sub } = item;
+      return {
+        name,
+        standardId,
+        departmentName: sub.name,
+        departmentStandardId: sub.standardId,
+      };
+    }) : [
+      {
+        name: null,
+        departmentName: null,
+      },
+    ],
   };
   const formatCertificates = (certificates: any) => {
     const certObj: CommonData = {};
@@ -52,8 +68,22 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
   const onFinish = (values: any) => {
     toggleEdit();
     console.log('valuessss', values);
+    const formValues = { ...values };
+    formValues.practiceAreas = formValues.practiceAreas.map((item: any) => {
+      const { departmentName, departmentStandardId, name, standardId, labelType } = item;
+      return {
+        name,
+        standardId,
+        sub: {
+          name: departmentName,
+          standardId: departmentStandardId,
+          labelType,
+        },
+      };
+    });
+    console.log('formValues', formValues);
     const params = {
-      ...values,
+      ...formValues,
       certificates: formatCertificates(values?.certificates),
       avatarUrl: avatar,
     };
@@ -96,6 +126,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
       setFieldsValue({ mentor: '' });
     }
   };
+  console.log('initForm', initForm);
   return (
     <div className={styles.far_doctor}>
       <Form
@@ -167,23 +198,49 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                   <Radio onClick={handleMentor} value="硕导">硕导</Radio>
                 </RadioGroup>
               </Form.Item>
-              <div className="flex">
-                <Hospitial
-                  setFieldsValue={setFieldsValue}
-                  nameKey="name"
-                  idKey="standardId"
-                  request={window.$api.base.fetchHospitals}
-                  disabled={!!userInfo.firstProfessionCompany}
-                />
-                <Department
-                  setFieldsValue={setFieldsValue}
-                  nameKey="firstPracticeDepartment"
-                  idKey="firstPracticeDepartmentId"
-                  disabled={!!userInfo.firstPracticeDepartment}
-                />
-                <PlusSquareOutlined />
-                <DeleteOutlined />
-              </div>
+              <Form.List name="practiceAreas">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map((field) => (
+                      <div className={`flex ${styles.hospital_wrap}`}>
+                        <div className="flex">
+                          <Hospitial
+                            setFieldsValue={setFieldsValue}
+                            getFieldValue={getFieldValue}
+                            field={field}
+                            nameKey="name"
+                            idKey="standardId"
+                            request={window.$api.base.fetchHospitals}
+                            disabled={!!userInfo.firstProfessionCompany}
+                          />
+                          <span className="mr-15 ml-10 mt-3">-</span>
+                          <Department
+                            field={field}
+                            setFieldsValue={setFieldsValue}
+                            getFieldValue={getFieldValue}
+                            nameKey="departmentName"
+                            idKey="departmentStandardId"
+                            disabled={!!userInfo.firstPracticeDepartment}
+                          />
+                        </div>
+                        {
+                          field.name === 0 ? (
+                            <span onClick={() => add()} className={`flex items-center mb-15 text-blue-500 ${styles.btn}`}>
+                              <PlusSquareOutlined />
+                              <span className="ml-4">添加</span>
+                            </span>
+                          ) : (
+                            <span onClick={() => remove(field.name)} className={`flex items-center mb-15 text-blue-500 ${styles.btn}`}>
+                              <DeleteOutlined />
+                              <span className="ml-4">删除</span>
+                            </span>
+                          )
+                        }
+                      </div>
+                    ))}
+                  </>
+                )}
+              </Form.List>
               <div className={styles.line_input}>
                 <Form.Item
                   label="所在互联网医院"
@@ -199,6 +256,18 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                   >
                     <Input />
                   </Form.Item>
+              </div>
+              <div className={`${styles.line_input} ${styles.role_tags}`}>
+                <Form.Item
+                  label="角色标签"
+                  name="roleTags"
+                >
+                  <Select mode="tags" style={{ width: '610px', height: 32 }} placeholder="请选择角色标签">
+                    {
+                      roleTags.map((role: string) => <Option key={role} value={role}>{role}</Option>)
+                    }
+                  </Select>
+                </Form.Item>
               </div>
               <Form.Item
                 label="银行卡号"

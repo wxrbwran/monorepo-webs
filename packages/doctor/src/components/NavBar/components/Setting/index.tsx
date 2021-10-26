@@ -27,7 +27,8 @@ interface Item {
 function Setting() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state: IState) => state.user);
-  const [showModal, setShowModal] = useState(true);
+  // 如果没有执业机构和科室信息，则认为是首次登录，默认展示编辑个人资料弹框
+  const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('info');
   useEffect(() => {
     dispatch({
@@ -35,6 +36,12 @@ function Setting() {
       payload: { wcIds: [window.$storage.getItem('wcId')] },
     });
   }, []);
+  useEffect(() => {
+    if (userInfo.firstLogin === 1) {
+      setActiveTab('info');
+      setShowModal(true);
+    }
+  }, [userInfo]);
   const handleLogout = () => {
     dispatch({
       type: 'auth/logout',

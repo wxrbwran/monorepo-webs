@@ -11,7 +11,7 @@ interface IProps {
 function UserAvatar({ avatarUrl, status }: IProps) {
   return (
     <div className={styles.avatar_wrap}>
-      <img className={styles.avatar} src={avatarUrl || config.defaultAvatar} alt="医生头像" />
+      <img className="w-70 h-70 rounded-md" src={avatarUrl || config.defaultAvatar} alt="医生头像" />
       <div className={styles.certification}>
         <SafetyCertificateFilled />
         {accountStatus[status]}

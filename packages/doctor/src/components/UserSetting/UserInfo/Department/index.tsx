@@ -8,9 +8,11 @@ import { departmentType } from 'xzl-web-shared/src/utils/consts';
 
 interface Iprops {
   setFieldsValue: (params: any) => void;
+  getFieldValue: (params: any) => void;
   nameKey: string;
   idKey: string;
   disabled: boolean;
+  field: any;
 }
 export interface Ihospital {
   id: string;
@@ -19,9 +21,11 @@ export interface Ihospital {
 
 const { Option } = Select;
 const RadioGroup = Radio.Group;
-function Department({
-  setFieldsValue, nameKey, idKey, disabled,
-}: Iprops) {
+function Department(props: Iprops) {
+  const {
+    setFieldsValue, getFieldValue, nameKey, idKey, disabled, field,
+  } = props;
+  console.log('field', field);
   const [department, setDepartment] = useState <Ihospital[]>([]);
   const [showModal, setshowModal] = useState(false);
 
@@ -45,39 +49,45 @@ function Department({
       // 显示弹框
       setshowModal(true);
     } else {
-      setFieldsValue({
+      const practiceAreas = getFieldValue('practiceAreas');
+      practiceAreas[field.name] = {
+        ...practiceAreas[field.name],
         [nameKey]: option.children,
         [idKey]: value,
-      });
+      };
+      setFieldsValue({ practiceAreas });
     }
   };
   const handleAddDep = (values: { labelType: string, departmentName: string }) => {
     const { labelType, departmentName } = values;
-    setFieldsValue({
+    const practiceAreas = getFieldValue('practiceAreas');
+    practiceAreas[field.name] = {
+      ...practiceAreas[field.name],
       labelType,
       [nameKey]: departmentName,
       [idKey]: null,
-    });
+    };
+    setFieldsValue({ practiceAreas });
     setshowModal(false);
   };
   console.log(disabled);
   return (
     <>
       <Form.Item
-        name="labelType"
+         name={[field.name, 'labelType']}
         noStyle
       >
         <Input type="hidden" />
       </Form.Item>
       <Form.Item
-        name={idKey}
+        name={[field.name, idKey]}
         noStyle
       >
         <Input type="hidden" />
       </Form.Item>
       <Form.Item
         label=""
-        name={nameKey}
+        name={[field.name, nameKey]}
         rules={[{
           required: true,
           message: '请输入第一执业医院所在科室!',
@@ -90,7 +100,7 @@ function Department({
           showArrow={false}
           filterOption={false}
           onSelect={handleSelect}
-          style={{ width: '376px' }}
+          style={{ width: '285px' }}
           // disabled={disabled}
         >
           {department.map((medicine) => (

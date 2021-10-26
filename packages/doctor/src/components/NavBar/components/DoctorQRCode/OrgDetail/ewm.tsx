@@ -1,6 +1,7 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
 import config from '@/config';
+import iconShowId from '@/assets/img/icon_showid.png';
 import styles from '../index.scss';
 
 interface IProps {
@@ -34,6 +35,7 @@ function OrgDetail({ currentOrg }: IProps) {
             {orgName}
           </div>
           <div className={styles.show_id}>
+            <img className="w-10 h-10 mr-5" src={iconShowId} alt="" />
             {`医生识别码:${uuCode}`}
           </div>
         </div>
@@ -47,9 +49,10 @@ function OrgDetail({ currentOrg }: IProps) {
         </div>
       </div>
       <div className={styles.ewm}>
-        {qrCodeUrl && <QRCode id="qrCodeUrl" size={200} value={qrCodeUrl} />}
-        <p>患者可通过app或小程序扫描二维码签约</p>
+        {qrCodeUrl && <QRCode id="qrCodeUrl" size={160} value={qrCodeUrl} />}
+        {/* <p>患者可通过APP或小程序扫描二维码签约</p> */}
       </div>
+      <p className="text-center mt-15 text-gray-800">患者可通过APP或小程序扫描二维码签约</p>
     </div>
   );
 }
