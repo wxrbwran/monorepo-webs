@@ -33,11 +33,11 @@ function Organization(props: IProps) {
 
   useEffect(() => {
     setOrganization(orgNsId);
-    api.doctor.getDoctorAllOrgs().then((res: {teams: ITeam[]}) => {
+    api.doctor.getDoctorAllOrgs().then((res: { teams: ITeam[] }) => {
       const organizations: ISubject[] = [];
       res.teams.forEach((item) => {
         item.members.forEach((member:ISubject) => {
-          if (member.role === Role.ORG.id) {
+          if ([Role.ORG.id, Role.UPPER_ORG.id, Role.LOWER_ORG.id].includes(member.role)) {
             organizations.push({
               ...member,
               nsId: item.teamNSId,
