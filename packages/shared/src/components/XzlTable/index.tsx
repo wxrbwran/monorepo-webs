@@ -115,6 +115,9 @@ const XzlTable: FC<IProps> = (props) => {
       const data: Store = { pageAt: page };
       fetchTableDataSource(data);
     }
+    if (tableOptions?.handleFetchPageAt) {
+      tableOptions?.handleFetchPageAt(page);
+    }
     // fetchTableDataSource(params);
   };
   /* eslint-disable react/jsx-props-no-spreading */

@@ -1,14 +1,15 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { Form, Button } from 'antd';
+import { Form, Button, message } from 'antd';
 import QueryItem from '../QueryItem';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { clAvatar, clName, roleCol } from 'xzl-web-shared/src/utils/columns';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 import styles from './index.scss';
+import defaultAvatar from 'xzl-web-shared/src/utils/consts';
+import { cloneDeep } from 'lodash';
 interface IProps {
-
+  handleRefresh: () => void;
 }
 interface ITableOptions {
   pageAt: number;
@@ -20,40 +21,85 @@ export const workload = {
   dataIndex: 'workload',
 };
 const TeamAddMember: FC<IProps> = (props) => {
-  const { children } = props;
+  const { children, handleRefresh } = props;
   const [form] = Form.useForm();
   const { getFieldsValue } = form;
   const [showModal, setshowModal] = useState(false);
-  const [tableOptions, setOptions] = useState<ITableOptions>({ pageAt:1, pageSize: 5, conditions: [] });
-  const [selectDoctor, setSelectDoctor] = useState([]);
+  const initTableOptions = { pageAt:1, pageSize: 5, conditions: [] };
+  const [tableOptions, setOptions] = useState<ITableOptions>(initTableOptions);
+  const [selectDoctor, setSelectDoctor] = useState<ISubject[][]>([]);
+  const [pageAt, setPageAt] = useState(1);
   console.log(setSelectDoctor);
   const columns = [
-    clAvatar, clName,
+    {
+      title: '头像',
+      dataIndex: 'avatarUrl',
+      width: 100,
+      render: (text: string) => (
+        <img
+          src={text || defaultAvatar}
+          style={{ width: 40, height: 40 }}
+        />
+      ),
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      width: 147,
+    },
     {
       title: '科室',
-      dataIndex: 'departmentName',
-    }
-    , roleCol,
+      dataIndex: 'practiceAreas',
+      width: 147,
+      render: (practiceAreas: { sub: { name: string } }[]) => {
+        if (practiceAreas) {
+          const department = [...new Set(practiceAreas.map(item => item.sub.name))];
+          return department.map((item, inx) => <span>{item}{inx !== department.length - 1 ? '、' : ''}</span>);
+        } else {
+          return <span>--</span>;
+        }
+      },
+    },
+    {
+      title: '角色',
+      dataIndex: 'roleTags',
+      width: 147,
+      render: (roleTags: string[]) => {
+        if (roleTags && roleTags.length > 0) {
+          return roleTags.map((role, inx) => <span>{role}{inx !== roleTags.length - 1 ? '、' : ''}</span>);
+        } else {
+          return <span>--</span>;
+        }
+      },
+    },
     {
       title: '互联网医院',
-      dataIndex: 'firstProfessionCompany',
+      dataIndex: 'orgs',
+      width: 147,
+      render: (orgs: string[]) => {
+        if (orgs && orgs.length > 0) {
+          return orgs.map((org, inx) => <span>{org}{inx !== orgs.length - 1 ? '、' : ''}</span>);
+        } else {
+          return <span>--</span>;
+        }
+      },
     },
     {
       title: '执业医院',
       dataIndex: 'practiceAreas',
+      width: 147,
+      render: (practiceAreas: { name: string }[]) => {
+        if (practiceAreas) {
+          return practiceAreas.map((item, inx) => <span>{item.name}{inx !== practiceAreas.length - 1 ? '、' : ''}</span>);
+        } else {
+          return <span>--</span>;
+        }
+      },
     },
   ];
   const handleShowModal = () => {
     setshowModal(true);
   };
-  // const conditions = {
-  //   'name': "sj.details->>'name'",
-  //   'tel': "sj.details->>'tel'",
-  //   'role_tag': 'role_tag',
-  //   'practice_areas': "practice_areas->>'name'",
-  //   'organization': 'cr.namespace',
-  //   'department': "sj.details->>'department'",
-  // };
   const handleSearch = () => {
     const newConditions = handleSelection(getFieldsValue());
     setOptions({
@@ -65,30 +111,58 @@ const TeamAddMember: FC<IProps> = (props) => {
   const fetchData = (data: any) => {
     console.log('data~~~~', data);
   };
-  // const handleCheckPatient = (a, b, c) => {
-  //   console.log(a, b, c);
-  // };
+
+  const handleFetchPageAt = (num: number) => {
+    setPageAt(num);
+  };
+  const handleDelDoctor = (pageInx: number, docSid: string) => {
+    const newDoctors = selectDoctor[pageInx].filter(item => item.sid !== docSid );
+    selectDoctor[pageInx] = newDoctors;
+    setSelectDoctor(cloneDeep(selectDoctor));
+  };
   const rowSelection = {
-    selectedRowKeys: selectDoctor,
-    onChange: (selectedRowKeys: never[], selectedRows: { sid: string }[]) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      // setSelectDoctor(selectedRows);
+    selectedRowKeys: selectDoctor[pageAt - 1]?.map(item => item.sid) || [],
+    onChange: (selectedRowKeys: string[], selectedRows: { sid: string }[]) => {
+      console.log('selectedRows', selectedRows);
+      console.log('selectedRowKeys', selectedRowKeys);
+      const newSelectDoc = [...selectDoctor];
+      newSelectDoc[pageAt - 1] = selectedRows;
+      setSelectDoctor(newSelectDoc);
     },
     onSelect: (record: any, selected: boolean ) => {
       console.log('onselect', record, selected);
-      // handleCheckPatient(selected, [record.sid], [record.wcId]);
     },
     onSelectAll: (selected: boolean, selectedRows: { sid: string, wcId: string }[]) => {
       console.log('onSelectAll', selected, selectedRows);
-      // const sids: string[] = [];
-      // const wcIds: string[] = [];
-      // selectedRows.forEach(item => {
-      //   sids.push(item.sid);
-      //   wcIds.push(item.wcId);
-      // });
-      // handleCheckPatient(selected, sids, wcIds);
     },
   };
+  const handleSubmit = () => {
+    // putDoctorFriends
+    const members: { sid: string }[] = [];
+    selectDoctor.forEach(pageDoctors => {
+      pageDoctors.forEach(doctor => members.push({ sid: doctor.sid }));
+    });
+    const params = {
+      members,
+    };
+    console.log('params', params);
+    window.$api.service.putDoctorFriends(params).then(res => {
+      console.log(4343, res);
+      message.success('添加成功');
+      handleRefresh();
+      setshowModal(false);
+      setOptions(initTableOptions);
+      setPageAt(1);
+    }).catch(err => {
+      console.log('rerere', err);
+      message.error(err?.result || '添加失败');
+    });
+  };
+  useEffect(() => {
+    if (!showModal) {
+      setSelectDoctor([]);
+    }
+  }, [showModal]);
   return (
     <div>
       <div onClick={handleShowModal}>{children}</div>
@@ -100,6 +174,7 @@ const TeamAddMember: FC<IProps> = (props) => {
         onCancel={() => setshowModal(false)}
         title="添加新成员"
         footer={null}
+        destroyOnClose
       >
         <div className={styles.add_member}>
          <div className="flex">
@@ -118,66 +193,29 @@ const TeamAddMember: FC<IProps> = (props) => {
             depOptions={tableOptions}
             tableOptions={{
               rowSelection,
-              // pagination: false,
+              handleFetchPageAt,
             }}
           />
           <div className="flex justify-between">
             <div className="flex">
               <div className="mt-20" style={{ flex: '0 0 42px' }}>已选择</div>
               <div className="flex flex-wrap">
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
-                <div className={styles.check_doctor}>
-                  <CloseCircleFilled />
-                  <img className="w-40 h-40 rounded-md mb-5" src="https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/617e9123-24e9-40b3-be2a-8c9aa13ad65d海啊.jpg" alt="医生头像" />
-                  <div>张三三</div>
-                </div>
+                {
+                  selectDoctor.map((pageDoctor, pageInx) => {
+                    return pageDoctor?.map((doctor) => {
+                      return (
+                        <div className={styles.check_doctor}>
+                          <CloseCircleFilled onClick={() => handleDelDoctor(pageInx, doctor.sid)} />
+                          <img className="w-40 h-40 rounded-md mb-5" src={doctor.avatarUrl || defaultAvatar} alt="" />
+                          <div>{doctor.name}</div>
+                        </div>
+                      );
+                    });
+                  })
+                }
               </div>
             </div>
-            <Button type="primary" onClick={handleSearch} className="mt-40">确认添加</Button>
+            <Button type="primary" onClick={handleSubmit} className="mt-40">确认添加</Button>
           </div>
         </div>
       </DragModal>

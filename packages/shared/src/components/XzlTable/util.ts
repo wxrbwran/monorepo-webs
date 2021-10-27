@@ -105,8 +105,31 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   // console.log('handlePatientTeamDataSource res', res);
   return res;
 };
-const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
-  return dataSource.map((member) => member.members[0]);
+export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
+  const doctors: any[] = [];
+  dataSource.forEach((dataItem) => {
+    let doctor: any = {};
+    dataItem.members.forEach(item => {
+      if (item.role === Role.DOCTOR.id) {
+        doctor = {
+          ...doctor,
+          ...item,
+        };
+        // 医生所在的互联网医院
+      } else if (item.role === Role.ORG.id) {
+        if (doctor.orgs) {
+          doctor.orgs.push(item.name);
+        } else {
+          doctor = {
+            ...doctor,
+            orgs: [item.name],
+          };
+        }
+      }
+    });
+    doctors.push(doctor);
+  });
+  return doctors;
 };
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
   console.log('dataSource', dataSource);

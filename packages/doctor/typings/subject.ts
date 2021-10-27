@@ -61,6 +61,17 @@ interface ISub {
   firstPracticeDepartmentId: string; // 第一执业 科室id
   firstProfessionBrief: string; // 第一执业医院简介
   belongToGroup: string; // 所属医生集团
+  practiceAreas: { // 执业医院和科室
+    name: string; // 机构名称
+    standardId: string; // 标准机构id
+    role: string[]; // 前端暂时不关心此字段，留待后用
+    sub: { // 科室信息
+      name: string; // 科室名称
+      standardId: string; // 标准科室ID，如果用户选用了标准库，则赋值
+      nsLabels: string[];// 前端暂时不关心此字段，留待后用
+    }
+  }[];
+  roleTags: string[]; // 角色标签
 
   qcCode: string; // 资格证书编码
   qcIssuingDate: string; // 资格证书发放日期

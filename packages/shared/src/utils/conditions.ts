@@ -42,6 +42,10 @@ export const handleSelection = (allValues: CommonData): CommonData[] => {
           return getCondition('role_tag', val, 'like');
         case 'practice_areas':
           return getCondition("practice_areas->>'name'", val, 'like');
+        case 'having_hospital':
+          return getCondition('having.ns.name', val, 'like');
+        case 'having_department':
+          return getCondition("having.o_subject.details->>'name'", val, 'like');
         default:
           return {};
       }
