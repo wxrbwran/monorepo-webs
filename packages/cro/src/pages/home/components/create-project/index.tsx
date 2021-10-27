@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message, Select, Radio } from 'antd';
+import { Button, Form, Input, message, Radio } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
 import * as api from '@/services/api';
@@ -9,7 +9,6 @@ import { history } from 'umi';
 
 import './index.scss';
 
-const { Option } = Select;
 interface IUploadParams {
   imageURL: string;
 }
@@ -23,17 +22,17 @@ interface IfromVal {
   type: string;
 }
 function CreateProject({ onCloseModal }: IProps) {
-  const defaultImg = projectDefaultImg[Math.floor(Math.random()*(0 - 5) + 5)];
-  const dispatch = useDispatch()
+  const defaultImg = projectDefaultImg[Math.floor(Math.random() * (0 - 5) + 5)];
+  const dispatch = useDispatch();
   const [showUpload, setShowUPload] = useState(false);
   const [avatarUrl, setAvatar] = useState(defaultImg);
   const [loading, setLoading] = useState(false);
   const uploadSuccess = (params: IUploadParams) => {
     console.log('上传成功', params);
     message.success('上传成功');
-    setShowUPload(false)
-    setAvatar(params.imageURL)
-  }
+    setShowUPload(false);
+    setAvatar(params.imageURL);
+  };
   const handleCreatePro = (fromVal: IfromVal) => {
     setLoading(true);
     const { name, duration, intro, type } = fromVal;
@@ -43,9 +42,9 @@ function CreateProject({ onCloseModal }: IProps) {
       detail: {
         avatarUrl,
         duration,
-        intro
-      }
-    }
+        intro,
+      },
+    };
     api.project.postCroProject(params).then(res => {
       setLoading(false);
       message.success('创建成功');
@@ -56,8 +55,8 @@ function CreateProject({ onCloseModal }: IProps) {
       });
       onCloseModal(); // 关闭弹框
       window.$storage.setItem('projectSid', res.projectSid);
-      history.push(`/proj_detail?projectSid=${res.projectSid}&projectName=${fromVal.name}`)
-    })
+      history.push(`/proj_detail?projectSid=${res.projectSid}&projectName=${fromVal.name}`);
+    });
   };
 
   const testType = [
@@ -67,7 +66,7 @@ function CreateProject({ onCloseModal }: IProps) {
     }, {
       key: 2,
       value: '多中心临床试验',
-    }
+    },
   ];
   return (
     <div className="create-project">
@@ -115,6 +114,23 @@ function CreateProject({ onCloseModal }: IProps) {
           </Radio.Group>
           </Form.Item>
           <Form.Item
+            label="所属机构"
+            name="type"
+            rules={[{ required: true, message: '请选择项目类型!' }]}
+            style={{ textAlign: 'left' }}
+          >
+           <Radio.Group>
+            {testType.map(item => (
+              <Radio
+                value={item.key}
+                key={item.key}
+              >
+                {item.value}
+              </Radio>
+            ))}
+          </Radio.Group>
+          </Form.Item>
+          <Form.Item
             name='intro'
             label="项目简介"
           >
@@ -143,7 +159,7 @@ function CreateProject({ onCloseModal }: IProps) {
         </DragModal>
       )}
     </div>
-  )
+  );
 }
 
 export default CreateProject;
