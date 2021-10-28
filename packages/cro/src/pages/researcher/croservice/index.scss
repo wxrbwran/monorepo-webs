@@ -1,0 +1,14 @@
+.croservice {
+  .avatar {
+   img {
+    @include size(100px);
+   }
+  }
+  .operator {
+    font-size: 15px;
+  }
+  .member {
+    box-shadow: 0 0 12px 0 rgb(0 0 0 / 10%);
+    border-radius: 8px;
+  }
+}
