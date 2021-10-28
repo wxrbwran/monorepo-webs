@@ -22,7 +22,7 @@ export var Role = {
     PATIENT_VIP: roleType('nWgX4b', 89, 80, 88, 'VIP 患者'),
     PATIENT_FAMILY: roleType('70MG43', 99, 90, 98, '患者家属'),
     NURSE: roleType('2Wmj4M', 109, 100, 108, '护士(角色默认在 xinzhili - 护士团队)'),
-    DOCTOR: roleType('n41zeZ', 119, 110, 118, '医生(角色默认在xinzhili - 全科'),
+    DOCTOR: roleType('n41zeZ', 119, 110, 118, '医生'),
     SYS_DOCTOR: roleType('ZW7Qew', 129, 120, 128, '系统智能医生'),
     UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '上级医生'),
     LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '下级医生'),

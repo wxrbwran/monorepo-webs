@@ -17,6 +17,7 @@ import logoutIcon from '@/assets/img/nav_bar/logout.svg';
 // import score from '@/assets/img/nav_bar/score.svg';
 import DoctorQRCode from '../DoctorQRCode';
 import styles from './index.scss';
+import { IState } from 'packages/doctor/typings/model';
 
 interface Item {
   key: string;
@@ -26,6 +27,7 @@ interface Item {
 function Setting() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state: IState) => state.user);
+  // 如果没有执业机构和科室信息，则认为是首次登录，默认展示编辑个人资料弹框
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('info');
   useEffect(() => {
@@ -34,6 +36,12 @@ function Setting() {
       payload: { wcIds: [window.$storage.getItem('wcId')] },
     });
   }, []);
+  useEffect(() => {
+    if (userInfo.firstLogin === 1) {
+      setActiveTab('info');
+      setShowModal(true);
+    }
+  }, [userInfo]);
   const handleLogout = () => {
     dispatch({
       type: 'auth/logout',
@@ -79,7 +87,7 @@ function Setting() {
       src: changePassword,
     },
   ];
-
+  const titleObj = { info: '个人资料', price: '收费标准', reset: '修改密码' };
   const Logout = (
     <div className={styles.item_btn} onClick={handleLogout}>
       <img src={logoutIcon} alt="退出登录" />
@@ -130,9 +138,9 @@ function Setting() {
         </div>
       </Dropdown>
       <DragModal
-        title="用户设置"
+        title={titleObj[activeTab] || '用户设置'}
         footer={null}
-        width={1248}
+        width={1000}
         visible={showModal}
         onCancel={() => {
           setShowModal(false);

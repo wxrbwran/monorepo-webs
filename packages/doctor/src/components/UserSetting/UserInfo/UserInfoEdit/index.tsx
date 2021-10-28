@@ -7,12 +7,14 @@ import moment from 'moment';
 import { IState } from 'typings/model';
 import UploadAvatar from '@/components/UploadAvatar';
 import { titleList, banksName } from '@/utils/tools';
+import { roleTags } from 'xzl-web-shared/src/utils/consts';
 import config from '@/config';
 import EditTextArea from '../EditTextArea';
 import CertificateEdit from '../CertificateEdit';
 import formatCert from '../formatCert';
 import Hospitial from '../Hospitial';
 import Department from '../Department';
+import { PlusSquareOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
 interface Iporps {
@@ -23,6 +25,7 @@ const { Option } = Select;
 const RadioGroup = Radio.Group;
 function UserInfoEdit({ toggleEdit }: Iporps) {
   const { userInfo } = useSelector((state:IState) => state.user);
+  console.log('userInfo232', userInfo);
   const [avatar, setAvatar] = useState<string>(userInfo.avatarUrl || config.defaultAvatar);
   const [form] = Form.useForm();
   const { getFieldValue, setFieldsValue } = form;
@@ -35,6 +38,20 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
     mentor: '',
     ...userInfo,
     certificates: formatCert(userInfo.certificates as ICert),
+    practiceAreas: userInfo.practiceAreas ? userInfo.practiceAreas.map(item => {
+      const { name, standardId, sub } = item;
+      return {
+        name,
+        standardId,
+        departmentName: sub.name,
+        departmentStandardId: sub.standardId,
+      };
+    }) : [
+      {
+        name: null,
+        departmentName: null,
+      },
+    ],
   };
   const formatCertificates = (certificates: any) => {
     const certObj: CommonData = {};
@@ -51,8 +68,22 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
   const onFinish = (values: any) => {
     toggleEdit();
     console.log('valuessss', values);
+    const formValues = { ...values };
+    formValues.practiceAreas = formValues.practiceAreas.map((item: any) => {
+      const { departmentName, departmentStandardId, name, standardId, labelType } = item;
+      return {
+        name,
+        standardId,
+        sub: {
+          name: departmentName,
+          standardId: departmentStandardId,
+          labelType,
+        },
+      };
+    });
+    console.log('formValues', formValues);
     const params = {
-      ...values,
+      ...formValues,
       certificates: formatCertificates(values?.certificates),
       avatarUrl: avatar,
     };
@@ -65,6 +96,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
       });
     }).catch((err: any) => {
       console.log('保存个人资料失败', err);
+      message.error(err?.result || '保存失败');
     });
   };
   const uploadSuccess = ({ imageURL }: { imageURL: string }) => {
@@ -90,48 +122,42 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
     }
     return undefined;
   };
-  const handleMentor = (e: {target: {value: string}}) => {
+  const handleMentor = (e: { target: { value: string } }) => {
     if (getFieldValue('mentor') === e.target.value) {
       setFieldsValue({ mentor: '' });
     }
   };
+  console.log('initForm', initForm);
   return (
     <div className={styles.far_doctor}>
-      <div className={styles.info_wrap}>
-        <div className={styles.left}>
-          <UploadAvatar uploadSuccess={uploadSuccess}>
-            <img src={avatar} alt="头像" />
-            <Button className={styles.upload_avatar}>上传头像</Button>
-          </UploadAvatar>
-        </div>
-        <div className={styles.right}>
-          <Form
-            // {...layout}
-            name="userInfo"
-            initialValues={initForm}
-            onFinish={onFinish}
-            form={form}
-          >
+      <Form
+        // {...layout}
+        name="userInfo"
+        initialValues={initForm}
+        onFinish={onFinish}
+        form={form}
+      >
+        <div className={styles.info_wrap}>
+          <div className={styles.left}>
+            <UploadAvatar uploadSuccess={uploadSuccess}>
+              <img className="w-70 h-70 rounded-md" src={avatar} alt="头像" />
+              <Button className={styles.upload_avatar}>上传头像</Button>
+            </UploadAvatar>
+          </div>
+          <div className={styles.right}>
             <div className={styles.form_list}>
               <Form.Item
                 label="姓名"
                 name="name"
                 rules={[{ required: true, message: '请输入姓名!' }]}
-                className={styles.name}
+                className={styles.left_input}
               >
                 <Input />
               </Form.Item>
               <Form.Item
-                label="手机号"
-                name="tel"
-                rules={[{ required: true, message: '请输入手机号!' }]}
-              >
-                <Input disabled />
-              </Form.Item>
-
-              <Form.Item
                 label="性别"
                 name="sex"
+                className={styles.right_input}
               >
                 <RadioGroup>
                   <Radio value={1}>男</Radio>
@@ -139,34 +165,22 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                 </RadioGroup>
               </Form.Item>
               <Form.Item
-                label="银行卡号"
-                name="bankCardNum"
+                label="手机号"
+                name="tel"
+                rules={[{ required: true, message: '请输入手机号!' }]}
+                className={styles.left_input}
               >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="持卡银行"
-                name="bankName"
-              >
-                <Select
-                  placeholder="请选择银行"
-                  className="item"
-                  style={{ width: '100%', minWidth: 140 }}
-                // onChange={value => this.handleBaseChange('bank', value)}
-                >
-                  {banksName.map((bank) => (
-                    <Option key={bank} value={bank}>{bank}</Option>
-                  ))}
-                </Select>
+                <Input disabled />
               </Form.Item>
               <Form.Item
                 label="职称"
                 name="title"
+                className={styles.right_input}
               >
                 <Select
                   placeholder="请选择职称"
                   className="item"
-                  style={{ width: '100%', minWidth: 140 }}
+                  style={{ width: 260 }}
                 >
                   {
                     titleList.map((item: string) => (
@@ -175,60 +189,122 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                   }
                 </Select>
               </Form.Item>
-              <Hospitial
-                setFieldsValue={setFieldsValue}
-                nameKey="firstProfessionCompany"
-                idKey="firstProfessionCompanyId"
-                request={window.$api.base.fetchHospitals}
-                disabled={!!userInfo.firstProfessionCompany}
-              />
-
-              <Department
-                setFieldsValue={setFieldsValue}
-                nameKey="firstPracticeDepartment"
-                idKey="firstPracticeDepartmentId"
-                disabled={!!userInfo.firstPracticeDepartment}
-              />
-              <Form.Item
-                name="level"
-              >
-                <RadioGroup>
-                  <Radio value={1}>一级</Radio>
-                  <Radio value={2}>二级</Radio>
-                  <Radio value={3}>三级</Radio>
-                </RadioGroup>
-              </Form.Item>
-              <Form.Item
-                label="所属医生集团"
-                name="belongToGroup"
-              >
-                <Input />
-              </Form.Item>
               <Form.Item
                 label="导师"
                 name="mentor"
+                className={styles.left_input}
               >
                 <RadioGroup>
                   <Radio onClick={handleMentor} value="博导">博导</Radio>
                   <Radio onClick={handleMentor} value="硕导">硕导</Radio>
                 </RadioGroup>
               </Form.Item>
+              <Form.List name="practiceAreas">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map((field) => (
+                      <div className={`flex ${styles.hospital_wrap}`}>
+                        <div className="flex">
+                          <Hospitial
+                            setFieldsValue={setFieldsValue}
+                            getFieldValue={getFieldValue}
+                            field={field}
+                            nameKey="name"
+                            idKey="standardId"
+                            request={window.$api.base.fetchHospitals}
+                            disabled={!!userInfo.firstProfessionCompany}
+                          />
+                          <span className="mr-15 ml-10 mt-3">-</span>
+                          <Department
+                            field={field}
+                            setFieldsValue={setFieldsValue}
+                            getFieldValue={getFieldValue}
+                            nameKey="departmentName"
+                            idKey="departmentStandardId"
+                            disabled={!!userInfo.firstPracticeDepartment}
+                          />
+                        </div>
+                        {
+                          field.name === 0 ? (
+                            <span onClick={() => add()} className={`flex items-center mb-15 text-blue-500 ${styles.btn}`}>
+                              <PlusSquareOutlined />
+                              <span className="ml-4">添加</span>
+                            </span>
+                          ) : (
+                            <span onClick={() => remove(field.name)} className={`flex items-center mb-15 text-blue-500 ${styles.btn}`}>
+                              <DeleteOutlined />
+                              <span className="ml-4">删除</span>
+                            </span>
+                          )
+                        }
+                      </div>
+                    ))}
+                  </>
+                )}
+              </Form.List>
+              <div className={styles.line_input}>
+                <Form.Item
+                  label="所在互联网医院"
+                  name="doctorGroup"
+                >
+                  <Input disabled />
+                </Form.Item>
+              </div>
+              <div className={styles.line_input}>
+                <Form.Item
+                    label="所属医生集团"
+                    name="belongToGroup"
+                  >
+                    <Input />
+                  </Form.Item>
+              </div>
+              <div className={`${styles.line_input} ${styles.role_tags}`}>
+                <Form.Item
+                  label="角色标签"
+                  name="roleTags"
+                >
+                  <Select mode="tags" style={{ width: '610px', height: 32 }} placeholder="请选择角色标签">
+                    {
+                      roleTags.map((role: string) => <Option key={role} value={role}>{role}</Option>)
+                    }
+                  </Select>
+                </Form.Item>
+              </div>
               <Form.Item
-                label="所在互联网医院"
-                name="doctorGroup"
+                label="银行卡号"
+                name="bankCardNum"
+                className={styles.left_input}
               >
-                <Input disabled />
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="持卡银行:"
+                name="bankName"
+                className={styles.right_input}
+              >
+                <Select
+                  placeholder="请选择银行"
+                  className="item"
+                  style={{ width: '100%', minWidth: 260 }}
+                // onChange={value => this.handleBaseChange('bank', value)}
+                >
+                  {banksName.map((bank) => (
+                    <Option key={bank} value={bank}>{bank}</Option>
+                  ))}
+                </Select>
               </Form.Item>
               <Form.Item
                 label="资格证书编码"
                 name="qcCode"
+                className={styles.left_input}
               >
-                <Input style={{ minWidth: 450 }} />
+                <Input />
               </Form.Item>
               <div className={styles.form_item}>
                 <Form.Item
                   label="发证日期"
                   name="qcIssuingDate"
+                  className={styles.right_input}
                 >
                   <Input type="hidden" />
                 </Form.Item>
@@ -240,13 +316,15 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
               <Form.Item
                 label="执业证书编码"
                 name="pcCode"
+                className={styles.left_input}
               >
-                <Input style={{ minWidth: 450 }} />
+                <Input />
               </Form.Item>
               <div className={styles.form_item}>
                 <Form.Item
                   label="发证日期"
                   name="pcIssuingDate"
+                  className={styles.right_input}
                 >
                   <Input type="hidden" />
                 </Form.Item>
@@ -257,22 +335,22 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
               </div>
             </div>
             <EditTextArea />
-            <CertificateEdit
-              setFieldsValue={setFieldsValue}
-              certificates={initForm?.certificates}
-              getFieldValue={getFieldValue}
-            />
-            <div className="common__btn">
-              <Form.Item>
-                <Button onClick={toggleEdit}>退出</Button>
-                <Button type="primary" htmlType="submit">
-                  确定
-                </Button>
-              </Form.Item>
-            </div>
-          </Form>
+          </div>
         </div>
-      </div>
+        <CertificateEdit
+          setFieldsValue={setFieldsValue}
+          certificates={initForm?.certificates}
+          getFieldValue={getFieldValue}
+        />
+        <div className="common__btn">
+          <Form.Item>
+            <Button onClick={toggleEdit}>退出</Button>
+            <Button type="primary" htmlType="submit">
+              确定
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
     </div>
   );
 }

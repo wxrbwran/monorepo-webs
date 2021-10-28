@@ -35,6 +35,7 @@ const userState: UserModelState = {
   },
   filterOrgs: [],
   currentOrgInfo: {},
+  firstLogin: 0, // 0初始值，1首次登录 2非首次登录
 };
 
 const Model: UserModelType = {
@@ -91,7 +92,11 @@ const Model: UserModelType = {
       }
       return {
         ...state,
-        userInfo,
+        userInfo: {
+          ...userInfo,
+          firstLogin: userInfo?.practiceAreas ? 2 : 1,
+        },
+
       };
     },
     saveUserPrice(state, action) {

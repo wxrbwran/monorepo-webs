@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, Button } from 'antd';
 import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
-import { Role } from './role';
+import { Role, fetchRolePropValue } from './role';
 import moment from 'moment';
 export var columnCreator = function (title, dataIndex, customRender) {
     if (customRender === void 0) { customRender = undefined; }
@@ -181,6 +181,11 @@ export var role = {
     title: '角色',
     dataIndex: 'role',
     render: function (text) { return React.createElement("span", null, roleList[text]); },
+};
+export var roleCol = {
+    title: '角色',
+    dataIndex: 'role',
+    render: function (text) { return React.createElement("span", null, fetchRolePropValue(text, 'desc')); },
 };
 export var workload = {
     title: '工作量统计',

@@ -275,17 +275,18 @@ export var operatorRoles = [
 export var departmentType = [
     {
         text: '通用科室',
-        key: 'COMMON_DEPARTMENT_TYPE',
+        key: 'common_department_type',
     },
     {
         text: '肿瘤科',
-        key: 'TUMOUR_DEPARTMENT_TYPE',
+        key: 'tumour_department_type',
     },
     {
         text: '神经内科',
-        key: 'NEUROLOGY_DEPARTMENT_TYPE',
+        key: 'neurology_department_type',
     },
 ];
+export var roleTags = ['主管医生', '医生助手', 'CRA', 'CRC', ' PM'];
 export var inviteStatusLists = {
     WAITING: '待确认',
     CONFIRMED: '已确认',

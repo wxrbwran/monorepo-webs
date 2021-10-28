@@ -105,7 +105,32 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   // console.log('handlePatientTeamDataSource res', res);
   return res;
 };
-
+export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
+  const doctors: any[] = [];
+  dataSource.forEach((dataItem) => {
+    let doctor: any = {};
+    dataItem.members.forEach(item => {
+      if (item.role === Role.DOCTOR.id) {
+        doctor = {
+          ...doctor,
+          ...item,
+        };
+        // 医生所在的互联网医院
+      } else if (item.role === Role.ORG.id) {
+        if (doctor.orgs) {
+          doctor.orgs.push(item.name);
+        } else {
+          doctor = {
+            ...doctor,
+            orgs: [item.name],
+          };
+        }
+      }
+    });
+    doctors.push(doctor);
+  });
+  return doctors;
+};
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
   console.log('dataSource', dataSource);
   console.log('dataKey', dataKey);
@@ -127,6 +152,9 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       }
       if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category as string)) {
         return handlePatientTeamDataSource(dataSource);
+      }
+      if (category === 'relatedDoctors') {
+        return handleRelatedDoctorsDataSource(dataSource);
       }
       return dataSource;
     case 'infos':

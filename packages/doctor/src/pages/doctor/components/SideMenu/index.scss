@@ -26,6 +26,11 @@
           height: 50px!important;
           line-height: 50px!important;
         }
+        .ant-menu-submenu-selected {
+          path {
+            fill: #1890ff!important;
+          }
+        }
       }
     }
   >div {

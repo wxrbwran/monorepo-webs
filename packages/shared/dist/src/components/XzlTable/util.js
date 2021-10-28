@@ -105,6 +105,28 @@ var handlePatientTeamDataSource = function (dataSource) {
     // console.log('handlePatientTeamDataSource res', res);
     return res;
 };
+export var handleRelatedDoctorsDataSource = function (dataSource) {
+    var doctors = [];
+    dataSource.forEach(function (dataItem) {
+        var doctor = {};
+        dataItem.members.forEach(function (item) {
+            if (item.role === Role.DOCTOR.id) {
+                doctor = __assign(__assign({}, doctor), item);
+                // 医生所在的互联网医院
+            }
+            else if (item.role === Role.ORG.id) {
+                if (doctor.orgs) {
+                    doctor.orgs.push(item.name);
+                }
+                else {
+                    doctor = __assign(__assign({}, doctor), { orgs: [item.name] });
+                }
+            }
+        });
+        doctors.push(doctor);
+    });
+    return doctors;
+};
 export var handleTableDataSource = function (dataKey, dataSource, category) {
     console.log('dataSource', dataSource);
     console.log('dataKey', dataKey);
@@ -125,6 +147,9 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             }
             if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category)) {
                 return handlePatientTeamDataSource(dataSource);
+            }
+            if (category === 'relatedDoctors') {
+                return handleRelatedDoctorsDataSource(dataSource);
             }
             return dataSource;
         case 'infos':

@@ -27,16 +27,6 @@
         margin-right: 106px;
       }
     }
-    .ant-btn {
-      margin: 0 5px 10px;
-      border-radius: 2px;
-      font-size: 14px;
-      height: 32px;
-      &.active {
-        color: #1890ff;
-        border-color: #1890ff;
-      }
-    }
   }
   // 机构列表
   .org_list {
@@ -46,19 +36,43 @@
     margin: 10px auto 0;
     @include flex();
     flex-wrap: wrap;
+    .org_btn{
+      margin: 0 5px 10px;
+      border-radius: 2px;
+      font-size: 14px;
+      height: 32px;
+      border: none;
+      position: relative;
+      display: block;
+      &.active {
+        color: #218CE9;
+        &::before {
+          content: '';
+          position: absolute;
+          left: 50%;
+          margin-left: -15px;
+          width: 30px;
+          height: 2px;
+          background: #218CE9;
+          bottom: 0;
+        }
+      }
+    }
   }
   // 医生详情
   .doctor {
-    width: 330px;
+    width: 540px;
     margin: 0px auto 0px;
-    padding-top: 10px;
+    padding: 25px;
     text-align: left;
-    background-color: #fff;
+    background: #F5F5F5;
+    border-radius: 5px;
     .info {
-      width: 306px;
-      margin: 0 auto;
+      margin: 0 auto 25px;
       font-size: 15px;
       color: #2C2F32;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #EFEFEF;
       @include flex(space-between, flex-start);
     }
     .wxinfo {
@@ -74,24 +88,29 @@
     }
     .avatar {
       background: #FFFFFF;
-      border-radius: 5px;
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
     }
     .show_id {
       width: 185px;
-      height: 34px;
-      text-align: center;
-      line-height: 34px;
-      background: #4C73CF;
+      height: 28px;
+      line-height: 28px;
+      background: #E8F1FA;
       border-radius: 2px;
-      font-size: 16px;
-      color: #FFFFFF;
-      margin: 10px 0 10px 0;
+      text-align: center;
+      font-weight: 500;
+      color: #218CE9;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      margin-top: 3px;
     }
   }
   .ewm {
     text-align: center;
+    width: 160px;
+    margin: 0 auto;
     p {
       margin-top: 15px;
       color: #999999;
@@ -125,7 +144,7 @@
     }
   }
   .download {
-    margin: 0 auto;
+    margin: 20px auto 0;
     display: block;
     color: #007ADA;
     background-color: #fff;
