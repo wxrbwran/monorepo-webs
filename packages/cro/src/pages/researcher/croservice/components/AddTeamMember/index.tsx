@@ -25,7 +25,7 @@ const AddTeamMember: FC<IProps> = (props) => {
   const [form] = Form.useForm();
   const { getFieldsValue } = form;
   const [showModal, setshowModal] = useState(false);
-  const initTableOptions = { pageAt:1, pageSize: 5, conditions: [] };
+  const initTableOptions = { pageAt: 1, pageSize: 5, conditions: [] };
   const [tableOptions, setOptions] = useState<ITableOptions>(initTableOptions);
   const [selectDoctor, setSelectDoctor] = useState<ISubject[][]>([]);
   const [pageAt, setPageAt] = useState(1);
@@ -78,7 +78,7 @@ const AddTeamMember: FC<IProps> = (props) => {
       width: 147,
       render: (orgs: string[]) => {
         if (orgs && orgs.length > 0) {
-          return orgs.map((org, inx) => <span>{org}{inx !== orgs.length - 1 ? '、' : ''}</span>);
+          return orgs.map((org, inx) => <span>{org.name}{inx !== orgs.length - 1 ? '、' : ''}</span>);
         } else {
           return <span>--</span>;
         }
@@ -108,7 +108,7 @@ const AddTeamMember: FC<IProps> = (props) => {
     setOptions({
       ...tableOptions,
       pageAt: 1,
-      conditions: [ ...newConditions ],
+      conditions: [...newConditions],
     });
   };
   const fetchData = (data: any) => {
@@ -119,7 +119,7 @@ const AddTeamMember: FC<IProps> = (props) => {
     setPageAt(num);
   };
   const handleDelDoctor = (pageInx: number, docSid: string) => {
-    const newDoctors = selectDoctor[pageInx].filter(item => item.sid !== docSid );
+    const newDoctors = selectDoctor[pageInx].filter(item => item.sid !== docSid);
     selectDoctor[pageInx] = newDoctors;
     setSelectDoctor(cloneDeep(selectDoctor));
   };
@@ -132,7 +132,7 @@ const AddTeamMember: FC<IProps> = (props) => {
       newSelectDoc[pageAt - 1] = selectedRows;
       setSelectDoctor(newSelectDoc);
     },
-    onSelect: (record: any, selected: boolean ) => {
+    onSelect: (record: any, selected: boolean) => {
       console.log('onselect', record, selected);
     },
     onSelectAll: (selected: boolean, selectedRows: { sid: string, wcId: string }[]) => {
@@ -181,52 +181,52 @@ const AddTeamMember: FC<IProps> = (props) => {
         destroyOnClose
       >
         <div className={styles.add_member}>
-         <div className="flex">
-           <div className={`text-gray-500 mr-25 ${styles.tit}`}>输入任意项查询</div>
-          <Form form={form}>
-            <QueryItem />
-            <Button type="primary" onClick={handleSearch} className="ml-12">查询</Button>
-          </Form>
-         </div>
-         {
-           !isEmpty(Object.values(getFieldsValue()).filter(val => !!val)) && (
-            <>
-              <XzlTable
-                columns={columns}
-                dataKey="teams"
-                handleCallback={fetchData}
-                category="relatedDoctors"
-                request={window.$api.service.fetchRelatedDoctors}
-                depOptions={tableOptions}
-                tableOptions={{
-                  rowSelection,
-                  handleFetchPageAt,
-                }}
-              />
-              <div className="flex justify-between">
-                <div className="flex">
-                  <div className="mt-20" style={{ flex: '0 0 42px' }}>已选择</div>
-                  <div className="flex flex-wrap">
-                    {
-                      selectDoctor.map((pageDoctor, pageInx) => {
-                        return pageDoctor?.map((doctor) => {
-                          return (
-                            <div className={styles.check_doctor}>
-                              <CloseCircleFilled onClick={() => handleDelDoctor(pageInx, doctor.sid)} />
-                              <img className="w-40 h-40 rounded-md mb-5" src={doctor.avatarUrl || defaultAvatar} alt="" />
-                              <div>{doctor.name}</div>
-                            </div>
-                          );
-                        });
-                      })
-                    }
+          <div className="flex">
+            <div className={`text-gray-500 mr-25 ${styles.tit}`}>输入任意项查询</div>
+            <Form form={form}>
+              <QueryItem />
+              <Button type="primary" onClick={handleSearch} className="ml-12">查询</Button>
+            </Form>
+          </div>
+          {
+            !isEmpty(Object.values(getFieldsValue()).filter(val => !!val)) && (
+              <>
+                <XzlTable
+                  columns={columns}
+                  dataKey="teams"
+                  handleCallback={fetchData}
+                  category="relatedDoctors"
+                  request={window.$api.service.fetchRelatedDoctors}
+                  depOptions={tableOptions}
+                  tableOptions={{
+                    rowSelection,
+                    handleFetchPageAt,
+                  }}
+                />
+                <div className="flex justify-between">
+                  <div className="flex">
+                    <div className="mt-20" style={{ flex: '0 0 42px' }}>已选择</div>
+                    <div className="flex flex-wrap">
+                      {
+                        selectDoctor.map((pageDoctor, pageInx) => {
+                          return pageDoctor?.map((doctor) => {
+                            return (
+                              <div className={styles.check_doctor}>
+                                <CloseCircleFilled onClick={() => handleDelDoctor(pageInx, doctor.sid)} />
+                                <img className="w-40 h-40 rounded-md mb-5" src={doctor.avatarUrl || defaultAvatar} alt="" />
+                                <div>{doctor.name}</div>
+                              </div>
+                            );
+                          });
+                        })
+                      }
+                    </div>
                   </div>
+                  <Button type="primary" onClick={handleSubmit} className="mt-40">确认添加</Button>
                 </div>
-                <Button type="primary" onClick={handleSubmit} className="mt-40">确认添加</Button>
-              </div>
-            </>
-           )
-         }
+              </>
+            )
+          }
         </div>
       </DragModal>
     </div>

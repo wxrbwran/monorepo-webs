@@ -22,10 +22,10 @@ const MemberItem: FC<IProps> = ({ doctorData, style }) => {
         <div>
           <div className="flex items-center  mt-10">
             <span className="text-lg font-bold">{name}</span>
-            { [0, 1].includes(sex) && <img src={sexList[sex]} /> }
+            {[0, 1].includes(sex) && <img src={sexList[sex]} />}
           </div>
           <div className="text-gray-500">
-            { depList?.map(item => <span className="mr-5">{item}</span>)}
+            {depList?.map(item => <span className="mr-5">{item}</span>)}
             <span>{title ? `| ${title}` : ''}</span>
           </div>
         </div>
@@ -33,19 +33,19 @@ const MemberItem: FC<IProps> = ({ doctorData, style }) => {
       <div className="flex">
         <div className={`text-gray-500 mr-10 pt-2 ${styles.title}`}>角色标签:</div>
         <div>
-          { roleTags && isEmpty(roleTags) ? roleTags?.map(item => <span className={styles.role_tag}>{item}</span>) : '--'}
+          {roleTags && isEmpty(roleTags) ? roleTags?.map(item => <span className={styles.role_tag}>{item}</span>) : '--'}
         </div>
       </div>
       <div className="flex my-12">
         <div className={`text-gray-500 mr-10 ${styles.title}`}>执业医院:</div>
         <div>
-          { practiceAreas ? practiceAreas?.map(item => <span className="mr-20">{item.name}</span>) : '--'}
+          {practiceAreas ? practiceAreas?.map(item => <span className="mr-20">{item.name}</span>) : '--'}
         </div>
       </div>
       <div className="flex">
         <div className={`text-gray-500 mr-10 ${styles.title}`}>互联网医院:</div>
         <div>
-          {orgs?.map((item: string) => <span className="mr-20">{item}</span>)}
+          {orgs?.map((item: string) => <span className="mr-20">{item.name}</span>)}
         </div>
       </div>
     </div>

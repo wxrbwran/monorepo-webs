@@ -88,7 +88,7 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource.forEach((datum) => {
     // console.log(datum);
-    let tmp:Record<string, string> = {};
+    let tmp: Record<string, string> = {};
     datum.members.forEach((member: Store) => {
       const curRole: string = fetchRolePropValue(member.role, 'key') as string;
       // console.log(curRole);
@@ -118,11 +118,11 @@ export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
         // 医生所在的互联网医院
       } else if (item.role === Role.ORG.id) {
         if (doctor.orgs) {
-          doctor.orgs.push(item.name);
+          doctor.orgs.push(item);
         } else {
           doctor = {
             ...doctor,
-            orgs: [item.name],
+            orgs: [item],
           };
         }
       }
