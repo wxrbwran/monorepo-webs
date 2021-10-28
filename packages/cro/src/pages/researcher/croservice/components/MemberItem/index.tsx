@@ -15,6 +15,8 @@ const MemberItem: FC<IProps> = ({ doctorData, style }) => {
   const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, departments } = doctorData;
   // 科室为多机构组合并去重得到, 互联网医院科室，不是执业科室
   const depList = departments ? [...new Set(departments.map(item => item.name))] : [];
+
+  console.log('=================MemberItem ', JSON.stringify(roleTags));
   return (
     <div className={`mt-10 p-15 rounded-md ${styles.item}`} style={style}>
       <div className="flex items-start mb-14">
@@ -33,7 +35,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style }) => {
       <div className="flex">
         <div className={`text-gray-500 mr-10 pt-2 ${styles.title}`}>角色标签:</div>
         <div>
-          {roleTags && isEmpty(roleTags) ? roleTags?.map(item => <span className={styles.role_tag}>{item}</span>) : '--'}
+          {roleTags && !isEmpty(roleTags) ? roleTags?.map(item => <span className={styles.role_tag}>{item}</span>) : '--'}
         </div>
       </div>
       <div className="flex my-12">

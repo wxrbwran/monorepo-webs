@@ -1,31 +1,37 @@
 import React, { FC, useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import MemberItem from '../MemberItem';
-import { Checkbox, Row, Col, Radio } from 'antd';
+import { Checkbox, Row, Col } from 'antd';
 import styles from './index.scss';
 
 interface IProps {
   role: string;
+  members: any[];
   handleChoice: (type: string, doctor: any) => void;
+  friends: any[];
 }
 const ChoiceDoctor: FC<IProps> = (props) => {
-  const { children, role } = props;
+  const { children, role, members, friends } = props;
   const [showModal, setshowModal] = useState(false);
-  const [showOrgModal, setshowOrgModal] = useState(false);
+  // const [showOrgModal, setshowOrgModal] = useState(false);
   const handleShowModal = () => {
     setshowModal(true);
   };
-  const handleChoiceDoctor = (checkedValues) => {
-    console.log('checkedValues', checkedValues);
-    setshowOrgModal(true);
+  const handleChoiceDoctor = (sid) => {
+
+    // 过滤出来选中的那个id
+    console.log('checkedValues', sid);
+    // setshowOrgModal(true);
   };
-  const handleChoiceOrg = (val) => {
-    console.log(343, val);
-  };
+  // const handleChoiceOrg = (val) => {
+  //   console.log(343, val);
+  // };
+
+  console.log('============== ChoiceDoctor members', members.length);
   return (
     <div>
       <div onClick={handleShowModal}>{children}</div>
-       <DragModal
+      <DragModal
         wrapClassName="ant-modal-wrap-center cancel_text_blue"
         width={1000}
         maskClosable
@@ -38,21 +44,20 @@ const ChoiceDoctor: FC<IProps> = (props) => {
         <div className={styles.choice_doctor}>
           <Checkbox.Group style={{ width: '100%' }} onChange={handleChoiceDoctor}>
             <Row>
-              <Col span={12}>
-                <Checkbox value="A">
-                  <MemberItem doctorData={{}} />
-                </Checkbox>
-              </Col>
-              <Col span={12}>
-                <Checkbox value="B">
-                  <MemberItem doctorData={{}} />
-                </Checkbox>
-              </Col>
+              {
+                friends.map((item) => {
+                  return (<Col span={12}>
+                    <Checkbox value={item.sid}>
+                      <MemberItem doctorData={item} />
+                    </Checkbox>
+                  </Col>);
+                })
+              }
             </Row>
           </Checkbox.Group>
         </div>
       </DragModal>
-      <DragModal
+      {/* <DragModal
         wrapClassName="ant-modal-wrap-center cancel_text_blue"
         width={1000}
         maskClosable
@@ -68,7 +73,7 @@ const ChoiceDoctor: FC<IProps> = (props) => {
           <Radio value={3}>C</Radio>
           <Radio value={4}>D</Radio>
         </Radio.Group>
-      </DragModal>
+      </DragModal> */}
     </div>
   );
 };

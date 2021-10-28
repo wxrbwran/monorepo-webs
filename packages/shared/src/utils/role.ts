@@ -62,7 +62,7 @@ export const Role: RolesMap = {
   LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '下级医生'), // 15
   ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
 
-  COUNSELOR_DOCTOR: roleType( '2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)' ), // 17
+  COUNSELOR_DOCTOR: roleType('2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)'), // 17
   CONSOLE_ROOT: roleType('6exPeb', 179, 170, 178, '后台系统Root管理员'), // 18
   CRO_ORG: roleType('YWQD0z', 189, 180, 188, 'CRO 机构'), // 19
   NONE: roleType('bWlZez', 199, 190, 198, '任何角色都没有，即没有任何身份，默认都进入xinzhili空间'), // 20
@@ -90,6 +90,11 @@ export const Role: RolesMap = {
   NURSE_YL: roleType('qWd7L0', 0, 0, 0, '护 养老院护士'), // 48
   YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '管 养老院高级管理员'), // 49
   YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'), // 50
+
+  CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'), // 51
+  CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'), // 51
+  CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'), // 51
+
 };
 
 export function fetchRolePropById(id: string) {

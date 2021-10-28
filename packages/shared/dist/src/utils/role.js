@@ -51,7 +51,10 @@ export var Role = {
     PATIENT_YL_VIP: roleType('V0XNq4', 469, 460, 468, '患 养老院vip患者'),
     NURSE_YL: roleType('qWd7L0', 0, 0, 0, '护 养老院护士'),
     YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '管 养老院高级管理员'),
-    YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'), // 50
+    YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'),
+    CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'),
+    CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'),
+    CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'), // 51
 };
 export function fetchRolePropById(id) {
     var roleKey = Object.keys(Role);
