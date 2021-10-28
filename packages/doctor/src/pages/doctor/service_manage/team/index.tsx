@@ -1,13 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import TeamAddMember from '../components/TeamAddMember';
+import AddTeamMember from '../components/AddTeamMember';
 import MemberItem from '../components/MemberItem';
 import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/src/components/XzlTable/util';
 import * as api from '@/services/api';
 
 const Team: FC = () => {
   const [friends, setfriends] = useState([]);
+  const doctorSid = window.$storage.getItem('sid');
   const handleFetchFriends = () => {
     api.service.fetchDoctorFriends().then(res => {
       setfriends(handleRelatedDoctorsDataSource(res.teams));
@@ -18,12 +19,13 @@ const Team: FC = () => {
   }, []);
   return (
     <div className="p-20 flex-auto">
-      <TeamAddMember handleRefresh={handleFetchFriends}>
+      <AddTeamMember handleRefresh={handleFetchFriends}>
         <Button type="primary" icon={<PlusOutlined />}>添加成员</Button>
-      </TeamAddMember>
+      </AddTeamMember>
       <div className="flex flex-wrap justify-between w-auto">
         {
-          friends.map((doctor: ISubject) => <MemberItem doctorData={doctor} />)
+          friends.filter(item => item?.sid !== doctorSid)
+            .map((doctor: ISubject) => <MemberItem style={{ width: '49.5%' }} doctorData={doctor} />)
         }
       </div>
     </div>

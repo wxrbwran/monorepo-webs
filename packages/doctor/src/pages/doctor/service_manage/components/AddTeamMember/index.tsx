@@ -6,8 +6,8 @@ import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 import styles from './index.scss';
-import defaultAvatar from 'xzl-web-shared/src/utils/consts';
-import { cloneDeep } from 'lodash';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { cloneDeep, isEmpty } from 'lodash';
 interface IProps {
   handleRefresh: () => void;
 }
@@ -20,7 +20,7 @@ export const workload = {
   title: '工作量统计',
   dataIndex: 'workload',
 };
-const TeamAddMember: FC<IProps> = (props) => {
+const AddTeamMember: FC<IProps> = (props) => {
   const { children, handleRefresh } = props;
   const [form] = Form.useForm();
   const { getFieldsValue } = form;
@@ -102,6 +102,9 @@ const TeamAddMember: FC<IProps> = (props) => {
   };
   const handleSearch = () => {
     const newConditions = handleSelection(getFieldsValue());
+    if (isEmpty(Object.values(getFieldsValue()).filter(val => !!val))) {
+      message.warn('请输入查询项');
+    }
     setOptions({
       ...tableOptions,
       pageAt: 1,
@@ -163,6 +166,7 @@ const TeamAddMember: FC<IProps> = (props) => {
       setSelectDoctor([]);
     }
   }, [showModal]);
+
   return (
     <div>
       <div onClick={handleShowModal}>{children}</div>
@@ -184,43 +188,49 @@ const TeamAddMember: FC<IProps> = (props) => {
             <Button type="primary" onClick={handleSearch} className="ml-12">查询</Button>
           </Form>
          </div>
-         <XzlTable
-            columns={columns}
-            dataKey="teams"
-            handleCallback={fetchData}
-            category="relatedDoctors"
-            request={window.$api.service.fetchRelatedDoctors}
-            depOptions={tableOptions}
-            tableOptions={{
-              rowSelection,
-              handleFetchPageAt,
-            }}
-          />
-          <div className="flex justify-between">
-            <div className="flex">
-              <div className="mt-20" style={{ flex: '0 0 42px' }}>已选择</div>
-              <div className="flex flex-wrap">
-                {
-                  selectDoctor.map((pageDoctor, pageInx) => {
-                    return pageDoctor?.map((doctor) => {
-                      return (
-                        <div className={styles.check_doctor}>
-                          <CloseCircleFilled onClick={() => handleDelDoctor(pageInx, doctor.sid)} />
-                          <img className="w-40 h-40 rounded-md mb-5" src={doctor.avatarUrl || defaultAvatar} alt="" />
-                          <div>{doctor.name}</div>
-                        </div>
-                      );
-                    });
-                  })
-                }
+         {
+           !isEmpty(Object.values(getFieldsValue()).filter(val => !!val)) && (
+            <>
+              <XzlTable
+                columns={columns}
+                dataKey="teams"
+                handleCallback={fetchData}
+                category="relatedDoctors"
+                request={window.$api.service.fetchRelatedDoctors}
+                depOptions={tableOptions}
+                tableOptions={{
+                  rowSelection,
+                  handleFetchPageAt,
+                }}
+              />
+              <div className="flex justify-between">
+                <div className="flex">
+                  <div className="mt-20" style={{ flex: '0 0 42px' }}>已选择</div>
+                  <div className="flex flex-wrap">
+                    {
+                      selectDoctor.map((pageDoctor, pageInx) => {
+                        return pageDoctor?.map((doctor) => {
+                          return (
+                            <div className={styles.check_doctor}>
+                              <CloseCircleFilled onClick={() => handleDelDoctor(pageInx, doctor.sid)} />
+                              <img className="w-40 h-40 rounded-md mb-5" src={doctor.avatarUrl || defaultAvatar} alt="" />
+                              <div>{doctor.name}</div>
+                            </div>
+                          );
+                        });
+                      })
+                    }
+                  </div>
+                </div>
+                <Button type="primary" onClick={handleSubmit} className="mt-40">确认添加</Button>
               </div>
-            </div>
-            <Button type="primary" onClick={handleSubmit} className="mt-40">确认添加</Button>
-          </div>
+            </>
+           )
+         }
         </div>
       </DragModal>
     </div>
   );
 };
 
-export default TeamAddMember;
+export default AddTeamMember;

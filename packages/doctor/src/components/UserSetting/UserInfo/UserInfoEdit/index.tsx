@@ -96,6 +96,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
       });
     }).catch((err: any) => {
       console.log('保存个人资料失败', err);
+      message.error(err?.result || '保存失败');
     });
   };
   const uploadSuccess = ({ imageURL }: { imageURL: string }) => {

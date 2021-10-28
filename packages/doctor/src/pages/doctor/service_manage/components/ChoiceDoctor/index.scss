@@ -1,0 +1,22 @@
+.choice_doctor {
+  :global {
+    // .ant-checkbox-wrapper {
+    //   display: flex;
+    //   flex-direction: row-reverse;
+    //   align-items: flex-start;
+    // }
+    .ant-checkbox-wrapper {
+      width: 100%;
+      >span {
+        &:nth-child(2) {
+          width: 100%;
+        }
+      }
+    }
+    .ant-checkbox {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+  }
+}

@@ -58,10 +58,6 @@ function Hospitial(props: Iprops) {
       <Form.Item
         label={field.name === 0 ? '执业医院和科室' : ' '}
         name={[field.name, nameKey]}
-        rules={[{
-          required: true,
-          message: '请输入第一执业医院!',
-        }]}
       >
         <Select
           showSearch
@@ -74,6 +70,7 @@ function Hospitial(props: Iprops) {
           onSelect={handleSelect}
           notFoundContent={fetching ? <Spin size="small" /> : null}
           style={{ width: '285px' }}
+          allowClear
           // disabled={disabled}
         >
           {hospitals.map((medicine) => (

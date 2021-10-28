@@ -2,20 +2,21 @@ import React, { FC } from 'react';
 import female from '@/assets/img/icon_female.svg';
 import male from '@/assets/img/icon_male.svg';
 import { isEmpty } from 'lodash';
-import defaultAvatar from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import styles from './index.scss';
 
 interface IProps {
   doctorData: ISubject;
+  style?: object;
 }
-const MemberItem: FC<IProps> = ({ doctorData }) => {
+const MemberItem: FC<IProps> = ({ doctorData, style }) => {
   // 女  男
   const sexList = [female, male];
-  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl } = doctorData;
-  // 科室为多机构组合并去重得到
-  const departments = practiceAreas ? [...new Set(practiceAreas.map(item => item.sub.name))] : [];
+  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, departments } = doctorData;
+  // 科室为多机构组合并去重得到, 互联网医院科室，不是执业科室
+  const depList = departments ? [...new Set(departments.map(item => item.name))] : [];
   return (
-    <div className={`mt-10 p-15 rounded-md ${styles.item}`}>
+    <div className={`mt-10 p-15 rounded-md ${styles.item}`} style={style}>
       <div className="flex items-start mb-14">
         <img className="w-60 h-60 mr-15 rounded-md" src={avatarUrl || defaultAvatar} />
         <div>
@@ -24,7 +25,7 @@ const MemberItem: FC<IProps> = ({ doctorData }) => {
             { [0, 1].includes(sex) && <img src={sexList[sex]} /> }
           </div>
           <div className="text-gray-500">
-            { departments?.map(item => <span className="mr-5">{item}</span>)}
+            { depList?.map(item => <span className="mr-5">{item}</span>)}
             <span>{title ? `| ${title}` : ''}</span>
           </div>
         </div>
@@ -50,5 +51,8 @@ const MemberItem: FC<IProps> = ({ doctorData }) => {
     </div>
   );
 };
-
+MemberItem.defaultProps = {
+  style: {},
+  doctorData: {},
+};
 export default MemberItem;

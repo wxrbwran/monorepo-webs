@@ -88,10 +88,6 @@ function Department(props: Iprops) {
       <Form.Item
         label=""
         name={[field.name, nameKey]}
-        rules={[{
-          required: true,
-          message: '请输入第一执业医院所在科室!',
-        }]}
       >
         <Select
           showSearch
@@ -102,6 +98,7 @@ function Department(props: Iprops) {
           onSelect={handleSelect}
           style={{ width: '285px' }}
           // disabled={disabled}
+          allowClear
         >
           {department.map((medicine) => (
             <Option key={medicine.id} value={medicine.id}>

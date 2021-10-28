@@ -1,0 +1,9 @@
+.service_package {
+  :global {
+    .ant-tabs-nav {
+      &::before {
+        display: none;
+      }
+    }
+  }
+}
