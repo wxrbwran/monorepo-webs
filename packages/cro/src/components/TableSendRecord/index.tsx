@@ -83,10 +83,11 @@ const TableSendRecord: FC<IProps> = (props) => {
     }
   };
   const renderTable = useMemo(() => () => {
-    const col = [...columns];
+    let col = [...columns];
+    if (source === 'crf') {
+      col = [sendAt, Receiver];
+    }
     if (tableOptions.status === 2 && source !== 'objective') { col.push(replyAt); }
-
-    console.log('================= renderTable = useMemo(()', JSON.stringify(tableOptions));
 
     return (
       tableOptions.ruleId ?

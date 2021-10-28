@@ -50,7 +50,7 @@ function Reply({ location }: IProps) {
       title: '试验状态',
       dataIndex: 'status',
       render: (record: any) => (
-        <div>{record.status === 1002 ? '进行中' : '已结束'}</div>
+        <div>{record === 1002 ? '进行中' : '已结束'}</div>
       ),
     },
     {
