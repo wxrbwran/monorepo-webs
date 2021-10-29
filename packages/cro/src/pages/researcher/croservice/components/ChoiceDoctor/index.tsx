@@ -1,33 +1,82 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef, useEffect } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import MemberItem from '../MemberItem';
 import { Checkbox, Row, Col } from 'antd';
 import styles from './index.scss';
+import { Button } from 'antd';
 
 interface IProps {
   role: string;
   members: any[];
-  handleChoice: (type: string, doctor: any) => void;
+  handleChoice: (choices: any[]) => void;
   friends: any[];
 }
 const ChoiceDoctor: FC<IProps> = (props) => {
-  const { children, role, members, friends } = props;
+  const { children, role, members, friends, handleChoice } = props;
   const [showModal, setshowModal] = useState(false);
-  // const [showOrgModal, setshowOrgModal] = useState(false);
+  const [choiceSources, setChoiceSources] = useState<any[]>([]);
+  const choicesRef = useRef<[]>();
+
+
+
+  console.log('============== ChoiceDoctor', JSON.stringify(members));
+  useEffect(() => {
+    const result = friends.filter((item) => !members?.includes(item));
+    setChoiceSources(result);
+  }, [friends]);
+
+  useEffect(() => {
+    const result = friends.filter((item) => !members?.includes(item));
+
+    console.log('============== ChoiceDoctor filter', JSON.stringify(result));
+    setChoiceSources(result);
+  }, [members]);
+
   const handleShowModal = () => {
+
+    // 每次弹窗重新弹出时, 清空选中的数据源
+    choicesRef.current = [];
     setshowModal(true);
   };
-  const handleChoiceDoctor = (sid) => {
+  // 选择了医生
+  const handleChoiceDoctor = (sids) => {
 
-    // 过滤出来选中的那个id
-    console.log('checkedValues', sid);
-    // setshowOrgModal(true);
+    // console.log('============= sids sids', JSON.stringify(sids));
+    // console.log('============= choicesRef.current', JSON.stringify(choicesRef.current));
+    // const newChoiceSid = sids.filter((item) => !choicesRef.current?.includes(item));
+
+    // const newChoice = choiceSources.filter((item) => newChoiceSid.includes(item.sid));
+    // console.log('============= newChoice', JSON.stringify(newChoice));
+
+    // console.log('============= newChoice.length', newChoice.length);
+
+    // if (newChoice.length > 0 && newChoice[0].orgs?.length > 0) {
+    //   setCurrentChoice(newChoice[0]);
+    //   setshowOrgModal(true);
+    // } else {
+    //   setshowOrgModal(false);
+    // }
+    choicesRef.current = sids;
   };
-  // const handleChoiceOrg = (val) => {
-  //   console.log(343, val);
+
+
+  // const handleChoiceOrg = (nsId) => {
+
+  //   setshowOrgModal(false);
+  //   currentChoice.choiceOrgNsId = nsId;
   // };
 
-  console.log('============== ChoiceDoctor members', members.length);
+  // 点击完成
+  const onSaveChoices = () => {
+
+    const result = choiceSources.filter((item) => choicesRef.current?.includes(item.sid));
+    console.log('============= onSaveChoices', JSON.stringify(result));
+    setshowModal(false);
+    if (handleChoice) {
+      handleChoice(result);
+    }
+  };
+
   return (
     <div>
       <div onClick={handleShowModal}>{children}</div>
@@ -45,7 +94,7 @@ const ChoiceDoctor: FC<IProps> = (props) => {
           <Checkbox.Group style={{ width: '100%' }} onChange={handleChoiceDoctor}>
             <Row>
               {
-                friends.map((item) => {
+                choiceSources.map((item) => {
                   return (<Col span={12}>
                     <Checkbox value={item.sid}>
                       <MemberItem doctorData={item} />
@@ -55,6 +104,7 @@ const ChoiceDoctor: FC<IProps> = (props) => {
               }
             </Row>
           </Checkbox.Group>
+          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={onSaveChoices}>完成</Button>
         </div>
       </DragModal>
       {/* <DragModal
@@ -67,11 +117,13 @@ const ChoiceDoctor: FC<IProps> = (props) => {
         footer={null}
         destroyOnClose
       >
-        <Radio.Group onChange={handleChoiceOrg} defaultValue={1}>
-          <Radio value={1}>A</Radio>
-          <Radio value={2}>B</Radio>
-          <Radio value={3}>C</Radio>
-          <Radio value={4}>D</Radio>
+        <Radio.Group onChange={handleChoiceOrg} defaultValue={currentChoice ? currentChoice.choiceOrgNsId : ''}>
+          {
+            currentChoice &&
+            currentChoice.orgs.map((item) => {
+              return (<Radio value={item.nsId}>{item.name}</Radio>);
+            })
+          }
         </Radio.Group>
       </DragModal> */}
     </div>

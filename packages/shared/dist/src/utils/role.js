@@ -54,7 +54,8 @@ export var Role = {
     YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'),
     CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'),
     CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'),
-    CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'), // 51
+    CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'),
+    SPACE_CREATOR: roleType('80pbO4', 0, 0, 0, 'CRO业务-CRC'),
 };
 export function fetchRolePropById(id) {
     var roleKey = Object.keys(Role);

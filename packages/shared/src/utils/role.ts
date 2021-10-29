@@ -91,10 +91,10 @@ export const Role: RolesMap = {
   YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '管 养老院高级管理员'), // 49
   YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'), // 50
 
-  CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'), // 51
-  CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'), // 51
-  CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'), // 51
-
+  CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'),
+  CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'),
+  CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'),
+  SPACE_CREATOR: roleType('80pbO4', 0, 0, 0, 'CRO业务-CRC'),
 };
 
 export function fetchRolePropById(id: string) {

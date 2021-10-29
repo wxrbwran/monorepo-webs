@@ -32,7 +32,7 @@ function SideMenu(props: IProps) {
         ...list,
         routerItem('架构 (分配角色)', 'architecture', iconArchitecture),
         routerItem('组织架构图', 'tree', iconTree),
-        routerItem('CRO服务包', 'croservice', iconTree),
+        routerItem('CRO服务包', 'Croservice', iconTree),
       ];
     }
     return list;

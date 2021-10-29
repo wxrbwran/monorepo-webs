@@ -11,4 +11,18 @@ export default {
   fetchDoctorFriends(data: CommonData): Promise<any> {
     return http.get('doctor/friends', { data });
   },
+
+  // 我的团队 查询好友列表
+  putTeamMembers(data: CommonData): Promise<any> {
+    return http.put('doctor/team/members', { data });
+  },
+
+  // 我的团队 查询好友列表
+  getTeams(data: CommonData): Promise<any> {
+    return http.get(`doctor/teams?data=${JSON.stringify(data)}`);
+  },
+
+
+
+
 };
