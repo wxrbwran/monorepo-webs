@@ -23,15 +23,17 @@ import {
 } from './columns';
 import AddPatient from './components/AddPatient';
 // import UnBind from './components/UnBind';
-import ChangeDoctor from './components/ChangeDoctor';
+import ChangeServicePackage from './components/ChangeServicePackage';
+import * as api from '@/services/api';
+import { useDispatch } from 'react-redux';
 import styles from './index.scss';
 
 function Patients() {
   const { level } = useParams<{ level: string }>();
   const [form] = Form.useForm();
   const { setFieldsValue, getFieldValue } = form;
-  const sRole = Role[`${level.toLocaleUpperCase()}_DOCTOR`].id;
-
+  const sRole = Role[`${level.toLocaleUpperCase()}`].id;
+  const dispatch = useDispatch();
   const getInitOptions = () => {
     let params: CommonData = {};
     const sessionData = sessionStorage.getItem(level);
@@ -50,6 +52,7 @@ function Patients() {
 
   const [depOptions, setOptions] = useState({ ...getInitOptions() });
   const [pageAt, setPageAt] = useState<number>(1);
+  const [packages, setPackages] = useState<CommonData[]>([]);
   // 切换左侧菜单or刷新页面or从患者详情返回列表页面保留筛选搜索分页条件
   useEffect(() => {
     const newOptions = getInitOptions();
@@ -63,6 +66,11 @@ function Patients() {
     setPageAt(newOptions?.pageAt || 1);
     setOptions({
       ...newOptions,
+    });
+    // 获取侧边栏菜单列表
+    dispatch({
+      type: 'user/getDoctorExistedRoles',
+      payload: {},
     });
   }, [level]);
 
@@ -95,11 +103,25 @@ function Patients() {
   const refresh = (params: { pageAt: number } = { pageAt }) => {
     setOptions({ ...depOptions, ...params });
   };
-  const changeDoctor = {
-    title: '更换医生团队',
+  const fetchPackages = () => {
+    const params = {
+      pageAt: 1,
+      pageSize: 99999,
+      teamNSLabels: ['chronic_disease_team'],
+    };
+    // innerTeams表示套餐集合，members表示一个坑位的信息集合
+    api.service.fetchDoctorTeams(params).then(({ teams }: { teams: any[] }) => {
+      setPackages(teams);
+    });
+  };
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+  const changeServicePackage = {
+    title: '更换服务包',
     dataIndex: 'sid',
     render: (_text: string, record: IRecord) => (
-      <ChangeDoctor data={record} curRole={level} refresh={() => refresh({ pageAt: 1 })} />
+      <ChangeServicePackage data={record} packages={packages} refresh={() => refresh({ pageAt: 1 })} />
     ),
   };
 
@@ -113,15 +135,15 @@ function Patients() {
     address,
     msgCount,
   ];
-  if (level === 'lower') {
+  if (level === 'lower_doctor') {
     columns.push(upperDoctor);
   }
-  if (level === 'upper') {
+  if (level === 'upper_doctor') {
     columns.push(lowerDoctor);
-    columns.push(changeDoctor);
+    columns.push(changeServicePackage);
   }
-  if (level === 'alone') {
-    columns.push(changeDoctor);
+  if (level === 'alone_doctor') {
+    columns.push(changeServicePackage);
   }
   console.log('为构建添加console');
   return (

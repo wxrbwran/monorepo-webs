@@ -48,7 +48,7 @@ const PackageDoctorItem: FC<IProps> = (props) => {
         <div className="mt-10 text-base font-bold">{doctorName}</div>
         <div className="text-gray-600 text-sm">
           {
-            roles.map(role => <span className="ml-5 mr-5">{role}</span>)
+            roles.map(role => <span className="ml-5 mr-5" key={role}>{role}</span>)
           }
         </div>
         <div className="text-gray-600 text-sm">{orgName}</div>

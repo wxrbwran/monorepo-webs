@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import iconDismiss from '@/assets/img/icon_dismiss.png';
 import iconEdit from '@/assets/img/icon_edit.png';
 import PackageDoctorItem from '../PackageDoctorItem';
@@ -7,17 +7,19 @@ import { Popconfirm, message } from 'antd';
 import * as api from '@/services/api';
 import styles from './index.scss';
 
+export interface IDataList {
+  innerTeams: {
+    members: ISubject[]
+  }[],
+  name: string; // 套餐名
+  teamNSId: string; // 套餐nsid
+}
 interface IProps {
   showEdit?: boolean;
   handleRefresh?: () => void;
-  dataList: {
-    innerTeams: {
-      members: ISubject[]
-    }[],
-    name: string; // 套餐名
-    teamNSId: string; // 套餐nsid
-  },
+  dataList: IDataList,
 }
+let timer: any = null;
 const PackageTeamItem: FC<IProps> = (props) => {
   const { showEdit, handleRefresh, dataList } = props;
   const { name, teamNSId, innerTeams } = dataList;
@@ -30,7 +32,7 @@ const PackageTeamItem: FC<IProps> = (props) => {
     api.service.deleteDoctorTeam(params).then(() => {
       message.success('解散成功');
       if (handleRefresh) {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           handleRefresh();
         }, 1000);
       }
@@ -38,9 +40,14 @@ const PackageTeamItem: FC<IProps> = (props) => {
       message.error(err?.result || '解散失败');
     });
   };
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
   // deleteDoctorTeam
   return (
-    <div className={styles.item_wrap} key={teamNSId}>
+    <div className={styles.item_wrap}>
       <div className="flex justify-between mb-40">
         <div className="font-bold text-base">{name}</div>
         {

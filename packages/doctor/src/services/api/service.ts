@@ -29,4 +29,8 @@ export default {
   deleteDoctorTeam(data: CommonData): Promise<any> {
     return http.delete('doctor/team', { data });
   },
+  // 为患者加入团队/科研服务包
+  putDoctorTeamMembersPatient(data: CommonData): Promise<any> {
+    return http.put('doctor/team/members/patient', { data });
+  },
 };

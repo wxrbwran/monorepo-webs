@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Tabs } from 'antd';
-import PackageTeamItem from '../components/PackageTeamItem';
+import PackageTeamItem, { IDataList } from '../components/PackageTeamItem';
 import AddServicePackage from '../components/AddServicePackage';
 import * as api from '@/services/api';
 import { Role } from 'xzl-web-shared/src/utils/role';
@@ -9,7 +9,7 @@ import styles from './index.scss';
 
 const { TabPane } = Tabs;
 const ServicePackage: FC = () => {
-  const [packages, setPackages] = useState<CommonData>({ creator: [], participant: [] });
+  const [packages, setPackages] = useState<{ creator: IDataList[], participant: IDataList[] }>({ creator: [], participant: [] });
   const doctorSid = window.$storage.getItem('sid');
   const handleChangeTabs = (key: string) => {
     console.log(key);
@@ -53,6 +53,7 @@ const ServicePackage: FC = () => {
   useEffect(() => {
     fetchPackages();
   }, []);
+  console.log('4343packages,', packages);
   return (
     <div className={`p-20 w-full ${styles.service_package}`}>
       <AddServicePackage onSuccess={fetchPackages}>
@@ -63,7 +64,7 @@ const ServicePackage: FC = () => {
           {
             isEmpty(packages.creator) ? <div>暂无数据</div> : (
               packages.creator.map(item => (
-                <PackageTeamItem key={item.role} dataList={item} showEdit={true} handleRefresh={fetchPackages} />
+                <PackageTeamItem key={item.teamNSId} dataList={item} showEdit={true} handleRefresh={fetchPackages} />
               ))
             )
           }
@@ -72,7 +73,7 @@ const ServicePackage: FC = () => {
           {
             isEmpty(packages.participant) ? <div>暂无数据</div> : (
               packages.participant.map(item => (
-                <PackageTeamItem  key={item.role} dataList={item}  />
+                <PackageTeamItem  key={item.teamNSId} dataList={item}  />
               ))
             )
           }

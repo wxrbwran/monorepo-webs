@@ -15,6 +15,7 @@ export interface UserModelType {
     getPrice: Effect;
     getUserOrganizations: Effect;
     getUserWclDetail: Effect;
+    getDoctorExistedRoles: Effect;
   };
   reducers: {
     saveUserInfo: Reducer;
@@ -22,6 +23,7 @@ export interface UserModelType {
     saveUserPrice: Reducer;
     saveUserFilterOrg: Reducer;
     setCurrentOrgInfo: Reducer;
+    saveDoctorExistedRoles: Reducer;
   };
 }
 
@@ -36,6 +38,7 @@ const userState: UserModelState = {
   filterOrgs: [],
   currentOrgInfo: {},
   firstLogin: 0, // 0初始值，1首次登录 2非首次登录
+  existedRoles: [], // 医生角色列表 侧边栏使用（签约患者下有哪些菜单）
 };
 
 const Model: UserModelType = {
@@ -76,6 +79,13 @@ const Model: UserModelType = {
       yield put({
         type: 'saveUserFilterOrg',
         payload: data,
+      });
+    },
+    * getDoctorExistedRoles({ payload }, { call, put }) {
+      const data = yield call(api.doctor.getDotorExistedRoles, payload);
+      yield put({
+        type: 'saveDoctorExistedRoles',
+        payload: data.teams[0].members,
       });
     },
   },
@@ -132,6 +142,12 @@ const Model: UserModelType = {
       return {
         ...state,
         currentOrgInfo: { ...action.payload },
+      };
+    },
+    saveDoctorExistedRoles(state, action) {
+      return {
+        ...state,
+        existedRoles: action.payload,
       };
     },
   },
