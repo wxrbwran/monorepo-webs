@@ -13,4 +13,20 @@ export default {
   fetchDoctorFriends(data: CommonData): Promise<any> {
     return http.get('doctor/friends', { data });
   },
+  // 创建套餐   添加服务包
+  putDoctorTeamMembers(data: CommonData): Promise<any> {
+    return http.put('doctor/team/members', { data });
+  },
+  // 编辑套餐（团队）、科研服务包
+  patchDoctorTeamMembers(data: CommonData): Promise<any> {
+    return http.patch('doctor/team/members', { data });
+  },
+  // 查询医生套餐（团队）列表、科研服务包
+  fetchDoctorTeams(data: CommonData): Promise<any> {
+    return http.get('doctor/teams', { data });
+  },
+  // 解散医生团队/套餐
+  deleteDoctorTeam(data: CommonData): Promise<any> {
+    return http.delete('doctor/team', { data });
+  },
 };

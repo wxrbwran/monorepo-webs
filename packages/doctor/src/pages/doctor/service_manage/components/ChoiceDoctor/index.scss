@@ -7,6 +7,7 @@
     // }
     .ant-checkbox-wrapper {
       width: 100%;
+      font-size: 14px;
       >span {
         &:nth-child(2) {
           width: 100%;
@@ -17,6 +18,15 @@
       position: absolute;
       right: 20px;
       top: 20px;
+    }
+
+  }
+}
+
+.choice_org {
+  :global {
+    .ant-radio-wrapper {
+      font-size: 14px;
     }
   }
 }

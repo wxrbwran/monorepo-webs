@@ -4,6 +4,7 @@ import Icon, { UserOutlined, BarChartOutlined, ProfileOutlined } from '@ant-desi
 import { history } from 'umi';
 import config from '@/config';
 import { Role } from 'xzl-web-shared/src/utils/role';
+import * as api from '@/services/api';
 import styles from './index.scss';
 
 interface Iprops {
@@ -46,6 +47,11 @@ function SideMenu({ location }: Iprops) {
     TEAM: { value: '我的团队', url: 'team' },
     SERVICE_PACKAGE: { value: '医疗服务包', url: 'service_package' },
   };
+  useEffect(() => {
+    api.doctor.getDotorExistedRoles().then(res => {
+      console.log(343243, res);
+    });
+  }, []);
   useEffect(() => {
     if (serviceMenu[roleText]) {
       setActiveMenu(roleText);

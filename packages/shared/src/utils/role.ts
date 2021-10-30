@@ -90,6 +90,10 @@ export const Role: RolesMap = {
   NURSE_YL: roleType('qWd7L0', 0, 0, 0, '护 养老院护士'), // 48
   YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '管 养老院高级管理员'), // 49
   YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'), // 50
+
+  NS_OWNER: roleType('80pbO4', 0, 0, 0, '创建人'), // 59 空间所属者/创建者
+
+  DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'), // 62
 };
 
 export function fetchRolePropById(id: string) {

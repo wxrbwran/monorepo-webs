@@ -76,9 +76,9 @@ const AddTeamMember: FC<IProps> = (props) => {
       title: '互联网医院',
       dataIndex: 'orgs',
       width: 147,
-      render: (orgs: string[]) => {
+      render: (orgs: { name: string }[]) => {
         if (orgs && orgs.length > 0) {
-          return orgs.map((org, inx) => <span>{org}{inx !== orgs.length - 1 ? '、' : ''}</span>);
+          return orgs.map((org, inx) => <span>{org.name}{inx !== orgs.length - 1 ? '、' : ''}</span>);
         } else {
           return <span>--</span>;
         }

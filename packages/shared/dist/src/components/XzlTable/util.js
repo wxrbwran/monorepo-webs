@@ -116,10 +116,10 @@ export var handleRelatedDoctorsDataSource = function (dataSource) {
             }
             else if (item.role === Role.ORG.id) {
                 if (doctor.orgs) {
-                    doctor.orgs.push(item.name);
+                    doctor.orgs.push(item);
                 }
                 else {
-                    doctor = __assign(__assign({}, doctor), { orgs: [item.name] });
+                    doctor = __assign(__assign({}, doctor), { orgs: [item] });
                 }
             }
         });

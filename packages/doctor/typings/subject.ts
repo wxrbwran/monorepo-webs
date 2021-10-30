@@ -118,6 +118,7 @@ interface ISub {
   // 以医生维度，name为医生姓名，机构名是orgName。如果以机构维度，机构名是name。
   // orgName是前端整合数据添加进去的,例如患者列表，需要展示机构名称，根据后端数据过滤到机构名追加进去方便使用
   orgName: string; //  teamNSId
+  orgs: any[]; // 医生所在的互联网医院集合
   // ——————————————！自定义！——————————————
 
   buildName: string;

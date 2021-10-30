@@ -118,11 +118,11 @@ export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
         // 医生所在的互联网医院
       } else if (item.role === Role.ORG.id) {
         if (doctor.orgs) {
-          doctor.orgs.push(item.name);
+          doctor.orgs.push(item);
         } else {
           doctor = {
             ...doctor,
-            orgs: [item.name],
+            orgs: [item],
           };
         }
       }
