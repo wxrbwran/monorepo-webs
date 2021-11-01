@@ -18,7 +18,7 @@ const Team: FC = () => {
     handleFetchFriends();
   }, []);
   return (
-    <div className="p-20 flex-auto">
+    <div className="p-20 flex-auto overflow-y-auto" style={{ maxHeight: 'calc(100vh - 58px)' }}>
       <AddTeamMember handleRefresh={handleFetchFriends}>
         <Button type="primary" icon={<PlusOutlined />}>添加成员</Button>
       </AddTeamMember>

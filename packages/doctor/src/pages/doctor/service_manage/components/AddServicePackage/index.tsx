@@ -124,9 +124,9 @@ const AddServicePackage: FC<IProps> = (props) => {
   };
   const handleSubmit = () => {
     if (!packageName) {
-      message.error('请输入服务包名称');
+      message.error('请输入服务小组名称');
     } else if (isEmpty(members.filter(member => member.sid === doctorSid))) {
-      message.error('请选择你在服务包中的位置');
+      message.error('请选择你在服务小组中的位置');
     } else if (checkUpperLower()){
       message.error('请添加主管医生');
     } else {
@@ -211,14 +211,14 @@ const AddServicePackage: FC<IProps> = (props) => {
         maskClosable
         visible={showModal}
         onCancel={() => setshowModal(false)}
-        title={`${initData ? '编辑' : '添加'}服务包`}
+        title={`${initData ? '编辑' : '添加'}服务小组`}
         footer={null}
         // destroyOnClose
       >
         <div className={styles.add_service}>
           <Input
             className={styles.package_name}
-            placeholder="请输入服务包名称"
+            placeholder="请输入服务小组名称"
             value={packageName}
             onChange={(e) => setpackageName(e.target.value)}
           />

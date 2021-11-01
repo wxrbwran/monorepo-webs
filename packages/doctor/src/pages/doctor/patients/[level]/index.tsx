@@ -9,6 +9,7 @@ import {
 import Organization from '@/components/Selects/Organization';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/src/utils/conditions';
+import { formatDoctorTeams } from '@/utils/utils';
 import {
   name,
   org,
@@ -111,14 +112,16 @@ function Patients() {
     };
     // innerTeams表示套餐集合，members表示一个坑位的信息集合
     api.service.fetchDoctorTeams(params).then(({ teams }: { teams: any[] }) => {
-      setPackages(teams);
+      const { alone, creator } = formatDoctorTeams(teams);
+      setPackages([...alone, ...creator]);
+
     });
   };
   useEffect(() => {
     fetchPackages();
   }, []);
   const changeServicePackage = {
-    title: '更换服务包',
+    title: '更换服务小组',
     dataIndex: 'sid',
     render: (_text: string, record: IRecord) => (
       <ChangeServicePackage data={record} packages={packages} refresh={() => refresh({ pageAt: 1 })} />

@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role, fetchRolePropValue } from '@/utils/role';
+import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 
 interface IProps {

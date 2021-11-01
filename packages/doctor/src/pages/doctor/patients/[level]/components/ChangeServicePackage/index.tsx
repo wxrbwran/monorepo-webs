@@ -64,7 +64,7 @@ const ChangeServicePackage: FC<IProps> = (props) => {
         maskClosable
         visible={showModal}
         onCancel={handleCloseModal}
-        title='更换服务包'
+        title='更换服务小组'
         footer={null}
         destroyOnClose
       >

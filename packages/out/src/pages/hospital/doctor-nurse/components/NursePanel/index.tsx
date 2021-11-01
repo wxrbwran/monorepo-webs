@@ -63,7 +63,7 @@ const Nurse: FC = () => {
   };
   const handleCallback = (callbackStore: XzlTableCallBackProps) => {
     console.log('callbackStore', callbackStore);
-    setSelectRows(callbackStore.selectedRows);
+    setSelectRows(callbackStore.selectedRowKeys);
   };
   const refreshList = () => {
     setOptions({ ...tableOptions });

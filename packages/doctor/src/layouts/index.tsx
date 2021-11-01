@@ -29,7 +29,7 @@ export default (props: IProps) => {
   if (isLogin && isNonAuthPage) {
     // console.log(3331112);
     child = null;
-    history.push('/doctor/patients/alone');
+    history.push('/doctor/patients/alone_doctor');
   }
   // 未登录，去往登录等页面
   if (!isLogin && isNonAuthPage) {

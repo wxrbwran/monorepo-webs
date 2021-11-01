@@ -66,38 +66,52 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
     return null;
   };
   const onFinish = (values: any) => {
-    toggleEdit();
+
     console.log('valuessss', values);
     const formValues = { ...values };
-    formValues.practiceAreas = formValues.practiceAreas.map((item: any) => {
+    const practiceAreas: any[] = [];
+    let isPass = true;
+    formValues.practiceAreas.forEach((item: any) => {
       const { departmentName, departmentStandardId, name, standardId, labelType } = item;
-      return {
-        name,
-        standardId,
-        sub: {
-          name: departmentName,
-          standardId: departmentStandardId,
-          labelType,
-        },
+      if (!departmentName && !name) {
+        console.log('医院和科室均未输入');
+      } else if (!departmentName || !name) {
+        // 只输入其中一个，阻止提交
+        message.error('第一执业医院和科室必须同时输入');
+        isPass = false;
+      } else {
+        practiceAreas.push({
+          name,
+          standardId,
+          sub: {
+            name: departmentName,
+            standardId: departmentStandardId,
+            labelType,
+          },
+        });
+      }
+    });
+    if (isPass) {
+      console.log('formValues', formValues);
+      const params = {
+        ...formValues,
+        practiceAreas,
+        certificates: formatCertificates(values?.certificates),
+        avatarUrl: avatar,
       };
-    });
-    console.log('formValues', formValues);
-    const params = {
-      ...formValues,
-      certificates: formatCertificates(values?.certificates),
-      avatarUrl: avatar,
-    };
-    // patchUserInfo
-    window.$api.user.patchUserInfo(params).then(() => {
-      message.success('保存成功');
-      dispatch({
-        type: 'user/getUserWclDetail',
-        payload: { wcIds: [window.$storage.getItem('wcId')] },
+      console.log('params434', params);
+      window.$api.user.patchUserInfo(params).then(() => {
+        message.success('保存成功');
+        toggleEdit();
+        dispatch({
+          type: 'user/getUserWclDetail',
+          payload: { wcIds: [window.$storage.getItem('wcId')] },
+        });
+      }).catch((err: any) => {
+        console.log('保存个人资料失败', err);
+        message.error(err?.result || '保存失败');
       });
-    }).catch((err: any) => {
-      console.log('保存个人资料失败', err);
-      message.error(err?.result || '保存失败');
-    });
+    }
   };
   const uploadSuccess = ({ imageURL }: { imageURL: string }) => {
     setAvatar(imageURL);

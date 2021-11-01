@@ -1,6 +1,6 @@
 // import dayjs from 'dayjs';
 import moment from 'moment';
-import { Role, fetchRolePropValue } from '@/utils/role';
+import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
 
 export function unique(arr: { id: string, content: string }[]) {
   const result: never[] = [];
@@ -113,3 +113,32 @@ export function compare(el) {
     return a - b;
   };
 }
+
+// 我的套餐列表--医疗服务小组列表---根据：我创建的、我参与的、我独立管理做分类
+export const formatDoctorTeams = (teams: any[]) => {
+  const packs: CommonData = { creator: [], participant: [], alone: [] };
+  teams.forEach(teamItem => {
+    let isCreator = false;
+    let isAloneTeams = false;
+    teamItem.innerTeams.forEach((innerItem: { members: ISubject[] }) => {
+      innerItem.members.forEach(member => {
+        if (member.role === Role.ALONE_DOCTOR.id) {
+          isAloneTeams = true;
+        }
+        if (member.role === Role.NS_OWNER.id && member.sid === window.$storage.getItem('sid')) {
+          isCreator = true;
+        }
+      });
+    });
+    if (!isAloneTeams) {
+      if (isCreator) {
+        packs.creator.push(teamItem);
+      } else {
+        packs.participant.push(teamItem);
+      }
+    } else {
+      packs.alone.push(teamItem);
+    }
+  });
+  return packs;
+};

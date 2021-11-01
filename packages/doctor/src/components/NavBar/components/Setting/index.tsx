@@ -7,7 +7,7 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UserSetting from '@/components/UserSetting';
 import Code from '@/assets/img/nav_bar/code.svg';
 import info from '@/assets/img/nav_bar/info.svg';
-import upperLowerDoctor from '@/assets/img/nav_bar/upper_lower_doctor.svg';
+// import upperLowerDoctor from '@/assets/img/nav_bar/upper_lower_doctor.svg';
 // import msgHistory from '@/assets/img/nav_bar/msg_history.svg';
 // import farDoctor from '@/assets/img/nav_bar/far_doctor.svg';
 import price from '@/assets/img/nav_bar/price.svg';
@@ -63,11 +63,11 @@ function Setting() {
       value: '收费标准',
       src: price,
     },
-    {
-      key: 'upperLower',
-      value: '我的上下级医生',
-      src: upperLowerDoctor,
-    },
+    // {
+    //   key: 'upperLower',
+    //   value: '我的上下级医生',
+    //   src: upperLowerDoctor,
+    // },
     // {
     //   key: 'farDoctor',
     //   value: '未来医生',

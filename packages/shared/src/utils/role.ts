@@ -110,4 +110,3 @@ export function fetchRolePropValue(id: string, keyName: string) {
   return fetchRolePropById(id)?.[keyName];
 }
 
-
