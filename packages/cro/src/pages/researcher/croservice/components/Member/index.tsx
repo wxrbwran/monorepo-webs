@@ -3,8 +3,9 @@ import iconClose from '@/assets/img/icon_close.png';
 import iconAdd from '@/assets/img/icon_add_large.png';
 import ChoiceDoctor from '../ChoiceDoctor';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
-
+import avatar from '@/assets/img/default_project.png';
 interface IMemberProps {
 
   title: string;
@@ -16,7 +17,7 @@ interface IMemberProps {
 }
 const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleChoice, onRemove }) => {
 
-  console.log('======fetchDoctorFriends==', JSON.stringify(members));
+  console.log('======fetchDoctorFriends==', JSON.stringify(friends));
 
 
   return (
@@ -33,7 +34,7 @@ const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleCho
               }
               <img className="w-80 h-80 rounded mt-30" src={item.avatarUrl ?? defaultAvatar} alt="" />
               <div className="text-lg font-bold mt-5">{item.name ?? ''}</div>
-              <div className={`text-gray-600 ${styles.org_name}`} title="xxx">{item.orgs ? item.orgs.map((it) => it.name).join(' ') : ''}</div>
+              {/* <div className={`text-gray-600 ${styles.org_name}`} title="xxx">{item.orgs ? item.orgs.map((it) => it.name).join(' ') : ''}</div> */}
             </div>
           ))
         }
@@ -53,3 +54,57 @@ export default Member;
 
 
 
+
+interface ITeamMemberProps {
+
+  team: any;
+}
+
+export const TeamMember: FC<ITeamMemberProps> = ({ team }) => {
+
+
+  const getDoctorMember = (members) => {
+
+    // SPACE_CREATOR
+    const roles = [Role.CRO_CRC.id, Role.CRO_CRA.id, Role.CRO_PM.id, Role.SPACE_CREATOR.id];
+    const result = members.filter((memb) => roles.includes(memb.role));
+
+    console.log('============= members', JSON.stringify(members));
+
+    console.log('============= getDoctorMember', JSON.stringify(result));
+    return result;
+  };
+
+  const getDesRoles = (members: any[]) => {
+
+    // const roles = [Role.CRO_CRC.id, Role.CRO_CRA.id, Role.CRO_PM.id];
+
+    return members.map((item) => {
+
+      if (item.role == Role.CRO_CRC.id) {
+        return 'CRC';
+      } else if (item.role == Role.CRO_CRA.id) {
+        return 'CRA';
+      } else if (item.role == Role.CRO_PM.id) {
+        return 'PM';
+      } else if (item.role == Role.SPACE_CREATOR.id) {
+        return '研究者';
+      }
+    }).join(' ');
+  };
+
+  return (
+    <div className='flex'>
+      {
+        team.innerTeams.map((innerTeam) => {
+
+          return (<div className='text-center text-base mx-40'>
+            <p className={styles.avatar}><img src={getDoctorMember(innerTeam.members)[0].avatarUrl ?? avatar} /></p>
+            <p className='font-bold mb-5 mt-20'>{getDoctorMember(innerTeam.members)[0].name}</p>
+            <p className='text-sm'>{getDesRoles(innerTeam.members)}</p>
+          </div>);
+        })
+      }
+    </div>
+  );
+};

@@ -12,15 +12,31 @@ export default {
     return http.get('doctor/friends', { data });
   },
 
-  // 我的团队 查询好友列表
+  // 
   putTeamMembers(data: CommonData): Promise<any> {
     return http.put('doctor/team/members', { data });
   },
 
-  // 我的团队 查询好友列表
+  //  
+  patchTeamMembers(data: CommonData): Promise<any> {
+    return http.patch('doctor/team/members', { data });
+  },
+
+  deleteTeamMembers(data: CommonData): Promise<any> {
+    return http.delete('doctor/team', { data });
+  },
+
+  //  
   getTeams(data: CommonData): Promise<any> {
     return http.get(`doctor/teams?data=${JSON.stringify(data)}`);
   },
+
+
+  putCroToPatients(data: CommonData): Promise<any> {
+    return http.put('doctor/team/members/patient ', { data });
+  },
+
+
 
 
 

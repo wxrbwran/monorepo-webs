@@ -94,7 +94,7 @@ export const Role: RolesMap = {
   CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'),
   CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'),
   CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'),
-  SPACE_CREATOR: roleType('80pbO4', 0, 0, 0, 'CRO业务-CRC'),
+  SPACE_CREATOR: roleType('80pbO4', 0, 0, 0, '研究者'),
 };
 
 export function fetchRolePropById(id: string) {

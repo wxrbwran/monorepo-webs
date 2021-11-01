@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Select, message, Form, Tabs } from 'antd';
+import React, { useState, useRef } from 'react';
+import { message, Form, Tabs, Button } from 'antd';
 import SelectGroup from '../components/select_group';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import * as api from '@/services/api';
@@ -11,29 +11,53 @@ import { patientCroColumns, patientCroStopColumns } from '@/utils/columns';
 import { useSelector, useDispatch } from 'umi';
 import '../index.scss';
 import { CommonData, IState } from 'typings/global';
+import AddServicePackage from '../../researcher/croservice/components/AddServicePackage';
+import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
 
-const Option = Select.Option;
 interface IProps {
 }
 const { TabPane } = Tabs;
 function PatientCro({ }: IProps) {
   const [form] = Form.useForm();
-  const {projectNsId} = useSelector((state: IState) => state.project.projDetail)
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
-  const [tableOptions, setOptions] = useState<CommonData>({projectNsId, status: 1002});
+  const [tableOptions, setOptions] = useState<CommonData>({ projectNsId, status: 1002 });
   const [imgVisible, setImgVisible] = useState(false);
   const [imgArr, setImgArr] = useState<string[]>([]);
-  const [status, setStatus] = useState<number>(1002); // tab状态
+  const [tabStatus, setTabStatus] = useState<number>(1002); // tab状态
   const dispatch = useDispatch();
 
+  const [teamShow, setTeamShow] = useState(false);
+  const putCroToRecord = useRef();
+
+
+
+  const [teamCreateShow, setTeamCreateShow] = useState(false);
+
+  const putCroToPatient = (team) => {
+
+    console.log('=============  putCroToPatient putCroToPatient', JSON.stringify(team));
+    const parma = {
+
+      pwcId: putCroToRecord.current.wcId,
+      toNSId: team.teamNSId,
+      toTeamNSLabels: team.teamNSLabels,
+    };
+    api.service.putCroToPatients(parma).then(() => {
+
+      setTeamShow(false);
+    });
+  };
+
+
   const refreshList = () => {
-    setOptions({...tableOptions }) //刷新当前受试者列表
-     //刷新试验分组列表
-     dispatch({
+    setOptions({ ...tableOptions }); //刷新当前受试者列表
+    //刷新试验分组列表
+    dispatch({
       type: 'project/fetchGroupList',
       payload: projectNsId,
     });
-  }
+  };
 
   const handleStop = (record: any) => {
     const params = {
@@ -41,25 +65,35 @@ function PatientCro({ }: IProps) {
       sid: record.sid,
       status: 1003,
       exitReason: 1,
-    }
-    api.patientManage.patchPatientStatus(params).then(res => {
+    };
+    api.patientManage.patchPatientStatus(params).then(() => {
       message.success('操作成功');
       refreshList();
-    })
-  }
+    });
+  };
 
   const toggleImg = (record: any) => {
     setImgVisible(true);
     setImgArr([record?.etcNote]);
-  }
-  const handleSelectChange = (changedValues: string[], allValues: {status: string,patientGroupId: string}) => {
+  };
+
+  const distributionTeam = (record: any) => {
+    console.log('=============  distributionTeam distributionTeam', JSON.stringify(record));
+    putCroToRecord.current = record;
+    setTeamShow(true);
+  };
+
+
+
+  const handleSelectChange = (_changedValues: string[], allValues: { status: string, patientGroupId: string }) => {
+
     const { status, patientGroupId } = allValues;
     const params: CommonData = {
       ...tableOptions,
-      conditions: []
-    }
+      conditions: [],
+    };
     if (status) {
-      params.conditions=handleSelection({status});
+      params.conditions = handleSelection({ status });
     }
     if (patientGroupId) {
       params.patientGroupId = patientGroupId;
@@ -77,26 +111,32 @@ function PatientCro({ }: IProps) {
     1002: patientCroColumns({
       handleStop,
       toggleImg,
+      distributionTeam,
     }),
-    1003: patientCroStopColumns()
+    1003: patientCroStopColumns(),
   };
   const rowSelection = {
     onChange: (selectedRowKeys: never[], selectedRows: { sid: string }[]) => {
-      const patients:any = [];
+      const patients: any = [];
       selectedRows.forEach((item: { sid: string }) => {
         patients.push(item.sid);
-      })
+      });
       setSelectPatient(Array.from(new Set(patients)));
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
-    getCheckboxProps: (record:{status: number}) => ({
+    getCheckboxProps: (record: { status: number }) => ({
       disabled: record?.status === 1003,
     }),
-  }
+  };
   const handleToggleTab = (key: string) => {
-    setStatus(Number(key));
+    setTabStatus(Number(key));
     setOptions({ ...tableOptions, status: +key });
-  }
+  };
+
+
+
+
+
   return (
     <div className="patient-manage-cont">
       <div className="title">全部受试者</div>
@@ -110,7 +150,7 @@ function PatientCro({ }: IProps) {
           <Group />
         </Form>
       </div>
-      <div className="patient-list" style={{marginTop: 8}}>
+      <div className="patient-list" style={{ marginTop: 8 }}>
         <Tabs onChange={handleToggleTab}>
           <TabPane tab="进行中" key={1002}>
           </TabPane>
@@ -119,7 +159,7 @@ function PatientCro({ }: IProps) {
         </Tabs>
 
         {
-          status === 1002 &&
+          tabStatus === 1002 &&
           <SelectGroup
             selectPatient={selectPatient}
             refreshList={refreshList}
@@ -128,7 +168,7 @@ function PatientCro({ }: IProps) {
           </SelectGroup>
         }
         <XzlTable
-          columns={columns[status]}
+          columns={columns[tabStatus]}
           category="patientList"
           dataKey="teams"
           request={window.$api.patientManage.getTestPatients}
@@ -136,7 +176,7 @@ function PatientCro({ }: IProps) {
           // handleCallback={handleCallback}
           noPagination={true}
           tableOptions={{
-            rowSelection: status === 1002 ? {
+            rowSelection: tabStatus === 1002 ? {
               ...rowSelection,
             } : false,
             pagination: false,
@@ -151,8 +191,21 @@ function PatientCro({ }: IProps) {
           src: url,
         }))}
       />
+      {/* 
+      <AddServicePackage onSaveSuccess={onSaveSuccess} edit={edit} source={source} show={show} onCancel={() => { setShow(false); }}>
+        <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button>
+      </AddServicePackage> */}
+
+      <AddServicePackage onSaveSuccess={() => { setTeamCreateShow(false); }} edit={false} show={teamCreateShow} onCancel={() => { setTeamCreateShow(false); }} source={undefined}>
+        {/* <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button> */}
+      </AddServicePackage>
+
+      <ChoiceTeam onSaveSuccess={putCroToPatient} show={teamShow} onCancel={() => { setTeamShow(false); }} onCreateTeam={() => { setTeamShow(false); setTeamCreateShow(true); }}>
+        <Button type="primary" className="mb-20" onClick={() => { setTeamShow(true); console.log('====123456'); }}>选择团队</Button>
+      </ChoiceTeam>
+
     </div>
-  )
+  );
 }
 
 export default PatientCro;

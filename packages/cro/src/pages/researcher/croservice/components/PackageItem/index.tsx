@@ -27,13 +27,13 @@ const PackageItem: FC<IProps> = (props) => {
               <span className="flex items-center text-sm">
                 <img className='w-16 h-16' src={iconEdit} />
                 <span>编辑</span>
-            </span>
+              </span>
               <span className="mx-10">|</span>
               <Popconfirm
                 placement="leftTop"
                 title={
                   <div style={{ width: 305, fontSize: 14 }}>
-                    <div>解散后服务包内的患者将自动转为由你独立管理?</div>
+                    <div>解散后服务小组内的患者将自动转为由你独立管理?</div>
                     <div className="text-gray-600"> 这是一个不可逆的操作，请谨慎对待</div>
                   </div>
                 }
@@ -51,13 +51,13 @@ const PackageItem: FC<IProps> = (props) => {
         }
       </div>
       <div className="pl-36 flex flex-wrap mb-30">
-          <div className="text-center mr-40 ml-40 mb-15">
-            <img className="w-100 h-100 rounded" src={defaultAvatar} />
-            <div className="mt-10 text-base font-bold">郭丽丽</div>
-            <div className="text-gray-600">主管医生</div>
-            <div className="text-gray-600">心之力医院</div>
-          </div>
+        <div className="text-center mr-40 ml-40 mb-15">
+          <img className="w-100 h-100 rounded" src={defaultAvatar} />
+          <div className="mt-10 text-base font-bold">郭丽丽</div>
+          <div className="text-gray-600">主管医生</div>
+          <div className="text-gray-600">心之力医院</div>
         </div>
+      </div>
     </div>
   );
 };

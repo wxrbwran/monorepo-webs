@@ -19,18 +19,25 @@ const ChoiceDoctor: FC<IProps> = (props) => {
 
 
 
-  console.log('============== ChoiceDoctor', JSON.stringify(members));
-  useEffect(() => {
-    const result = friends.filter((item) => !members?.includes(item));
+  const refreshChoiceSource = () => {
+
+    const membersSids = members.map((memb) => { return memb.sid; });
+    const result = friends.filter((item) => !membersSids?.includes(item.sid));
+    console.log('============== ChoiceDoctor filter', JSON.stringify(result));
     setChoiceSources(result);
+  };
+
+  useEffect(() => {
+
+    refreshChoiceSource();
   }, [friends]);
 
   useEffect(() => {
-    const result = friends.filter((item) => !members?.includes(item));
 
-    console.log('============== ChoiceDoctor filter', JSON.stringify(result));
-    setChoiceSources(result);
+    refreshChoiceSource();
   }, [members]);
+
+
 
   const handleShowModal = () => {
 
