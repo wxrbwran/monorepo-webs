@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Radio } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
 import * as api from '@/services/api';
-import { useDispatch } from 'react-redux';
 import { projectDefaultImg } from '@/utils/consts';
 import { history } from 'umi';
+import { useSelector, useDispatch } from 'umi';
 
 import './index.scss';
 
@@ -22,11 +22,22 @@ interface IfromVal {
   type: string;
 }
 function CreateProject({ onCloseModal }: IProps) {
+
+  const filterOrgs: ISubject[] = useSelector((state: IState) => state.user.filterOrgs);
+
   const defaultImg = projectDefaultImg[Math.floor(Math.random() * (0 - 5) + 5)];
   const dispatch = useDispatch();
   const [showUpload, setShowUPload] = useState(false);
   const [avatarUrl, setAvatar] = useState(defaultImg);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    dispatch({
+      type: 'user/fetchUserOrganizations',
+      payload: {},
+    });
+  }, []);
+
   const uploadSuccess = (params: IUploadParams) => {
     console.log('上传成功', params);
     message.success('上传成功');
@@ -35,10 +46,11 @@ function CreateProject({ onCloseModal }: IProps) {
   };
   const handleCreatePro = (fromVal: IfromVal) => {
     setLoading(true);
-    const { name, duration, intro, type } = fromVal;
+    const { name, duration, intro, type, orgSid } = fromVal;
     const params = {
       name,
       type,
+      orgSids: [orgSid],
       detail: {
         avatarUrl,
         duration,
@@ -94,7 +106,7 @@ function CreateProject({ onCloseModal }: IProps) {
             name="duration"
             rules={[{ required: true, message: '请输入项目周期!' }]}
           >
-            <Input suffix="天"/>
+            <Input suffix="天" />
           </Form.Item>
           <Form.Item
             label="项目类型"
@@ -102,34 +114,36 @@ function CreateProject({ onCloseModal }: IProps) {
             rules={[{ required: true, message: '请选择项目类型!' }]}
             style={{ textAlign: 'left' }}
           >
-           <Radio.Group>
-            {testType.map(item => (
-              <Radio
-                value={item.key}
-                key={item.key}
-              >
-                {item.value}
-              </Radio>
-            ))}
-          </Radio.Group>
+            <Radio.Group>
+              {testType.map(item => (
+                <Radio
+                  value={item.key}
+                  key={item.key}
+                >
+                  {item.value}
+                </Radio>
+              ))}
+            </Radio.Group>
           </Form.Item>
-          <Form.Item
-            label="所属机构"
-            name="type"
-            rules={[{ required: true, message: '请选择项目类型!' }]}
-            style={{ textAlign: 'left' }}
-          >
-           <Radio.Group>
-            {testType.map(item => (
-              <Radio
-                value={item.key}
-                key={item.key}
-              >
-                {item.value}
-              </Radio>
-            ))}
-          </Radio.Group>
-          </Form.Item>
+          {
+            filterOrgs && filterOrgs.length > 1 && <Form.Item
+              label="所属机构"
+              name="orgSid"
+              rules={[{ required: true, message: '请选择项目类型!' }]}
+              style={{ textAlign: 'left' }}
+            >
+              <Radio.Group>
+                {filterOrgs.map(item => (
+                  <Radio
+                    value={item.sid}
+                    key={item.sid}
+                  >
+                    {item.name}
+                  </Radio>
+                ))}
+              </Radio.Group>
+            </Form.Item>
+          }
           <Form.Item
             name='intro'
             label="项目简介"
