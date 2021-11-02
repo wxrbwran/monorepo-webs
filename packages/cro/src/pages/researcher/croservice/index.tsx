@@ -7,6 +7,7 @@ import { Button } from 'antd';
 import AddServicePackage from './components/AddServicePackage';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
+import { TeamMember } from './components/Member';
 interface IProps {
 
 }
