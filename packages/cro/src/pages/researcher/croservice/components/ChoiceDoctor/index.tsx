@@ -37,8 +37,6 @@ const ChoiceDoctor: FC<IProps> = (props) => {
     refreshChoiceSource();
   }, [members]);
 
-
-
   const handleShowModal = () => {
 
     // 每次弹窗重新弹出时, 清空选中的数据源
