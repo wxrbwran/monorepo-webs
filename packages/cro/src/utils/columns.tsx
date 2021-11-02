@@ -270,7 +270,7 @@ export const patientCroColumns = (params: Store) => [
     dataIndex: '',
     render: (_text: any, record: any) => (
       <div>
-        我独立管理
+        {record.team.name}
         <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => params.distributionTeam(record)} />
       </div >
     ),

@@ -34,6 +34,18 @@ function PatientCro({ }: IProps) {
 
   const [teamCreateShow, setTeamCreateShow] = useState(false);
 
+
+
+
+  const refreshList = () => {
+    setOptions({ ...tableOptions }); //刷新当前受试者列表
+    //刷新试验分组列表
+    dispatch({
+      type: 'project/fetchGroupList',
+      payload: projectNsId,
+    });
+  };
+
   const putCroToPatient = (team) => {
 
     console.log('=============  putCroToPatient putCroToPatient', JSON.stringify(team));
@@ -45,17 +57,8 @@ function PatientCro({ }: IProps) {
     };
     api.service.putCroToPatients(parma).then(() => {
 
+      refreshList();
       setTeamShow(false);
-    });
-  };
-
-
-  const refreshList = () => {
-    setOptions({ ...tableOptions }); //刷新当前受试者列表
-    //刷新试验分组列表
-    dispatch({
-      type: 'project/fetchGroupList',
-      payload: projectNsId,
     });
   };
 
