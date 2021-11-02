@@ -40,7 +40,7 @@ function Patient() {
   };
 
   //勾选患者/取消勾选患者
-  const handleCheckPatient = (selected: boolean, patientSIds:string[], patientWcIds: string[]) => {
+  const handleCheckPatient = (selected: boolean, patientSIds: string[], patientWcIds: string[]) => {
     console.log('selected', selected);
     const params = {
       projectNsId,
@@ -55,14 +55,21 @@ function Patient() {
   const rowSelection = {
     selectedRowKeys: patientSids,
     onChange: (selectedRowKeys: never[], selectedRows: { sid: string }[]) => {
-      const sids:any = [];
+      const sids: any = [];
       selectedRows.forEach((item: { sid: string }) => {
         sids.push(item.sid);
       });
       setPatientSids(Array.from(new Set(sids)));
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
-    onSelect: (record: any, selected: boolean ) => {
+    getCheckboxProps: (record) => {
+
+      console.log('============== record,', JSON.stringify(record));
+      return ({
+        disabled: record.name === '014患者清dev',
+      });
+    },
+    onSelect: (record: any, selected: boolean) => {
       handleCheckPatient(selected, [record.sid], [record.wcId]);
     },
     onSelectAll: (selected: boolean, selectedRows: { sid: string, wcId: string }[]) => {
@@ -99,16 +106,16 @@ function Patient() {
       </div>
       <div className="selects">
         筛选：
-          <Form form={form} onValuesChange={handleSelectChange}>
-            <DoctorRelatedOrg />
-            <Sex />
-            {
-              showSearch
-                ?
-                  <Search form={form} searchKey="searchByName" placeholder="搜索姓名或手机号" focus={true}  />
-                : <SearchOutlined onMouseEnter={() => setShowSearch(true)} />
-            }
-          </Form>
+        <Form form={form} onValuesChange={handleSelectChange}>
+          <DoctorRelatedOrg />
+          <Sex />
+          {
+            showSearch
+              ?
+              <Search form={form} searchKey="searchByName" placeholder="搜索姓名或手机号" focus={true} />
+              : <SearchOutlined onMouseEnter={() => setShowSearch(true)} />
+          }
+        </Form>
       </div>
       <div className="patient-list">
         <Tabs defaultActiveKey="0" onChange={handleToggleTab}>
@@ -124,12 +131,12 @@ function Patient() {
               type="primary"
               disabled={patientSids.length === 0 || status !== 1001}
               onClick={debounce(handleJoinProject, 300)}
-            >已签署同意书，<br/> 直接加入试验</Button>
+            >已签署同意书，<br /> 直接加入试验</Button>
             <SendFile
               refreshList={refreshList}
               patientSids={patientSids}
             >
-              未签署，发送 <br/> 试验项目书、知情同意书
+              未签署，发送 <br /> 试验项目书、知情同意书
             </SendFile>
           </div>
         }
