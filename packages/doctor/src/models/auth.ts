@@ -66,7 +66,7 @@ const Model: AuthModelType = {
             type: 'user/getUserOrganizations',
             payload: {},
           });
-          history.push('/doctor/patients/alone');
+          history.push('/doctor/patients/alone_doctor');
         }
         if (payload.clientId === 'xzl-web-out-org') {
           localStorage.setItem('xzl-web-out-org_token', JSON.stringify(data));

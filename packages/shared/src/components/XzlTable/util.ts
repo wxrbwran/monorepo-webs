@@ -9,6 +9,14 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
+      // 下级、上级、科研医生、营养师、独立
+      // const doctorIds = [Role.LOWER_DOCTOR.id, Role.UPPER_DOCTOR.id, Role.RESEARCH_PROJECT_DOCTOR.id, Role.DIETITIAN.id, Role.ALONE_DOCTOR.id];
+      if (Role.NS_OWNER.id === member.role) {
+        newObj.nsOwner = {
+          wcId: member.wcId,  //创建者的wcid - 患者详情获取会话成员使用
+          sid: member.sid,  //创建者的sid -  患者列表是否展示更换服务按钮使用
+        };
+      }
       switch (member.role) {
         case Role.PROJECT_PATIENT.id: // 受试列表
         case Role.PATIENT.id:
@@ -35,6 +43,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
       }
     });
+    newObj.team = team;
     newPatients.push(newObj);
   });
   return newPatients;
@@ -88,7 +97,7 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource.forEach((datum) => {
     // console.log(datum);
-    let tmp:Record<string, string> = {};
+    let tmp: Record<string, string> = {};
     datum.members.forEach((member: Store) => {
       const curRole: string = fetchRolePropValue(member.role, 'key') as string;
       // console.log(curRole);
@@ -105,7 +114,32 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   // console.log('handlePatientTeamDataSource res', res);
   return res;
 };
-
+export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
+  const doctors: any[] = [];
+  dataSource.forEach((dataItem) => {
+    let doctor: any = {};
+    dataItem.members.forEach(item => {
+      if (item.role === Role.DOCTOR.id) {
+        doctor = {
+          ...doctor,
+          ...item,
+        };
+        // 医生所在的互联网医院
+      } else if (item.role === Role.ORG.id) {
+        if (doctor.orgs) {
+          doctor.orgs.push(item);
+        } else {
+          doctor = {
+            ...doctor,
+            orgs: [item],
+          };
+        }
+      }
+    });
+    doctors.push(doctor);
+  });
+  return doctors;
+};
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
   console.log('dataSource', dataSource);
   console.log('dataKey', dataKey);
@@ -127,6 +161,9 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       }
       if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category as string)) {
         return handlePatientTeamDataSource(dataSource);
+      }
+      if (category === 'relatedDoctors') {
+        return handleRelatedDoctorsDataSource(dataSource);
       }
       return dataSource;
     case 'infos':

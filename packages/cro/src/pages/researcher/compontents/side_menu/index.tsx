@@ -23,22 +23,23 @@ function SideMenu(props: IProps) {
   const [activeMenu, setActiveMenu] = useState(pathname);
   const [routerList, setRouterList] = useState<IRouterItem[]>([]);
   const routerItem = (name: string, pathName: string, imgSrc: string) => {
-    return {name, pathName, imgSrc};
-  }
+    return { name, pathName, imgSrc };
+  };
   const getRouterList = () => {
-    let list = [routerItem('成员 (邀请研究者加入)','member', iconMember)];
+    let list = [routerItem('成员 (邀请研究者加入)', 'member', iconMember)];
     if (croLabel === 'multi_project') {
       list = [
         ...list,
-        routerItem('架构 (分配角色)','architecture', iconArchitecture),
-        routerItem('组织架构图','tree', iconTree),
-      ]
+        routerItem('架构 (分配角色)', 'architecture', iconArchitecture),
+        routerItem('组织架构图', 'tree', iconTree),
+        routerItem('CRO服务小组', 'Croservice', iconTree),
+      ];
     }
     return list;
-  }
+  };
   useEffect(() => {
     setRouterList(getRouterList());
-  }, [croLabel])
+  }, [croLabel]);
   useEffect(() => {
     const currentPathname = props.location.pathname.split('/').pop();
     if (currentPathname !== activeMenu) {

@@ -28,7 +28,7 @@ function UploadImageWithCrop(props: IProps) {
   const [src, setSrc] = useState<string | ArrayBuffer | null>();
   const [file, setFile] = useState();
   const inputRef = useRef<HTMLDivElement>(null);
-  let cropperRef:HTMLDivElement;
+  const cropperRef = useRef<HTMLImageElement>(null);
   useEffect(() => {
     const id = `upload-with-crop__${type}`;
     const input = document.getElementById(id) as HTMLElement;
@@ -91,7 +91,7 @@ function UploadImageWithCrop(props: IProps) {
       }
       // 登录状态下不会出现这行文字，点击页面右上角一键登录
       // TODO: 这里可以尝试修改上传图片的尺寸
-      cropperRef.getCroppedCanvas().toBlob(async (blob) => {
+      cropperRef?.current?.cropper?.getCroppedCanvas().toBlob(async (blob) => {
         // 提示开始上传
         setSubmitting(true);
         // 上传图片
@@ -155,7 +155,7 @@ function UploadImageWithCrop(props: IProps) {
             viewMode={2}
             src={src}
             style={{ height: 500, width: '100%' }}
-            ref={(cropper: any) => { cropperRef = cropper; }}
+            ref={cropperRef}
             // Cropper.js options
             aspectRatio={aspectRatio}
             preview=".crop__preview-img"

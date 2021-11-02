@@ -1,15 +1,16 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role, fetchRolePropValue } from '@/utils/role';
+import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 
 interface IProps {
   person: IPerson;
+  sessionId: string;
 }
 
 const ChatPersonItem: FC<IProps> = (props) => {
-  const { person } = props;
+  const { person, sessionId } = props;
   const dispatch = useDispatch();
   const im = useSelector((state: IState) => state.im);
   const handleUpdateSessionId = (id: string) => {
@@ -49,13 +50,17 @@ const ChatPersonItem: FC<IProps> = (props) => {
     Role.PATIENT_VIP.id,
     Role.ALONE_DOCTOR.id,
     Role.UPPER_DOCTOR.id,
-    Role.LOWER_DOCTOR.id, Role.NURSE.id,
+    Role.LOWER_DOCTOR.id,
+    Role.DIETITIAN.id,
+    Role.NURSE.id,
   ];
   const compare = (obj1: IInfos, obj2: IInfos) => (
     orderId.indexOf(obj1.role) - orderId.indexOf(obj2.role)
   );
+  console.log('perso3232n', person);
+
   const personList = useMemo(() => (
-    person.infos.sort(compare).map((item) => (
+    person.sort(compare).map((item) => (
       <div key={item.role} className="flex justify-start items-center">
         <img className="w-40 h-40" src={item.avatarUrl || defaultAvatar} alt="" key={item.wcId} />
         <div key={item.wcId} className={styles.name}>
@@ -68,7 +73,7 @@ const ChatPersonItem: FC<IProps> = (props) => {
   return (
     <li
       className={`${styles.item} ${im.currSessionId === `p2p-${person.sessionId}` ? styles.active : ''}`}
-      onClick={() => handleUpdateSessionId(person.sessionId)}
+      onClick={() => handleUpdateSessionId(sessionId)}
     >
       <div className={styles.team}>
         <div className={styles.names}>

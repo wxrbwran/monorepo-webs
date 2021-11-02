@@ -1,0 +1,11 @@
+.service_package {
+  max-height: calc(100vh - 58px);
+  overflow-y: scroll;
+  :global {
+    .ant-tabs-nav {
+      &::before {
+        display: none;
+      }
+    }
+  }
+}

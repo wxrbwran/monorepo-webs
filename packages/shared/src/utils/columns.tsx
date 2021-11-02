@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, Button } from 'antd';
 import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
-import { Role } from './role';
+import { Role, fetchRolePropValue } from './role';
 import moment from 'moment';
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
   const column: CommonData = {
@@ -233,6 +233,11 @@ export const role = {
   title: '角色',
   dataIndex: 'role',
   render: (text: string) => <span>{roleList[text]}</span>,
+};
+export const roleCol = {
+  title: '角色',
+  dataIndex: 'role',
+  render: (text: string) => <span>{fetchRolePropValue(text, 'desc')}</span>,
 };
 
 export const workload = {

@@ -1,0 +1,28 @@
+.teams {
+  margin-bottom: 20px;
+  :global {
+    .ant-radio-group {
+      width: 100%;
+    }
+    .ant-radio-wrapper {
+      // display: block;
+      width: 100%;
+      position: relative;
+      span {
+        &:nth-child(2n) {
+          width: 100%;
+        }
+      }
+      &::after {
+        display: none;
+      }
+    }
+    .ant-radio {
+      position: absolute;
+      right: 30px;
+      top: 30px;
+      width: 15px;
+    }
+
+  }
+}

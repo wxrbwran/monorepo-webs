@@ -152,6 +152,9 @@ var XzlTable = function (props) {
             var data = { pageAt: page };
             fetchTableDataSource(data);
         }
+        if (tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.handleFetchPageAt) {
+            tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.handleFetchPageAt(page);
+        }
         // fetchTableDataSource(params);
     };
     /* eslint-disable react/jsx-props-no-spreading */

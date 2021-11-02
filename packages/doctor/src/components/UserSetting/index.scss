@@ -2,9 +2,13 @@
 .user_setting {
   :global {
     .ant-tabs-nav {
+      // display: none;
       &::before {
         display: none;
       }
+    }
+    .ant-tabs-content {
+      padding-top: 20px;
     }
     .ant-tabs-nav {
       background-color: rgba(244, 247, 251, 0.65);

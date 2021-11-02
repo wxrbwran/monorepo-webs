@@ -20,7 +20,7 @@ function MenuTab() {
     setActiveTab(key);
     if (key === 'SIGNING') {
       handleBadge();
-      history.push('/doctor/patients/alone');
+      history.push('/doctor/patients/alone_doctor');
     } else if (key === 'ORDER') {
       handleBadge();
       // history.push('/doctor/reservation/im');

@@ -3,7 +3,7 @@ import { history } from 'umi';
 
 export default function () {
   useEffect(() => {
-    history.push('/doctor/patients/alone');
+    history.push('/doctor/patients/alone_doctor');
   });
   return (
     <div>

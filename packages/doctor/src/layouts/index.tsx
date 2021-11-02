@@ -17,7 +17,6 @@ export default (props: IProps) => {
   const isLogin = window.$storage.getItem('access_token');
   // 登录、注册和忘记密码等不需要验证的界面
   const isNonAuthPage = logPages.includes(location.pathname);
-
   let child: React.ReactElement | null = children;
   const authPages = <SecurityLayout location={location}>{children}</SecurityLayout>;
   // 已登录，去往需验证页面
@@ -29,7 +28,7 @@ export default (props: IProps) => {
   if (isLogin && isNonAuthPage) {
     // console.log(3331112);
     child = null;
-    history.push('/doctor/patients/alone');
+    history.push('/doctor/patients/alone_doctor');
   }
   // 未登录，去往登录等页面
   if (!isLogin && isNonAuthPage) {

@@ -19,6 +19,14 @@ var handlePatientsTeamDataSource = function (data) {
     data.forEach(function (team) {
         newObj = {};
         team.members.forEach(function (member) {
+            // 下级、上级、科研医生、营养师、独立
+            // const doctorIds = [Role.LOWER_DOCTOR.id, Role.UPPER_DOCTOR.id, Role.RESEARCH_PROJECT_DOCTOR.id, Role.DIETITIAN.id, Role.ALONE_DOCTOR.id];
+            if (Role.NS_OWNER.id === member.role) {
+                newObj.nsOwner = {
+                    wcId: member.wcId,
+                    sid: member.sid, //创建者的sid -  患者列表是否展示更换服务按钮使用
+                };
+            }
             switch (member.role) {
                 case Role.PROJECT_PATIENT.id: // 受试列表
                 case Role.PATIENT.id:
@@ -45,6 +53,7 @@ var handlePatientsTeamDataSource = function (data) {
                     break;
             }
         });
+        newObj.team = team;
         newPatients.push(newObj);
     });
     return newPatients;
@@ -105,6 +114,28 @@ var handlePatientTeamDataSource = function (dataSource) {
     // console.log('handlePatientTeamDataSource res', res);
     return res;
 };
+export var handleRelatedDoctorsDataSource = function (dataSource) {
+    var doctors = [];
+    dataSource.forEach(function (dataItem) {
+        var doctor = {};
+        dataItem.members.forEach(function (item) {
+            if (item.role === Role.DOCTOR.id) {
+                doctor = __assign(__assign({}, doctor), item);
+                // 医生所在的互联网医院
+            }
+            else if (item.role === Role.ORG.id) {
+                if (doctor.orgs) {
+                    doctor.orgs.push(item);
+                }
+                else {
+                    doctor = __assign(__assign({}, doctor), { orgs: [item] });
+                }
+            }
+        });
+        doctors.push(doctor);
+    });
+    return doctors;
+};
 export var handleTableDataSource = function (dataKey, dataSource, category) {
     console.log('dataSource', dataSource);
     console.log('dataKey', dataKey);
@@ -125,6 +156,9 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             }
             if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category)) {
                 return handlePatientTeamDataSource(dataSource);
+            }
+            if (category === 'relatedDoctors') {
+                return handleRelatedDoctorsDataSource(dataSource);
             }
             return dataSource;
         case 'infos':

@@ -9,6 +9,7 @@ import {
 import Organization from '@/components/Selects/Organization';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/src/utils/conditions';
+import { formatDoctorTeams } from '@/utils/utils';
 import {
   name,
   org,
@@ -18,20 +19,20 @@ import {
   address,
   msgCount,
   noteC,
-  upperDoctor,
-  lowerDoctor,
 } from './columns';
 import AddPatient from './components/AddPatient';
 // import UnBind from './components/UnBind';
-import ChangeDoctor from './components/ChangeDoctor';
+import ChangeServicePackage from './components/ChangeServicePackage';
+import * as api from '@/services/api';
+import { useDispatch } from 'react-redux';
 import styles from './index.scss';
 
 function Patients() {
   const { level } = useParams<{ level: string }>();
   const [form] = Form.useForm();
   const { setFieldsValue, getFieldValue } = form;
-  const sRole = Role[`${level.toLocaleUpperCase()}_DOCTOR`].id;
-
+  const sRole = Role[`${level.toLocaleUpperCase()}`].id;
+  const dispatch = useDispatch();
   const getInitOptions = () => {
     let params: CommonData = {};
     const sessionData = sessionStorage.getItem(level);
@@ -50,6 +51,7 @@ function Patients() {
 
   const [depOptions, setOptions] = useState({ ...getInitOptions() });
   const [pageAt, setPageAt] = useState<number>(1);
+  const [packages, setPackages] = useState<CommonData[]>([]);
   // 切换左侧菜单or刷新页面or从患者详情返回列表页面保留筛选搜索分页条件
   useEffect(() => {
     const newOptions = getInitOptions();
@@ -63,6 +65,11 @@ function Patients() {
     setPageAt(newOptions?.pageAt || 1);
     setOptions({
       ...newOptions,
+    });
+    // 获取侧边栏菜单列表
+    dispatch({
+      type: 'user/getDoctorExistedRoles',
+      payload: {},
     });
   }, [level]);
 
@@ -95,12 +102,31 @@ function Patients() {
   const refresh = (params: { pageAt: number } = { pageAt }) => {
     setOptions({ ...depOptions, ...params });
   };
-  const changeDoctor = {
-    title: '更换医生团队',
+  const fetchPackages = () => {
+    const params = {
+      pageAt: 1,
+      pageSize: 99999,
+      teamNSLabels: ['chronic_disease_team'],
+    };
+    // innerTeams表示套餐集合，members表示一个坑位的信息集合
+    api.service.fetchDoctorTeams(params).then(({ teams }: { teams: any[] }) => {
+      const { alone, creator } = formatDoctorTeams(teams);
+      setPackages([...alone, ...creator]);
+
+    });
+  };
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+  // 只有创建人是当前登录者，才展示更换按钮
+  const changeServicePackage = {
+    title: '更换服务小组',
     dataIndex: 'sid',
-    render: (_text: string, record: IRecord) => (
-      <ChangeDoctor data={record} curRole={level} refresh={() => refresh({ pageAt: 1 })} />
-    ),
+    render: (_text: string, record: IRecord) => {
+      return record?.nsOwner?.sid === window.$storage.getItem('sid') ? (
+        <ChangeServicePackage data={record} packages={packages} refresh={() => refresh({ pageAt: 1 })} />
+      ) : <>--</>;
+    },
   };
 
   const columns: CommonData[] = [
@@ -113,15 +139,8 @@ function Patients() {
     address,
     msgCount,
   ];
-  if (level === 'lower') {
-    columns.push(upperDoctor);
-  }
-  if (level === 'upper') {
-    columns.push(lowerDoctor);
-    columns.push(changeDoctor);
-  }
-  if (level === 'alone') {
-    columns.push(changeDoctor);
+  if (['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level)) {
+    columns.push(changeServicePackage);
   }
   console.log('为构建添加console');
   return (

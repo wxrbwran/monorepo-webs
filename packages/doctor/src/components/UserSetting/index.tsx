@@ -3,7 +3,7 @@ import { Tabs } from 'antd';
 import UserInfo from './UserInfo';
 // import MyScore from './MyScore';
 import Charges from './Charges';
-import FactionDoctor from './FactionDoctor';
+// import FactionDoctor from './FactionDoctor';
 // import FarDoctor from './FarDoctor';
 // import VisitTime from './VisitTime';
 import ResetPWD from './ResetPWD';
@@ -39,11 +39,11 @@ function UserSetting(props: Iprops) {
       value: '收费标准',
       components: <Charges onClose={onClose} />,
     },
-    {
-      key: 'upperLower',
-      value: '我的上下级医生',
-      components: <FactionDoctor />,
-    },
+    // {
+    //   key: 'upperLower',
+    //   value: '我的上下级医生',
+    //   components: <FactionDoctor />,
+    // },
     // {
     //   key: 'farDoctor',
     //   value: '未来医生',
@@ -65,7 +65,7 @@ function UserSetting(props: Iprops) {
   };
   return (
     <div className={styles.user_setting}>
-      <Tabs defaultActiveKey={activeTab} onChange={callback}>
+      <Tabs defaultActiveKey={activeTab} onChange={callback} className={styles.tab_box} renderTabBar={() => <></>}>
         {tabName.map((item) => (
           <TabPane tab={item.value} key={item.key}>
             {item.components}
