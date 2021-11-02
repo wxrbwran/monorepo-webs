@@ -36,7 +36,7 @@
     "debug:nurse": "pnpm debug --filter 'xzl-web-nurse'",
     "debug:org": "pnpm debug --filter 'xzl-web-org'",
     "debug:out": "pnpm debug --filter 'out-hospital-patient'",
-    "debug:cro": "pnpm debug --filter 'clinical-cro'",
+    "debug:cro": "pnpm debug-shared --filter 'clinical-cro'",
     "debug-prod:doctor": "pnpm debug-prod --filter 'xzl-web-doctor'",
     "debug-prod:nurse": "pnpm debug-prod --filter 'xzl-web-nurse'",
     "debug-prod:org": "pnpm debug-prod --filter 'xzl-web-org'",

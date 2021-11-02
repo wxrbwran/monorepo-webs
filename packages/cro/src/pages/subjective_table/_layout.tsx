@@ -14,6 +14,7 @@ interface IProps {
       id: string;
       name: string;
       isTemp?: string;
+      ruleId: string;
     };
   };
 }
@@ -42,10 +43,15 @@ function PatientManage(props: IProps) {
       console.log('newUrlName', newUrlName);
       api.subjective.getScaleGroup({ projectSid, type: 'SUBJECTIVE' }).then((res) => {
         setTableList(res.scaleGroupInfos);
-        const id = res.scaleGroupInfos.filter(
+        const scaleGroupInfos = res.scaleGroupInfos.filter(
           (item: { name: string }) => item.name === newUrlName,
-        )[0].id;
-        history.replace(`/subjective_table/detail?id=${id}`);
+        );
+        if (scaleGroupInfos.length > 0) {
+          const id = scaleGroupInfos[0].id;
+          history.replace(`/subjective_table/detail?id=${id}`);
+        } else {
+          history.replace('/subjective_table');
+        }
       });
     }
   }, [props]);

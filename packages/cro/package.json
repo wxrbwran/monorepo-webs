@@ -9,7 +9,7 @@
     "toprod": "./config/toprod.sh",
     "postinstall": "pnpm clean",
     "dev-shared": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=dev umi dev",
-    "debug-shared": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=dev umi dev",
+    "debug-shared": "pnpm clean && pnpm toprod && NODE_ENV=development APP_ENV=test umi dev",
     "dev": "pnpm todev && NODE_ENV=development APP_ENV=dev umi dev",
     "debug": "pnpm todev && NODE_ENV=development APP_ENV=test umi dev",
     "debug-prod": "pnpm todev && NODE_ENV=development APP_ENV=prod umi dev",

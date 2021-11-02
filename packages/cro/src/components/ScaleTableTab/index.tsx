@@ -9,7 +9,7 @@ interface IProps {
   scaleType: string;
 }
 
-function ScaleTableTab({location, id, scaleType}: IProps) {
+function ScaleTableTab({ location, id, scaleType }: IProps) {
   const [activeTab, setActiveTab] = useState('');
   useEffect(() => {
     let newTab = 'detail';
@@ -19,23 +19,23 @@ function ScaleTableTab({location, id, scaleType}: IProps) {
       newTab = 'send_record';
     }
     setActiveTab(newTab);
-  }, [location.pathname])
+  }, [location.pathname]);
   const tabList = [
     {
       name: scaleType === 'crf' ? 'CRF量表' : '主观量表',
-      url: 'detail'
+      url: 'detail',
     },
     {
       name: '回复状态',
-      url: 'reply'
+      url: 'reply',
     },
     {
       name: '发送记录',
-      url: 'send_record'
-    }
-  ]
+      url: 'send_record',
+    },
+  ];
   const urlName = scaleType === 'crf' ? 'end_event' : 'subjective_table';
-console.log('activeTab2232', activeTab)
+  console.log('activeTab2232', activeTab);
   return (
     <div className="subjective-table-tab">
       {
@@ -43,16 +43,16 @@ console.log('activeTab2232', activeTab)
           return (
             <div
               key={item.url}
-              className={["item", activeTab === item.url ? 'active' : ''].join(' ')}
+              className={['item', activeTab === item.url ? 'active' : ''].join(' ')}
               onClick={() => setActiveTab(item.url)}
             >
               <Link to={`/${urlName}/${item.url}?id=${id}`}>{item.name}</Link>
             </div>
-          )
+          );
         })
       }
     </div>
-  )
+  );
 }
 
 export default ScaleTableTab;

@@ -45,6 +45,7 @@ var handlePatientsTeamDataSource = function (data) {
                     break;
             }
         });
+        newObj.team = team;
         newPatients.push(newObj);
     });
     return newPatients;

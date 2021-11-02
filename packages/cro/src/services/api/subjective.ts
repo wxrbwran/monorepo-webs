@@ -5,30 +5,35 @@ export default {
   getScaleGroup(data?: any): Promise<any> {
     return http.get(`research/scale_group?data=${JSON.stringify(data)}`);
   },
-  // 创建主观量表
-  postSubjectiveScale(data?: any): Promise<any> {
-    return http.post('research/subjective/scale', { data });
+  // 添加主观量表-新
+  addSubjectiveScale(data?: any): Promise<any> {
+    console.log('=============== addSubjectiveScale', JSON.stringify(data));
+    return http.post('research/scale', { data });
   },
+  // 获取主观量表详情-新
+  getSubjectiveScaleDetail(groupId?: any): Promise<any> {
+    return http.get(`research/scale/${groupId}`);
+  },
+  //更新计划-新
+  //删除主观量表里的计划-新
+  deleteScaleRule(data?: any): Promise<any> {
+    return http.delete(`/rules/${data}`);
+  },
+  //新增主观量表里的计划-新
+  addScaleRule(data?: any): Promise<any> {
+    return http.post('rules', { data });
+  },
+
   // 修改主观量表
   patchSubjectiveScale(data?: any): Promise<any> {
     return http.patch('research/scale', { data });
   },
-  // 创建CRF量表
-  postCrfScale(data?: any): Promise<any> {
-    return http.post('research/crf/scale', { data });
-  },
-  // 获取主观量表详情
-  getSubjectiveScale(groupId?: any): Promise<any> {
-    return http.get(`research/subjective/scale/${groupId}`);
-  },
-  // 获取CRF量表详情
-  getCrfScale(groupId?: any): Promise<any> {
-    return http.get(`research/crf/scale/${groupId}`);
-  },
-  //添加客观量表
+
+  //添加客观量表-不改
   addObjectiveScale(data?: any): Promise<any> {
     return http.post('research/objective/scale', { data });
   },
+
   updateObjectiveScale(data?: any): Promise<any> {
     return http.patch('objective/scale', { data });
   },
@@ -45,10 +50,18 @@ export default {
   getPatientScale(data?: any): Promise<any> {
     return http.get('patient/scale', { data });
   },
+  // //更新计划
+  // updateScalePlan(data?: any): Promise<any> {
+  //   return http.patch('research/scale_plan', { data });
+  // },
+
   //更新计划
   updateScalePlan(data?: any): Promise<any> {
-    return http.patch('research/scale_plan', { data });
+    return http.patch('research/objective/rule', { data });
   },
+
+
+
   // 创建量表模板
   postScaleTemplate(data?: any): Promise<any> {
     return http.post('scale/template', { data });

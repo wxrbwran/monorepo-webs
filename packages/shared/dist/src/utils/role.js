@@ -53,7 +53,11 @@ export var Role = {
     YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '管 养老院高级管理员'),
     YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'),
     NS_OWNER: roleType('80pbO4', 0, 0, 0, '创建人'),
-    DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'), // 62
+    DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'),
+    CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'),
+    CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'),
+    CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'),
+    SPACE_CREATOR: roleType('80pbO4', 0, 0, 0, '研究者'),
 };
 export function fetchRolePropById(id) {
     var roleKey = Object.keys(Role);

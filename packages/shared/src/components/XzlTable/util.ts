@@ -35,6 +35,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
       }
     });
+    newObj.team = team;
     newPatients.push(newObj);
   });
   return newPatients;
@@ -88,7 +89,7 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource.forEach((datum) => {
     // console.log(datum);
-    let tmp:Record<string, string> = {};
+    let tmp: Record<string, string> = {};
     datum.members.forEach((member: Store) => {
       const curRole: string = fetchRolePropValue(member.role, 'key') as string;
       // console.log(curRole);

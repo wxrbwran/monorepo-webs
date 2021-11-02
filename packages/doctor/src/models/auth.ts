@@ -104,6 +104,7 @@ const Model: AuthModelType = {
     clearLoginInfo() {
       setAuthorizationToken(false);
       window.$storage.clear();
+      window.sessionStorage.clear();
       ['alone', 'lower', 'upper', 'doCalling'].forEach((item) => {
         window.$storage.removeItem(item);
       });

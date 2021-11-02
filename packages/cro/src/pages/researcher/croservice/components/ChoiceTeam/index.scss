@@ -1,0 +1,22 @@
+.add_service {
+  padding: 0 40px;
+  .package_name {
+    width: 676px;
+    height: 32px;
+  }
+  .org_name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    padding: 0 10px;
+  }
+}
+
+.member {
+  box-shadow: 0 0 12px 0 rgb(0 0 0 / 10%);
+  border-radius: 8px;
+}
+.operator {
+  font-size: 15px;
+}

@@ -62,7 +62,7 @@ export const Role: RolesMap = {
   LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '下级医生'), // 15
   ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
 
-  COUNSELOR_DOCTOR: roleType( '2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)' ), // 17
+  COUNSELOR_DOCTOR: roleType('2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)'), // 17
   CONSOLE_ROOT: roleType('6exPeb', 179, 170, 178, '后台系统Root管理员'), // 18
   CRO_ORG: roleType('YWQD0z', 189, 180, 188, 'CRO 机构'), // 19
   NONE: roleType('bWlZez', 199, 190, 198, '任何角色都没有，即没有任何身份，默认都进入xinzhili空间'), // 20
@@ -94,6 +94,10 @@ export const Role: RolesMap = {
   NS_OWNER: roleType('80pbO4', 0, 0, 0, '创建人'), // 59 空间所属者/创建者
 
   DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'), // 62
+  CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'CRO业务-PM'),
+  CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRO业务-CRA'),
+  CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRO业务-CRC'),
+  SPACE_CREATOR: roleType('80pbO4', 0, 0, 0, '研究者'),
 };
 
 export function fetchRolePropById(id: string) {

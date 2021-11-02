@@ -7,6 +7,7 @@ import moment from 'moment';
 import { sexList } from './consts';
 import { Store } from 'antd/lib/form/interface';
 import IconAutograph from '@/assets/img/icon_autograph.png';
+import distributionTeamPng from '@/assets/img/distribution_team.png';
 
 export type SexType = 'MALE' | 'FEMALE';
 const statusObj: Store = {
@@ -210,6 +211,26 @@ export const ethnicity = {
 // 全部患者列表-未邀请
 export const noSendPatientColumns = () => [
   name,
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    width: 150,
+    // render: (text: string, record: any) => <span>{record.name}{text}</span>,
+    render: (text: any, _record: any) => (
+
+      <div className='no_send_patient_name'>
+        {text}
+        <div className="no_chose_why" >
+          <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => console.log('====== 点击了=====')}>
+          </img>
+          <div className="no_chose_alert">
+            患者正在参与试验「试验名称」,无法邀请
+          </div>
+        </div>
+
+      </div >
+    ),
+  },
   age,
   address,
   sex,
@@ -262,6 +283,16 @@ export const patientCroColumns = (params: Store) => [
       <div>
         {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)} /> : '--'}
       </div>
+    ),
+  },
+  {
+    title: '分配cro团队',
+    dataIndex: '',
+    render: (_text: any, record: any) => (
+      <div>
+        {record.team.name}
+        <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => params.distributionTeam(record)} />
+      </div >
     ),
   },
 ];

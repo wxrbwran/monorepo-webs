@@ -1,9 +1,9 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
-import { initialOrg, localRole } from '@/utils/consts';
+import { initialOrg } from '@/utils/consts';
 import user from '@/services/api/user';
 import { UserModelState } from 'typings/global';
-
+import { Role } from 'xzl-web-shared/src/utils/role';
 export interface UserModelType {
   namespace: 'user';
   state: UserModelState;
@@ -33,7 +33,7 @@ export const userState = {
   currentRole: '',
   isShowMsgHistory: false,
   filterOrgs: [],
-}
+};
 
 const UserModel: UserModelType = {
   namespace: 'user',
@@ -42,7 +42,7 @@ const UserModel: UserModelType = {
   effects: {
     *fetchCurrent({ payload }, { call, put }) {
       const response = yield call(user.getUserInfo, payload);
-      console.log('response111', response)
+      console.log('response111', response);
       yield put({
         type: 'saveCurrentUser',
         payload: response.wcl[0],
@@ -50,6 +50,8 @@ const UserModel: UserModelType = {
     },
     * fetchUserOrganizations({ payload }, { call, put }) {
       const data = yield call(user.getDoctorOrgs, payload);
+
+      console.log('========== fetchUserOrganizations data', JSON.stringify(data));
       yield put({
         type: 'saveUserFilterOrg',
         payload: data,
@@ -59,18 +61,18 @@ const UserModel: UserModelType = {
 
   reducers: {
     saveCurrentUser(state, action) {
-      console.log('action.payload', action.payload)
+      console.log('action.payload', action.payload);
       return {
         ...state,
         user: {
-          ...action.payload
-        }
+          ...action.payload,
+        },
       };
     },
     saveUserFilterOrg(state, action) {
-      const filterOrgList:any[] = [];
+      const filterOrgList: any[] = [];
       action.payload.teams.forEach((item: IOrgTeams) => {
-        item.members.forEach((member:ISubject) => {
+        item.members.forEach((member: ISubject) => {
           if (member.role === Role.ORG.id) {
             filterOrgList.push({
               ...member,

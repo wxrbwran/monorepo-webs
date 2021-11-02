@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
-import { Form, Input, Row, Col } from 'antd';
+import { Form, Input, Row, Col, message } from 'antd';
 import { baseField } from '../../utils';
 import styles from './index.scss';
 import { IQuestions } from 'typings/imgStructured';
@@ -10,11 +10,13 @@ interface IProps {
   initData: IQuestions[];
   outType: string; // JCD  OTHER
   changeCallbackFns: (params: ICallbackFn) => void
+  changeJcdBaseInfo: (params: object) => void;
 }
 
-const TopicBaseInfo: FC<IProps> = ({ initData, changeCallbackFns, outType }) => {
+const TopicBaseInfo: FC<IProps> = (props) => {
+  const { initData, changeCallbackFns, outType, changeJcdBaseInfo } = props;
   const [form] = Form.useForm();
-  const { validateFields, setFieldsValue } = form;
+  const { validateFields, setFieldsValue, getFieldsValue } = form;
   const fetchInit = () => {
     const initObj: CommonData = {};
     initData.forEach(item => {
@@ -27,7 +29,7 @@ const TopicBaseInfo: FC<IProps> = ({ initData, changeCallbackFns, outType }) => 
           initObj.measured_at = Number(ans);
           break;
         case '检查部位':
-          initObj.position = ans;
+          initObj.part = ans;
           break;
         case '检查方法':
           initObj.method = ans;
@@ -47,7 +49,7 @@ const TopicBaseInfo: FC<IProps> = ({ initData, changeCallbackFns, outType }) => 
   const [initialValues, setInitVals] = useState(fetchInit());
   const handleSave = () => new Promise((resolve, reject) => {
     validateFields().then((values: CommonData) => {
-      console.log(values);
+      console.log('基本信息', values);
       const questions: any[] = [];
       Object.keys(values).forEach((item: string) => {
         questions.push({
@@ -56,16 +58,22 @@ const TopicBaseInfo: FC<IProps> = ({ initData, changeCallbackFns, outType }) => 
           question_type: 'BASIC',
           group: `0-${baseField[item].inx}`,
           sid: window.$storage.getItem('sid'),
-          // createdTime: new Date().getTime(),
         });
       });
-      // resolve(questions);
       resolve({
         data: questions,
         groupInx: 0,
       });
       console.log('questions', questions);
     }).catch((err: any) => {
+      console.log('基本信息err', err);
+      message.error({
+        content: '请输入检查部位和检查方法',
+        maxCount: 1,
+      });
+      message.config({
+        maxCount: 1,
+      });
       reject(err);
     });
   });
@@ -88,7 +96,12 @@ const TopicBaseInfo: FC<IProps> = ({ initData, changeCallbackFns, outType }) => 
   const handleChangeTime = (time: number | null) => {
     setFieldsValue({ measured_at: time });
   };
-
+  const handleChangeName = () => {
+    const coreField = outType === 'JCD' ? ['part', 'method'] : ['djName'];
+    console.log('核心字段：', getFieldsValue(coreField));
+    changeJcdBaseInfo(getFieldsValue(coreField));
+  };
+  const rules = [{ required: true, message: '请输入' }];
   return (
     <div className={`border p-15 ${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
@@ -126,13 +139,13 @@ const TopicBaseInfo: FC<IProps> = ({ initData, changeCallbackFns, outType }) => 
             outType === 'JCD' ? (
               <>
                 <Col span={12}>
-                <Form.Item name="position" label="检查部位">
-                  <Input />
+                <Form.Item name="part" label="检查部位" rules={rules}>
+                  <Input onBlur={handleChangeName}  />
                 </Form.Item>
               </Col>
               <Col span={12} className="pl-17">
-                <Form.Item name="method" label="检查方法">
-                  <Input />
+                <Form.Item name="method" label="检查方法" rules={rules}>
+                  <Input onBlur={handleChangeName}  />
                 </Form.Item>
               </Col>
               <Col span={12}>
