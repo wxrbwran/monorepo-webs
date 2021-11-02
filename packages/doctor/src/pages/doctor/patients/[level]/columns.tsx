@@ -38,11 +38,12 @@ export interface IRecord {
   avatarUrl: string;
   isYlPatient: boolean; // 是否是养老患者
   inCro: boolean; // 是否参与了科研项目
+  teamsMemberDoctorWcId: string; // 医生wcId, 在该行对应的team 中的members的wcId
 }
 const patientPage = (record: IRecord, actionType?: string, other?: string) => {
   console.log('跳转', record, actionType, other);
   const {
-    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name,
+    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, teamsMemberDoctorWcId,
   } = record;
   window.$storage.setItem('patientWcId', wcId);
   window.$storage.setItem('patientSid', sid);
@@ -61,6 +62,7 @@ const patientPage = (record: IRecord, actionType?: string, other?: string) => {
       issueCount,
       name,
       avatarUrl,
+      teamsMemberDoctorWcId,
     },
   });
   history.push(`/patient_panel/${record.sid}`);

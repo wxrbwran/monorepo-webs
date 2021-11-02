@@ -40,18 +40,18 @@ const PackageDoctorItem: FC<IProps> = (props) => {
       }
     });
     return (
-      <div className="text-center mr-40 ml-40 mb-15">
-        <div className="relative w-100">
+      <div className="text-center mb-15 w-173">
+        <div className="relative w-100 mx-auto">
           <img className="w-100 h-100 rounded" src={avatarUrl} />
           {isCreator && <div className={styles.creator}>创建人</div>}
         </div>
-        <div className="mt-10 text-base font-bold">{doctorName}</div>
+        <div className="mt-10 text-base font-bold line-ellipsis w-160" title={doctorName}>{doctorName}</div>
         <div className="text-gray-600 text-sm">
           {
-            roles.map(role => <span className="ml-5 mr-5" key={role}>{role}</span>)
+            roles.map(role => <span className="ml-3 mr-3" key={role}>{role}</span>)
           }
         </div>
-        <div className="text-gray-600 text-sm">{orgName}</div>
+        <div className="text-gray-600 text-sm line-ellipsis w-160" title={orgName}>{orgName}</div>
       </div>
     );
   }, [members]);

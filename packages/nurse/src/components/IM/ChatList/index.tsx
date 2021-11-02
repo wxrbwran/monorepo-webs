@@ -10,7 +10,6 @@ import * as api from '@/services/api';
 import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
 import { imMsgType } from '@/utils/tools';
 import reCalcAllMessageTime from '@/utils/reCalcAllMessageTime';
-// eslint-disable-next-line import/no-cycle
 import ChatItem from '../ChatItem';
 import styles from './index.scss';
 
@@ -78,6 +77,7 @@ const ChatList: FC = () => {
 
   //   }
   // }, 300);
+  console.log('----------12', sessions);
   const getMsgs = (endTime?: number) => {
     setFetching(true);
     // 过滤出当前会话组成员

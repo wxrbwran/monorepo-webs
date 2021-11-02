@@ -658,3 +658,6 @@ body {
     line-height: 34px;
   }
 }
+.line-ellipsis {
+  @include line-clamp(1);
+}
