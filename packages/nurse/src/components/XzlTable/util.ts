@@ -25,8 +25,6 @@ const handlePatientsTeamDataSource = (data) => {
         default: break;
       }
     });
-    newObj.team = team;
-    console.log('=============== newObj, ', JSON.stringify(team));
     newPatients.push(newObj);
   });
   return newPatients;

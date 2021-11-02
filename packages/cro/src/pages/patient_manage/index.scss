@@ -1,5 +1,5 @@
 .patient-manage-cont {
-  font-size: 14px;;
+  font-size: 14px;
   // padding: 27px 30px 0;
   .title {
     font-size: 18px;
@@ -32,9 +32,9 @@
         color: #000;
       }
     }
-    .ant-tabs-tab.ant-tabs-tab-active{
+    .ant-tabs-tab.ant-tabs-tab-active {
       .ant-tabs-tab-btn {
-        color: #3195FA;
+        color: #3195fa;
       }
     }
     .send-btn {
@@ -60,11 +60,12 @@
       z-index: 2;
     }
     .ant-table-container {
-      border: 1px solid #EEEEEE;
+      border: 1px solid #eeeeee;
       max-height: calc(100vh - 302px);
       overflow: auto;
       tr {
-        td, th{
+        td,
+        th {
           &:last-child {
             padding-right: 45px;
           }
@@ -72,12 +73,39 @@
       }
     }
   }
-  .ant-tabs-top>.ant-tabs-nav::before {
+  .ant-tabs-top > .ant-tabs-nav::before {
     border: none;
   }
   .table-operating {
-    color: #3296FA;
+    color: #3296fa;
     cursor: pointer;
+  }
+
+  .no_send_patient_name {
+    display: flex;
+    flex-direction: row;
+  }
+  .no_chose_why {
+    // width: 140px;
+    // height: 126px;
+    // text-align: center;
+    // background: #ffffff;
+    // border-radius: 8px;
+    // @include flex-lay(column, nowrap, center, center);
+    // margin-top: 26px;
+    // cursor: pointer;
+    // position: relative;
+    &:hover {
+      .no_chose_alert {
+        display: block;
+        background-color: #181818;
+        width: 140px;
+        position: relative;
+      }
+    }
+    .no_chose_alert {
+      display: none;
+    }
   }
 }
 .select-group-modal {

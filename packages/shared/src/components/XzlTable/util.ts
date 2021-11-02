@@ -35,6 +35,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
       }
     });
+    newObj.team = team;
     newPatients.push(newObj);
   });
   return newPatients;
