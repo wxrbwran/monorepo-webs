@@ -91,11 +91,11 @@ export function getRole(role: string) {
 export function getFromDoctorInfo(currSession: IPerson) {
   let fromDoctorInfo:[] = [];
   // 非智能医生
-  const doctorInfo = currSession.infos.filter(
+  const doctorInfo = currSession.members.filter(
     (item) => item.role === window.$storage.getItem('currRoleId'),
   );
   // 智能医生
-  const sysDoctorInfo = currSession.infos.filter(
+  const sysDoctorInfo = currSession.members.filter(
     (item) => item.role === Role.SYS_DOCTOR.id,
   );
   if (sysDoctorInfo[0]?.wcId) {

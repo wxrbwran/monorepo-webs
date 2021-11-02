@@ -93,7 +93,7 @@ const DoctorQRCode:FC = ({ children }) => {
       }
     }
   }, [downImgUrl]);
-
+  console.log('currentOrg', currentOrg);
   return (
     <div className={styles.qrcode}>
       <div onClick={handleShowModal}>

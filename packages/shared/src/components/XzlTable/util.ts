@@ -9,6 +9,11 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
+      // 下级、上级、科研医生、营养师、独立
+      const doctorIds = [Role.LOWER_DOCTOR.id, Role.UPPER_DOCTOR.id, Role.RESEARCH_PROJECT_DOCTOR.id, Role.DIETITIAN.id, Role.ALONE_DOCTOR.id];
+      if (doctorIds.includes(member.role!)) {
+        newObj.teamsMemberDoctorWcId = member.wcId;  // 医生wcId, 在该行对应的team 中的members的wcId
+      }
       switch (member.role) {
         case Role.PROJECT_PATIENT.id: // 受试列表
         case Role.PATIENT.id:
