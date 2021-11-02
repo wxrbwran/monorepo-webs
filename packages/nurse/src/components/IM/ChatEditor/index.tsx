@@ -29,8 +29,6 @@ const ChatEditor: FC = () => {
   const fileToSent:any = useRef<HTMLInputElement>();
   const textarea: any = useRef<HTMLTextAreaElement>();
 
-  console.log('43859495', currSessionId);
-  console.log('sessions', sessions);
   useEffect(() => {
     if (currSessionId && sessions.length > 0) {
       // 过滤出当前会话组成员
@@ -38,7 +36,7 @@ const ChatEditor: FC = () => {
         (item:IPerson) => `p2p-${item.sessionId}` === currSessionId,
       );
       // 从会话组中去除自己
-      const removeOwnAfter = currSession[0].members.filter(
+      const removeOwnAfter = currSession[0].infos.filter(
         (item: { wcId: string | undefined }) => item.wcId !== fromWcId,
       );
       // 得到要发送给的成员的wcId
