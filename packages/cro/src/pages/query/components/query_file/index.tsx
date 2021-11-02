@@ -3,6 +3,7 @@ import { Form, Input, Select } from 'antd';
 import NumberPicker from '../number_picker';
 import DateTypePicker from '../date_picker';
 import styles from '../pre_table/index.scss';
+import { utilNumType, utilTimeType } from '../../util';
 interface IProps {
   currentField: {
     level: string;
@@ -35,7 +36,7 @@ function QueryFile({ currentField, setFieldsValue }: IProps) {
 
   console.log('currentField_query_file', currentField);
   // end-event.MAIN_ENDPOINT_0 取最后一位”0“
-  // const kIdx = currentField.key.split('_')[currentField.key.split('_').length - 1];
+  const kIdx = currentField.key.split('_')[currentField.key.split('_').length - 1];
   // const projectSid = window.$storage.getItem('projectSid');
   // const optionValue = (val: string) => {
   //   if(['女', '男'].includes(val)) {
@@ -55,67 +56,60 @@ function QueryFile({ currentField, setFieldsValue }: IProps) {
   };
 
 
-  const getCorrectInput = (className, type, current, item) => {
+  const getCorrectInput = (name, type, current, item) => {
 
     //     export const utilTimeType = ['date', 'timestamp', 'ms', 'time'];
     // export const utilNumType = ['number', 'int', 'float'];
     // export const utilStringType = ['string', 'refs'];
     // export const utilBoolType = ['bool'];
 
-    return (
-      <div>
-        {
-          ['date', 'timestamp'].includes(type) && (
-            <div className={className}>
-              <DateTypePicker currentField={{ ...item, key: current.key }} setFieldsValue={setFieldsValue} />
-            </div>
-          )
-        }
-        {
-          ['int', 'float'].includes(type) && (
-            <div className={className}>
-              <NumberPicker currentField={{ ...item, key: current.key }} setFieldsValue={setFieldsValue} />
-            </div>
-          )
-        }
-        {/* // string 分别有option的和无option的 */}
-        {
-          current?.option ? (
-            <div className={`${styles.single_select} sing_line ${styles.cell_wrapper}`}>
-              <FormItem
-                name={`${current.name}_value_${kIdx}`}
-                noStyle
-              >
-                <Select placeholder='全部选项'>
-                  <Option value=''>全部选项</Option>
-                  {
-                    current.option.map((ite) => (
-                      <Option value={ite.value} key={ite.value}>{ite.value}</Option>
-                    ))
-                  }
-                </Select>
-              </FormItem>
-            </div>
-          ) :
-            <>
-
-              {
-                current.type === 'string' && !current?.items && (
-                  <div className={`${styles.single_input} sing_line ${styles.cell_wrapper}`}>
-                    <FormItem
-                      name={`${current.name}_value_${kIdx}`}
-                      initialValue=''
-                      noStyle
-                    >
-                      <Input placeholder='全部(点击可修改)' />
-                    </FormItem>
-                  </div>)
-              }
-            </>
-        }
-      </div>
-    );
-
+    if (utilTimeType.includes(type)) {
+      return (
+        <div className={name}>
+          <DateTypePicker currentField={{ ...item, key: current.key }} setFieldsValue={setFieldsValue} />
+        </div>
+      );
+    } else if (utilNumType.includes(type)) {
+      return (
+        <div className={name}>
+          <NumberPicker currentField={{ ...item, key: current.key }} setFieldsValue={setFieldsValue} />
+        </div>
+      );
+    } else {
+      return (
+        current?.option ? (
+          <div className={`${styles.single_select} sing_line ${styles.cell_wrapper}`}>
+            <FormItem
+              name={`${current.name}_value_${kIdx}`}
+              noStyle
+            >
+              <Select placeholder='全部选项'>
+                <Option value=''>全部选项</Option>
+                {
+                  current.option.map((ite) => (
+                    <Option value={ite.value} key={ite.value}>{ite.value}</Option>
+                  ))
+                }
+              </Select>
+            </FormItem>
+          </div>
+        ) :
+          <>
+            {
+              current.type === 'string' && !current?.items && (
+                <div className={`${styles.single_input} sing_line ${styles.cell_wrapper}`}>
+                  <FormItem
+                    name={`${current.name}_value_${kIdx}`}
+                    initialValue=''
+                    noStyle
+                  >
+                    <Input placeholder='全部(点击可修改)' />
+                  </FormItem>
+                </div>)
+            }
+          </>
+      );
+    }
   };
 
 
@@ -128,33 +122,6 @@ function QueryFile({ currentField, setFieldsValue }: IProps) {
       {
         getCorrectInput(`${styles.multi_select} sing_line ${styles.cell_wrapper}`, currentField.type, currentField, currentField)
       }
-
-      {/* {
-        // 如果item为空，直接判断 option 和 type，如果item有值，则根据item数量显示单个或者一个
-        // currentField?.items?.length ? 
-        currentField?.option ? (
-          <div className={`${styles.single_select} sing_line ${styles.cell_wrapper}`}>
-            <FormItem
-              name={`${currentField.name}_value_${kIdx}`}
-              noStyle
-            >
-              <Select placeholder='全部选项'>
-                <Option value=''>全部选项</Option>
-                {
-                  currentField.option.map((item) => (
-                    <Option value={item.value} key={item.value}>{item.value}</Option>
-                  ))
-                }
-              </Select>
-            </FormItem>
-          </div>
-        ) :
-          <>
-            {
-              getCorrectInput(`${styles.multi_select} sing_line ${styles.cell_wrapper}`, currentField.type, currentField, currentField)
-            }
-          </>
-      } */}
 
       {/* id 为 double_line代表双行(既有时间，又有数值)，className为sing_line代表单行，只有时间或只有数值 */}
       {
