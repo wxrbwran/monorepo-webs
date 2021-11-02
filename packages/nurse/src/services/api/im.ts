@@ -20,6 +20,9 @@ export default {
   getSessionGroup({ patientWcId, patientSid }: any): Promise < any > {
     return http.get(`/ms/yx/session/group/${patientWcId}/${patientSid}`);
   },
+  getPickSessionGroup(data: object): Promise<any> {
+    return http.get('v1/ms/pick/session', { data });
+  },
   // 根据云信帐号获取用户信息（来电时使用）
   getYxUserInfo(accId: string): Promise < any > {
     return http.get(`/ms/yx/user/${accId}`);
@@ -31,5 +34,8 @@ export default {
   // 查询单条消息内容
   getSingleMsg(data: object): Promise < any > {
     return http.get(`ms/yx/message/content?data=${JSON.stringify(data)}`);
+  },
+  getMsAccid(to_sid: string): Promise<any> {
+    return http.get(`v1/ms/acc_id/${to_sid}`);
   },
 };
