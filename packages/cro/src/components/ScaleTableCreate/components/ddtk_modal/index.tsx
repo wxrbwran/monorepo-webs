@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { btnRender } from '@/utils/button';
 import CustomChoice from '../custom_choice';
-import { Table, Select, Checkbox } from 'antd';
+import { Table, Select, Checkbox, message } from 'antd';
 import { IQuestions } from '@/utils/consts';
 import './index.scss';
 
@@ -159,8 +159,26 @@ const AddPatient = (props: IProps) => {
   };
 
   const handleSubmitModal = () => {
-    setShowModal(false);
-    handSaveDdtkModify();
+    let isPass = true;
+    questions[quesIndex].detail.content.map((quesItem: IQuestions) => {
+      if (['radio', 'checkbox'].includes(quesItem.type)) {
+        if (quesItem?.options.length === 0) { isPass = false; }
+        quesItem?.options.forEach((optionItem: { content: string }) => {
+          if (optionItem.content === '') {
+            isPass = false;
+          }
+        });
+      }
+    });
+    if (isPass) {
+      setShowModal(false);
+      handSaveDdtkModify();
+    } else {
+      message.error('选项不能为空');
+    }
+
+    // setShowModal(false);
+    // handSaveDdtkModify();
   };
 
   const handleCloseModal = () => {
