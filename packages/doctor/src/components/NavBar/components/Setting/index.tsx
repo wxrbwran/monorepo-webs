@@ -35,6 +35,10 @@ function Setting() {
       type: 'user/getUserWclDetail',
       payload: { wcIds: [window.$storage.getItem('wcId')] },
     });
+    dispatch({
+      type: 'user/getUserOrganizations',
+      payload: { },
+    });
   }, []);
   useEffect(() => {
     if (userInfo.firstLogin === 1) {

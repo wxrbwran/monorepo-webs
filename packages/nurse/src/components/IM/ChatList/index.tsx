@@ -77,7 +77,6 @@ const ChatList: FC = () => {
 
   //   }
   // }, 300);
-  console.log('----------12', sessions);
   const getMsgs = (endTime?: number) => {
     setFetching(true);
     // 过滤出当前会话组成员

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Select } from 'antd';
 import { IState } from 'packages/doctor/typings/model';
 import { Role } from 'xzl-web-shared/src/utils/role';
@@ -17,13 +17,6 @@ function ChoiceSelfRole({ callback }: IProps) {
   const { filterOrgs, userInfo } = useSelector((state: IState) => state.user);
   const [selectOrgList, setSelectOrgList] = useState<ISubject[]>(filterOrgs);
   const [selfInfo, setselfInfo] = useState<ISelfInfo>({ sourceNSId: null, role: null, orgName: null });
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch({
-      type: 'user/getUserOrganizations',
-      payload: { },
-    });
-  }, []);
   useEffect(() => {
     if (filterOrgs) {
       setSelectOrgList(filterOrgs);

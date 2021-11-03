@@ -19,8 +19,6 @@ import {
   address,
   msgCount,
   noteC,
-  upperDoctor,
-  lowerDoctor,
 } from './columns';
 import AddPatient from './components/AddPatient';
 // import UnBind from './components/UnBind';
@@ -120,12 +118,15 @@ function Patients() {
   useEffect(() => {
     fetchPackages();
   }, []);
+  // 只有创建人是当前登录者，才展示更换按钮
   const changeServicePackage = {
     title: '更换服务小组',
     dataIndex: 'sid',
-    render: (_text: string, record: IRecord) => (
-      <ChangeServicePackage data={record} packages={packages} refresh={() => refresh({ pageAt: 1 })} />
-    ),
+    render: (_text: string, record: IRecord) => {
+      return record?.nsOwner?.sid === window.$storage.getItem('sid') ? (
+        <ChangeServicePackage data={record} packages={packages} refresh={() => refresh({ pageAt: 1 })} />
+      ) : <>--</>;
+    },
   };
 
   const columns: CommonData[] = [
@@ -138,14 +139,7 @@ function Patients() {
     address,
     msgCount,
   ];
-  if (level === 'lower_doctor') {
-    columns.push(upperDoctor);
-  }
-  if (level === 'upper_doctor') {
-    columns.push(lowerDoctor);
-    columns.push(changeServicePackage);
-  }
-  if (level === 'alone_doctor') {
+  if (['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level)) {
     columns.push(changeServicePackage);
   }
   console.log('为构建添加console');

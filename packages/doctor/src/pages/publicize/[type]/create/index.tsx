@@ -41,15 +41,15 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
       .then((res) => {
         console.log('resrules', res);
         setRules(res.keys);
-        const scopeListApi = res.keys.filter(item => item.name === 'scope')[0].assign.value;
-        if (scopeListApi){
+        const scopeListApi = res.keys.filter(item => item.name === 'scope')[0].items[0].assign.value;
+        if (scopeListApi) {
           const params = {
             sourceType: isScale ? 2 : 3,
             kp: 'team',
             rsList: [{
-              sid:  window.$storage.getItem('sid'),
+              sid: window.$storage.getItem('sid'),
               roleType: window.$storage.getItem('currRoleId'),
-              nsId:  window.$storage.getItem('nsId'),
+              nsId: window.$storage.getItem('nsId'),
             }, {
               sid: currentOrgInfo.sid,
               roleType: currentOrgInfo.role,
