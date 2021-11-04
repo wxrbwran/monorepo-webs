@@ -23,7 +23,11 @@ interface IfromVal {
 }
 function CreateProject({ onCloseModal }: IProps) {
 
-  const filterOrgs: ISubject[] = useSelector((state: IState) => state.user.filterOrgs);
+  const filterOrgs = useSelector((state: IState) => state.user.user.roles[0].subject.practiceAreas);
+
+  // const practiceAreas = user.roles[0].subject.practiceAreas;
+
+  // const filterOrgs: ISubject[] = useSelector((state: IState) => state.user.filterOrgs);
 
   const defaultImg = projectDefaultImg[Math.floor(Math.random() * (0 - 5) + 5)];
   const dispatch = useDispatch();
@@ -32,10 +36,7 @@ function CreateProject({ onCloseModal }: IProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    dispatch({
-      type: 'user/fetchUserOrganizations',
-      payload: {},
-    });
+
   }, []);
 
   const uploadSuccess = (params: IUploadParams) => {
@@ -46,7 +47,14 @@ function CreateProject({ onCloseModal }: IProps) {
   };
   const handleCreatePro = (fromVal: IfromVal) => {
     setLoading(true);
-    const { name, duration, intro, type, orgSid } = fromVal;
+    const { name, duration, intro, type } = fromVal;
+
+    let { orgSid } = fromVal;
+    if (!orgSid) {
+
+      orgSid = filterOrgs[0].sid;
+    }
+
     const params = {
       name,
       type,

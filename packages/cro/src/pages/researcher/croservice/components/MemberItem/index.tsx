@@ -50,7 +50,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style }) => {
           {
             orgs?.map((item: { name: string, nsId: string }) => {
               return (
-                <span key={item.nsId} className={`mr-20 ${choiceOrg?.nsId === item?.nsId ? 'text-blue-500' : ''}`}>{item.name}</span>
+                <span key={item.nsId} className={`mr-20 ${(choiceOrg?.nsId === item?.nsId ) ? 'text-blue-500' : ''}`}>{item.name}</span>
               );
             })
           }

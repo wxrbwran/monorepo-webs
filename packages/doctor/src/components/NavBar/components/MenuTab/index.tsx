@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 // import { Tabs, Badge } from 'antd';
-import { Tabs, notification, message } from 'antd';
-import { history, useSelector } from 'umi';
+import { Tabs } from 'antd';
+import { history } from 'umi';
 import config from '@/config';
-import * as api from '@/services/api';
 import styles from './index.scss';
 
 const { TabPane } = Tabs;
@@ -12,7 +11,6 @@ function MenuTab() {
   //  如果用户仅仅是专家会诊池的医生，那么只显示预约患者tab，且左侧只显示我是会诊医生
   const onlyConsultations = window.$storage.getItem('onlyConsultations');
   const [activeTab, setActiveTab] = useState(onlyConsultations ? 'ORDER' : 'SIGNING');
-  const { firstProfessionCompany } = useSelector((state: IState) => state.user.userInfo);
   const handleBadge = () => {
     // 切换tab更新小红点,把数据保存到redux中，导航和侧边栏都需要使用
   };
@@ -29,20 +27,22 @@ function MenuTab() {
     }
   };
   const handleGoCro = async () => {
-    if (!firstProfessionCompany) {
-      notification.warning({
-        message: '提醒',
-        duration: 6,
-        description:
-          '请在【设置 → 个人资料】中填写第一执业医院',
-      });
-    } else {
-      api.user.patchCheckInfo().then(() => {
-        (document.getElementById('go_cro') as HTMLElement).click();
-      }).catch((err) => {
-        message.error(err?.result);
-      });
-    }
+
+    (document.getElementById('go_cro') as HTMLElement).click();
+    // if (!firstProfessionCompany) {
+    //   notification.warning({
+    //     message: '提醒',
+    //     duration: 6,
+    //     description:
+    //       '请在【设置 → 个人资料】中填写第一执业医院',
+    //   });
+    // } else {
+    //   api.user.patchCheckInfo().then(() => {
+    //     (document.getElementById('go_cro') as HTMLElement).click();
+    //   }).catch((err) => {
+    //     message.error(err?.result);
+    //   });
+    // }
   };
   return (
     <div className={styles.center}>
