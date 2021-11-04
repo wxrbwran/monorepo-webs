@@ -100,6 +100,15 @@ export const org = {
     </div>
   ),
 };
+export const project = {
+  title: ' 科研项目',
+  dataIndex: 'projectName',
+  render: (data: string, record: IRecord) => (
+    <div onClick={() => patientPage(record)}>
+      {data}
+    </div>
+  ),
+};
 
 export const sex = {
   title: '性别',

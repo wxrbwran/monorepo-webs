@@ -16,11 +16,13 @@ import dayjs from 'dayjs';
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
     var newObj = {};
+    // 签约患者下，当前选中菜单的role
+    var currentMenuRole = window.$storage.getItem('role');
+    var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
     data.forEach(function (team) {
         newObj = {};
         team.members.forEach(function (member) {
             // 下级、上级、科研医生、营养师、独立
-            // const doctorIds = [Role.LOWER_DOCTOR.id, Role.UPPER_DOCTOR.id, Role.RESEARCH_PROJECT_DOCTOR.id, Role.DIETITIAN.id, Role.ALONE_DOCTOR.id];
             if (Role.NS_OWNER.id === member.role) {
                 newObj.nsOwner = {
                     wcId: member.wcId,
@@ -29,9 +31,16 @@ var handlePatientsTeamDataSource = function (data) {
             }
             switch (member.role) {
                 case Role.PROJECT_PATIENT.id: // 受试列表
+                    if (!doctorRole.includes(currentMenuRole)) {
+                        newObj = __assign(__assign({}, newObj), member);
+                    }
+                    newObj.inCro = true; // 标记为受试者
+                    break;
                 case Role.PATIENT.id:
                 case Role.PATIENT_VIP.id:
-                    newObj = __assign(__assign({}, newObj), member);
+                    if (doctorRole.includes(currentMenuRole)) {
+                        newObj = __assign(__assign({}, newObj), member);
+                    }
                     break;
                 case Role.RESEARCH_PROJECT_DOCTOR.id:
                     newObj.researchProjectDoctor = member.name;
@@ -44,6 +53,9 @@ var handlePatientsTeamDataSource = function (data) {
                     break;
                 case Role.ORG.id:
                     newObj.organizationName = member.name;
+                    break;
+                case Role.RESEARCH_PROJECT.id:
+                    newObj.projectName = member.name;
                     break;
                 case Role.PATIENT_YL.id:
                 case Role.PATIENT_YL_VIP.id:

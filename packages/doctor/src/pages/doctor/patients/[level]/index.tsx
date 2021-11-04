@@ -19,6 +19,7 @@ import {
   address,
   msgCount,
   noteC,
+  project,
 } from './columns';
 import AddPatient from './components/AddPatient';
 // import UnBind from './components/UnBind';
@@ -52,6 +53,9 @@ function Patients() {
   const [depOptions, setOptions] = useState({ ...getInitOptions() });
   const [pageAt, setPageAt] = useState<number>(1);
   const [packages, setPackages] = useState<CommonData[]>([]);
+  // 慢病医生角色
+  const isDoctor = ['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level);
+
   // 切换左侧菜单or刷新页面or从患者详情返回列表页面保留筛选搜索分页条件
   useEffect(() => {
     const newOptions = getInitOptions();
@@ -131,7 +135,7 @@ function Patients() {
 
   const columns: CommonData[] = [
     name,
-    org,
+    isDoctor ? org : project,
     patientLevel(refresh),
     noteC(refresh),
     sex,
@@ -139,7 +143,7 @@ function Patients() {
     address,
     msgCount,
   ];
-  if (['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level)) {
+  if (isDoctor) {
     columns.push(changeServicePackage);
   }
   console.log('为构建添加console');
@@ -152,7 +156,7 @@ function Patients() {
       <div className={styles.panel}>
         <Form form={form} onValuesChange={handleSelectChange}>
           <div className={styles.select_wrap}>
-            <Organization />
+            <Organization type={isDoctor ? 'org' : 'croProject'} />
             <Address />
             <Age />
             <Sex />

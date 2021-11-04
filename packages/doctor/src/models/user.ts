@@ -36,6 +36,7 @@ const userState: UserModelState = {
     total: 0,
   },
   filterOrgs: [],
+  croProjectList: [],
   currentOrgInfo: {},
   firstLogin: 0, // 0初始值，1首次登录 2非首次登录
   existedRoles: [], // 医生角色列表 侧边栏使用（签约患者下有哪些菜单）
@@ -124,10 +125,16 @@ const Model: UserModelType = {
     },
     saveUserFilterOrg(state, action) {
       const filterOrgList: any[] = [];
+      const croProjectList: any[] = [];
       action.payload.teams.forEach((item: IOrgTeams) => {
         item.members.forEach((member: ISubject) => {
           if (member.role === Role.ORG.id) {
             filterOrgList.push({
+              ...member,
+              nsId: item.teamNSId,
+            });
+          } else if (member.role === Role.RESEARCH_PROJECT.id) {
+            croProjectList.push({
               ...member,
               nsId: item.teamNSId,
             });
@@ -137,6 +144,7 @@ const Model: UserModelType = {
       return {
         ...state,
         filterOrgs: filterOrgList,
+        croProjectList: croProjectList,
       };
     },
     setCurrentOrgInfo(state, action) {

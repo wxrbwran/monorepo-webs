@@ -6,11 +6,13 @@ import dayjs from 'dayjs';
 const handlePatientsTeamDataSource = (data: Store[]) => {
   const newPatients: CommonData[] = [];
   let newObj: CommonData = {};
+  // 签约患者下，当前选中菜单的role
+  const currentMenuRole = window.$storage.getItem('role');
+  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
   data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
       // 下级、上级、科研医生、营养师、独立
-      // const doctorIds = [Role.LOWER_DOCTOR.id, Role.UPPER_DOCTOR.id, Role.RESEARCH_PROJECT_DOCTOR.id, Role.DIETITIAN.id, Role.ALONE_DOCTOR.id];
       if (Role.NS_OWNER.id === member.role) {
         newObj.nsOwner = {
           wcId: member.wcId,  //创建者的wcid - 患者详情获取会话成员使用
@@ -19,9 +21,16 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
       }
       switch (member.role) {
         case Role.PROJECT_PATIENT.id: // 受试列表
+          if (!doctorRole.includes(currentMenuRole)) {
+            newObj = { ...newObj, ...member };
+          }
+          newObj.inCro = true; // 标记为受试者
+          break;
         case Role.PATIENT.id:
         case Role.PATIENT_VIP.id:
-          newObj = { ...newObj, ...member };
+          if (doctorRole.includes(currentMenuRole)) {
+            newObj = { ...newObj, ...member };
+          }
           break;
         case Role.RESEARCH_PROJECT_DOCTOR.id:
           newObj.researchProjectDoctor = member.name;
@@ -34,6 +43,9 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
         case Role.ORG.id:
           newObj.organizationName = member.name;
+          break;
+        case Role.RESEARCH_PROJECT.id:
+          newObj.projectName = member.name;
           break;
         case Role.PATIENT_YL.id:
         case Role.PATIENT_YL_VIP.id:
