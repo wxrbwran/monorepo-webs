@@ -159,12 +159,18 @@ export const transformDynamicToStatic = (item: { type: string, name: string, ass
 // medical-normal.start_value_1: 1629907200000
 /// -------- values ------ 例子----- end
 
+export const utilTimeType = ['date', 'timestamp', 'ms', 'time'];
+export const utilNumType = ['number', 'int', 'float'];
+export const utilStringType = ['string', 'refs'];
+export const utilBoolType = ['bool'];
+
 const getCorrentOperatorAndValue = (values: any, number: number, field: any) => {
 
   let value = values[(field.name + '_value_' + number)];
   const hasValue = ![undefined, null].includes(value) && value.toString().length > 0;
   let operator = values[(field.name + '_operator_' + number)];
 
+  console.log('================== field.type=', field.type);
   if (!hasValue) {
     operator = '=';
     value = '*';

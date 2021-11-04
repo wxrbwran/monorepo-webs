@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import iconClose from '@/assets/img/icon_close.png';
 import iconAdd from '@/assets/img/icon_add_large.png';
-import ChoiceDoctor from '../ChoiceDoctor';
+import ChoiceDoctor, { DoctorOrgsProp } from '../ChoiceDoctor';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
@@ -14,8 +14,10 @@ interface IMemberProps {
   friends: any[];
   handleChoice?: (choices: any[]) => void;
   onRemove?: (item: any, index: number) => void;
+  onDoctorChoice?: (member) => DoctorOrgsProp;
+  onDoctorUnChoice?: (member) => boolean; // 取消选中了某个医生，需要返回一个bool值，判断chiceOrg是不是要赋空值
 }
-const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleChoice, onRemove }) => {
+const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleChoice, onRemove, onDoctorChoice, onDoctorUnChoice }) => {
 
   console.log('======fetchDoctorFriends==', JSON.stringify(friends));
 
@@ -34,12 +36,12 @@ const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleCho
               }
               <img className="w-80 h-80 rounded mt-30" src={item.avatarUrl ?? defaultAvatar} alt="" />
               <div className="text-lg font-bold mt-5">{item.name ?? ''}</div>
-              {/* <div className={`text-gray-600 ${styles.org_name}`} title="xxx">{item.orgs ? item.orgs.map((it) => it.name).join(' ') : ''}</div> */}
+              <div className={`text-gray-600 ${styles.org_name}`} title="xxx">{item.choiceOrg ? item.choiceOrg.name : ''}</div>
             </div>
           ))
         }
         {
-          editable && members.length !== friends.length && <ChoiceDoctor members={members} friends={friends} role="助手" handleChoice={handleChoice}>
+          editable && members.length !== friends.length && <ChoiceDoctor members={members} friends={friends} role="助手" handleChoice={handleChoice} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}>
             <div className="flex items-center justify-center box-shadow w-160 h-188 rounded-md">
               <img src={iconAdd} alt="" />
             </div>
@@ -65,8 +67,7 @@ export const TeamMember: FC<ITeamMemberProps> = ({ team }) => {
 
   const getDoctorMember = (members) => {
 
-    // SPACE_CREATOR
-    const roles = [Role.CRO_CRC.id, Role.CRO_CRA.id, Role.CRO_PM.id, Role.SPACE_CREATOR.id];
+    const roles = [Role.CRO_CRC.id, Role.CRO_CRA.id, Role.CRO_PM.id, Role.RESEARCH_PROJECT_DOCTOR.id];
     const result = members.filter((memb) => roles.includes(memb.role));
 
     console.log('============= members', JSON.stringify(members));
@@ -87,11 +88,23 @@ export const TeamMember: FC<ITeamMemberProps> = ({ team }) => {
         return 'CRA';
       } else if (item.role == Role.CRO_PM.id) {
         return 'PM';
-      } else if (item.role == Role.SPACE_CREATOR.id) {
+      } else if (item.role == Role.RESEARCH_PROJECT_DOCTOR.id) {
         return '研究者';
       }
     }).join(' ');
   };
+
+  const getChoiceOrgName = (members: any[]) => {
+
+    // const roles = [Role.CRO_CRC.id, Role.CRO_CRA.id, Role.CRO_PM.id];
+    return members.map((item) => {
+
+      if (item.role == Role.ORG.id) {
+        return item.name;
+      }
+    }).join(' ');
+  };
+
 
   return (
     <div className='flex'>
@@ -102,6 +115,7 @@ export const TeamMember: FC<ITeamMemberProps> = ({ team }) => {
             <p className={styles.avatar}><img src={getDoctorMember(innerTeam.members)[0].avatarUrl ?? avatar} /></p>
             <p className='font-bold mb-5 mt-20'>{getDoctorMember(innerTeam.members)[0].name}</p>
             <p className='text-sm'>{getDesRoles(innerTeam.members)}</p>
+            <p className='text-sm'>{getChoiceOrgName(innerTeam.members)}</p>
           </div>);
         })
       }

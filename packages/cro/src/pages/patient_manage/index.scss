@@ -86,21 +86,13 @@
     flex-direction: row;
   }
   .no_chose_why {
-    // width: 140px;
-    // height: 126px;
-    // text-align: center;
-    // background: #ffffff;
-    // border-radius: 8px;
-    // @include flex-lay(column, nowrap, center, center);
-    // margin-top: 26px;
-    // cursor: pointer;
-    // position: relative;
     &:hover {
       .no_chose_alert {
         display: block;
-        background-color: #181818;
-        width: 140px;
-        position: relative;
+        background-color: #999999;
+        width: 200px;
+        position: absolute;
+        z-index: 3;
       }
     }
     .no_chose_alert {

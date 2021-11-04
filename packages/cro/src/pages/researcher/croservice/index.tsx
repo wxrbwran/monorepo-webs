@@ -30,6 +30,8 @@ const Croservice: FC<IProps> = () => {
     api.service.getTeams({ 'teamNSLabels': ['research_pro_patient'], 'targetNSId': projectNsId }).then(res => {
 
       const croTeams = res.teams.filter((item) => item.teamNSLabels.includes('research_cro_team'));
+
+      console.log('============== croTeams', JSON.stringify(croTeams));
       setTeams(croTeams);
     });
   }, []);
@@ -41,6 +43,8 @@ const Croservice: FC<IProps> = () => {
 
       // 过滤独立管理的
       const croTeams = res.teams.filter((item) => item.teamNSLabels.includes('research_cro_team'));
+
+
       setTeams(croTeams);
     });
   };

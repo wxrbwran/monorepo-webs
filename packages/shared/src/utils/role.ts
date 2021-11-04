@@ -92,7 +92,6 @@ export const Role: RolesMap = {
   YL_YZ: roleType('YWBka4', 0, 0, 0, '院长'), // 50 院 养老院院长
 
   NS_OWNER: roleType('80pbO4', 0, 0, 0, '创建人'), // 59 空间所属者/创建者  慢病里叫创建人
-  SPACE_CREATOR: roleType('80pbO4', 0, 0, 0, '研究者'), // 科研里叫研究者
 
   DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'), // 62 营养师
   CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'PM'), // CRO业务-PM
