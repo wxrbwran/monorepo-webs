@@ -12,7 +12,7 @@ interface IProps {
 const MemberItem: FC<IProps> = ({ doctorData, style }) => {
   // 女  男
   const sexList = [female, male];
-  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, departments } = doctorData;
+  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, departments, choiceOrg } = doctorData;
   // 科室为多机构组合并去重得到, 互联网医院科室，不是执业科室
   const depList = departments ? [...new Set(departments.map(item => item.name))] : [];
 
@@ -47,7 +47,13 @@ const MemberItem: FC<IProps> = ({ doctorData, style }) => {
       <div className="flex">
         <div className={`text-gray-500 mr-10 ${styles.title}`}>互联网医院:</div>
         <div>
-          {orgs?.map((item: string) => <span className="mr-20">{item.name}</span>)}
+          {
+            orgs?.map((item: { name: string, nsId: string }) => {
+              return (
+                <span key={item.nsId} className={`mr-20 ${choiceOrg?.nsId === item?.nsId ? 'text-blue-500' : ''}`}>{item.name}</span>
+              );
+            })
+          }
         </div>
       </div>
     </div>

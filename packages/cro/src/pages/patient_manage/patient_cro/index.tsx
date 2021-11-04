@@ -199,7 +199,7 @@ function PatientCro({ }: IProps) {
         <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button>
       </AddServicePackage> */}
 
-      <AddServicePackage onSaveSuccess={() => { setTeamCreateShow(false); }} edit={false} show={teamCreateShow} onCancel={() => { setTeamCreateShow(false); }} source={undefined}>
+      <AddServicePackage onSaveSuccess={() => { setTeamCreateShow(false); }} edit={false} show={teamCreateShow} onCancel={() => { setTeamCreateShow(false); }} source={undefined} >
         {/* <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button> */}
       </AddServicePackage>
 

@@ -22,7 +22,7 @@ function Patient() {
   const { projectNsId, projectSid, status } = useSelector((state: IState) => state.project.projDetail);
   const [patientSids, setPatientSids] = useState<string[]>([]);
   const [tabStatus, setStatus] = useState<string>('0'); // tab状态
-  const [tableOptions, setOptions] = useState({ projectNsId, type: 0, var: '林' });
+  const [tableOptions, setOptions] = useState({ projectNsId, type: 0 });
   const [showSearch, setShowSearch] = useState(false);
 
   const refreshList = () => {
@@ -64,9 +64,9 @@ function Patient() {
     },
     getCheckboxProps: (record) => {
 
-      console.log('============== record,', JSON.stringify(record));
+      console.log('============== record, 014患者清dev	', JSON.stringify(record));
       return ({
-        disabled: record.name === '014患者清dev',
+        disabled: false,
       });
     },
     onSelect: (record: any, selected: boolean) => {
