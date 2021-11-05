@@ -63,68 +63,69 @@ const AddServicePackage: FC<IProps> = (props) => {
 
     console.log('============ useEffect source source', JSON.stringify(source));
 
+    if (show) {
+      // 刷新选中的CRC、CRA、PM
+      if (source && !isEmpty(source)) {
 
-    // 刷新选中的CRC、CRA、PM
-    if (source && !isEmpty(source)) {
+        setTeamName(source.name);
 
-      setTeamName(source.name);
+        const crcArray = [];
+        const craArray = [];
+        const pmArray = [];
+        const selfArray = [];
+        for (let i = 0; i < source.innerTeams.length; i++) {
+          const members = source.innerTeams[i].members;
 
-      const crcArray = [];
-      const craArray = [];
-      const pmArray = [];
-      const selfArray = [];
-      for (let i = 0; i < source.innerTeams.length; i++) {
-        const members = source.innerTeams[i].members;
-
-        const doctorList = [];
-        let org: any;
-        for (let j = 0; j < members.length; j++) {
-          const memb = members[j];
-          console.log('=========== memb', JSON.stringify(memb));
-          if (memb.role == Role.CRO_CRC.id) {
-            crcArray.push(memb);
-            doctorList.push(memb);
-          } else if (memb.role == Role.CRO_CRA.id) {
-            craArray.push(memb);
-            doctorList.push(memb);
-          } else if (memb.role == Role.CRO_PM.id) {
-            pmArray.push(memb);
-            doctorList.push(memb);
-          } else if (memb.role == Role.RESEARCH_PROJECT_DOCTOR.id) {
-            selfArray.push(memb);
-            doctorList.push(memb);
-          } else if (memb.role == Role.ORG.id) {
-            org = memb;
+          const doctorList = [];
+          let org: any;
+          for (let j = 0; j < members.length; j++) {
+            const memb = members[j];
+            console.log('=========== memb', JSON.stringify(memb));
+            if (memb.role == Role.CRO_CRC.id) {
+              crcArray.push(memb);
+              doctorList.push(memb);
+            } else if (memb.role == Role.CRO_CRA.id) {
+              craArray.push(memb);
+              doctorList.push(memb);
+            } else if (memb.role == Role.CRO_PM.id) {
+              pmArray.push(memb);
+              doctorList.push(memb);
+            } else if (memb.role == Role.RESEARCH_PROJECT_DOCTOR.id) {
+              selfArray.push(memb);
+              doctorList.push(memb);
+            } else if (memb.role == Role.ORG.id) {
+              org = memb;
+            }
           }
+          doctorList.forEach((item) => {
+            item.orgs = [org];
+            item.choiceOrg = org;
+          });
         }
-        doctorList.forEach((item) => {
-          item.orgs = [org];
-          item.choiceOrg = org;
+
+        console.log('============ useEffect CRC CRA PM', JSON.stringify(crcArray));
+        console.log('============ useEffect CRC CRA PM', JSON.stringify(craArray));
+        console.log('============ useEffect CRC CRA PM', JSON.stringify(pmArray));
+        setChoiceMember({
+          CRC: crcArray,
+          CRA: craArray,
+          PM: pmArray,
+          SELF: selfArray,
+        });
+      } else {
+
+        console.log('============setChoiceMember [] [] []');
+        setTeamName(undefined);
+        setChoiceMember({
+          CRC: [],
+          CRA: [],
+          PM: [],
+          SELF: friends.filter(item => item?.sid === doctorSid),
         });
       }
-
-      console.log('============ useEffect CRC CRA PM', JSON.stringify(crcArray));
-      console.log('============ useEffect CRC CRA PM', JSON.stringify(craArray));
-      console.log('============ useEffect CRC CRA PM', JSON.stringify(pmArray));
-      setChoiceMember({
-        CRC: crcArray,
-        CRA: craArray,
-        PM: pmArray,
-        SELF: selfArray,
-      });
-    } else {
-
-      console.log('============setChoiceMember [] [] []');
-      setTeamName(undefined);
-      setChoiceMember({
-        CRC: [],
-        CRA: [],
-        PM: [],
-        SELF: friends.filter(item => item?.sid === doctorSid),
-      });
     }
 
-  }, [source]);
+  }, [source, show]);
 
 
 
