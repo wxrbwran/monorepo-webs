@@ -33,6 +33,7 @@ const AddServicePackage: FC<IProps> = (props) => {
   const [members, setMembers] = useState<IMember[]>([]);
   const [teamNsId, setTeamNsId] = useState<string | null>(null);
   const [friends, setfriends] = useState([]); // 好友列表
+  const [initSelfInfo, setInitSelfInfo] = useState({});
   const doctorSid = window.$storage.getItem('sid');
 
   const handleFetchFriends = () => {
@@ -83,6 +84,15 @@ const AddServicePackage: FC<IProps> = (props) => {
           });
         });
 
+      });
+      initMembers.forEach(item => {
+        if (item.sid === doctorSid) {
+          setInitSelfInfo({
+            role: item.role,
+            orgName: item.orgName,
+            sourceNSId: item.sourceNSId,
+          });
+        }
       });
       setMembers([...initMembers]);
     }
@@ -173,7 +183,11 @@ const AddServicePackage: FC<IProps> = (props) => {
           {
             curRoleMembers.map(doctor => (
               <div className="box-shadow relative w-160 h-188 text-center rounded-md mr-20" key={doctor.role + doctor.sid}>
-                <img className="absolute right-10 top-10 w-14" src={iconClose} alt="" onClick={() => handleDel(doctor.sid, roleInfo.role)} />
+                {
+                  doctor.sid !== doctorSid && (
+                    <img className="absolute right-10 top-10 w-14" src={iconClose} alt="" onClick={() => handleDel(doctor.sid, roleInfo.role)} />
+                  )
+                }
                 <img className="w-80 h-80 rounded mt-30" src={doctor.avatarUrl || defaultAvatar} alt="" />
                 <div className="text-lg font-bold mt-5">{doctor.name}</div>
                 <div className={`text-gray-600 ${styles.org_name}`} title={doctor.orgName}>{doctor.orgName}</div>
@@ -222,7 +236,7 @@ const AddServicePackage: FC<IProps> = (props) => {
             value={packageName}
             onChange={(e) => setpackageName(e.target.value)}
           />
-          <ChoiceSelfRole callback={handleSelfRole} />
+          <ChoiceSelfRole callback={handleSelfRole} initData={initSelfInfo} />
           { roleMembers.map(item => renderDom(item)) }
           <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={handleSubmit}>完成</Button>
         </div>
