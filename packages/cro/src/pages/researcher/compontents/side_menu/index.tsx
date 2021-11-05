@@ -34,6 +34,11 @@ function SideMenu(props: IProps) {
         routerItem('组织架构图', 'tree', iconTree),
         routerItem('CRO服务小组', 'Croservice', iconTree),
       ];
+    } else {
+      list = [
+        ...list,
+        routerItem('CRO服务小组', 'Croservice', iconTree),
+      ];
     }
     return list;
   };
