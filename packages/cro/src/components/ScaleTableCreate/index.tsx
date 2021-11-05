@@ -89,7 +89,9 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   // 保存输入的问题
   const handleSaveStem = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
     questions[quesIndex].detail.stem = ev.target.value;
+    originQue[quesIndex].detail.stem = ev.target.value;
     setQuestions([...questions]);
+    setOriginQue([...originQue]);
   };
   // 删除问题
   const handleDelStem = (quesIndex: number) => {
