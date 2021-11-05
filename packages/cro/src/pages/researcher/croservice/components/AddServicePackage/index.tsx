@@ -278,18 +278,20 @@ const AddServicePackage: FC<IProps> = (props) => {
         <div className={styles.add_service}>
           <Input className={styles.package_name} placeholder="请输入服务小组名称" value={teamName} onChange={onTeamNameChange} />
 
-          <div className="mt-15">
-            <span className="mr-15">我在</span>
-            <Select placeholder="请选择机构" onChange={onSelfOrgChange} style={{ width: 240 }} value={choiceMember.SELF.length > 0 ? (choiceMember.SELF[0].choiceOrg?.nsId ?? '') : ''}>
-              {
-                choiceMember.SELF && choiceMember.SELF.length > 0 && choiceMember.SELF[0].orgs.map(({ nsId, name, wcId }) => (
-                  <Option value={nsId} title={name} key={wcId}>
-                    {name}
-                  </Option>
-                ))
-              }
-            </Select>
-          </div>
+          {
+            !edit && <div className="mt-15">
+              <span className="mr-15">我在</span>
+              <Select placeholder="请选择机构" onChange={onSelfOrgChange} style={{ width: 240 }} value={choiceMember.SELF.length > 0 ? (choiceMember.SELF[0].choiceOrg?.nsId ?? '') : ''}>
+                {
+                  choiceMember.SELF && choiceMember.SELF.length > 0 && choiceMember.SELF[0].orgs.map(({ nsId, name, wcId }) => (
+                    <Option value={nsId} title={name} key={wcId}>
+                      {name}
+                    </Option>
+                  ))
+                }
+              </Select>
+            </div>
+          }
           <Member title='研究者' members={choiceMember.SELF} editable={false} friends={friends}></Member>
           <Member title='CRC' members={choiceMember.CRC} editable={true} friends={friends} handleChoice={(choices: any[]) => onHandleChoice('CRC', choices)} onRemove={(item: any, index: number) => onRemove('CRC', item, index)} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}></Member>
           <Member title='CRA' members={choiceMember.CRA} editable={true} friends={friends} handleChoice={(choices: any[]) => onHandleChoice('CRA', choices)} onRemove={(item: any, index: number) => onRemove('CRA', item, index)} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}></Member>
