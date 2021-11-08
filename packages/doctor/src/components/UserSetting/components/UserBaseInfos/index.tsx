@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useSelector } from 'umi';
 import { Input } from 'antd';
 import moment from 'moment';
 import { basicInfoTab } from '@/utils/tools';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import UserAvatar from '../../components/UserAvatar';
+import { IState } from 'packages/doctor/typings/model';
 import telIcon from '@/assets/img/icon_tel.png';
 import titlesIcon from '@/assets/img/icon_titles.png';
 import peopleIcon from '@/assets/img/icon_people.png';
@@ -18,6 +20,7 @@ function UserBaseInfos({ userInfo }: IProps) {
     belongToGroup, qcCode, qcIssuingDate, pcCode, pcIssuingDate, biography, expertise,
     achievement, meetingLecture, firstProfessionBrief, bankName, bankCardNum, roleTags,
   } = userInfo;
+  const { filterOrgs } = useSelector((state: IState) => state.user);
   const [activeInfoTab, setActiveInfoTab] = useState('biography');
   const tabData:CommonData = {
     biography,
@@ -71,7 +74,14 @@ function UserBaseInfos({ userInfo }: IProps) {
         <div className="flex">
           <div className="w-112 text-right">所在互联网医院：</div>
           <div>
-            <span>心之力</span>
+            {/* <span>心之力</span> */}
+            {
+              filterOrgs?.map((item: { name: string, nsId: string }) => {
+                return (
+                  <span key={item.nsId} className={'mr-20'}>{item.name}</span>
+                );
+              })
+            }
           </div>
         </div>
         <div className="flex">
