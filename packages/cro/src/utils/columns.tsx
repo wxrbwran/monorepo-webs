@@ -8,7 +8,7 @@ import { sexList } from './consts';
 import { Store } from 'antd/lib/form/interface';
 import IconAutograph from '@/assets/img/icon_autograph.png';
 import distributionTeamPng from '@/assets/img/distribution_team.png';
-// import haveQuestionPng from '@/assets/img/have_question.png';
+import haveQuestionPng from '@/assets/img/have_question.png';
 
 
 export type SexType = 'MALE' | 'FEMALE';
@@ -211,26 +211,32 @@ export const ethnicity = {
   render: (text: string) => text || '--',
 };
 // 全部患者列表-未邀请
-export const noSendPatientColumns = () => [
-  name,
-  // {
-  //   title: '姓名',
-  //   dataIndex: 'name',
-  //   width: 150,
-  //   // render: (text: string, record: any) => <span>{record.name}{text}</span>,
-  //   render: (text: any, _record: any) => (
+export const noSendPatientColumns = (params: Store) => [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    width: 150,
+    // render: (text: string, record: any) => <span>{record.name}{text}</span>,
+    render: (text: number, record: any) => {
 
-  //     <div className='no_send_patient_name'>
-  //       {text}
-  //       <div className="no_chose_why" >
-  //         <img style={{ width: '16px', height: '16px', alignSelf: 'center', marginLeft: '6px' }} src={haveQuestionPng} />
-  //         <div className="no_chose_alert">
-  //           患者正在参与试验「试验名称」,无法邀请
-  //         </div>
-  //       </div>
-  //     </div >
-  //   ),
-  // },
+      const experimentName = params.getExperimentName(record);
+      return (
+        experimentName ?
+          <div className='no_send_patient_name'>
+            {text}
+            <div className="no_chose_why" >
+              <img style={{ width: '16px', height: '16px', alignSelf: 'center', marginLeft: '6px' }} src={haveQuestionPng} />
+              <div className="no_chose_alert">
+                患者正在参与试验 {experimentName},无法邀请
+              </div>
+            </div>
+          </div >
+          : <div className='no_send_patient_name'>
+            {text}
+          </div >
+      );
+    },
+  },
   age,
   address,
   sex,
