@@ -14,6 +14,7 @@ import '../index.scss';
 import { IState } from 'typings/global';
 import { SearchOutlined } from '@ant-design/icons';
 import { debounce } from 'lodash';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 const { TabPane } = Tabs;
 
@@ -37,6 +38,18 @@ function Patient() {
   const handleSelectChange = (_changedValues: string[], allValues: string[]) => {
     console.log('allValues', allValues);
     setOptions({ ...tableOptions, conditions: handleSelection(allValues) });
+  };
+
+  const getExperimentName = (record: any) => {
+    const members = record.team.members.filter((item) => item.role == Role.RESEARCH_PROJECT.id);
+    console.log('============= members members members', JSON.stringify(members));
+    if (members.length > 0) {
+      const nameList = members.map((item) => item.name);
+      console.log('============= nameList nameList nameList', JSON.stringify(nameList));
+      return nameList.join(',');
+    } else {
+      return null;
+    }
   };
 
   //勾选患者/取消勾选患者
@@ -63,10 +76,8 @@ function Patient() {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: (record) => {
-
-      console.log('============== record, 014患者清dev	', JSON.stringify(record));
       return ({
-        disabled: false,
+        disabled: getExperimentName(record),
       });
     },
     onSelect: (record: any, selected: boolean) => {
@@ -141,18 +152,18 @@ function Patient() {
           </div>
         }
         <XzlTable
-          columns={tabStatus === '0' ? noSendPatientColumns() : addedPatientColumns()}
+          columns={tabStatus === '0' ? noSendPatientColumns({ getExperimentName }) : addedPatientColumns()}
           dataKey="teams"
           handleCallback={fetchData}
           category="patientList"
           request={window.$api.patientManage.getPatientList}
           depOptions={tableOptions}
-          noPagination={true}
+          // noPagination={true}
           tableOptions={{
             rowSelection: tabStatus === '0' ? {
               ...rowSelection,
             } : false,
-            pagination: false,
+            // pagination: false,
           }}
         />
 

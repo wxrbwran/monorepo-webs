@@ -55,7 +55,7 @@ function CertificateEdit({ userInfo }: IProps) {
           <div className={styles.cert__imgs}>
             {
               item.img.map((v: string, vIndex) => (
-                <div key={v}>
+                <div key={v} className="mr-20">
                   {
                     !defaultImg.includes(v)
                       ? <img src={v} alt="" />

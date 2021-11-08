@@ -8,6 +8,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   let newObj: CommonData = {};
   // 签约患者下，当前选中菜单的role
   const currentMenuRole = window.$storage.getItem('role');
+  console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
   const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
   data.forEach((team: Store) => {
     newObj = {};
@@ -28,7 +29,8 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
         case Role.PATIENT.id:
         case Role.PATIENT_VIP.id:
-          if (doctorRole.includes(currentMenuRole)) {
+          // 科研currentMenuRole为空，医生端currentMenuRole有值，需要属于doctorRole之一才满足条件
+          if (!currentMenuRole || doctorRole.includes(currentMenuRole)) {
             newObj = { ...newObj, ...member };
           }
           break;

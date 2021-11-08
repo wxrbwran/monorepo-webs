@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useParams } from 'umi';
+import { useParams, history } from 'umi';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import {
   Age, Sex, Address, PatientRole, Search,
@@ -32,7 +32,7 @@ function Patients() {
   const { level } = useParams<{ level: string }>();
   const [form] = Form.useForm();
   const { setFieldsValue, getFieldValue } = form;
-  const sRole = Role[`${level.toLocaleUpperCase()}`].id;
+  const sRole = Role[`${level.toLocaleUpperCase()}`]?.id;
   const dispatch = useDispatch();
   const getInitOptions = () => {
     let params: CommonData = {};
@@ -75,6 +75,10 @@ function Patients() {
       type: 'user/getDoctorExistedRoles',
       payload: {},
     });
+    if (!sRole) {
+      history.replace('/doctor/patients/alone_doctor');
+      window.location.reload();
+    }
   }, [level]);
 
   const handleSelectChange = (changedValues: string[], allValues: string[]) => {
