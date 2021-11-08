@@ -8,6 +8,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   let newObj: CommonData = {};
   // 签约患者下，当前选中菜单的role
   const currentMenuRole = window.$storage.getItem('role');
+  console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
   const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
   data.forEach((team: Store) => {
     newObj = {};
