@@ -82,7 +82,7 @@ function SideMenu({ location }: Iprops) {
       >
         <SubMenu key="sub1" icon={<UserOutlined />} title="签约患者">
           {
-            existedRoles.map((item: IExistedRole) => {
+            existedRoles.filter(item => !!sidebar[item.role]).map((item: IExistedRole) => {
               return (
                 <Menu.Item
                 key={sidebar[item.role].url.toUpperCase()}
