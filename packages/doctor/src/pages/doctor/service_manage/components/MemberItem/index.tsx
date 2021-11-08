@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import female from '@/assets/img/icon_female.svg';
 import male from '@/assets/img/icon_male.svg';
-import { isEmpty } from 'lodash';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import styles from './index.scss';
 
@@ -37,7 +36,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style, doctorWorkOrg }) => {
       <div className="flex">
         <div className={`text-gray-500 mr-10 pt-2 ${styles.title}`}>角色标签:</div>
         <div>
-          { roleTags && isEmpty(roleTags) ? roleTags?.map(item => <span className={styles.role_tag} key={item}>{item}</span>) : '--'}
+          { roleTags && !!roleTags.length ? roleTags?.map(item => <span className={styles.role_tag} key={item}>{item}</span>) : '--'}
         </div>
       </div>
       <div className="flex my-12">
