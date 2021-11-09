@@ -44,7 +44,6 @@ function OrgDetail({ currentOrg }: IProps) {
             className={styles.avatar}
             src={avatarUrl || config.defaultAvatar}
             alt="医生头像"
-            crossOrigin="anonymous"
           />
         </div>
       </div>
