@@ -115,6 +115,7 @@ const AddEditDoctor: FC<IProps> = (props) => {
         };
         const params = handleUserInfo(data);
         setName(res.details.name);
+        setAvatar(res.details.avatarUrl);
         setSid(res.sid);
         form.setFieldsValue(params);
       }

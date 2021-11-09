@@ -72,7 +72,7 @@ function UserBaseInfos({ userInfo }: IProps) {
           </div>
         </div>
         <div className="flex">
-          <div className="w-112 text-right">所在互联网医院：</div>
+          <div className="w-112 text-right whitespace-nowrap">所在互联网医院：</div>
           <div>
             {/* <span>心之力</span> */}
             {
