@@ -15,6 +15,7 @@ import formatCert from '../formatCert';
 import Hospitial from '../Hospitial';
 import Department from '../Department';
 import { PlusSquareOutlined, DeleteOutlined } from '@ant-design/icons';
+import { isEmpty } from 'lodash';
 import styles from './index.scss';
 
 interface Iporps {
@@ -38,7 +39,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
     mentor: '',
     ...userInfo,
     certificates: formatCert(userInfo.certificates as ICert),
-    practiceAreas: userInfo.practiceAreas ? userInfo.practiceAreas.map(item => {
+    practiceAreas: userInfo?.practiceAreas && !isEmpty(userInfo?.practiceAreas) ? userInfo.practiceAreas.map(item => {
       const { name, standardId, sub } = item;
       return {
         name,

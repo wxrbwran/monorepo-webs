@@ -30,12 +30,13 @@
   }
   // 机构列表
   .org_list {
-    width: 350px;
+    width: 100%;
     max-height: 76px;
     overflow: auto;
     margin: 10px auto 0;
-    @include flex();
-    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .org_btn{
       margin: 0 5px 10px;
       border-radius: 2px;
@@ -44,6 +45,7 @@
       border: none;
       position: relative;
       display: block;
+      flex: 0 0 auto;
       &.active {
         color: #218CE9;
         &::before {

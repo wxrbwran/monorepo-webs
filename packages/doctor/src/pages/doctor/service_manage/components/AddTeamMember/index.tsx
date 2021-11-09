@@ -53,7 +53,7 @@ const AddTeamMember: FC<IProps> = (props) => {
       width: 147,
       render: (practiceAreas: { sub: { name: string } }[]) => {
         if (practiceAreas) {
-          const department = [...new Set(practiceAreas.map(item => item.sub.name))];
+          const department = [...new Set(practiceAreas.map(item => item?.sub?.name))];
           return department.map((item, inx) => <span>{item}{inx !== department.length - 1 ? '、' : ''}</span>);
         } else {
           return <span>--</span>;

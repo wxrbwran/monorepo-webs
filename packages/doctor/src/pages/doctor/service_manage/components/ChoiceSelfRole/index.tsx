@@ -3,9 +3,15 @@ import { useSelector } from 'react-redux';
 import { Select } from 'antd';
 import { IState } from 'packages/doctor/typings/model';
 import { Role } from 'xzl-web-shared/src/utils/role';
+import { isEmpty } from 'lodash';
 
 interface IProps {
   callback: (selectData: Object) => void;
+  initData: {
+    role: string;
+    sourceNSId: string;
+    orgName: string;
+  };
 }
 interface ISelfInfo {
   sourceNSId: null | string;
@@ -13,10 +19,10 @@ interface ISelfInfo {
   orgName: null | string;
 }
 const { Option } = Select;
-function ChoiceSelfRole({ callback }: IProps) {
+function ChoiceSelfRole({ callback, initData }: IProps) {
   const { filterOrgs, userInfo } = useSelector((state: IState) => state.user);
   const [selectOrgList, setSelectOrgList] = useState<ISubject[]>(filterOrgs);
-  const [selfInfo, setselfInfo] = useState<ISelfInfo>({ sourceNSId: null, role: null, orgName: null });
+  const [selfInfo, setselfInfo] = useState<ISelfInfo>(initData);
   useEffect(() => {
     if (filterOrgs) {
       setSelectOrgList(filterOrgs);
@@ -45,18 +51,30 @@ function ChoiceSelfRole({ callback }: IProps) {
 
   return (
     <div className="mt-15">
-      <span className="mr-15">我在</span>
-      <Select placeholder="请选择机构" onChange={(val, option) => handleChangeOrg('sourceNSId', val, option)}  style={{ width: 240 }}>
-        {
-          selectOrgList.map(({ nsId, name, wcId }) => (
-            <Option value={nsId} title={name} key={wcId}>
-              {name}
-            </Option>
-          ))
-        }
-      </Select>
+      {
+        !!isEmpty(initData) && (
+          <>
+            <span className="mr-15">我在</span>
+              <Select
+                placeholder="请选择机构"
+                defaultValue={initData.sourceNSId}
+                onChange={(val, option) => handleChangeOrg('sourceNSId', val, option)}
+                style={{ width: 240 }}
+                // disabled={!!initData.sourceNSId}
+              >
+                {
+                  selectOrgList.map(({ nsId, name, wcId }) => (
+                    <Option value={nsId} title={name} key={wcId}>
+                      {name}
+                    </Option>
+                  ))
+                }
+              </Select>
+          </>
+        )
+      }
       <span className="mx-15">以</span>
-      <Select placeholder='请选择角色' style={{ width: 240 }} onChange={(val) => handleChangeOrg('role', val)}>
+      <Select placeholder='请选择角色' defaultValue={initData.role} style={{ width: 240 }} onChange={(val) => handleChangeOrg('role', val)}>
         <Option value={Role.UPPER_DOCTOR.id}>主管医生</Option>
         <Option value={Role.LOWER_DOCTOR.id}>医生助手</Option>
         <Option value={Role.DIETITIAN.id}>营养师</Option>

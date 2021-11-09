@@ -38,7 +38,8 @@ var handlePatientsTeamDataSource = function (data) {
                     break;
                 case Role.PATIENT.id:
                 case Role.PATIENT_VIP.id:
-                    if (doctorRole.includes(currentMenuRole)) {
+                    // 科研currentMenuRole为空，医生端currentMenuRole有值，需要属于doctorRole之一才满足条件
+                    if (!currentMenuRole || doctorRole.includes(currentMenuRole)) {
                         newObj = __assign(__assign({}, newObj), member);
                     }
                     break;
