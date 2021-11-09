@@ -18,6 +18,7 @@ var handlePatientsTeamDataSource = function (data) {
     var newObj = {};
     // 签约患者下，当前选中菜单的role
     var currentMenuRole = window.$storage.getItem('role');
+    console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
     var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
     data.forEach(function (team) {
         newObj = {};
