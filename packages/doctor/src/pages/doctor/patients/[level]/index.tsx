@@ -140,8 +140,6 @@ function Patients() {
   const columns: CommonData[] = [
     name,
     isDoctor ? org : project,
-    patientLevel(refresh),
-    noteC(refresh),
     sex,
     age,
     address,
@@ -149,6 +147,7 @@ function Patients() {
   ];
   if (isDoctor) {
     columns.push(changeServicePackage);
+    columns.splice(2, 0, patientLevel(refresh), noteC(refresh));
   }
   console.log('为构建添加console');
   return (
@@ -164,7 +163,7 @@ function Patients() {
             <Address />
             <Age />
             <Sex />
-            <PatientRole />
+            { isDoctor && <PatientRole /> }
           </div>
           <div className={styles.operating}>
             <div className={styles.search}>
