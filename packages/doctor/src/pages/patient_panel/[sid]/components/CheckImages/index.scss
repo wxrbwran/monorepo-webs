@@ -74,12 +74,12 @@
     }
   }
   .images_list {
-    @include flex(flex-start, center);
+    @include flex(flex-start, flex-start);
     flex-wrap: wrap;
     .images_item {
       position: relative;
       width: 150px;
-      margin: 10px 6px 0;
+      margin: 10px 6px 10px;
       text-align: center;
       .exception, .normal{
         position: absolute;

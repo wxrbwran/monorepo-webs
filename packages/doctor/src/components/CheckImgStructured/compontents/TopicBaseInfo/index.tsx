@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
-import { Form, Input, Row, Col, message } from 'antd';
+import { Form, Input, Row, Col, message, AutoComplete } from 'antd';
 import { baseField } from '../utils';
 import styles from './index.scss';
 import { IQuestions } from 'typings/imgStructured';
@@ -17,6 +17,9 @@ const TopicBaseInfo: FC<IProps> = (props) => {
   const { initData, changeCallbackFns, outType, changeJcdBaseInfo } = props;
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue, getFieldsValue } = form;
+  const [parts, setParts] = useState<{ value: string }[]>([{ value: '头部' }, { value: '胃部' }]);
+  const [methods, setMethods] = useState<{ value: string }[]>([{ value: 'ct' }, { value: '核磁' }]);
+  console.log(setParts, setMethods);
   const fetchInit = () => {
     const initObj: CommonData = {};
     initData.forEach(item => {
@@ -34,7 +37,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
         case '检查方法':
           initObj.method = ans;
           break;
-        case '检查名称':
+        case '检查单名称':
           initObj.name = ans;
           break;
         case '单据名称':
@@ -102,6 +105,9 @@ const TopicBaseInfo: FC<IProps> = (props) => {
     changeJcdBaseInfo(getFieldsValue(coreField));
   };
   const rules = [{ required: true, message: '请输入' }];
+  const handleSearch = (val: string, type: string) =>{
+    console.log('-------search', val, type );
+  };
   return (
     <div className={`border p-15 ${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
@@ -111,20 +117,20 @@ const TopicBaseInfo: FC<IProps> = (props) => {
         initialValues={initialValues}
       >
         <Row>
-          <Col span={12} className="flex">
+          <Col span={11} className="flex">
             <Form.Item name="orgName" noStyle>
               <Input type="hidden" />
             </Form.Item>
-            <span className="text-sm font-medium mr-8">检查机构: </span>
+            <span className="text-sm font-medium mr-8 w-72 inline-block">检查机构: </span>
             <SearchHospital
               placeholder="请输入检查机构"
               callback={handleSetHospital}
               fieldName="hospital"
-              style={{ width: 'calc(100% - 72px)' }}
+              style={{ width: 'calc(100% - 80px)' }}
               defaultValue={{ hospitalName: initialValues?.orgName }}
             />
           </Col>
-          <Col span={12}>
+          <Col span={13}>
             <Form.Item name="measured_at" noStyle>
               <Input type="hidden" />
             </Form.Item>
@@ -132,30 +138,42 @@ const TopicBaseInfo: FC<IProps> = (props) => {
               // 如果是回显，就直接取回显的时间，没有就设置当前时间
               initReportTime={initialValues?.measured_at}
               setReporttime={(time: number | null) => handleChangeTime(time)}
-              style={{ width: 'calc(100% - 70px)' }}
+              style={{ width: 'calc(100% - 168px)' }}
             />
           </Col>
           {
             outType === 'JCD' ? (
               <>
-                <Col span={12}>
+                <Col span={11} className='my-10'>
                 <Form.Item name="part" label="检查部位" rules={rules}>
-                  <Input onBlur={handleChangeName}  />
+                  {/* <Input onBlur={handleChangeName}  /> */}
+                  <AutoComplete
+                    options={parts}
+                    onSearch={(val) => handleSearch(val, 'part')}
+                    onBlur={handleChangeName}
+                    placeholder="请输入检查部位"
+                  />
                 </Form.Item>
               </Col>
-              <Col span={12} className="pl-17">
+              <Col span={13} className="pl-17 my-10">
                 <Form.Item name="method" label="检查方法" rules={rules}>
-                  <Input onBlur={handleChangeName}  />
+                  {/* <Input onBlur={handleChangeName}  /> */}
+                  <AutoComplete
+                    options={methods}
+                    onSearch={(val) => handleSearch(val, 'method')}
+                    onBlur={handleChangeName}
+                    placeholder="请输入检查方法"
+                  />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item name="name" label="检查名称">
+              <Col span={11}>
+                <Form.Item name="name" label="检查单名称">
                   <Input />
                 </Form.Item>
               </Col>
               </>
             ) : (
-              <Col span={12}>
+              <Col span={11}>
                 <Form.Item name="djName" label="单据名称">
                   <Input />
                 </Form.Item>

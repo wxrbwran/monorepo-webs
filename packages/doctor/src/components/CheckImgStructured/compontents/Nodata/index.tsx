@@ -5,12 +5,12 @@ import vague from '@/assets/img/doctor_patients/icon_vague.png';
 interface IProps {
   tabKey: string;
   outType: string;
-  inspectionCallbackFns: any; // 保存时候的回调
+  hydCallbackFns: any; // 保存时候的回调
   imageId: string;
 }
-const Nodata: FC<IProps> = ({ tabKey, outType, inspectionCallbackFns, imageId }) => {
+const Nodata: FC<IProps> = ({ tabKey, outType, hydCallbackFns, imageId }) => {
   useEffect(() => {
-    inspectionCallbackFns[tabKey] = () => new Promise((resolve) => {
+    hydCallbackFns[tabKey] = () => new Promise((resolve) => {
       resolve({
         imageId,
         outType,

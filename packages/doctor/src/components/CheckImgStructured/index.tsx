@@ -122,7 +122,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
         <div>
           {
             imgData ? (
-              <div className="flex justify-start items-start mt-10" style={{ minWidth: 1200 }}>
+              <div className="flex justify-start items-start mt-10" style={{ minWidth: 1400 }}>
                 <ImgWrap
                   imageUrl={imgData.url}
                   handleClose={() => setShowViewer(false)}

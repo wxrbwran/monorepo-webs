@@ -3,15 +3,15 @@ import React, {
 } from 'react';
 import { Button, Tabs, message } from 'antd';
 import { useDispatch } from 'react-redux';
-import { IStructuredDetailProps, ITopicQaItemApi } from 'typings/imgStructured';
+import { IStructuredDetailProps, ITopicQaItemApi, ITopicItemApi, IApiDocumentList } from 'typings/imgStructured';
 import * as api from '@/services/api';
-import StructuredDetailItem from '../StructuredDetailItem';
+import StructuredDetailHydPanel from '../StructuredDetailHydPanel';
 import StructuredDetailTopic from '../StructuredDetailTopic';
 import Nodata from '../Nodata';
 import { outTypes, formatJcdSubmitData } from '../utils';
 import styles from './index.scss';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
-import uuid from 'react-uuid';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface ITopicParams {
   data: ITopicQaItemApi[];
@@ -34,23 +34,29 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const dispatch = useDispatch();
   const isRefreshParent = useRef(false);
   const fetchLevel1 = () => {
-    const datas = [...hydData, ...jcdData];
-    return isEmpty(datas) ? [{ outType: 'HYD', key: uuid() }] : datas;
+    const jcdTabs = jcdData.map((jctItem: ITopicItemApi) => {
+      return {  ...jctItem, outType: jctItem.meta.title };
+    });
+    const hydTab = hydData.map((hydItem: IApiDocumentList) => {
+      return { ...hydItem, outType: hydItem.outType };
+    });
+    const datas = [...hydTab, ...jcdTabs];
+    return isEmpty(datas) ? [{ outType: 'HYD' }] : datas;
   };
   // 保存各个分类的方法队列 - 检查单、图片不清晰、非医学单据
-  const [inspectionCallbackFns, setCallbackFns] = useState<CommonData>({});
   const [hydCallbackFns, setHydCallbackFns] = useState<CommonData>({});
+  const [jcdCallbackFns, setJcdCallbackFns] = useState<CommonData>({});
   // // true仅查看 false编辑中
   const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData));
   const [typeTabs, setTypeTabs] = useState <any[]>(fetchLevel1());
-  const [activeType, setActiveType] = useState(fetchLevel1()[0].key);
+  const [activeType, setActiveType] = useState(fetchLevel1()[0]);
   // 1表示检查单接口或化验单接口其中一个保存成功，2表示两个都成功，此时关闭弹框
   const [saveSuccess, setSaveSuccess] = useState(0);
 
   useEffect(() => {
     const tabs = fetchLevel1();
     setTypeTabs(tabs);
-    setActiveType(tabs[0].key);
+    setActiveType(tabs[0].outType);
     setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
   }, [hydData, jcdData]);
   useEffect(() => () => {
@@ -84,7 +90,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   }, [saveSuccess]);
   const fetchAllTypes = () => {
     const allTypes = typeTabs.map(item => {
-      return item?.meta?.title || item.outType;
+      return item.outType;
     });
     return [...new Set(allTypes)];
   };
@@ -136,7 +142,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           list: [],
         };
         // 化验、图片不清晰、非医学单据
-        Promise.all(Object.values(inspectionCallbackFns)
+        Promise.all(Object.values(hydCallbackFns)
           .map((fn) => fn()))
           .then((documentList) => {
             apiParams.list = [...documentList];
@@ -146,7 +152,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             message.error('请完善化验单后提交！');
           });
         // 检查单、其它单据
-        Promise.all(Object.values(hydCallbackFns)
+        Promise.all(Object.values(jcdCallbackFns)
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
             const { tempList, jcdList } = formatJcdSubmitData(list, clickSaveTime);
@@ -162,46 +168,54 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     }
   };
 
-  const handelTabsEdit = (targetKey: string) => {
-    const newTabs = typeTabs.filter(item => item.key !== targetKey);
-    if (targetKey === activeType) {
-      setActiveType(newTabs?.[newTabs?.length - 1]?.key);
+  const handelTabsEdit = (targetOutType: string) => {
+    const newTabs = typeTabs.filter(item => item.outType !== targetOutType);
+    if (targetOutType === activeType) {
+      setActiveType(newTabs?.[newTabs?.length - 1]);
     }
     setTypeTabs(cloneDeep(newTabs));
   };
 
   const handleAddLevel1 = (type: string) => {
-    if (['JCD', 'OTHER'].includes(type)) {
-      typeTabs.push({ meta: { title: type }, key: uuid() });
-    } else {
-      typeTabs.push({ outType: type, key: uuid() });
+    const tabsTitle = typeTabs.map(item => item.outType);
+    if (!tabsTitle.includes(type)) {
+      typeTabs.push({ outType: type });
+      setTypeTabs(cloneDeep(typeTabs));
+      console.log('typeTab1212s', typeTabs);
+      if (!['NOT_CLEAR', 'NOT_HYD_JCD'].includes(type)) {
+        setActiveType(typeTabs?.[typeTabs.length - 1].outType);
+      }
     }
-    setActiveType(typeTabs?.[typeTabs.length - 1].key);
-    setTypeTabs(cloneDeep(typeTabs));
-    console.log('typeTab1212s', typeTabs);
+  };
+  const handleDelLevel1 = (type: string) => {
+    const newTabs = typeTabs.filter(item => item.outType !== type);
+    setTypeTabs(newTabs);
   };
 
   const fetInitData = (inx: number) => {
+    console.log(34333, inx);
+    console.log('typeTabs', typeTabs);
     if (typeTabs[inx]?.documentList || typeTabs[inx]?.data) {
+      console.log('-------2', typeTabs?.[inx]);
       return typeTabs?.[inx];
     }
     return [];
   };
   const renderTabPane = useMemo(() => {
-    return (itemTab: any, inx: number) => {
+    return (itemTabType: any, inx: number) => {
       let dom: any = null;
-      const typeStart = itemTab?.outType || itemTab?.meta?.title;
+      const typeStart = itemTabType;
       const baseProps = {
         outType: typeStart,
-        tabKey: itemTab.key,
+        tabKey: itemTabType,
         imageId,
         isViewOnly,
       };
       switch (typeStart) {
         case 'HYD':
-          dom = <StructuredDetailItem
-            setCallbackFns={setCallbackFns}
-            inspectionCallbackFns={inspectionCallbackFns}
+          dom = <StructuredDetailHydPanel
+            setHydCallbackFns={setHydCallbackFns}
+            hydCallbackFns={hydCallbackFns}
             {...baseProps}
             initData={fetInitData(inx)}
           />;
@@ -209,21 +223,24 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         case 'OTHER':
         case 'JCD':
           dom = <StructuredDetailTopic
-            initData={fetInitData(inx)}
-            hydCallbackFns={hydCallbackFns}
-            setHydCallbackFns={setHydCallbackFns}
+            jcdCallbackFns={jcdCallbackFns}
+            setJcdCallbackFns={setJcdCallbackFns}
             tempAll={tempAll}
+            initData={fetInitData(inx)}
             {...baseProps}
           />;
           break;
         default:
-          dom = <Nodata {...baseProps} inspectionCallbackFns={inspectionCallbackFns} />;
+          dom = <Nodata {...baseProps} hydCallbackFns={hydCallbackFns} />;
           break;
       }
       return dom;
     };
   }, [isViewOnly, typeTabs]);
   console.log('typeTabs21', typeTabs);
+  console.log('outTypes', outTypes);
+  const typeTabsText = typeTabs.map(typeItem => typeItem.outType);
+  // typeTabs
   return (
     <div className={`flex-1 mx-20 mt-10 ${styles.structrued} ${isViewOnly ? styles.disabled : ''}`}>
       <div className="flex justify-between items-center mb-5">
@@ -231,7 +248,17 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           {
             !isViewOnly && (
               Object.keys(outTypes).map(outType =>
-                <Button key={outType} className="mr-15" onClick={() => handleAddLevel1(outType)}>{outTypes[outType]}</Button>,
+                <Button
+                  key={outType}
+                  className={`mr-15 ${typeTabsText.includes(outType) ? styles.active_btn : ''}`}
+                  onClick={() => handleAddLevel1(outType)}
+                >
+                  <span>{outTypes[outType]}</span>
+                  {
+                    ['NOT_CLEAR', 'NOT_HYD_JCD'].includes(outType) && typeTabsText.includes(outType) &&
+                    <CloseOutlined style={{ fontSize: 14 }} onClick={() => handleDelLevel1(outType)} />
+                  }
+                </Button>,
               )
             )
           }
@@ -252,15 +279,16 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
                 onChange={(tab: string) => setActiveType(tab)}
               >
                 {
-                  typeTabs.map((itemTab: any, inx) => (
+                  typeTabs.filter(typeItem => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(typeItem.outType))
+                    .map((itemTab: any, inx) => (
                     <TabPane
-                      tab={outTypes?.[itemTab?.outType || itemTab?.meta?.title]}
-                      key={itemTab.key}
+                      tab={outTypes?.[itemTab.outType]}
+                      key={itemTab.outType}
                       forceRender={true}
                     >
-                      {renderTabPane(itemTab, inx)}
+                      {renderTabPane(itemTab.outType, inx)}
                     </TabPane>
-                  ))
+                    ))
                 }
               </Tabs>
             </div>

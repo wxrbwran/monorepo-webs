@@ -17,7 +17,7 @@ function ItemDate(props: IProps) {
   const {
     initReportTime, isUnknownTime, setReporttime, setUnknow, type, style,
   } = props;
-  console.log('initReportTime', initReportTime);
+  console.log('initReportTime', initReportTime, type);
   const [unknownTime, setUnknownTime] = useState(isUnknownTime);
   let year: string | number = '';
   let month: string | number = '';
@@ -50,7 +50,7 @@ function ItemDate(props: IProps) {
   const disabledDate = (current: any) => current && current > moment().endOf('day');
   return (
     <div className="flex items-center">
-      <div className="text-sm ml-17 font-medium w-70 text-right">{type === 'HYD' ? '采样' : ''}时间：</div>
+      <div className="text-sm ml-17 font-medium w-70 text-right">采样时间：</div>
       <DatePicker
         disabledDate={disabledDate}
         onChange={(momentDate, dateString) => handleSetFieldsVal(dateString, momentDate)}
@@ -61,16 +61,12 @@ function ItemDate(props: IProps) {
         allowClear={false}
         style={style}
       />
-      {
-        type === 'HYD' && (
-          <div
-            className={`ml-10 ${styles.date_button} ${unknownTime ? styles.selected : ''}`}
-            onClick={handleTimeUnkown}
-          >
-            时间不详
-          </div>
-        )
-      }
+      <div
+        className={`ml-10 ${styles.date_button} ${unknownTime ? styles.selected : ''}`}
+        onClick={handleTimeUnkown}
+      >
+        时间不详
+      </div>
     </div>
   );
 }

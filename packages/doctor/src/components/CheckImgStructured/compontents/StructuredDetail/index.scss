@@ -32,6 +32,12 @@
     height: 34px;
     z-index: 999;
   }
+  .active_btn {
+    background: #EAF4FC;
+    border-radius: 3px;
+    color: #218CE9;
+    border: none;
+  }
   .checkbox_group {
     :global {
       .ant-checkbox-group {
