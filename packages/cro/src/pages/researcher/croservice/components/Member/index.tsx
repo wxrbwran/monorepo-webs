@@ -107,7 +107,7 @@ export const TeamMember: FC<ITeamMemberProps> = ({ team }) => {
 
 
   return (
-    <div className='flex'>
+    <div className='flex flex-wrap'>
       {
         team.innerTeams.map((innerTeam) => {
 
@@ -115,7 +115,7 @@ export const TeamMember: FC<ITeamMemberProps> = ({ team }) => {
             <p className={styles.avatar}><img src={getDoctorMember(innerTeam.members)[0].avatarUrl ?? avatar} /></p>
             <p className='font-bold mb-5 mt-20'>{getDoctorMember(innerTeam.members)[0].name}</p>
             <p className='text-sm'>{getDesRoles(innerTeam.members)}</p>
-            <p className='text-sm'>{getChoiceOrgName(innerTeam.members)}</p>
+            <p className='text-sm mb-30'>{getChoiceOrgName(innerTeam.members)}</p>
           </div>);
         })
       }
