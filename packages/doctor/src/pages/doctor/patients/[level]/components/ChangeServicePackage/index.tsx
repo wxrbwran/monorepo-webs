@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import hand from '@/assets/img/change.svg';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import PackageTeamItem, { IDataList } from '../../../../service_manage/components/PackageTeamItem';
+import PackageTeamItem from '../../../../service_manage/components/PackageTeamItem';
 // import PackageTeamItem, { IDataList } from '@/pages/doctor/service_manage/components/PackageTeamItem';
 import { Radio, message } from 'antd';
 import { btnRender } from '@/utils/button';
@@ -9,20 +9,38 @@ import { debounce } from 'lodash';
 import * as api from '@/services/api';
 import { useDispatch } from 'react-redux';
 import styles from './index.scss';
+import { formatDoctorTeams } from '@/utils/utils';
 
 interface IProps {
   data: ISubject;
   refresh: () => void;
-  packages: IDataList[];
 }
 const ChangeServicePackage: FC<IProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [selectTeamNSId, setSelectTeamNSId] = useState(null);
-  const { packages, data, refresh } = props;
+  const [packages, setPackages] = useState<CommonData[]>([]);
+  const { data, refresh } = props;
   console.log('fdfdfd', data);
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setSelectTeamNSId(e.target.value);
+  };
+  const fetchPackages = () => {
+    const params = {
+      pageAt: 1,
+      pageSize: 99999,
+      teamNSLabels: ['chronic_disease_team'],
+    };
+    // innerTeams表示套餐集合，members表示一个坑位的信息集合
+    api.service.fetchDoctorTeams(params).then(({ teams }: { teams: any[] }) => {
+      const { alone, creator } = formatDoctorTeams(teams);
+      setPackages([...alone, ...creator]);
+      setShowModal(true);
+    });
+  };
+  const handleShow = () => {
+    fetchPackages();
+
   };
   // putDoctorTeamMembersPatient
   const handleSave = () => {
@@ -50,17 +68,18 @@ const ChangeServicePackage: FC<IProps> = (props) => {
     setShowModal(false);
     setSelectTeamNSId(null);
   };
+  console.log('packages32', packages);
   return (
     <div>
       <img
         className="cursor-pointer"
         src={hand}
         alt="更换医生团队"
-        onClick={() => setShowModal(true)}
+        onClick={handleShow}
       />
        <DragModal
         wrapClassName="ant-modal-wrap-center"
-        width={1000}
+        width={1100}
         maskClosable
         visible={showModal}
         onCancel={handleCloseModal}

@@ -26,4 +26,5 @@ interface RolesMap {
 export declare const Role: RolesMap;
 export declare function fetchRolePropById(id: string): RoleType;
 export declare function fetchRolePropValue(id: string, keyName: string): string | number;
+export declare function isDoctor(roleId: string): boolean;
 export {};

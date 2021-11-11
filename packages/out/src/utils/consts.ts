@@ -209,8 +209,8 @@ export const projectStatus = {
   1000: '待确认',
   1001: '已拒绝',
   1002: '进行中',
-  1003: '已结束'
-}
+  1003: '已结束',
+};
 export const croLists = {
   [croStatus.Running]: '进行中',
   [croStatus.Stopping]: '已结束',
@@ -219,7 +219,7 @@ export const croLists = {
 export const itemWithoutlabel = ['name', 'sex', 'title'];
 export const itemWithLabel = [
   { key: 'tel', label: '手机' },
-  { key: 'firstProfessionCompany', label: '第一执业医院' },
+  { key: 'practiceAreas', label: '执业医院和科室' },
 ];
 export const basicInfoTab: Store = {
   biography: '个人简介',
