@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState } from 'react';
 import { Avatar, Button, Tabs, message, Form } from 'antd';
 import CertificateCard from '@/components/CertificateCard';
@@ -7,7 +7,6 @@ import DragModalForm from '@/components/DragModal/DragModalForm';
 import {
   defaultAvatar,
   itemWithoutlabel,
-  itemWithLabel,
   titleList,
   sexList,
   basicInfoTab,
@@ -61,8 +60,9 @@ const RoleInfo: FC<IProps> = (props) => {
   const renderTrigger = () => {
     return (
       <div onClick={() => setShowModal(true)}>{trigger}</div>
-    )
-  }
+    );
+  };
+  console.log('rewrerer', info?.practiceAreas);
   return (
     <DragModalForm
       title="角色信息"
@@ -100,14 +100,24 @@ const RoleInfo: FC<IProps> = (props) => {
                     {handleItemWithoutLabel(item)}
                   </span>
                 ))}
-                {itemWithLabel.map((item) => (
-                  <span key={item.key} className={styles.label}>
-                    {`${item.label} :
-               ${handleItemWithoutLabel(item.key)}`}
-                  </span>
-                ))}
+                <span className={styles.label}>
+                  手机{handleItemWithoutLabel('tel')}
+                </span>
               </div>
             </div>
+            <div className="mb-10 flex">
+                <span style={{ flex: '0 0 113px' }}>执业医院和科室：</span>
+                <div>
+                  {
+                    info?.practiceAreas ?
+                      info?.practiceAreas?.map(item => {
+                        return (
+                        <span className="mr-20 inline-block mb-3" key={item.standardId}>{item?.name}-{item?.sub?.name}</span>
+                        );
+                      }) : '--'
+                  }
+                </div>
+              </div>
             {role === 'doctor' && (
               <div className={styles.items}>
                 <Tabs size="middle">
