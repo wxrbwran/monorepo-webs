@@ -42,9 +42,9 @@ export var handleSelection = function (allValues) {
             case 'practice_areas':
                 return getCondition("practice_areas->>'name'", val, 'like');
             case 'having_hospital':
-                return getCondition('having.ns.name', val, 'like');
+                return getCondition('having.o_subject.name', val, 'like');
             case 'having_department':
-                return getCondition("having.o_subject.details->>'name'", val, 'like');
+                return getCondition("having.practice_areas->>'sub'", val, 'like');
             default:
                 return {};
         }

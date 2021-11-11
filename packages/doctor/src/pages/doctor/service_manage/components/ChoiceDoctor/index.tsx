@@ -42,25 +42,15 @@ const ChoiceDoctor: FC<IProps> = (props) => {
       setshowOrgModal(false);
     }
   }, [showModal]);
-  const handleChoiceDoctor = (checkedValues: any) => {
+  const handleChoiceDoctor = (choiceSids: string[]) => {
+    console.log('choiceDoctorSid', choiceSids);
+    console.log('selectDoctors', selectDoctors);
     // 增加勾选，此时不setSelectDoctors，在勾选完机构后再setSelectDoctors
-    if (checkedValues.length > selectDoctors.length) {
-      let newAddData: any = {};
-      if (checkedValues.length === 1) {
-        newAddData = checkedValues[0];
-      } else {
-        // 过滤出新添加项
-        checkedValues.forEach((item: ISubject) => {
-          let isHas = false; // 存在
-          selectDoctors.forEach((doctor: ISubject) => {
-            if (doctor?.sid === item?.sid) {
-              isHas = true;
-            }
-          });
-          // 遍历完，如果依然是不存在，那此项为新加的
-          if (!isHas) { newAddData = item; }
-        });
-      }
+    if (choiceSids.length > selectDoctors.length) {
+      const selectDoctorsSid = selectDoctors.map(item => item.sid);
+      const newAddSid = choiceSids.filter(sidItem => !selectDoctorsSid.includes(sidItem))[0];
+      let newAddData = friends.filter(item => item.sid === newAddSid)[0];
+
       setLastCheckDoc(newAddData);
       let orgInfo = { nsId: newAddData!.orgs![0].nsId, name: newAddData!.orgs![0].name };
       // 如果此医生已经选择过了，其它角色 再选择此医生机构则直接指定之前的机构。一个套餐中：一个医生可以多角色，但不能多机构
@@ -89,9 +79,8 @@ const ChoiceDoctor: FC<IProps> = (props) => {
         }
       }
     } else {
-      const selectSids = checkedValues.map(item => item.sid);
-      const newList = selectDoctors.filter(docItem => selectSids.includes(docItem.sid));
       // 取消勾选
+      const newList = selectDoctors.filter(docItem => choiceSids.includes(docItem.sid));
       setSelectDoctors([...newList]);
     }
   };
@@ -109,7 +98,11 @@ const ChoiceDoctor: FC<IProps> = (props) => {
     setshowOrgModal(false);
     setDoctorWorkOrg({ ...doctorWorkOrg });
     // @ts-ignore
-    setSelectDoctors([...selectDoctors, addDoctor]);
+    if (role === Role.UPPER_DOCTOR.id) {
+      setSelectDoctors([addDoctor]);
+    } else {
+      setSelectDoctors([...selectDoctors, addDoctor]);
+    }
     setSelectOrg(null); // 置空已选择机构
   };
 
@@ -127,12 +120,6 @@ const ChoiceDoctor: FC<IProps> = (props) => {
     callbackSelectDoctor(doctors);
     setshowModal(false);
   };
-  let checkProp: CommonData = {};
-  if (role === Role.UPPER_DOCTOR.id) {
-    checkProp = {
-      value: [lastCheckDoc],
-    };
-  }
   return (
     <div>
       <div onClick={handleShowModal}>{children}</div>
@@ -148,14 +135,14 @@ const ChoiceDoctor: FC<IProps> = (props) => {
       >
         <div className={styles.choice_doctor}>
           <Checkbox.Group style={{ width: '100%' }} onChange={handleChoiceDoctor}
-            { ...checkProp }
+           value = {selectDoctors.map(item => item.sid)}
           >
             <Row>
               {
                 friends.filter(item => !selectedDoctorSid.includes(item.sid)).map((doctor: ISubject) => {
                   return (
                     <Col span={12} key={doctor.sid}>
-                      <Checkbox value={doctor}>
+                      <Checkbox value={doctor.sid}>
                         <MemberItem doctorData={doctor} doctorWorkOrg={doctorWorkOrg} />
                       </Checkbox>
                     </Col>
