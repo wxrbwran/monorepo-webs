@@ -131,11 +131,28 @@ export const testStatus = {
   ),
 };
 
-export const firstProfessionCompany = {
-  title: '医院',
-  dataIndex: 'firstProfessionCompany',
-  key: 'firstProfessionCompany',
+
+export const practiceAreas = {
+  title: '医院 -- 科室',
+  dataIndex: 'practiceAreas',
+  key: 'practiceAreas',
+  render: (_text: any, record: any) => {
+
+    return (
+      <div>
+        {record.subjectDetail.practiceAreas.map((item) => {
+          return (
+            <div>
+              {(item?.name ?? '') + ' -- ' + (item?.sub?.name ?? '')}
+            </div>
+          );
+        })}
+      </div>
+    );
+  },
 };
+
+
 export const title = {
   title: '职称',
   dataIndex: 'title',
@@ -323,8 +340,9 @@ export const groupDetailColumns = () => [
 export const memberListColumns = [
   name,
   researcherRole,
-  firstProfessionCompany,
-  department,
+  // firstProfessionCompany,
+  practiceAreas,
+  // department,
   tel,
   patientCount,
   memberStatus,

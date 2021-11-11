@@ -92,6 +92,7 @@ const Croservice: FC<IProps> = () => {
       </AddServicePackage>
       {
         teams.map((team) => {
+
           return (<div className={`${styles.member} py-15 px-20 mb-15`}>
             <div className='flex justify-between text-base mb-50'>
               <div className='font-bold'>{team.name}</div>

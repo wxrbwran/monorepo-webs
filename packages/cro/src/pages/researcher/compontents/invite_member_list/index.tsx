@@ -5,7 +5,7 @@ import defaultAvatar from '@/assets/img/default_doctor.png';
 import { Search } from 'xzl-web-shared/src/components/Selects';
 import * as api from '@/services/api';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { name, firstProfessionCompany, title, department, orgName, inviteStatus } from '@/utils/columns';
+import { name, practiceAreas, title, orgName, inviteStatus } from '@/utils/columns';
 import styles from './index.scss';
 import { Store } from 'antd/lib/form/interface';
 import { useSelector } from 'umi';
@@ -13,7 +13,7 @@ import { IState } from 'typings/global';
 
 interface Iprops {
   onClose: () => void;
-  refreshList: ()=> void;
+  refreshList: () => void;
 }
 
 function InviteMemberList(props: Iprops) {
@@ -28,7 +28,7 @@ function InviteMemberList(props: Iprops) {
   const [form] = Form.useForm();
   const { setFieldsValue } = form;
 
-  useEffect(( ) => {
+  useEffect(() => {
     if (croLabel === 'single_project') {
       api.research.fetchProjectOrg(projectNsId).then(res => {
         setSingleOrg(res.infos[0].name);
@@ -42,9 +42,8 @@ function InviteMemberList(props: Iprops) {
       render: (text: string) => <img style={{ borderRadius: '50%', width: 40, height: 40 }} src={text || defaultAvatar} />,
     },
     name,
-    firstProfessionCompany,
+    practiceAreas,
     title,
-    department,
     orgName,
     inviteStatus,
   ];
@@ -89,7 +88,7 @@ function InviteMemberList(props: Iprops) {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       const ids: string[] = [];
-      selectedRows.forEach((item:{ subjectId: string, name: string }) => {
+      selectedRows.forEach((item: { subjectId: string, name: string }) => {
         ids.push(item.subjectId);
       });
       setSelectIds(ids);
@@ -102,10 +101,10 @@ function InviteMemberList(props: Iprops) {
           {
             croLabel === 'single_project'
               ? (
-              <>
-                {`已为您显示【${singleOrg}】全部医生`}
-                <Search form={form} searchKey="var" placeholder="搜索姓名或手机号" />
-              </>
+                <>
+                  {`已为您显示【${singleOrg}】全部医生`}
+                  <Search form={form} searchKey="var" placeholder="搜索姓名或手机号" />
+                </>
               ) : (
                 <Search
                   form={form}
