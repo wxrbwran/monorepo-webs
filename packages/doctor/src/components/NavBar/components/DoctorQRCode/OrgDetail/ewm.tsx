@@ -21,6 +21,7 @@ function OrgDetail({ currentOrg }: IProps) {
   const {
     orgName, name, title, uuCode, department, avatarUrl, qrCodeUrl,
   } = currentOrg;
+  console.log('currentOrg', currentOrg);
   return (
     <div className={styles.doctor} id="ewm">
       <div className={styles.info}>
