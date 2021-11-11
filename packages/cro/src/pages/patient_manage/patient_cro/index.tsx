@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { message, Form, Tabs, Button } from 'antd';
+import { message, Form, Tabs } from 'antd';
 import SelectGroup from '../components/select_group';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import * as api from '@/services/api';
@@ -204,7 +204,7 @@ function PatientCro({ }: IProps) {
       </AddServicePackage>
 
       <ChoiceTeam onSaveSuccess={putCroToPatient} show={teamShow} onCancel={() => { setTeamShow(false); }} onCreateTeam={() => { setTeamShow(false); setTeamCreateShow(true); }}>
-        <Button type="primary" className="mb-20" onClick={() => { setTeamShow(true); console.log('====123456'); }}>选择团队</Button>
+        {/* <Button type="primary" className="mb-20" onClick={() => { setTeamShow(true); console.log('====123456'); }}>选择团队</Button> */}
       </ChoiceTeam>
 
     </div>
