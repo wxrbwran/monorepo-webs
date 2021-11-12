@@ -71,3 +71,12 @@ export function fetchRolePropValue(id, keyName) {
     var _a;
     return (_a = fetchRolePropById(id)) === null || _a === void 0 ? void 0 : _a[keyName];
 }
+export function isDoctor(roleId) {
+    return !![
+        Role.ALONE_DOCTOR.id,
+        Role.UPPER_DOCTOR.id,
+        Role.LOWER_DOCTOR.id,
+        Role.DOCTOR.id,
+        Role.DOCTOR_IH.id,
+    ].includes(roleId);
+}

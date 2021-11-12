@@ -9,7 +9,7 @@ import {
 import Organization from '@/components/Selects/Organization';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/src/utils/conditions';
-import { formatDoctorTeams } from '@/utils/utils';
+
 import {
   name,
   org,
@@ -24,7 +24,6 @@ import {
 import AddPatient from './components/AddPatient';
 // import UnBind from './components/UnBind';
 import ChangeServicePackage from './components/ChangeServicePackage';
-import * as api from '@/services/api';
 import { useDispatch } from 'react-redux';
 import styles from './index.scss';
 
@@ -52,7 +51,7 @@ function Patients() {
 
   const [depOptions, setOptions] = useState({ ...getInitOptions() });
   const [pageAt, setPageAt] = useState<number>(1);
-  const [packages, setPackages] = useState<CommonData[]>([]);
+
   // 慢病医生角色
   const isDoctor = ['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level);
 
@@ -110,29 +109,13 @@ function Patients() {
   const refresh = (params: { pageAt: number } = { pageAt }) => {
     setOptions({ ...depOptions, ...params });
   };
-  const fetchPackages = () => {
-    const params = {
-      pageAt: 1,
-      pageSize: 99999,
-      teamNSLabels: ['chronic_disease_team'],
-    };
-    // innerTeams表示套餐集合，members表示一个坑位的信息集合
-    api.service.fetchDoctorTeams(params).then(({ teams }: { teams: any[] }) => {
-      const { alone, creator } = formatDoctorTeams(teams);
-      setPackages([...alone, ...creator]);
-
-    });
-  };
-  useEffect(() => {
-    fetchPackages();
-  }, []);
   // 只有创建人是当前登录者，才展示更换按钮
   const changeServicePackage = {
     title: '更换服务小组',
     dataIndex: 'sid',
     render: (_text: string, record: IRecord) => {
       return record?.nsOwner?.sid === window.$storage.getItem('sid') ? (
-        <ChangeServicePackage data={record} packages={packages} refresh={() => refresh({ pageAt: 1 })} />
+        <ChangeServicePackage data={record} refresh={() => refresh({ pageAt: 1 })} />
       ) : <>--</>;
     },
   };
@@ -140,8 +123,6 @@ function Patients() {
   const columns: CommonData[] = [
     name,
     isDoctor ? org : project,
-    patientLevel(refresh),
-    noteC(refresh),
     sex,
     age,
     address,
@@ -149,6 +130,7 @@ function Patients() {
   ];
   if (isDoctor) {
     columns.push(changeServicePackage);
+    columns.splice(2, 0, patientLevel(refresh), noteC(refresh));
   }
   console.log('为构建添加console');
   return (
@@ -164,7 +146,7 @@ function Patients() {
             <Address />
             <Age />
             <Sex />
-            <PatientRole />
+            { isDoctor && <PatientRole /> }
           </div>
           <div className={styles.operating}>
             <div className={styles.search}>

@@ -4,7 +4,7 @@ import { Tabs, Spin, Button } from 'antd';
 import html2canvas from 'html2canvas';
 import { useSelector } from 'umi';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role, isDoctor } from 'xzl-web-shared/src/utils/role';
 import OrgListBtn from './OrgListBtn';
 import DoctorDetailEwm from './OrgDetail/ewm';
 // import DoctorDetailWxEwm from './OrgDetail/wxEwm';
@@ -22,19 +22,26 @@ const DoctorQRCode:FC = ({ children }) => {
   useEffect(() => {
     if (organizations.teams.length > 0) {
       const filterOrgList:any[] = [];
+      console.log('organizations232', organizations);
       organizations.teams.forEach((item) => {
         let orgItem: CommonData = {};
         item.members.forEach((member) => {
           if (member.role === Role.ORG.id) {
             orgItem.orgName = member.name;
-          } else {
-            orgItem = {
-              ...orgItem,
-              ...member,
-            };
+          } else if (isDoctor(member.role) || Role.SYS_DOCTOR.id) {
+            // 如果没有保存过医生姓名  或者 上次保存的医生角色是非独立角色的医生（优先展示作为独立医生的角色的信息）
+            if (!orgItem?.name || orgItem.role !== Role.ALONE_DOCTOR.id) {
+              console.log('------00', member);
+              orgItem = {
+                ...orgItem,
+                ...member,
+              };
+            }
           }
         });
-        filterOrgList.push(orgItem);
+        if (orgItem?.orgName) {
+          filterOrgList.push(orgItem);
+        }
       });
       console.log('filterOrgList', filterOrgList);
       setOrgList(filterOrgList);

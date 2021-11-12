@@ -8,6 +8,7 @@ import AddServicePackage from './components/AddServicePackage';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import { TeamMember } from './components/Member';
+import { Role } from 'xzl-web-shared/src/utils/role';
 interface IProps {
 
 }
@@ -70,7 +71,13 @@ const Croservice: FC<IProps> = () => {
       name: team.name,
       teamNSId: team.teamNSId,
       teamNSLabels: ['research_pro_patient'],
+      members: team.innerTeams
+        .filter((innerTeam) => innerTeam.members.find((item) => item.role == Role.NS_OWNER.id))
+        .flatMap((inner) => inner.members)
+        .map((item) => { return { sid: item.sid, role: item.role }; }),
     };
+
+    console.log('======================= memberList', JSON.stringify(parma));
 
     api.service.deleteTeamMembers(parma).then(() => {
 
@@ -85,6 +92,7 @@ const Croservice: FC<IProps> = () => {
       </AddServicePackage>
       {
         teams.map((team) => {
+
           return (<div className={`${styles.member} py-15 px-20 mb-15`}>
             <div className='flex justify-between text-base mb-50'>
               <div className='font-bold'>{team.name}</div>
