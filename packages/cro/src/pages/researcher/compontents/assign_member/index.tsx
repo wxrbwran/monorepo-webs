@@ -17,34 +17,34 @@ interface Iprops {
 function AssignMember({ children, data, refresh }: Iprops) {
   const [isShowModal, setIsShowModal] = useState(false);
   const [doctorId, setDoctorId] = useState<string>();
-  const { projectNsId } = useSelector((state: IState) =>  state.project.projDetail);
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const handleToggleShow = () => {
-    setIsShowModal(!isShowModal)
-  }
+    setIsShowModal(!isShowModal);
+  };
   const handleChangeSelect = (params: Irecord[]) => {
     setDoctorId(params[0].subjectId);
-  }
+  };
   const handleSubmit = () => {
-    const { nsId, roleId} = data
+    const { nsId, roleId } = data;
     if (doctorId) {
       const params = {
         doctorSId: doctorId,
         groupId: nsId,
         projectNsId,
         role: roleId,
-      }
+      };
       api.research.postGroupLeader(params).then(() => {
         message.success('指定成功');
         refresh();
-      })
+      });
     } else {
       message.error('您未勾选任何成员');
     }
-  }
+  };
   const handleShowModal = (e) => {
     e.stopPropagation();
     setIsShowModal(true);
-  }
+  };
   return (
     <div className={styles.assign}>
       <span
@@ -71,7 +71,7 @@ function AssignMember({ children, data, refresh }: Iprops) {
         </div>
       </DragModal>
     </div>
-  )
+  );
 }
 
 export default AssignMember;

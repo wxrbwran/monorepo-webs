@@ -34,6 +34,7 @@ function CreateProject({ onCloseModal }: IProps) {
   const [showUpload, setShowUPload] = useState(false);
   const [avatarUrl, setAvatar] = useState(defaultImg);
   const [loading, setLoading] = useState(false);
+  const [choiceTestType, setChoiceTestType] = useState(2);
 
   useEffect(() => {
 
@@ -55,16 +56,23 @@ function CreateProject({ onCloseModal }: IProps) {
       orgSid = filterOrgs[0].sid;
     }
 
-    const params = {
+    let params = {
       name,
       type,
-      orgSids: [orgSid],
       detail: {
         avatarUrl,
         duration,
         intro,
       },
     };
+    if (choiceTestType == 1) {
+      params = {
+        ...params,
+        orgSids: [orgSid],
+      };
+    }
+
+    console.log('================= params params params', JSON.stringify(params));
     api.project.postCroProject(params).then(res => {
       setLoading(false);
       message.success('创建成功');
@@ -88,6 +96,13 @@ function CreateProject({ onCloseModal }: IProps) {
       value: '多中心临床试验',
     },
   ];
+
+  const onTestTypeChange = (e) => {
+    console.log('单中心多中心更换', e);
+
+    setChoiceTestType(e.target.value);
+  };
+
   return (
     <div className="create-project">
       <div className="left">
@@ -122,7 +137,7 @@ function CreateProject({ onCloseModal }: IProps) {
             rules={[{ required: true, message: '请选择项目类型!' }]}
             style={{ textAlign: 'left' }}
           >
-            <Radio.Group>
+            <Radio.Group onChange={onTestTypeChange}>
               {testType.map(item => (
                 <Radio
                   value={item.key}
@@ -134,7 +149,7 @@ function CreateProject({ onCloseModal }: IProps) {
             </Radio.Group>
           </Form.Item>
           {
-            filterOrgs && filterOrgs.length > 1 && <Form.Item
+            choiceTestType == 1 && filterOrgs && filterOrgs.length > 1 && <Form.Item
               label="所属机构"
               name="orgSid"
               rules={[{ required: true, message: '请选择项目类型!' }]}

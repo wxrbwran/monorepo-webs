@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input} from 'antd';
+import { Input } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import styles from './index.scss';
 
@@ -8,7 +8,7 @@ interface IProps {
   record: {
     name: string;
     tel: string;
-    firstProfessionCompany: string;
+    subjectDetail: { practiceAreas: any[] };
     sex: string;
     joinTime: number;
     provinceName: string;
@@ -21,54 +21,58 @@ interface IProps {
   };
 }
 
-function MemberDetail({children, record}: IProps) {
-  const { name, tel, firstProfessionCompany, sex, joinTime, provinceName, status, title, patientCount, person, groupName, role } = record;
+function MemberDetail({ children, record }: IProps) {
+  const { name, tel, subjectDetail, sex, joinTime, provinceName, status, title, patientCount, person, groupName, role } = record;
   const [isShowModal, setIsShowModal] = useState(false);
   const handleShowGroup = () => {
     setIsShowModal(true);
-  }
+  };
+
   const baseInfo = [
     {
       key: name,
-      value: '姓名'
-    },{
+      value: '姓名',
+    }, {
       key: tel,
-      value: '手机号'
-    },{
-      key: firstProfessionCompany,
-      value: '中心'
-    },{
+      value: '手机号',
+    }, {
+      key: subjectDetail?.practiceAreas ? subjectDetail.practiceAreas.map((item) => {
+        return (item?.name ?? '');
+      }).join(';') : '--'
+      ,
+      value: '中心',
+    }, {
       key: sex,
-      value: '性别'
-    },{
+      value: '性别',
+    }, {
       key: joinTime,
-      value: '加入时间'
-    },{
+      value: '加入时间',
+    }, {
       key: provinceName,
-      value: '城市'
-    },{
+      value: '城市',
+    }, {
       key: status,
-      value: '状态'
-    },{
+      value: '状态',
+    }, {
       key: title,
-      value: '职称'
-    },{
+      value: '职称',
+    }, {
       key: patientCount,
-      value: '受试者人数'
-    },{
+      value: '受试者人数',
+    }, {
       key: person,
-      value: '邀请人'
-    }
-  ]
+      value: '邀请人',
+    },
+  ];
   const otherInfo = [
     {
       key: groupName,
-      value: '所在分组'
-    },{
+      value: '所在分组',
+    }, {
       key: role,
-      value: '角色'
-    }
-  ]
+      value: '角色',
+    },
+  ];
   return (
     <>
       <span
@@ -86,7 +90,7 @@ function MemberDetail({children, record}: IProps) {
         <div className={styles.info}>
           <ul>
             {
-              baseInfo.map((item, index)=>(
+              baseInfo.map((item, index) => (
                 <li key={index}>
                   <label htmlFor="name">{item.value}</label>
                   <Input
@@ -100,8 +104,8 @@ function MemberDetail({children, record}: IProps) {
           <div className={styles.split}>工作信息</div>
           <ul>
             {
-              otherInfo.map((item, index)=>(
-                <li key={index} style={{flex: '100%'}}>
+              otherInfo.map((item, index) => (
+                <li key={index} style={{ flex: '100%' }}>
                   <label htmlFor="name">{item.value}</label>
                   <Input
                     value={item.key}
@@ -114,7 +118,7 @@ function MemberDetail({children, record}: IProps) {
         </div>
       </DragModal>
     </>
-  )
+  );
 }
 
 export default MemberDetail;

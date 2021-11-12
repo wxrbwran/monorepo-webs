@@ -20,7 +20,7 @@ interface IProps {
 function BaseInfo({ projectSid }: IProps) {
 
   const dispatch = useDispatch();
-  const projDetail = useSelector((state: IState)=>state.project.projDetail);
+  const projDetail = useSelector((state: IState) => state.project.projDetail);
   const [state, setState] = useState();
   const [intro, setIntro] = useState('');
 
@@ -43,7 +43,7 @@ function BaseInfo({ projectSid }: IProps) {
     setIntro(e.target.value);
   };
 
-  const updateCroProject = (apiParams?: object)=> {
+  const updateCroProject = (apiParams?: object) => {
     const params: CommonData = {
       projectSid,
       detail: {
@@ -66,7 +66,8 @@ function BaseInfo({ projectSid }: IProps) {
     updateCroProject({ minDays: Number(e.target.value) });
   };
 
-  const { name, detail, createdAt, patientCount, avgDay, label } = projDetail;
+  const { name, detail, createdAt, patientCount, avgDay, label, practiceArea } = projDetail;
+
 
   return (
     <>
@@ -94,7 +95,7 @@ function BaseInfo({ projectSid }: IProps) {
               onChange={changeIntro}
               className={styles.content}
               value={intro}
-              onBlur={()=>updateCroProject()}
+              onBlur={() => updateCroProject()}
               disabled={![Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType) || projDetail.status === 1001}
             />
           </Tooltip>
@@ -128,7 +129,7 @@ function BaseInfo({ projectSid }: IProps) {
           </div>
           <div className={styles.right}>
             <p className={styles.title}><span>·</span> 所属机构 <span>·</span></p>
-            <p className={styles.content}>{projectLabel[label]}</p>
+            <p className={styles.content}>{practiceArea}</p>
           </div>
         </div>
       </div>
