@@ -2,6 +2,8 @@ import React, { FC, useMemo } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import IconMore from '@/assets/img/icon_more.png';
+import { Dropdown } from 'antd';
 import styles from './index.scss';
 
 interface IProps {
@@ -70,7 +72,7 @@ const ChatPersonItem: FC<IProps> = (props) => {
   const personList = useMemo(() => (
     person.sort(compare).map((item) => (
       <div key={item.role} className="flex justify-start items-center">
-        <img className="w-40 h-40" src={item.avatarUrl || defaultAvatar} alt="" key={item.wcId} />
+        <img className="w-40 h-40 my-8" src={item.avatarUrl || defaultAvatar} alt="" key={item.wcId} />
         <div key={item.wcId} className={styles.name}>
           <div className={styles.role}>{getRole(item.role)}</div>
           <div>{item.name}</div>
@@ -87,6 +89,14 @@ const ChatPersonItem: FC<IProps> = (props) => {
         <div className={styles.names}>
           { personList }
         </div>
+        <Dropdown
+          overlay={<div className={`${styles.team} ${styles.dropdown}`}>{personList}</div>}
+          placement="bottomRight"
+          arrow
+          trigger={['click']}
+        >
+          <img className="w-20 h-20 mt-15" src={IconMore} />
+        </Dropdown>
       </div>
     </li>
   );
