@@ -41,11 +41,20 @@ const AddServicePackage: FC<IProps> = (props) => {
 
       const resFriends = handleRelatedDoctorsDataSource(res.teams);
       if (!edit) {
+
+        const selfFriend = resFriends.filter(item => item?.sid === doctorSid);
+
+        selfFriend.map((item) => {
+          if (item?.orgs?.length == 1) {
+            item.choiceOrg = item.orgs[0];
+          }
+        });
+
         setChoiceMember({
           CRC: [],
           CRA: [],
           PM: [],
-          SELF: resFriends.filter(item => item?.sid === doctorSid),
+          SELF: selfFriend,
         });
       }
       setfriends(resFriends.filter(item => item?.sid !== doctorSid));
@@ -114,13 +123,19 @@ const AddServicePackage: FC<IProps> = (props) => {
         });
       } else {
 
-        console.log('============setChoiceMember [] [] []');
         setTeamName(undefined);
+        const selfFriend = friends.filter(item => item?.sid === doctorSid);
+        selfFriend.map((item) => {
+          if (item?.orgs?.length == 1) {
+            item.choiceOrg = item.orgs[0];
+          }
+        });
+
         setChoiceMember({
           CRC: [],
           CRA: [],
           PM: [],
-          SELF: friends.filter(item => item?.sid === doctorSid),
+          SELF: selfFriend,
         });
       }
     }
@@ -274,7 +289,7 @@ const AddServicePackage: FC<IProps> = (props) => {
         onCancel={onCancel}
         title={edit ? '编辑团队' : '添加新团队'}
         footer={null}
-        destroyOnClose
+      // destroyOnClose
       >
         <div className={styles.add_service}>
           <Input className={styles.package_name} placeholder="请输入服务小组名称" value={teamName} onChange={onTeamNameChange} />
@@ -298,6 +313,7 @@ const AddServicePackage: FC<IProps> = (props) => {
           <Member title='CRA' members={choiceMember.CRA} editable={true} friends={friends} handleChoice={(choices: any[]) => onHandleChoice('CRA', choices)} onRemove={(item: any, index: number) => onRemove('CRA', item, index)} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}></Member>
           <Member title='PM' members={choiceMember.PM} editable={true} friends={friends} handleChoice={(choices: any[]) => onHandleChoice('PM', choices)} onRemove={(item: any, index: number) => onRemove('PM', item, index)} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}></Member>
           <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={onSaveTeam}>完成</Button>
+
         </div>
       </DragModal >
     </div >

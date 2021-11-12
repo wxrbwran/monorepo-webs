@@ -94,9 +94,12 @@ const ChoiceDoctor: FC<IProps> = (props) => {
   };
 
 
-  const handleChoiceOrg = (e) => {
+  const handleChangeOrg = (e) => {
 
     currentChoice.choiceOrg = currentChoice.orgs.filter((item) => item.nsId == e.target.value)[0];
+  };
+
+  const handleChoiceOrg = () => {
     setshowOrgModal(false);
   };
 
@@ -151,14 +154,17 @@ const ChoiceDoctor: FC<IProps> = (props) => {
         footer={null}
         destroyOnClose
       >
-        <Radio.Group onChange={handleChoiceOrg} defaultValue={currentChoiceOrgsProp?.defaultChoiceOrg?.nsId ?? ''}>
-          {
-            currentChoiceOrgsProp &&
-            currentChoiceOrgsProp.orgs.map((item) => {
-              return (<Radio value={item.nsId}>{item.name}</Radio>);
-            })
-          }
-        </Radio.Group>
+        <div className={styles.choice_org}>
+          <Radio.Group onChange={handleChangeOrg} defaultValue={currentChoiceOrgsProp?.defaultChoiceOrg?.nsId ?? ''}>
+            {
+              currentChoiceOrgsProp &&
+              currentChoiceOrgsProp.orgs.map((item) => {
+                return (<Radio value={item.nsId}>{item.name}</Radio>);
+              })
+            }
+          </Radio.Group>
+        </div>
+        <Button type="primary" className="w-98 mx-auto mt-30 block" onClick={handleChoiceOrg}>确认</Button>
       </DragModal>
     </div>
   );
