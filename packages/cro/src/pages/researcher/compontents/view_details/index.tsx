@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Drawer, Table } from 'antd';
 import AssignMember from '../assign_member';
 import IconTip from '@/assets/img/icon_tip.png';
-import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';import styles from './index.scss';
+import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role'; import styles from './index.scss';
 import { IState, ISubject } from 'typings/global';
 import { useSelector } from 'umi';
 import { handleInviteMemberList } from 'xzl-web-shared/src/components/XzlTable/util';
@@ -21,7 +21,7 @@ type Iprops = {
     nsId: string;
   }
   style?: object;
-}
+};
 interface IRecord {
   groupName: string;
   name: string;
@@ -46,35 +46,35 @@ function ViewDetails({ children, data, style, refresh }: Iprops) {
       groupId: nsId,
       projectNsId,
       role,
-    }
+    };
     api.research.fetchGroupDetail(params).then((res: any) => {
-      const data = [
+      const list = [
         { ...res },
-        ...res.subWC
-      ]
-      setData(handleInviteMemberList(data));
-    })
-  }
-  const handleShowModel = (e) => {
+        ...res.subWC,
+      ];
+      setData(handleInviteMemberList(list));
+    });
+  };
+  const handleShowModel = () => {
     setVisible(true);
     fetchData();
-  }
+  };
   const refreshData = () => {
     refresh(); // 刷新架构树的数据
     fetchData();
-  }
+  };
   const columns: any = [
     {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
       render: (text: string, record: IRecord) => (
-      <div>
-        { text ? text : (
-          window.$storage.getItem('isLeader') ? <AssignMember refresh={refreshData} data={record}>暂未指定</AssignMember> : '暂未指定'
-        )}
-      </div>
-      )
+        <div>
+          {text ? text : (
+            window.$storage.getItem('isLeader') ? <AssignMember refresh={refreshData} data={record}>暂未指定</AssignMember> : '暂未指定'
+          )}
+        </div>
+      ),
     },
     {
       title: '组名',
@@ -82,8 +82,8 @@ function ViewDetails({ children, data, style, refresh }: Iprops) {
       key: 'groupName',
       align: 'center',
       render: (text: string) => (
-        <div className="text-overflow" style={{maxWidth: 350}} title={text}>{text}</div>
-      )
+        <div className="text-overflow" style={{ maxWidth: 350 }} title={text}>{text}</div>
+      ),
     },
     {
       title: '角色',
@@ -94,25 +94,32 @@ function ViewDetails({ children, data, style, refresh }: Iprops) {
       title: '职位',
       dataIndex: 'title',
       key: 'title',
-      render: (text: string) =>  text || '--'
+      render: (text: string) => text || '--',
     },
     {
-      title: '单位',
-      dataIndex: 'firstProfessionCompany',
-      key: 'firstProfessionCompany',
-      render: (text: string) =>  text || '--'
-    },
-    {
-      title: '科室',
-      dataIndex: 'firstPracticeDepartment',
-      key: 'firstPracticeDepartment',
-      render: (text: string) =>  text || '--'
+      title: '单位 -- 科室',
+      dataIndex: 'practiceAreas',
+      key: 'practiceAreas',
+      render: (_text: any, record: any) => {
+        return (
+          <div>
+            {record?.subjectDetail?.practiceAreas ? record.subjectDetail.practiceAreas.map((item) => {
+              return (
+                <div>
+                  {(item?.name ?? '') + ' -- ' + (item?.sub?.name ?? '')}
+                </div>
+              );
+            }) : '--'
+            }
+          </div>
+        );
+      },
     },
     {
       title: '操作',
       dataIndex: 'nsId',
       key: 'nsId',
-      render: (text: string, record: IRecord) => (
+      render: (_text: string, record: IRecord) => (
         <div>
           {
             record.name ?
@@ -121,11 +128,10 @@ function ViewDetails({ children, data, style, refresh }: Iprops) {
               )
           }
         </div>
-      )
-    }
-
+      ),
+    },
   ];
-  return(
+  return (
     <>
       <div
         className={styles.view_details}
@@ -148,7 +154,7 @@ function ViewDetails({ children, data, style, refresh }: Iprops) {
             !subjectDetail && (
               <div className={styles.top}>
                 <div className={styles.left}>
-                  <img src={IconTip} alt="提醒"/>
+                  <img src={IconTip} alt="提醒" />
                   <span>{groupName}暂未指定{fetchRolePropValue(role, 'desc')}</span>
                 </div>
               </div>
@@ -163,7 +169,7 @@ function ViewDetails({ children, data, style, refresh }: Iprops) {
         </div>
       </Drawer>
     </>
-  )
+  );
 }
 
 export default ViewDetails;

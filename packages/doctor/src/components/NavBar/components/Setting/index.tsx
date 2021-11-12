@@ -101,8 +101,8 @@ function Setting() {
   const Qrcode = (
     <DoctorQRCode>
       <div className={styles.item_btn}>
-        <img src={Code} alt="我的二维码" />
-        我的二维码
+        <img src={Code} alt="我的名片" />
+        我的名片
       </div>
     </DoctorQRCode>
   );
