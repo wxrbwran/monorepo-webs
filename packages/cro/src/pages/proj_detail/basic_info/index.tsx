@@ -127,10 +127,13 @@ function BaseInfo({ projectSid }: IProps) {
             <p className={styles.title}><span>·</span> 项目类型 <span>·</span></p>
             <p className={styles.content}>{projectLabel[label]}</p>
           </div>
-          <div className={styles.right}>
-            <p className={styles.title}><span>·</span> 所属机构 <span>·</span></p>
-            <p className={styles.content}>{practiceArea}</p>
-          </div>
+          {
+            practiceArea &&
+            <div className={styles.right}>
+              <p className={styles.title}><span>·</span> 所属机构 <span>·</span></p>
+              <p className={styles.content}>{practiceArea}</p>
+            </div>
+          }
         </div>
       </div>
       <div className={styles.left_bottom}>

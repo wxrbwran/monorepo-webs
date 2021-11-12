@@ -25,6 +25,8 @@ function CreateProject({ onCloseModal }: IProps) {
 
   const filterOrgs = useSelector((state: IState) => state.user.user.roles[0].subject.practiceAreas);
 
+
+  console.log('================ filterOrgs', JSON.stringify(filterOrgs));
   // const practiceAreas = user.roles[0].subject.practiceAreas;
 
   // const filterOrgs: ISubject[] = useSelector((state: IState) => state.user.filterOrgs);
@@ -152,7 +154,7 @@ function CreateProject({ onCloseModal }: IProps) {
             choiceTestType == 1 && filterOrgs && filterOrgs.length > 1 && <Form.Item
               label="所属机构"
               name="orgSid"
-              rules={[{ required: true, message: '请选择项目类型!' }]}
+              rules={[{ required: true, message: '请选择所属机构!' }]}
               style={{ textAlign: 'left' }}
             >
               <Radio.Group>
