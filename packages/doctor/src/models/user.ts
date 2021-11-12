@@ -19,6 +19,7 @@ export interface UserModelType {
   };
   reducers: {
     saveUserInfo: Reducer;
+    updateUserOperationLog: Reducer;
     saveUserOrg: Reducer;
     saveUserPrice: Reducer;
     saveUserFilterOrg: Reducer;
@@ -31,6 +32,7 @@ const userState: UserModelState = {
   user: {},
   prices: [],
   userInfo: {},
+  loginCount: 0, // 0初始值，1首次登录 其余值是非首次登录
   organizations: {
     teams: [],
     total: 0,
@@ -38,7 +40,6 @@ const userState: UserModelState = {
   filterOrgs: [],
   croProjectList: [],
   currentOrgInfo: {},
-  firstLogin: 0, // 0初始值，1首次登录 2非首次登录
   existedRoles: [], // 医生角色列表 侧边栏使用（签约患者下有哪些菜单）
 };
 
@@ -93,22 +94,17 @@ const Model: UserModelType = {
   },
   reducers: {
     saveUserInfo(state, action) {
-      console.log(999999);
       // 有些老数据存在只有第一执业医院名称，没有医院id，会导致后面逻辑错误，这里兼容一下，没有id直接清掉名字，让用户再录入
       const userInfo = action.payload;
-      if (!userInfo.firstPracticeDepartmentId) {
-        delete userInfo.firstPracticeDepartment;
-      }
-      if (!userInfo.firstProfessionCompanyId) {
-        delete userInfo.firstProfessionCompany;
-      }
       return {
         ...state,
-        userInfo: {
-          ...userInfo,
-          firstLogin: userInfo?.practiceAreas ? 2 : 1,
-        },
-
+        userInfo,
+      };
+    },
+    updateUserOperationLog(state, action) {
+      return {
+        ...state,
+        loginCount: action.payload,
       };
     },
     saveUserPrice(state, action) {

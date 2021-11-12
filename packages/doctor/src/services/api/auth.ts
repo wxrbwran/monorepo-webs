@@ -36,4 +36,9 @@ export default {
   uuidInvalid(data: CommonData): Promise<any> {
     return http.post('scan/token/invalid', { data });
   },
+
+  // 更新用户登录次数
+  postUserOperationLog(behavior: string): Promise<any> {
+    return http.post(`user/operation/log/${behavior}`);
+  },
 };

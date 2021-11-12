@@ -17,6 +17,7 @@ export interface AuthModelType {
   effects: {
     login: Effect;
     logout: Effect;
+    updateLoginOperationLog: Effect;
   };
   reducers: {
     saveLoginInfo: Reducer;
@@ -66,6 +67,10 @@ const Model: AuthModelType = {
             type: 'user/getUserOrganizations',
             payload: {},
           });
+          yield put({
+            type: 'auth/updateLoginOperationLog',
+            payload: 'LOGIN',
+          });
           history.push('/doctor/patients/alone_doctor');
         }
         if (payload.clientId === 'xzl-web-out-org') {
@@ -81,6 +86,14 @@ const Model: AuthModelType = {
       } else {
         message.error(data.result);
       }
+    },
+    * updateLoginOperationLog({ payload }, { call, put }) {
+      const { count } = yield call(api.auth.postUserOperationLog, payload);
+      // 更新登录次数
+      yield put({
+        type: 'user/updateUserOperationLog',
+        payload: count,
+      });
     },
     * logout(_, { put }) {
       yield put({

@@ -26,7 +26,7 @@ interface Item {
 }
 function Setting() {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state: IState) => state.user);
+  const { userInfo, loginCount } = useSelector((state: IState) => state.user);
   // 如果没有执业机构和科室信息，则认为是首次登录，默认展示编辑个人资料弹框
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('info');
@@ -41,11 +41,11 @@ function Setting() {
     });
   }, []);
   useEffect(() => {
-    if (userInfo.firstLogin === 1) {
+    if (loginCount === 1 && userInfo?.name) {
       setActiveTab('info');
       setShowModal(true);
     }
-  }, [userInfo]);
+  }, [userInfo, loginCount]);
   const handleLogout = () => {
     dispatch({
       type: 'auth/logout',
