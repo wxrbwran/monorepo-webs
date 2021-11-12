@@ -30,12 +30,12 @@
   }
   // 机构列表
   .org_list {
-    width: 100%;
+    max-width: 540px;
     max-height: 76px;
     overflow: auto;
     margin: 10px auto 0;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     .org_btn{
       margin: 0 5px 10px;

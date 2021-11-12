@@ -8,13 +8,13 @@ interface IProps {
   onClose: () => void;
 }
 function UserInfo({ onClose }: IProps) {
-  const { userInfo } = useSelector((state: IState) => state.user);
+  const { userInfo, loginCount } = useSelector((state: IState) => state.user);
   const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
-    if (userInfo.firstLogin === 1) {
+    if (loginCount === 1) {
       setIsEdit(true);
     }
-  }, [userInfo]);
+  }, [userInfo, loginCount]);
   const handleToggleEdit = () => {
     setIsEdit(!isEdit);
   };

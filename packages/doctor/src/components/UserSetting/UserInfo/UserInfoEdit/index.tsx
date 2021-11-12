@@ -108,6 +108,10 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
           type: 'user/getUserWclDetail',
           payload: { wcIds: [window.$storage.getItem('wcId')] },
         });
+        dispatch({
+          type: 'user/updateUserOperationLog',
+          payload: 0,
+        });
       }).catch((err: any) => {
         console.log('保存个人资料失败', err);
         message.error(err?.result || '保存失败');
@@ -227,7 +231,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                             nameKey="name"
                             idKey="standardId"
                             request={window.$api.base.fetchHospitals}
-                            disabled={!!userInfo.firstProfessionCompany}
+                            disabled={false}
                           />
                           <span className="mr-15 ml-10 mt-3">-</span>
                           <Department
@@ -236,7 +240,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                             getFieldValue={getFieldValue}
                             nameKey="departmentName"
                             idKey="departmentStandardId"
-                            disabled={!!userInfo.firstPracticeDepartment}
+                            disabled={false}
                           />
                         </div>
                         {
@@ -278,7 +282,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                   label="角色标签"
                   name="roleTags"
                 >
-                  <Select mode="tags" style={{ width: '610px', height: 32 }} placeholder="请选择角色标签">
+                  <Select mode="tags" style={{ width: '610px', minHeight: 32 }} placeholder="请选择角色标签">
                     {
                       roleTags.map((role: string) => <Option key={role} value={role}>{role}</Option>)
                     }

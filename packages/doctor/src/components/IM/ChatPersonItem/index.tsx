@@ -2,6 +2,8 @@ import React, { FC, useMemo } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import IconMore from '@/assets/img/icon_more.png';
+import { Dropdown } from 'antd';
 import styles from './index.scss';
 
 interface IProps {
@@ -45,6 +47,9 @@ const ChatPersonItem: FC<IProps> = (props) => {
         return fetchRolePropValue(role, 'desc');
     }
   };
+  // 各角色排序优先级
+  // 患者 > 独立管理 > 护士 > 研究者 > PM > CRA > CRC
+  // 患者 > 主管医生 > 医生助手 > 营养师 > 护士 > 研究者 > PM > CRA > CRC
   const orderId: string[] = [
     Role.PATIENT.id,
     Role.PATIENT_VIP.id,
@@ -53,6 +58,11 @@ const ChatPersonItem: FC<IProps> = (props) => {
     Role.LOWER_DOCTOR.id,
     Role.DIETITIAN.id,
     Role.NURSE.id,
+
+    Role.PROJECT_RESEARCHER.id,
+    Role.CRO_PM.id,
+    Role.CRO_CRA.id,
+    Role.CRO_CRC.id,
   ];
   const compare = (obj1: IInfos, obj2: IInfos) => (
     orderId.indexOf(obj1.role) - orderId.indexOf(obj2.role)
@@ -62,7 +72,7 @@ const ChatPersonItem: FC<IProps> = (props) => {
   const personList = useMemo(() => (
     person.sort(compare).map((item) => (
       <div key={item.role} className="flex justify-start items-center">
-        <img className="w-40 h-40" src={item.avatarUrl || defaultAvatar} alt="" key={item.wcId} />
+        <img className="w-40 h-40 my-8" src={item.avatarUrl || defaultAvatar} alt="" key={item.wcId} />
         <div key={item.wcId} className={styles.name}>
           <div className={styles.role}>{getRole(item.role)}</div>
           <div>{item.name}</div>
@@ -79,6 +89,14 @@ const ChatPersonItem: FC<IProps> = (props) => {
         <div className={styles.names}>
           { personList }
         </div>
+        <Dropdown
+          overlay={<div className={`${styles.team} ${styles.dropdown}`}>{personList}</div>}
+          placement="bottomRight"
+          arrow
+          trigger={['click']}
+        >
+          <img className="w-20 h-20 mt-15" src={IconMore} />
+        </Dropdown>
       </div>
     </li>
   );

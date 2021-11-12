@@ -27,22 +27,7 @@ function MenuTab() {
     }
   };
   const handleGoCro = async () => {
-
     (document.getElementById('go_cro') as HTMLElement).click();
-    // if (!firstProfessionCompany) {
-    //   notification.warning({
-    //     message: '提醒',
-    //     duration: 6,
-    //     description:
-    //       '请在【设置 → 个人资料】中填写第一执业医院',
-    //   });
-    // } else {
-    //   api.user.patchCheckInfo().then(() => {
-    //     (document.getElementById('go_cro') as HTMLElement).click();
-    //   }).catch((err) => {
-    //     message.error(err?.result);
-    //   });
-    // }
   };
   return (
     <div className={styles.center}>

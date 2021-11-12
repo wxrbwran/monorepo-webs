@@ -14,6 +14,7 @@ const PackageDoctorItem: FC<IProps> = (props) => {
     [Role.DIETITIAN.id]: '营养师',
   };
   const renderItem = useMemo(() => () => {
+    console.log('members322', members);
     let isCreator = false;
     let doctorName = '';
     let roles: string[] = [];
@@ -39,8 +40,9 @@ const PackageDoctorItem: FC<IProps> = (props) => {
           break;
       }
     });
+    console.log('orgName', orgName);
     return (
-      <div className="text-center mb-15 w-173">
+      <div className="text-center mb-15 w-160">
         <div className="relative w-100 mx-auto">
           <img className="w-100 h-100 rounded" src={avatarUrl} />
           {isCreator && <div className={styles.creator}>创建人</div>}

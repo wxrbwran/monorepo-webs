@@ -5,6 +5,7 @@ import PackageDoctorItem from '../PackageDoctorItem';
 import AddServicePackage from '../AddServicePackage';
 import { Popconfirm, message } from 'antd';
 import * as api from '@/services/api';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 
 export interface IDataList {
@@ -28,6 +29,10 @@ const PackageTeamItem: FC<IProps> = (props) => {
       name,
       teamNSId,
       teamNSLabels: ['chronic_disease_team'],
+      members: dataList.innerTeams.filter(innerItem =>
+        innerItem.members.find(member => member.role === Role.NS_OWNER.id))
+        .flatMap(innerItem => innerItem.members)
+        .map(member => { return { role: member.role, sid: member.sid };}),
     };
     api.service.deleteDoctorTeam(params).then(() => {
       message.success('解散成功');
@@ -46,6 +51,7 @@ const PackageTeamItem: FC<IProps> = (props) => {
     };
   }, []);
   // deleteDoctorTeam
+  console.log('innerTeam43s', props);
   return (
     <div className={styles.item_wrap}>
       <div className="flex justify-between mb-40">
@@ -81,7 +87,7 @@ const PackageTeamItem: FC<IProps> = (props) => {
           )
         }
       </div>
-      <div className="pl-36 flex flex-wrap mb-20">
+      <div className="flex flex-wrap mb-20">
         {
           innerTeams.map(item => <PackageDoctorItem members={item.members} />)
         }
