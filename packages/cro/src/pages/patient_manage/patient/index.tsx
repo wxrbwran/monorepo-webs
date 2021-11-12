@@ -41,6 +41,8 @@ function Patient() {
   };
 
   const getExperimentName = (record: any) => {
+
+    console.log('=============record', JSON.stringify(record));
     const members = record.team.members.filter((item) => item.role == Role.RESEARCH_PROJECT.id);
     console.log('============= members members members', JSON.stringify(members));
     if (members.length > 0) {

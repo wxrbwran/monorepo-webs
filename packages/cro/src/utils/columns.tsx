@@ -354,7 +354,8 @@ export const addGroupDoctorListColumns = [
   tel,
   researcherRole,
   title,
-  department,
+  // department,
+  practiceAreas,
   // groupName,
 ];
 
