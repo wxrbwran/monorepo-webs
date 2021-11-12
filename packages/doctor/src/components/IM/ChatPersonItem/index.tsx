@@ -45,6 +45,9 @@ const ChatPersonItem: FC<IProps> = (props) => {
         return fetchRolePropValue(role, 'desc');
     }
   };
+  // 各角色排序优先级
+  // 患者 > 独立管理 > 护士 > 研究者 > PM > CRA > CRC
+  // 患者 > 主管医生 > 医生助手 > 营养师 > 护士 > 研究者 > PM > CRA > CRC
   const orderId: string[] = [
     Role.PATIENT.id,
     Role.PATIENT_VIP.id,
@@ -53,6 +56,11 @@ const ChatPersonItem: FC<IProps> = (props) => {
     Role.LOWER_DOCTOR.id,
     Role.DIETITIAN.id,
     Role.NURSE.id,
+
+    Role.PROJECT_RESEARCHER.id,
+    Role.CRO_PM.id,
+    Role.CRO_CRA.id,
+    Role.CRO_CRC.id,
   ];
   const compare = (obj1: IInfos, obj2: IInfos) => (
     orderId.indexOf(obj1.role) - orderId.indexOf(obj2.role)
