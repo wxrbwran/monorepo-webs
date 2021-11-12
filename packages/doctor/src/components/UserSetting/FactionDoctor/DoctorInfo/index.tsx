@@ -7,12 +7,10 @@ function DoctorInfo({ currDetail }: ISubject) {
     avatarUrl,
     name,
     title,
-    department,
     biography,
     expertise,
     achievement,
     meetingLecture,
-    firstProfessionCompany,
   } = currDetail;
   return (
     <div className={styles.faction__info}>
@@ -20,15 +18,7 @@ function DoctorInfo({ currDetail }: ISubject) {
         <img src={avatarUrl || config.defaultAvatar} alt="" />
         <h3>{name}</h3>
         <div>
-          {firstProfessionCompany}
-          {' '}
-          |
-          {' '}
           {title}
-          {' '}
-          |
-          {' '}
-          {department.name}
         </div>
       </div>
       <div>

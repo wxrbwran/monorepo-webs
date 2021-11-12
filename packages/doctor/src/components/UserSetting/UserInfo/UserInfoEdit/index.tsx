@@ -227,7 +227,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                             nameKey="name"
                             idKey="standardId"
                             request={window.$api.base.fetchHospitals}
-                            disabled={!!userInfo.firstProfessionCompany}
+                            disabled={false}
                           />
                           <span className="mr-15 ml-10 mt-3">-</span>
                           <Department
@@ -236,7 +236,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                             getFieldValue={getFieldValue}
                             nameKey="departmentName"
                             idKey="departmentStandardId"
-                            disabled={!!userInfo.firstPracticeDepartment}
+                            disabled={false}
                           />
                         </div>
                         {
