@@ -66,7 +66,7 @@ const ChatEditor: FC = () => {
       content,
       associateWcId: patientWcId,
       associateSId: patientSid,
-      sessionId: currSessionId?.split('p2p-')[1],
+      nsessionId: currSessionId?.split('p2p-')[1],
     };
     console.log(toWcIds);
     api.im
@@ -195,7 +195,7 @@ const ChatEditor: FC = () => {
       }),
       associateWcId: patientWcId,
       associateSId: patientSid,
-      sessionId: currSessionId?.split('p2p-')[1],
+      nsessionId: currSessionId?.split('p2p-')[1],
     };
     console.log('5432', params);
     api.im
