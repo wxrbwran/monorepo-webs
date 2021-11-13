@@ -4,21 +4,14 @@ export default {
   getIMUser(data?: any): Promise<any> {
     return http.get('mock/im/users', { data });
   },
-  getIMPersonGroup(patient_wc_id: string, p_sid: string): Promise<any> {
-    return http.get(`ms/yx/session/group/${patient_wc_id}/${p_sid}`);
-  },
   sendMsg(data: object): Promise<any> {
-    return http.post('ms/yx/message', { data });
+    return http.post('v1/ms/yx/message', { data });
   },
   getMsg(data: object): Promise<any> {
-    return http.get('ms/yx/im_messages', { data });
+    return http.get('v1/ms/yx/im_messages', { data });
   },
   filePrepare(data: object): Promise<any> {
     return http.get('base/file/prepare', { data });
-  },
-  // 获取患者云信帐号
-  getSessionGroup({ patientWcId, patientSid }: any): Promise<any> {
-    return http.get(`/ms/yx/session/group/${patientWcId}/${patientSid}`);
   },
   getPickSessionGroup(data: object): Promise<any> {
     return http.get('v1/ms/pick/session', { data });
