@@ -136,7 +136,7 @@ export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
     dataItem.members.forEach(item => {
       if (item.role === Role.DOCTOR.id) {
         doctor = {
-          ...doctor,
+          orgs: doctor?.orgs || [],
           ...item,
         };
         // 医生所在的互联网医院
