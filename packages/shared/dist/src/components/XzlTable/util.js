@@ -135,7 +135,7 @@ export var handleRelatedDoctorsDataSource = function (dataSource) {
         var doctor = {};
         dataItem.members.forEach(function (item) {
             if (item.role === Role.DOCTOR.id) {
-                doctor = __assign(__assign({}, doctor), item);
+                doctor = __assign({ orgs: (doctor === null || doctor === void 0 ? void 0 : doctor.orgs) || [] }, item);
                 // 医生所在的互联网医院
             }
             else if (item.role === Role.ORG.id) {
