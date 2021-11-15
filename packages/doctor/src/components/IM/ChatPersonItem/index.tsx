@@ -59,7 +59,8 @@ const ChatPersonItem: FC<IProps> = (props) => {
     Role.DIETITIAN.id,
     Role.NURSE.id,
 
-    Role.PROJECT_RESEARCHER.id,
+    Role.RESEARCH_PROJECT_DOCTOR.id, // 科研项目医生  31
+    // Role.PROJECT_RESEARCHER.id, // 研究者  36只有在组织架构里有存在，其余出现，均为31角色
     Role.CRO_PM.id,
     Role.CRO_CRA.id,
     Role.CRO_CRC.id,
