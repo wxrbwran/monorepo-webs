@@ -45,6 +45,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
         case Role.ORG.id:
           newObj.organizationName = member.name;
+          newObj.organizationNSId = member.nsId;
           break;
         case Role.RESEARCH_PROJECT.id:
           newObj.projectName = member.name;
