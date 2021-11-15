@@ -30,6 +30,7 @@ const ChangeServicePackage: FC<IProps> = (props) => {
       pageAt: 1,
       pageSize: 99999,
       teamNSLabels: ['chronic_disease_team'],
+      targetNSId: data.organizationNSId,
     };
     // innerTeams表示套餐集合，members表示一个坑位的信息集合
     api.service.fetchDoctorTeams(params).then(({ teams }: { teams: any[] }) => {
