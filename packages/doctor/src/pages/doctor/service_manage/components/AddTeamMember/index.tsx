@@ -222,7 +222,7 @@ const AddTeamMember: FC<IProps> = (props) => {
                     }
                   </div>
                 </div>
-                <Button type="primary" onClick={handleSubmit} className="mt-40">确认添加</Button>
+                <Button type="primary" onClick={handleSubmit} className="mt-40" disabled={!!isEmpty(selectDoctor.flat())}>确认添加</Button>
               </div>
             </>
            )
