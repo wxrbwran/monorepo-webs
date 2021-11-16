@@ -43,6 +43,9 @@ function Member() {
         params[item] = allValues[item];
       }
     });
+
+    console.log('================ handleSelectChange member', JSON.stringify(params));
+
     setOptions({
       projectNsId,
       ...params,

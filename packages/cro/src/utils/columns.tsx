@@ -81,12 +81,44 @@ export const patientGroup = {
   key: 'groups',
   render: (_text: any, record: any) => (
     <div>
-      {record.groups.map((item: string, index: number) => `${item} ${index !== record.groups.length - 1 ? '、' : ''}`)}
+      {record?.groups ? record.groups.map((item: string, index: number) => `${item} ${index !== record.groups.length - 1 ? '、' : ''}`) : '--'}
     </div>
   ),
 };
 
 export const inGroupAt = {
+  title: '入组时间',
+  dataIndex: 'timelines',
+  key: 'timelines',
+  render: (text: any, _record: any) => {
+
+    const inTime = text ? text.filter((item) => item.eventCode == 1002) : [];
+    return (
+      <div>
+        {inTime.length > 0 ? moment(inTime[0].at).format('YYYY.MM.DD') : '--'}
+      </div >
+    );
+
+  },
+};
+
+export const outGroupAt = {
+  title: '出组时间',
+  dataIndex: 'timelines',
+  key: 'timelines',
+  render: (text: any, _record: any) => {
+
+    const inTime = text ? text.filter((item) => item.eventCode == 1003) : [];
+    return (
+      <div>
+        {inTime.length > 0 ? moment(inTime[0].at).format('YYYY.MM.DD') : '--'}
+      </div >
+    );
+  },
+};
+
+
+export const groupInGroupAt = {
   title: '入组时间',
   dataIndex: 'interval',
   key: 'interval',
@@ -97,7 +129,7 @@ export const inGroupAt = {
   ),
 };
 
-export const outGroupAt = {
+export const groupOutGroupAt = {
   title: '出组时间',
   dataIndex: 'statusUpdateTime',
   key: 'statusUpdateTime',
@@ -106,6 +138,7 @@ export const outGroupAt = {
       {(text && record.status === 1003) ? moment(text).format('YYYY.MM.DD') : '--'}
     </div>
   ),
+
 };
 
 export const stopReason = {
@@ -331,8 +364,8 @@ export const patientCroStopColumns = () => [
 // 小组患者列表
 export const groupDetailColumns = () => [
   name,
-  inGroupAt,
-  outGroupAt,
+  groupInGroupAt,
+  groupOutGroupAt,
   testStatus,
   researchProjectDoctor,
 ];

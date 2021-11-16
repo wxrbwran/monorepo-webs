@@ -308,7 +308,6 @@ export var projectInviteStatus = {
     1000: '待确认',
     1001: '已拒绝',
     1002: '已加入',
-    0: '未邀请',
 };
 export var croLists = (_a = {},
     _a[croStatus.Running] = '进行中',

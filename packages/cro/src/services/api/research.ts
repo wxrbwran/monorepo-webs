@@ -3,19 +3,19 @@ import { isEmpty } from 'lodash';
 
 export default {
   // 查询成员医生统计信息
-  fetchMemberStatistics({projectNsId}: {projectNsId: string}): Promise<any> {
+  fetchMemberStatistics({ projectNsId }: { projectNsId: string }): Promise<any> {
     return http.get(`research/member/statistics/${projectNsId}`);
   },
   // 查询成员邀请空间的医生（成员列表）
   fetchMemberDoctor(data: any): Promise<any> {
     if (isEmpty(data)) {
-      return http.get(`research/member/doctor`);
+      return http.get('research/member/doctor');
     }
     return http.get(`research/member/doctor?data=${JSON.stringify(data)}`);
   },
   // 查询科研机构的所有医生(邀请成员列表)
   fetchProjectDoctor(data: any): Promise<any> {
-    return http.get(`research/project/doctor?data=${JSON.stringify(data)}`);
+    return http.get(`project/related_doctors?data=${JSON.stringify(data)}`);
   },
   // 查询项目下全部科研机构(邀请成员-》机构列表)
   fetchProjectOrg(projectNsId: any): Promise<any> {
@@ -23,10 +23,10 @@ export default {
   },
   // 获取医生相关的全部机构列表
   fetchDoctorRelatedOrg(data: any): Promise<any> {
-    return http.get(`doctor/related_organizations`, { data });
+    return http.get('doctor/related_organizations', { data });
   },
   // 查询科研机构下的科室(邀请成员-》科室列表)
-  fetchProjectDep({orgId}: any): Promise<any> {
+  fetchProjectDep({ orgId }: any): Promise<any> {
     return http.get(`research/project/department/${orgId}`);
   },
   // 邀请科研医生
@@ -64,7 +64,7 @@ export default {
   fetchGroupDetail(data: any): Promise<any> {
     return http.get(`research/group/detail?data=${JSON.stringify(data)}`);
   },
-   // 将科研医生加入实验分组
+  // 将科研医生加入实验分组
   postGroupDoctor(data?: any): Promise<any> {
     return http.post('research/group/doctor', { data });
   },
@@ -78,8 +78,8 @@ export default {
     return http.get(`research/frame/chart/${projectNsId}`);
   },
 
-   // 升级成多中心试验
-   patchProjectUpgrade(projectSid: string): Promise<any> {
+  // 升级成多中心试验
+  patchProjectUpgrade(projectSid: string): Promise<any> {
     return http.patch(`research/project/upgrade/${projectSid}`);
   },
 

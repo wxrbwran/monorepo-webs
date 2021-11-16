@@ -18,7 +18,7 @@ interface Iprops {
 
 function InviteMemberList(props: Iprops) {
   const { projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
-  const initOption = { pageSize: 5, projectNsId };
+  const initOption = { conditions: [] };
   const user = useSelector((state: IState) => state?.user?.user);
   const croLabel = window.$storage.getItem('croLabel');
   const [selectIds, setSelectIds] = useState<string[]>([]);
@@ -53,7 +53,11 @@ function InviteMemberList(props: Iprops) {
     // setFieldsValue
     Object.keys(allValues).forEach((item: string) => {
       if (!!allValues[item]) {
-        params[item] = allValues[item];
+        params.conditions.push({
+          var: "practice_areas->>'name',sj.details->>'name',sj.details->>'tel',having.o_subject.name,having.practice_areas->>'sub'",
+          value: allValues[item],
+          operator: 'like',
+        });
       }
     });
     if (allValues.orgId === '') {
@@ -61,6 +65,8 @@ function InviteMemberList(props: Iprops) {
       delete params.orgId;
       delete params.depId;
     }
+
+    console.log('================= handleSelectChange handleSelectChange', JSON.stringify(params));
     setOptions({ ...params });
   };
   const handleSubmit = () => {
@@ -125,8 +131,12 @@ function InviteMemberList(props: Iprops) {
         tableOptions={{
           rowSelection: {
             ...rowSelection,
+            // pagination: false,
           },
         }}
+      // noPagination={true}
+
+
       />
       <div className={styles.btn} style={{ marginTop: 0 }}>
         <Button onClick={props.onClose} > 取消 </Button>
