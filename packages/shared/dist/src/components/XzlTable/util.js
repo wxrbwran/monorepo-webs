@@ -1,5 +1,5 @@
 var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
+    __assign = Object.assign || function (t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
@@ -55,6 +55,7 @@ var handlePatientsTeamDataSource = function (data) {
                     break;
                 case Role.ORG.id:
                     newObj.organizationName = member.name;
+                    newObj.organizationNSId = member.nsId;
                     break;
                 case Role.RESEARCH_PROJECT.id:
                     newObj.projectName = member.name;
@@ -79,11 +80,19 @@ export var handleInviteMemberList = function (dataSource) {
     dataSource.forEach(function (item) {
         var _a;
         var _b = item.subjectDetail || {}, title = _b.title, avatarUrl = _b.avatarUrl, firstProfessionCompany = _b.firstProfessionCompany, firstPracticeDepartment = _b.firstPracticeDepartment, name = _b.name, tel = _b.tel, provinceName = _b.provinceName, sex = _b.sex;
-        newData.push(__assign(__assign({}, item), { title: title,
+        newData.push(__assign(__assign({}, item), {
+            title: title,
             avatarUrl: avatarUrl,
-            name: name, joinTime: ((_a = item === null || item === void 0 ? void 0 : item.interval) === null || _a === void 0 ? void 0 : _a.start) ? dayjs(item.interval.start).format('YYYY-MM-DD') : null, status: projectInviteStatus[item.status], tel: tel,
-            provinceName: provinceName, sex: sexList[sex], firstProfessionCompany: firstProfessionCompany,
-            firstPracticeDepartment: firstPracticeDepartment, role: fetchRolePropValue(item.role, 'desc'), roleId: item.role }));
+            name: name,
+            joinTime: ((_a = item === null || item === void 0 ? void 0 : item.interval) === null || _a === void 0 ? void 0 : _a.start) ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
+            status: projectInviteStatus[item.status],
+            tel: tel,
+            provinceName: provinceName,
+            sex: sexList[sex],
+            firstProfessionCompany: firstProfessionCompany,
+            firstPracticeDepartment: firstPracticeDepartment,
+            role: fetchRolePropValue(item.role, 'desc'), roleId: item.role
+        }));
     });
     console.log('newData', newData);
     return newData;
@@ -93,11 +102,11 @@ var handleDoctorTeamDataSource = function (dataSource) {
     dataSource
         .map(function (member) { return member.members[0]; })
         .forEach(function (member) {
-        var _a;
-        var tmp = __assign({}, member);
-        tmp.patientNum = (_a = member.counters[0]) === null || _a === void 0 ? void 0 : _a.count;
-        res.push(tmp);
-    });
+            var _a;
+            var tmp = __assign({}, member);
+            tmp.patientNum = (_a = member.counters[0]) === null || _a === void 0 ? void 0 : _a.count;
+            res.push(tmp);
+        });
     return res;
 };
 var handleNurseTeamDataSource = function (dataSource) {
@@ -134,7 +143,7 @@ export var handleRelatedDoctorsDataSource = function (dataSource) {
         var doctor = {};
         dataItem.members.forEach(function (item) {
             if (item.role === Role.DOCTOR.id) {
-                doctor = __assign(__assign({}, doctor), item);
+                doctor = __assign({ orgs: (doctor === null || doctor === void 0 ? void 0 : doctor.orgs) || [] }, item);
                 // 医生所在的互联网医院
             }
             else if (item.role === Role.ORG.id) {

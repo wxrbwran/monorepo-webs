@@ -11,7 +11,7 @@ interface UserModelState {
   prices: any[];
   userInfo: ISubject;
   organizations: IOrganizations;
-  filterOrgs: [];
+  filterOrgs: any[];
 }
 
 interface CurrentPatientModelState {

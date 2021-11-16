@@ -329,7 +329,6 @@ export const projectInviteStatus: CommonData = {
   1000: '待确认',
   1001: '已拒绝',
   1002: '已加入',
-  0: '未邀请',
 };
 export const croLists = {
   [croStatus.Running]: '进行中',

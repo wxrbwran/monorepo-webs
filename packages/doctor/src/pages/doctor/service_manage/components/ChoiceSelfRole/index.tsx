@@ -23,18 +23,8 @@ function ChoiceSelfRole({ callback, initData }: IProps) {
   const { filterOrgs, userInfo } = useSelector((state: IState) => state.user);
   const [selectOrgList, setSelectOrgList] = useState<ISubject[]>(filterOrgs);
   const [selfInfo, setselfInfo] = useState<ISelfInfo>(initData);
-  useEffect(() => {
-    if (filterOrgs) {
-      setSelectOrgList(filterOrgs);
-    }
-  }, [filterOrgs]);
   const handleChangeOrg = (type: string, val: Object, option?: { title: string }) => {
-    console.log('checkVal', type, val);
-    // callback('org', val);
-    const newData: ISelfInfo = {
-      ...selfInfo,
-      [type]: val,
-    };
+    const newData: ISelfInfo = { ...selfInfo, [type]: val };
     if (option) {
       newData.orgName = option.title;
     }
@@ -48,7 +38,20 @@ function ChoiceSelfRole({ callback, initData }: IProps) {
       });
     }
   };
-
+  useEffect(() => {
+    if (filterOrgs) {
+      setSelectOrgList(filterOrgs);
+      if (!initData?.sourceNSId && filterOrgs.length === 1) {
+        const { nsId, name } = filterOrgs?.[0];
+        handleChangeOrg('sourceNSId', nsId, { title: name });
+      }
+    }
+  }, [filterOrgs]);
+  // 如果只有一个机构，默认选中
+  let initOrgNsId: any = initData?.sourceNSId;
+  if (!initData?.sourceNSId && filterOrgs.length === 1) {
+    initOrgNsId = filterOrgs[0]?.nsId;
+  }
   return (
     <div className="mt-15">
       {
@@ -57,7 +60,7 @@ function ChoiceSelfRole({ callback, initData }: IProps) {
             <span className="mr-15">我在</span>
               <Select
                 placeholder="请选择机构"
-                defaultValue={initData.sourceNSId}
+                defaultValue={initOrgNsId}
                 onChange={(val, option) => handleChangeOrg('sourceNSId', val, option)}
                 style={{ width: 240 }}
                 // disabled={!!initData.sourceNSId}

@@ -22,6 +22,8 @@ interface IProps {
 }
 
 function MemberDetail({ children, record }: IProps) {
+
+  console.log('============================ MemberDetail MemberDetail record', JSON.stringify(record));
   const { name, tel, subjectDetail, sex, joinTime, provinceName, status, title, patientCount, person, groupName, role } = record;
   const [isShowModal, setIsShowModal] = useState(false);
   const handleShowGroup = () => {
