@@ -82,6 +82,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
   const handleDelStem = (quesIndex: number) => {
     const newQuestions = questions.filter((_item, index) => { return index !== quesIndex; });
     setQuestions([...newQuestions]);
+    setOriginQue([...newQuestions]);
     setEditIndex(-1); // 设置当前编辑未选中
   };
   const changeQues = (newQues: any) => {
@@ -89,6 +90,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
   };
   const changeDdtkQues = (newQues: any) => {
     setAlfterQuestions([...newQues]);
+    setOriginQue([...newQues]);
   };
   const handSaveDdtkModify = () => {
     setQuestions([...alfterQuestions]);
