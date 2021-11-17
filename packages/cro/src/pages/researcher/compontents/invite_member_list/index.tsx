@@ -18,7 +18,7 @@ interface Iprops {
 
 function InviteMemberList(props: Iprops) {
   const { projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
-  const initOption = { conditions: [] };
+  const initOption = { conditions: [], targetNSId: projectNsId };
   const user = useSelector((state: IState) => state?.user?.user);
   const croLabel = window.$storage.getItem('croLabel');
   const [selectIds, setSelectIds] = useState<string[]>([]);
