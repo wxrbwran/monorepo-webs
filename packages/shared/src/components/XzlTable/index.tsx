@@ -22,6 +22,7 @@ export interface XzlTableCallBackProps {
   selectedRowKeys?: ReactText[];
   currentPage?: number;
   dataSource?: Store[];
+  apiData?: any; // 接口返回的原始数据，例如外部需要total
 }
 
 interface IOnSelectChange {
@@ -91,7 +92,7 @@ const XzlTable: FC<IProps> = (props) => {
             setTotal(res.total);
           }
           const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
-          handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
+          handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt, apiData: res });
           console.log('handledData*****', handledData);
           setDataSource(handledData);
         } else {
