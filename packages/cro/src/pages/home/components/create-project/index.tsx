@@ -49,8 +49,15 @@ function CreateProject({ onCloseModal }: IProps) {
     setAvatar(params.imageURL);
   };
   const handleCreatePro = (fromVal: IfromVal) => {
-    setLoading(true);
+
+
     const { name, duration, intro, type } = fromVal;
+    if (
+      duration
+    )
+
+      setLoading(true);
+
 
     let { orgSid } = fromVal;
     if (!orgSid) {
@@ -131,7 +138,7 @@ function CreateProject({ onCloseModal }: IProps) {
             name="duration"
             rules={[{ required: true, message: '请输入项目周期!' }]}
           >
-            <Input suffix="天" />
+            <Input suffix="天" type={'number'} />
           </Form.Item>
           <Form.Item
             label="项目类型"

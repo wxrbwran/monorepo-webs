@@ -10,13 +10,14 @@ import radioUnCheck from '@/assets/img/radio_uncheck.png';
 
 interface IProps {
 
+  teamNSId?: string;
   onSaveSuccess: (choiceTeam) => void;
   onCancel: () => void;
   show: boolean;
   onCreateTeam: () => void;
 }
 const ChoiceTeam: FC<IProps> = (props) => {
-  const { children, onSaveSuccess, show, onCancel, onCreateTeam } = props;
+  const { children, onSaveSuccess, show, onCancel, onCreateTeam, teamNSId } = props;
   const [teams, setTeams] = useState([]);
 
   const [choiceTeam, setChoiceTeam] = useState();
@@ -29,7 +30,12 @@ const ChoiceTeam: FC<IProps> = (props) => {
       api.service.getTeams({ 'teamNSLabels': ['research_pro_patient'], 'targetNSId': projectNsId }).then(res => {
 
         setTeams(res.teams);
-        setChoiceTeam(res.teams[0]);
+
+        const choices = res.teams.filter((team) => team.teamNSId == teamNSId);
+        if (teamNSId && choices.length > 0) {
+          setChoiceTeam(choices[0]);
+        }
+
       });
     }
   }, [show]);
