@@ -67,6 +67,8 @@ const AddPatient = (props: IProps) => {
       });
       setDataSource([...dataSource]);
       changeQues([...questions]);
+    } else {
+      setDataSource([]);
     }
   }, [showModal]);
 
@@ -242,6 +244,7 @@ const AddPatient = (props: IProps) => {
         onCancel={() => setShowModal(false)}
         footer={null}
         className="topic-list"
+        destroyOnClose
       >
         <p className="text-base mb-10">
           当前题目: {currentStem}
