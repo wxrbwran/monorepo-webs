@@ -99,6 +99,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       return index !== quesIndex;
     });
     setQuestions([...newQuestions]);
+    setOriginQue([...newQuestions]);
     setEditIndex(-1); // 设置当前编辑未选中
   };
   const changeQues = (newQues: any) => {
@@ -106,6 +107,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   };
   const changeDdtkQues = (newQues: any) => {
     setAlfterQuestions([...newQues]);
+    setOriginQue([...newQues]);
   };
   const handSaveDdtkModify = () => {
     setQuestions([...alfterQuestions]);
