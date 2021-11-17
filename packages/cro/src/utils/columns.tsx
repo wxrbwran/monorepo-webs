@@ -169,17 +169,19 @@ export const practiceAreas = {
   title: '医院 -- 科室',
   dataIndex: 'practiceAreas',
   key: 'practiceAreas',
-  render: (_text: any, record: any) => {
+  render: (text: any, record: any) => {
 
+    const areas = text && text.length > 0 ? text : record?.subjectDetail?.practiceAreas;
     return (
       <div>
-        {record.subjectDetail.practiceAreas.map((item) => {
+        {areas ? areas.map((item) => {
           return (
             <div>
               {(item?.name ?? '') + ' -- ' + (item?.sub?.name ?? '')}
             </div>
           );
-        })}
+        }) : '--'
+        }
       </div>
     );
   },
@@ -190,6 +192,13 @@ export const title = {
   title: '职称',
   dataIndex: 'title',
   key: 'title',
+  render: (text: any, _record: any) => {
+    return (
+      <div>
+        {text ? text : '--'}
+      </div>
+    );
+  },
 };
 export const department = {
   title: '科室',

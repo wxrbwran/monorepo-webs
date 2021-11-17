@@ -31,7 +31,14 @@ function InviteMemberList(props: Iprops) {
   useEffect(() => {
     if (croLabel === 'single_project') {
       api.research.fetchProjectOrg(projectNsId).then(res => {
-        setSingleOrg(res.infos[0].name);
+        setSingleOrg(res.infos[0]?.name ?? '');
+        const params: Store = { ...initOption };
+        params.conditions.push({
+          var: "practice_areas->>'name'",
+          value: res.infos[0]?.name ?? '',
+          operator: 'like',
+        });
+        setOptions({ ...params });
       });
     }
   }, []);
@@ -53,11 +60,25 @@ function InviteMemberList(props: Iprops) {
     // setFieldsValue
     Object.keys(allValues).forEach((item: string) => {
       if (!!allValues[item]) {
-        params.conditions.push({
-          var: "practice_areas->>'name',sj.details->>'name',sj.details->>'tel',having.o_subject.name,having.practice_areas->>'sub'",
-          value: allValues[item],
-          operator: 'like',
-        });
+        if (item == 'single_project') {
+
+          params.conditions.push({
+            var: "sj.details->>'name',sj.details->>'tel'",
+            value: allValues[item],
+            operator: 'like',
+          }, {
+            var: "practice_areas->>'name'",
+            value: singleOrg,
+            operator: 'like',
+          });
+        } else {
+          params.conditions.push({
+            var: "practice_areas->>'name',sj.details->>'name',sj.details->>'tel',having.o_subject.name,having.practice_areas->>'sub'",
+            value: allValues[item],
+            operator: 'like',
+          });
+        }
+
       }
     });
     if (allValues.orgId === '') {
@@ -94,8 +115,8 @@ function InviteMemberList(props: Iprops) {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       const ids: string[] = [];
-      selectedRows.forEach((item: { subjectId: string, name: string }) => {
-        ids.push(item.subjectId);
+      selectedRows.forEach((item: { sid: string, name: string }) => {
+        ids.push(item.sid);
       });
       setSelectIds(ids);
     },
@@ -109,12 +130,12 @@ function InviteMemberList(props: Iprops) {
               ? (
                 <>
                   {`已为您显示【${singleOrg}】全部医生`}
-                  <Search form={form} searchKey="var" placeholder="搜索姓名或手机号" />
+                  <Search form={form} searchKey="single_project" placeholder="搜索姓名或手机号" />
                 </>
               ) : (
                 <Search
                   form={form}
-                  searchKey="var"
+                  searchKey="mulit_project"
                   placeholder="搜索研究者姓名、手机号、第一执业医院、所在互联网医院、科室"
                   width={500}
                 />
@@ -124,9 +145,9 @@ function InviteMemberList(props: Iprops) {
       </Form>
       <XzlTable
         columns={columns}
-        dataKey="infos"
+        dataKey="teams"
         category="inviteMemberList"
-        request={api.research.fetchProjectDoctor}
+        request={croLabel === 'single_project' ? (singleOrg ? api.research.fetchProjectDoctor : null) : api.research.fetchProjectDoctor}
         depOptions={depOptions}
         tableOptions={{
           rowSelection: {
