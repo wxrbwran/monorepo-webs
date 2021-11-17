@@ -24,7 +24,7 @@ interface IProps {
 function MemberDetail({ children, record }: IProps) {
 
   console.log('============================ MemberDetail MemberDetail record', JSON.stringify(record));
-  const { name, tel, subjectDetail, sex, joinTime, provinceName, status, title, patientCount, person, groupName, role } = record;
+  const { name, tel, subjectDetail, sex, joinTime, provinceName, status, title, patientCount, groupName, role } = record;
   const [isShowModal, setIsShowModal] = useState(false);
   const handleShowGroup = () => {
     setIsShowModal(true);
@@ -61,9 +61,6 @@ function MemberDetail({ children, record }: IProps) {
     }, {
       key: patientCount,
       value: '受试者人数',
-    }, {
-      key: person,
-      value: '邀请人',
     },
   ];
   const otherInfo = [

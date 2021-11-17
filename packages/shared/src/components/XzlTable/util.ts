@@ -90,6 +90,57 @@ export const handleInviteMemberList = (dataSource: Store[]) => {
   return newData;
 };
 
+// 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
+export const handleTeamInviteMemberList = (dataSource: Store[]) => {
+  const newData: Array<ISubject> = [];
+  console.log('handleTeamInviteMemberList dataSource', dataSource);
+  dataSource.forEach((team: any) => {
+    let doctor: any = {};
+    team.members.forEach(item => {
+      if (item.role === Role.DOCTOR.id) {
+        doctor = {
+          orgs: doctor?.orgs || [],
+          ...item,
+        };
+        // 医生所在的互联网医院
+      } else if (item.role === Role.ORG.id) {
+        if (doctor.orgs) {
+          doctor.orgs.push(item);
+          doctor.orgName = doctor.orgs.map((org) => org.name).join(',');
+        } else {
+          doctor = {
+            ...doctor,
+            orgs: [item],
+            orgName: item.name,
+          };
+        }
+      }
+    });
+    newData.push(doctor);
+
+    // const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
+    // newData.push({
+    //   ...item,
+    //   title,
+    //   avatarUrl,
+    //   name,
+    //   joinTime: item?.interval?.start ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
+    //   status: projectInviteStatus[item.status],
+    //   tel,
+    //   provinceName,
+    //   sex: sexList[sex],
+    //   firstProfessionCompany,
+    //   firstPracticeDepartment,
+    //   role: fetchRolePropValue(item.role, 'desc'),
+    //   roleId: item.role,
+    // });
+  });
+  console.log('handleTeamInviteMemberList newData', newData);
+  return newData;
+};
+
+
+
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource
@@ -180,6 +231,11 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       if (category === 'relatedDoctors') {
         return handleRelatedDoctorsDataSource(dataSource);
       }
+
+      if (category === 'inviteMemberList') {
+        return handleTeamInviteMemberList(dataSource);
+      }
+
       return dataSource;
     case 'infos':
       return handleInviteMemberList(dataSource);

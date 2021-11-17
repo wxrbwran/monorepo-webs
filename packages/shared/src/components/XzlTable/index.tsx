@@ -76,23 +76,27 @@ const XzlTable: FC<IProps> = (props) => {
     console.log('fetchTableDataSource params', params);
     const timeOut = tableOptions?.timeOut ? 2000 : 0;
     setTimeout(async () => {
-      const res = await request(params);
-      console.log('fetchTableDataSource res', res);
-      if (res) {
-        setCurrent(params.pageAt);
-        setSize(params.pageSize);
-        if (dataKey == 'events_jsonb') {
-          res.tableBody.forEach(element => {
-            element.content = JSON.parse(element.content.value);
-          });
-          setTotal(extra);
+      if (request) {
+        const res = await request(params);
+        console.log('fetchTableDataSource res', res);
+        if (res) {
+          setCurrent(params.pageAt);
+          setSize(params.pageSize);
+          if (dataKey == 'events_jsonb') {
+            res.tableBody.forEach(element => {
+              element.content = JSON.parse(element.content.value);
+            });
+            setTotal(extra);
+          } else {
+            setTotal(res.total);
+          }
+          const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
+          handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
+          console.log('handledData*****', handledData);
+          setDataSource(handledData);
         } else {
-          setTotal(res.total);
+          setDataSource([]);
         }
-        const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
-        handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
-        console.log('handledData*****', handledData);
-        setDataSource(handledData);
       } else {
         setDataSource([]);
       }

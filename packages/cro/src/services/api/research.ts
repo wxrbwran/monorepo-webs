@@ -15,7 +15,7 @@ export default {
   },
   // 查询科研机构的所有医生(邀请成员列表)
   fetchProjectDoctor(data: any): Promise<any> {
-    return http.get(`project/related_doctors?data=${JSON.stringify(data)}`);
+    return http.get(`research/project/related_doctors?data=${JSON.stringify(data)}`);
   },
   // 查询项目下全部科研机构(邀请成员-》机构列表)
   fetchProjectOrg(projectNsId: any): Promise<any> {
