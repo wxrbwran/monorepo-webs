@@ -14,7 +14,7 @@ interface IProps {
 }
 const Croservice: FC<IProps> = () => {
 
-  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const { projectNsId, creatorSId } = useSelector((state: IState) => state.project.projDetail);
   const [teams, setTeams] = useState([]);
 
   const [show, setShow] = useState(false);
@@ -24,6 +24,9 @@ const Croservice: FC<IProps> = () => {
 
   useEffect(() => {
 
+    const isCurrentSid = creatorSId == localStorage.getItem('xzl-web-doctor_sid');
+    setIsCreater(isCurrentSid);
+
     api.service.fetchBaseRoles().then(res => {
 
       console.log('========= service.getTeams', JSON.stringify(res));
@@ -32,10 +35,6 @@ const Croservice: FC<IProps> = () => {
     api.service.getTeams({ 'teamNSLabels': ['research_pro_patient'], 'targetNSId': projectNsId }).then(res => {
 
       const croTeams = res.teams.filter((item) => item.teamNSLabels.includes('research_cro_team'));
-      const isCurrentSid = res.teams[0].innerTeams[0].members.filter((item) => item.role == Role.NS_OWNER.id)[0].sid == localStorage.getItem('xzl-web-doctor_sid');
-      setIsCreater(isCurrentSid);
-
-      console.log('========= service.isCurrentSid', isCurrentSid);
       setTeams(croTeams);
     });
   }, []);
@@ -47,8 +46,6 @@ const Croservice: FC<IProps> = () => {
 
       // 过滤独立管理的
       const croTeams = res.teams.filter((item) => item.teamNSLabels.includes('research_cro_team'));
-
-
       setTeams(croTeams);
     });
   };

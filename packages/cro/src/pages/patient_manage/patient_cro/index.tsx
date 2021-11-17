@@ -49,17 +49,21 @@ function PatientCro({ }: IProps) {
   const putCroToPatient = (team) => {
 
     console.log('=============  putCroToPatient putCroToPatient', JSON.stringify(team));
-    const parma = {
+    if (team) {
+      const parma = {
 
-      pwcId: putCroToRecord.current.wcId,
-      toNSId: team.teamNSId,
-      toTeamNSLabels: team.teamNSLabels,
-    };
-    api.service.putCroToPatients(parma).then(() => {
+        pwcId: putCroToRecord.current.wcId,
+        toNSId: team.teamNSId,
+        toTeamNSLabels: team.teamNSLabels,
+      };
+      api.service.putCroToPatients(parma).then(() => {
 
-      refreshList();
-      setTeamShow(false);
-    });
+        refreshList();
+        setTeamShow(false);
+      });
+    } else {
+      message.error('您未选择团队');
+    }
   };
 
   const handleStop = (record: any) => {
@@ -203,7 +207,7 @@ function PatientCro({ }: IProps) {
         {/* <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button> */}
       </AddServicePackage>
 
-      <ChoiceTeam onSaveSuccess={putCroToPatient} show={teamShow} onCancel={() => { setTeamShow(false); }} onCreateTeam={() => { setTeamShow(false); setTeamCreateShow(true); }}>
+      <ChoiceTeam onSaveSuccess={putCroToPatient} show={teamShow} teamNSId={putCroToRecord?.current?.team?.teamNSId} onCancel={() => { setTeamShow(false); }} onCreateTeam={() => { setTeamShow(false); setTeamCreateShow(true); }}>
         {/* <Button type="primary" className="mb-20" onClick={() => { setTeamShow(true); console.log('====123456'); }}>选择团队</Button> */}
       </ChoiceTeam>
 

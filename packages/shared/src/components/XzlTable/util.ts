@@ -90,7 +90,7 @@ export const handleInviteMemberList = (dataSource: Store[]) => {
   return newData;
 };
 
-// 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
+// cro邀请研究者参与管理数据处理使用此方法
 export const handleTeamInviteMemberList = (dataSource: Store[]) => {
   const newData: Array<ISubject> = [];
   console.log('handleTeamInviteMemberList dataSource', dataSource);
@@ -101,6 +101,7 @@ export const handleTeamInviteMemberList = (dataSource: Store[]) => {
         doctor = {
           orgs: doctor?.orgs || [],
           ...item,
+          status: projectInviteStatus[item.status],
         };
         // 医生所在的互联网医院
       } else if (item.role === Role.ORG.id) {

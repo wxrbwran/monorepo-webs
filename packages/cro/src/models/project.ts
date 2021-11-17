@@ -120,6 +120,7 @@ const ProjectModel: ProjectModelType = {
       } else {
         window.$storage.removeItem('isLeader');
       }
+      console.log('========110', response);
       yield put({
         type: 'setProjectDetail',
         payload: response,
