@@ -96,8 +96,9 @@ export var handleTeamInviteMemberList = function (dataSource) {
     dataSource.forEach(function (team) {
         var doctor = {};
         team.members.forEach(function (item) {
+            var _a;
             if (item.role === Role.DOCTOR.id) {
-                doctor = __assign(__assign({ orgs: (doctor === null || doctor === void 0 ? void 0 : doctor.orgs) || [] }, item), { status: projectInviteStatus[item.status] });
+                doctor = __assign(__assign({ orgs: (doctor === null || doctor === void 0 ? void 0 : doctor.orgs) || [] }, item), { status: (_a = projectInviteStatus[item.status]) !== null && _a !== void 0 ? _a : '未邀请' });
                 // 医生所在的互联网医院
             }
             else if (item.role === Role.ORG.id) {

@@ -21,17 +21,17 @@ function InviteMember(props: IProps) {
         onClick={handleShowGroup}
       >
         {props.children}
-        </Button>
+      </Button>
       <DragModal
         wrapClassName="ant-modal-wrap-center"
         className="select-group-modal"
-        width="800px"
+        width="900px"
         visible={isShowModal}
         title='邀请研究者参与管理'
         onCancel={() => setIsShowModal(false)}
         footer={null}
       >
-        <InviteMemberList onClose={() => setIsShowModal(false)} refreshList={props.refreshList}/>
+        <InviteMemberList onClose={() => setIsShowModal(false)} refreshList={props.refreshList} />
       </DragModal>
     </>
   );

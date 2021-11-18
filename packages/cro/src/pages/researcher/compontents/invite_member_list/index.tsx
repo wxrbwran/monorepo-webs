@@ -78,7 +78,6 @@ function InviteMemberList(props: Iprops) {
             operator: 'like',
           });
         }
-
       }
     });
     if (allValues.orgId === '') {
@@ -87,6 +86,13 @@ function InviteMemberList(props: Iprops) {
       delete params.depId;
     }
 
+    if (croLabel === 'single_project' && params.conditions.length == 0) {
+      params.conditions.push({
+        var: "practice_areas->>'name'",
+        value: singleOrg,
+        operator: 'like',
+      });
+    }
     console.log('================= handleSelectChange handleSelectChange', JSON.stringify(params));
     setOptions({ ...params });
   };

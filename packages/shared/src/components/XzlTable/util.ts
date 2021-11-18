@@ -101,7 +101,7 @@ export const handleTeamInviteMemberList = (dataSource: Store[]) => {
         doctor = {
           orgs: doctor?.orgs || [],
           ...item,
-          status: projectInviteStatus[item.status],
+          status: projectInviteStatus[item.status] ?? '未邀请',
         };
         // 医生所在的互联网医院
       } else if (item.role === Role.ORG.id) {
