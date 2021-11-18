@@ -66,12 +66,15 @@ function Detail({ location }: IProps) {
     setInfos([...objectiveScaleList]);
     setScaleName(formName);
     //默认第一次加载时执行
-    if (editStatus.length === 0) {
-      objectiveScaleList.forEach(() => {
-        editStatus.push('lock');
-      });
-      setEditStatus([...editStatus]);
-    }
+    // if (editStatus.length === 0) {
+    const statusList: string[] = [];
+    objectiveScaleList.forEach(() => {
+      statusList.push('lock');
+    });
+    setEditStatus([...statusList]);
+
+    console.log('================ editStatus,', JSON.stringify(statusList));
+    // }
   }, [objectiveScaleList]);
 
   const changeFormName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,11 +146,8 @@ function Detail({ location }: IProps) {
         message.success('添加成功');
 
         infos[index] = params;
-        console.log('====================== infos[index]', JSON.stringify(infos[index]));
         setInfos([...infos]);
-        editStatus[index] = 'lock';
-        setEditStatus([...editStatus]);
-
+        console.log('================ 添加成功 editStatus,', JSON.stringify(editStatus));
         dispatch({
           type: 'project/fetchObjectiveScale',
           payload: location.query.id,

@@ -115,9 +115,9 @@ function SideMenu(props: IProps) {
             return (
               <div className={['item', currentGroupId === item.groupId ? 'active' : ''].join(' ')} key={item.groupName}>
                 <Link className="flex justify-between pl-10 pr-20 group_item" to={`/patient_manage/group_details?groupId=${item.groupId}`} onClick={() => resetIndex(index)}>
-                  <span className="name">{item.groupName}</span>
-                  <span className="name">{item?.note?.note1}{item?.note?.note1 ? '人' : '--'}</span>
-                  <span className="name">{item?.patientCount || 0}人</span>
+                  <span title={item.groupName} className="name">{item.groupName}</span>
+                  <span title={item?.note?.note1 ? item?.note?.note1 + '人' : '--'} className="name">{item?.note?.note1}{item?.note?.note1 ? '人' : '--'}</span>
+                  <span title={(item?.patientCount || 0) + '人'} className="name">{item?.patientCount || 0}人</span>
                 </Link>
 
                 {(activeIndex !== index && window.$storage.getItem('isLeader')) && status !== 1001 && (

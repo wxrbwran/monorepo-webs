@@ -88,7 +88,7 @@ const AddEditGroup: FC<IProps> = (props) => {
               name="note1"
               rules={[{ required: true, message: '请输入目标人数!' }]}
             >
-              <Input />
+              <Input type={'number'} />
             </Form.Item>
             <Form.Item style={{ textAlign: 'center' }}>
               <div className={styles.btn}>
