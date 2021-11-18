@@ -20,6 +20,12 @@ export default {
   getCroProjectInfo(value: string): Promise<any> {
     return http.get(`research/project/detail/${value}`);
   },
+
+  // )获取项目对于当前登陆者的团队信息
+  getProjectTeamMembers(value: string): Promise<any> {
+    return http.get(`research/project/team/${value}`);
+  },
+
   // 添加文件
   addProjectFile(data?: any): Promise<any> {
     return http.post('research/project/file', { data });
