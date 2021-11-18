@@ -73,7 +73,7 @@ function InviteMemberList(props: Iprops) {
           });
         } else {
           params.conditions.push({
-            var: "practice_areas->>'name',sj.details->>'name',sj.details->>'tel',having.o_subject.name,having.practice_areas->>'sub'",
+            var: "practice_areas->>'name',sj.details->>'name',sj.details->>'tel',o_subject.name,practice_areas->>'sub'",
             value: allValues[item],
             operator: 'like',
           });
