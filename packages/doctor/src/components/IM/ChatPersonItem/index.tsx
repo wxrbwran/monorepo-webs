@@ -39,10 +39,13 @@ const ChatPersonItem: FC<IProps> = (props) => {
       case Role.PATIENT_VIP.id:
         return '患者';
       case Role.UPPER_DOCTOR.id:
-      case Role.ALONE_DOCTOR.id:
         return '主管医生';
+      case Role.ALONE_DOCTOR.id:
+        return '独立医生';
       case Role.LOWER_DOCTOR.id:
         return '医助';
+      case Role.RESEARCH_PROJECT_DOCTOR.id:
+        return '研究者';
       default:
         return fetchRolePropValue(role, 'desc');
     }

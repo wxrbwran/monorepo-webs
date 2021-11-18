@@ -15,6 +15,7 @@ export interface XzlTableCallBackProps {
     selectedRowKeys?: ReactText[];
     currentPage?: number;
     dataSource?: Store[];
+    apiData?: any;
 }
 declare const XzlTable: FC<IProps>;
 export default XzlTable;
