@@ -13,13 +13,15 @@ import '../index.scss';
 import { CommonData, IState } from 'typings/global';
 import AddServicePackage from '../../researcher/croservice/components/AddServicePackage';
 import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
-
+import { Role } from 'xzl-web-shared/src/utils/role';
+import distributionTeamPng from '@/assets/img/distribution_team.png';
 interface IProps {
 }
 const { TabPane } = Tabs;
 function PatientCro({ }: IProps) {
   const [form] = Form.useForm();
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const teamMembers = useSelector((state: IState) => state.project.teamMembers);
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
   const [tableOptions, setOptions] = useState<CommonData>({ projectNsId, status: 1002 });
   const [imgVisible, setImgVisible] = useState(false);
@@ -29,7 +31,6 @@ function PatientCro({ }: IProps) {
 
   const [teamShow, setTeamShow] = useState(false);
   const putCroToRecord = useRef();
-
 
 
   const [teamCreateShow, setTeamCreateShow] = useState(false);
@@ -110,16 +111,28 @@ function PatientCro({ }: IProps) {
     setOptions(params);
   };
 
-  // const columns = [patientCroColumns({
-  //   handleStop,
-  //   toggleImg,
-  // }), patientCroStopColumns()];
+
+  const patientColums = teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) ? [...patientCroColumns({
+    handleStop,
+    toggleImg,
+    distributionTeam,
+  }), {
+    title: '分配cro团队',
+    dataIndex: '',
+    render: (_text: any, record: any) => (
+      <div>
+        {record.team.name}
+        <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => distributionTeam(record)} />
+      </div >
+    ),
+  }] : patientCroColumns({
+    handleStop,
+    toggleImg,
+    distributionTeam,
+  });
+
   const columns = {
-    1002: patientCroColumns({
-      handleStop,
-      toggleImg,
-      distributionTeam,
-    }),
+    1002: patientColums,
     1003: patientCroStopColumns(),
   };
   const rowSelection = {
@@ -166,7 +179,7 @@ function PatientCro({ }: IProps) {
         </Tabs>
 
         {
-          tabStatus === 1002 &&
+          tabStatus === 1002 && teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) &&
           <SelectGroup
             selectPatient={selectPatient}
             refreshList={refreshList}

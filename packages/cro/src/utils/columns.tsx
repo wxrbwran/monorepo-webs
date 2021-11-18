@@ -7,7 +7,6 @@ import moment from 'moment';
 import { sexList } from './consts';
 import { Store } from 'antd/lib/form/interface';
 import IconAutograph from '@/assets/img/icon_autograph.png';
-import distributionTeamPng from '@/assets/img/distribution_team.png';
 import haveQuestionPng from '@/assets/img/have_question.png';
 
 
@@ -348,16 +347,6 @@ export const patientCroColumns = (params: Store) => [
       <div>
         {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)} /> : '--'}
       </div>
-    ),
-  },
-  {
-    title: '分配cro团队',
-    dataIndex: '',
-    render: (_text: any, record: any) => (
-      <div>
-        {record.team.name}
-        <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => params.distributionTeam(record)} />
-      </div >
     ),
   },
 ];

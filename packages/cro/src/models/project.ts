@@ -17,6 +17,7 @@ export interface ProjectModelState {
   formName: string;
   projDetail: any;
   scaleGroupInfos: any;
+  teamMembers: string[]; // role 数组
 }
 interface ProjectModelType {
   namespace: 'project';
@@ -25,6 +26,7 @@ interface ProjectModelType {
     fetchProjectList: Effect;
     fetchObjectiveScale: Effect;
     fetchGroupList: Effect;
+    fetchProjectTeamMembers: Effect;
     fetchProjectDetail: Effect;
     fetchScaleGroup: Effect;
   };
@@ -35,6 +37,7 @@ interface ProjectModelType {
     clearReverData: Reducer<ProjectModelState>;
     setGroupList: Reducer<ProjectModelState>;
     setProjectDetail: Reducer<ProjectModelState>;
+    setProjectTeamMembers: Reducer<ProjectModelState>;
     setScaleGroup: Reducer<ProjectModelState>;
   };
 }
@@ -66,6 +69,7 @@ export const projectState = {
   formName: '',
   projDetail: {},
   scaleGroupInfos: [],
+  teamMembers: [],
 };
 
 const ProjectModel: ProjectModelType = {
@@ -109,6 +113,13 @@ const ProjectModel: ProjectModelType = {
         payload: response.infos,
       });
     },
+    *fetchProjectTeamMembers({ payload }, { call, put }) {
+      const response = yield call(detail.getProjectTeamMembers, payload);
+      yield put({
+        type: 'setProjectTeamMembers',
+        payload: response,
+      });
+    },
     *fetchProjectDetail({ payload }, { call, put }) {
       const response = yield call(detail.getCroProjectInfo, payload);
       const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(response.roleType);
@@ -124,6 +135,11 @@ const ProjectModel: ProjectModelType = {
       yield put({
         type: 'setProjectDetail',
         payload: response,
+      });
+
+      yield put({
+        type: 'fetchProjectTeamMembers',
+        payload: payload,
       });
     },
     *fetchScaleGroup({ payload }, { call, put }) {
@@ -177,6 +193,20 @@ const ProjectModel: ProjectModelType = {
         projDetail: payload,
       };
     },
+
+    setProjectTeamMembers(state = projectState, { payload }): ProjectModelState {
+
+      return {
+        ...state,
+        teamMembers: payload.members.map((item) => {
+          return (
+            { role: item.role }
+          );
+        }),
+      };
+    },
+
+
     setScaleGroup(state = projectState, { payload }): ProjectModelState {
       return {
         ...state,

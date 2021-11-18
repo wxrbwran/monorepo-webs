@@ -26,6 +26,7 @@ function SideMenu(props: IProps) {
   const [editPatientNum, seteditPatientNum] = useState(false);
   const groupList = useSelector((state: IState) => state.project.objectiveGroup);
   const { projectNsId, status, detail, projectSid, roleType } = useSelector((state: IState) => state.project.projDetail);
+  const teamMembers = useSelector((state: IState) => state.project.teamMembers);
 
   useEffect(() => {
     const currentPathname = props.location.pathname.split('/').pop();
@@ -67,7 +68,12 @@ function SideMenu(props: IProps) {
       });
     seteditPatientNum(false);
   };
-  const routerList = [
+
+
+  const a = '';
+  a.includes();
+
+  const routerList = teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) ? [
     {
       name: '全部患者',
       pathName: 'patient',
@@ -76,11 +82,19 @@ function SideMenu(props: IProps) {
       name: '全部受试者',
       pathName: 'patient_cro',
     },
+  ] : [
+    {
+      name: '全部受试者',
+      pathName: 'patient_cro',
+    },
   ];
+
+
   const currentGroupId = props.location.query.groupId;
   return (
     <div className="patient-manage-side">
       {
+
         routerList.map((item) => {
           return (
             <div className={['menu', activeMenu === item.pathName ? 'active' : ''].join(' ')} key={item.name}>
@@ -92,7 +106,7 @@ function SideMenu(props: IProps) {
       <div className="group-title">
         <span>试验分组</span>
         {
-          window.$storage.getItem('isLeader') && status !== 1001 && (
+          window.$storage.getItem('isLeader') && status !== 1001 && teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) && (
             <AddEditGroup type="add" projectNsId={projectNsId} onSuccess={getGroupList}>
               <PlusOutlined style={{ fontSize: 14 }} />
             </AddEditGroup>
@@ -137,7 +151,7 @@ function SideMenu(props: IProps) {
         }
       </div>
       {
-        groupList.length === 0 && window.$storage.getItem('isLeader') && status !== 1001 && (
+        groupList.length === 0 && window.$storage.getItem('isLeader') && status !== 1001 && teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) && (
           <div className="creact-tip">
             <div>
               您的项目内暂无试验分组，创建分组并加入受试者开始您的科研吧。

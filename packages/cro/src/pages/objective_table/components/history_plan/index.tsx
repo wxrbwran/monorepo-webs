@@ -158,25 +158,6 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                     <></>
                     )}
                 </PlanModal>
-                {/* <PlanModal
-                  title="修改发送计划"
-                  location={location}
-                  infoIndex={itemIndex}
-                  scaleId={infoItem.scaleId}
-                  plans={infoItem.plans}
-                  question={infoItem.questions}
-                  updatePlan={updatePlan}
-                >
-                  {window.$storage.getItem('isLeader') &&
-                    status !== 1001 ? (
-                    <p className={styles.detail}>
-                      <FormOutlined />
-                      <span className="ml-5">编辑</span>
-                    </p>
-                  ) : (
-                    <></>
-                  )}
-                </PlanModal> */}
                 {
                   status !== 1001 && window.$storage.getItem('isLeader') && (
                     <>
