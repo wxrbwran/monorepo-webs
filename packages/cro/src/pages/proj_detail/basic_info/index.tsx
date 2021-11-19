@@ -67,8 +67,6 @@ function BaseInfo({ projectSid }: IProps) {
   };
 
   const { name, detail, createdAt, patientCount, avgDay, label, practiceArea } = projDetail;
-
-  console.log('========================= minDays minDays', detail.minDays, JSON.stringify(projDetail));
   return (
     <>
       <div className={styles.left_top}>
