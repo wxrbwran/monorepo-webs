@@ -8,6 +8,7 @@ import { InputNumber, message } from 'antd';
 import AddEditGroup from '../add_edit_group';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
+import { hasPermissions } from '@/utils/utils';
 
 interface IProps {
   location: {
@@ -69,11 +70,7 @@ function SideMenu(props: IProps) {
     seteditPatientNum(false);
   };
 
-
-  const a = '';
-  a.includes();
-
-  const routerList = teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) ? [
+  const routerList = hasPermissions(teamMembers) ? [
     {
       name: '全部患者',
       pathName: 'patient',
@@ -106,7 +103,7 @@ function SideMenu(props: IProps) {
       <div className="group-title">
         <span>试验分组</span>
         {
-          window.$storage.getItem('isLeader') && status !== 1001 && teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) && (
+          window.$storage.getItem('isLeader') && status !== 1001 && hasPermissions(teamMembers) && (
             <AddEditGroup type="add" projectNsId={projectNsId} onSuccess={getGroupList}>
               <PlusOutlined style={{ fontSize: 14 }} />
             </AddEditGroup>
@@ -151,7 +148,7 @@ function SideMenu(props: IProps) {
         }
       </div>
       {
-        groupList.length === 0 && window.$storage.getItem('isLeader') && status !== 1001 && teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) && (
+        groupList.length === 0 && window.$storage.getItem('isLeader') && status !== 1001 && hasPermissions(teamMembers) && (
           <div className="creact-tip">
             <div>
               您的项目内暂无试验分组，创建分组并加入受试者开始您的科研吧。

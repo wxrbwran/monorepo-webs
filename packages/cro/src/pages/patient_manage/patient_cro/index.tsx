@@ -13,8 +13,8 @@ import '../index.scss';
 import { CommonData, IState } from 'typings/global';
 import AddServicePackage from '../../researcher/croservice/components/AddServicePackage';
 import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
-import { Role } from 'xzl-web-shared/src/utils/role';
 import distributionTeamPng from '@/assets/img/distribution_team.png';
+import { hasPermissions } from '@/utils/utils';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -112,7 +112,7 @@ function PatientCro({ }: IProps) {
   };
 
 
-  const patientColums = teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) ? [...patientCroColumns({
+  const patientColums = hasPermissions(teamMembers) ? [...patientCroColumns({
     handleStop,
     toggleImg,
     distributionTeam,
@@ -179,7 +179,7 @@ function PatientCro({ }: IProps) {
         </Tabs>
 
         {
-          tabStatus === 1002 && teamMembers.find((item) => item.role.includes(Role.RESEARCH_PROJECT_DOCTOR.id)) &&
+          tabStatus === 1002 && hasPermissions(teamMembers) &&
           <SelectGroup
             selectPatient={selectPatient}
             refreshList={refreshList}
