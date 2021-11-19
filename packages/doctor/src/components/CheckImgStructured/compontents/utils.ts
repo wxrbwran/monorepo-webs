@@ -2,6 +2,7 @@ import { cloneDeep, isEmpty } from 'lodash';
 import { IUserAddTopicItem, StructuredModelState } from 'packages/doctor/typings/model';
 import { IMeta, IQuestions, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import { getDvaApp } from 'umi';
+import { IJcdTabItem } from './type';
 
 export const outTypes: CommonData = {
   HYD: '化验单',
@@ -27,18 +28,19 @@ export const textData = {
 };
 
 // 多段填空是二维数组嵌套qa里面每个item是多个问答组成的一道题
-export const ddtkData = {
-  question_type: 'COMPLETION',
-  isAdd: true,
-  question: '',
-  answer: [],
+export const ddtkData = (uuid: string) => {
+  return {
+    uuid,
+    question_type: 'COMPLETION',
+    question: '',
+    answer: [],
+    // isAdd: true,
+  };
 };
 
 export const ddtkExample = [
-  { q: '肝脏形态', a: '有' },
+  { q: '形态', a: '有' },
   { q: '大小', a: '1.5×1×1' },
-  { q: '边缘', a: '清' },
-  { q: '各叶比例', a: '2:2:2' },
 ];
 
 export const baseField: CommonData = {
@@ -195,7 +197,7 @@ export const findPosition = (item: ITopicQaItemApi, topicAll: any[], dimension: 
   }
 };
 // 回显时1：后端api返回的平铺格式转成ui格式   api--->ui
-export const fetchInitData = (initData: { data: any[] }) => {
+export const fetchInitData = (initData: IJcdTabItem) => {
   const topicAll: any[] = [[], [], [], []]; // 多维数组
   initData?.data?.forEach(item => {
     findPosition(item, topicAll, 0);
@@ -204,7 +206,6 @@ export const fetchInitData = (initData: { data: any[] }) => {
   return topicAll;
 };
 // 处理检查单类型数据回显---e
-
 
 // 回显时：单独处理多段填空，需要把模板格式转成ui需要的多维数组格式(先根据uuid分组，然后组内排序)   模板--->ui
 export const formatTempDdtk = (tkTmpList: any[]) => {
@@ -374,3 +375,4 @@ export const watchUserTopicChange = (
   }
 };
 // 处理用户新加问题多tab共享-e
+

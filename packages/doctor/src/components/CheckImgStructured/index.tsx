@@ -1,6 +1,6 @@
 import React, { useState, FC, useEffect } from 'react';
 import { Spin, message } from 'antd';
-import { IApiDocumentList, IImgStructuredApiData, IMeta, ITmpList, ITopicItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
+import { IApiDocumentList, IImgStructuredApiData, ITopicItemApi } from 'typings/imgStructured';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import * as api from '@/services/api';
 import ImgWrap from './compontents/ImgWrap';
@@ -15,10 +15,10 @@ interface IProps {
     imageUrl?: string;
   }
 }
-interface ITempItem {
-  data: ITopicTemplateItemApi;
-  meta: IMeta;
-}
+// interface ITempItem {
+//   data: ITopicTemplateItemApi;
+//   meta: IMeta;
+// }
 const CheckImgStructured: FC<IProps> = (props) => {
   const { children, imageInfo, handleRefresh } = props;
   const [showViewer, setShowViewer] = useState(false);
@@ -27,7 +27,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const [imgData, setImgData] = useState<IImgStructuredApiData>();
   const [isLoaded, setIsLoaded] = useState(false);
   // 全部模板 from ： 0
-  const [tempAll, settempAll] = useState<ITmpList>({});
+  // const [tempAll, settempAll] = useState<ITmpList>({});
   const patientSid = window.$storage.getItem('patientSid');
   const handleStructured = () => {
     setShowViewer(true);
@@ -35,23 +35,24 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const hideViewer = () => {
     setShowViewer(false);
   };
-  const formatTemplate = (res) => {
-    const tempData: ITmpList = {};
-    res.list.forEach((item: ITempItem) => {
-      const { method, part, title } = item.meta;
-      const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
-      if (!tempData[type]) {
-        tempData[type] = [];
-      }
-      tempData[type] = tempData[type].concat(item.data);
-    });
-    settempAll(tempData);
-  };
-  const fetchTemplate = async (from: number, to: number) => {
-    const params = { from, to };
-    const data = api.image.fetchImageTopicTemplate(params);
-    return data;
-  };
+  // const formatTemplate = (res) => {
+  //   const tempData: ITmpList = {};
+  //   console.log(452454, res.list);
+  //   res.list.forEach((item: ITempItem) => {
+  //     const { method, part, title } = item.meta;
+  //     const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
+  //     if (!tempData[type]) {
+  //       tempData[type] = [];
+  //     }
+  //     tempData[type] = tempData[type].concat(item.data);
+  //   });
+  //   settempAll(tempData);
+  // };
+  // const fetchTemplate = async (from: number, to: number) => {
+  //   const params = { from, to };
+  //   const data = api.image.fetchImageTopicTemplate(params);
+  //   return data;
+  // };
   const fetchImageJcds = async (imageId: string) => {
     const params = { meta: { imageId,  sid: patientSid } };
     const data = api.image.fetchImageJcdAndOther(params);
@@ -67,10 +68,23 @@ const CheckImgStructured: FC<IProps> = (props) => {
     const data = await api.image.fetchImageIndexes(params);
     return data;
   };
-  const fetchData = (id: string, oTime: number) => {
-    Promise.all([fetchTemplate(0, oTime), fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
-      const [tempData, hData, jData ] = res;
-      formatTemplate(tempData);
+  // const fetchData = (id: string, oTime: number) => {
+  //   Promise.all([fetchTemplate(0, oTime), fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
+  //     const [tempData, hData, jData ] = res;
+  //     formatTemplate(tempData);
+  //     setHydData(hData.list.map(item => {
+  //       return ({ ...item, key: uuid() });
+  //     }));
+  //     setJcdData(jData.list.map(item => {
+  //       return ({ ...item, key: uuid() });
+  //     }));
+  //     setImgData({ ...hData, imageId: id });
+  //     setIsLoaded(true);
+  //   });
+  // };
+  const fetchData = (id: string) => {
+    Promise.all([fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
+      const [hData, jData ] = res;
       setHydData(hData.list.map(item => {
         return ({ ...item, key: uuid() });
       }));
@@ -138,7 +152,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
                       imageId={imgData?.imageId}
                       handleRefresh={handleRefresh}
                       handleClose={() => setShowViewer(false)}
-                      tempAll={tempAll}
+                      tempAll={{}}
                     />
                   )
                 }

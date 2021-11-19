@@ -12,10 +12,11 @@ interface IProps {
   isUnknownTime?: boolean;
   type?: string;
   style?: object;
+  label?: string;
 }
 function ItemDate(props: IProps) {
   const {
-    initReportTime, isUnknownTime, setReporttime, setUnknow, type, style,
+    initReportTime, isUnknownTime, setReporttime, setUnknow, type, style, label,
   } = props;
   console.log('initReportTime', initReportTime, type);
   const [unknownTime, setUnknownTime] = useState(isUnknownTime);
@@ -50,7 +51,7 @@ function ItemDate(props: IProps) {
   const disabledDate = (current: any) => current && current > moment().endOf('day');
   return (
     <div className="flex items-center">
-      <div className="text-sm ml-17 font-medium w-70 text-right">采样时间：</div>
+      <div className="text-sm ml-17 font-medium w-70 text-right">{label || '采样时间'}：</div>
       <DatePicker
         disabledDate={disabledDate}
         onChange={(momentDate, dateString) => handleSetFieldsVal(dateString, momentDate)}

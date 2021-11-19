@@ -505,6 +505,14 @@ body {
       top: 0;
     }
   }
+  .ant-modal-hide-header {
+    .ant-modal-header {
+      display: none;
+    }
+    .ant-modal-close {
+      display: none;
+    }
+  }
   // 全屏modal、化验单检查单审核图片时使用
   .ant-modal-wrap-full {
     display: flex;

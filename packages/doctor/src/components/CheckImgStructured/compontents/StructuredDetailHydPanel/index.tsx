@@ -110,7 +110,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     }
     activeType1.current = params.documentId + params.sampleFrom;
     setActiveType(params.documentId + params.sampleFrom);
-    console.log('===-2');
+    console.log('===-2', newCheckTypes);
     setCheckTypes([...newCheckTypes]);
   };
   useEffect(() => {

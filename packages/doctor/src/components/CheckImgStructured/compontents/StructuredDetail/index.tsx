@@ -3,30 +3,31 @@ import React, {
 } from 'react';
 import { Button, Tabs, message } from 'antd';
 import { useDispatch } from 'react-redux';
-import { IStructuredDetailProps, ITopicQaItemApi, ITopicItemApi, IApiDocumentList } from 'typings/imgStructured';
+import { IStructuredDetailProps, ITopicItemApi, IApiDocumentList } from 'typings/imgStructured';
 import * as api from '@/services/api';
 import StructuredDetailHydPanel from '../StructuredDetailHydPanel';
-import StructuredDetailTopic from '../StructuredDetailTopic';
+import StructuredDetailJcdPanel from '../StructuredDetailJcdPanel';
+// import StructuredJcdTabItem from '../StructuredJcdTabItem';
 import Nodata from '../Nodata';
-import { outTypes, formatJcdSubmitData } from '../utils';
+import { outTypes } from '../utils';
 import styles from './index.scss';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
 import { CloseOutlined } from '@ant-design/icons';
 
-interface ITopicParams {
-  data: ITopicQaItemApi[];
-  meta: {
-    imageId: string;
-    sid: string;
-    createdTime: number;
-    title?: string;
-  }
-}
+// interface ITopicParams {
+//   data: ITopicQaItemApi[];
+//   meta: {
+//     imageId: string;
+//     sid: string;
+//     createdTime: number;
+//     title?: string;
+//   }
+// }
 const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const {
-    hydData, jcdData, imageId, handleRefresh, handleClose, tempAll,
-    jcdOriginIds,
+    hydData, jcdData, imageId, handleRefresh, handleClose,
+    // jcdOriginIds,
   } = props;
   console.log('hydData232', hydData);
   console.log('jcdData', jcdData);
@@ -41,7 +42,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       return { ...hydItem, outType: hydItem.outType };
     });
     const datas = [...hydTab, ...jcdTabs];
-    return isEmpty(datas) ? [{ outType: 'HYD' }] : datas;
+    return isEmpty(datas) ? [{ outType: 'JCD' }] : datas;
   };
   // 保存各个分类的方法队列 - 检查单、图片不清晰、非医学单据
   const [hydCallbackFns, setHydCallbackFns] = useState<CommonData>({});
@@ -101,30 +102,30 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       message.error(err?.result || '保存失败');
     });
   };
-  const saveTemplate = (list: ITopicParams[]) => {
-    if (!isEmpty(list)) {
-      const params = { list };
-      api.image.putImageTopicTemplate(params).then(() => {
-        console.log('添加问题模板成功');
-      }).catch((err: any) => {
-        console.log('添加问题模板失败：', err);
-      });
-    }
-  };
-  const saveJcdData = (params: any) => {
-    // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
-    if (!isEmpty(jcdOriginIds) ||  !isEmpty(params.list)) {
-      params.originIds = jcdOriginIds;
-      api.image.putImageJcdAndOther(params).then(() => {
-        console.log('添加检查单成功');
-        setSaveSuccess(prev => prev + 1);
-      }).catch((err: any) => {
-        console.log('添加检查单失败', err);
-      });
-    } else {
-      setSaveSuccess(prev => prev + 1);
-    }
-  };
+  // const saveTemplate = (list: ITopicParams[]) => {
+  //   if (!isEmpty(list)) {
+  //     const params = { list };
+  //     api.image.putImageTopicTemplate(params).then(() => {
+  //       console.log('添加问题模板成功');
+  //     }).catch((err: any) => {
+  //       console.log('添加问题模板失败：', err);
+  //     });
+  //   }
+  // };
+  // const saveJcdData = (params: any) => {
+  //   // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
+  //   if (!isEmpty(jcdOriginIds) ||  !isEmpty(params.list)) {
+  //     params.originIds = jcdOriginIds;
+  //     api.image.putImageJcdAndOther(params).then(() => {
+  //       console.log('添加检查单成功');
+  //       setSaveSuccess(prev => prev + 1);
+  //     }).catch((err: any) => {
+  //       console.log('添加检查单失败', err);
+  //     });
+  //   } else {
+  //     setSaveSuccess(prev => prev + 1);
+  //   }
+  // };
 
   const handleSaveClick = async () => {
     if (isViewOnly) {
@@ -155,9 +156,10 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         Promise.all(Object.values(jcdCallbackFns)
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
-            const { tempList, jcdList } = formatJcdSubmitData(list, clickSaveTime);
-            saveTemplate(tempList);
-            saveJcdData(jcdList);
+            console.log('=====jcdlist', list);
+            // const { tempList, jcdList } = formatJcdSubmitData(list, clickSaveTime);
+            // saveTemplate(tempList);
+            // saveJcdData(jcdList);
           }).catch((err) => {
             console.log('请完善检查单后提交！err', err);
             message.error('请完善检查单后提交！');
@@ -170,8 +172,8 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
 
   const handelTabsEdit = (targetOutType: string) => {
     const newTabs = typeTabs.filter(item => item.outType !== targetOutType);
-    if (targetOutType === activeType) {
-      setActiveType(newTabs?.[newTabs?.length - 1]);
+    if (targetOutType === activeType && !(isEmpty(newTabs))) {
+      setActiveType(newTabs?.[newTabs?.length - 1].outType);
     }
     setTypeTabs(cloneDeep(newTabs));
   };
@@ -222,14 +224,22 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           break;
         case 'OTHER':
         case 'JCD':
-          dom = <StructuredDetailTopic
+          dom = <StructuredDetailJcdPanel
             jcdCallbackFns={jcdCallbackFns}
             setJcdCallbackFns={setJcdCallbackFns}
-            tempAll={tempAll}
             initData={fetInitData(inx)}
             {...baseProps}
           />;
           break;
+        // case 'JCD':
+        //   dom = <StructuredJcdTabItem
+        //     jcdCallbackFns={jcdCallbackFns}
+        //     setJcdCallbackFns={setJcdCallbackFns}
+        //     tempAll={tempAll}
+        //     initData={fetInitData(inx)}
+        //     {...baseProps}
+        //   />;
+        //   break;
         default:
           dom = <Nodata {...baseProps} hydCallbackFns={hydCallbackFns} />;
           break;

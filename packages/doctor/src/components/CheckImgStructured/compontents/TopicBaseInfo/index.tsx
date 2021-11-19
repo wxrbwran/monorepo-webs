@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
-import { Form, Input, Row, Col, message, AutoComplete } from 'antd';
+import { Form, Input, Row, Col, message } from 'antd';
 import { baseField } from '../utils';
 import styles from './index.scss';
 import { IQuestions } from 'typings/imgStructured';
@@ -10,16 +10,12 @@ interface IProps {
   initData: IQuestions[];
   outType: string; // JCD  OTHER
   changeCallbackFns: (params: ICallbackFn) => void
-  changeJcdBaseInfo: (params: object) => void;
 }
 
 const TopicBaseInfo: FC<IProps> = (props) => {
-  const { initData, changeCallbackFns, outType, changeJcdBaseInfo } = props;
+  const { initData, changeCallbackFns } = props;
   const [form] = Form.useForm();
-  const { validateFields, setFieldsValue, getFieldsValue } = form;
-  const [parts, setParts] = useState<{ value: string }[]>([{ value: '头部' }, { value: '胃部' }]);
-  const [methods, setMethods] = useState<{ value: string }[]>([{ value: 'ct' }, { value: '核磁' }]);
-  console.log(setParts, setMethods);
+  const { validateFields, setFieldsValue } = form;
   const fetchInit = () => {
     const initObj: CommonData = {};
     initData.forEach(item => {
@@ -30,18 +26,6 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           break;
         case '时间':
           initObj.measured_at = Number(ans);
-          break;
-        case '检查部位':
-          initObj.part = ans;
-          break;
-        case '检查方法':
-          initObj.method = ans;
-          break;
-        case '检查单名称':
-          initObj.name = ans;
-          break;
-        case '单据名称':
-          initObj.djName = ans;
           break;
         default:
           break;
@@ -80,7 +64,6 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       reject(err);
     });
   });
-  console.log('initData121112,', initData);
   useEffect(() => {
     setInitVals(fetchInit());
   }, [initData]);
@@ -99,17 +82,9 @@ const TopicBaseInfo: FC<IProps> = (props) => {
   const handleChangeTime = (time: number | null) => {
     setFieldsValue({ measured_at: time });
   };
-  const handleChangeName = () => {
-    const coreField = outType === 'JCD' ? ['part', 'method'] : ['djName'];
-    console.log('核心字段：', getFieldsValue(coreField));
-    changeJcdBaseInfo(getFieldsValue(coreField));
-  };
-  const rules = [{ required: true, message: '请输入' }];
-  const handleSearch = (val: string, type: string) =>{
-    console.log('-------search', val, type );
-  };
+
   return (
-    <div className={`border p-15 ${styles.topic_base} structured-edit-wrap`}>
+    <div className={`pb-20 ${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
       <Form
         name="topicBaseInfo"
@@ -139,47 +114,9 @@ const TopicBaseInfo: FC<IProps> = (props) => {
               initReportTime={initialValues?.measured_at}
               setReporttime={(time: number | null) => handleChangeTime(time)}
               style={{ width: 'calc(100% - 168px)' }}
+              label="检查时间"
             />
           </Col>
-          {
-            outType === 'JCD' ? (
-              <>
-                <Col span={11} className='my-10'>
-                <Form.Item name="part" label="检查部位" rules={rules}>
-                  {/* <Input onBlur={handleChangeName}  /> */}
-                  <AutoComplete
-                    options={parts}
-                    onSearch={(val) => handleSearch(val, 'part')}
-                    onBlur={handleChangeName}
-                    placeholder="请输入检查部位"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={13} className="pl-17 my-10">
-                <Form.Item name="method" label="检查方法" rules={rules}>
-                  {/* <Input onBlur={handleChangeName}  /> */}
-                  <AutoComplete
-                    options={methods}
-                    onSearch={(val) => handleSearch(val, 'method')}
-                    onBlur={handleChangeName}
-                    placeholder="请输入检查方法"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={11}>
-                <Form.Item name="name" label="检查单名称">
-                  <Input />
-                </Form.Item>
-              </Col>
-              </>
-            ) : (
-              <Col span={11}>
-                <Form.Item name="djName" label="单据名称">
-                  <Input />
-                </Form.Item>
-              </Col>
-            )
-          }
         </Row>
       </Form>
     </div>

@@ -1,0 +1,72 @@
+.demo {
+  width: 100%;
+  background: #F7F7F7;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 12px;
+  margin-bottom: 15px;
+  :global {
+    .ant-input {
+      width: 120px!important;
+      margin-left: 12px;
+    }
+  }
+}
+.order_number {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  border-radius: 50%;
+  color: #181818;
+  border: 1px solid #181818;
+  font-size: 12px;
+  display: inline-block;
+  line-height: 14px;
+  text-align: center;
+  margin-right: 3px;
+}
+.add_btn {
+  color: #3296FA;
+  cursor: pointer;
+  margin-top: 15px;
+}
+.ghost_btn {
+  text-align: center;
+  :global {
+    .ant-btn {
+      margin: 0 20px;
+      height: 24px;
+      border-radius: 3px;
+      border: 1px solid #3296FA;
+      color: #3296FA;
+      font-size: 15px;
+      background-color: #fff;
+    }
+  }
+}
+.qa_list {
+  .subject {
+    width: 100%;
+  }
+  :global {
+    .ant-input {
+      height: 32px;
+      line-height: 32px;
+      font-size: 14px;
+    }
+
+  }
+  .qa_item {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    position: relative;
+    :global {
+      .anticon-close-circle {
+        color: #D8D8D8;
+        position: absolute;
+        right: -20px;
+      }
+    }
+  }
+}

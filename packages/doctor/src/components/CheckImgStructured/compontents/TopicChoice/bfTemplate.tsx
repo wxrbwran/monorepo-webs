@@ -4,20 +4,25 @@ import delIcon from '@/assets/img/doctor_patients/delete-icon.svg';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { BorderOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import TopicTitle from '../TopicTitle';
-import { checkboxData } from '../utils';
+import { checkboxData, handleDelUserTopic, handleEditUserTopic, watchUserTopicChange } from '../utils';
 import { IQuestions } from 'typings/imgStructured';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
 import uuid from 'react-uuid';
+import { useSelector } from 'react-redux';
+import { IState } from 'packages/doctor/typings/model';
 
 interface IProps {
   changeCallbackFns: (params: ICallbackFn) => void;
   initData: IQuestions[] | undefined;
   isViewOnly: boolean;
+  tabKey: string;
+  tempKey: string;
 }
 // saveAddQa
 function TopicChoice(props: IProps) {
   console.log('choiceProps', props);
-  const { changeCallbackFns, initData, isViewOnly } = props;
+  const { changeCallbackFns, initData, isViewOnly, tempKey, tabKey } = props;
+  const userAddTopic = useSelector((state: IState) => state.structured);
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
   const [editIndex, setEditIndex] = useState(-1);
   const handleSave = (a) => new Promise((resolve) => {
@@ -42,6 +47,13 @@ function TopicChoice(props: IProps) {
     }
   }, [questions]);
 
+  useEffect(() => {
+    const newQues = watchUserTopicChange(userAddTopic, questions, tempKey, tabKey, ['RADIO', 'CHECKBOX']);
+    if (newQues) {
+      setQuestions(cloneDeep(newQues));
+    }
+  }, [userAddTopic]);
+
   const changeEditIndex = () => {
     if (editIndex !== -1 && editIndex !== 999) {
       if (!isEmpty(questions)) {
@@ -49,6 +61,7 @@ function TopicChoice(props: IProps) {
         questions[editIndex].options = addOptions;
         // 如果问题和选项都 空，则删除添加的此项
         if (isEmpty(addOptions) && !questions[editIndex].question.trim()) {
+          handleDelUserTopic({ userAddTopic, questions, tempKey, editIndex, tabKey }); // 通知其它同类型tab删除此问题-del
           questions.splice(editIndex, 1);
           setQuestions([...questions]);
           setEditIndex(999);
@@ -56,6 +69,15 @@ function TopicChoice(props: IProps) {
           message.error('请输入问题');
         } else {
           setQuestions([...questions]);
+          const params = {
+            userAddTopic,
+            questions: cloneDeep(questions),
+            tempKey,
+            editIndex,
+            tabKey,
+            questionsType: questions[editIndex].question_type,
+          };
+          handleEditUserTopic(params); // 处理用户新加问题多2tab共享 -add/edit
           setEditIndex(999);
         }
       }
@@ -74,6 +96,7 @@ function TopicChoice(props: IProps) {
   };
   // 删除选项
   const handleDelStem = (inx: number) => {
+    handleDelUserTopic({ userAddTopic, questions, tempKey, editIndex, tabKey }); // 通知其它同类型tab删除此问题-del
     questions.splice(inx, 1);
     setQuestions([...questions]);
     setEditIndex(999);

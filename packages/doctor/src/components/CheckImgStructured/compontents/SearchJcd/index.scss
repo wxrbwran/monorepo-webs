@@ -1,0 +1,30 @@
+.search_jcd {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 20px;
+  :global {
+    .ant-select-auto-complete {
+      width: calc(100% - 70px);
+    }
+    .ant-select-selector {
+      height: 32px!important;
+      line-height: 32px;
+    }
+    .ant-select-selection-item {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .add_btn {
+    border-radius: 3px;
+    border: 1px solid #D3E8FB;
+    color: #218CE9;
+    margin-left: 10px;
+    flex: 0 0 50px;
+  }
+}
+.tit {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 0 0 70px;
+}
