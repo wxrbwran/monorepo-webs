@@ -131,7 +131,7 @@ const ProjectModel: ProjectModelType = {
       } else {
         window.$storage.removeItem('isLeader');
       }
-      console.log('========110', response);
+      console.log('========fetchProjectDetail respon', JSON.stringify(response));
       yield put({
         type: 'setProjectDetail',
         payload: response,

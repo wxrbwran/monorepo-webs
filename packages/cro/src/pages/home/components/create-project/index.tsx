@@ -93,6 +93,8 @@ function CreateProject({ onCloseModal }: IProps) {
       onCloseModal(); // 关闭弹框
       window.$storage.setItem('projectSid', res.projectSid);
       history.push(`/proj_detail?projectSid=${res.projectSid}&projectName=${fromVal.name}`);
+    }).catch(() => {
+      setLoading(false);
     });
   };
 
@@ -136,9 +138,18 @@ function CreateProject({ onCloseModal }: IProps) {
           <Form.Item
             label="项目周期"
             name="duration"
-            rules={[{ required: true, message: '请输入项目周期!' }]}
+            rules={[{ required: true, message: '请输入项目周期!' }, {
+              validator(_rule, value, callback) {
+
+                if (!/^\d+$/.test(value)) {
+                  callback('请输入正整数');
+                } else {
+                  callback();
+                }
+              },
+            }]}
           >
-            <Input suffix="天" type={'number'} />
+            <Input suffix="天" type={'text'} />
           </Form.Item>
           <Form.Item
             label="项目类型"

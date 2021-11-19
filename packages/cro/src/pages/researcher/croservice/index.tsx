@@ -38,7 +38,9 @@ const Croservice: FC<IProps> = () => {
 
     api.service.getTeams({ 'teamNSLabels': ['research_pro_patient'], 'targetNSId': projectNsId }).then(res => {
 
+      // 只能展示自己创建的，自己参与的，
       const croTeams = res.teams.filter((item) => item.teamNSLabels.includes('research_cro_team'));
+
       setTeams(croTeams);
     });
   }, []);
@@ -89,6 +91,13 @@ const Croservice: FC<IProps> = () => {
     });
   };
 
+  // 是否是该team的创建人
+  const isTeamCreater = (team) => {
+
+    return team.innerTeams
+      .find((innerTeam) => innerTeam.members.find((item) => localStorage.getItem('xzl-web-doctor_sid') == item.sid && item.role == Role.NS_OWNER.id));
+  };
+
   return (
     <div className={styles.croservice}>
       <AddServicePackage onSaveSuccess={onSaveSuccess} edit={edit} source={source} show={show} onCancel={() => { setShow(false); }}>
@@ -103,7 +112,7 @@ const Croservice: FC<IProps> = () => {
             <div className='flex justify-between text-base mb-50'>
               <div className='font-bold'>{team.name}</div>
               {
-                hasPermissions(teamMembers) && <div className={`${styles.operator} flex items-center`}>
+                hasPermissions(teamMembers) && isTeamCreater(team) && <div className={`${styles.operator} flex items-center`}>
 
 
                   <p onClick={() => { onEditTeam(team); }}><img src={editPng} className='mr-5' />编辑</p>

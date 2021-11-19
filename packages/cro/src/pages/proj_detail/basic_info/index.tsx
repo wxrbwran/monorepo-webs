@@ -68,7 +68,7 @@ function BaseInfo({ projectSid }: IProps) {
 
   const { name, detail, createdAt, patientCount, avgDay, label, practiceArea } = projDetail;
 
-
+  console.log('========================= minDays minDays', detail.minDays, JSON.stringify(projDetail));
   return (
     <>
       <div className={styles.left_top}>
@@ -114,6 +114,7 @@ function BaseInfo({ projectSid }: IProps) {
                   className={detail?.minDays ? styles.border_none : ''}
                   defaultValue={detail?.minDays}
                   onBlur={handleMinDay}
+                  value={detail?.minDays}
                   disabled={![Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType) || projDetail.status === 1001}
                 />
                 <span className="ml-5">天</span>

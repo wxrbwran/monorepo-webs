@@ -83,12 +83,22 @@ const AddEditGroup: FC<IProps> = (props) => {
             >
               <Input />
             </Form.Item>
+
             <Form.Item
               label="目标人数"
               name="note1"
-              rules={[{ required: true, message: '请输入目标人数!' }]}
+              rules={[{ required: true, message: '请输入目标人数!' }, {
+                validator(_rule, value, callback) {
+
+                  if (!/^\d+$/.test(value)) {
+                    callback('请输入正整数');
+                  } else {
+                    callback();
+                  }
+                },
+              }]}
             >
-              <Input type={'number'} />
+              <Input type={'text'} />
             </Form.Item>
             <Form.Item style={{ textAlign: 'center' }}>
               <div className={styles.btn}>
@@ -101,8 +111,8 @@ const AddEditGroup: FC<IProps> = (props) => {
             </Form.Item>
           </Form>
         </div>
-      </DragModal>
-    </div>
+      </DragModal >
+    </div >
   );
 };
 
