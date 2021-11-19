@@ -9,23 +9,27 @@ import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import { TeamMember } from './components/Member';
 import { Role } from 'xzl-web-shared/src/utils/role';
+import { hasPermissions } from '@/utils/utils';
+
 interface IProps {
 
 }
 const Croservice: FC<IProps> = () => {
 
-  const { projectNsId, creatorSId } = useSelector((state: IState) => state.project.projDetail);
+  // const { projectNsId, creatorSId } = useSelector((state: IState) => state.project.projDetail);
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [teams, setTeams] = useState([]);
 
   const [show, setShow] = useState(false);
   const [edit, setEdit] = useState(false);
   const [source, setSource] = useState({});
-  const [isCreater, setIsCreater] = useState(false);
+  const teamMembers = useSelector((state: IState) => state.project.teamMembers);
+
 
   useEffect(() => {
 
-    const isCurrentSid = creatorSId == localStorage.getItem('xzl-web-doctor_sid');
-    setIsCreater(isCurrentSid);
+    // const isCurrentSid = creatorSId == localStorage.getItem('xzl-web-doctor_sid');
+    // setIsCreater(isCurrentSid);
 
     api.service.fetchBaseRoles().then(res => {
 
@@ -89,7 +93,7 @@ const Croservice: FC<IProps> = () => {
     <div className={styles.croservice}>
       <AddServicePackage onSaveSuccess={onSaveSuccess} edit={edit} source={source} show={show} onCancel={() => { setShow(false); }}>
         {
-          isCreater && <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button>
+          hasPermissions(teamMembers) && <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button>
         }
       </AddServicePackage>
       {
@@ -99,7 +103,7 @@ const Croservice: FC<IProps> = () => {
             <div className='flex justify-between text-base mb-50'>
               <div className='font-bold'>{team.name}</div>
               {
-                isCreater && <div className={`${styles.operator} flex items-center`}>
+                hasPermissions(teamMembers) && <div className={`${styles.operator} flex items-center`}>
 
 
                   <p onClick={() => { onEditTeam(team); }}><img src={editPng} className='mr-5' />编辑</p>
