@@ -112,24 +112,66 @@ function PatientCro({ }: IProps) {
   };
 
 
-  const patientColums = hasPermissions(teamMembers) ? [...patientCroColumns({
-    handleStop,
-    toggleImg,
-    distributionTeam,
-  }), {
+  const operation = {
+    title: '操作',
+    dataIndex: '',
+    render: (_text: any, record: any) => (
+      <div className="table-operating">
+        {
+          record.status === 1002 ? (
+            <Popconfirm
+              placement="topRight"
+              overlayClassName="delete__pop-confirm"
+              title={(
+                <div>
+                  <h3>确定要停止此患者试验吗？</h3>
+                </div>
+              )}
+              onConfirm={() => params.handleStop(record)}
+            >
+              <span>停止此患者试验</span>
+            </Popconfirm>
+          ) : <span style={{ color: '#C5C5C5' }}>已停止</span>
+        }
+
+      </div>
+    ),
+  };
+
+  const subject = {
+    title: '受试者签名',
+    dataIndex: '',
+    render: (_text: any, record: any) => (
+      <div>
+        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)} /> : '--'}
+      </div>
+    ),
+  };
+
+  const cro = {
     title: '分配cro团队',
     dataIndex: '',
     render: (_text: any, record: any) => (
       <div>
         {record.team.name}
-        <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => distributionTeam(record)} />
+        <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => {
+          if (hasPermissions(teamMembers)) {
+            distributionTeam(record);
+          }
+        }} />
       </div >
     ),
-  }] : patientCroColumns({
+  };
+
+  const patientColums = hasPermissions(teamMembers) ? [...patientCroColumns({
     handleStop,
     toggleImg,
     distributionTeam,
-  });
+  }), operation, subject, cro] : [...patientCroColumns({
+    handleStop,
+    toggleImg,
+    distributionTeam,
+  }), subject, cro];
 
   const columns = {
     1002: patientColums,

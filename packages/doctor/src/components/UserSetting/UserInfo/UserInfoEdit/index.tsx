@@ -25,15 +25,18 @@ interface Iporps {
 const { Option } = Select;
 const RadioGroup = Radio.Group;
 function UserInfoEdit({ toggleEdit }: Iporps) {
-  const { userInfo } = useSelector((state:IState) => state.user);
+  const { userInfo, filterOrgs } = useSelector((state:IState) => state.user);
   console.log('userInfo232', userInfo);
   const [avatar, setAvatar] = useState<string>(userInfo.avatarUrl || config.defaultAvatar);
   const [form] = Form.useForm();
   const { getFieldValue, setFieldsValue } = form;
   const dispatch = useDispatch();
-
+  let org = '';
+  filterOrgs.forEach((item, inx) => {
+    org += `${item.name}${inx + 1 === filterOrgs.length ? '' : '、'}`;
+  });
   const initForm = {
-    doctorGroup: '心之力医院',
+    doctorGroup: org,
     sex: null,
     level: 0,
     mentor: '',
