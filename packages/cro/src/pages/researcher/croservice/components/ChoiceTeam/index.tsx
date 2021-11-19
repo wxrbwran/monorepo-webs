@@ -7,7 +7,7 @@ import { useSelector } from 'umi';
 import { TeamMember } from '../Member';
 import radioCheck from '@/assets/img/radio_check.png';
 import radioUnCheck from '@/assets/img/radio_uncheck.png';
-
+import { Role } from 'xzl-web-shared/src/utils/role';
 interface IProps {
 
   teamNSId?: string;
@@ -24,12 +24,22 @@ const ChoiceTeam: FC<IProps> = (props) => {
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
 
 
+
+  // 是否是该team的创建人
+  const isTeamCreater = (team) => {
+
+    return team.innerTeams
+      .find((innerTeam) => innerTeam.members.find((item) => localStorage.getItem('xzl-web-doctor_sid') == item.sid && item.role == Role.NS_OWNER.id));
+  };
+
   useEffect(() => {
 
     if (show) {
       api.service.getTeams({ 'teamNSLabels': ['research_pro_patient'], 'targetNSId': projectNsId }).then(res => {
 
-        setTeams(res.teams);
+
+        // 选择团队只能选择是自己创建的服务包
+        setTeams(res.teams.filter((team) => isTeamCreater(team)));
 
         const choices = res.teams.filter((team) => team.teamNSId == teamNSId);
         if (teamNSId && choices.length > 0) {

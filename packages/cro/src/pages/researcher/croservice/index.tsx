@@ -10,7 +10,6 @@ import { useSelector } from 'umi';
 import { TeamMember } from './components/Member';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { hasPermissions } from '@/utils/utils';
-
 interface IProps {
 
 }
@@ -113,8 +112,6 @@ const Croservice: FC<IProps> = () => {
               <div className='font-bold'>{team.name}</div>
               {
                 hasPermissions(teamMembers) && isTeamCreater(team) && <div className={`${styles.operator} flex items-center`}>
-
-
                   <p onClick={() => { onEditTeam(team); }}><img src={editPng} className='mr-5' />编辑</p>
                   <Divider type="vertical" />
                   <Popconfirm
