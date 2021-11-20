@@ -1,3 +1,4 @@
+import { Role } from 'xzl-web-shared/src/utils/role';
 import { parse } from 'querystring';
 
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -84,4 +85,15 @@ export const hasPermissions = (teamMembers: any[]): boolean => {
 
   return res;
 };
+
+
+export const hasOperationPermissions = (teamMembers: any[]): boolean => {
+
+  const ownerMember = teamMembers.filter((item) => item.role == Role.NS_OWNER.id);
+  if (ownerMember.length > 0) {
+    return ownerMember[0].sid == localStorage.getItem('xzl-web-doctor_sid');
+  }
+  return false;
+};
+
 
