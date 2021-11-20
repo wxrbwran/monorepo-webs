@@ -14,9 +14,8 @@ import { CommonData, IState } from 'typings/global';
 import AddServicePackage from '../../researcher/croservice/components/AddServicePackage';
 import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
 import distributionTeamPng from '@/assets/img/distribution_team.png';
-import { hasPermissions } from '@/utils/utils';
+import { hasPermissions, hasOperationPermissions } from '@/utils/utils';
 import IconAutograph from '@/assets/img/icon_autograph.png';
-import { hasOperationPermissions } from 'packages/cro/src/utils/utils';
 interface IProps {
 }
 const { TabPane } = Tabs;
