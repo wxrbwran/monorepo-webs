@@ -65,8 +65,8 @@ function BaseInfo({ projectSid }: IProps) {
   const handleMinDay = (e) => {
     updateCroProject({ minDays: Number(e.target.value) });
   };
-
   const { name, detail, createdAt, patientCount, avgDay, label, practiceArea } = projDetail;
+  console.log('======11', projDetail);
   return (
     <>
       <div className={styles.left_top}>
@@ -110,7 +110,6 @@ function BaseInfo({ projectSid }: IProps) {
                 <InputNumber
                   min={0}
                   className={detail?.minDays ? styles.border_none : ''}
-                  defaultValue={detail?.minDays}
                   onBlur={handleMinDay}
                   value={detail?.minDays}
                   disabled={![Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType) || projDetail.status === 1001}
