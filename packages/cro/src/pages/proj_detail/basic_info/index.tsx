@@ -5,7 +5,7 @@ import time from '@/assets/time.png';
 import * as api from '@/services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { Input, Tooltip, message, InputNumber } from 'antd';
+import { Input, Tooltip, message } from 'antd';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 import { CommonData, IState } from 'typings/global';
@@ -65,8 +65,9 @@ function BaseInfo({ projectSid }: IProps) {
   const handleMinDay = (e) => {
     updateCroProject({ minDays: Number(e.target.value) });
   };
-
+  console.log('handleMinDay', handleMinDay);
   const { name, detail, createdAt, patientCount, avgDay, label, practiceArea } = projDetail;
+  console.log('======11', projDetail);
   return (
     <>
       <div className={styles.left_top}>
@@ -107,14 +108,14 @@ function BaseInfo({ projectSid }: IProps) {
             <p className={styles.title}><span>·</span> 最小试验天数 <span>·</span></p>
             {
               <span>
-                <InputNumber
+                {/* <InputNumber
                   min={0}
                   className={detail?.minDays ? styles.border_none : ''}
                   defaultValue={detail?.minDays}
                   onBlur={handleMinDay}
                   value={detail?.minDays}
                   disabled={![Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType) || projDetail.status === 1001}
-                />
+                /> */}
                 <span className="ml-5">天</span>
               </span>
             }
