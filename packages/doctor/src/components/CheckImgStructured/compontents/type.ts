@@ -3,7 +3,7 @@ export interface IAddTopicProps {
   actionType: string; // add | edit
   templateId: string; // 单据模板id
   editInx?: number; // 编辑时传：当前编辑项
-  handleDelQuestion: (delInx?: number) => void;
+  handleDelQuestion: (delInx: number) => void;
   handleSaveQuestion: (data: any, actionType: string, editInx?: number) => void;
 }
 export interface IAddJcdItem {

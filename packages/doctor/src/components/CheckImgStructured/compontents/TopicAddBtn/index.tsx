@@ -3,26 +3,32 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { debounce } from 'lodash';
 import { IAddTopicProps } from '../type';
 import TopicAddDdtk from '../TopicAddDdtk';
+import TopicAddProblem from '../TopicAddProblem';
+import TopicAddChoice from '../TopicAddChoice';
 import styles from './index.scss';
 
 const TopicAddBtn: FC<IAddTopicProps> = (props) => {
   const { topicType, actionType } = props;
-  const [showModal, setshowModal] = useState(true);
+  const [showModal, setshowModal] = useState(false);
   const closeModal = () => {
     setshowModal(false);
+  };
+  const topicProps = {
+    ...props,
+    closeModal,
   };
   const typeObj = {
     COMPLETION: {
       title: '多段填空',
-      comp: <TopicAddDdtk {...props} closeModal={closeModal} />,
+      comp: <TopicAddDdtk {...topicProps}/>,
     },
     RADIO: {
-      title: '多段填空',
-      comp: <TopicAddDdtk {...props} />,
+      title: '选择题',
+      comp: <TopicAddChoice {...topicProps} />,
     },
     TEXT: {
       title: '问答题',
-      comp: <TopicAddDdtk {...props} />,
+      comp: <TopicAddProblem {...topicProps} />,
     },
   };
   const handleShow = () => {

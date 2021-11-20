@@ -3,6 +3,7 @@ import { IUserAddTopicItem, StructuredModelState } from 'packages/doctor/typings
 import { IMeta, IQuestions, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import { getDvaApp } from 'umi';
 import { IJcdTabItem } from './type';
+import { message } from 'antd';
 
 export const outTypes: CommonData = {
   HYD: '化验单',
@@ -17,12 +18,11 @@ export const checkboxData = {
   isAdd: true,
   question: '',
   answer: [],
-  options: ['', ''],
+  options: ['', '', ''],
 };
 
 export const textData = {
   question_type: 'TEXT',
-  isAdd: true,
   question: '',
   answer: [],
 };
@@ -60,7 +60,9 @@ export const baseFieldReverse: CommonData = {
   '检查名称': 'name',
   '单据名称': 'djName',
 };
-
+export const msg = (content:string, type: string = 'success') => {
+  message[type]({ content, style: { zIndex: 1111 } });
+};
 // 提交时3，把问题转成api接口参数格式  ui->api
 export const fetchSubmitData = (questions: IQuestions[], startInx: number | string, clickSaveTime: number, gid?: string) => {
   // console.log('gid', gid);

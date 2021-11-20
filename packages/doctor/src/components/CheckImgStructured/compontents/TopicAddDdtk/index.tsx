@@ -1,8 +1,8 @@
 import React, { FC, useState, useRef } from 'react';
 import styles from './index.scss';
-import { ddtkExample, ddtkData } from '../utils';
+import { ddtkExample, ddtkData, msg } from '../utils';
 import { IAddTopicProps } from '../type';
-import { Input, Button, message } from 'antd';
+import { Input, Button } from 'antd';
 import { CheckCircleOutlined, DeleteOutlined, CloseCircleFilled } from '@ant-design/icons';
 import * as api from '@/services/api';
 import uuid from 'react-uuid';
@@ -13,7 +13,6 @@ interface IDdtkItem {
   question_type: string;
   question: string;
   answer: string[],
-  templateId: string;
 }
 const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) => {
   const { actionType, handleDelQuestion, editInx, closeModal, templateId } = props;
@@ -41,9 +40,9 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
   const handleSave = () => {
     console.log('------qas', qas);
     if (qas[0].question === '') {
-      message.error({ content: '请输入题目', style: { zIndex: 1100 } });
+      msg('请输入题目', 'error');
     } else if (qas.find(qaItem => qaItem.question === '')) {
-      message.error({ content: '请输入问题', style: { zIndex: 1100 } });
+      msg('请输入问题', 'error');
     } else {
       // handleSaveQuestion(qas, actionType);
       // closeModal();

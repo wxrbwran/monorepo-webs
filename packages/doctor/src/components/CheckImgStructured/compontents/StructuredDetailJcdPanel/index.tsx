@@ -4,13 +4,12 @@ import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
 import iconGf from '@/assets/img/icon_official.png';
 import StructuredJcdTabItem from '../StructuredJcdTabItem';
 import SearchJcd from '../SearchJcd';
-import { IAddJcdItem, IJcdTabItem } from '../type';
 import CreateJcd from '../CreateJcd';
+import { IAddJcdItem, IJcdTabItem } from '../type';
 // import * as api from '@/services/api';
-import styles from './index.scss';
 import uuid from 'react-uuid';
 import { isEmpty } from 'lodash';
-const { TabPane } = Tabs;
+import styles from './index.scss';
 
 interface IProps {
   imageId: string;
@@ -20,12 +19,12 @@ interface IProps {
   setJcdCallbackFns: (params: { [type: string]: () => void }) => void; // 设置callback function
   isViewOnly: boolean;
 }
-
+const { TabPane } = Tabs;
 const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const { imageId, outType, isViewOnly, setJcdCallbackFns, initData, jcdCallbackFns } = props;
   // const topicPanelCallbackFns = useRef({});
   // const addJcdNum = useRef();
-  const [jcdList, setJcdList] = useState<IJcdTabItem[]>([]); // 检查单tab list
+  const [jcdList, setJcdList] = useState<IJcdTabItem[]>([ { meta: { tabKey: 'iidi', jcdName: 'test' } }]); // 检查单tab list
   const [activeTabKey, setActiveTabKey] = useState<string>(); // 检查单tab 当前选中项
   const [showAddJctBtn, setShowAddJctBtn] = useState(false); // 显示添加检查单按钮
   const [partMethod, setPartMethod] = useState<{ part?: string; method?: string }>(); // 部位+方法，添加检查单时使用

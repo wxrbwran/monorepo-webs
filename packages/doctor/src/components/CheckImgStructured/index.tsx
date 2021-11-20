@@ -35,24 +35,6 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const hideViewer = () => {
     setShowViewer(false);
   };
-  // const formatTemplate = (res) => {
-  //   const tempData: ITmpList = {};
-  //   console.log(452454, res.list);
-  //   res.list.forEach((item: ITempItem) => {
-  //     const { method, part, title } = item.meta;
-  //     const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
-  //     if (!tempData[type]) {
-  //       tempData[type] = [];
-  //     }
-  //     tempData[type] = tempData[type].concat(item.data);
-  //   });
-  //   settempAll(tempData);
-  // };
-  // const fetchTemplate = async (from: number, to: number) => {
-  //   const params = { from, to };
-  //   const data = api.image.fetchImageTopicTemplate(params);
-  //   return data;
-  // };
   const fetchImageJcds = async (imageId: string) => {
     const params = { meta: { imageId,  sid: patientSid } };
     const data = api.image.fetchImageJcdAndOther(params);
@@ -68,20 +50,6 @@ const CheckImgStructured: FC<IProps> = (props) => {
     const data = await api.image.fetchImageIndexes(params);
     return data;
   };
-  // const fetchData = (id: string, oTime: number) => {
-  //   Promise.all([fetchTemplate(0, oTime), fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
-  //     const [tempData, hData, jData ] = res;
-  //     formatTemplate(tempData);
-  //     setHydData(hData.list.map(item => {
-  //       return ({ ...item, key: uuid() });
-  //     }));
-  //     setJcdData(jData.list.map(item => {
-  //       return ({ ...item, key: uuid() });
-  //     }));
-  //     setImgData({ ...hData, imageId: id });
-  //     setIsLoaded(true);
-  //   });
-  // };
   const fetchData = (id: string) => {
     Promise.all([fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
       const [hData, jData ] = res;
