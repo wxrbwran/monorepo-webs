@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { message, Form, Tabs } from 'antd';
+import { message, Form, Tabs, Popconfirm } from 'antd';
 import SelectGroup from '../components/select_group';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import * as api from '@/services/api';
@@ -15,6 +15,7 @@ import AddServicePackage from '../../researcher/croservice/components/AddService
 import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
 import distributionTeamPng from '@/assets/img/distribution_team.png';
 import { hasPermissions } from '@/utils/utils';
+import IconAutograph from '@/assets/img/icon_autograph.png';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -111,14 +112,13 @@ function PatientCro({ }: IProps) {
     setOptions(params);
   };
 
-
   const operation = {
     title: '操作',
     dataIndex: '',
     render: (_text: any, record: any) => (
       <div className="table-operating">
         {
-          record.status === 1002 ? (
+          record.status === 1002 ? hasPermissions(record.team.members) && (
             <Popconfirm
               placement="topRight"
               overlayClassName="delete__pop-confirm"
@@ -127,7 +127,7 @@ function PatientCro({ }: IProps) {
                   <h3>确定要停止此患者试验吗？</h3>
                 </div>
               )}
-              onConfirm={() => params.handleStop(record)}
+              onConfirm={() => handleStop(record)}
             >
               <span>停止此患者试验</span>
             </Popconfirm>
@@ -143,7 +143,7 @@ function PatientCro({ }: IProps) {
     dataIndex: '',
     render: (_text: any, record: any) => (
       <div>
-        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)} /> : '--'}
+        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => toggleImg(record)} /> : '--'}
       </div>
     ),
   };
@@ -155,7 +155,7 @@ function PatientCro({ }: IProps) {
       <div>
         {record.team.name}
         <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => {
-          if (hasPermissions(teamMembers)) {
+          if (hasPermissions(record.team.members)) {
             distributionTeam(record);
           }
         }} />
@@ -163,15 +163,11 @@ function PatientCro({ }: IProps) {
     ),
   };
 
-  const patientColums = hasPermissions(teamMembers) ? [...patientCroColumns({
+  const patientColums = [...patientCroColumns({
     handleStop,
     toggleImg,
     distributionTeam,
-  }), operation, subject, cro] : [...patientCroColumns({
-    handleStop,
-    toggleImg,
-    distributionTeam,
-  }), subject, cro];
+  }), operation, subject, cro];
 
   const columns = {
     1002: patientColums,
