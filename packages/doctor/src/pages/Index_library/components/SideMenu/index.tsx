@@ -21,15 +21,15 @@ const { Search } = Input;
 const SideMenu: FC = () => {
   const [activeMenu, setactiveMenu] = useState(''); // 当前选中项
   const [imgType, setImgType] = useState<IImgType>({});
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState(''); // 只用于搜索框展示文案用，点击菜单时会清空这里
   const [showSubMenu, setShowSubMenu] = useState(false);
-  const fetchImageType = () => {
-    const params: { name?: string;sourceSid: string;source: string } = {
+  const fetchImageType = (params?: { name: string }) => {
+    const apiParams: { name?: string;sourceSid: string;source: string } = {
       sourceSid: window.$storage.getItem('sid'),
       source: 'DOCTOR',
+      ...params,
     };
-    if (keyword) params.name = keyword;
-    api.indexLibrary.fetchIndexDocument(params).then((res: { list : IIndexItem[] }) => {
+    api.indexLibrary.fetchIndexDocument(apiParams).then((res: { list : IIndexItem[] }) => {
       if (res.list.length > 0) {
         const JCD: IIndexItem[] = [];
         const HYD: IIndexItem[] = [];
@@ -56,14 +56,15 @@ const SideMenu: FC = () => {
   useEffect(() => {
     fetchImageType();
   }, []);
-  const handleSearch = (value, event) => {
-    console.log('value, event', value, event);
-    fetchImageType();
+  const handleSearch = (value: string) => {
+    fetchImageType({ name: value });
     setShowSubMenu(true);
   };
   const handleChangeMenu = (typeItem: string, source: string) => {
+    setKeyword('');
     setactiveMenu(typeItem + source);
     setShowSubMenu(true);
+    fetchImageType();
   };
 
   const handleGoDetail = (indexData: { id: string, type: string }) => {
@@ -80,6 +81,7 @@ const SideMenu: FC = () => {
         // allowClear
         onSearch={handleSearch}
         prefix={<SearchOutlined />}
+        value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       />
       {
