@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { message, Form, Tabs } from 'antd';
+import { message, Form, Tabs, Popconfirm } from 'antd';
 import SelectGroup from '../components/select_group';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import * as api from '@/services/api';
@@ -253,7 +253,7 @@ function PatientCro({ }: IProps) {
           src: url,
         }))}
       />
-      {/* 
+      {/*
       <AddServicePackage onSaveSuccess={onSaveSuccess} edit={edit} source={source} show={show} onCancel={() => { setShow(false); }}>
         <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button>
       </AddServicePackage> */}
