@@ -186,7 +186,7 @@ function PatientCro({ }: IProps) {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: (record: { status: number }) => ({
-      disabled: record?.status === 1003,
+      disabled: record?.status === 1003 && hasOperationPermissions(record.team.members),
     }),
   };
   const handleToggleTab = (key: string) => {
