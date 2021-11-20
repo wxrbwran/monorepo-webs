@@ -16,6 +16,7 @@ import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
 import distributionTeamPng from '@/assets/img/distribution_team.png';
 import { hasPermissions } from '@/utils/utils';
 import IconAutograph from '@/assets/img/icon_autograph.png';
+import { hasOperationPermissions } from 'packages/cro/src/utils/utils';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -118,7 +119,7 @@ function PatientCro({ }: IProps) {
     render: (_text: any, record: any) => (
       <div className="table-operating">
         {
-          record.status === 1002 ? hasPermissions(record.team.members) && (
+          record.status === 1002 ? hasOperationPermissions(record.team.members) && (
             <Popconfirm
               placement="topRight"
               overlayClassName="delete__pop-confirm"
@@ -154,11 +155,14 @@ function PatientCro({ }: IProps) {
     render: (_text: any, record: any) => (
       <div>
         {record.team.name}
-        <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => {
-          if (hasPermissions(record.team.members)) {
+        {
+          hasOperationPermissions(record.team.members) &&
+          <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => {
+
             distributionTeam(record);
-          }
-        }} />
+
+          }} />
+        }
       </div >
     ),
   };
