@@ -8,6 +8,7 @@ import { TeamMember } from '../Member';
 import radioCheck from '@/assets/img/radio_check.png';
 import radioUnCheck from '@/assets/img/radio_uncheck.png';
 import { Role } from 'xzl-web-shared/src/utils/role';
+import { debounce } from 'lodash';
 interface IProps {
 
   teamNSId?: string;
@@ -57,6 +58,9 @@ const ChoiceTeam: FC<IProps> = (props) => {
   };
 
 
+  const handlePassCert = debounce((team) => {
+    onSaveSuccess(team);
+  }, 300);
 
   return (
     <div>
@@ -72,7 +76,7 @@ const ChoiceTeam: FC<IProps> = (props) => {
         destroyOnClose
       >
         <div className={styles.add_service}>
-          <p className='flex mb-20 text-lg'>没找到团队?<p className='text-blue-400' onClick={onCreateTeam}>点击创建团队</p></p>
+          <p className='flex mb-20 text-lg'>没找到团队?<p className='text-blue-400' onClick={debounce(onCreateTeam, 300)}>点击创建团队</p></p>
           {
             teams.map((team) => {
 
@@ -92,7 +96,7 @@ const ChoiceTeam: FC<IProps> = (props) => {
               );
             })
           }
-          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={() => { onSaveSuccess(choiceTeam); }}>完成</Button>
+          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={() => { handlePassCert(choiceTeam); }}>完成</Button>
         </div>
       </DragModal>
     </div>

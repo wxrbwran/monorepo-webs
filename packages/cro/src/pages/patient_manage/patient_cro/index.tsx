@@ -16,6 +16,7 @@ import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
 import distributionTeamPng from '@/assets/img/distribution_team.png';
 import { hasPermissions, hasOperationPermissions } from '@/utils/utils';
 import IconAutograph from '@/assets/img/icon_autograph.png';
+import { debounce } from 'lodash';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -35,9 +36,6 @@ function PatientCro({ }: IProps) {
 
 
   const [teamCreateShow, setTeamCreateShow] = useState(false);
-
-
-
 
   const refreshList = () => {
     setOptions({ ...tableOptions }); //刷新当前受试者列表
@@ -148,6 +146,10 @@ function PatientCro({ }: IProps) {
     ),
   };
 
+  const handlePassCert = debounce((record) => {
+    distributionTeam(record);
+  }, 300);
+
   const cro = {
     title: '分配cro团队',
     dataIndex: '',
@@ -156,11 +158,7 @@ function PatientCro({ }: IProps) {
         {record.team.name}
         {
           hasOperationPermissions(record.team.members) &&
-          <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => {
-
-            distributionTeam(record);
-
-          }} />
+          <img style={{ width: '26px', height: '26px', alignSelf: 'center' }} src={distributionTeamPng} onClick={() => { handlePassCert(record); }} />
         }
       </div >
     ),
@@ -186,7 +184,7 @@ function PatientCro({ }: IProps) {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: (record: { status: number }) => ({
-      disabled: record?.status === 1003 || !hasOperationPermissions(record.team.members),
+      disabled: record?.status === 1003 && hasOperationPermissions(record.team.members),
     }),
   };
   const handleToggleTab = (key: string) => {
@@ -261,7 +259,7 @@ function PatientCro({ }: IProps) {
         {/* <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button> */}
       </AddServicePackage>
 
-      <ChoiceTeam onSaveSuccess={putCroToPatient} show={teamShow} teamNSId={putCroToRecord?.current?.team?.teamNSId} onCancel={() => { setTeamShow(false); }} onCreateTeam={() => { setTeamShow(false); setTeamCreateShow(true); }}>
+      <ChoiceTeam onSaveSuccess={debounce(putCroToPatient, 300)} show={teamShow} teamNSId={putCroToRecord?.current?.team?.teamNSId} onCancel={() => { setTeamShow(false); }} onCreateTeam={() => { setTeamShow(false); setTeamCreateShow(true); }}>
         {/* <Button type="primary" className="mb-20" onClick={() => { setTeamShow(true); console.log('====123456'); }}>选择团队</Button> */}
       </ChoiceTeam>
 
