@@ -35,7 +35,7 @@ const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleCho
                 <img className="absolute right-3 top-3 w-14 h-14" src={iconClose} alt="" onClick={() => { onRemove(item, index); }} />
               }
               <img className="w-60 h-60 rounded mt-15" src={item.avatarUrl ?? defaultAvatar} alt="" />
-              <div className={`font-bold mt-5 ${styles.name}`} title={item.name + item.name ?? ''}>{item.name + item.name ?? ''}</div>
+              <div className={`font-bold mt-5 ${styles.name}`} title={item.name ?? ''}>{item.name ?? ''}</div>
               <div className={`text-gray-600 ${styles.org_name}`} title={item.choiceOrg ? item.choiceOrg.name : ''}>{item.choiceOrg ? item.choiceOrg.name : ''}</div>
             </div>
           ))
