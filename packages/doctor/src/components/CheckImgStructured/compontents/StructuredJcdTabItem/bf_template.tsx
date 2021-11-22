@@ -12,8 +12,8 @@ import { IMeta } from 'packages/doctor/typings/imgStructured';
 interface IProps {
   tabKey: string;
   outType: string;
-  hydCallbackFns: any; // 保存时候的回调
-  setHydCallbackFns: (params: { [type: string]: () => void }) => void;
+  jcdCallbackFns: any; // 保存时候的回调
+  setJcdCallbackFns: (params: { [type: string]: () => void }) => void;
   imageId: string;
   initData: {
     data: ITopicQaItemApi[],
@@ -25,7 +25,7 @@ interface IProps {
 
 const StructuredDetailTopic: FC<IProps> = (props) => {
   console.log('gggprops', props);
-  const { initData, tabKey, hydCallbackFns, setHydCallbackFns, isViewOnly,
+  const { initData, tabKey, jcdCallbackFns, setJcdCallbackFns, isViewOnly,
     imageId, outType, tempAll } = props;
   const initTmp: ITopicTemplateItemApi[][] = [[], [], [], []];
   // 编辑：后增加的模板问题
@@ -117,7 +117,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
     }
   };
   useEffect(() => {
-    hydCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
+    jcdCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
       Promise.all(Object.values(topicCallbackFns.current)
         .map((fn) => fn())).then((topicList) => {
         let jcdProp: any = {};
@@ -141,11 +141,11 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
         });
       });
     });
-    setHydCallbackFns(hydCallbackFns);
+    setJcdCallbackFns(jcdCallbackFns);
     return () => {
       // 删除掉此tab要delete掉此项
-      delete hydCallbackFns[tabKey];
-      setHydCallbackFns(hydCallbackFns);
+      delete jcdCallbackFns[tabKey];
+      setJcdCallbackFns(jcdCallbackFns);
     };
   }, []);
   const changeTopicCallbackFns = ({ type, fn }: ICallbackFn ) => {

@@ -28,8 +28,8 @@ interface IProps {
     unknownReport?: boolean;
     measuredAt?: number;
   };
-  inspectionCallbackFns: any; // 保存时候的回调
-  setCallbackFns: (params: { [type: string]: () => void }) => void; // 设置callback function
+  hydCallbackFns: any; // 保存时候的回调
+  setHydCallbackFns: (params: { [type: string]: () => void }) => void; // 设置callback function
   isViewOnly: boolean;
 }
 // 渲染时需要这两个字段
@@ -40,9 +40,9 @@ interface ICheckTypesItem extends IApiDocumentItem {
 }
 // ICheckTypesItem保存过后init数据，接口返回的格式。ISearchDocumentItem是搜索时候接口返回的数据格式
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
-const StructuredDetailItem: FC<IProps> = (props) => {
+const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const {
-    inspectionCallbackFns, setCallbackFns, tabKey, outType, initData, imageId, isViewOnly,
+    hydCallbackFns, setHydCallbackFns, tabKey, outType, initData, imageId, isViewOnly,
   } = props;
   console.log('initDddd', initData);
   const activeType1 = useRef('');
@@ -110,12 +110,12 @@ const StructuredDetailItem: FC<IProps> = (props) => {
     }
     activeType1.current = params.documentId + params.sampleFrom;
     setActiveType(params.documentId + params.sampleFrom);
-    console.log('===-2');
+    console.log('===-2', newCheckTypes);
     setCheckTypes([...newCheckTypes]);
   };
   useEffect(() => {
     console.log('level1Type', tabKey);
-    inspectionCallbackFns[tabKey] = () => new Promise((resolve) => {
+    hydCallbackFns[tabKey] = () => new Promise((resolve) => {
       Promise.all(Object.values(documentsCallbackFns.current)
         .map((fn) => fn())).then((documentList) => {
         // console.log('hospital', hospital);
@@ -130,12 +130,12 @@ const StructuredDetailItem: FC<IProps> = (props) => {
         });
       });
     });
-    // inspectionCallbackFns浅拷贝，不执行下面setCallbackFns， 也可以。
-    setCallbackFns(inspectionCallbackFns);
+    // hydCallbackFns浅拷贝，不执行下面setHydCallbackFns， 也可以。
+    setHydCallbackFns(hydCallbackFns);
     return () => {
       // 删除掉此tab要delete掉此项
-      delete inspectionCallbackFns[tabKey];
-      setCallbackFns(inspectionCallbackFns);
+      delete hydCallbackFns[tabKey];
+      setHydCallbackFns(hydCallbackFns);
     };
   }, []);
   // 获取所有大分类数据list
@@ -154,6 +154,7 @@ const StructuredDetailItem: FC<IProps> = (props) => {
     return (arg as ICheckTypesItem).indexList !== undefined;
   }
   const getInitList = (item: ICheckTypesItem | ISearchDocumentItem) => {
+    console.log('67893467843', item);
     // 有indexList表示是回显数据
     if (isMedicalIndexList(item)) {
       const { documentId, documentName } = item;
@@ -311,4 +312,4 @@ const StructuredDetailItem: FC<IProps> = (props) => {
   );
 };
 
-export default StructuredDetailItem;
+export default StructuredDetailHydPanel;

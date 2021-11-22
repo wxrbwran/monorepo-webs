@@ -1,9 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
-import { SearchOutlined } from '@ant-design/icons';
-import { Input, message } from 'antd';
-import { Link, history } from 'umi';
+import { SearchOutlined, RightOutlined, EditOutlined } from '@ant-design/icons';
+import { Input, message, Tooltip } from 'antd';
+import { history } from 'umi';
 import * as api from '@/services/api';
 import AddType from '../AddType';
+import styles from './index.scss';
 
 interface IIndexItem {
   id: string;
@@ -18,16 +19,17 @@ interface IImgType {
 
 const { Search } = Input;
 const SideMenu: FC = () => {
-  const [activeId, setactiveId] = useState(''); // 当前选中项
+  const [activeMenu, setactiveMenu] = useState(''); // 当前选中项
   const [imgType, setImgType] = useState<IImgType>({});
-  const [keyword, setKeyword] = useState('');
-  const fetchImageType = () => {
-    const params: {name?: string;sourceSid: string;source: string} = {
+  const [keyword, setKeyword] = useState(''); // 只用于搜索框展示文案用，点击菜单时会清空这里
+  const [showSubMenu, setShowSubMenu] = useState(false);
+  const fetchImageType = (params?: { name: string }) => {
+    const apiParams: { name?: string;sourceSid: string;source: string } = {
       sourceSid: window.$storage.getItem('sid'),
       source: 'DOCTOR',
+      ...params,
     };
-    if (keyword) params.name = keyword;
-    api.indexLibrary.fetchIndexDocument(params).then((res: {list : IIndexItem[]}) => {
+    api.indexLibrary.fetchIndexDocument(apiParams).then((res: { list : IIndexItem[] }) => {
       if (res.list.length > 0) {
         const JCD: IIndexItem[] = [];
         const HYD: IIndexItem[] = [];
@@ -41,7 +43,7 @@ const SideMenu: FC = () => {
         // 取第一个选中项
         const firstId = HYD?.[0]?.id || JCD?.[0]?.id;
         const newAddtype = HYD.length > 0 ? 'HYD' : 'JCD';
-        setactiveId(firstId);
+        setactiveMenu(firstId);
         history.push(`/index_library?documentId=${firstId}&documentType=${newAddtype}`);
         setImgType({ HYD, JCD });
       } else {
@@ -54,52 +56,80 @@ const SideMenu: FC = () => {
   useEffect(() => {
     fetchImageType();
   }, []);
-  const handleSearch = () => {
+  const handleSearch = (value: string) => {
+    fetchImageType({ name: value });
+    setShowSubMenu(true);
+  };
+  const handleChangeMenu = (typeItem: string, source: string) => {
+    setKeyword('');
+    setactiveMenu(typeItem + source);
+    setShowSubMenu(true);
     fetchImageType();
   };
 
-  const type: CommonData = {
-    HYD: '化验单',
-    JCD: '检查单',
+  const handleGoDetail = (indexData: { id: string, type: string }) => {
+    history.push(`/index_library?documentId=${indexData.id}&documentType=${indexData.type}`);
+    setShowSubMenu(false);
   };
+  const imgTypeText: CommonData = { HYD: '化验单', JCD: '检查单', OTHER: '其他医学单据' };
+  const imgTypeSource: CommonData = { SYSTEM: '系统', ONESELF: '自己', OTHERS: '他人' };
   return (
-    <div className="ui-index-library__menu">
+    <div className={styles.menu}>
       <Search
-        placeholder="搜索项目"
-        className="search-wrap"
-        allowClear
+        placeholder="请输入名称"
+        className={styles.search_wrap}
+        // allowClear
         onSearch={handleSearch}
         prefix={<SearchOutlined />}
+        value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       />
       {
-        Object.keys(imgType).map((key) => (
-          <div key={key}>
-            <div className="type-title">
-              <span>{type[key]}</span>
-              <AddType imageType={key} onSuccess={fetchImageType} />
+        Object.keys(imgTypeText).map((typeItem) => (
+          <div key={typeItem}>
+            <div className={styles.title}>
+              <span>{imgTypeText[typeItem]}</span>
+              <AddType imageType={typeItem} onSuccess={fetchImageType} />
             </div>
-            <div className="type-list">
+            <div className={styles.type_list}>
               {
-                imgType[key].map((item: IIndexItem) => (
-                  <Link
-                    to={`/index_library?documentId=${item.id}&documentType=${key}`}
-                    onClick={() => setactiveId(item.id)}
-                    key={item.id}
+                Object.keys(imgTypeSource).map((source) => (
+                  <div
+                    className={`${styles.type_item} ${typeItem + source === activeMenu ? styles.active : ''}`}
+                    key={typeItem + source}
+                    onClick={() => handleChangeMenu(typeItem, source)}
                   >
-                    <div
-                      className={`type-item ${item.id === activeId ? 'active' : ''}`}
-                      key={item.id}
-                    >
-                      <span>{item.name}</span>
-                    </div>
-                  </Link>
+                    <span>{imgTypeSource[source]}添加</span>
+                    <RightOutlined />
+                  </div>
                 ))
               }
             </div>
           </div>
         ))
       }
+      {
+        showSubMenu && (
+          <div className={styles.index_list}>
+            {
+              imgType?.HYD?.map((item: IIndexItem) => (
+                <div className={styles.index_item} key={item.id}>
+                  <EditOutlined />
+                  <Tooltip placement="right" title={<span dangerouslySetInnerHTML={{ __html: item.name }} />}>
+                    <div
+                      className={styles.index_name}
+                      onClick={() => handleGoDetail(item)}
+                      dangerouslySetInnerHTML={{ __html: item.name }}
+                    />
+                  </Tooltip>
+                </div>
+              ))
+            }
+            {/* <div className={styles.no_data}>暂无数据</div> */}
+          </div>
+        )
+      }
+
     </div>
   );
 };
