@@ -41,8 +41,8 @@ const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleCho
           ))
         }
         {
-          editable && members.length !== friends.length && <ChoiceDoctor members={members} friends={friends} role="助手" handleChoice={handleChoice} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}>
-            <div className="flex items-center justify-center box-shadow w-160 h-188 rounded-md">
+          editable && members.length !== friends.length && <ChoiceDoctor members={members} friends={friends} role={title} handleChoice={handleChoice} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}>
+            <div className="flex items-center justify-center box-shadow w-90 h-127 rounded-md">
               <img src={iconAdd} alt="" />
             </div>
           </ChoiceDoctor>
