@@ -123,15 +123,24 @@ export function getChooseValuesKeyFromRules(rule: IRule) {
       chooseStartTime = fatherItem;
     } else {
 
-      const key = Object.keys(mustItem)[0];
-      const item = mustItem[key];
-      item.name = key;
 
-      choseConditions.push({
-        chooseItem: item,
-        chooseValue: getChooseValueFromItem(item),
-      });
-      changeDescritionWithItem(item);
+      if (Object.keys(mustItem).length > 0) {
+        const key = Object.keys(mustItem)[0];
+
+        console.log('============ name  借宿设置名字 mustItem', JSON.stringify(mustItem));
+
+        const item = mustItem[key];
+        console.log('============ name  开始设置名字');
+
+        item.name = key;
+        console.log('============ name  借宿设置名字');
+
+        choseConditions.push({
+          chooseItem: item,
+          chooseValue: getChooseValueFromItem(item),
+        });
+        changeDescritionWithItem(item);
+      }
     }
   }
 
