@@ -27,7 +27,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style, doctorWorkOrg }) => {
             { [0, 1].includes(sex) && <img src={sexList[sex]} /> }
           </div>
           <div className="text-gray-500">
-            { depList?.map(item => <span className="mr-5" key={item}>{item}</span>)}
+            { depList.map(item => <span className="mr-5" key={item}>{item}</span>)}
             <span>{title && !isEmpty(depList) && '|' }</span>
             <span>{title ? `${title}` : ''}</span>
           </div>
