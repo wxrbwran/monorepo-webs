@@ -6,14 +6,33 @@ import dayjs from 'dayjs';
 const handlePatientsTeamDataSource = (data: Store[]) => {
   const newPatients: CommonData[] = [];
   let newObj: CommonData = {};
+  // 签约患者下，当前选中菜单的role
+  const currentMenuRole = window.$storage.getItem('role');
+  console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
+  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
   data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
+      // 下级、上级、科研医生、营养师、独立
+      if (Role.NS_OWNER.id === member.role) {
+        newObj.nsOwner = {
+          wcId: member.wcId,  //创建者的wcid - 患者详情获取会话成员使用
+          sid: member.sid,  //创建者的sid -  患者列表是否展示更换服务按钮使用
+        };
+      }
       switch (member.role) {
         case Role.PROJECT_PATIENT.id: // 受试列表
+          if (!doctorRole.includes(currentMenuRole)) {
+            newObj = { ...newObj, ...member };
+          }
+          newObj.inCro = true; // 标记为受试者
+          break;
         case Role.PATIENT.id:
         case Role.PATIENT_VIP.id:
-          newObj = { ...newObj, ...member };
+          // 科研currentMenuRole为空，医生端currentMenuRole有值，需要属于doctorRole之一才满足条件
+          if (!currentMenuRole || doctorRole.includes(currentMenuRole)) {
+            newObj = { ...newObj, ...member };
+          }
           break;
         case Role.RESEARCH_PROJECT_DOCTOR.id:
           newObj.researchProjectDoctor = member.name;
@@ -26,6 +45,10 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
         case Role.ORG.id:
           newObj.organizationName = member.name;
+          newObj.organizationNSId = member.nsId;
+          break;
+        case Role.RESEARCH_PROJECT.id:
+          newObj.projectName = member.name;
           break;
         case Role.PATIENT_YL.id:
         case Role.PATIENT_YL_VIP.id:
@@ -35,6 +58,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
           break;
       }
     });
+    newObj.team = team;
     newPatients.push(newObj);
   });
   return newPatients;
@@ -66,6 +90,58 @@ export const handleInviteMemberList = (dataSource: Store[]) => {
   return newData;
 };
 
+// cro邀请研究者参与管理数据处理使用此方法
+export const handleTeamInviteMemberList = (dataSource: Store[]) => {
+  const newData: Array<ISubject> = [];
+  console.log('handleTeamInviteMemberList dataSource', dataSource);
+  dataSource.forEach((team: any) => {
+    let doctor: any = {};
+    team.members.forEach(item => {
+      if (item.role === Role.DOCTOR.id) {
+        doctor = {
+          orgs: doctor?.orgs || [],
+          ...item,
+          status: projectInviteStatus[item.status] ?? '未邀请',
+        };
+        // 医生所在的互联网医院
+      } else if (item.role === Role.ORG.id) {
+        if (doctor.orgs) {
+          doctor.orgs.push(item);
+          doctor.orgName = doctor.orgs.map((org) => org.name).join(',');
+        } else {
+          doctor = {
+            ...doctor,
+            orgs: [item],
+            orgName: item.name,
+          };
+        }
+      }
+    });
+    newData.push(doctor);
+
+    // const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
+    // newData.push({
+    //   ...item,
+    //   title,
+    //   avatarUrl,
+    //   name,
+    //   joinTime: item?.interval?.start ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
+    //   status: projectInviteStatus[item.status],
+    //   tel,
+    //   provinceName,
+    //   sex: sexList[sex],
+    //   firstProfessionCompany,
+    //   firstPracticeDepartment,
+    //   role: fetchRolePropValue(item.role, 'desc'),
+    //   roleId: item.role,
+    // });
+  });
+  console.log('handleTeamInviteMemberList newData', newData);
+  return newData;
+};
+
+
+
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource
@@ -88,7 +164,7 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
   dataSource.forEach((datum) => {
     // console.log(datum);
-    let tmp:Record<string, string> = {};
+    let tmp: Record<string, string> = {};
     datum.members.forEach((member: Store) => {
       const curRole: string = fetchRolePropValue(member.role, 'key') as string;
       // console.log(curRole);
@@ -105,7 +181,32 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
   // console.log('handlePatientTeamDataSource res', res);
   return res;
 };
-
+export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
+  const doctors: any[] = [];
+  dataSource.forEach((dataItem) => {
+    let doctor: any = {};
+    dataItem.members.forEach(item => {
+      if (item.role === Role.DOCTOR.id) {
+        doctor = {
+          orgs: doctor?.orgs || [],
+          ...item,
+        };
+        // 医生所在的互联网医院
+      } else if (item.role === Role.ORG.id) {
+        if (doctor.orgs) {
+          doctor.orgs.push(item);
+        } else {
+          doctor = {
+            ...doctor,
+            orgs: [item],
+          };
+        }
+      }
+    });
+    doctors.push(doctor);
+  });
+  return doctors;
+};
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
   console.log('dataSource', dataSource);
   console.log('dataKey', dataKey);
@@ -128,6 +229,14 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category as string)) {
         return handlePatientTeamDataSource(dataSource);
       }
+      if (category === 'relatedDoctors') {
+        return handleRelatedDoctorsDataSource(dataSource);
+      }
+
+      if (category === 'inviteMemberList') {
+        return handleTeamInviteMemberList(dataSource);
+      }
+
       return dataSource;
     case 'infos':
       return handleInviteMemberList(dataSource);

@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { useSelector } from 'umi';
 import { Input } from 'antd';
 import moment from 'moment';
-import {
-  sexList, basicInfoTab, hospitalLevel,
-} from '@/utils/tools';
+import { basicInfoTab } from '@/utils/tools';
+import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import UserAvatar from '../../components/UserAvatar';
+import { IState } from 'packages/doctor/typings/model';
+import telIcon from '@/assets/img/icon_tel.png';
+import titlesIcon from '@/assets/img/icon_titles.png';
+import peopleIcon from '@/assets/img/icon_people.png';
 import './index.scss';
 
 interface IProps {
@@ -11,10 +16,11 @@ interface IProps {
 }
 function UserBaseInfos({ userInfo }: IProps) {
   const {
-    name, sex, tel, title, workDepartment, mentor, firstProfessionCompany, level,
+    name, tel, title, practiceAreas, mentor,
     belongToGroup, qcCode, qcIssuingDate, pcCode, pcIssuingDate, biography, expertise,
-    achievement, meetingLecture, firstProfessionBrief, bankName, bankCardNum,
+    achievement, meetingLecture, firstProfessionBrief, bankName, bankCardNum, roleTags,
   } = userInfo;
+  const { filterOrgs } = useSelector((state: IState) => state.user);
   const [activeInfoTab, setActiveInfoTab] = useState('biography');
   const tabData:CommonData = {
     biography,
@@ -27,73 +33,91 @@ function UserBaseInfos({ userInfo }: IProps) {
   const changeActiveInfoTab = (tab: string) => {
     setActiveInfoTab(tab);
   };
+
   return (
     <div className="infos">
-      <div className="infos__base">
-        <span>{name}</span>
-        {sex !== undefined && <span>{sexList[sex]}</span>}
-        {title && <span>{title}</span>}
-        {workDepartment
-          && (
-            <span>
-              科室：
-              {workDepartment}
-            </span>
-          )}
-        {tel && (
-          <span>
-            手机：
-            {tel}
-          </span>
-        )}
-        <span>{mentor}</span>
+      <div className="flex">
+        <UserAvatar avatarUrl={userInfo.avatarUrl || defaultAvatar} status={userInfo.status} />
+        <div>
+          <div className="text-lg mt-8">{name}</div>
+          <div className="flex mb-3 mt-5">
+            <div className="flex items-center justify-start">
+              <img className="w-14 h-14 mr-2" src={telIcon} />
+              <span>手机号: {tel}</span>
+            </div>
+            <div className="flex items-center ml-40 mr-40">
+              <img className="w-14 h-14 mr-2" src={peopleIcon} />
+              <span>职称: {title || '--'}</span>
+            </div>
+            <div className="flex items-center">
+              <img className="w-14 h-14 mr-2" src={titlesIcon} />
+              <span>导师: {mentor}</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="infos__base">
-        <span>
-          第一执业医院：
-          {firstProfessionCompany || '--'}
-          {level ? hospitalLevel[level] : ''}
-        </span>
-        {belongToGroup && (
-          <span>
-            所属医生集团：
-            {belongToGroup || '--'}
-          </span>
-        )}
-        <span>
-          所在互联网医院：
-          心之力
-        </span>
-        {qcCode && (
-          <p>
-            <span>
-              资格证书编码：
-              {qcCode}
-            </span>
-            {qcIssuingDate && (
-              <span>
-                （发证日期：
-                {moment(qcIssuingDate).format('YYYY-MM-DD')}
-                ）
-              </span>
-            )}
-          </p>
-        )}
-        {pcCode && (
-          <p>
-            <span>
-              执业证书编码：
-              {pcCode}
-            </span>
-            {pcIssuingDate && (
-              <span>
-                （发证日期：
-                {moment(pcIssuingDate).format('YYYY-MM-DD')}
-                ）
-              </span>
-            )}
-          </p>
-        )}
+        <div className="flex">
+          <div className="w-112 text-right" style={{ flex: '0 0 112px' }}>执业医院和科室：</div>
+          <div>
+            {
+              practiceAreas?.length > 0 ? (
+                practiceAreas.map(item => {
+                  return (
+                    <span className="mr-10">{item.name}-{item.sub.name}</span>
+                  );
+                })
+              ) : '--'
+            }
+          </div>
+        </div>
+        <div className="flex">
+          <div className="w-112 text-right whitespace-nowrap">所在互联网医院：</div>
+          <div>
+            {/* <span>心之力</span> */}
+            {
+              filterOrgs?.map((item: { name: string, nsId: string }) => {
+                return (
+                  <span key={item.nsId} className={'mr-20'}>{item.name}</span>
+                );
+              })
+            }
+          </div>
+        </div>
+        <div className="flex">
+          <div className="w-112 text-right">所属医生集团：</div>
+          <div>
+            <span>{belongToGroup || '--'} </span>
+          </div>
+        </div>
+        <div className="flex">
+          <div className="w-112 text-right">角色标签：</div>
+          <div>
+            {
+              roleTags?.length > 0 ? roleTags.map((item: string) => <span className='infos__base__tags'>{item}</span>) : '--'
+            }
+          </div>
+        </div>
+        <div className="flex">
+          <div className="w-112 text-right">银行卡号：</div>
+          <div>
+            {bankCardNum || '--'}
+            { bankName ? ` - ${bankName}` : null }
+          </div>
+        </div>
+        <div className="flex">
+          <div className="w-112 text-right">资格证书编码：</div>
+          <div>
+            {`${qcCode || '--'} ${qcCode && qcIssuingDate ? '-' : ''} 发证日期：${qcIssuingDate ? moment(qcIssuingDate).format('YYYY-MM-DD') : '--'}`}
+
+          </div>
+        </div>
+        <div className="flex">
+          <div className="w-112 text-right">执业证书编码：</div>
+          <div>
+            {`${pcCode || '--'} ${pcCode && pcIssuingDate ? '-' : ''} 发证日期：${pcIssuingDate ? moment(pcIssuingDate).format('YYYY-MM-DD') : '--'}`}
+          </div>
+        </div>
       </div>
       <div className="infos__introduction">
         <ul>
@@ -112,25 +136,9 @@ function UserBaseInfos({ userInfo }: IProps) {
             readOnly
             disabled
             value={tabData[activeInfoTab]}
-            style={{
-              width: '100%',
-              height: 88,
-              padding: 0,
-              margin: 0,
-              border: 'none',
-            }}
+            style={{ width: '900px', height: 88, padding: 0, margin: 0, border: 'none' }}
           />
         </div>
-      </div>
-      <div className="infos__base">
-        {/* <span>证件信息: 234234132434</span> */}
-        <span>
-          银行卡号：
-          {bankCardNum}
-          {
-            bankName ? `(${bankName})` : null
-          }
-        </span>
       </div>
     </div>
   );

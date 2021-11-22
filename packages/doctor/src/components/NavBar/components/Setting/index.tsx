@@ -7,7 +7,7 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UserSetting from '@/components/UserSetting';
 import Code from '@/assets/img/nav_bar/code.svg';
 import info from '@/assets/img/nav_bar/info.svg';
-import upperLowerDoctor from '@/assets/img/nav_bar/upper_lower_doctor.svg';
+// import upperLowerDoctor from '@/assets/img/nav_bar/upper_lower_doctor.svg';
 // import msgHistory from '@/assets/img/nav_bar/msg_history.svg';
 // import farDoctor from '@/assets/img/nav_bar/far_doctor.svg';
 import price from '@/assets/img/nav_bar/price.svg';
@@ -17,6 +17,7 @@ import logoutIcon from '@/assets/img/nav_bar/logout.svg';
 // import score from '@/assets/img/nav_bar/score.svg';
 import DoctorQRCode from '../DoctorQRCode';
 import styles from './index.scss';
+import { IState } from 'packages/doctor/typings/model';
 
 interface Item {
   key: string;
@@ -25,7 +26,8 @@ interface Item {
 }
 function Setting() {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state: IState) => state.user);
+  const { userInfo, loginCount } = useSelector((state: IState) => state.user);
+  // 如果没有执业机构和科室信息，则认为是首次登录，默认展示编辑个人资料弹框
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('info');
   useEffect(() => {
@@ -33,7 +35,17 @@ function Setting() {
       type: 'user/getUserWclDetail',
       payload: { wcIds: [window.$storage.getItem('wcId')] },
     });
+    dispatch({
+      type: 'user/getUserOrganizations',
+      payload: { },
+    });
   }, []);
+  useEffect(() => {
+    if (loginCount === 1 && userInfo?.name) {
+      setActiveTab('info');
+      setShowModal(true);
+    }
+  }, [userInfo, loginCount]);
   const handleLogout = () => {
     dispatch({
       type: 'auth/logout',
@@ -55,11 +67,11 @@ function Setting() {
       value: '收费标准',
       src: price,
     },
-    {
-      key: 'upperLower',
-      value: '我的上下级医生',
-      src: upperLowerDoctor,
-    },
+    // {
+    //   key: 'upperLower',
+    //   value: '我的上下级医生',
+    //   src: upperLowerDoctor,
+    // },
     // {
     //   key: 'farDoctor',
     //   value: '未来医生',
@@ -79,7 +91,7 @@ function Setting() {
       src: changePassword,
     },
   ];
-
+  const titleObj = { info: '个人资料', price: '收费标准', reset: '修改密码' };
   const Logout = (
     <div className={styles.item_btn} onClick={handleLogout}>
       <img src={logoutIcon} alt="退出登录" />
@@ -89,8 +101,8 @@ function Setting() {
   const Qrcode = (
     <DoctorQRCode>
       <div className={styles.item_btn}>
-        <img src={Code} alt="我的二维码" />
-        我的二维码
+        <img src={Code} alt="我的名片" />
+        我的名片
       </div>
     </DoctorQRCode>
   );
@@ -130,9 +142,9 @@ function Setting() {
         </div>
       </Dropdown>
       <DragModal
-        title="用户设置"
+        title={titleObj[activeTab] || '用户设置'}
         footer={null}
-        width={1248}
+        width={1000}
         visible={showModal}
         onCancel={() => {
           setShowModal(false);

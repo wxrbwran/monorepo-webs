@@ -6,7 +6,7 @@ import styles from '../../index.scss';
 function Logo() {
   return (
     <div className={styles.logo}>
-      <Link to="/doctor/patients/alone">
+      <Link to="/doctor/patients/alone_doctor">
         <img src={logo} alt="" />
       </Link>
     </div>

@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
-import { Card, Alert, Form, Button, Row, Col, message } from 'antd';
+import { Card, Alert, Form, Button, Row, Col } from 'antd';
 import { Search, AccountStatus } from 'xzl-web-shared/src/components/Selects';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
@@ -8,24 +8,24 @@ import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import RoleInfo from '@/components/RoleInfo';
 import { handleSelection } from '@/utils/conditions';
 import { name, tel, sex, title, patientNum, departmentName, status } from 'xzl-web-shared/src/utils/columns';
-import ModalForm from '@/components/DragModal/DragModalForm';
+// import ModalForm from '@/components/DragModal/DragModalForm';
 import AddDoctorNurse from '../AddDoctorNurse';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
-import { isEmpty, debounce } from 'lodash';
+// import { debounce } from 'lodash';
 import { isOpenSub as getIsOpenSub, upperOrgNsId } from '@/utils/tools';
 
-interface IDoctor {
-  department?: {
-    nsId: string;
-  };
-  sid: string;
-}
+// interface IDoctor {
+//   department?: {
+//     nsId: string;
+//   };
+//   sid: string;
+// }
 const Doctor: FC = () => {
   const [form] = Form.useForm();
   const isOpenSub = getIsOpenSub();
   const { getFieldValue } = form;
-  const [selectRows, setSelectRows] = useState<IDoctor[]>([]);
+  // const [selectRows, setSelectRows] = useState<IDoctor[]>([]);
   const [unReviewedCount, setUnReviewed] = useState<number>(0);
   const [acceptedStateCount, setAcceptedStateCount] = useState<number>(0);
   const initOptions = isOpenSub
@@ -73,7 +73,8 @@ const Doctor: FC = () => {
   };
 
   const handleCallback = (callbackStore: XzlTableCallBackProps) => {
-    setSelectRows(callbackStore.selectedRows);
+    console.log(34343, callbackStore);
+    // setSelectRows(callbackStore.selectedRowKeys);
   };
   const refreshList = () => {
     setOptions({ ...tableOptions });
@@ -83,31 +84,31 @@ const Doctor: FC = () => {
   useEffect(() => {
     getCountStaff();
   }, []);
-  const handleDelete = debounce(() => {
-    const params = {
-      member: [],
-      orgNSId: window.$storage.getItem('nsId'),
-    };
-    selectRows.forEach((doctor: IDoctor) => {
-      const curDoctor: CommonData = { sid: doctor.sid, sRole: Role.DOCTOR.id };
-      if (doctor.department) {
-        curDoctor.nsId = doctor.department.nsId;
-      }
-      params.member.push(curDoctor);
-    });
-    console.log('paramsvvvv', params);
-    return api.org
-      .postMoveOrgDoctor(params)
-      .then(() => {
-        message.success('移出成功');
-        refreshList();
-        return true;
-      })
-      .catch(() => {
-        message.error('移出失败');
-        return true;
-      });
-  }, 300);
+  // const handleDelete = debounce(() => {
+  //   const params = {
+  //     member: [],
+  //     orgNSId: window.$storage.getItem('nsId'),
+  //   };
+  //   selectRows.forEach((doctor: IDoctor) => {
+  //     const curDoctor: CommonData = { sid: doctor.sid, sRole: Role.DOCTOR.id };
+  //     if (doctor.department) {
+  //       curDoctor.nsId = doctor.department.nsId;
+  //     }
+  //     params.member.push(curDoctor);
+  //   });
+  //   console.log('paramsvvvv', params);
+  //   return api.org
+  //     .postMoveOrgDoctor(params)
+  //     .then(() => {
+  //       message.success('移出成功');
+  //       refreshList();
+  //       return true;
+  //     })
+  //     .catch(() => {
+  //       message.error('移出失败');
+  //       return true;
+  //     });
+  // }, 300);
   return (
     <Card bordered={false}>
       <div className="my-10">
@@ -146,7 +147,7 @@ const Doctor: FC = () => {
                 </Button>
               }
             ></AddDoctorNurse>
-            <ModalForm
+            {/* <ModalForm
               title="确定移出？"
               trigger={
                 <Button type="primary" danger className="ml-10" disabled={isEmpty(selectRows)}>
@@ -162,7 +163,7 @@ const Doctor: FC = () => {
               onFinish={async () => handleDelete()}
             >
               <p className="text-center text-red-500">这是一个不可逆的操作，请谨慎对待！</p>
-            </ModalForm>
+            </ModalForm> */}
           </Col>
         )}
       </Row>
@@ -172,7 +173,7 @@ const Doctor: FC = () => {
         request={window.$api.org.getDepartmentRoles}
         depOptions={tableOptions}
         handleCallback={handleCallback}
-        // tableOptions={{ rowSelection: undefined }}
+        tableOptions={{ rowSelection: false }}
       />
     </Card>
   );

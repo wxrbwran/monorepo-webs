@@ -160,7 +160,7 @@ function PlansModal({ children }: IProps) {
             content: JSON.stringify(formatIMPlansMsg([...plansAction], newPlans)),
             associateWcId: patientWcId,
             associateSId: patientSid,
-            sessionId: window.$storage.getItem('toSessionId'),
+            nsessionId: window.$storage.getItem('toSessionId'),
           };
           await api.im.sendMsg(imParams);
         }

@@ -28,7 +28,7 @@ function Reply({ location }: IProps) {
       scaleGroupId: location.query.id,
       projectNsId,
     }).then((res) => {
-      if (res.crfScaleReplyList.length > 0){
+      if (res.crfScaleReplyList.length > 0) {
         setDataSource(res.crfScaleReplyList);
         setScaleName(res.scaleName);
       }
@@ -74,7 +74,7 @@ function Reply({ location }: IProps) {
       render: (text: number, record: any) => {
         return (
           text === 1 ? '未填写' :
-          <Button type="link" onClick={() => handleShowDetail(record)}>点击查看</Button>
+            <Button type="link" onClick={() => handleShowDetail(record)}>点击查看</Button>
         );
       },
     },
@@ -86,7 +86,7 @@ function Reply({ location }: IProps) {
         <Table
           dataSource={dataSource}
           columns={columns}
-          // pagination={false}
+        // pagination={false}
         />
       </div>
       <DragModal

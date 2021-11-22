@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button } from 'antd';
 import styles from '../index.scss';
 
 interface IProps {
@@ -18,13 +17,13 @@ function OrgListBtn({ handleToggleOrg, orgList, type }: IProps) {
     <div className={styles.org_list}>
       {
         orgList.map((item, index) => (
-          <Button
-            className={index === activeOrgIndex ? 'active' : ''}
+          <div
+            className={index === activeOrgIndex ? `${styles.org_btn} ${styles.active}` : styles.org_btn}
             onClick={() => changeOrg(index, item)}
             key={item.orgName}
           >
             {item.orgName}
-          </Button>
+          </div>
         ))
       }
     </div>

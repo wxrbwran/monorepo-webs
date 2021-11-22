@@ -295,18 +295,18 @@ export const operatorRoles = [
 export const departmentType = [
   {
     text: '通用科室',
-    key: 'COMMON_DEPARTMENT_TYPE',
+    key: 'common_department_type',
   },
   {
     text: '肿瘤科',
-    key: 'TUMOUR_DEPARTMENT_TYPE',
+    key: 'tumour_department_type',
   },
   {
     text: '神经内科',
-    key: 'NEUROLOGY_DEPARTMENT_TYPE',
+    key: 'neurology_department_type',
   },
 ];
-
+export const roleTags: string[] = ['主管医生', '医生助手', 'CRA', 'CRC', ' PM'];
 
 export const inviteStatusLists = {
   WAITING: '待确认',
@@ -329,7 +329,6 @@ export const projectInviteStatus: CommonData = {
   1000: '待确认',
   1001: '已拒绝',
   1002: '已加入',
-  0: '未邀请',
 };
 export const croLists = {
   [croStatus.Running]: '进行中',

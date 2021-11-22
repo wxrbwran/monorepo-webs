@@ -30,7 +30,7 @@ const AddEditDepartment: FC<IProps> = (props) => {
       const labelType = departmentType.filter((type) => {
         const typeKey = type.key.toLowerCase();
         return info.labels.includes(typeKey);
-      })[0].key;
+      })[0]?.key;
       console.log(labelType);
       initialValues.labelType = labelType;
       form.setFieldsValue({

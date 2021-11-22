@@ -14,6 +14,7 @@ import PlanModal from '@/components/PlanModal';
 import ScalePlanDetailEcho from '@/components/ScalePlanDetailEcho';
 
 import './index.scss';
+import { IRuleDoc, IRules } from '../../pages/subjective_table/util';
 // const { confirm } = Modal;
 
 interface IProps {
@@ -32,9 +33,13 @@ interface IProps {
 function ScaleTableCreate({ location, scaleType }: IProps) {
   const [formTit, setFormTit] = useState('');
   const [subTit, setSubTit] = useState('');
-  const [questions, setQuestions] = useState<IQuestions[]>([]);
+  const [questions, setQuestions] = useState<IQuestions[]>([]); //修改题目填写题目时一直变化的questions
+  const [alfterQuestions, setAlfterQuestions] = useState<IQuestions[]>([]); // 修改完点击”确定“后的questions
+  const [originQue, setOriginQue] = useState<IQuestions[]>([]); // 修改完但点了”取消“后questions
   const [editIndex, setEditIndex] = useState(0);
-  const [plans, setPlans] = useState([]);
+  // const [plans, setPlans] = useState([]);
+  const [ruleDoc, setRuleDoc] = useState<IRuleDoc>();
+
   const [loading, setLoading] = useState(false);
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const groupId = location.query.groupId;
@@ -52,6 +57,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     setQuestions([...questions, addItem]);
     // 新添加的题目选项卡为编辑状态
     setEditIndex(currentEdit);
+    setOriginQue([...questions, addItem]);
   };
   useEffect(() => {
     if (location.query.tempId) {
@@ -62,20 +68,30 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       });
     }
     // 编辑
-    if (groupId){
-      api.subjective.getSubjectiveScale(groupId).then((res: any) => {
+    if (groupId) {
+      api.subjective.getSubjectiveScaleDetail(groupId).then((res: any) => {
         setFormTit(res.name);
         setSubTit(res.subtitle);
         setQuestions(res.questions);
-        setPlans(res.plans);
+        // setPlans(res.plans);
+        setOriginQue(res.questions);
         setEditIndex(res.questions.length - 1);
+
+        setRuleDoc(res.ruleDoc);
+
+        // setRuleDoc(res.ruleDoc);
+        // setScaleId(res.scaleId);
+        // setFromName(res.name);
+
       });
     }
   }, []);
   // 保存输入的问题
   const handleSaveStem = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
     questions[quesIndex].detail.stem = ev.target.value;
+    originQue[quesIndex].detail.stem = ev.target.value;
     setQuestions([...questions]);
+    setOriginQue([...originQue]);
   };
   // 删除问题
   const handleDelStem = (quesIndex: number) => {
@@ -83,10 +99,19 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       return index !== quesIndex;
     });
     setQuestions([...newQuestions]);
+    setOriginQue([...newQuestions]);
     setEditIndex(-1); // 设置当前编辑未选中
   };
   const changeQues = (newQues: any) => {
     setQuestions([...newQues]);
+  };
+  const changeDdtkQues = (newQues: any) => {
+    setAlfterQuestions([...newQues]);
+    setOriginQue([...newQues]);
+  };
+  const handSaveDdtkModify = () => {
+    setQuestions([...alfterQuestions]);
+    setOriginQue([...alfterQuestions]);
   };
   const checkOptionsValue = (options: Ioptions[]) => {
     const validOptions: Ioptions[] = [];
@@ -119,14 +144,19 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const handleCreate = (params: any, tit: string) => {
     setLoading(true);
     if (scaleType === 'CRF') {
-      const apiName = groupId ? 'patchSubjectiveScale' : 'postCrfScale';
+      // const apiName = groupId ? 'patchSubjectiveScale' : 'postCrfScale';
+      const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
+
+      console.log('================ CRF', JSON.stringify(params));
       api.subjective[apiName](params).then(() => {
         // message.success('添加成功');
         setLoading(false);
         history.push(`/end_event/detail?name=${tit}`);
       });
     } else {
-      const apiName = groupId ? 'patchSubjectiveScale' : 'postSubjectiveScale';
+
+      const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
+
       api.subjective[apiName](params).then(() => {
         // message.success('修改成功');
         setLoading(false);
@@ -135,6 +165,8 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     }
   };
   const handleSubmit = () => {
+
+    // 周注释
     if (!formTit.trim()) {
       message.error('请输入表单标题!');
       return false;
@@ -173,18 +205,19 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
           } else {
             questions[i].detail.options = options;
           }
-        } else if (questions[i].type === 'COMPLETION' && typeof(questions[i].detail.stem) === 'string') {
+        } else if (questions[i].type === 'COMPLETION' && typeof (questions[i].detail.stem) === 'string') {
           questions[i].detail.stem = questions[i].detail.stem?.split('＿＿＿');
         }
         questions[i].code = i + 1;
       }
     }
+    console.log('questionsResult', questions);
     if (isEmpty) {
       return false;
     } else {
       const params = {
         name: formTit,
-        plans: [...plans],
+        // plans: [...plans],
         projectSid: window.$storage.getItem('projectSid'),
         type: scaleType,
         info: { questions },
@@ -200,11 +233,18 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         handleTempCreate(formTit);
         return false;
       }
-      if (groupId){
+      if (groupId) {
         params.scaleGroupId = groupId;
       }
-      console.log('params22', JSON.stringify(params));
-      if (plans.length === 0) {
+      if (!groupId) { // 说明是新增
+
+        if (ruleDoc) {
+          params.ruleDoc = ruleDoc;
+          handleCreate(params, formTit);
+        } else {
+          const spanEl = document.getElementById('add_plan') as HTMLElement;
+          spanEl.click();
+        }
         // confirm({
         //   title: '您还没有配置发送计划，如果没有发送计划，量表将无法发送!',
         //   content: '确定完成吗？',
@@ -216,16 +256,14 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         //     console.log('Cancel');
         //   },
         // });
-        const spanEl = document.getElementById('add_plan') as HTMLElement;
-        spanEl.click();
       } else {
         handleCreate(params, formTit);
       }
     }
   };
-  const addPlans = (params: { plans: [] }) => {
-    const plan = params.plans;
-    setPlans([...plan]);
+  const addPlans = (params: { ruleDoc: IRules }) => {
+
+    setRuleDoc(params.ruleDoc);
   };
 
   const handleSetEditIndex = (inx: number) => {
@@ -280,7 +318,13 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
               } else if (['TEXT', 'END'].includes(item.type)) {
                 return <QuestionText {...props} key={quesIndex} />;
               } else if (item.type === 'COMPLETION') {
-                return <QuestionDdtk {...props} key={quesIndex} />;
+                return <QuestionDdtk
+                  {...props}
+                  key={quesIndex}
+                  changeDdtkQues={changeDdtkQues}
+                  handSaveDdtkModify={handSaveDdtkModify}
+                  originQue={originQue}
+                />;
               }
             })}
           </div>
@@ -294,19 +338,19 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         )}
       </div>
       <div className="right">
-        {plans.length > 0 ? (
+        {ruleDoc ? (
           <ScalePlanDetailEcho
-            addPlans={addPlans}
             scaleType={scaleType}
-            initPlans={plans}
             groupId={groupId}
+            initRule={ruleDoc}
+            addPlans={addPlans}
           />
         ) : (
           !location.query.isTemp && (
             <div className="send-plan">
               <p>请添加随访计划，我们将按计划发送量表</p>
               <span>
-                <PlanModal title="添加发送计划" updatePlan={addPlans} infoIndex={0}>
+                <PlanModal title="添加发送计划" updatePlan={addPlans} infoIndex={0} scaleType={scaleType}>
                   <span id="add_plan">添加发送计划</span>
                 </PlanModal>
               </span>

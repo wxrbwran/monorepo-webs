@@ -9,6 +9,7 @@ interface IProps {
   projectNsId: string;
   onSuccess: () => void;
   initData?: IFormVal;
+  className?: string;
 }
 interface IFormVal {
   groupName: string;
@@ -27,10 +28,12 @@ interface IApiParams {
   }
 }
 const AddEditGroup: FC<IProps> = (props) => {
-  const { children, type, projectNsId, onSuccess, initData } = props;
+  const { children, type, projectNsId, onSuccess, initData, className } = props;
   console.log('initData', initData);
   const [showModal, setshowModal] = useState(false);
-  const [loading, setloading] = useState(false);
+  // const [loading, setloading] = useState(false);
+  const loading = false;
+
   const actionName = type === 'add' ? '添加' : '编辑';
   const handleShowModal = () => {
     setshowModal(true);
@@ -40,22 +43,22 @@ const AddEditGroup: FC<IProps> = (props) => {
     const params: IApiParams = { groupName, note: { note1: Number(note1) } };
     if (type === 'add') {
       params.projectNsId = projectNsId;
-      api.patientManage.postAddGroup(params).then((res) => {
+      api.patientManage.postAddGroup(params).then((_res: any) => {
         message.success('添加成功');
         onSuccess();
       });
-    } else if (type === 'edit' && initData){
+    } else if (type === 'edit' && initData) {
       params.groupId = initData.groupId;
-      api.patientManage.modifyGroup(params).then(res => {
+      api.patientManage.modifyGroup(params).then((_res: any) => {
         message.success('修改成功');
         onSuccess();
-      })
+      });
     }
     setshowModal(false);
   };
 
   return (
-    <div>
+    <div className={className}>
       <div onClick={handleShowModal}>{children}</div>
       <DragModal
         visible={showModal}
@@ -70,7 +73,7 @@ const AddEditGroup: FC<IProps> = (props) => {
           <Form
             preserve={false}
             name="basic"
-            initialValues={{ ...initData, note1: initData?.note?.note1}}
+            initialValues={{ ...initData, note1: initData?.note?.note1 }}
             onFinish={handleCreatePro}
           >
             <Form.Item
@@ -80,12 +83,22 @@ const AddEditGroup: FC<IProps> = (props) => {
             >
               <Input />
             </Form.Item>
+
             <Form.Item
               label="目标人数"
               name="note1"
-              rules={[{ required: true, message: '请输入目标人数!' }]}
+              rules={[{ required: true, message: '请输入目标人数!' }, {
+                validator(_rule, value, callback) {
+
+                  if (!/^\d+$/.test(value)) {
+                    callback('请输入正整数');
+                  } else {
+                    callback();
+                  }
+                },
+              }]}
             >
-              <Input />
+              <Input type={'text'} />
             </Form.Item>
             <Form.Item style={{ textAlign: 'center' }}>
               <div className={styles.btn}>
@@ -98,8 +111,8 @@ const AddEditGroup: FC<IProps> = (props) => {
             </Form.Item>
           </Form>
         </div>
-      </DragModal>
-    </div>
+      </DragModal >
+    </div >
   );
 };
 

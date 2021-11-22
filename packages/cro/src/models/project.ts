@@ -5,6 +5,9 @@ import detail from '@/services/api/detail';
 import { IPlanInfos } from '@/utils/consts';
 import { patientManage, subjective } from '@/services/api';
 import { Role } from 'xzl-web-shared/src/utils/role';
+import { getChooseValuesKeyFromRules } from '../pages/subjective_table/util';
+import * as api from '@/services/api';
+import { history } from 'umi';
 
 export interface ProjectModelState {
   projectList: IProjectList[];
@@ -14,6 +17,7 @@ export interface ProjectModelState {
   formName: string;
   projDetail: any;
   scaleGroupInfos: any;
+  teamMembers: string[]; // role 数组
 }
 interface ProjectModelType {
   namespace: 'project';
@@ -22,6 +26,7 @@ interface ProjectModelType {
     fetchProjectList: Effect;
     fetchObjectiveScale: Effect;
     fetchGroupList: Effect;
+    fetchProjectTeamMembers: Effect;
     fetchProjectDetail: Effect;
     fetchScaleGroup: Effect;
   };
@@ -32,6 +37,7 @@ interface ProjectModelType {
     clearReverData: Reducer<ProjectModelState>;
     setGroupList: Reducer<ProjectModelState>;
     setProjectDetail: Reducer<ProjectModelState>;
+    setProjectTeamMembers: Reducer<ProjectModelState>;
     setScaleGroup: Reducer<ProjectModelState>;
   };
 }
@@ -63,6 +69,7 @@ export const projectState = {
   formName: '',
   projDetail: {},
   scaleGroupInfos: [],
+  teamMembers: [],
 };
 
 const ProjectModel: ProjectModelType = {
@@ -79,6 +86,21 @@ const ProjectModel: ProjectModelType = {
     },
     *fetchObjectiveScale({ payload }, { call, put }) {
       const response = yield call(subjective.getObjectiveScale, payload);
+      if (response.infos.length == 0) {
+        const projectSid = window.$storage.getItem('projectSid');
+        api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+          if (res.scaleGroupInfos.length > 0) {
+            history.replace((`/objective_table/detail?name=${res.scaleGroupInfos[0].name}`));
+          } else {
+            history.replace(('/objective_table/detail?name=_zsh_null'));
+          }
+        });
+      }
+      // 处理数据，添加chooseValues内容
+      for (let i = 0; i < response.infos.length; i++) {
+        const chooseValuesKey = getChooseValuesKeyFromRules(response.infos[i].ruleDoc.rules[0]);
+        response.infos[i].chooseValues = chooseValuesKey;
+      }
       yield put({
         type: 'saveObjectiveScale',
         payload: response,
@@ -89,6 +111,13 @@ const ProjectModel: ProjectModelType = {
       yield put({
         type: 'setGroupList',
         payload: response.infos,
+      });
+    },
+    *fetchProjectTeamMembers({ payload }, { call, put }) {
+      const response = yield call(detail.getProjectTeamMembers, payload);
+      yield put({
+        type: 'setProjectTeamMembers',
+        payload: response,
       });
     },
     *fetchProjectDetail({ payload }, { call, put }) {
@@ -102,9 +131,15 @@ const ProjectModel: ProjectModelType = {
       } else {
         window.$storage.removeItem('isLeader');
       }
+      console.log('========fetchProjectDetail respon', JSON.stringify(response));
       yield put({
         type: 'setProjectDetail',
         payload: response,
+      });
+
+      yield put({
+        type: 'fetchProjectTeamMembers',
+        payload: payload,
       });
     },
     *fetchScaleGroup({ payload }, { call, put }) {
@@ -158,6 +193,20 @@ const ProjectModel: ProjectModelType = {
         projDetail: payload,
       };
     },
+
+    setProjectTeamMembers(state = projectState, { payload }): ProjectModelState {
+
+      return {
+        ...state,
+        teamMembers: payload.members.map((item) => {
+          return (
+            { role: item.role }
+          );
+        }),
+      };
+    },
+
+
     setScaleGroup(state = projectState, { payload }): ProjectModelState {
       return {
         ...state,

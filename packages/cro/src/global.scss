@@ -9,6 +9,27 @@
 }
 
 body {
+  // button按钮样式
+  .common__btn {
+    text-align: center;
+    button {
+      margin-right: 40px;
+      min-width: 130px;
+      height: 42px;
+      font-size: 16px;
+      @extend %border-btn;
+      border-radius: 2px;
+
+      &.finish {
+        margin-right: 0;
+        @extend %fill-btn;
+      }
+    }
+
+    .ant-btn-primary {
+      color: #fff;
+    }
+  }
   // background: #f7f7f7;
   .anticon {
     font-size: 16px;
@@ -31,8 +52,8 @@ body {
     padding: 0;
     height: 50px;
     border: 0;
-    border-bottom: 1px solid #ECECEC;
-    border-top: 2px solid #3296FA;
+    border-bottom: 1px solid #ececec;
+    border-top: 2px solid #3296fa;
     .build-title {
       text-align: left;
       font-size: 16px;
@@ -62,7 +83,29 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    &.new-header {
+      .ant-modal-header {
+        border-top: 2px solid #3296fa;
+        background: #fff;
+        border-bottom: 1px solid #ececec;
+        .build-title {
+          padding-left: 30px;
+          text-align: left;
+        }
+      }
+    }
+    .ant-modal {
+      top: 0;
+    }
+  }
+
+  // modal弹框在ie居中问题，由于使用align-items:center，在ie上不生效。这里使用媒体查询方法实现针对ie的处理。
+  // 它就是-ms-high-contrast，只有IE10/11实现了这个属性，它可以有两个值active或none
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .ant-modal-wrap-center {
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 
   .ant-tabs-bar {
@@ -81,9 +124,9 @@ body {
   }
 
   // 表格样式
-  .ant-table-tbody>tr,
-  .ant-table-tbody>tr>td,
-  .ant-table-thead>tr {
+  .ant-table-tbody > tr,
+  .ant-table-tbody > tr > td,
+  .ant-table-thead > tr {
     transition: all 0s;
     text-align: center;
   }
@@ -92,10 +135,10 @@ body {
     color: rgba(0, 0, 0, 1);
     font-size: 14px;
     .anticon-frown-o:before {
-      content: "\E62D";
+      content: '\E62D';
     }
   }
- // 搜索框的搜索按钮
+  // 搜索框的搜索按钮
   .ant-input-search-button {
     height: 35px;
   }
@@ -114,14 +157,14 @@ body {
     font-size: 14px;
   }
   .ant-btn-primary {
-    border-color: #3296FA;
-    background-color: #3296FA;
+    border-color: #3296fa;
+    background-color: #3296fa;
   }
 
-  .ant-table-tbody>tr.ant-table-row-hover>td,
-  .ant-table-tbody>tr:hover>td,
-  .ant-table-thead>tr.ant-table-row-hover>td,
-  .ant-table-thead>tr:hover>td {
+  .ant-table-tbody > tr.ant-table-row-hover > td,
+  .ant-table-tbody > tr:hover > td,
+  .ant-table-thead > tr.ant-table-row-hover > td,
+  .ant-table-thead > tr:hover > td {
     background: #fff;
     border-width: 1px 0;
     border-style: solid;
@@ -130,13 +173,13 @@ body {
     transition: all 0s;
   }
 
-  .ant-table-thead>tr>th {
+  .ant-table-thead > tr > th {
     background-color: #f8fafa;
     font-size: 14px;
     text-align: center;
   }
-  .ant-table-thead>tr>th,
-  .ant-table-tbody>tr>td {
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
     padding: 16px 8px;
   }
   .ant-select.ant-select-single.ant-select-show-arrow {
@@ -182,7 +225,7 @@ ul {
 }
 .ant-input {
   height: 42px;
-  font-size: 14px!important;
+  font-size: 14px !important;
 }
 .event_label {
   display: inline-block;
@@ -190,19 +233,19 @@ ul {
   margin: 0 8px 10px 0;
 }
 .MAIN {
-  background: #FF8491
+  background: #ff8491;
 }
 .SICK {
-  background: #5D9EFA
+  background: #5d9efa;
 }
 .MINOR {
-  background: #F9E681
+  background: #f9e681;
 }
 .BAD {
-  background: #C07BFF
+  background: #c07bff;
 }
 
-.text-overflow{
+.text-overflow {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

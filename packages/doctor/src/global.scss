@@ -156,7 +156,10 @@ textarea {
 .pointer {
   cursor: pointer;
 }
-
+.box-shadow {
+  // box-shadow: 1px 1px 5px 2px #eaeaea;
+  box-shadow: 0px 0 5px 0 rgb(0 0 0 / 13%);
+}
 // 关于表单，高度要设置42的
 #height42 {
   &.ant-form {
@@ -280,7 +283,7 @@ textarea {
       }
     }
     .ant-select-selector {
-      height: 42px;
+      min-height: 42px;
       line-height: 42px;
     }
     .ant-select-selection-item {
@@ -654,4 +657,10 @@ body {
     font-size: 14px;
     line-height: 34px;
   }
+}
+.line-ellipsis {
+  @include line-clamp(1);
+}
+.hide-text {
+  @extend %hide-text;
 }

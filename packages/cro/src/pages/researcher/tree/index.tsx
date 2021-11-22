@@ -12,38 +12,39 @@ function Tree() {
   const [isFull, setFull] = useState(false);
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
 
-  const renderItem = (tree: ITree) => {
+  const renderItem = (treeItem: ITree) => {
     return (
       {
-        level: fetchRolePropValue(tree.role, 'desc'),
-        name: tree.name || '暂未分配',
-        firstProfessionCompany: tree?.subjectDetail?.firstProfessionCompany || '',
-        group: tree.groupName,
-        hasChildren: !!tree?.subWC?.length,
-        subjectId: tree?.subjectId || '',
-        children: !!tree?.subWC?.length ? renderTree(tree.subWC) : []
+        level: fetchRolePropValue(treeItem.role, 'desc'),
+        name: treeItem.name || '暂未分配',
+        practiceAreas: treeItem?.subjectDetail?.practiceAreas,
+        group: treeItem.groupName,
+        hasChildren: !!treeItem?.subWC?.length,
+        subjectId: treeItem?.subjectId || '',
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        children: !!treeItem?.subWC?.length ? renderTree(treeItem.subWC) : [],
       }
-    )
-  }
+    );
+  };
   const renderTree = (subTree: ITree[]) => {
     let treeList: any[] = [];
-    subTree.forEach((tree: ITree, index: number)=> {
-      treeList.push(renderItem(tree));
-    })
+    subTree.forEach((treeItem: ITree, _index: number) => {
+      treeList.push(renderItem(treeItem));
+    });
     return treeList;
-  }
+  };
 
   const fetchFrameChart = () => {
-    api.research.fetchFrameChart(projectNsId).then(res => {
+    api.research.fetchFrameChart(projectNsId).then((res: { name: any; }) => {
       const treeD = {
         rootName: res.name,
-        downward: renderItem(res)
-      }
+        downward: renderItem(res),
+      };
       // mock的数据在./mock.ts文件中，可直观看到数据结构
       const chart = new TreeChart(treeD);
       chart.drawChart();
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     fetchFrameChart();

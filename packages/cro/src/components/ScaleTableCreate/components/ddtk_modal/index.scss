@@ -1,0 +1,15 @@
+.topic-list {
+  .options-list {
+    .item {
+      display: flex;
+      align-items: center;
+      .ant-input {
+        background-color: inherit;
+      }
+    }
+  }
+  .topic-item {
+    margin: 0 auto;
+    padding: 0;
+  }
+}

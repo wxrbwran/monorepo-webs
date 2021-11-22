@@ -149,7 +149,7 @@ function Patients() {
           // request={() => {}}
           groupList={groupList}
         >
-          加入试验分组
+          加入宣教分组
         </SelectGroup>
       </Form>
       {

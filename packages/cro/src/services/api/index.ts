@@ -7,6 +7,7 @@ export { default as patientManage } from './patientManage';
 export { default as report } from './report';
 export { default as query } from './query';
 export { default as template } from './template';
-export { default as research } from  './research';
+export { default as research } from './research';
 export { default as base } from './base';
 export { default as event } from './event';
+export { default as service } from './croService';

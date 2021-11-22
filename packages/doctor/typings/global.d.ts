@@ -213,6 +213,10 @@ interface IPerson {
   infos: IInfos[];
   sessionId: string;
 }
+interface IPersonNew {
+  members: IInfos[];
+  sessionId: string;
+}
 interface IInfos {
   avatarUrl: string;
   name: string;

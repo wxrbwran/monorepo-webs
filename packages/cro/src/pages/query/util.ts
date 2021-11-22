@@ -2,8 +2,13 @@
 import { message } from 'antd';
 import * as api from '@/services/api';
 
+export const ResearchSourceType = '4';
+export const SubectiveScaleSourceType = '5';
+export const CrfScaleSourceType = '6';
+export const ObjectiveSourceType = '7';
+
 // 将动态的item请求接口转换成真实的静态items，(请求自己的真实内容)
-export const transformDynamicToStatic = (item: { type: string, name: string, assign: { value: string } }, projectSid: string, projectRoleType: string, value?: string) => {
+export const transformDynamicToStatic = (item: { type: string, name: string, assign: { value: string } }, projectSid: string, projectRoleType: string, sourceType: string, value?: string) => {
 
   return new Promise<any[]>((resolve, reject) => {
 
@@ -13,7 +18,7 @@ export const transformDynamicToStatic = (item: { type: string, name: string, ass
         kp: item.name,
         value: value,
         rsList: [{ sid: projectSid, roleType: projectRoleType }],
-        sourceType: '4',
+        sourceType: sourceType,
       };
 
       api.query.fetchNodeEl(
@@ -154,12 +159,18 @@ export const transformDynamicToStatic = (item: { type: string, name: string, ass
 // medical-normal.start_value_1: 1629907200000
 /// -------- values ------ 例子----- end
 
+export const utilTimeType = ['date', 'timestamp', 'ms', 'time'];
+export const utilNumType = ['number', 'int', 'float'];
+export const utilStringType = ['string', 'refs'];
+export const utilBoolType = ['bool'];
+
 const getCorrentOperatorAndValue = (values: any, number: number, field: any) => {
 
   let value = values[(field.name + '_value_' + number)];
   const hasValue = ![undefined, null].includes(value) && value.toString().length > 0;
   let operator = values[(field.name + '_operator_' + number)];
 
+  console.log('================== field.type=', field.type);
   if (!hasValue) {
     operator = '=';
     value = '*';

@@ -9,7 +9,7 @@ import { useSelector } from 'umi';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 
-interface IProps{
+interface IProps {
   name: string;
   name2: string;
   type: string;
@@ -22,8 +22,8 @@ interface IKey {
   id: string;
 }
 
-function FileType({ name, name2, imgSrc, type }:IProps) {
-  const { projDetail } = useSelector((state: IState) =>  state.project);
+function FileType({ name, name2, imgSrc, type }: IProps) {
+  const { projDetail } = useSelector((state: IState) => state.project);
   const projectSid = window.$storage.getItem('projectSid');
   const [isShowModal, setIsShowModal] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -35,7 +35,7 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
 
   //获取文件列表
   const fetchFileList = () => {
-    if (projectSid){
+    if (projectSid) {
       api.detail.getProjectFileList({
         projectSid,
         type,
@@ -49,22 +49,22 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
     }
   };
 
-  useEffect(()=> {
-    if (isShowModal){
+  useEffect(() => {
+    if (isShowModal) {
       setFileList([]);
       fetchFileList();
     }
   }, [isShowModal]);
 
   //上传
-  const handleSubmit = (rawUrl:string, fileName:string) => {
+  const handleSubmit = (rawUrl: string, fileName: string) => {
     api.detail.addProjectFile({
       address: rawUrl,
-      name:fileName,
+      name: fileName,
       projectSid,
       type,
     }).then(() => {
-      if (isShowModal){
+      if (isShowModal) {
         setTimeout(() => {
           setLoading(false);
           message.success('文件上传成功');
@@ -77,7 +77,7 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
       });
   };
 
-  const fetchUrlThenUpload = async (file:{ name: string, type: string }) => {
+  const fetchUrlThenUpload = async (file: { name: string, type: string }) => {
     console.log('fileeee', file);
     setLoading(true);
     api.base.filePrepare({ businessType: 300 }).then(res => {
@@ -111,7 +111,7 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
     });
   };
 
-  const stopPropagation = (e:any) => {
+  const stopPropagation = (e: any) => {
     //ts
     e.stopPropagation();
   };
@@ -130,7 +130,7 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
   const lookFile = (fileId: string) => {
     api.detail.getFileInfo(fileId).then((res) => {
       const aEl = document.getElementById('upload');
-      if (aEl && res.convertAddress){
+      if (aEl && res.convertAddress) {
         aEl.setAttribute('href', res.convertAddress);
         aEl.click();
       }
@@ -150,7 +150,7 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
       >
         <div className={styles.upload}>
           {
-            isEdit &&  (
+            isEdit && (
               <Upload
                 multiple={false}
                 listType="text"
@@ -158,8 +158,8 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
                 showUploadList={false}
                 accept={type === 'INVITER_FILE' ? '.doc,.docx,.xlsx,.xls,.pdf' : ''}
                 onClick={stopPropagation}
-                // disabled={[Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(window.$storage.getItem('croRoleType'))}
-                // disabled={true}
+              // disabled={[Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(window.$storage.getItem('croRoleType'))}
+              // disabled={true}
               >
                 <UploadOutlined />
                 <span>上传</span>
@@ -172,7 +172,7 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
         <p>{name}</p>
         <p>{name2}</p>
       </div>
-      { isShowModal && (
+      {isShowModal && (
         <DragModal
           visible={isShowModal}
           title={`${name}${name2 && '/'}${name2}`}
@@ -185,22 +185,22 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
         >
           <ul>
             {
-              fileList.map((item: IKey, index)=> (
+              fileList.map((item: IKey, index) => (
                 <li key={index}>
                   <p>{item.name}</p>
                   <p className={styles.operate}>
-                      {
-                        (item.name.includes('doc') || item.name.includes('xls')) && (
-                          <>
-                            <span className={styles.download} onClick={() => lookFile(item.id)}><FileSearchOutlined />  查看</span>
-                          </>
-                        )
-                      }
-                      <a id="upload" style={{ display: 'none' }} target="_blank"></a>
-                      <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
-                      {
-                        isEdit &&  <span  onClick={() => handleRemove(item.id)}><DeleteOutlined /> 删除</span>
-                      }
+                    {
+                      (item.name.includes('doc') || item.name.includes('xls')) && (
+                        <>
+                          <span className={styles.download} onClick={() => lookFile(item.id)}><FileSearchOutlined />  查看</span>
+                        </>
+                      )
+                    }
+                    <a id="upload" style={{ display: 'none' }} target="_blank"></a>
+                    <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
+                    {
+                      isEdit && <span onClick={() => handleRemove(item.id)}><DeleteOutlined /> 删除</span>
+                    }
                   </p>
                 </li>
               ))
@@ -228,7 +228,7 @@ function FileType({ name, name2, imgSrc, type }:IProps) {
             )
           }
         </DragModal>
-      ) }
+      )}
     </>
   );
 }

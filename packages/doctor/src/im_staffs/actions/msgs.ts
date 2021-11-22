@@ -46,7 +46,7 @@ export function getMsgNeedToReceipt(state, teamId, msgs) {
 }
 
 export function formatMsg(msg) {
-  msg.sessionId = 'p2p-'+JSON.parse(msg.custom).sessionId
+  msg.sessionId = 'p2p-'+JSON.parse(msg.custom).nsessionId
   return msg;
 }
 
@@ -71,8 +71,7 @@ export function onOfflineMsgs(obj) {
 
 // export function onMsg(msg) {
 export const onMsg = async(msg) => {
-
-  console.log('onmsg', msg);
+  console.log('==================onmsg', msg);
   const state = window.$store.getState().im;
   if (msg.scene === 'team' && msg.type === 'notification') {
     console.log('收到到im消息啦~1', msg)

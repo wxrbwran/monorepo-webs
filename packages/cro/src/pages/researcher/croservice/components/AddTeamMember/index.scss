@@ -1,0 +1,55 @@
+.add_member {
+  .tit {
+    flex: 0 0 100px;
+    margin-right: 8px;
+  }
+  .check_doctor {
+    border-radius: 3px;
+    border: 1px solid #E0E0E0;
+    min-width: 70px;
+    height: 80px;
+    position: relative;
+    padding: 10px 15px;
+    margin: 20px 0 0px 20px;
+    text-align: center;
+  }
+  :global {
+    td {
+      border-right: 1px solid #ECECEC;
+      &:first-child {
+        border-left: 1px solid #ECECEC;
+      }
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .ant-input {
+      display: inline-block;
+      width: 160px;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 12px 15px;
+      font-size: 14px;
+    }
+    .ant-btn {
+      background: #218CE9;
+      width: 89px;
+      height: 32px;
+      line-height: 32px;
+      padding: 0;
+      text-align: center;
+      border-radius: 5px;
+      border: 1px solid #218CE9;
+    }
+    .anticon-close-circle {
+      color: #D8D8D8;
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+

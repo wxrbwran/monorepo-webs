@@ -56,13 +56,13 @@ export const Role: RolesMap = {
   PATIENT_VIP: roleType('nWgX4b', 89, 80, 88, 'VIP 患者'), // 9
   PATIENT_FAMILY: roleType('70MG43', 99, 90, 98, '患者家属'), // 10
   NURSE: roleType('2Wmj4M', 109, 100, 108, '护士(角色默认在 xinzhili - 护士团队)'), // 11
-  DOCTOR: roleType('n41zeZ', 119, 110, 118, '医生(角色默认在xinzhili - 全科'), // 12
+  DOCTOR: roleType('n41zeZ', 119, 110, 118, '医生'), // 12 医生(角色默认在xinzhili - 全科
   SYS_DOCTOR: roleType('ZW7Qew', 129, 120, 128, '系统智能医生'), // 13
   UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '上级医生'), // 14
   LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '下级医生'), // 15
   ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
 
-  COUNSELOR_DOCTOR: roleType( '2eAEeG', 169, 160, 168, '顾问医生(角色默认在xinzhili - 顾问医生团队)', ), // 17
+  COUNSELOR_DOCTOR: roleType('2eAEeG', 169, 160, 168, '顾问医生'), // 17 顾问医生(角色默认在xinzhili - 顾问医生团队)
   CONSOLE_ROOT: roleType('6exPeb', 179, 170, 178, '后台系统Root管理员'), // 18
   CRO_ORG: roleType('YWQD0z', 189, 180, 188, 'CRO 机构'), // 19
   NONE: roleType('bWlZez', 199, 190, 198, '任何角色都没有，即没有任何身份，默认都进入xinzhili空间'), // 20
@@ -76,7 +76,7 @@ export const Role: RolesMap = {
 
   RESEARCH_PROJECT_ORG: roleType('V0bD49', 0, 0, 0, '科研 机构'), // 29
   RESEARCH_PROJECT: roleType('YePZWq', 0, 0, 0, '科研项目'), // 30
-  RESEARCH_PROJECT_DOCTOR: roleType('m4vkea', 0, 0, 0, '科研项目医生'), // 31
+  RESEARCH_PROJECT_DOCTOR: roleType('m4vkea', 0, 0, 0, '科研项目医生'), // 31医生研究者
   PI: roleType('Y0OG0Q', 0, 0, 0, 'PI'), // 32 科研多中心项目PI
   MAIN_PI: roleType('NeEd4M', 0, 0, 0, '总PI'), // 33 科研多中心项目总PI
   SUB_PI: roleType('D09PeP', 0, 0, 0, '分PI'), // 34 科研多中心项目分PI
@@ -85,11 +85,18 @@ export const Role: RolesMap = {
   PROJECT_PATIENT: roleType('NWkr0D', 0, 0, 0, '受试者'), // 37 科研 受试者
   PROJECT_MEMBERS: roleType('V0YzWE', 0, 0, 0, '组员'), // 38 科研单中心项目组员
 
-  PATIENT_YL: roleType('XWrVxW', 459, 450, 458, '患 养老院患者'), // 46
-  PATIENT_YL_VIP: roleType('V0XNq4', 469, 460, 468, '患 养老院vip患者'), // 47
-  NURSE_YL: roleType('qWd7L0', 0, 0, 0, '护 养老院护士'), // 48
-  YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '管 养老院高级管理员'), // 49
-  YL_YZ: roleType('YWBka4', 0, 0, 0, '院 养老院院长'), // 50
+  PATIENT_YL: roleType('XWrVxW', 459, 450, 458, '患者'), // 46 患 养老院患者
+  PATIENT_YL_VIP: roleType('V0XNq4', 469, 460, 468, 'vip患者'), // 47 患 养老院vip患者
+  NURSE_YL: roleType('qWd7L0', 0, 0, 0, '护士'), // 48 护 养老院护士
+  YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '高级管理员'), // 49 管 养老院高级管理员
+  YL_YZ: roleType('YWBka4', 0, 0, 0, '院长'), // 50 院 养老院院长
+
+  NS_OWNER: roleType('80pbO4', 0, 0, 0, '创建人'), // 59 空间所属者/创建者  慢病里叫创建人
+
+  DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'), // 62 营养师
+  CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'PM'), // CRO业务-PM
+  CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRA'), // CRO业务-CRA
+  CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRC'), //CRO业务-CRC
 };
 
 export function fetchRolePropById(id: string) {
@@ -106,4 +113,12 @@ export function fetchRolePropValue(id: string, keyName: string) {
   return fetchRolePropById(id)?.[keyName];
 }
 
-
+export function isDoctor(roleId: string) {
+  return !![
+    Role.ALONE_DOCTOR.id,
+    Role.UPPER_DOCTOR.id,
+    Role.LOWER_DOCTOR.id,
+    Role.DOCTOR.id,
+    Role.DOCTOR_IH.id,
+  ].includes(roleId);
+}

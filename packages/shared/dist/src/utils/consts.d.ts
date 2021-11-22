@@ -84,6 +84,7 @@ export declare const departmentType: {
     text: string;
     key: string;
 }[];
+export declare const roleTags: string[];
 export declare const inviteStatusLists: {
     WAITING: string;
     CONFIRMED: string;

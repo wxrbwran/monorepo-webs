@@ -10,29 +10,30 @@ interface IProps {
     }
   };
 }
-interface ISource {
-  groupName: string;
-  inGroupAt: number;
-  outGroupAt: number;
-  patientName: string;
-  status: string;
-}
+// interface ISource {
+//   groupName: string;
+//   inGroupAt: number;
+//   outGroupAt: number;
+//   patientName: string;
+//   status: string;
+// }
 
-function GroupDetails({location}: IProps) {
-  const [dataSource, setDataSource] = useState<ISource[]>([]);
-  const {projectNsId} = useSelector((state: IState) => state.project.projDetail)
-  const [groupId, setGroupId] = useState(location.query.groupId)
-  const [tableOptions, setOptions] = useState({projectNsId, groupId: location.query.groupId });
+function GroupDetails({ location }: IProps) {
+  // const [dataSource, setDataSource] = useState<ISource[]>([]);
+  const dataSource: string | any[] = [];
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const [groupId, setGroupId] = useState(location.query.groupId);
+  const [tableOptions, setOptions] = useState({ projectNsId, groupId: location.query.groupId });
 
   useEffect(() => {
     if (groupId !== location.query.groupId) {
-      setGroupId(location.query.groupId)
+      setGroupId(location.query.groupId);
       setOptions({ ...tableOptions, groupId: location.query.groupId });
     }
 
   }, [location]);
 
-  return(
+  return (
     <div className="patient-manage-cont">
       <div className="title">{dataSource.length > 0 && dataSource[0].groupName}</div>
       <div className="patient-list" style={{ marginTop: 8 }}>
@@ -50,6 +51,6 @@ function GroupDetails({location}: IProps) {
         />
       </div>
     </div>
-  )
+  );
 }
 export default GroupDetails;

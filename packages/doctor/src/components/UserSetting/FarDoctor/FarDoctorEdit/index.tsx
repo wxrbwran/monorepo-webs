@@ -79,7 +79,7 @@ function FarDoctorEdit({ cancelSave, type }: Iporps) {
                 </Select>
               </Form.Item>
             </div>
-            <div className={styles.form_item}>
+            {/* <div className={styles.form_item}>
               <Form.Item
                 label="科室"
                 name="department"
@@ -92,7 +92,7 @@ function FarDoctorEdit({ cancelSave, type }: Iporps) {
               >
                 <Input style={{ width: 300 }} />
               </Form.Item>
-            </div>
+            </div> */}
             <div className="form_item_area">
               <Form.Item
                 label="个人简介"

@@ -49,7 +49,7 @@ const config = {
   history: { type: 'hash' },
   proxy: {
     '/api': {
-      target: 'http://172.16.10.25:8000/',
+      target: 'http://172.16.10.16:8000/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

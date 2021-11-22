@@ -17,6 +17,7 @@ export interface AuthModelType {
   effects: {
     login: Effect;
     logout: Effect;
+    updateLoginOperationLog: Effect;
   };
   reducers: {
     saveLoginInfo: Reducer;
@@ -66,7 +67,11 @@ const Model: AuthModelType = {
             type: 'user/getUserOrganizations',
             payload: {},
           });
-          history.push('/doctor/patients/alone');
+          yield put({
+            type: 'auth/updateLoginOperationLog',
+            payload: 'LOGIN',
+          });
+          history.push('/doctor/patients/alone_doctor');
         }
         if (payload.clientId === 'xzl-web-out-org') {
           localStorage.setItem('xzl-web-out-org_token', JSON.stringify(data));
@@ -81,6 +86,14 @@ const Model: AuthModelType = {
       } else {
         message.error(data.result);
       }
+    },
+    * updateLoginOperationLog({ payload }, { call, put }) {
+      const { count } = yield call(api.auth.postUserOperationLog, payload);
+      // 更新登录次数
+      yield put({
+        type: 'user/updateUserOperationLog',
+        payload: count,
+      });
     },
     * logout(_, { put }) {
       yield put({
@@ -104,6 +117,7 @@ const Model: AuthModelType = {
     clearLoginInfo() {
       setAuthorizationToken(false);
       window.$storage.clear();
+      window.sessionStorage.clear();
       ['alone', 'lower', 'upper', 'doCalling'].forEach((item) => {
         window.$storage.removeItem(item);
       });

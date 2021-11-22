@@ -1,34 +1,33 @@
 .infos {
   flex: 1;
-  &__base {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+  span {
     font-size: 14px;
-    color: $import-text-color;
-
-    span {
+  }
+  &__base {
+    font-size: 14px;
+    color: #181818;
+    border-radius: 5px;
+    border: 1px solid #E5E5E5;
+    margin-bottom: 20px;
+    padding:10px 20px 0;
+    >div {
+      margin-bottom: 10px;
+    }
+    &__tags {
+      border-radius: 3px;
+      border: 1px solid #D6AF6F;
+      color: #D6AF6F;
+      padding: 6px 8px;
       display: inline-block;
-      margin-bottom: 15px;
-      min-height: 14px;
-      padding-right: 15px;
-      line-height: 14px;
-      border-right: 1px solid #f7f7f7;
-
-      &:first-child {
-        padding-left: 0;
-      }
-
-      &:last-child {
-        border: 0;
-      }
+      margin-right: 10px;
+      margin-bottom: 5px;
     }
   }
 
   &__introduction {
     margin-bottom: 15px;
     font-size: 14px;
-
+    width: 900px;
     ul {
       margin: 0;
       height: 32px;
@@ -55,7 +54,7 @@
 
     >div {
       height: 108px;
-      overflow-y: auto;
+      // overflow-y: auto;
       border: solid $border-color;
       border-width: 0 1px 1px 1px;
       padding: 15px;
@@ -73,7 +72,6 @@
 .doctor-status {
   &__base {
     @include flex-lay(row, wrap, space-between, center);
-
     .user__item {
       @include flex-lay(row, nowrap, flex-start, center);
       flex-grow: 1;

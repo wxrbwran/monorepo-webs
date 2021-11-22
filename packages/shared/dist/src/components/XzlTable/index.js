@@ -107,7 +107,9 @@ var XzlTable = function (props) {
             var res, handledData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request(params)];
+                    case 0:
+                        if (!request) return [3 /*break*/, 2];
+                        return [4 /*yield*/, request(params)];
                     case 1:
                         res = _a.sent();
                         console.log('fetchTableDataSource res', res);
@@ -124,13 +126,18 @@ var XzlTable = function (props) {
                                 setTotal(res.total);
                             }
                             handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
-                            handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
+                            handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt, apiData: res });
                             console.log('handledData*****', handledData);
                             setDataSource(handledData);
                         }
                         else {
                             setDataSource([]);
                         }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        setDataSource([]);
+                        _a.label = 3;
+                    case 3:
                         setLoading(false);
                         return [2 /*return*/];
                 }
@@ -151,6 +158,9 @@ var XzlTable = function (props) {
         if (!(tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.handlePagerChange)) {
             var data = { pageAt: page };
             fetchTableDataSource(data);
+        }
+        if (tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.handleFetchPageAt) {
+            tableOptions === null || tableOptions === void 0 ? void 0 : tableOptions.handleFetchPageAt(page);
         }
         // fetchTableDataSource(params);
     };

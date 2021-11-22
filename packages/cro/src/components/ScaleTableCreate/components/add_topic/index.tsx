@@ -1,9 +1,9 @@
-import React, {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import dxt from '@/assets/img/follow-table/dxt.svg';
 import wdt from '@/assets/img/follow-table/wdt.svg';
 import zdsj from '@/assets/img/follow-table/zdsj.svg';
-import CommonIssue from '@/components/CommonIssue'
+import CommonIssue from '@/components/CommonIssue';
 import ManageIssue from '@/components/ManageIssue';
 import * as api from '@/services/api';
 
@@ -29,26 +29,27 @@ interface IItem {
 // 右侧添加题目ui
 function AddTopic(props: IProps) {
   const { scaleType } = props;
-   const [infos, setInfos] = useState([]);
+  const [infos, setInfos] = useState([]);
 
   const questionType = [
     {
       type: 'RADIO',
       name: '选择题',
-      img: dxt
+      img: dxt,
     },
     {
       type: 'TEXT',
       name: '问答题',
-      img: wdt
-    }
+      img: wdt,
+    },
   ];
-  if (scaleType === 'CRF') {
+  console.log('scaleType', scaleType);
+  if (['SUBJECTIVE', 'CRF'].includes(scaleType)) {
     questionType.push({
       type: 'COMPLETION',
       name: '多段填空',
-      img: zdsj
-    })
+      img: zdsj,
+    });
   } else {
     // questionType.push({
     //   type: 'END',
@@ -57,47 +58,51 @@ function AddTopic(props: IProps) {
     // })
   }
   const checkboxData = {
-    "type": "RADIO",
-    "detail": {
-      "checkedArr": [],
-      "stem": "",
-      "options": [
+    'type': 'RADIO',
+    'detail': {
+      'checkedArr': [],
+      'stem': '',
+      'required': true,
+      'options': [
         {
-          "content": "",
-          "checked": false
+          'content': '',
+          'checked': false,
         },
         {
-          "content": "",
-          "checked": false
+          'content': '',
+          'checked': false,
         },
-      ]
-    }
+      ],
+    },
   };
   const textData = {
-    "type": 'TEXT',
-    "detail": {
-      "stem": '',
-      "answer": ''
-    }
+    'type': 'TEXT',
+    'detail': {
+      'stem': '',
+      'answer': '',
+      'required': true,
+    },
   };
   const endData = {
-    "type": 'END',
-    "detail": {
-      "stem": '',
-      "answer": ''
-    }
+    'type': 'END',
+    'detail': {
+      'stem': '',
+      'answer': '',
+      'required': true,
+    },
   };
   const ddtkData = {
-    "type": 'COMPLETION',
-    "detail": {
-      "stem": '填空1＿＿＿，填空2＿＿＿',
-      "answer": []
-    }
+    'type': 'COMPLETION',
+    'detail': {
+      'stem': '填空1＿＿＿，填空2＿＿＿',
+      'answer': [],
+      'content': [],
+    },
   };
 
   const handleAddTm = (type: string) => {
-    let addObj = {}
-    console.log('type',type);
+    let addObj = {};
+    console.log('type', type);
     switch (type) {
       case 'RADIO':
         addObj = checkboxData;
@@ -105,40 +110,40 @@ function AddTopic(props: IProps) {
       case 'CHECKBOX':
         addObj = checkboxData;
         break;
-      case "TEXT":
+      case 'TEXT':
         addObj = textData;
         break;
-      case "END":
+      case 'END':
         addObj = endData;
         break;
-      case "COMPLETION":
+      case 'COMPLETION':
         addObj = ddtkData;
         break;
     }
-    props.handleAddQuestion(addObj)
-  }
+    props.handleAddQuestion(addObj);
+  };
   //获取常用题列表
   const fetchList = () => {
     api.subjective.getCommonQuestion().then((res) => {
-        setInfos(res.infos);
-      })
-  }
+      setInfos(res.infos);
+    });
+  };
   useEffect(()=> {
-    if(props.location.query.isTemp){
-      fetchList()
+    if (props.location.query.isTemp){
+      fetchList();
     }
-  },[])
+  }, []);
 
   const updateInfo = ()=> {
-    fetchList()
-  }
+    fetchList();
+  };
 
   //使用常用题
   const addCommon = (question) => {
     //深拷贝
     let newObj = JSON.parse(JSON.stringify(question));
     props.handleAddQuestion(newObj);
-  }
+  };
   return (
     <>
       <div className="title">添加题目</div>
@@ -152,16 +157,16 @@ function AddTopic(props: IProps) {
                 </div>
                 <div className='plus'><PlusOutlined /></div>
               </div>
-            )
+            );
           })
         }
       </div>
       {
         props.location.query.isTemp && (
           <>
-            <div className="title" style={{marginTop: 30}}>我的常用题</div>
+            <div className="title" style={{ marginTop: 30 }}>我的常用题</div>
             {
-              infos.length>0 ?
+              infos.length > 0 ?
                 <div className="manage">
                   <ManageIssue infos={infos} updateInfo={updateInfo}><p>管理</p></ManageIssue>
                   <ul>
@@ -172,7 +177,7 @@ function AddTopic(props: IProps) {
                     }
                   </ul>
                 </div>
-              :
+                :
                 <div className="send-plan">
                   <p>创建效率低？试试将问题设为常用题吧~</p>
                   <span>
@@ -189,7 +194,7 @@ function AddTopic(props: IProps) {
       }
 
     </>
-  )
+  );
 }
 
 export default AddTopic;

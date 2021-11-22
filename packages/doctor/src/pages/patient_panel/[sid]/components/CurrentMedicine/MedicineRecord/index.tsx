@@ -103,6 +103,13 @@ function MedicineRecord() {
   useEffect(() => {
     fetchTimelineStatus();
   }, []);
+  useEffect(() => {
+    if (selectedValue){
+      fetchRecords(selectedValue);
+    } else {
+      fetchRecords(moment());
+    }
+  }, [moment(selectedValue).format('YYYY-MM-DD')]);
   // 切换年/月，获取每天服药状态
   const onPanelChange = (value: moment.Moment) => {
     fetchTimelineStatus(value);
@@ -110,7 +117,7 @@ function MedicineRecord() {
   };
   // 选中某天，获取某天服药记录
   const onSelect = (value: moment.Moment) => {
-    fetchRecords(value);
+    // fetchRecords(value);
     setIsShow(true);
     setSelectedValue(value);
   };
@@ -147,7 +154,7 @@ function MedicineRecord() {
                       className={v.confirmAt ? `${styles.hour} ${styles.green}` : styles.hour}
                       key={v.start}
                     >
-                      {moment(v.start).format('HH:mm').split(':')[0]}
+                      {moment(v.start).format('HH:mm').split(':')[1] === '00' ? moment(v.start).format('HH:mm').split(':')[0] : moment(v.start).format('HH:mm')}
                     </span>
                   ),
                 )}

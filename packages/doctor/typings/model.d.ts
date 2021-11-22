@@ -11,7 +11,7 @@ interface UserModelState {
   prices: any[];
   userInfo: ISubject;
   organizations: IOrganizations;
-  filterOrgs: [];
+  filterOrgs: any[];
 }
 
 interface CurrentPatientModelState {
@@ -115,6 +115,26 @@ export interface ImageModelState {
   anaImg: IImageItem[];
   otherImg: IImageItem[];
 }
+export interface IUserAddTopicItem  {
+  actionType: string, // add edit delete
+  qaType: string,
+  qa: IQuestions | IQuestions[],
+  uuid: string;
+}
+export interface StructuredModelState {
+  // editTabKey: string;
+  // editQa:  IQuestions[] | IQuestions[][],
+  // actionType: string; // edit 编辑|添加  del删除
+  [key: any]: IUserAddTopicItem[],
+  currEditData: {
+    uuid: string, // 当前编辑的问题的uuid
+    qaType: string, // 当前编辑的问题的类型question_type
+    actionType, // 当前操作： add  edit delete
+    tempKey: string, // 当前变化的是哪种分类
+    tabKey: string,
+
+  },
+}
 declare interface IState {
   auth: AuthModelState;
   user: UserModelState;
@@ -125,6 +145,7 @@ declare interface IState {
   image: ImageModelState;
   education: EduModelState;
   suifang: SuifangModelState;
+  structured: StructuredModelState;
 }
 interface EduModelState {
   richText: {
@@ -139,7 +160,7 @@ interface EduModelState {
   };
   sendList: []
 }
-interface IQuestions {
+interface ISuiFangQuestions {
   type: string;
   code?: number;
   detail: {
@@ -153,5 +174,5 @@ interface SuifangModelState {
   id?: string;
   subTitle?: string;
   title?: string;
-  question?: IQuestions[]
+  question?: ISuiFangQuestions[]
 };

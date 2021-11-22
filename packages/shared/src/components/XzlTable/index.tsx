@@ -22,6 +22,7 @@ export interface XzlTableCallBackProps {
   selectedRowKeys?: ReactText[];
   currentPage?: number;
   dataSource?: Store[];
+  apiData?: any; // 接口返回的原始数据，例如外部需要total
 }
 
 interface IOnSelectChange {
@@ -76,23 +77,27 @@ const XzlTable: FC<IProps> = (props) => {
     console.log('fetchTableDataSource params', params);
     const timeOut = tableOptions?.timeOut ? 2000 : 0;
     setTimeout(async () => {
-      const res = await request(params);
-      console.log('fetchTableDataSource res', res);
-      if (res) {
-        setCurrent(params.pageAt);
-        setSize(params.pageSize);
-        if (dataKey == 'events_jsonb') {
-          res.tableBody.forEach(element => {
-            element.content = JSON.parse(element.content.value);
-          });
-          setTotal(extra);
+      if (request) {
+        const res = await request(params);
+        console.log('fetchTableDataSource res', res);
+        if (res) {
+          setCurrent(params.pageAt);
+          setSize(params.pageSize);
+          if (dataKey == 'events_jsonb') {
+            res.tableBody.forEach(element => {
+              element.content = JSON.parse(element.content.value);
+            });
+            setTotal(extra);
+          } else {
+            setTotal(res.total);
+          }
+          const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
+          handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt, apiData: res });
+          console.log('handledData*****', handledData);
+          setDataSource(handledData);
         } else {
-          setTotal(res.total);
+          setDataSource([]);
         }
-        const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category);
-        handleCallBackStore({ dataSource: handledData, currentPage: params.pageAt });
-        console.log('handledData*****', handledData);
-        setDataSource(handledData);
       } else {
         setDataSource([]);
       }
@@ -114,6 +119,9 @@ const XzlTable: FC<IProps> = (props) => {
     if (!tableOptions?.handlePagerChange) {
       const data: Store = { pageAt: page };
       fetchTableDataSource(data);
+    }
+    if (tableOptions?.handleFetchPageAt) {
+      tableOptions?.handleFetchPageAt(page);
     }
     // fetchTableDataSource(params);
   };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useParams } from 'umi';
+import { useParams, history } from 'umi';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import {
   Age, Sex, Address, PatientRole, Search,
@@ -9,6 +9,7 @@ import {
 import Organization from '@/components/Selects/Organization';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/src/utils/conditions';
+
 import {
   name,
   org,
@@ -18,20 +19,20 @@ import {
   address,
   msgCount,
   noteC,
-  upperDoctor,
-  lowerDoctor,
+  project,
 } from './columns';
 import AddPatient from './components/AddPatient';
 // import UnBind from './components/UnBind';
-import ChangeDoctor from './components/ChangeDoctor';
+import ChangeServicePackage from './components/ChangeServicePackage';
+import { useDispatch } from 'react-redux';
 import styles from './index.scss';
 
 function Patients() {
   const { level } = useParams<{ level: string }>();
   const [form] = Form.useForm();
   const { setFieldsValue, getFieldValue } = form;
-  const sRole = Role[`${level.toLocaleUpperCase()}_DOCTOR`].id;
-
+  const sRole = Role[`${level.toLocaleUpperCase()}`]?.id;
+  const dispatch = useDispatch();
   const getInitOptions = () => {
     let params: CommonData = {};
     const sessionData = sessionStorage.getItem(level);
@@ -50,6 +51,10 @@ function Patients() {
 
   const [depOptions, setOptions] = useState({ ...getInitOptions() });
   const [pageAt, setPageAt] = useState<number>(1);
+
+  // 慢病医生角色
+  const isDoctor = ['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level);
+
   // 切换左侧菜单or刷新页面or从患者详情返回列表页面保留筛选搜索分页条件
   useEffect(() => {
     const newOptions = getInitOptions();
@@ -64,6 +69,15 @@ function Patients() {
     setOptions({
       ...newOptions,
     });
+    // 获取侧边栏菜单列表
+    dispatch({
+      type: 'user/getDoctorExistedRoles',
+      payload: {},
+    });
+    if (!sRole) {
+      history.replace('/doctor/patients/alone_doctor');
+      window.location.reload();
+    }
   }, [level]);
 
   const handleSelectChange = (changedValues: string[], allValues: string[]) => {
@@ -95,33 +109,28 @@ function Patients() {
   const refresh = (params: { pageAt: number } = { pageAt }) => {
     setOptions({ ...depOptions, ...params });
   };
-  const changeDoctor = {
-    title: '更换医生团队',
+  // 只有创建人是当前登录者，才展示更换按钮
+  const changeServicePackage = {
+    title: '更换服务小组',
     dataIndex: 'sid',
-    render: (_text: string, record: IRecord) => (
-      <ChangeDoctor data={record} curRole={level} refresh={() => refresh({ pageAt: 1 })} />
-    ),
+    render: (_text: string, record: IRecord) => {
+      return record?.nsOwner?.sid === window.$storage.getItem('sid') ? (
+        <ChangeServicePackage data={record} refresh={() => refresh({ pageAt: 1 })} />
+      ) : <>--</>;
+    },
   };
 
   const columns: CommonData[] = [
     name,
-    org,
-    patientLevel(refresh),
-    noteC(refresh),
+    isDoctor ? org : project,
     sex,
     age,
     address,
     msgCount,
   ];
-  if (level === 'lower') {
-    columns.push(upperDoctor);
-  }
-  if (level === 'upper') {
-    columns.push(lowerDoctor);
-    columns.push(changeDoctor);
-  }
-  if (level === 'alone') {
-    columns.push(changeDoctor);
+  if (isDoctor) {
+    columns.push(changeServicePackage);
+    columns.splice(2, 0, patientLevel(refresh), noteC(refresh));
   }
   console.log('为构建添加console');
   return (
@@ -133,11 +142,11 @@ function Patients() {
       <div className={styles.panel}>
         <Form form={form} onValuesChange={handleSelectChange}>
           <div className={styles.select_wrap}>
-            <Organization />
+            <Organization type={isDoctor ? 'org' : 'croProject'} />
             <Address />
             <Age />
             <Sex />
-            <PatientRole />
+            { isDoctor && <PatientRole /> }
           </div>
           <div className={styles.operating}>
             <div className={styles.search}>

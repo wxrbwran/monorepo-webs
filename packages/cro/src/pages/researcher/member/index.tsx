@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  Form, Modal, message } from 'antd';
+import { Form, Modal, message } from 'antd';
 import number from '@/assets/img/number.svg';
 import InviteMember from '../compontents/invite_member';
 import { Search, InviteStatus } from 'xzl-web-shared/src/components/Selects';
@@ -43,6 +43,9 @@ function Member() {
         params[item] = allValues[item];
       }
     });
+
+    console.log('================ handleSelectChange member', JSON.stringify(params));
+
     setOptions({
       projectNsId,
       ...params,
@@ -66,8 +69,8 @@ function Member() {
       title: '升级成为多中心试验后不能再改为单中心试验',
       icon: <ExclamationCircleOutlined />,
       content: <div className={styles.confirm_content}>
-                <span>您的组员会改为暂未分配状态，</span>您还要继续吗？
-              </div>,
+        <span>您的组员会改为暂未分配状态，</span>您还要继续吗？
+      </div>,
       cancelText: '取消',
       okText: '继续',
       onOk() {
@@ -86,16 +89,16 @@ function Member() {
           // setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
         }).catch(() => console.log('Oops errors!'));
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
   return (
     <div className={styles.member}>
       <div className={styles.title}>
-        <h3>成员</h3><img src={number} alt=""/> <span>{memberCount}</span>
+        <h3>成员</h3><img src={number} alt="" /> <span>{memberCount}</span>
       </div>
       <Form form={form} onValuesChange={handleSelectChange} style={{ position: 'relative' }}>
-        <Search form={form} searchKey="var" placeholder="搜索姓名或手机号" float={'inherit'}/>
+        <Search form={form} searchKey="var" placeholder="搜索姓名或手机号" float={'inherit'} />
         <div className={styles.lists_head}>
           <InviteStatus />
           {
@@ -103,20 +106,20 @@ function Member() {
               Role.MAIN_PI.id,
               Role.PROJECT_LEADER.id,
             ].includes(croRoleType) && (
-             <div>
-               {
-                 label === 'single_project' && status !== 1001 && <div className={styles.upgrade_btn} onClick={handleUpgrade}>升级成多中心试验</div>
-               }
-               {
-                 status === 1001 && (
-                  <InviteMember
-                    refreshList={refreshList}
-                  >
-                    邀请研究者参与管理
-                  </InviteMember>
-                 )
-               }
-             </div>
+              <div>
+                {
+                  label === 'single_project' && status !== 1001 && <div className={styles.upgrade_btn} onClick={handleUpgrade}>升级成多中心试验</div>
+                }
+                {
+                  status === 1001 && (
+                    <InviteMember
+                      refreshList={refreshList}
+                    >
+                      邀请研究者参与管理
+                    </InviteMember>
+                  )
+                }
+              </div>
             )
           }
         </div>

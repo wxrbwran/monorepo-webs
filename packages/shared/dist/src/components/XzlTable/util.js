@@ -16,14 +16,33 @@ import dayjs from 'dayjs';
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
     var newObj = {};
+    // 签约患者下，当前选中菜单的role
+    var currentMenuRole = window.$storage.getItem('role');
+    console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
+    var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
     data.forEach(function (team) {
         newObj = {};
         team.members.forEach(function (member) {
+            // 下级、上级、科研医生、营养师、独立
+            if (Role.NS_OWNER.id === member.role) {
+                newObj.nsOwner = {
+                    wcId: member.wcId,
+                    sid: member.sid, //创建者的sid -  患者列表是否展示更换服务按钮使用
+                };
+            }
             switch (member.role) {
                 case Role.PROJECT_PATIENT.id: // 受试列表
+                    if (!doctorRole.includes(currentMenuRole)) {
+                        newObj = __assign(__assign({}, newObj), member);
+                    }
+                    newObj.inCro = true; // 标记为受试者
+                    break;
                 case Role.PATIENT.id:
                 case Role.PATIENT_VIP.id:
-                    newObj = __assign(__assign({}, newObj), member);
+                    // 科研currentMenuRole为空，医生端currentMenuRole有值，需要属于doctorRole之一才满足条件
+                    if (!currentMenuRole || doctorRole.includes(currentMenuRole)) {
+                        newObj = __assign(__assign({}, newObj), member);
+                    }
                     break;
                 case Role.RESEARCH_PROJECT_DOCTOR.id:
                     newObj.researchProjectDoctor = member.name;
@@ -36,6 +55,10 @@ var handlePatientsTeamDataSource = function (data) {
                     break;
                 case Role.ORG.id:
                     newObj.organizationName = member.name;
+                    newObj.organizationNSId = member.nsId;
+                    break;
+                case Role.RESEARCH_PROJECT.id:
+                    newObj.projectName = member.name;
                     break;
                 case Role.PATIENT_YL.id:
                 case Role.PATIENT_YL_VIP.id:
@@ -45,6 +68,7 @@ var handlePatientsTeamDataSource = function (data) {
                     break;
             }
         });
+        newObj.team = team;
         newPatients.push(newObj);
     });
     return newPatients;
@@ -63,6 +87,49 @@ export var handleInviteMemberList = function (dataSource) {
             firstPracticeDepartment: firstPracticeDepartment, role: fetchRolePropValue(item.role, 'desc'), roleId: item.role }));
     });
     console.log('newData', newData);
+    return newData;
+};
+// cro邀请研究者参与管理数据处理使用此方法
+export var handleTeamInviteMemberList = function (dataSource) {
+    var newData = [];
+    console.log('handleTeamInviteMemberList dataSource', dataSource);
+    dataSource.forEach(function (team) {
+        var doctor = {};
+        team.members.forEach(function (item) {
+            var _a;
+            if (item.role === Role.DOCTOR.id) {
+                doctor = __assign(__assign({ orgs: (doctor === null || doctor === void 0 ? void 0 : doctor.orgs) || [] }, item), { status: (_a = projectInviteStatus[item.status]) !== null && _a !== void 0 ? _a : '未邀请' });
+                // 医生所在的互联网医院
+            }
+            else if (item.role === Role.ORG.id) {
+                if (doctor.orgs) {
+                    doctor.orgs.push(item);
+                    doctor.orgName = doctor.orgs.map(function (org) { return org.name; }).join(',');
+                }
+                else {
+                    doctor = __assign(__assign({}, doctor), { orgs: [item], orgName: item.name });
+                }
+            }
+        });
+        newData.push(doctor);
+        // const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
+        // newData.push({
+        //   ...item,
+        //   title,
+        //   avatarUrl,
+        //   name,
+        //   joinTime: item?.interval?.start ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
+        //   status: projectInviteStatus[item.status],
+        //   tel,
+        //   provinceName,
+        //   sex: sexList[sex],
+        //   firstProfessionCompany,
+        //   firstPracticeDepartment,
+        //   role: fetchRolePropValue(item.role, 'desc'),
+        //   roleId: item.role,
+        // });
+    });
+    console.log('handleTeamInviteMemberList newData', newData);
     return newData;
 };
 var handleDoctorTeamDataSource = function (dataSource) {
@@ -105,6 +172,28 @@ var handlePatientTeamDataSource = function (dataSource) {
     // console.log('handlePatientTeamDataSource res', res);
     return res;
 };
+export var handleRelatedDoctorsDataSource = function (dataSource) {
+    var doctors = [];
+    dataSource.forEach(function (dataItem) {
+        var doctor = {};
+        dataItem.members.forEach(function (item) {
+            if (item.role === Role.DOCTOR.id) {
+                doctor = __assign({ orgs: (doctor === null || doctor === void 0 ? void 0 : doctor.orgs) || [] }, item);
+                // 医生所在的互联网医院
+            }
+            else if (item.role === Role.ORG.id) {
+                if (doctor.orgs) {
+                    doctor.orgs.push(item);
+                }
+                else {
+                    doctor = __assign(__assign({}, doctor), { orgs: [item] });
+                }
+            }
+        });
+        doctors.push(doctor);
+    });
+    return doctors;
+};
 export var handleTableDataSource = function (dataKey, dataSource, category) {
     console.log('dataSource', dataSource);
     console.log('dataKey', dataKey);
@@ -125,6 +214,12 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             }
             if ([Role.PATIENT.id, Role.PATIENT_VIP.id].includes(category)) {
                 return handlePatientTeamDataSource(dataSource);
+            }
+            if (category === 'relatedDoctors') {
+                return handleRelatedDoctorsDataSource(dataSource);
+            }
+            if (category === 'inviteMemberList') {
+                return handleTeamInviteMemberList(dataSource);
             }
             return dataSource;
         case 'infos':

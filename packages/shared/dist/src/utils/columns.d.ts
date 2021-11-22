@@ -169,6 +169,11 @@ export declare const role: {
     dataIndex: string;
     render: (text: string) => JSX.Element;
 };
+export declare const roleCol: {
+    title: string;
+    dataIndex: string;
+    render: (text: string) => JSX.Element;
+};
 export declare const workload: {
     title: string;
     dataIndex: string;

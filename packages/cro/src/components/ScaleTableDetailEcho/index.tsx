@@ -25,8 +25,8 @@ function ScaleTableDetailEcho(props: IProps) {
   const [questions, setQuestions] = useState<IQuestions[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [subTit, setSubTit] = useState('');
-  const scaleGroupInfos = useSelector((state: any)=>state.project.scaleGroupInfos);
-  const { status } = useSelector((state: IState) =>  state.project.projDetail);
+  const scaleGroupInfos = useSelector((state: any) => state.project.scaleGroupInfos);
+  const { status } = useSelector((state: IState) => state.project.projDetail);
   useEffect(() => {
     if (source) {
       api.query
@@ -74,8 +74,7 @@ function ScaleTableDetailEcho(props: IProps) {
           && !location.pathname.includes('template') && (
             <p className={`${styles.icon} mr-20 absolute right-0 top-0`}>
               <Link
-                to={`/${
-                  scaleType === 'CRF' ? 'end_event' : 'subjective_table'
+                to={`/${scaleType === 'CRF' ? 'end_event' : 'subjective_table'
                 }/create?groupId=${groupId}`}
               >
                 <p className="inline-block text-base cursor-pointer">
@@ -94,7 +93,7 @@ function ScaleTableDetailEcho(props: IProps) {
       </div>
       <p className={styles.second_title}>{subTit}</p>
 
-      {questions.map((item: IQuestions, index) => {
+      {questions && questions.map((item: IQuestions, index) => {
         return (
           <div className={styles.item} key={index}>
             <div className={styles.item__issue}>

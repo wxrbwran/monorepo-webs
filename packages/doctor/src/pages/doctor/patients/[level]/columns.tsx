@@ -12,6 +12,7 @@ import patientIcon from '@/assets/img/patient.png';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
 import Note from './components/Note';
+// import ChangeServicePackage from './components/ChangeServicePackage';
 import styles from './index.scss';
 
 export interface IRecord {
@@ -38,11 +39,15 @@ export interface IRecord {
   avatarUrl: string;
   isYlPatient: boolean; // 是否是养老患者
   inCro: boolean; // 是否参与了科研项目
+  nsOwner: {
+    wcId: string;
+    sid: string;
+  }; // 创建者信息
 }
 const patientPage = (record: IRecord, actionType?: string, other?: string) => {
   console.log('跳转', record, actionType, other);
   const {
-    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name,
+    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, nsOwner,
   } = record;
   window.$storage.setItem('patientWcId', wcId);
   window.$storage.setItem('patientSid', sid);
@@ -61,6 +66,7 @@ const patientPage = (record: IRecord, actionType?: string, other?: string) => {
       issueCount,
       name,
       avatarUrl,
+      nsOwner,
     },
   });
   history.push(`/patient_panel/${record.sid}`);
@@ -88,6 +94,15 @@ export const name = {
 export const org = {
   title: '机构',
   dataIndex: 'organizationName',
+  render: (data: string, record: IRecord) => (
+    <div onClick={() => patientPage(record)}>
+      {data}
+    </div>
+  ),
+};
+export const project = {
+  title: ' 科研项目',
+  dataIndex: 'projectName',
   render: (data: string, record: IRecord) => (
     <div onClick={() => patientPage(record)}>
       {data}

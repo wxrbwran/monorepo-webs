@@ -44,7 +44,7 @@ const ChatEditor: FC = () => {
       setFromWcId(doctorWcId);
       window.$storage.setItem('fromWcId', doctorWcId);
       // 从会话组中去除自己
-      const removeOwnAfter = currSession[0].infos.filter(
+      const removeOwnAfter = currSession[0].members.filter(
         (item: { wcId: string | undefined }) => item.wcId !== doctorWcId,
       );
       // 得到要发送给的成员的wcId
@@ -66,7 +66,7 @@ const ChatEditor: FC = () => {
       content,
       associateWcId: patientWcId,
       associateSId: patientSid,
-      sessionId: currSessionId?.split('p2p-')[1],
+      nsessionId: currSessionId?.split('p2p-')[1],
     };
     console.log(toWcIds);
     api.im
@@ -195,7 +195,7 @@ const ChatEditor: FC = () => {
       }),
       associateWcId: patientWcId,
       associateSId: patientSid,
-      sessionId: currSessionId?.split('p2p-')[1],
+      nsessionId: currSessionId?.split('p2p-')[1],
     };
     console.log('5432', params);
     api.im

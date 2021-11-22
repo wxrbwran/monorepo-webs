@@ -15,13 +15,16 @@ export interface UserModelType {
     getPrice: Effect;
     getUserOrganizations: Effect;
     getUserWclDetail: Effect;
+    getDoctorExistedRoles: Effect;
   };
   reducers: {
     saveUserInfo: Reducer;
+    updateUserOperationLog: Reducer;
     saveUserOrg: Reducer;
     saveUserPrice: Reducer;
     saveUserFilterOrg: Reducer;
     setCurrentOrgInfo: Reducer;
+    saveDoctorExistedRoles: Reducer;
   };
 }
 
@@ -29,12 +32,15 @@ const userState: UserModelState = {
   user: {},
   prices: [],
   userInfo: {},
+  loginCount: 0, // 0初始值，1首次登录 其余值是非首次登录
   organizations: {
     teams: [],
     total: 0,
   },
   filterOrgs: [],
+  croProjectList: [],
   currentOrgInfo: {},
+  existedRoles: [], // 医生角色列表 侧边栏使用（签约患者下有哪些菜单）
 };
 
 const Model: UserModelType = {
@@ -77,21 +83,28 @@ const Model: UserModelType = {
         payload: data,
       });
     },
+    * getDoctorExistedRoles({ payload }, { call, put }) {
+      const data = yield call(api.doctor.getDotorExistedRoles, payload);
+      console.log(339383, data.teams[0].members);
+      yield put({
+        type: 'saveDoctorExistedRoles',
+        payload: data.teams[0].members,
+      });
+    },
   },
   reducers: {
     saveUserInfo(state, action) {
-      console.log(999999);
       // 有些老数据存在只有第一执业医院名称，没有医院id，会导致后面逻辑错误，这里兼容一下，没有id直接清掉名字，让用户再录入
       const userInfo = action.payload;
-      if (!userInfo.firstPracticeDepartmentId) {
-        delete userInfo.firstPracticeDepartment;
-      }
-      if (!userInfo.firstProfessionCompanyId) {
-        delete userInfo.firstProfessionCompany;
-      }
       return {
         ...state,
         userInfo,
+      };
+    },
+    updateUserOperationLog(state, action) {
+      return {
+        ...state,
+        loginCount: action.payload,
       };
     },
     saveUserPrice(state, action) {
@@ -108,10 +121,16 @@ const Model: UserModelType = {
     },
     saveUserFilterOrg(state, action) {
       const filterOrgList: any[] = [];
+      const croProjectList: any[] = [];
       action.payload.teams.forEach((item: IOrgTeams) => {
         item.members.forEach((member: ISubject) => {
           if (member.role === Role.ORG.id) {
             filterOrgList.push({
+              ...member,
+              nsId: item.teamNSId,
+            });
+          } else if (member.role === Role.RESEARCH_PROJECT.id) {
+            croProjectList.push({
               ...member,
               nsId: item.teamNSId,
             });
@@ -121,12 +140,19 @@ const Model: UserModelType = {
       return {
         ...state,
         filterOrgs: filterOrgList,
+        croProjectList: croProjectList,
       };
     },
     setCurrentOrgInfo(state, action) {
       return {
         ...state,
         currentOrgInfo: { ...action.payload },
+      };
+    },
+    saveDoctorExistedRoles(state, action) {
+      return {
+        ...state,
+        existedRoles: action.payload,
       };
     },
   },

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import DiffShow from '@/components/AdjustMedicine/DiffShow';
 import InspectionDiff from '@/components/AdjustInspection/InspectionDiff';
-import { fetchRolePropValue } from '@/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 
 interface IProps {

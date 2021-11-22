@@ -61,6 +61,17 @@ interface ISub {
   firstPracticeDepartmentId: string; // 第一执业 科室id
   firstProfessionBrief: string; // 第一执业医院简介
   belongToGroup: string; // 所属医生集团
+  practiceAreas: { // 执业医院和科室
+    name: string; // 机构名称
+    standardId: string; // 标准机构id
+    role: string[]; // 前端暂时不关心此字段，留待后用
+    sub: { // 科室信息
+      name: string; // 科室名称
+      standardId: string; // 标准科室ID，如果用户选用了标准库，则赋值
+      nsLabels: string[];// 前端暂时不关心此字段，留待后用
+    }
+  }[];
+  roleTags: string[]; // 角色标签
 
   qcCode: string; // 资格证书编码
   qcIssuingDate: string; // 资格证书发放日期
@@ -107,6 +118,7 @@ interface ISub {
   // 以医生维度，name为医生姓名，机构名是orgName。如果以机构维度，机构名是name。
   // orgName是前端整合数据添加进去的,例如患者列表，需要展示机构名称，根据后端数据过滤到机构名追加进去方便使用
   orgName: string; //  teamNSId
+  orgs: any[]; // 医生所在的互联网医院集合
   // ——————————————！自定义！——————————————
 
   buildName: string;

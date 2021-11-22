@@ -1,0 +1,46 @@
+.add_service {
+  padding: 0 40px;
+  .package_name {
+    width: 676px;
+    height: 32px;
+  }
+}
+
+.avatar {
+  img {
+    @include size(100px);
+  }
+}
+
+.item {
+  box-shadow: 0px 0 5px 0 rgb(0 0 0 / 13%);
+  // width: 100%;
+  .title {
+    flex: 0 0 84px;
+  }
+}
+
+.name {
+  font-size: 14px;
+  height: 14px;
+  line-height: 14px;
+
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.org_name {
+  padding: 0 10px;
+  font-size: 12px;
+  text-align: center;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}

@@ -6,9 +6,10 @@ import { FormOutlined } from '@ant-design/icons';
 import create from '@/assets/img/create.svg';
 import { Input, message } from 'antd';
 import { history } from 'umi';
-import SendPlan from '@/components/SendPlan';
 import * as api from '@/services/api';
 import styles from '../index.scss';
+import ScaleTemplate from '@/components/ScaleTemplate';
+import { IRuleDoc, IChooseValues } from '../../subjective_table/util';
 
 interface IProps {
   location: {
@@ -26,12 +27,6 @@ interface IState {
 }
 function Detail({ location }: IProps) {
   let initInfos: IPlanInfos = {
-    plans: [
-      {
-        type: '',
-        detail: {},
-      },
-    ],
     questions: '',
     scaleId: '',
   };
@@ -66,15 +61,20 @@ function Detail({ location }: IProps) {
   }, [location]);
 
   useEffect(() => {
+
+    console.log('================ objectiveScaleList,', JSON.stringify(objectiveScaleList));
     setInfos([...objectiveScaleList]);
     setScaleName(formName);
     //默认第一次加载时执行
-    if (editStatus.length === 0){
-      objectiveScaleList.forEach(()=>{
-        editStatus.push('lock');
-      });
-      setEditStatus([...editStatus]);
-    }
+    // if (editStatus.length === 0) {
+    const statusList: string[] = [];
+    objectiveScaleList.forEach(() => {
+      statusList.push('lock');
+    });
+    setEditStatus([...statusList]);
+
+    console.log('================ editStatus,', JSON.stringify(statusList));
+    // }
   }, [objectiveScaleList]);
 
   const changeFormName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,29 +125,33 @@ function Detail({ location }: IProps) {
     delPlan(index);
   };
   //提醒计划的确定按钮回传回来的数据
-  const addPlan = (params: IPlanInfos, index: number) => {
-    infos[index] = { ...infos[index], ...params };
+  const addPlan = (params: { ruleDoc: IRuleDoc, question: string, scaleId: string, chooseValues: IChooseValues }, index: number) => {
+
     const paraAdd = {
       doctorSid,
-      infos: [infos[index]],
-      name: '客观量表',
+      infos: [{
+        questions: params.questions,
+        ruleDoc: params.ruleDoc,
+      }],
+      name: formName,
       projectSid,
       projectName,
       projectNsId,
       type: 'OBJECTIVE',
       scaleGroupId: location.query.id,
     };
+    console.log('====================== rule', JSON.stringify(params.questions));
     api.subjective.addObjectiveScale(paraAdd)
       .then(() => {
         message.success('添加成功');
-        setEditStatus([]);
+
+        infos[index] = params;
+        setInfos([...infos]);
+        console.log('================ 添加成功 editStatus,', JSON.stringify(editStatus));
         dispatch({
           type: 'project/fetchObjectiveScale',
           payload: location.query.id,
         });
-      })
-      .catch((err: string) => {
-        message.error(err);
       });
   };
 
@@ -198,23 +202,34 @@ function Detail({ location }: IProps) {
       </div>
       {
         status !== 1001 && window.$storage.getItem('isLeader') &&
-          <div className={styles.add} onClick={addInfo}>
-            <img src={create} alt="" />
-            创建新提醒
-          </div>
+        <div className={styles.add} onClick={addInfo}>
+          <img src={create} alt="" />
+          创建新提醒
+        </div>
       }
       {infos.map((item: IPlanInfos, index: number) => {
         if (editStatus[index] === 'open') {
+          console.log('======================= item, item', JSON.stringify(item));
           return (
-            <SendPlan
+            // <SendPlan
+            //   key={index}
+            //   mode="Add"
+            //   onCancel={() => handleCancel(index)}
+            //   infoIndex={index}
+            //   addPlan={addPlan}
+            //   plans={item.plans}
+            //   question={item.questions}
+            //   isDisabled={item.scaleId}
+            // />
+            <ScaleTemplate
               key={index}
               mode="Add"
               onCancel={() => handleCancel(index)}
-              infoIndex={index}
-              addPlan={addPlan}
-              plans={item.plans}
+              addPlan={(params) => addPlan(params, index)}
+              scaleType={'OBJECTIVE'}
               question={item.questions}
-              isDisabled={item.scaleId}
+              originRuleDoc={item.ruleDoc}
+              chooseValues={item.chooseValues}
             />
           );
         } else {

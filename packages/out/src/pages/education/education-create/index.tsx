@@ -40,19 +40,20 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
       .then((res) => {
         console.log('resrules', res);
         setRules(res.keys);
-        const scopeListApi = res.keys.filter(item => item.name === 'scope')[0].assign.value;
-        if (scopeListApi){
+        const scopeListApi = res.keys.filter(item => item.name === 'scope')[0].items[0].assign.value;
+
+        if (scopeListApi) {
           const params = {
             sourceType: isScale ? 2 : 3,
             kp: 'team',
             rsList: [{
-              sid:  window.$storage.getItem('sid'),
+              sid: window.$storage.getItem('sid'),
               roleType: window.$storage.getItem('roleId'),
-              nsId:  window.$storage.getItem('nsId'),
+              nsId: window.$storage.getItem('nsId'),
             }, {
               sid: window.$storage.getItem('orgSid'),
-              roleType:  window.$storage.getItem('orgRole'),
-              nsId:  window.$storage.getItem('nsId'),
+              roleType: window.$storage.getItem('orgRole'),
+              nsId: window.$storage.getItem('nsId'),
             }],
           };
           api.education
@@ -88,7 +89,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   const onFinish = (values: IValues) => {
     console.log('Received values of form:', values);
     const orgSid = window.$storage.getItem('orgSid');
-    const orgRole =   window.$storage.getItem('orgRole');
+    const orgRole = window.$storage.getItem('orgRole');
     const result = handleFormatValues(values, rules, isScale, checked, orgSid, orgRole, scopeItems);
     if (result) {
       // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -35,7 +35,6 @@ const OrgModel: OrgModelType = {
   state: OrgState,
   effects: {
     *getOrgMenu({ payload }, { put, call }) {
-      // console.log(payload);
       const response = yield call(window.$api.org.getOrgMenu, payload);
       yield put({
         type: 'saveCurrentOrgMenu',

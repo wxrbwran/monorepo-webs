@@ -1,5 +1,4 @@
 .side_menu {
-    padding-top: 14px;
     width: 240px;
     // flex: 0 0 180px;
     z-index: 2;
@@ -7,6 +6,8 @@
       :global {
         width: 240px!important;
         height: calc(100vh - 58px);
+        padding-top: 14px;
+        box-sizing: border-box;
         .ant-menu-submenu-title, .anticon {
           font-size: 16px;
           font-weight: 600;
@@ -25,6 +26,11 @@
         .ant-menu-submenu-title {
           height: 50px!important;
           line-height: 50px!important;
+        }
+        .ant-menu-submenu-selected {
+          path {
+            fill: #1890ff!important;
+          }
         }
       }
     }

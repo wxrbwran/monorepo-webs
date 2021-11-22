@@ -1,30 +1,36 @@
+
 import { expand, sortByDate } from './util';
 
-var rootRectWidth = 0; //根节点rect的宽度
-var downwardLength = 0;
-var upwardLength = 0;
+// var rootRectWidth = 0; //根节点rect的宽度
+// var downwardLength = 0;
+// var upwardLength = 0;
 var forUpward = true;
 
 class TreeChart {
   public directions: string[];
+
   public treeData: any;
+
   public rootName: string;
+
   constructor(data: any) {
-    this.directions = [ 'downward'];
+    this.directions = ['downward'];
     // this.directions = [ 'upward', 'downward'];
     this.treeData = data;
     this.rootName = data.rootName;
   }
+
   drawChart() {
     var self = this;
     console.log(this);
-    rootRectWidth = self.rootName.length * 15;
-    //获得upward第一级节点的个数
-    upwardLength = self.treeData?.upward?.children?.length; // 架构图不显示upward
-    //获得downward第一级节点的个数
-    downwardLength = self.treeData.downward.children.length;
+    // rootRectWidth = self.rootName.length * 15;
+    // //获得upward第一级节点的个数
+    // upwardLength = self.treeData?.upward?.children?.length; // 架构图不显示upward
+    // //获得downward第一级节点的个数
+    // downwardLength = self.treeData.downward.children.length;
     self.graphTree(self.getTreeConfig());
   }
+
   getTreeConfig() {
     var treeConfig: any = {
       margin: {
@@ -60,8 +66,8 @@ class TreeChart {
                 ? d.source.y - 20
                 : d.source.y + 20
               : forUpward
-              ? d.source.y - 60
-              : d.source.y + 85,
+                ? d.source.y - 60
+                : d.source.y + 85,
         };
       })
       .target(function (d) {
@@ -73,6 +79,14 @@ class TreeChart {
       .projection(function (d) {
         return [d.x, d.y];
       });
+    function disableRightClick() {
+      // stop zoom
+      if (window.d3.event.button == 2) {
+        console.log('No right click allowed');
+        window.d3.event.stopImmediatePropagation();
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     var zoom = window.d3.behavior.zoom().scaleExtent([0.5, 2]).on('zoom', redraw);
     var svg = d3
       .select('#product_tree')
@@ -86,57 +100,60 @@ class TreeChart {
     var treeG = svg
       .append('g')
       .attr('class', 'gbox')
-      .attr('transform', 'translate(' + config.margin.left + ',' + config.margin.top + ')');
+      .attr('transform', 'translate(' + config.margin.left + ',' + config.margin.top + ')')
+      .text('12345')
+      ;
 
-    //箭头(下半部分)
-    var markerDown = svg
-      .append('marker')
-      .attr('id', 'resolvedDown')
-      .attr('markerUnits', 'strokeWidth') //设置为strokeWidth箭头会随着线的粗细发生变化
-      .attr('markerUnits', 'userSpaceOnUse')
-      .attr('viewBox', '0 -5 10 10') //坐标系的区域
-      .attr('refX', 0) //箭头坐标
-      .attr('refY', 0)
-      .attr('markerWidth', 12) //标识的大小
-      .attr('markerHeight', 12)
-      .attr('orient', '90') //绘制方向，可设定为：auto（自动确认方向）和 角度值
-      .attr('stroke-width', 2) //箭头宽度
-      .append('path')
-      .attr('d', 'M0,-5L10,0L0,5') //箭头的路径
-      .attr('fill', '#000'); //箭头颜色
-    //箭头(上半部分)
-    var markerUp = svg
-      .append('marker')
-      .attr('id', 'resolvedUp')
-      .attr('markerUnits', 'strokeWidth') //设置为strokeWidth箭头会随着线的粗细发生变化
-      .attr('markerUnits', 'userSpaceOnUse')
-      .attr('viewBox', '0 -5 10 10') //坐标系的区域
-      .attr('refX', 10) //箭头坐标
-      .attr('refY', 0)
-      .attr('markerWidth', 12) //标识的大小
-      .attr('markerHeight', 12)
-      .attr('orient', '90') //绘制方向，可设定为：auto（自动确认方向）和 角度值
-      .attr('stroke-width', 2) //箭头宽度
-      .append('path')
-      .attr('d', 'M0,-5L10,0L0,5') //箭头的路径
-      .attr('fill', '#000'); //箭头颜色
+    var tooltip = d3.select('body')
+      .append('div')
+      .style('position', 'absolute')
+      .style('z-index', '10')
+      .style('visibility', 'hidden')
+      .style('background', '#3296FA')
+      .text('a simple tooltip');
+
+    // //箭头(下半部分)
+    // var markerDown = svg
+    //   .append('marker')
+    //   .attr('id', 'resolvedDown')
+    //   .attr('markerUnits', 'strokeWidth') //设置为strokeWidth箭头会随着线的粗细发生变化
+    //   .attr('markerUnits', 'userSpaceOnUse')
+    //   .attr('viewBox', '0 -5 10 10') //坐标系的区域
+    //   .attr('refX', 0) //箭头坐标
+    //   .attr('refY', 0)
+    //   .attr('markerWidth', 12) //标识的大小
+    //   .attr('markerHeight', 12)
+    //   .attr('orient', '90') //绘制方向，可设定为：auto（自动确认方向）和 角度值
+    //   .attr('stroke-width', 2) //箭头宽度
+    //   .append('path')
+    //   .attr('d', 'M0,-5L10,0L0,5') //箭头的路径
+    //   .attr('fill', '#000'); //箭头颜色
+    // //箭头(上半部分)
+    // var markerUp = svg
+    //   .append('marker')
+    //   .attr('id', 'resolvedUp')
+    //   .attr('markerUnits', 'strokeWidth') //设置为strokeWidth箭头会随着线的粗细发生变化
+    //   .attr('markerUnits', 'userSpaceOnUse')
+    //   .attr('viewBox', '0 -5 10 10') //坐标系的区域
+    //   .attr('refX', 10) //箭头坐标
+    //   .attr('refY', 0)
+    //   .attr('markerWidth', 12) //标识的大小
+    //   .attr('markerHeight', 12)
+    //   .attr('orient', '90') //绘制方向，可设定为：auto（自动确认方向）和 角度值
+    //   .attr('stroke-width', 2) //箭头宽度
+    //   .append('path')
+    //   .attr('d', 'M0,-5L10,0L0,5') //箭头的路径
+    //   .attr('fill', '#000'); //箭头颜色
 
     // Initialize the tree nodes and update chart.
-    for (var d in this.directions) {
-      var direction = this.directions[d];
-      var data = self.treeData[direction];
-      data.x0 = config.centralWidth;
-      data.y0 = config.centralHeight;
-      data.children.forEach(expand);
-      update(data, data, treeG);
-    }
+
     function update(source: any, originalData: any, g: any) {
       console.log(self, 1111);
       console.log(source);
-      var direction = originalData['direction'];
+      var direction = originalData.direction;
       forUpward = direction == 'upward';
-      var node_class = direction + 'Node';
-      var link_class = direction + 'Link';
+      var nodeClass = direction + 'Node';
+      var linkClass = direction + 'Link';
       var downwardSign = forUpward ? -1 : 1;
       var isExpand = false;
       var nodeSpace = 130;
@@ -158,34 +175,35 @@ class TreeChart {
       });
 
       // Update the node.
-      var node = g.selectAll('g.' + node_class).data(nodes, function (d: any) {
+      var node = g.selectAll('g.' + nodeClass).data(nodes, function (d: any) {
         return d.id || (d.id = ++id);
       });
       var nodeEnter = node
         .enter()
         .append('g')
-        .attr('class', node_class)
-        .attr('transform', function (d: any) {
+        .attr('class', nodeClass)
+        .attr('transform', function (_d: any) {
           return 'translate(' + source.x0 + ',' + source.y0 + ')';
         })
         .style('cursor', function (d: any) {
           return d.children || d._children ? 'pointer' : '';
         });
 
+
       nodeEnter
         .append('svg:rect')
-        .attr('x', function (d: any) {
+        .attr('x', function (_d: any) {
           return -60;
         })
-        .attr('y', function (d: any) {
+        .attr('y', function (_d: any) {
           return forUpward ? -52 : 12;
         })
-        .attr('width', function (d: any) {
+        .attr('width', function (_d: any) {
           return 120;
         })
         .attr('height', 60)
         .attr('rx', 1)
-        .style('stroke', function (d: any) {
+        .style('stroke', function (_d: any) {
           return '#CCC';
         })
         .style('fill', function (d: any) {
@@ -197,13 +215,13 @@ class TreeChart {
       nodeEnter
         .append('text')
         .attr('class', 'linkname')
-        .attr('x', function (d: any) {
+        .attr('x', function (_d: any) {
           return '0';
         })
-        .attr('dy', function (d: any) {
+        .attr('dy', function (_d: any) {
           return forUpward ? '-40' : '24';
         })
-        .attr('text-anchor', function (d: any) {
+        .attr('text-anchor', function (_d: any) {
           return 'middle';
         })
         .attr('fill', '#000')
@@ -212,8 +230,8 @@ class TreeChart {
         })
         .style({
           'fill-opacity': 1e-6,
-          fill: function (d: any) {},
-          'font-size': function (d: any) {
+          fill: function (_d: any) { },
+          'font-size': function (_d: any) {
             return 12;
           },
           cursor: 'pointer',
@@ -222,7 +240,7 @@ class TreeChart {
       nodeEnter
         .append('text')
         .attr('x', '0')
-        .attr('dy', function (d: any) {
+        .attr('dy', function (_d: any) {
           return forUpward ? '-16' : '38';
         })
         .attr('text-anchor', 'middle')
@@ -236,21 +254,31 @@ class TreeChart {
       nodeEnter
         .append('text')
         .attr('x', '0')
-        .attr('dy', function (d: any) {
+        .attr('dy', function (_d: any) {
           return forUpward ? '-16' : '52';
         })
         .attr('text-anchor', 'middle')
         .attr('class', 'linkname')
         .style('fill', '#000')
         .style('font-size', 12)
-        .attr('title', (d) => d.firstProfessionCompany)
+        .on('mouseover', function (d) {
+
+          const practiceAreasDes = d?.practiceAreas ? d.practiceAreas.map((item) => (item?.name ?? '')).join(';') : '--';
+          tooltip.text(practiceAreasDes);
+          return tooltip.style('visibility', 'visible');
+        })
+        .on('mousemove', function () {
+          return tooltip.style('top', (d3.event.pageY - 10) + 'px').style('left', (d3.event.pageX + 10) + 'px');
+        })
+        .on('mouseout', function () { return tooltip.style('visibility', 'hidden'); })
         .text(function (d: any) {
-          return d.firstProfessionCompany.length > 10 ? `${d.firstProfessionCompany.substr(0, 9)}...` : d.firstProfessionCompany;
+          const practiceAreasDes = d?.practiceAreas ? d.practiceAreas.map((item) => (item?.name ?? '')).join(';') : '--';
+          return practiceAreasDes.length > 10 ? `${practiceAreasDes.substr(0, 9)}...` : practiceAreasDes;
         });
       nodeEnter
         .append('text')
         .attr('x', '0')
-        .attr('dy', function (d: any) {
+        .attr('dy', function (_d: any) {
           return forUpward ? '-16' : '66';
         })
         .attr('text-anchor', 'middle')
@@ -272,7 +300,7 @@ class TreeChart {
         .attr('r', function (d: any) {
           return d.hasChildren ? 6 : 0;
         })
-        .attr('cy', function (d: any) {
+        .attr('cy', function (_d: any) {
           return forUpward ? -59 : 80;
         })
         .style('fill', function (d: any) {
@@ -295,84 +323,7 @@ class TreeChart {
             return 5;
           }
         });
-      //代表是否展开的+-号
-      nodeEnter
-        .append('svg:text')
-        .attr('class', 'isExpand')
-        .attr('x', '0')
-        .attr('dy', function (d: any) {
-          return forUpward ? -55 : 83;
-        })
-        .attr('text-anchor', 'middle')
-        .style('fill', '#000')
-        .text(function (d: any) {
-          return d.hasChildren ? '-' : '';
-        })
-        .on('click', click);
 
-      nodeUpdate.select('text').style('fill-opacity', 1);
-
-      var nodeExit = node
-        .exit()
-        .transition()
-        .duration(duration)
-        .attr('transform', function (d: any) {
-          return 'translate(' + source.x + ',' + source.y + ')';
-        })
-        .remove();
-      nodeExit.select('circle').attr('r', 1e-6);
-      nodeExit.select('text').style('fill-opacity', 1e-6);
-
-      var link = g.selectAll('path.' + link_class).data(links, function (d: any) {
-        return d.target.id;
-      });
-
-      link
-        .enter()
-        .insert('path', 'g')
-        .attr('class', link_class)
-        .attr('stroke', function (d: any) {
-          return '#8b4513';
-        })
-        .attr('fill', 'none')
-        .attr('stroke-width', '1px')
-        .attr('opacity', 0.5)
-        .attr('d', function (d: any) {
-          var o = {
-            x: source.x0,
-            y: source.y0,
-          };
-          return diagonal({
-            source: o,
-            target: o,
-          });
-        })
-        .attr('marker-end', function (d: any) {
-          return forUpward ? 'url(#resolvedUp)' : 'url(#resolvedDown)';
-        }) //根据箭头标记的id号标记箭头;
-        .attr('id', function (d, i) {
-          return 'mypath' + i;
-        });
-      link.transition().duration(duration).attr('d', diagonal);
-      link
-        .exit()
-        .transition()
-        .duration(duration)
-        .attr('d', function (d: any) {
-          var o = {
-            x: source.x,
-            y: source.y,
-          };
-          return diagonal({
-            source: o,
-            target: o,
-          });
-        })
-        .remove();
-      nodes.forEach(function (d: any) {
-        d.x0 = d.x;
-        d.y0 = d.y;
-      });
       function click(d: any) {
         if (forUpward) {
         } else {
@@ -401,7 +352,95 @@ class TreeChart {
         }
         update(d, originalData, g);
       }
+      //代表是否展开的+-号
+      nodeEnter
+        .append('svg:text')
+        .attr('class', 'isExpand')
+        .attr('x', '0')
+        .attr('dy', function (_d: any) {
+          return forUpward ? -55 : 83;
+        })
+        .attr('text-anchor', 'middle')
+        .style('fill', '#000')
+        .text(function (d: any) {
+          return d.hasChildren ? '-' : '';
+        })
+        .on('click', click);
+
+      nodeUpdate.select('text').style('fill-opacity', 1);
+
+      var nodeExit = node
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr('transform', function (_d: any) {
+          return 'translate(' + source.x + ',' + source.y + ')';
+        })
+        .remove();
+      nodeExit.select('circle').attr('r', 1e-6);
+      nodeExit.select('text').style('fill-opacity', 1e-6);
+
+      var link = g.selectAll('path.' + linkClass).data(links, function (d: any) {
+        return d.target.id;
+      });
+
+      link
+        .enter()
+        .insert('path', 'g')
+        .attr('class', linkClass)
+        .attr('stroke', function (_d: any) {
+          return '#8b4513';
+        })
+        .attr('fill', 'none')
+        .attr('stroke-width', '1px')
+        .attr('opacity', 0.5)
+        .attr('d', function (_d: any) {
+          var o = {
+            x: source.x0,
+            y: source.y0,
+          };
+          return diagonal({
+            source: o,
+            target: o,
+          });
+        })
+        .attr('marker-end', function (_d: any) {
+          return forUpward ? 'url(#resolvedUp)' : 'url(#resolvedDown)';
+        }) //根据箭头标记的id号标记箭头;
+        .attr('id', function (_d: any, i: string) {
+          return 'mypath' + i;
+        });
+      link.transition().duration(duration).attr('d', diagonal);
+      link
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr('d', function (_d: any) {
+          var o = {
+            x: source.x,
+            y: source.y,
+          };
+          return diagonal({
+            source: o,
+            target: o,
+          });
+        })
+        .remove();
+      nodes.forEach(function (d: any) {
+        d.x0 = d.x;
+        d.y0 = d.y;
+      });
     }
+
+    for (var d in this.directions) {
+      var direction = this.directions[d];
+      var data = self.treeData[direction];
+      data.x0 = config.centralWidth;
+      data.y0 = config.centralHeight;
+      data.children.forEach(expand);
+      update(data, data, treeG);
+    }
+
 
     function redraw() {
       treeG.attr(
@@ -410,13 +449,7 @@ class TreeChart {
       );
     }
 
-    function disableRightClick() {
-      // stop zoom
-      if (window.d3.event.button == 2) {
-        console.log('No right click allowed');
-        window.d3.event.stopImmediatePropagation();
-      }
-    }
+
   }
 }
 

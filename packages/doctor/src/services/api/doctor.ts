@@ -52,4 +52,8 @@ export default {
   postPatientLevel(data: any): Promise<any> {
     return http.post('doctor/change/patient_role', { data });
   },
+  // 医生角色列表  --- 说明： 主管、医助、独立，三个角色有无患者，都会返回显示
+  getDotorExistedRoles(): Promise<any> {
+    return http.get('doctor/existed_roles');
+  },
 };

@@ -117,7 +117,7 @@ const AddOrg: FC<IProps> = (props) => {
       >
         <div className={styles.add_org}>
           <Search
-            placeholder="请输入医院名、简称或医院识别码，如:协和医院、协和、02110002"
+            placeholder="请输入医院名、简称，如:协和医院、协和"
             onSearch={onSearch}
             style={{ width: 560 }}
             enterButton={<Button type="primary">搜索</Button>}

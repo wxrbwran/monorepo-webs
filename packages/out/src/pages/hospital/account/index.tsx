@@ -72,7 +72,7 @@ function Account() {
   const changeIntro = (e: { target: { value: string } }) => {
     setIntro(e.target.value);
   };
-  console.log('为构建添加console');
+  // console.log('为构建添加console');
   return (
     <div className={`h-full relative ${styles.account}`}>
       <Row>

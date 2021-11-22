@@ -1,12 +1,12 @@
 import React from 'react';
-import { Popconfirm } from 'antd';
 import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
 import { eventList, exitReason } from '@/utils/consts';
 import moment from 'moment';
 
 import { sexList } from './consts';
 import { Store } from 'antd/lib/form/interface';
-import IconAutograph from '@/assets/img/icon_autograph.png';
+import haveQuestionPng from '@/assets/img/have_question.png';
+
 
 export type SexType = 'MALE' | 'FEMALE';
 const statusObj: Store = {
@@ -78,12 +78,44 @@ export const patientGroup = {
   key: 'groups',
   render: (_text: any, record: any) => (
     <div>
-      {record.groups.map((item: string, index: number) => `${item} ${index !== record.groups.length - 1 ? '、' : ''}`)}
+      {record?.groups ? record.groups.map((item: string, index: number) => `${item} ${index !== record.groups.length - 1 ? '、' : ''}`) : '--'}
     </div>
   ),
 };
 
 export const inGroupAt = {
+  title: '入组时间',
+  dataIndex: 'timelines',
+  key: 'timelines',
+  render: (text: any, _record: any) => {
+
+    const inTime = text ? text.filter((item) => item.eventCode == 1002) : [];
+    return (
+      <div>
+        {inTime.length > 0 ? moment(inTime[0].at).format('YYYY.MM.DD') : '--'}
+      </div >
+    );
+
+  },
+};
+
+export const outGroupAt = {
+  title: '出组时间',
+  dataIndex: 'timelines',
+  key: 'timelines',
+  render: (text: any, _record: any) => {
+
+    const inTime = text ? text.filter((item) => item.eventCode == 1003) : [];
+    return (
+      <div>
+        {inTime.length > 0 ? moment(inTime[0].at).format('YYYY.MM.DD') : '--'}
+      </div >
+    );
+  },
+};
+
+
+export const groupInGroupAt = {
   title: '入组时间',
   dataIndex: 'interval',
   key: 'interval',
@@ -94,7 +126,7 @@ export const inGroupAt = {
   ),
 };
 
-export const outGroupAt = {
+export const groupOutGroupAt = {
   title: '出组时间',
   dataIndex: 'statusUpdateTime',
   key: 'statusUpdateTime',
@@ -103,6 +135,7 @@ export const outGroupAt = {
       {(text && record.status === 1003) ? moment(text).format('YYYY.MM.DD') : '--'}
     </div>
   ),
+
 };
 
 export const stopReason = {
@@ -128,15 +161,41 @@ export const testStatus = {
   ),
 };
 
-export const firstProfessionCompany = {
-  title: '医院',
-  dataIndex: 'firstProfessionCompany',
-  key: 'firstProfessionCompany',
+
+export const practiceAreas = {
+  title: '医院 -- 科室',
+  dataIndex: 'practiceAreas',
+  key: 'practiceAreas',
+  render: (text: any, record: any) => {
+
+    const areas = text && text.length > 0 ? text : record?.subjectDetail?.practiceAreas;
+    return (
+      <div>
+        {areas ? areas.map((item) => {
+          return (
+            <div>
+              {(item?.name ?? '') + ' -- ' + (item?.sub?.name ?? '')}
+            </div>
+          );
+        }) : '--'
+        }
+      </div>
+    );
+  },
 };
+
+
 export const title = {
   title: '职称',
   dataIndex: 'title',
   key: 'title',
+  render: (text: any, _record: any) => {
+    return (
+      <div>
+        {text ? text : '--'}
+      </div>
+    );
+  },
 };
 export const department = {
   title: '科室',
@@ -208,8 +267,32 @@ export const ethnicity = {
   render: (text: string) => text || '--',
 };
 // 全部患者列表-未邀请
-export const noSendPatientColumns = () => [
-  name,
+export const noSendPatientColumns = (params: Store) => [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    width: 150,
+    // render: (text: string, record: any) => <span>{record.name}{text}</span>,
+    render: (text: number, record: any) => {
+
+      const experimentName = params.getExperimentName(record);
+      return (
+        experimentName ?
+          <div className='no_send_patient_name'>
+            {text}
+            <div className="no_chose_why" >
+              <img style={{ width: '16px', height: '16px', alignSelf: 'center', marginLeft: '6px' }} src={haveQuestionPng} />
+              <div className="no_chose_alert">
+                患者正在参与试验 {experimentName},无法邀请
+              </div>
+            </div>
+          </div >
+          : <div className='no_send_patient_name'>
+            {text}
+          </div >
+      );
+    },
+  },
   age,
   address,
   sex,
@@ -225,45 +308,11 @@ export const addedPatientColumns = () => [
   ethnicity,
 ];
 // 全部受试者列表
-export const patientCroColumns = (params: Store) => [
+export const patientCroColumns = (_params: Store) => [
   name,
   patientGroup,
   inGroupAt,
   researchProjectDoctor,
-  {
-    title: '操作',
-    dataIndex: '',
-    render: (_text: any, record: any) => (
-      <div className="table-operating">
-        {
-          record.status === 1002 ? (
-            <Popconfirm
-              placement="topRight"
-              overlayClassName="delete__pop-confirm"
-              title={(
-                <div>
-                  <h3>确定要停止此患者试验吗？</h3>
-                </div>
-              )}
-              onConfirm={() => params.handleStop(record)}
-            >
-              <span>停止此患者试验</span>
-            </Popconfirm>
-          ) : <span style={{ color: '#C5C5C5' }}>已停止</span>
-        }
-
-      </div>
-    ),
-  },
-  {
-    title: '受试者签名',
-    dataIndex: '',
-    render: (_text: any, record: any) => (
-      <div>
-        {record?.etcNote ? <img style={{ width: '26px', height: '26px' }} src={IconAutograph} onClick={() => params.toggleImg(record)} /> : '--'}
-      </div>
-    ),
-  },
 ];
 export const patientCroStopColumns = () => [
   name,
@@ -277,8 +326,8 @@ export const patientCroStopColumns = () => [
 // 小组患者列表
 export const groupDetailColumns = () => [
   name,
-  inGroupAt,
-  outGroupAt,
+  groupInGroupAt,
+  groupOutGroupAt,
   testStatus,
   researchProjectDoctor,
 ];
@@ -286,8 +335,9 @@ export const groupDetailColumns = () => [
 export const memberListColumns = [
   name,
   researcherRole,
-  firstProfessionCompany,
-  department,
+  // firstProfessionCompany,
+  practiceAreas,
+  // department,
   tel,
   patientCount,
   memberStatus,
@@ -299,7 +349,8 @@ export const addGroupDoctorListColumns = [
   tel,
   researcherRole,
   title,
-  department,
+  // department,
+  practiceAreas,
   // groupName,
 ];
 
