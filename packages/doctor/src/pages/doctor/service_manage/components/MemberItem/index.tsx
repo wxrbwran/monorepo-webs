@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import female from '@/assets/img/icon_female.svg';
 import male from '@/assets/img/icon_male.svg';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { isEmpty } from 'lodash';
 import styles from './index.scss';
 
 interface IProps {
@@ -12,12 +13,10 @@ interface IProps {
 const MemberItem: FC<IProps> = ({ doctorData, style, doctorWorkOrg }) => {
   // 女  男
   const sexList = [female, male];
-  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, departments, sid } = doctorData;
+  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, sid } = doctorData;
   // 科室为多机构组合并去重得到, 互联网医院科室，不是执业科室
-  const depList = departments ? [...new Set(departments.map(item => item.name))] : [];
+  const depList = practiceAreas ? [...new Set(practiceAreas.map(item => item?.sub?.name).filter(item => item !== undefined))] : [];
   const selectOrgNsId = doctorWorkOrg?.[sid];
-  console.log('dfdfd', sid);
-  console.log('selectOrgNsId', selectOrgNsId);
   return (
     <div className={`mt-10 p-15 rounded-md ${styles.item}`} style={style}>
       <div className="flex items-start mb-14">
@@ -29,7 +28,8 @@ const MemberItem: FC<IProps> = ({ doctorData, style, doctorWorkOrg }) => {
           </div>
           <div className="text-gray-500">
             { depList?.map(item => <span className="mr-5" key={item}>{item}</span>)}
-            <span>{title ? `| ${title}` : ''}</span>
+            <span>{title && !isEmpty(depList) && '|' }</span>
+            <span>{title ? `${title}` : ''}</span>
           </div>
         </div>
       </div>

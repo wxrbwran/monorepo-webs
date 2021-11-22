@@ -9,7 +9,7 @@ import styles from './index.scss';
 import ChoiceSelfRole from '../ChoiceSelfRole';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
-import { isEmpty } from 'lodash';
+import { isEmpty, debounce } from 'lodash';
 import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/src/components/XzlTable/util';
 interface IProps {
   initData?: {
@@ -238,7 +238,7 @@ const AddServicePackage: FC<IProps> = (props) => {
           />
           <ChoiceSelfRole callback={handleSelfRole} initData={initSelfInfo} />
           { roleMembers.map(item => renderDom(item)) }
-          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={handleSubmit}>完成</Button>
+          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={debounce(handleSubmit, 500)}>完成</Button>
         </div>
       </DragModal>
     </div>
