@@ -661,3 +661,6 @@ body {
 .line-ellipsis {
   @include line-clamp(1);
 }
+.hide-text {
+  @extend %hide-text;
+}
