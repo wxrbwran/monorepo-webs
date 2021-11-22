@@ -12,9 +12,10 @@ interface IProps {
 const MemberItem: FC<IProps> = ({ doctorData, style }) => {
   // 女  男
   const sexList = [female, male];
-  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, departments, choiceOrg } = doctorData;
+  const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, choiceOrg } = doctorData;
   // 科室为多机构组合并去重得到, 互联网医院科室，不是执业科室
-  const depList = departments ? [...new Set(departments.map(item => item.name))] : [];
+  // const depList = departments ? [...new Set(departments.map(item => item.name))] : [];
+  const depList = practiceAreas ? [...new Set(practiceAreas.map(item => item?.sub?.name).filter(item => item !== undefined))] : [];
 
   console.log('=================MemberItem ', JSON.stringify(roleTags));
   return (
@@ -50,7 +51,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style }) => {
           {
             orgs?.map((item: { name: string, nsId: string }) => {
               return (
-                <span key={item.nsId} className={`mr-20 ${(choiceOrg?.nsId === item?.nsId ) ? 'text-blue-500' : ''}`}>{item.name}</span>
+                <span key={item.nsId} className={`mr-20 ${(choiceOrg?.nsId === item?.nsId) ? 'text-blue-500' : ''}`}>{item.name}</span>
               );
             })
           }
