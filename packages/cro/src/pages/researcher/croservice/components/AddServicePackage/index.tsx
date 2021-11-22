@@ -9,7 +9,7 @@ import { useSelector } from 'umi';
 import { message } from '@umijs/plugin-request/lib/ui';
 import Member from '../Member';
 import { isEmpty } from 'lodash';
-
+import { debounce } from 'lodash';
 
 interface IProps {
 
@@ -312,7 +312,7 @@ const AddServicePackage: FC<IProps> = (props) => {
           <Member title='CRC' members={choiceMember.CRC} editable={true} friends={friends} handleChoice={(choices: any[]) => onHandleChoice('CRC', choices)} onRemove={(item: any, index: number) => onRemove('CRC', item, index)} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}></Member>
           <Member title='CRA' members={choiceMember.CRA} editable={true} friends={friends} handleChoice={(choices: any[]) => onHandleChoice('CRA', choices)} onRemove={(item: any, index: number) => onRemove('CRA', item, index)} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}></Member>
           <Member title='PM' members={choiceMember.PM} editable={true} friends={friends} handleChoice={(choices: any[]) => onHandleChoice('PM', choices)} onRemove={(item: any, index: number) => onRemove('PM', item, index)} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}></Member>
-          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={onSaveTeam}>完成</Button>
+          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={debounce(onSaveTeam, 300)}>完成</Button>
 
         </div>
       </DragModal >
