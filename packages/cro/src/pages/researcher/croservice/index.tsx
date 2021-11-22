@@ -10,6 +10,7 @@ import { useSelector } from 'umi';
 import { TeamMember } from './components/Member';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import { hasPermissions } from '@/utils/utils';
+import { debounce } from 'lodash';
 interface IProps {
 
 }
@@ -101,7 +102,7 @@ const Croservice: FC<IProps> = () => {
     <div className={styles.croservice}>
       <AddServicePackage onSaveSuccess={onSaveSuccess} edit={edit} source={source} show={show} onCancel={() => { setShow(false); }}>
         {
-          hasPermissions(teamMembers) && <Button type="primary" className="mb-20" onClick={onAddTeam}>+ 添加新团队</Button>
+          hasPermissions(teamMembers) && <Button type="primary" className="mb-20" onClick={debounce(onAddTeam, 300)}>+ 添加新团队</Button>
         }
       </AddServicePackage>
       {
