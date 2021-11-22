@@ -182,15 +182,15 @@ const AddServicePackage: FC<IProps> = (props) => {
         <div className="flex flex-wrap">
           {
             curRoleMembers.map(doctor => (
-              <div className="box-shadow relative w-160 h-188 text-center rounded-md mr-20" key={doctor.role + doctor.sid}>
+              <div className="box-shadow relative w-110 h-147 text-center rounded-md mr-20" key={doctor.role + doctor.sid}>
                 {
                   doctor.sid !== doctorSid && (
                     <img className="absolute right-10 top-10 w-14" src={iconClose} alt="" onClick={() => handleDel(doctor.sid, roleInfo.role)} />
                   )
                 }
-                <img className="w-80 h-80 rounded mt-30" src={doctor.avatarUrl || defaultAvatar} alt="" />
-                <div className="text-lg font-bold mt-5">{doctor.name}</div>
-                <div className={`text-gray-600 ${styles.org_name}`} title={doctor.orgName}>{doctor.orgName}</div>
+                <img className="w-60 h-60 rounded mt-30" src={doctor.avatarUrl || defaultAvatar} alt="" />
+                <div className="text-sm font-bold mt-5 hide-text text-center">{doctor.name}</div>
+                <div className={`text-gray-600 text-xs ${styles.org_name}`} title={doctor.orgName}>{doctor.orgName}</div>
               </div>
             ))
           }
@@ -206,7 +206,7 @@ const AddServicePackage: FC<IProps> = (props) => {
                 members={members}
                 initWorkOrgs={initWordOrgs}
               >
-                <div className="flex items-center justify-center box-shadow w-160 h-188 rounded-md">
+                <div className="flex items-center justify-center box-shadow w-110 h-147 rounded-md">
                   <img src={iconAdd} alt="" />
                 </div>
               </ChoiceDoctor>
@@ -221,7 +221,7 @@ const AddServicePackage: FC<IProps> = (props) => {
       <div onClick={handleShowModal}>{children}</div>
       <DragModal
         wrapClassName="ant-modal-wrap-center cancel_text_blue"
-        width={1000}
+        width={1200}
         maskClosable
         visible={showModal}
         onCancel={() => setshowModal(false)}
