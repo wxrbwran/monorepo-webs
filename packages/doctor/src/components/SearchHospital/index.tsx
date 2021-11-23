@@ -15,6 +15,7 @@ interface Iprops {
   placeholder?: string;
   fieldName: string;
   defaultValue?: IhospitalSubmit | undefined;
+  allowClear?: boolean;
 }
 export interface Ihospital {
   id: string;
@@ -23,7 +24,7 @@ export interface Ihospital {
 
 const { Option } = Select;
 function SearchHospital({
-  style, callback, fieldName, defaultValue, placeholder,
+  style, callback, fieldName, defaultValue, placeholder, allowClear,
 }: Iprops) {
   const initName = defaultValue ? defaultValue.hospitalName : '';
   const [hospitals, setHospitals] = useState <Ihospital[]>([]);
@@ -70,6 +71,16 @@ function SearchHospital({
       );
     }
   };
+  const handleClear = () => {
+    setHospitalsName(undefined);
+    callback(
+      fieldName,
+      {
+        hospitalName: undefined,
+        hospitalId: undefined,
+      },
+    );
+  };
   const handleSave = (name: string, id: string) => {
     setShowModal(false);
     setHospitalsName(name);
@@ -112,6 +123,8 @@ function SearchHospital({
         value={hospitalName}
         onPopupScroll={handleOptionScroll}
         virtual={false}
+        allowClear={allowClear || false}
+        onClear={handleClear}
       >
         {hospitals.map((medicine) => (
           <Option key={medicine.id} value={medicine.id}>
