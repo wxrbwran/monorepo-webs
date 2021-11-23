@@ -21,10 +21,9 @@ interface IProps {
   originQue: IQuestions[];
 }
 function questionGapFilling(props: IProps) {
-  const { questions, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex, changeDdtkQues, handSaveDdtkModify } = props;
+  const { questions, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex, changeDdtkQues, handSaveDdtkModify, scaleType } = props;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [cursorIndex, setCursorIndex] = useState();
-
   const getStemString = (stem) => {
     let newStem = stem;
     if (stem instanceof Array){
@@ -32,6 +31,8 @@ function questionGapFilling(props: IProps) {
       stem.forEach((i, idx) => {
         if (idx !== stem.length - 1){
           newStem = newStem + i + '＿＿＿';
+        } else {
+          newStem += i;
         }
       });
     }
@@ -61,6 +62,7 @@ function questionGapFilling(props: IProps) {
     setCursorIndex(ev.target.value.length);
     handleSaveStem(ev, quesIndex);
   };
+  const showInx = scaleType !== 'CRF';
   return (
     <div
       className={`topic-item ${styles.ddtk} ${(editIndex === quesIndex) ? 'edit' : ''}`}
@@ -68,7 +70,7 @@ function questionGapFilling(props: IProps) {
     >
       <div className={styles.del}><img className="issue__delete" src={delIcon} onClick={() => handleDelStem(quesIndex)} /></div>
       <div className="answer-wrap">
-
+        {showInx && <span className="issue__index ml-8 mt-27">{quesIndex + 1}、</span>}
         <pre style={{ position: 'relative' }}>
           <div>{getStemString(item.detail.stem)}</div>
           <TextArea

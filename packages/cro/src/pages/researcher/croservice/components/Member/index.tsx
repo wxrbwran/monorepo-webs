@@ -24,25 +24,27 @@ const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleCho
 
   return (
     <div className="mt-20">
-      <div className="text-base font-bold mb-10">{title}</div>
+      <div className="text-base font-bold">{title}</div>
 
       <div className='flex flex-wrap'>
         {
           members.map((item, index) => (
-            <div className={`box-shadow relative w-90 h-127 text-center rounded-md mr-20 rounded-md ${styles.item}`}>
+            <div className={`flex flex-row justify-center box-shadow relative w-150 h-80 text-center rounded-md mr-20 mt-15 rounded-md ${styles.item}`}>
               {
                 editable &&
                 <img className="absolute right-3 top-3 w-14 h-14" src={iconClose} alt="" onClick={() => { onRemove(item, index); }} />
               }
-              <img className="w-60 h-60 rounded mt-15" src={item.avatarUrl ?? defaultAvatar} alt="" />
-              <div className={`font-bold mt-5 ${styles.name}`} title={item.name ?? ''}>{item.name ?? ''}</div>
-              <div className={`text-gray-600 ${styles.org_name}`} title={item.choiceOrg ? item.choiceOrg.name : ''}>{item.choiceOrg ? item.choiceOrg.name : ''}</div>
+              <img className="w-50 h-50 rounded mt-15 ml-15" src={item.avatarUrl ?? defaultAvatar} alt="" />
+              <div className={'flex flex-col items-center justify-center'}>
+                <div className={`font-bold mt-5 ${styles.name}`} title={item.name ?? ''}>{item.name ?? ''}</div>
+                <div className={`text-gray-600 ${styles.org_name}`} title={item.choiceOrg ? item.choiceOrg.name : ''}>{item.choiceOrg ? item.choiceOrg.name : ''}</div>
+              </div>
             </div>
           ))
         }
         {
           editable && members.length !== friends.length && <ChoiceDoctor members={members} friends={friends} role={title} handleChoice={handleChoice} onDoctorChoice={onDoctorChoice} onDoctorUnChoice={onDoctorUnChoice}>
-            <div className="flex items-center justify-center box-shadow w-90 h-127 rounded-md">
+            <div className={`flex items-center justify-center box-shadow w-80 h-80 rounded-md mt-15 ${styles.item}`}>
               <img src={iconAdd} alt="" />
             </div>
           </ChoiceDoctor>
