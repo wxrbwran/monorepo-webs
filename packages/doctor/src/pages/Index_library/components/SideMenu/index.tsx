@@ -43,7 +43,6 @@ const SideMenu: FC = () => {
         // 取第一个选中项
         const firstId = HYD?.[0]?.id || JCD?.[0]?.id;
         const newAddtype = HYD.length > 0 ? 'HYD' : 'JCD';
-        setactiveMenu(firstId);
         history.push(`/index_library?documentId=${firstId}&documentType=${newAddtype}`);
         setImgType({ HYD, JCD });
       } else {

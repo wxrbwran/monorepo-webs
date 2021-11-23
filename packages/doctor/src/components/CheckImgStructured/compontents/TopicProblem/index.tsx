@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
 import { IQuestions } from 'typings/imgStructured';
-import { EditOutlined } from '@ant-design/icons';
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
+import { IQaItem } from '../type';
 
 const { TextArea } = Input;
 interface IProps {
@@ -11,12 +11,13 @@ interface IProps {
   initData: IQuestions[];
   isViewOnly: boolean;
   templateId: string;
+  isFirstEdit: boolean;
 }
 function TopicProblem(props: IProps) {
-  const { changeCallbackFns, initData, isViewOnly, templateId } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
   console.log('initDatatext', initData);
   const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
-  const [editIndex, setEditIndex] = useState(-1);
+  const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
   const handleSave = () => new Promise((resolve) => {
     resolve({
       data: questions.filter(item => !!item.question.trim()),
@@ -26,6 +27,7 @@ function TopicProblem(props: IProps) {
   useEffect(() => {
     if (initData && isEmpty(questions)) {
       setQuestions(initData);
+      setValuableQas(initData.filter(qaItem => !isEmpty(qaItem.answer)));
     }
   }, [initData]);
   useEffect(() => {
@@ -37,69 +39,65 @@ function TopicProblem(props: IProps) {
     }
   }, [questions]);
 
-  const handleClickItem = (e: Event, inx: number) => {
-    e.stopPropagation();
-    setEditIndex(inx);
-  };
-
   const handleSaveAnswer = (ev: React.ChangeEvent<HTMLInputElement>, quesIndex: number) => {
     ev.stopPropagation();
     questions[quesIndex].answer = [ev.target.value];
     setQuestions([...questions]);
   };
-  const handleDelQuestion = () => {
-
+  const handleDelQuestion = (editIndex: number) => {
+    questions.splice(editIndex, 1);
+    setQuestions(cloneDeep(questions));
   };
-  const handleSaveQuestion = () => {
-
+  const handleSaveQuestion = (data: IQaItem, actionType: string, editIndex?: number) => {
+    if (actionType === 'add') {
+      setQuestions([...questions, data]);
+    } else if (actionType === 'edit' && editIndex !== undefined) {
+      questions[editIndex] = data;
+      setQuestions(cloneDeep(questions));
+    }
+  };
+  const editProps = {
+    templateId,
+    isFirstEdit,
+    handleDelQuestion,
+    handleSaveQuestion,
+    topicType: 'TEXT',
   };
   console.log('最新question text', questions);
-  let emptyAnsNum = 0;
+
   return (
-    <div className="p-15 my-15">
-      {/* <TopicTitle number="三" handleAdd={debounce(handleAddTopic, 300)} btnText='添加新的问答题' /> */}
-      <div className="qa-wrap">
-        {
-          questions.map((item, quesIndex: number) => {
-            const isEdit = editIndex === quesIndex;
-            let isShow = true;
-            if (isViewOnly && !item.answer[0]?.trim()) {
-              isShow = false;
-              ++emptyAnsNum;
-            }
-            return (
-              isShow ? (
-                <div
-                  className={`${(isEdit) ? 'edit topic-item' : ' topic-item-show'}`}
-                  key={quesIndex}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <>
-                    {
-                      item.isAdd && <EditOutlined onClick={(e: any) => handleClickItem(e, quesIndex)} />
-                    }
-                    <div className="pl-12">{quesIndex - emptyAnsNum + 1}、{item.question}</div>
-                  </>
-                  <div className="answer-wrap">
-                    <TextArea
-                      placeholder="请输入"
-                      onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
-                      value={item.answer?.[0]}
-                      disabled={isViewOnly}
-                    />
-                  </div>
-                </div>
-              ) : <></>
-            );
-          })
-        }
-      </div>
+    <div>
+      {
+        (isViewOnly ? valuableQas : questions).map((item, quesIndex: number) => (
+          <div
+            className="mb-15"
+            key={item.question}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="topic_title">
+              <span>{quesIndex + 1}. </span>
+              <span className="mr-10">{item.question}</span>
+              <TopicAddBtn
+                {...editProps}
+                actionType="edit"
+                initData={item}
+                editGroupInx={quesIndex}
+              />
+            </div>
+            <div className="answer-wrap">
+              <TextArea
+                placeholder="请输入"
+                onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
+                value={item.answer?.[0]}
+                disabled={isViewOnly}
+              />
+            </div>
+          </div>
+        ))
+      }
       <TopicAddBtn
-        topicType="TEXT"
+        {...editProps}
         actionType="add"
-        templateId={templateId}
-        handleDelQuestion={handleDelQuestion}
-        handleSaveQuestion={handleSaveQuestion}
       />
     </div>
   );

@@ -1,23 +1,18 @@
 import React, { FC, useState } from 'react';
 import styles from './index.scss';
 import { textData, msg } from '../utils';
-import { IAddTopicProps } from '../type';
+import { IAddTopicProps, IQaItem } from '../type';
 import { Input, Button } from 'antd';
 import { CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 // import * as api from '@/services/api';
 import uuid from 'react-uuid';
 import { cloneDeep } from 'lodash';
 
-interface ITextItem {
-  uuid: string;
-  question_type: string;
-  question: string;
-  answer: string[],
-}
 const { TextArea } = Input;
 const TopicAddProblem: FC<IAddTopicProps & { closeModal: () => void }> = (props) => {
-  const { actionType, handleDelQuestion, editInx, closeModal, templateId } = props;
-  const [qa, setQa] = useState<ITextItem>({ ...textData, uuid: uuid() });
+  const { actionType, handleDelQuestion, handleSaveQuestion, closeModal, templateId, editGroupInx, initData } = props;
+  const initQa = initData ? cloneDeep(initData as IQaItem) : { ...cloneDeep(textData), uuid: uuid() };
+  const [qa, setQa] = useState<IQaItem>(initQa);
   const handleEditCont = (e: any, type: string) => {
     if (type === 'question') {
       qa[type] = e.target.value;
@@ -31,21 +26,33 @@ const TopicAddProblem: FC<IAddTopicProps & { closeModal: () => void }> = (props)
     if (qa.question === '') {
       msg('请输入问题', 'error');
     } else {
+      const paramsQa = {
+        ...qa,
+        action: actionType === 'add' ? 'ADD' : 'ALTER',
+        answer: [],
+      };
+      if (initData) {
+        paramsQa.createdTime = (initData as IQaItem)?.createdTime;
+      }
       const params = {
         meta: { id: templateId },
-        data: [ qa ],
+        data: [ paramsQa ],
       };
-      console.log('------1', params);
-      // api.image.postImageTemplate(params).then(res => {
-      //   console.log('添加多段填空成功', res);
-      //   // handleSaveQuestion(qas, actionType);
-      //   // closeModal();
-      // });
+      window.$api.image.postImageTemplate(params).then(() => {
+        msg('保存成功', 'success');
+        handleSaveQuestion(qa, actionType, editGroupInx);
+        closeModal();
+      });
     }
   };
   const handleDelete = () => {
-    if (actionType === 'edit' && editInx) {
-      handleDelQuestion(editInx);
+    if (actionType === 'edit' && editGroupInx && initData) {
+      const qasData = { ...initData, action: 'DELETE' };
+      const params = { meta: { id: templateId }, data: [qasData] };
+      window.$api.image.postImageTemplate(params).then(() => {
+        msg('删除成功', 'success');
+        handleDelQuestion(editGroupInx);
+      });
     }
     closeModal();
   };

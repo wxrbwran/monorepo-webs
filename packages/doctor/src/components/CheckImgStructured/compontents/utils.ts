@@ -15,7 +15,6 @@ export const outTypes: CommonData = {
 
 export const checkboxData = {
   question_type: 'RADIO',
-  isAdd: true,
   question: '',
   answer: [],
   options: ['', '', ''],
@@ -221,13 +220,18 @@ export const formatTempDdtk = (tkTmpList: any[]) => {
       groupDdtk[item.uuid] = [item];
     }
   });
+  console.log('groupDdtk', groupDdtk);
   Object.values(groupDdtk).forEach(groupItem => {
     const groupList: ITopicTemplateItemApi[] = [];
     console.log('groupItem', groupItem);
     groupItem.forEach((qaItem: ITopicTemplateItemApi) => {
       console.log('qaItem', qaItem);
+      // 新版多段填空，一组题存在一个题目，例： 1-1（题目）  1-1-0（题目下每一个问答内容） 1-1-1(第二个问答)依次类推
       const targetInx: number = Number(qaItem.group.split('-')[2]); // 根据此值进行小组内问题排序
-      groupList[targetInx] = {
+      // 只有题止的group得到的targetInx是NAN，此时inx设为0；（ui渲染时，默认认为第一个元素为题目，其余为问答）
+      const inx: number = isNaN(targetInx) ? 0 : targetInx + 1;
+      console.log('inx', inx);
+      groupList[inx] = {
         ...qaItem,
         answer: qaItem?.answer!?.map(() => null),
       };

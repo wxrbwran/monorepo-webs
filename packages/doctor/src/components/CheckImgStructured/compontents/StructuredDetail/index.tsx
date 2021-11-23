@@ -124,7 +124,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         Promise.all(Object.values(jcdCallbackFns)
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
-            console.log('=====jcdlist', list);
+            console.log('=====jcdlist', list.flat(5));
             // const { tempList, jcdList } = formatJcdSubmitData(list, clickSaveTime);
             // saveJcdData(jcdList);
           }).catch((err) => {

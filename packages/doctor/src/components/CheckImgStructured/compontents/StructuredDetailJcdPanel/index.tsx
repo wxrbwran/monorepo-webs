@@ -24,7 +24,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const { imageId, outType, isViewOnly, setJcdCallbackFns, initData, jcdCallbackFns } = props;
   // const topicPanelCallbackFns = useRef({});
   // const addJcdNum = useRef();
-  const [jcdList, setJcdList] = useState<IJcdTabItem[]>([ { meta: { tabKey: 'iidi', jcdName: 'test' } }]); // 检查单tab list
+  const [jcdList, setJcdList] = useState<IJcdTabItem[]>([]); // 检查单tab list
   const [activeTabKey, setActiveTabKey] = useState<string>(); // 检查单tab 当前选中项
   const [showAddJctBtn, setShowAddJctBtn] = useState(false); // 显示添加检查单按钮
   const [partMethod, setPartMethod] = useState<{ part?: string; method?: string }>(); // 部位+方法，添加检查单时使用
@@ -51,6 +51,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const updateCreateJcdNum = () => {
     setCreateJcdNum(prev => prev + 1);
   };
+  console.log('jcdList----', jcdList);
   const renderTabPane = useMemo(() => () => jcdList.map(
     (item: IJcdTabItem) => (
       <TabPane

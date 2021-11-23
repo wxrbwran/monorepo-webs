@@ -84,7 +84,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
   };
 
   return (
-    <div className={`pb-20 ${styles.topic_base} structured-edit-wrap`}>
+    <div className={`${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
       <Form
         name="topicBaseInfo"
