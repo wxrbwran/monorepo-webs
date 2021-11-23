@@ -233,7 +233,6 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                             field={field}
                             nameKey="name"
                             idKey="standardId"
-                            request={window.$api.base.fetchHospitals}
                             disabled={false}
                           />
                           <span className="mr-15 ml-10 mt-3">-</span>
