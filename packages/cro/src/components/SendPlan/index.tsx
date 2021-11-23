@@ -213,7 +213,7 @@ function SendPlan({ onCancel, infoIndex, addPlan, mode, plans, question, isDisab
   const isEmptyGroup = group.detail.projectGroups.length === 0;
   const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
   const disabled =
-  isShowTextArea ? !remind || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
+    isShowTextArea ? !remind || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
       {isShowTextArea && (
