@@ -145,8 +145,8 @@ export function getChooseValuesKeyFromRules(rule: IRule) {
         // 分割诊断处理成多个数组
         if (fatherItem.name == 'diagnose.treatment' || fatherItem.name == 'diagnose.disease') {
 
-          const valueArray = fatherItem.value.split('}, {');
-          const idArray = fatherItem?.items?.length > 0 ? fatherItem.items[0].value.split('}, {') : [];
+          const valueArray = fatherItem.value.split('},{');
+          const idArray = fatherItem?.items?.length > 0 ? fatherItem.items[0].value.split('},{') : [];
 
           const conditionArr = [];
           for (let j = 0; j < valueArray.length; j++) {

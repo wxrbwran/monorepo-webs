@@ -194,7 +194,7 @@ const tileChooseConditionToArray = (conditions: ICondition[]) => {
         }
         currentItem.chooseItem.operator = isIn ? 'in' : '=';
 
-        const descriptions = (isIn ? (currentItem.chooseItem.value + '}, {') : '') + conditions[i].chooseValue.value;
+        const descriptions = (isIn ? (currentItem.chooseItem.value + '},{') : '') + conditions[i].chooseValue.value;
         currentItem.chooseItem.value = descriptions;
       }
       if (currentChildItem) {
@@ -208,7 +208,7 @@ const tileChooseConditionToArray = (conditions: ICondition[]) => {
         }
         if (!isEmpty(currentChildItem)) {
           currentChildItem.chooseItem.operator = isIn ? 'in' : '=';
-          currentChildItem.chooseItem.value = (isIn ? currentChildItem.chooseItem.value + '}, {' : '') + conditions[i].chooseValue.id;
+          currentChildItem.chooseItem.value = (isIn ? currentChildItem.chooseItem.value + '},{' : '') + conditions[i].chooseValue.id;
         }
       }
     }
