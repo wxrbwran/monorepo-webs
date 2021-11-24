@@ -5,7 +5,6 @@ import { Popover } from 'antd';
 import classnames from 'classnames';
 import { useDispatch } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { getRole } from '@/utils/utils';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
 import AdjustMedicineCustom from '../AdjustMedicineCustom';
@@ -17,11 +16,13 @@ import Scale from '../Scale';
 import './index.scss';
 import BindCustom from '../BindCustom';
 import Video from '../Video';
+import { CommonData } from 'packages/doctor/typings/global';
 
-interface IMsg {
+interface IProps {
   rawMsg: Store;
   // myInfo: Store;
   avatarArr: IAvatar[];
+  personRole: CommonData
 }
 interface IFile {
   dur: number,
@@ -40,8 +41,8 @@ const audio:any = { // 正在播放音频的 audio、target
   timeout: '',
 };
 
-const ChatItem: FC<IMsg> = (props) => {
-  const { rawMsg, avatarArr } = props;
+const ChatItem: FC<IProps> = (props) => {
+  const { rawMsg, avatarArr, personRole } = props;
   const [show, setShow] = useState(false);
   // console.log('rawMsg', JSON.stringify(rawMsg));
   const dispatch = useDispatch();
@@ -249,7 +250,7 @@ const ChatItem: FC<IMsg> = (props) => {
           </div>
           <div className="chat__item-content">
             <p className="msg-user">
-              {`${msg.fromNick} (${getRole(custom.fromUser?.role)})`}
+              {`${msg.fromNick} (${personRole?.[custom.fromUser?.sid]?.join('、')})`}
             </p>
             {msg.type === 'text' && popoverDom(<p className="msg-text">{msg.showText}</p>)}
             {msg.type === 'image' && (

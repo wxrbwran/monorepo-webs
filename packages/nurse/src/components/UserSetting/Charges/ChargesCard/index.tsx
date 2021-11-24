@@ -51,7 +51,7 @@ function ChargesCard({ onClose, toggleEdit }: IProps) {
               </span>
               <span className={[styles.price_box, styles.first_one].join(' ')}>
                 <span className={styles.price_lable}>
-                  我做上级医生
+                  我做主管医生
                   <Popover content="我带助手管理">
                     <img src={question} alt="" />
                   </Popover>
@@ -69,8 +69,8 @@ function ChargesCard({ onClose, toggleEdit }: IProps) {
               </span>
               <span className={[styles.price_box, styles.first_one].join(' ')}>
                 <span className={styles.price_lable}>
-                  我做下级医生
-                  <Popover content="我找上级医生一起管">
+                  我做医生助手
+                  <Popover content="我找主管医生一起管">
                     <img src={question} alt="" />
                   </Popover>
                 </span>

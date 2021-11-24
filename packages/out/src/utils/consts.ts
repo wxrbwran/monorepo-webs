@@ -255,7 +255,7 @@ export const topInfos: Store = {
   uuCode: '机构识别码',
   name: '机构名称',
   organizationCode: '组织机构代码',
-  isInternet: '是否为互联网医院',
+  isInternet: '是否为线上医院和项目机构',
   orgType: '机构类别',
   level: '医院级别',
   grade: '医院等次',

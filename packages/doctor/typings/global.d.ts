@@ -213,7 +213,7 @@ interface IPerson {
   infos: IInfos[];
   sessionId: string;
 }
-interface IPersonNew {
+export interface IPersonNew {
   members: IInfos[];
   sessionId: string;
 }

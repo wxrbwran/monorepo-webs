@@ -73,7 +73,7 @@ const AddTeamMember: FC<IProps> = (props) => {
       },
     },
     {
-      title: '互联网医院',
+      title: '线上医院和项目机构',
       dataIndex: 'orgs',
       width: 147,
       render: (orgs: string[]) => {

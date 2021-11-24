@@ -70,7 +70,7 @@ function ActionPanel() {
           key="issue"
           tab={
             <Badge overflowCount={99} count={issueUnRead}>
-              {role === 'UPPER_DOCTOR' ? '下级医生的请求' : '待审核问题'}
+              {role === 'UPPER_DOCTOR' ? '医生助手的请求' : '待审核问题'}
             </Badge>
           }
         >

@@ -22,7 +22,7 @@ function MedicalRecords(props: Iprops) {
   const [medicalList, setmedicalList] = useState<IMedicalList[]>();
   const role = window.$storage.getItem('role') || '';
   const roleId = window.$storage.getItem('currRoleId');
-  const { sid } = useParams<{sid: string}>();
+  const { sid } = useParams<{ sid: string }>();
   const [note, setNote] = useState<string>(); // 调整建议
   const [remind, setRemind] = useState<string>(data?.body?.content?.remind); // 医生提醒（发送给患者）
   const [loading, setLoading] = useState(false);
@@ -43,10 +43,10 @@ function MedicalRecords(props: Iprops) {
     setLoading(true);
     // 是否调整过指标或者服药，只要有一个编辑过即过验证通过
     const isEdit = validateMedical(medicalList) || validateMedicine(medicineList);
-    // 如果角色是上级医生，可跳过验证（因为下级医生一定调整过了）
+    // 如果角色是主管医生，可跳过验证（因为医生助手一定调整过了）
     if (role === 'UPPER_DOCTOR' || isEdit) {
       const content = { ...data.body.content };
-      // 如果下级医生调整过，此时content字段有值。调药和调指标-未调整的则没有此字段，调过的则有。这里做判断，有则用，无则添加为空数组
+      // 如果医生助手调整过，此时content字段有值。调药和调指标-未调整的则没有此字段，调过的则有。这里做判断，有则用，无则添加为空数组
       if (remind) {
         content.remind = remind;
       }
@@ -103,7 +103,7 @@ function MedicalRecords(props: Iprops) {
   const handlIgnoreMsg = () => {
     const params = {
       roleType: window.$storage.getItem('roleId'),
-      state: role === 'LOWER_DOCTOR' ? 4 : 2, // 2独立管理和上级医生，4是下级医生
+      state: role === 'LOWER_DOCTOR' ? 4 : 2, // 2独立管理和主管医生，4是医生助手
       id: data.id,
       objectId: window.$storage.getItem('patientSid'),
       objectWcId: window.$storage.getItem('patientWcId'),
@@ -155,7 +155,7 @@ function MedicalRecords(props: Iprops) {
           </div>
           <MrAdjustAdvice changeNote={handleChangeNote} remind={remind} />
           {
-            role === 'LOWER_DOCTOR' && <Button className={styles.submit_btn} type="primary" onClick={handleSend}>请上级医生审核</Button>
+            role === 'LOWER_DOCTOR' && <Button className={styles.submit_btn} type="primary" onClick={handleSend}>请主管医生审核</Button>
           }
           {
             ['UPPER_DOCTOR', 'ALONE_DOCTOR'].includes(role)
@@ -164,7 +164,7 @@ function MedicalRecords(props: Iprops) {
                 <Button onClick={handlIgnoreMsg}>取消发送</Button>
                 <Button type="primary" onClick={handleSend} loading={loading}>
                   发送患者
-                  {role === 'UPPER_DOCTOR' && '及下级医生'}
+                  {role === 'UPPER_DOCTOR' && '及医生助手'}
                 </Button>
               </div>
             )

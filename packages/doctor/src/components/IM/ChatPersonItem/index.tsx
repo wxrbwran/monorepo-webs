@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import IconMore from '@/assets/img/icon_more.png';
+import { getRole } from '@/utils/utils';
 import { Dropdown } from 'antd';
 import styles from './index.scss';
 
@@ -29,25 +30,6 @@ const ChatPersonItem: FC<IProps> = (props) => {
         type: 'im/UPDATE_CURR_SESSION_MSGS',
         payload,
       });
-    }
-  };
-  const getRole = (role: string) => {
-    switch (role) {
-      case Role.NURSE.id:
-        return '护士';
-      case Role.PATIENT.id:
-      case Role.PATIENT_VIP.id:
-        return '患者';
-      case Role.UPPER_DOCTOR.id:
-        return '主管医生';
-      case Role.ALONE_DOCTOR.id:
-        return '独立医生';
-      case Role.LOWER_DOCTOR.id:
-        return '医助';
-      case Role.RESEARCH_PROJECT_DOCTOR.id:
-        return '研究者';
-      default:
-        return fetchRolePropValue(role, 'desc');
     }
   };
   // 各角色排序优先级

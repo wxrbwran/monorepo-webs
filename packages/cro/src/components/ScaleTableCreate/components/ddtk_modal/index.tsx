@@ -242,10 +242,12 @@ const AddPatient = (props: IProps) => {
       dataIndex: 'required',
       key: 'required',
       render: (_text: any, record: any) => (
-        <Checkbox onChange={
-          (e) => changeRequired(e, record)}
-          defaultChecked={questions[quesIndex].detail.content[record.key].required}
-        />
+        <div className="required_wrap">
+          <Checkbox onChange={
+            (e) => changeRequired(e, record)}
+            defaultChecked={questions[quesIndex].detail.content[record.key].required}
+          />
+        </div>
       ),
     },
   ];

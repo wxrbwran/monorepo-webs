@@ -40,15 +40,15 @@ function Department({
         <Input type="hidden" />
       </Form.Item>
       <Form.Item
-        label="第一执业医院所在科室"
+        label="请输入科室名称"
         name={nameKey}
         rules={[{
           required: true,
-          message: '请输入第一执业医院所在科室!',
+          message: '请输入科室名称!',
         }]}
       >
         <Select
-          placeholder="第一执业医院所在科室"
+          placeholder="请输入科室名称"
           showArrow={false}
           filterOption={false}
           onSelect={handleSelect}

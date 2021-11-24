@@ -30,8 +30,8 @@ const orgList: Iorg[] = [
 ];
 function ChargesEdit({ onClose, toggleEdit }: IProps) {
   // INDEPENDENT_VIP独立管理  VIP_YEAR   VIP_HALF_YEAR   VIP_QUARTER
-  // SUPERIOR_VIP上级医生
-  // SUBORDINATE_VIP下级医生
+  // SUPERIOR_VIP主管医生
+  // SUBORDINATE_VIP医生助手
   // DOCTOR_CONSULTATION单次会诊 CONSULTATION_24  CONSULTATION_12
   // MEDIA_SERVICE 视频语音  VIDEO AUDIO
   const [orgId, setOrgId] = useState(orgList[0].organizationId);
@@ -82,7 +82,7 @@ function ChargesEdit({ onClose, toggleEdit }: IProps) {
               </span>
               <span className={[styles.price_box, styles.first_one].join(' ')}>
                 <span className={styles.price_lable}>
-                  我做上级医生
+                  我做主管医生
                   <Popover content="我带助手管理">
                     <img src={question} alt="" />
                   </Popover>
@@ -109,8 +109,8 @@ function ChargesEdit({ onClose, toggleEdit }: IProps) {
               </span>
               <span className={[styles.price_box, styles.first_one].join(' ')}>
                 <span className={styles.price_lable}>
-                  我做下级医生
-                  <Popover content="我找上级医生一起管">
+                  我做医生助手
+                  <Popover content="我找主管医生一起管">
                     <img src={question} alt="" />
                   </Popover>
                 </span>
