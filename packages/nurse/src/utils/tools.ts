@@ -212,8 +212,8 @@ export const provinces = [
 ];
 
 export const AdjustMedicineBtn: CommonData = {
-  [Role.LOWER_DOCTOR.id]: '请上级医生审核',
-  [Role.UPPER_DOCTOR.id]: '发送给患者及下级医生',
+  [Role.LOWER_DOCTOR.id]: '请主管医生审核',
+  [Role.UPPER_DOCTOR.id]: '发送给患者及医生助手',
   [Role.ALONE_DOCTOR.id]: '发送给患者',
 };
 

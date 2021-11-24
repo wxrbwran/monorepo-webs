@@ -14,7 +14,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style, doctorWorkOrg }) => {
   // 女  男
   const sexList = [female, male];
   const { name, practiceAreas, title, roleTags, orgs, sex, avatarUrl, sid } = doctorData;
-  // 科室为多机构组合并去重得到, 互联网医院科室，不是执业科室
+  // 科室为多机构组合并去重得到, 线上医院和项目机构科室，不是执业科室
   const depList = practiceAreas ? [...new Set(practiceAreas.map(item => item?.sub?.name).filter(item => item !== undefined))] : [];
   const selectOrgNsId = doctorWorkOrg?.[sid];
   return (
@@ -46,7 +46,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style, doctorWorkOrg }) => {
         </div>
       </div>
       <div className="flex">
-        <div className={`text-gray-500 mr-10 ${styles.title}`}>互联网医院:</div>
+        <div className={`text-gray-500 mr-10 ${styles.title}`} style={{ flex: '0 0 130px' }}>线上医院和项目机构:</div>
         <div>
           {
             orgs?.map((item: { name: string, nsId: string }) => {

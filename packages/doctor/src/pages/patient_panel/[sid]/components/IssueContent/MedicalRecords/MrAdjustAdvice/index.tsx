@@ -15,7 +15,7 @@ function MrAdjustAdvice({ changeNote, remind }: IProps) {
         ['LOWER_DOCTOR', 'UPPER_DOCTOR'].includes(role) && (
           <div>
             <h3 className={styles.tit_wrap}>
-              {role === 'LOWER_DOCTOR' ? '调整建议（发给上级）' : '上级医生的评价与指导（发给下级）'}
+              {role === 'LOWER_DOCTOR' ? '调整建议（发给主管医生）' : '主管医生的评价与指导（发给医生助手）'}
             </h3>
             <Input.TextArea
               rows={3}

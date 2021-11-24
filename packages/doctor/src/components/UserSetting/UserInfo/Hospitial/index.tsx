@@ -44,7 +44,7 @@ function Hospitial(props: Iprops) {
         name={[field.name, nameKey]}
       >
         <SearchHospital
-          placeholder={field.name === 0 ? '执业医院和科室' : ' '}
+          placeholder='请输入医院名称'
           callback={handleSelect}
           fieldName="hospital"
           style={{ width: '285px' }}

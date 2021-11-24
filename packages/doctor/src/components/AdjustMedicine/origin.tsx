@@ -101,7 +101,7 @@ const AdjustMedicine: FC<IProps> = (props) => {
                 />
                 <div className="common__btn" style={{ marginTop: 30 }}>
                   <Button type="primary" loading={loading} onClick={handleSend}>
-                    {/* 是养老患者，且不是下级医生角色时，显示发送给护士 */}
+                    {/* 是养老患者，且不是医生助手角色时，显示发送给护士 */}
                     {(isYlPatient === 1 && roleId !== Role.LOWER_DOCTOR.id) ? '发送给护士' : AdjustMedicineBtn[roleId] }
                   </Button>
                   <Button type="primary" onClick={() => setStatus(1)}>

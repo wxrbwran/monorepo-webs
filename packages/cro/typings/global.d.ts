@@ -188,7 +188,7 @@ interface ISub {
   townCode: number;
   districtName: string; // 街道
   detailAddress: string; // 详细地址
-  isOnlineHos: number; // 是否是互联网医院 0否 1是
+  isOnlineHos: number; // 是否是线上医院和项目机构 0否 1是
   level: number; // 医生级别 1 2 3
   grade: string; // "甲等" 医院评级
   type: string; // "A级"

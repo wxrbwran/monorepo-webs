@@ -30,7 +30,7 @@ const Model: IssueModelType = {
     * fetchIssueHistory({ payload }, { call, put }) { // 获取操作历史列表
       console.log(payload);
       const params = {
-        // 1 是已读 0 是未读, 5是已修改 (忽略：2独立管理和上级医生，4是下级医生)。独立管理不需要传0
+        // 1 是已读 0 是未读, 5是已修改 (忽略：2独立管理和主管医生，4是医生助手)。独立管理不需要传0
         state: window.$storage.getItem('role') === 'ALONE_DOCTOR' ? [1, 2, 4, 5] : [0, 1, 2, 4, 5],
         fromSid: window.$storage.getItem('sid') || '',
         roleType: window.$storage.getItem('roleId') || '',

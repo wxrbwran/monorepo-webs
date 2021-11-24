@@ -41,8 +41,8 @@ function FactionDoctor() {
     setOrgNsId(orgId);
   };
   const tab: CommonData = {
-    UPPER_DOCTOR: '我的上级医生',
-    LOWER_DOCTOR: '我的下级医生',
+    UPPER_DOCTOR: '我的主管医生',
+    LOWER_DOCTOR: '我的医生助手',
   };
   const changeTab = (value: string) => {
     setActiveType(value);
@@ -56,7 +56,7 @@ function FactionDoctor() {
 
   const getDoctors = (type: string) => {
     const roleId = type === 'UPPER_DOCTOR' ? Role.LOWER_DOCTOR.id : Role.UPPER_DOCTOR.id;
-    api.doctor.getDoctors(orgNsId, roleId).then((res: {teams: ITeam[]}) => {
+    api.doctor.getDoctors(orgNsId, roleId).then((res: { teams: ITeam[] }) => {
       const doctors: IMember[] = [];
       res.teams.forEach((item) => {
         item.members.forEach((member:IMember) => {

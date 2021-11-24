@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { Role } from '@/utils/role';
-// 获取患者列表（做为独立、上级、下级医生的患者列表）
+// 获取患者列表（做为独立、主管、医生助手的患者列表）
 var handlePatientsTeamDataSource = function (data) {
     console.log(5432, data);
     var newPatients = [];

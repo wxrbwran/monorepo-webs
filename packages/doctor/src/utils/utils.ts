@@ -74,17 +74,24 @@ export function getCondition(keyName: string, value:any, operator?: string) {
 
 // 获取IM消息角色
 export function getRole(role: string) {
-  let userRole = '';
-  if (role) {
-    if (Role[role]) {
-      // eslint-disable-next-line prefer-destructuring
-      userRole = Role[role].desc.substr(0, 1);
-    } else {
-      const desc = fetchRolePropValue(role, 'desc')?.substr(0, 1);
-      userRole = desc === 'V' ? '患' : desc;
-    }
+  switch (role) {
+    case Role.NURSE.id:
+      return '护士';
+    case Role.PATIENT.id:
+    case Role.PATIENT_VIP.id:
+      return '患者';
+    case Role.UPPER_DOCTOR.id:
+      return '主管医生';
+    case Role.ALONE_DOCTOR.id:
+      return '独立医生';
+    case Role.LOWER_DOCTOR.id:
+      return '医助';
+    case Role.RESEARCH_PROJECT_DOCTOR.id:
+      return '研究者';
+    default:
+      return fetchRolePropValue(role, 'desc');
   }
-  return userRole;
+
 }
 
 // 得到IM发送者的信息(只要有智能医生角色，发送者就是智能医生，否则以什么角色进的详情页谁就是发送者)

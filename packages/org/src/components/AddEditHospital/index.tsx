@@ -186,7 +186,7 @@ const AddEditHospital: FC<IProps> = (props) => {
                 <Input placeholder="请填写机构名称" type="text" maxLength={20} autoFocus />
               </FormItem>
               <div>
-                <FormItem label="是否互联网医院" name="isOnlineHos">
+                <FormItem label="是否线上医院和项目机构" name="isOnlineHos">
                   <RadioGroup>
                     <Radio value={1}> 是 </Radio>
                     <Radio value={0}> 否 </Radio>

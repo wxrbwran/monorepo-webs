@@ -208,7 +208,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                 </RadioGroup>
               </Form.Item>
               <Form.Item
-                label="所在互联网医院"
+                label="所在线上医院和项目机构"
                 name="doctorGroup"
               >
                 <Input disabled />

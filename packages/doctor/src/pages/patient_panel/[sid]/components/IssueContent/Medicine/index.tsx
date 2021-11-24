@@ -24,10 +24,10 @@ function Medicine({
   const roleId: string = window.$storage.getItem('roleId')!;
   /*
     0:弹框不展示
-    3*:上级医生收到下级医生的调药请示  31->33也可33->31
+    3*:主管医生收到下级医生的调药请示  31->33也可33->31
     31:展示下级医生调药diff页面
-    32:在31基础上，上级医生点击重新调药
-    33:32基础上，调完药点击确定展示上级医生调药
+    32:在31基础上，主管医生点击重新调药
+    33:32基础上，调完药点击确定展示主管医生调药
   */
   const [status, setStatus] = useState(0);
   const [newMedicine, setNewMedicine] = useState<IAdjustMedicinePlan[]>([]);

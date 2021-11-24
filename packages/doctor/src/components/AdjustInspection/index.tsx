@@ -20,7 +20,7 @@ function AdjustInspection(props: Iprops) {
   const [showModal, setShowModal] = useState(false);
   const [medicalList, setMedicalList] = useState<IMedicalList[]>([]);
   const [note, setNote] = useState<string>();
-  const { sid } = useParams<{sid: string}>();
+  const { sid } = useParams<{ sid: string }>();
   const roleId = window.$storage.getItem('roleId') || '';
   const role = window.$storage.getItem('role') || '';
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ function AdjustInspection(props: Iprops) {
 
   const btnText: CommonData = {
     UPPER_DOCTOR: '发送',
-    LOWER_DOCTOR: '发给上级医生',
+    LOWER_DOCTOR: '发给主管医生',
     ALONE_DOCTOR: '发送',
   };
 

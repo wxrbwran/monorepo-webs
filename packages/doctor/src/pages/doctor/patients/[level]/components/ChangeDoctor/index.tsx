@@ -18,10 +18,10 @@ interface IProps {
 function ChangeDoctor(props: IProps) {
   const { data, curRole, refresh } = props;
   const [showModal, setShowModal] = useState(false);
-  const [step, setStep] = useState(1); // 1我做为什么角色  2选择关联的上或下级医生
+  const [step, setStep] = useState(1); // 1我做为什么角色  2选择关联的主管医生或医生助手
   const [choiceRoleId, setChoiceRoleId] = useState<string>(); // 要改成什么角色
   const [relationDoctorId, setRelationDoctorId] = useState<string>(); // 选中的关联医生wcid
-  const [doctorTeams, setDoctorTeams] = useState<ISubject[]>([]); // 我做为上/下，选择对应的下/上级医生团队
+  const [doctorTeams, setDoctorTeams] = useState<ISubject[]>([]); // 我做为上/下，选择对应的下/主管医生团队
   const { wcl } = useSelector((state: IState) => state.auth);
 
   const resetState = () => {
@@ -37,13 +37,13 @@ function ChangeDoctor(props: IProps) {
   }, [showModal]);
 
   const fetchDoctorTeams = (roleId: string) => {
-    // 选自己作为上级医生，就传上级医生角色
+    // 选自己作为主管医生，就传主管医生角色
     api.doctor.getDotorTeams(roleId).then((res) => {
       // 我做为上级，选择下级医生，此时过滤出团队里的下级医生集合。反之相同。
       const filterRole: string = roleId === Role.UPPER_DOCTOR.id
         ? Role.LOWER_DOCTOR.id : Role.UPPER_DOCTOR.id;
       const doctors: ISubject[] = [];
-      res.teams.forEach((item: {members: ISubject[]}) => {
+      res.teams.forEach((item: { members: ISubject[] }) => {
         const filtermMember = item.members.filter(
           (member: ISubject) => member.role === filterRole,
         )[0];
@@ -88,7 +88,7 @@ function ChangeDoctor(props: IProps) {
   // choiceRole
   const btnList = [{ text: '我作为下级医生参与管理', roleId: Role.LOWER_DOCTOR.id }];
   if (curRole === 'alone') {
-    btnList.unshift({ text: '我作为上级医生参与管理', roleId: Role.UPPER_DOCTOR.id });
+    btnList.unshift({ text: '我作为主管医生参与管理', roleId: Role.UPPER_DOCTOR.id });
   } else {
     btnList.unshift({ text: '我独立管理', roleId: Role.ALONE_DOCTOR.id });
   }
@@ -98,7 +98,7 @@ function ChangeDoctor(props: IProps) {
     } if (choiceRoleId === Role.UPPER_DOCTOR.id) {
       return '选择下级医生';
     }
-    return '选择上级医生';
+    return '选择主管医生';
   }, [step, choiceRoleId]);
   return (
     <div>

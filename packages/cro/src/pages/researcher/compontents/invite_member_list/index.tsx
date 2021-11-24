@@ -142,7 +142,7 @@ function InviteMemberList(props: Iprops) {
                 <Search
                   form={form}
                   searchKey="mulit_project"
-                  placeholder="搜索研究者姓名、手机号、第一执业医院、所在互联网医院、科室"
+                  placeholder="搜索研究者姓名、手机号、第一执业医院、所在线上医院和项目机构、科室"
                   width={500}
                 />
               )
