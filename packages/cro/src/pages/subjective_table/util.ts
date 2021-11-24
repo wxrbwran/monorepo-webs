@@ -117,7 +117,8 @@ export function deleteStartOrEndSymbol(str: string) {
 
   if (str.startsWith('{')) {
 
-    return str.substring(1);
+    // 除完'{'可能还有'}'
+    return deleteStartOrEndSymbol(str.substring(1));
   } else if (str.endsWith('}')) {
 
     return str.substring(0, str.length - 1);
