@@ -30,8 +30,8 @@ var handlePatientsTeamDataSource = function (data) {
                     sid: member.sid, //创建者的sid -  患者列表是否展示更换服务按钮使用
                 };
             }
-            // 在members里过滤出sid与当前登录者sid相同的医生信息，取出wcId，im聊天会话需要此参数
-            if (member.sid === window.$storage.getItem('sid')) {
+            // 在members里过滤出sid与当前登录者sid相同,并且与侧边栏医生角色一致的医生信息，取出wcId，im聊天会话需要此参数
+            if (member.sid === window.$storage.getItem('sid') && member.role === window.$storage.getItem('currRoleId')) {
                 newObj.currLoginDoctorInfo = {
                     wcId: member.wcId,
                     sid: member.sid,

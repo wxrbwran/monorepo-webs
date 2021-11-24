@@ -27,6 +27,10 @@ interface CurrentPatientModelState {
   avatarUrl?: string;
   name?: string;
   isYlPatient?: number;
+  currLoginDoctorInfo?: {
+    sid: string;
+    wcId: string;
+  }
 }
 interface IPlan {
   count: number;
