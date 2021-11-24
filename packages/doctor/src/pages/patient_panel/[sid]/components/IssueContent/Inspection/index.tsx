@@ -16,18 +16,18 @@ interface Iprops {
   children: string;
 }
 
-// 此组件用于 下级医生调达标值-上级收到下级医生的请求-上级审核调整达标值
+// 此组件用于 医生助手调达标值-上级收到医生助手的请求-上级审核调整达标值
 /* status
     0:弹框不展示
-    1:展示下级医生调指标diff页面
-    2:在1基础上，上级医生点击重新调整达标值
-    3:在2基础上，调完达标值点击确定展示上级医生调整的数据
+    1:展示医生助手调指标diff页面
+    2:在1基础上，主管医生点击重新调整达标值
+    3:在2基础上，调完达标值点击确定展示主管医生调整的数据
   */
 function Inspection({
   data, children, refresh,
 }: Iprops) {
   const dispatch = useDispatch();
-  const { sid } = useParams<{sid: string}>();
+  const { sid } = useParams<{ sid: string }>();
   const roleId = window.$storage.getItem('currRoleId');
   const [status, setStatus] = useState(0);
   const [editMedicalList, setEditMedicalList] = useState<IMedicalList[]>([]);
@@ -136,11 +136,11 @@ function Inspection({
                   medicalList={lowerInspection}
                 />
                 <div style={{ width: 530, margin: '0 auto' }}>
-                  <h3>下级医生调整建议</h3>
+                  <h3>医生助手调整建议</h3>
                   <div>{note || '无'}</div>
                 </div>
               </div>
-            ) : <span style={{ color: 'red' }}>下级医生未调整指标</span>
+            ) : <span style={{ color: 'red' }}>医生助手未调整指标</span>
           }
 
           <div style={{ display: status === 2 ? 'block' : 'none' }}>

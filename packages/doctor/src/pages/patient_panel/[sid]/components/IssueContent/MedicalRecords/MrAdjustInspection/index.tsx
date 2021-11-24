@@ -45,7 +45,7 @@ function MrAdjustInspection({ saveData, issueData }: IProps) {
     if (newMedical.length > 0) {
       return `${Role[role].desc}调指标结果`;
     } if (!isEmpty(lowerMedical)) {
-      return '下级医生调指标结果';
+      return '医生助手调指标结果';
     }
     return '患者目前达标值';
   };

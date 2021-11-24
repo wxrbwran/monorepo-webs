@@ -13,8 +13,8 @@
 - jest：进行单元测试和集成测试
 
 
-// UPPER  上级
-// LOWER  下级
+// UPPER  上级--主管
+// LOWER  下级--医生助手 
 // ALONE  独立管理
 
 11

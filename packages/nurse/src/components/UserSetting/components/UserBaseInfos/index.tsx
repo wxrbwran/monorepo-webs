@@ -60,7 +60,7 @@ function UserBaseInfos({ userInfo }: IProps) {
           </span>
         )}
         <span>
-          所在互联网医院：
+          所在线上医院和项目机构：
           心之力
         </span>
         {qcCode && (

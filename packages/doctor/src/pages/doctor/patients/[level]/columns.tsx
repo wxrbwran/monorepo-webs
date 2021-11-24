@@ -143,7 +143,7 @@ export const riskFactor = {
 };
 
 export const upperDoctor = {
-  title: '上级医生',
+  title: '主管医生',
   dataIndex: 'upperDoctor',
 };
 

@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useLayoutEffect } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
@@ -276,7 +276,7 @@ const AddEditDoctor: FC<IProps> = (props) => {
                   <Radio value="硕导">硕导</Radio>
                 </Radio.Group>
               </Form.Item>
-              <FormItem label="所在互联网医院" name="doctorGroup">
+              <FormItem label="所在线上医院和项目机构" name="doctorGroup">
                 <Input style={{ width: 300 }} />
               </FormItem>
               <FormItem label="资格证书编码" name="qcCode">

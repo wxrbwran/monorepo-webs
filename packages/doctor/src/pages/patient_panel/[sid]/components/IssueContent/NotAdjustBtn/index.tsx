@@ -11,11 +11,11 @@ function AdjustBtn(props: Iprops) {
   const { data, refresh } = props;
   const role = window.$storage.getItem('role') || '';
   const dispatch = useDispatch();
-  const { sid } = useParams<{sid: string}>();
+  const { sid } = useParams<{ sid: string }>();
   const handlIgnoreMsg = () => {
     const params = {
       roleType: window.$storage.getItem('roleId'),
-      state: role === 'LOWER_DOCTOR' ? 4 : 2, // 2独立管理和上级医生，4是下级医生
+      state: role === 'LOWER_DOCTOR' ? 4 : 2, // 2独立管理和主管医生，4是医生助手
       id: data.id,
       objectId: window.$storage.getItem('patientSid'),
       objectWcId: window.$storage.getItem('patientWcId'),

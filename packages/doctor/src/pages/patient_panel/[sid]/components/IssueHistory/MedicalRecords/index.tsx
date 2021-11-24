@@ -43,7 +43,7 @@ function MedicalRecords(props: IProps) {
                     {
                         item.note && (
                         <div>
-                          <div className={styles.note_tit}>{item.role === 'LOWER_DOCTOR' ? '调整建议（发给上级）' : '上级医生的评价与指导（发给下级）'}</div>
+                          <div className={styles.note_tit}>{item.role === 'LOWER_DOCTOR' ? '调整建议（发给主管医生）' : '主管医生的评价与指导（发给医生助手）'}</div>
                           <div>{item.note}</div>
                         </div>
                         )

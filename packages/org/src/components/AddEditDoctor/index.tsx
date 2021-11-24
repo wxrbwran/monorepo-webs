@@ -304,7 +304,7 @@ const AddEditDoctor: FC<IProps> = (props) => {
                     <Radio value="硕导">硕导</Radio>
                   </Radio.Group>
                 </Form.Item>
-                <FormItem label="所在互联网医院" name="doctorGroup">
+                <FormItem label="所在线上医院和项目机构" name="doctorGroup">
                   <Input disabled />
                 </FormItem>
                 <div className={styles.form_item}>

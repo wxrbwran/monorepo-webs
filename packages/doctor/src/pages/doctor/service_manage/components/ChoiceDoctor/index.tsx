@@ -162,7 +162,7 @@ const ChoiceDoctor: FC<IProps> = (props) => {
             maskClosable
             visible={showOrgModal}
             onCancel={handleChoiceOrg}
-            title='请选择所在互联网医院'
+            title='请选择所在线上医院和项目机构'
             footer={null}
             destroyOnClose
           >

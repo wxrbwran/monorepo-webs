@@ -87,11 +87,11 @@ export var title = {
     render: function (text) { return React.createElement("span", null, text); },
 };
 export var upperDoctor = {
-    title: '上级医生',
+    title: '主管医生',
     dataIndex: 'upper_doctor',
 };
 export var lowerDoctor = {
-    title: '下级医生',
+    title: '医生助手',
     dataIndex: 'lower_doctor',
 };
 export var province = {

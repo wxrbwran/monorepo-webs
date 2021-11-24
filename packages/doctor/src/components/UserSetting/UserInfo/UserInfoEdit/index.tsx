@@ -265,7 +265,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
               </Form.List>
               <div className={styles.line_input}>
                 <Form.Item
-                  label="所在互联网医院"
+                  label="线上医院和项目机构"
                   name="doctorGroup"
                 >
                   <Input disabled />
