@@ -47,7 +47,7 @@ function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues, scaleTy
         >
           <ScaleTemplate
             mode='Edit'
-            onCancel={() => history.go(-1)}
+            onCancel={() => setShowModal(false)}
             addPlan={addPlan}
             originRuleDoc={ruleDoc}
             chooseValues={chooseValues}
