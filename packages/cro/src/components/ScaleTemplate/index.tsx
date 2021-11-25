@@ -477,7 +477,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     // const params = {
     //   // plans: [startTime, ...conditionArr, frequency, group],
     //   // questions: remind,
-    //   // ruleDoc: 
+    //   // ruleDoc:
     // };
     //年龄限制
     // const filterAgeObj = callBackPlans.filter((item) => item.detail.send === 'AGE')[0];
@@ -506,7 +506,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     console.log('============= choseConditions', JSON.stringify(choseConditions));
     console.log('============= choseScope', JSON.stringify(choseScope));
     console.log('============= frequency', JSON.stringify(frequency));
-    const arrParma = tileAllChoosesToArray(chooseStartTime, choseConditions, choseScope);
+    const hasValConditions = choseConditions.filter(item => !isEmpty(item.chooseValue));
+    const arrParma = tileAllChoosesToArray(chooseStartTime, hasValConditions, choseScope);
+
 
     console.log('=============arrParma arrParma', JSON.stringify(arrParma));
 
@@ -544,13 +546,12 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     if (originRuleDoc) {
       params.id = originRuleDoc.id;
     }
-
     addPlan({
       ruleDoc: params,
       questions: remind,
       chooseValues: {
         chooseStartTime: chooseStartTime,
-        choseConditions: choseConditions,
+        choseConditions: hasValConditions,
         choseScope: choseScope,
         frequency: frequency,
       },
