@@ -75,7 +75,7 @@ function Create({ location }: IProps) {
       message.error('请输入提醒类型');
       setLoading(false);
     } else {
-      const ruleList = cloneDeep(infos);
+      const ruleList = cloneDeep(infos).filter(item => item.questions !== '');
       for (let i = 0; i < ruleList.length; i++) {
         delete ruleList[i].chooseValues;
       }
@@ -99,6 +99,7 @@ function Create({ location }: IProps) {
         })
         .catch((err: string) => {
           message.error(err);
+          setLoading(false);
         });
     }
   };
