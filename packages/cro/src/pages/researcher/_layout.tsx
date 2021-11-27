@@ -21,8 +21,7 @@ function Researcher(props: IProps) {
         </ToogleSide>
       }
     </div>
-
-  )
+  );
 }
 
 export default Researcher;

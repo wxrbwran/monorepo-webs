@@ -1,15 +1,17 @@
 import React from 'react';
-import { history } from 'umi';
+import { history, useParams } from 'umi';
+import { PlusOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
 interface IProps {
   toAddress: string
 }
 function PatientEducation({ toAddress }: IProps) {
-
+  const { type } = useParams<{ type: string }>();
   return (
     <div className={styles.create_new} onClick={() => history.push(toAddress)}>
-      创建
+      <PlusOutlined />
+      <span>创建新{ type === 'education' ? '宣教' : '随访'}</span>
     </div>
   );
 }

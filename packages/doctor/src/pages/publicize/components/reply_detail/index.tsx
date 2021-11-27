@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Select } from 'antd';
 import * as api from '@/services/api';
 import ReplyTable from '../reply_table';
 import styles from './index.scss';
@@ -10,6 +10,7 @@ interface IProps {
   id: string;
   children: React.ReactElement;
 }
+const { Option } = Select;
 function Reply({ id, children }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [dataSource, setDataSource] = useState([]);
@@ -89,13 +90,16 @@ function Reply({ id, children }: IProps) {
         </ReplyTable>,
     },
   ];
+  const handleChange = () => {
+    console.log('筛选表');
+  };
   return (
     <>
       <span onClick={() => setShowModal(!showModal)}>{children}</span>
       {showModal && (
         <DragModal
           visible={showModal}
-          title=''
+          title='回复详情'
           width={800}
           wrapClassName="ant-modal-wrap-center"
           onCancel={() => setShowModal(false)}
@@ -103,6 +107,11 @@ function Reply({ id, children }: IProps) {
           footer={null}
         >
           <div className={styles.reply_wrap}>
+          <Select defaultValue="1" style={{ width: 180 }} onChange={handleChange}>
+            <Option value="1">随访表1</Option>
+            <Option value="2">随访表2</Option>
+            <Option value="3">随访表3</Option>
+          </Select>
             <div className={styles.count}>
               <span>已发出: {sendNumber}张</span>
               <span>已回复: {replyNumber}张</span>

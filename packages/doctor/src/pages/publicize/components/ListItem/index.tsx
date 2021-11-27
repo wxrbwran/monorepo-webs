@@ -54,6 +54,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   const isShowBtn = (type === 'accompany' && item?.edit) || (!item?.inSchedule && item?.del);
   // 是否显示分隔线
   const isShowSplit = (type === 'accompany' && item?.edit) && (!item?.inSchedule && item?.del);
+  console.log('====22', type);
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>
       {

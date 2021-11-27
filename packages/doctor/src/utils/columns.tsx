@@ -2,6 +2,7 @@ import React from 'react';
 import { message, Switch } from 'antd';
 import config from '@/config';
 import * as api from '@/services/api';
+import moment from 'moment';
 
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
   const column: CommonData = {
@@ -32,7 +33,7 @@ export const clAvatar = {
 export const clDepartment = {
   title: '科室',
   dataIndex: 'department',
-  render: (text: { name: string}) => text.name,
+  render: (text: { name: string }) => text.name,
 };
 export const indexUnits = {
   title: () => (
@@ -100,4 +101,22 @@ export const indexSource = {
   render: (text: string) => (
     <div>{text === 'DOCTOR' ? '自己添加' : '系统添加'}</div>
   ),
+};
+
+export const patientName = {
+  title: '姓名',
+  dataIndex: 'name',
+  width: 122,
+};
+
+export const sendAt = {
+  title: '时间',
+  dataIndex: 'sendTime',
+  width: 236,
+  render: (text: number) => <span>{moment(text).format('YYYY.MM.DD HH:mm:ss')}</span>,
+};
+
+export const senderFileName = {
+  title: '文件名称',
+  dataIndex: 'fileName',
 };
