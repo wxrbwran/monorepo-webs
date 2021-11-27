@@ -539,7 +539,7 @@ const TemplateRule: FC<IProps> = ({
   };
 
   return (
-    <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
+    <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan}`}>
       <FirstSendTime choiceModelChange={onChoiceModelChange} popverContent={
         contentPopver('firstTime')
       } />
