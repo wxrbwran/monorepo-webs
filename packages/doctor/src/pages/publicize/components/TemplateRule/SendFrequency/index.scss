@@ -112,3 +112,12 @@ h2 {
     }
   }
 }
+
+.time {
+  :global {
+    .ant-picker {
+      height: 40px;
+      width: 100px;
+    }
+  }
+}
