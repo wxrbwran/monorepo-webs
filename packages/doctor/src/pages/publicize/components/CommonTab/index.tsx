@@ -44,6 +44,18 @@ function CommonTab() {
       statusName: '患者随访',
       status: 'suifang',
     },
+    {
+      statusName: 'crf量表',
+      status: 'crf_scale',
+    },
+    {
+      statusName: '新宣教',
+      status: 'new_ducation',
+    },
+    {
+      statusName: '新随访',
+      status: 'new_suifang',
+    },
   ];
   return (
     <>
