@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+
 export interface IItem {
   name: string;
   type: string;
@@ -9,6 +10,16 @@ export interface IItem {
   starting: boolean;
   operator: string;
 }
+
+export const sendType = [
+  {
+    key: 'CUSTOM',
+    value: '自定义',
+  }, {
+    key: 'LOOP',
+    value: '循环下发',
+  },
+];
 
 export interface ICondition {
   chooseItem: IItem;
