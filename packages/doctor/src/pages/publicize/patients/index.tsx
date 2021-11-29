@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button, Table, Spin } from 'antd';
 import { useSelector, useLocation } from 'umi';
 import  * as api from '@/services/api';
@@ -15,18 +15,18 @@ interface IOnSelectChange {
   (selectedRowKeys: React.ReactText[], selectedRows?: Store[]): void;
 }
 let timer: any = null;
-let len = [];
 function Patients() {
   const location = useLocation();
   const [form] = Form.useForm();
+  const retryTimes = useRef<number>(1);
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
   const [showSearch, setShowSearch] = useState(false);
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   const groupList = useSelector((state: IState) => state.education.groupList);
   const columns = [pname, groupName, initAt];
   const [dataSource, setDataSource] = useState<Store[]>([]);
+  const pageSize = 10;
   const [loading, setLoading] = useState(true);
-  // const [len, setLen] = useState<number[]>([]);
 
   const onSelectChange: IOnSelectChange = (keys: any[]) => {
     setSelectPatient(keys);
@@ -35,24 +35,37 @@ function Patients() {
     selectedRowKeys: selectPatient,
     onChange: onSelectChange,
   };
-
-  const fetchPatientList = (actionLogId: string) => {
-    api.education.getPatientsList({ actionLogId })
+  // 如果返回条数不足10条
+  //   1.页码为1并且请求次数小于3，则继续请求第一页，
+  //   2.页码大于1，则直接结束请求
+  // 等于10条，继续请求
+  const fetchPatientList = (actionLogId: string, pageAt: number) => {
+    const params = {
+      actionLogId,
+      pageAt,
+      pageSize,
+    };
+    clearInterval(timer);
+    api.education.getPatientsList(params)
       .then((res) => {
-        setDataSource(res.lists);
-        let newLen = [...len, res.lists.length];
-        if (len.length === 3){
-          len = [res.lists.length];
-          newLen = [res.lists.length];
+        if (pageAt === 1) {
+          setDataSource([...res.lists]);
         } else {
-          len = [...newLen];
+          setDataSource([...dataSource, ...res.lists]);
         }
-        if (newLen.length === 3){
-          if (Array.from(new Set(newLen)).length === 1){
-            // setDataSource(res.lists);
+        if (res.lists.length < pageSize) {
+          if (pageAt === 1 && retryTimes.current < 3) {
+            retryTimes.current += 1;
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              fetchPatientList(actionLogId, 1);
+            }, 2000);
+          } else {
+            clearTimeout(timer);
             setLoading(false);
-            clearInterval(timer);
           }
+        } else {
+          fetchPatientList(actionLogId, pageAt + 1);
         }
       })
       .catch((err: string) => {
@@ -65,9 +78,7 @@ function Patients() {
       .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
       .then((res) => {
         if (res) {
-          timer = setInterval(() => {
-            fetchPatientList(res?.id);
-          }, 2000);
+          fetchPatientList(res?.id, 1);
         } else {
           clearInterval(timer);
           setDataSource([]);
@@ -82,14 +93,14 @@ function Patients() {
   useEffect(() => {
     if (!isEmpty(currentOrgInfo)){
       changeTableOption(window.$storage.getItem('keyWord'));
-      len = [];
+      retryTimes.current = 1;
       setLoading(true);
     }
   }, [currentOrgInfo]);
 
   useEffect(() => {
     clearInterval(timer);
-    len = [];
+    retryTimes.current = 1;
     setLoading(true);
   }, [location]);
 
@@ -153,12 +164,14 @@ function Patients() {
         </SelectGroup>
       </Form>
       {
+
         <Table
           // loading={loading}
           rowKey={(record) => record.sid}
           rowSelection={rowSelection}
           columns={[...columns, action]}
           dataSource={dataSource}
+          pagination={false}
         />
       }
       {
