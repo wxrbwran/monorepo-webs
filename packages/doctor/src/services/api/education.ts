@@ -4,10 +4,6 @@ export default {
   filePrepare(data: object): Promise<any> {
     return http.get('base/file/prepare', { data });
   },
-  // 初始化随访团队
-  initContact(data: object): Promise<any> {
-    return http.post('doctor/init/contact', { data });
-  },
   // 创建随访小组
   addGroup(data: object): Promise<any> {
     return http.post('doctor/contact/group', { data });
@@ -22,11 +18,11 @@ export default {
   },
   // 为患者分配小组
   postGroupPatient(data: any): Promise<any> {
-    return http.post('doctor/contact/patient', { data });
+    return http.post('doctor/contact/group/patient', { data });
   },
   // 获取小组下患者列表
   getGroupPatientList(data: any): Promise<any> {
-    return http.get(`doctor/contact/group/patient/${data.groupId}`);
+    return http.get('doctor/contact/group/patient', { data });
   },
   // 获取列表logId
   getLogId(data: any): Promise<any> {
@@ -34,7 +30,7 @@ export default {
   },
   // 获取全部患者列表
   getPatientsList(data: any): Promise<any> {
-    return http.get(`contact/patient/${data.actionLogId}`);
+    return http.get('contact/patient', { data });
   },
   // 新增视频-文件-文章-图片
   addPublicize(data: any): Promise<any> {

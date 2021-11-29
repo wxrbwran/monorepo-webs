@@ -58,7 +58,6 @@ function SideMenu(props: IProps) {
     if (!!addGroupName) {
       const params = {
         orgNSId: currentOrgInfo.nsId,
-        sid: window.$storage.getItem('sid'),
         namespaceName: addGroupName,
       };
       api.education.addGroup(params).then(() => {
@@ -93,8 +92,6 @@ function SideMenu(props: IProps) {
       const params = {
         namespaceName: modifyGroupName,
         nsId: groupId,
-        orgNSId: currentOrgInfo.nsId,
-        sid: window.$storage.getItem('sid'),
       };
       api.education.modifyGroup(params).then(() => {
         message.success('修改成功');

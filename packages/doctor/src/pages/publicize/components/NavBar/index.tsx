@@ -15,18 +15,6 @@ function NavBar() {
   const [selectOrgList, setSelectOrgList] = useState<ISubject[]>(filterOrgs);
   const [currentOrg, setCurrentOrg] = useState();
 
-  // 初始化随访团队接口
-  const initContact = (nsId?: string) => {
-    api.education.initContact({
-      orgNSId: nsId,
-      sid: window.$storage.getItem('sid'),
-    }).then(() => {
-      console.log('成功');
-    }).catch((err: any) => {
-      message.error(err?.result);
-    });
-  };
-
   // 记录当前机构位置
   const postContactLocation = (nsId?: string) => {
     api.education.postContactLocation({
@@ -59,7 +47,6 @@ function NavBar() {
       }).catch((err: any) => {
         message.error(err?.result);
       });
-      // initContact(filterOrgs[0].nsId);
     }
   }, [filterOrgs]);
 
@@ -70,7 +57,6 @@ function NavBar() {
         type: 'user/setCurrentOrgInfo',
         payload: currentOrg,
       });
-      initContact(currentOrg?.nsId);
       if (location.pathname.includes('groups')){
         history.push('/publicize/patients');
       }
