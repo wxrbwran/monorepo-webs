@@ -67,6 +67,7 @@ export const EducationType = {
   article: '文章',
   picture: '图片',
   audio: '音频',
+  crf: 'CRF量表',
 };
 export const AcceptType = {
   video: '.mp4',

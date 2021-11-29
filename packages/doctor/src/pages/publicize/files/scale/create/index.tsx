@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { Input, Tooltip, Button, message } from 'antd';
-import { history, useSelector } from 'umi';
+import { history, useSelector, useLocation } from 'umi';
 import * as api from '@/services/api';
 import guide from '@/assets/img/suifang/guide.png';
 import type { IQuestions, Ioptions } from '../../../const';
@@ -32,6 +32,9 @@ interface IParams {
 }
 function SuifangCreate({ location, scaleType }: IProps) {
   const initSf = useSelector((state: IState) => state.suifang);
+  console.log('initSf', initSf);
+  console.log('useParams', useLocation());
+  const { type } = useLocation().query;
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   const initQuestion = () => {
     if (initSf.question) {
@@ -190,6 +193,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
       question: questions,
       title: formTit,
       subTitle: subTit,
+      type: type === 'accompany' ? 0 : 1, //0：随访表 1：CRF量表
     };
     handleCreate(params);
     return true;
@@ -207,7 +211,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
           <div className="text-box">
             <Tooltip placement="top" title="点击可进行编辑">
               <Input
-                placeholder={'输入随访表标题'}
+                placeholder={`输入${type === 'crf' ? 'CRF量' : '随访'}表标题`}
                 className="edit-input"
                 value={formTit}
                 onChange={handleFormTit}

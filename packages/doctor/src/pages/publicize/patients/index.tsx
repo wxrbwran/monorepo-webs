@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Button, Table, Spin } from 'antd';
+import { Form, Button, Table, Spin, message } from 'antd';
 import { useSelector, useLocation } from 'umi';
 import  * as api from '@/services/api';
 import { pname, groupName, initAt } from 'xzl-web-shared/src/utils/columns';
@@ -68,8 +68,10 @@ function Patients() {
           fetchPatientList(actionLogId, pageAt + 1);
         }
       })
-      .catch((err: string) => {
+      .catch((err: any) => {
         console.log('err', err);
+        setLoading(false);
+        message.error(err?.result || '加载失败');
       });
   };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import video from '@/assets/img/suifang/video.svg';
 import suifang from '@/assets/img/suifang/suifang.svg';
+import crf from '@/assets/img/suifang/crf.png';
 import file from '@/assets/img/suifang/file.svg';
 import article from '@/assets/img/suifang/article.svg';
 import pic from '@/assets/img/suifang/pic.svg';
@@ -38,6 +39,11 @@ function Visite() {
       type: 'accompany',
       name: '随访表',
       icon: suifang,
+    },
+    {
+      type: 'crf',
+      name: 'CRF量表',
+      icon: crf,
     },
   ];
 
