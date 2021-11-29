@@ -23,7 +23,7 @@ export interface DoctorOrgsProp {
 
 interface IProps {
 
-  type: 'crf' | 'ducation' | 'suifang';
+  type: 'crf' | 'education' | 'suifang';
   onSaveChoices: (choiceIds: IList[]) => void; // 选中的所有数据id,
   onDragModalDidShow: () => void; // 弹窗显示会调
 }
@@ -96,7 +96,7 @@ const ChoiceContent: FC<IProps> = (props) => {
 
   const getContentListSources = () => {
 
-    if (type == 'ducation') {
+    if (type == 'education') {
       getPublicizeScaleList();
     }
   };

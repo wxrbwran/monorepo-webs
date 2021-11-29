@@ -3,6 +3,7 @@ import { DatePicker, InputNumber, Select, TimePicker } from 'antd';
 // import * as api from '@/services/api';
 import styles from './index.scss';
 import moment from 'moment';
+import { cloneDeep, isEmpty } from 'lodash';
 
 interface IProps {
 
@@ -12,6 +13,7 @@ interface IProps {
 
   choiceModelChange: (choiceModel: IModel) => void;
   popverContent: React.ReactNode;
+  choiceModelSource?: any;
 }
 const { Option } = Select;
 export interface IModel {
@@ -55,15 +57,21 @@ const model: IModel = {
 };
 
 
-const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent }: IProps) => {
+const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceModelSource }: IProps) => {
 
-  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: model, description: 'first' });
+  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: cloneDeep(model), description: 'first' });
   // const [contentList, setContentList] = useState<any[]>([]);
 
   const handleChangeType = (val: any, currentItem: IModel) => {
     currentItem.choiceModel = currentItem.childItem?.filter((item) => item.description == val)[0];
     setChoiceModel({ ...choiceModel });
   };
+
+  useEffect(() => {
+    if (choiceModelSource && !isEmpty(choiceModelSource)) {
+      setChoiceModel(choiceModelSource);
+    }
+  }, [choiceModelSource]);
 
   const dateChange = (_val: any, str: string, choiceItem: IModel) => {
 

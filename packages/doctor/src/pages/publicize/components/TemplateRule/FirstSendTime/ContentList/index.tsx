@@ -15,7 +15,7 @@ interface Iprops {
   onDragModalDidShow: () => void; // 弹窗显示会调
   onSaveChoices: (choices: IList[]) => void; // 选中的所有数据id,
 
-  type: 'crf' | 'ducation' | 'suifang';
+  type: 'crf' | 'education' | 'suifang';
 }
 
 

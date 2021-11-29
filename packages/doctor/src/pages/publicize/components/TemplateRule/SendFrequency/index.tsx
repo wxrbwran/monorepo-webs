@@ -12,7 +12,7 @@ interface IProps {
 
   initFrequency: any;
   onFrequencyChange: (frequency: any) => void;
-  type: 'crf' | 'ducation' | 'suifang';
+  type: 'crf' | 'education' | 'suifang';
 }
 const { Option } = Select;
 
@@ -20,6 +20,11 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
 
 
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
+
+
+  useEffect(() => {
+    setFrequency(initFrequency);
+  }, [initFrequency]);
 
   useEffect(() => {
     onFrequencyChange(frequency);

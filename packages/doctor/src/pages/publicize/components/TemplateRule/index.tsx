@@ -14,7 +14,7 @@ import SendGroup from './SendGroup';
 // import { isEmpty, cloneDeep } from 'lodash';
 // import { IChooseValues, ICondition, IItem, IRuleDoc } from '../../pages/subjective_table/util';
 import { Button } from 'antd';
-import { IChooseValues, IItem, IRuleDoc } from './util';
+import { IItem, IRuleDoc } from './util';
 import { cloneDeep, isEmpty } from 'lodash';
 import ContentPopover from './ContentPopover/index';
 import { IList } from '../../const';
@@ -291,13 +291,13 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: { day: 
 
 const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, frequency: { frequency: string, custom: { day: number, time: string }[] }) => {
 
-  const arr = tileAllFrequencyToArray(frequency);
+  const arr = [];
 
   console.log('==================  firstTime firstTime', JSON.stringify(firstTime));
   if (firstSteps.includes('自定义')) {
     const index = firstSteps.indexOf('自定义');
     const action: any = {
-      type: 'first',
+      type: 'once',
       params: {
         delay: getDelay(firstSteps[index + 2]),
         period: firstSteps[index + 1],
@@ -312,7 +312,7 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
     arr.push(action);
   } else { // 
     const action: any = {
-      type: 'first',
+      type: 'once',
       params: {
         delay: 0,
         period: 0,
@@ -326,7 +326,9 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
     };
     arr.push(action);
   }
-  console.log('============== arr ', JSON.stringify(arr));
+
+  arr.push(...tileAllFrequencyToArray(frequency));
+  return arr;
 };
 
 const titleAllChoosesToMustParma = (chooseStartTime: IItem, firstSteps: string[], choseConditions: ICondition[]) => {
@@ -358,13 +360,20 @@ const getFirstSteps = (firstTime: any): string[] => {
 
 interface IProps {
   originRuleDoc?: IRuleDoc;
-  chooseValues?: IChooseValues;
+  chooseValues?: any;
 
-  pageType: 'crf' | 'ducation' | 'suifang';
+  pageType: 'crf' | 'education' | 'suifang';
 
   onCancelClick: () => void;
-  onSaveClick: (data: { ruleDoc: any }) => void;
+  onSaveClick: (data: { ruleDoc: any, chooseValues: any }) => void;
 }
+
+// chooseValues: {
+//   firstTime: firstTime,
+//   choseConditions: choseConditions,
+//   choseScope: choseScope,
+//   frequency: frequency,
+// },
 
 type ContentType = 'firstTime' | 'frequency';
 
@@ -378,12 +387,13 @@ const TemplateRule: FC<IProps> = ({
 
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
-  const sourceType = pageType == 'ducation' ? 3 : (pageType == 'suifang' ? 2 : 6);
-  const ruleType = pageType == 'ducation' ? 'PUBLICIZE_EDUCATION' : (pageType == 'suifang' ? 'FOLLOW' : 'CRF_SCALE');
+  const sourceType = pageType == 'education' ? 3 : (pageType == 'suifang' ? 2 : 6);
+  const ruleType = pageType == 'education' ? 'PUBLICIZE_EDUCATION' : (pageType == 'suifang' ? 'FOLLOW' : 'CRF_SCALE');
   // const [contentListVisible, setContentListVisible] = useState(false); //选中的起始发送时间子item
 
   const startTimeRef = useRef<IItem>();
 
+  // 首次发送时间
   const [firstTime, setFirstTime] = useState<{ choiceModel: any, choiceContents: IList[] }>({ choiceModel: null, choiceContents: [] });
 
   // 发送对象
@@ -409,10 +419,6 @@ const TemplateRule: FC<IProps> = ({
     custom: [{ day: '', time: '', contents: [] }],
   };
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
-
-  // type: 'FOLLOW' | 'PUBLICIZE_EDUCATION'; // isScale ? 2 : 3
-  // sourceType: 2 | 3;
-  // pageType: 'crf' | 'ducation' | 'suifang';
 
   useEffect(() => {
     api.education
@@ -478,11 +484,16 @@ const TemplateRule: FC<IProps> = ({
 
   useEffect(() => {
 
+
+    console.log('=============== originRuleDoc', JSON.stringify(originRuleDoc));
+    console.log('=============== chooseValues', JSON.stringify(chooseValues));
     if (chooseValues) {
+
+      setFirstTime(cloneDeep(chooseValues.firstTime));
       // setChooseStartTime(chooseValues.chooseStartTime);
-      setChoseScope(chooseValues.choseScope);
-      setChoseConditions(chooseValues.choseConditions);
-      setFrequency(chooseValues.frequency);
+      setChoseScope(cloneDeep(chooseValues.choseScope));
+      setChoseConditions(cloneDeep(chooseValues.choseConditions));
+      setFrequency(cloneDeep(chooseValues.frequency));
 
       // const des = getTreatmentDesInStartTimeKey(chooseValues.chooseStartTime);
       // setChooseTreatmentDes(des);
@@ -558,15 +569,17 @@ const TemplateRule: FC<IProps> = ({
     // 判断是不是要添加时间firstAtTime
     if (firstSteps.includes('选择特定日期')) {
       const index = firstSteps.indexOf('选择特定日期');
-      meta.firstAtTime = dayjs(dayjs(firstSteps[index]).format('YYYY-MM-DD HH:mm')).valueOf();
+      meta.firstAtTime = dayjs(firstSteps[index + 1], 'YYYY-MM-DD HH:mm').valueOf() / 1000;
     }
-
     // if (originRuleDoc) { // 说明是修改
     //   meta = originRuleDoc.meta;
     // }
     const params: any = {
       rules: [{
-        match: must,
+        match: {
+          must: must,
+          should_1: should1,
+        },
         actions: actions,
       }],
       meta: meta,
@@ -579,6 +592,12 @@ const TemplateRule: FC<IProps> = ({
 
     onSaveClick({
       ruleDoc: params,
+      chooseValues: {
+        firstTime: firstTime,
+        choseConditions: choseConditions,
+        choseScope: choseScope,
+        frequency: frequency,
+      },
     });
   };
 
@@ -621,12 +640,12 @@ const TemplateRule: FC<IProps> = ({
     );
   };
 
-  console.log('================= render', JSON.stringify(choseScope));
+  console.log('================= render', JSON.stringify(firstTime.choiceModel));
   return (
     <div className={styles.send_plan}>
       <FirstSendTime choiceModelChange={onChoiceModelChange} popverContent={
         contentPopver('firstTime')
-      } />
+      } choiceModelSource={firstTime.choiceModel} />
       <SendFrequency onFrequencyChange={onFrequencyChange} initFrequency={frequency} type={pageType}></SendFrequency>
       <SendCondition
         conditions={conditionSource}

@@ -9,7 +9,7 @@ function CRFScale() {
 
     <div className='ml-100 mt-100'>
       <TemplateRule
-        pageType='ducation'
+        pageType='education'
         onCancelClick={() => { }}
         onSaveClick={(data: { ruleDoc: any }) => {
 

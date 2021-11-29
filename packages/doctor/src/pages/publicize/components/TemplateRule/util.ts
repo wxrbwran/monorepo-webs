@@ -63,17 +63,6 @@ export interface IAction {
 }
 
 
-export interface IChooseValues {
-  chooseStartTime: IItem;
-  choseConditions: ICondition[];
-  choseScope: [],
-  frequency: {
-    frequency: string,
-    custom: [],
-  },
-}
-
-
 
 export function getHierarchyFromItem(originItem: {}) {
 
