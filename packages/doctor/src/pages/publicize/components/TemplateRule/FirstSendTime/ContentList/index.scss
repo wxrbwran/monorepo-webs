@@ -18,3 +18,19 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 }
+
+.listItem {
+  :global {
+    .url___3inmo {
+      img,
+      video {
+        width: 80px !important;
+        height: 80px !important;
+        border-radius: 5px;
+      }
+    }
+  }
+
+  .name___Secqr {
+  }
+}

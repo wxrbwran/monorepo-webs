@@ -6,7 +6,6 @@ import { useSelector } from 'umi';
 
 import styles from './index.scss';
 import FirstSendTime from './FirstSendTime';
-import { ContentListModel } from './FirstSendTime/ChoiceContent';
 import SendFrequency from './SendFrequency';
 import SendCondition from './ScaleCondition';
 import SendGroup from './SendGroup';
@@ -16,69 +15,64 @@ import SendGroup from './SendGroup';
 // import { IChooseValues, ICondition, IItem, IRuleDoc } from '../../pages/subjective_table/util';
 import { Button } from 'antd';
 import { IChooseValues, IItem, IRuleDoc } from './util';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import ContentPopover from './ContentPopover/index';
+import { IList } from '../../const';
+import dayjs from 'dayjs';
 
 
 
+const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRoleType: String) => {
 
+  for (let i = 0; i < timeKey.items.length; i++) {
+    const item = timeKey.items[i];
+    item.operator = '=';
+    item.value = '';
+    if (item.name === 'team') {
+      for (let j = 0; j < item.items.length; j++) {
+        const subItem = item.items[j];
+        subItem.operator = '=';
+        if (subItem.name === 'team.role') {
+          subItem.value = projectRoleType;
+        } else if (subItem.name === 'team.subject') {
+          subItem.value = projectSid;
+        } else if (subItem.name === 'team.init_time') {
+          subItem.value = '*';
+          subItem.starting = true;
+        }
+      }
+    } else if (item.name === 'diagnose.treatment') {
+      for (let j = 0; j < item.items.length; j++) {
+        const subItem = item.items[j];
+        subItem.operator = '=';
+        if (subItem.name === 'diagnose.treatment.start') {
+          subItem.value = '*';
+          subItem.starting = true;
+        } else {
+          subItem.value = '';
+        }
+      }
+    }
+  }
+};
 
-// const { TextArea } = Input;
-// const CheckboxGroup = Checkbox.Group;
-// const { Option } = Select;
-// let timer: any = null;
+const fillValueInScopeKey = (scopeKey: IItem) => {
 
-// const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRoleType: String) => {
+  if (scopeKey.items && scopeKey.items.length == 0) {
+    return;
+  }
+  for (let i = 0; i < scopeKey.items.length; i++) {
+    const item = scopeKey.items[i];
+    item.operator = '=';
+    item.value = item.assign?.value ?? '';
 
-//   for (let i = 0; i < timeKey.items.length; i++) {
-//     const item = timeKey.items[i];
-//     item.operator = '=';
-//     item.value = '';
-//     if (item.name === 'team') {
-//       for (let j = 0; j < item.items.length; j++) {
-//         const subItem = item.items[j];
-//         subItem.operator = '=';
-//         if (subItem.name === 'team.role') {
-//           subItem.value = projectRoleType;
-//         } else if (subItem.name === 'team.subject') {
-//           subItem.value = projectSid;
-//         } else if (subItem.name === 'team.init_time') {
-//           subItem.value = '*';
-//           subItem.starting = true;
-//         }
-//       }
-//     } else if (item.name === 'diagnose.treatment') {
-//       for (let j = 0; j < item.items.length; j++) {
-//         const subItem = item.items[j];
-//         subItem.operator = '=';
-//         if (subItem.name === 'diagnose.treatment.start') {
-//           subItem.value = '*';
-//           subItem.starting = true;
-//         } else {
-//           subItem.value = '';
-//         }
-//       }
-//     }
-//   }
-// };
-
-// const fillValueInScopeKey = (scopeKey: IItem) => {
-
-//   if (scopeKey.items && scopeKey.items.length == 0) {
-//     return;
-//   }
-//   for (let i = 0; i < scopeKey.items.length; i++) {
-//     const item = scopeKey.items[i];
-//     item.operator = '=';
-//     item.value = item.assign?.value ?? '';
-
-//     for (let j = 0; j < item.items.length; j++) {
-//       const subItem = item.items[j];
-//       subItem.operator = '=';
-//       subItem.value = subItem.assign?.value ?? '';
-//     }
-//   }
-// };
+    for (let j = 0; j < item.items.length; j++) {
+      const subItem = item.items[j];
+      subItem.operator = '=';
+      subItem.value = subItem.assign?.value ?? '';
+    }
+  }
+};
 
 
 // const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
@@ -237,22 +231,16 @@ const tileChooseScopeToArray = (chooseScope: IItem[]) => {
   return array;
 };
 
-const tileAllChoosesToArray = (chooseStartTime: IItem, choseConditions: ICondition[], chooseScope: IItem[]) => {
-
-
-  const param = {
-    must: [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)],
-    should_1: tileChooseScopeToArray(chooseScope),
-  };
-
-  return param;
+const getDelay = (time: string) => {
+  const hm = time.split(':');
+  return hm[0] * 60 * 60 + hm[1] * 60;
 };
 
-const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[] }, sourceMember?: []) => {
+const tileAllFrequencyToArray = (frequency: { frequency: string, custom: { day: number, time: string, contents: [] }[] }, _sourceMember?: []) => {
 
+  // {"frequency":"CUSTOM","custom":[{"day":1,"time":"14:22"},{"day":2,"time":"07:07"},{"day":2,"time":"05:05"}]}
   // 自定义
   const arrary = [];
-  const delay = 9 * 60 * 60; // 9个小时的毫秒值
 
   if (frequency.frequency === 'CUSTOM') {
     for (let i = 0; i < frequency.custom.length; i++) {
@@ -261,14 +249,19 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
       const action: any = {
         type: 'once',
         params: {
-          delay: delay,
-          period: period,
+          delay: getDelay(period.time),
+          period: period.day,
           unit: 'day',
+          sourceMember: period.contents.map((item: { id: any; }) => {
+            return ({
+              sourceId: item.id,
+            });
+          }),
         },
       };
-      if (sourceMember) {
-        action.params.sourceMember = sourceMember;
-      }
+      // if (sourceMember) {
+      //   action.params.sourceMember = sourceMember;
+      // }
       arrary.push(action);
     }
   } else {
@@ -277,50 +270,121 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
     const action: any = {
       type: 'rolling',
       params: {
-        delay: delay,
-        period: period,
+        delay: 9 * 60 * 60,
+        period: period.day,
         unit: 'day',
+        sourceMember: period.contents.map((item: { id: any; }) => {
+          return ({
+            sourceId: item.id,
+          });
+        }),
       },
     };
-    if (sourceMember) {
-      action.params.sourceMember = sourceMember;
-    }
+    // if (sourceMember) {
+    //   action.params.sourceMember = sourceMember;
+    // }
     arrary.push(action);
   }
 
   return arrary;
 };
 
+const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, frequency: { frequency: string, custom: { day: number, time: string }[] }) => {
+
+  const arr = tileAllFrequencyToArray(frequency);
+
+  console.log('==================  firstTime firstTime', JSON.stringify(firstTime));
+  if (firstSteps.includes('自定义')) {
+    const index = firstSteps.indexOf('自定义');
+    const action: any = {
+      type: 'first',
+      params: {
+        delay: getDelay(firstSteps[index + 2]),
+        period: firstSteps[index + 1],
+        unit: 'day',
+        sourceMember: firstTime.choiceContents.map((item: { id: any; }) => {
+          return ({
+            sourceId: item.id,
+          });
+        }),
+      },
+    };
+    arr.push(action);
+  } else { // 
+    const action: any = {
+      type: 'first',
+      params: {
+        delay: 0,
+        period: 0,
+        unit: 'day',
+        sourceMember: firstTime.choiceContents.map((item: { id: any; }) => {
+          return ({
+            sourceId: item.id,
+          });
+        }),
+      },
+    };
+    arr.push(action);
+  }
+  console.log('============== arr ', JSON.stringify(arr));
+};
+
+const titleAllChoosesToMustParma = (chooseStartTime: IItem, firstSteps: string[], choseConditions: ICondition[]) => {
+
+
+  if (firstSteps.includes('患者与我绑定日期后')) {
+
+    const must = [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)];
+    return must;
+  } else {
+    return [...tileChooseConditionToArray(choseConditions)];
+  }
+};
+
+const getFirstSteps = (firstTime: any): string[] => {
+  const steps = [];
+  steps.push(firstTime.description);
+  if (firstTime.description == '自定义') {
+    steps.push(firstTime.inputDay);
+    steps.push(firstTime.inputHM);
+  } else if (firstTime.description == '选择特定日期') {
+    steps.push(firstTime.inputTime);
+  }
+  if (firstTime?.choiceModel) {
+    steps.push(...getFirstSteps(firstTime.choiceModel));
+  }
+  return steps;
+};
+
 interface IProps {
-  mode: string;
-  originRuleDoc: IRuleDoc;
-  chooseValues: IChooseValues;
+  originRuleDoc?: IRuleDoc;
+  chooseValues?: IChooseValues;
 
-  type: 'FOLLOW' | 'PUBLICIZE_EDUCATION'; // isScale ? 2 : 3
-  sourceType: 2 | 3;
-
-  dragModalSources: ContentListModel[]; //ContentListModel[]会作为+号点击弹窗的数据来源
-  dragModalDidShow: () => void; // 弹窗显示会调
-
+  pageType: 'crf' | 'ducation' | 'suifang';
 
   onCancelClick: () => void;
-  onSaveClick: ({ }) => void;
+  onSaveClick: (data: { ruleDoc: any }) => void;
 }
 
 type ContentType = 'firstTime' | 'frequency';
 
 const TemplateRule: FC<IProps> = ({
-  mode, dragModalDidShow, dragModalSources, onCancelClick,
-  type, sourceType,
+  pageType,
   originRuleDoc,
   chooseValues,
+  onCancelClick,
+  onSaveClick,
 }: IProps) => {
 
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
+  const sourceType = pageType == 'ducation' ? 3 : (pageType == 'suifang' ? 2 : 6);
+  const ruleType = pageType == 'ducation' ? 'PUBLICIZE_EDUCATION' : (pageType == 'suifang' ? 'FOLLOW' : 'CRF_SCALE');
   // const [contentListVisible, setContentListVisible] = useState(false); //选中的起始发送时间子item
 
-  const firstTimeRef = useRef<{ choiceModel: any, choiceContentSids: string[] }>({ choiceModel: null, choiceContentSids: [] });
+  const startTimeRef = useRef<IItem>();
+
+  const [firstTime, setFirstTime] = useState<{ choiceModel: any, choiceContents: IList[] }>({ choiceModel: null, choiceContents: [] });
 
   // 发送对象
   const [scopeSource, setScopeSource] = useState<IItem>({});
@@ -342,21 +406,26 @@ const TemplateRule: FC<IProps> = ({
   // 发送发送频率
   const initFrequency = {
     frequency: 'CUSTOM',
-    custom: [{ day: '', time: '' }],
+    custom: [{ day: '', time: '', contents: [] }],
   };
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
 
+  // type: 'FOLLOW' | 'PUBLICIZE_EDUCATION'; // isScale ? 2 : 3
+  // sourceType: 2 | 3;
+  // pageType: 'crf' | 'ducation' | 'suifang';
+
   useEffect(() => {
     api.education
-      .getRules(type)
+      .getRules(ruleType)
       .then((res) => {
         console.log('resrules', res);
 
         for (let i = 0; i < res.keys.length; i++) {
           if (res.keys[i].name == 'start') {
-            // fillValueInStartTimeKey(res.keys[i], projectSid, projectRoleType);
-            // setStartTimeKey(res.keys[i]);
 
+            fillValueInStartTimeKey(res.keys[i], currentOrgInfo.sid, currentOrgInfo.role);
+            startTimeRef.current = res.keys[i].items[0];
+            // setStartTimeKey(res.keys[i]);
             // setChooseStartTime((preState) => {
             //   if (isEmpty(preState)) {
             //     return res.keys[i].items[0];
@@ -384,11 +453,14 @@ const TemplateRule: FC<IProps> = ({
               api.education
                 .fetchNodeEl(element.assign.value, params)
                 .then((r) => {
-                  // fillValueInScopeKey(r);
+                  fillValueInScopeKey(r);
                   setScopeSource(r);
                   setChoseScope((preState) => {
+
+
                     if (isEmpty(preState)) {
-                      return [res.keys[i].items[0]];
+                      console.log('============== preState preState', JSON.stringify(r.items[0]));
+                      return [r.items[0]];
                     }
                     return preState;
                   });
@@ -418,7 +490,9 @@ const TemplateRule: FC<IProps> = ({
   }, [originRuleDoc]);
 
   const onChoiceModelChange = (choiceModel: IModel) => {
-    firstTimeRef.current.choiceModel = choiceModel;
+
+    firstTime.choiceModel = choiceModel;
+    setFirstTime({ ...firstTime });
   };
 
   // 平率
@@ -440,12 +514,6 @@ const TemplateRule: FC<IProps> = ({
 
   const saveClick = () => {
 
-    const choice = {
-      firstTime: firstTimeRef.current,
-      frequency: frequencyRef.current,
-    };
-
-    console.log('================== saveClick saveClick', JSON.stringify(choice));
 
     const set = Array.from(new Set(frequency.custom));
     const filter = set.filter((item) => !!item);
@@ -454,13 +522,19 @@ const TemplateRule: FC<IProps> = ({
 
     //去重、过滤空数据
     frequency.custom = Array.from(new Set(frequency.custom)).filter((item) => !!item);
-    // console.log('============= chooseStartTime', JSON.stringify(chooseStartTime));
+    console.log('============= firstTime', JSON.stringify(firstTime));
     console.log('============= choseConditions', JSON.stringify(choseConditions));
     console.log('============= choseScope', JSON.stringify(choseScope));
     console.log('============= frequency', JSON.stringify(frequency));
-    const arrParma = tileAllChoosesToArray({}, choseConditions, choseScope);
 
-    console.log('=============arrParma arrParma', JSON.stringify(arrParma));
+
+    const firstSteps = getFirstSteps(firstTime);
+    const must = titleAllChoosesToMustParma(startTimeRef.current, firstSteps, choseConditions);
+    console.log('=============must must', JSON.stringify(must));
+    const should1 = tileChooseScopeToArray(choseScope);
+    console.log('=============should_1 should_1', JSON.stringify(should1));
+    const actions = titleAllChoosesToActionsParma(firstSteps, firstTime, frequency);
+    console.log('=============actions actions', JSON.stringify(actions));
 
     // 如果是添加
     let meta: any = {
@@ -481,14 +555,18 @@ const TemplateRule: FC<IProps> = ({
       ],
     };
 
-    if (originRuleDoc) { // 说明是修改
-      meta = originRuleDoc.meta;
+    // 判断是不是要添加时间firstAtTime
+    if (firstSteps.includes('选择特定日期')) {
+      const index = firstSteps.indexOf('选择特定日期');
+      meta.firstAtTime = dayjs(dayjs(firstSteps[index]).format('YYYY-MM-DD HH:mm')).valueOf();
     }
 
-    const actions = originRuleDoc ? tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
+    // if (originRuleDoc) { // 说明是修改
+    //   meta = originRuleDoc.meta;
+    // }
     const params: any = {
       rules: [{
-        match: arrParma,
+        match: must,
         actions: actions,
       }],
       meta: meta,
@@ -498,65 +576,69 @@ const TemplateRule: FC<IProps> = ({
     }
 
     console.log('========================= params params ', JSON.stringify(params));
-    //   addPlan({
-    //     ruleDoc: params,
-    //     questions: remind,
-    //     chooseValues: {
-    //       chooseStartTime: chooseStartTime,
-    //       choseConditions: choseConditions,
-    //       choseScope: choseScope,
-    //       frequency: frequency,
-    //     },
-    //   });
-    // };
 
+    onSaveClick({
+      ruleDoc: params,
+    });
   };
 
-  const onContentListAdd = (contentType: ContentType, _choicesSid: string[]) => {
+  const onContentListAdd = (contentType: ContentType, choicesSid: IList[]) => {
+    console.log('================= onContentListAdd choicesSid', JSON.stringify(choicesSid));
+    console.log('================= onContentListAdd choicesSid 11', JSON.stringify(firstTime.choiceContents));
 
     if (contentType == 'firstTime') {
-      // firstTimeRef.current.choiceContentSids = choicesSid;
+      firstTime.choiceContents.push(...choicesSid);
+      setFirstTime({ ...firstTime });
     }
   };
 
-  const onRemoveSuccess = (contentType: ContentType, _item: any, _index: number, _list: any[]) => {
-
+  const onRemoveSuccess = (contentType: ContentType, _item: any, _index: number, list: any[]) => {
+    console.log('================= onRemoveSuccess choicesSid', JSON.stringify(list));
     if (contentType == 'firstTime') {
-
+      firstTime.choiceContents = list;
+      setFirstTime({ ...firstTime });
     }
     // setContentList(list);
   };
 
   const contentPopver = (contentType: ContentType) => {
 
+    console.log('================= render contentType', firstTime.choiceContents.length);
+
+    const getContentList = () => {
+      if (contentType == 'firstTime') {
+        return [...firstTime.choiceContents];
+      }
+      return [];
+    };
+
     return (
-      <ContentPopover contentListsources={[]}
+      <ContentPopover contentListsources={getContentList()}
         onRemoveSuccess={(item: any, index: number, list: any[]) => { onRemoveSuccess(contentType, item, index, list); }}
-        dragModalSources={dragModalSources}
-        onDragModalDidShow={dragModalDidShow}
-        onSaveChoices={(choicesSid) => onContentListAdd(contentType, choicesSid)} />
+        // dragModalSources={dragModalSources}
+        // onDragModalDidShow={dragModalDidShow}
+        onSaveChoices={(choices) => onContentListAdd(contentType, choices)} type={pageType} />
     );
   };
 
+  console.log('================= render', JSON.stringify(choseScope));
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan}`}>
       <FirstSendTime choiceModelChange={onChoiceModelChange} popverContent={
         contentPopver('firstTime')
       } />
-      <SendFrequency onFrequencyChange={onFrequencyChange} popverContent={
-        contentPopver('frequency')
-      } initFrequency={frequency}></SendFrequency>
+      <SendFrequency onFrequencyChange={onFrequencyChange} initFrequency={frequency} type={pageType}></SendFrequency>
       <SendCondition
         conditions={conditionSource}
         updateChoseConditions={onUpdateChoseConditions}
         values={choseConditions}
       />
-      <SendGroup scopeSources={scopeSource} onGroupChange={onGroupChange} choseScope={choseScope}></SendGroup>
+      <SendGroup scopeSources={scopeSource} onGroupChange={onGroupChange} choseScopes={choseScope}></SendGroup>
       <div className='flex flex-row justify-center'>
         <Button className="w-98 mt-20 mb-0 mr-20" type="primary" onClick={onCancelClick}>取消</Button>
         <Button className="w-98 mt-20 mb-0 " type="primary" onClick={saveClick}>完成</Button>
       </div>
-    </div>
+    </div >
   );
 };
 

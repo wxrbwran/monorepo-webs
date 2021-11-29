@@ -4,17 +4,19 @@ import { Button, InputNumber, Select, TimePicker } from 'antd';
 import styles from './index.scss';
 import { sendType } from '../util';
 import moment from 'moment';
+import ContentPopover from '../ContentPopover';
+import { IList } from '../../../const';
 
 
 interface IProps {
 
   initFrequency: any;
   onFrequencyChange: (frequency: any) => void;
-  popverContent: React.ReactNode;
+  type: 'crf' | 'ducation' | 'suifang';
 }
 const { Option } = Select;
 
-const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, popverContent }: IProps) => {
+const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: IProps) => {
 
 
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
@@ -56,6 +58,32 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, popverCon
 
     frequency.custom[index].time = str;
     setFrequency({ ...frequency });
+  };
+
+  const onContentListAdd = (choicesSid: IList[], frequencyIndex: number) => {
+
+    console.log('============ frequency.custom ', JSON.stringify(frequency.custom), frequencyIndex);
+    frequency.custom[frequencyIndex].contents = choicesSid;
+    setFrequency({ ...frequency });
+  };
+
+  const onContentsRemoveSuccess = (_item: any, _index: number, list: any[], frequencyIndex: number) => {
+    console.log('================= onRemoveSuccess choicesSid', JSON.stringify(list));
+    frequency.custom[frequencyIndex].contents = list;
+    setFrequency({ ...frequency });
+  };
+
+  const contentPopver = (frequencyIndex: number) => {
+
+    const getContentList = () => {
+      return frequency.custom[frequencyIndex]?.contents ?? [];
+    };
+
+    return (
+      <ContentPopover contentListsources={getContentList()}
+        onRemoveSuccess={(item: any, index: number, list: any[]) => { onContentsRemoveSuccess(item, index, list, frequencyIndex); }}
+        onSaveChoices={(choices) => onContentListAdd(choices, frequencyIndex)} type={type} />
+    );
   };
 
   return (
@@ -103,7 +131,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, popverCon
                   </div>
                   <div className='ml-20'>
                     {
-                      popverContent
+                      contentPopver(index)
                     }
                   </div>
                 </div>
@@ -128,7 +156,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, popverCon
             </div>
             <div className='ml-20'>
               {
-                popverContent
+                contentPopver(0)
               }
             </div>
 

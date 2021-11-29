@@ -57,7 +57,7 @@ const model: IModel = {
 
 const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent }: IProps) => {
 
-  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: model, description: '首次发送时间' });
+  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: model, description: 'first' });
   // const [contentList, setContentList] = useState<any[]>([]);
 
   const handleChangeType = (val: any, currentItem: IModel) => {

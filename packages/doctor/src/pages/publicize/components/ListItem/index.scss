@@ -1,6 +1,9 @@
 img {
   cursor: pointer;
 }
+.url {
+  width: auto;
+}
 .name {
   @extend %file__name;
 }
@@ -16,7 +19,7 @@ img {
 //   display: none;
 // }
 //观看的当前时间
-video::-webkit-media-controls-current-time-display{
+video::-webkit-media-controls-current-time-display {
   display: none;
 }
 //剩余时间
@@ -45,10 +48,9 @@ video::-webkit-media-controls-time-remaining-display {
     overflow: hidden;
     :global {
       .anticon {
-        color: #Fff;
+        color: #fff;
         cursor: pointer;
       }
     }
   }
 }
-

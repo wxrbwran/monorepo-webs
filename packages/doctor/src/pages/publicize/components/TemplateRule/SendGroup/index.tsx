@@ -10,25 +10,29 @@ interface IProps {
 
   scopeSources: IItem;
   onGroupChange: (choseScope: IItem[]) => void;
-  choseScope: IItem[];
+  choseScopes: IItem[];
 }
 
 const CheckboxGroup = Checkbox.Group;
 
-const SendGroup: FC<IProps> = ({ scopeSources, onGroupChange }: IProps) => {
+const SendGroup: FC<IProps> = ({ scopeSources, onGroupChange, choseScopes }: IProps) => {
 
 
-  const [choseScope, setChoseScope] = useState<IItem[]>([]);
+  const [choseScope, setChoseScope] = useState<IItem[]>(choseScopes);
 
   useEffect(() => {
     onGroupChange(choseScope);
   }, [choseScope]);
 
+
+  useEffect(() => {
+    setChoseScope(choseScopes);
+  }, [choseScopes]);
+
   //发送实验组-zhou
   const handleChangeGroup = (checkedValues: any[]) => {
 
     const choseList = scopeSources.items.filter(item => checkedValues.includes(item.description));
-
     setChoseScope(choseList);
   };
 
@@ -39,6 +43,7 @@ const SendGroup: FC<IProps> = ({ scopeSources, onGroupChange }: IProps) => {
 
   const des = choseScope.map(item => item.description);
 
+  console.log('================== des des', JSON.stringify(choseScope));
   return (
     <div>
       <h2>
