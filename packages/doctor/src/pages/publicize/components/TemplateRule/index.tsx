@@ -623,7 +623,7 @@ const TemplateRule: FC<IProps> = ({
 
   console.log('================= render', JSON.stringify(choseScope));
   return (
-    <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan}`}>
+    <div className={styles.send_plan}>
       <FirstSendTime choiceModelChange={onChoiceModelChange} popverContent={
         contentPopver('firstTime')
       } />
