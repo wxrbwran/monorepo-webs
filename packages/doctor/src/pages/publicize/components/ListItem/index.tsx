@@ -26,7 +26,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   const isList = location?.pathname.includes('files');
   const lookFile = (_item: IList) => {
     const aEl = document.getElementById('upload');
-    if (aEl && !!location){
+    if (aEl && !!location) {
       aEl.setAttribute('href', _item.content.convertAddress);
       aEl.click();
     }
@@ -36,7 +36,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
     if (['accompany', 'crf'].includes(type) ) {
       request = api.education.delPublicizeScale;
     }
-    request(id).then( () => {
+    request(id).then(() => {
       message.success('删除成功');
       onSuccess();
     }).catch(err => {
@@ -85,7 +85,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
           </div>
         )
       }
-      <p>
+      <p className={styles.url}>
         {
           type === 'video' && (
             <video
@@ -102,22 +102,22 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
         {
           type === 'document' && (
             <>
-            {['doc', 'docx'].includes(ext) && <img src={word} alt="" onClick={() => lookFile(item)}/>}
-            {['xlsx', 'xls'].includes(ext) && <img src={excel} alt="" onClick={() => lookFile(item)}/>}
-            {['pdf'].includes(ext) && <img src={pdf} alt="" onClick={() => lookFile(item)}/>}
-            <a id="upload" className='hidden' target="_blank"></a>
+              {['doc', 'docx'].includes(ext) && <img src={word} alt="" onClick={() => lookFile(item)} />}
+              {['xlsx', 'xls'].includes(ext) && <img src={excel} alt="" onClick={() => lookFile(item)} />}
+              {['pdf'].includes(ext) && <img src={pdf} alt="" onClick={() => lookFile(item)} />}
+              <a id="upload" className='hidden' target="_blank"></a>
             </>
           )
         }
         {
           type === 'picture' && (
-              <Image
-                width={86}
-                height={86}
-                src={item.content.address}
-                alt=""
-                className='w-86 h-86 rounded'
-              />
+            <Image
+              width={86}
+              height={86}
+              src={item.content.address}
+              alt=""
+              className='w-86 h-86 rounded'
+            />
           )
         }
         {
@@ -136,10 +136,10 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
 
         }
         {
-          type === 'audio' && <img src={audio} alt=""/>
+          type === 'audio' && <img src={audio} alt="" />
         }
         {
-          type === 'article' && <img src={item.content.cover} alt="" className='w-240 h-120'/>
+          type === 'article' && <img src={item.content.cover} alt="" className='w-240 h-120' />
         }
       </p>
       <p className={styles.name}>{`${!['accompany', 'crf'].includes(type)  ? item.content.filename || '' : item.title}`}</p>

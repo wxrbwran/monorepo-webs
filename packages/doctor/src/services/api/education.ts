@@ -130,4 +130,8 @@ export default {
   getPublicizeGroup(data?: any): Promise<any> {
     return http.get('publicize/group', { data });
   },
+  // 新建宣教随访crf
+  addPublicizeRules(data?: any): Promise<any> {
+    return http.post('publicize/rules', { data });
+  },
 };

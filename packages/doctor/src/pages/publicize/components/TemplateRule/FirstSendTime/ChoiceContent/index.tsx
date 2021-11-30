@@ -1,11 +1,12 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { Checkbox, Row, Col } from 'antd';
+import { Checkbox, Row, Col, message } from 'antd';
 import styles from './index.scss';
 import { Button } from 'antd';
 import ListItem from '../../../ListItem';
 import { IList } from '../../../../const';
-
+import * as api from '@/services/api';
+import { useSelector } from 'umi';
 
 export interface ContentListModel {
   title: string,
@@ -22,34 +23,98 @@ export interface DoctorOrgsProp {
 
 interface IProps {
 
-  dragModalSources: ContentListModel[]; //ContentListModel[]会作为+号点击弹窗的数据来源
-  dragModalDidShow: () => void; // 弹窗显示会调
-  onSaveChoices: (choiceIds: string[]) => void; // 选中的所有数据id,
+  type: 'crf' | 'education' | 'suifang';
+  onSaveChoices: (choiceIds: IList[]) => void; // 选中的所有数据id,
+  onDragModalDidShow: () => void; // 弹窗显示会调
 }
 
 const ChoiceContent: FC<IProps> = (props) => {
-  const { children, dragModalDidShow, dragModalSources, onSaveChoices } = props;
+  const { children, onSaveChoices, type, onDragModalDidShow } = props;
   const [showModal, setshowModal] = useState(false);
   const [contentList, setContentList] = useState<ContentListModel[]>([]);
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
-  const choicesRef = useRef<[]>([]);
+  const choicesRef = useRef<IList[]>([]);
 
-  useEffect(() => {
-    setContentList(dragModalSources);
-  }, [dragModalSources]);
+  const fileTypes = [
+    {
+      name: '视频',
+      code: 1,
+      type: 'video',
+    }, {
+      name: '文件',
+      code: 2,
+      type: 'document',
+    }, {
+      name: '文章',
+      code: 3,
+      type: 'article',
+    }, {
+      name: '图片',
+      code: 4,
+      type: 'picture',
+    }, {
+      name: '音频',
+      code: 6,
+      type: 'audio',
+    },
+  ];
 
+  // 查询随访表列表
+  const getPublicizeScaleList = () => {
+    api.education.getPublicizeList({
+      // fromSid: window.$storage.getItem('orgSid'),
+      types: ['DOCUMENT', 'VIDEO', 'ARTICLE', 'AUDIO', 'PICTURE'],
+      operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid: currentOrgInfo.sid,
+      roleType: window.$storage.getItem('roleId'),
+    }).then((res) => {
+
+      const list: any[] = [];
+      fileTypes.forEach((fileType: any) => {
+
+        if (res.list.filter(p => p.type === fileType.code).length > 0) {
+          list.push({
+            title: fileType.name,
+            lists: res.list.filter(p => p.type === fileType.code).map((item) => {
+              return ({
+                ...item,
+                extraFileType: { ...fileType },
+              });
+            }),
+            ...fileType,
+          });
+        }
+      });
+      setContentList(list);
+    })
+      .catch((err: string) => {
+        message.error(err?.result);
+      });
+  };
+
+  const getContentListSources = () => {
+
+    if (type == 'education') {
+      getPublicizeScaleList();
+    }
+  };
 
   const handleShowModal = () => {
 
     // 每次弹窗重新弹出时, 清空选中的数据源
     choicesRef.current = [];
     setshowModal(true);
-    dragModalDidShow();
+    onDragModalDidShow();
+    // 请求接口
+    getContentListSources();
   };
 
   const onChange = (val) => {
 
-    choicesRef.current = val;
+    const source = contentList.flatMap((model) => model.lists).filter((item) => val.includes(item.id));
+    choicesRef.current = source;
   };
 
   // 点击取消

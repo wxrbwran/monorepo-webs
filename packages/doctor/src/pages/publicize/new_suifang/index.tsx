@@ -1,48 +1,44 @@
 
-import React, { useState } from 'react';
-import { message } from 'antd';
-import { useSelector } from 'umi';
+import React from 'react';
 
 import TemplateRule from '../components/TemplateRule';
-import * as api from '@/services/api';
+// import * as api from '@/services/api';
 
 
 function CRFScale() {
 
-  const [dragModalSources, setDragModalSources] = useState<ContentListModel[]>([]);
-  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
+  // const [dragModalSources, setDragModalSources] = useState<ContentListModel[]>([]);
+  // const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
-  // 查询随访表列表
-  const getPublicizeScaleList = () => {
-    api.education.getPublicizeScale({
-      operatorSid: window.$storage.getItem('sid'),
-      operatorWcId: window.$storage.getItem('wcId'),
-      ownershipSid: currentOrgInfo.sid,
-      roleType: window.$storage.getItem('roleId'),
-    }).then((res) => {
+  // // 查询随访表列表
+  // const getPublicizeScaleList = () => {
+  //   api.education.getPublicizeScale({
+  //     operatorSid: window.$storage.getItem('sid'),
+  //     operatorWcId: window.$storage.getItem('wcId'),
+  //     ownershipSid: currentOrgInfo.sid,
+  //     roleType: window.$storage.getItem('roleId'),
+  //   }).then((res) => {
 
-      setDragModalSources(res.list);
-    })
-      .catch((err: string) => {
-        message.error(err?.result);
-      });
-  };
+  //     setDragModalSources(res.list);
+  //   })
+  //     .catch((err: string) => {
+  //       message.error(err?.result);
+  //     });
+  // };
 
-  const dragModalDidShow = () => {
+  // const dragModalDidShow = () => {
 
-    getPublicizeScaleList();
-  };
+  //   getPublicizeScaleList();
+  // };
 
   return (
     <div className='ml-100 mt-100'>
       <TemplateRule
-        mode={'add'}
-        dragModalDidShow={dragModalDidShow}
-        dragModalSources={dragModalSources}
-        type={'FOLLOW'}
-        sourceType={2}
+        pageType='suifang'
         onCancelClick={() => { }}
-        onSaveClick={() => { }}>
+        onSaveClick={(data: { ruleDoc: any }) => {
+          console.log('============= onSaveClick suifang', JSON.stringify(data));
+        }}>
       </TemplateRule>
     </div>
   );

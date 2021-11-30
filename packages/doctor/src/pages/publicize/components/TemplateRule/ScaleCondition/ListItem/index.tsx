@@ -23,9 +23,9 @@ interface IProps {
   changeStateByValue: Function;
 }
 interface Ikey {
-  id: string;
+  uid: string;
   genericName: string;
-  name: string;
+  value: string;
 }
 function ScaleListItem({ changeStateByValue, item }: IProps) {
 
@@ -162,11 +162,11 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
             >
               {diagnosisList.map((diaItem: Ikey) => (
                 <Option
-                  key={diaItem.id}
-                  value={diaItem.id + '_zsh_' + diaItem.name}
-                  title={diaItem.name}
+                  key={diaItem.uid}
+                  value={diaItem.uid + '_zsh_' + diaItem.value}
+                  title={diaItem.value}
                 >
-                  {diaItem.name}
+                  {diaItem.value}
                 </Option>
               ))
               }
@@ -197,11 +197,11 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
             >
               {treatmentsList.map((treItem: Ikey) => (
                 <Option
-                  key={treItem.id}
-                  value={treItem.id + '_zsh_' + treItem.name}
-                  title={treItem.name}
+                  key={treItem.uid}
+                  value={treItem.uid + '_zsh_' + treItem.value}
+                  title={treItem.value}
                 >
-                  {treItem.name}
+                  {treItem.value}
                 </Option>
               ))
               }
