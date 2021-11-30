@@ -43,7 +43,7 @@ function PatientOrgs(props: IProps = { type: 'org' } ) {
         croProject,
       });
     });
-  }, []);
+  }, [type]);
   return (
     <Form.Item noStyle name="organization">
       <Select placeholder={typeObj[type].title}>
