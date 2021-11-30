@@ -5,6 +5,10 @@ export default {
   getDoctorOrgs(): Promise<any> {
     return http.get('doctor/organizations');
   },
+  // 患者列表，筛选条件：机构列表
+  getPatientOrgs(): Promise<any> {
+    return http.get('doctor/patient_organizations');
+  },
   // 获取医生的患者列表
   getDoctorPatients(data: CommonData): Promise<any> {
     return http.get('doctor/patients/own', { data });
