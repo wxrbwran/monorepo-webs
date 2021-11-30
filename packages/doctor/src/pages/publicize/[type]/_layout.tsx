@@ -21,7 +21,7 @@ function Patients(props: IProps) {
       {
         pathname.includes('create') ?  <div> {props.children} </div> : (
           <ToogleSide>
-            <SideMenu tableList={[{ id: '11s', name: '宣教1' }]} location={props.location} />
+            <SideMenu location={props.location} />
             <div> {props.children} </div>
         </ToogleSide>
         )

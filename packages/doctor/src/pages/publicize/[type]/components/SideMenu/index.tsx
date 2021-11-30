@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Link, useParams } from 'umi';
+import { Link, useParams, useSelector, history } from 'umi';
+import * as api from '@/services/api';
+import { sfTypeUrl } from '../../../utils';
 import './index.scss';
+import { IState } from 'packages/doctor/typings/model';
 
 interface IProps{
   location: {
@@ -10,24 +13,44 @@ interface IProps{
       id: string;
     }
   };
-  tableList: {
-    id: string,
-    name: string;
-  }[]
 }
-function SideMenu(props: IProps) {
+interface INameItem {
+  title: string;
+  id: string;
+}
+function SideMenu({ location }: IProps) {
   const [currentId, setCurrentId] = useState('');
+  const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
+  const [fileNameList, setfileNameList] = useState<INameItem[]>([]);
   const { type } = useParams<{ type: string }>();
   const soruceType = {
     education: { text: '宣教' },
     suifang: { text: '随访' },
   };
+  const fetchData = () => {
+    const params = {
+      operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid:  currentOrgInfo.sid, // 机构的sid
+      type: sfTypeUrl?.[type].type, //0：随访表 1：CRF量表 2:宣教
+    };
+    api.education.getPublicizeGroup(params).then((res) => {
+      console.log(34343, res);
+      setfileNameList(res.list);
+      if (res.list?.length > 0) {
+        history.replace(`/publicize/${type}/detail?id=${res.list[0].id}`);
+      }
+    });
+  };
   useEffect(() => {
-    const id = props.location.query.id;
-    if ( id !== currentId) {
+    const id = location.query.id;
+    if (!id) {
+      fetchData();
+    } else if ( id !== currentId) {
       setCurrentId(id);
     }
-  }, [props]);
+  }, [location]);
+
   return (
     <div className="follow-table-menu">
       <div className="tit">
@@ -35,13 +58,13 @@ function SideMenu(props: IProps) {
       </div>
       <div className="table-list">
         {
-          props.tableList.map((item) => {
+          fileNameList.map((item) => {
             return (
               <div
                 className={['item', item.id === currentId ? 'active' : ''].join(' ')}
                 key={item.id}
               >
-                <Link to={`/publicize/${type}/detail?id=${item.id}`}>{item.name}</Link>
+                <Link to={`/publicize/${type}/detail?id=${item.id}`}>{item.title}</Link>
               </div>
             );
           })

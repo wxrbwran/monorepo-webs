@@ -154,3 +154,19 @@ export function getCheckedContent(idArr: string[], listArr: []){
   });
   return result;
 }
+
+export const sfType = ['随访', 'CRF', '宣教'];
+export const sfTypeUrl = {
+  suifang: {
+    text: '随访',
+    type: 0,
+  },
+  crf_scale: {
+    text: 'CRF',
+    type: 1,
+  },
+  education: {
+    text: '宣教',
+    type:2,
+  },
+};

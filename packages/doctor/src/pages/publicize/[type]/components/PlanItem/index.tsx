@@ -21,10 +21,16 @@ const PlanItem: FC<IProps> = ({ data, status }) => {
   const { type } = useParams<{ type: string }>();
   const [open, setopen] = useState(false);
   console.log('======121', data);
-  const item = data.localRules[0];
-  const { frequencyType, custom, content, group } = item;
-  const diagnosisArr = item.conditions.filter((i) => i.type === 'diagnosis');
-  const treatmentArr = item.conditions.filter((i) => i.type === 'treatment');
+  // const item = data.localRules[0];
+  // const { frequencyType, custom, group } = item;
+  // const diagnosisArr = item.conditions.filter((i) => i.type === 'diagnosis');
+  // const treatmentArr = item.conditions.filter((i) => i.type === 'treatment');
+  const diagnosisArr = [{
+    'id': '47526',
+    'type': 'diagnosis',
+    'value': '从1米或1米以上的高处意外跌落',
+  }];
+  const treatmentArr = [];
   const fileType = {
     1: 'video',
     2: 'document',
@@ -32,7 +38,21 @@ const PlanItem: FC<IProps> = ({ data, status }) => {
     4: 'picture',
     6: 'audio',
   };
-
+  const content = [
+    {
+      'inSchedule': true,
+      'edit': false,
+      'del': false,
+      'id': 152,
+      'type': 4,
+      'content': {
+        'filename': 'avatar_doctor.jpg',
+        'address': 'https://xzl-user-avatar.oss-cn-hangzhou.aliyuncs.com/test/0/f3b663b3-5439-42ba-adae-8528307150a8avatar_doctor.jpg',
+        'size': 9038,
+        'convertAddress': 'https://xzl-user-avatar.oss-cn-hangzhou.aliyuncs.com/test/0/f3b663b3-5439-42ba-adae-8528307150a8avatar_doctor.jpg',
+      },
+    },
+  ];
   return (
     <div className={`${styles.card} ${open ? styles.h_auto : ''}`}>
       <div className={styles.btn_wrap}>
@@ -87,7 +107,8 @@ const PlanItem: FC<IProps> = ({ data, status }) => {
             <img src={groupIcon} alt="" /> 发送对象:
           </div>
           <p className={styles.con}>
-            {group.includes('PATIENT_ALL') ? '全部患者' : group.join()}
+            {/* {group.includes('PATIENT_ALL') ? '全部患者' : group.join()} */}
+            全部患者
           </p>
         </div>
       </div>
@@ -97,15 +118,17 @@ const PlanItem: FC<IProps> = ({ data, status }) => {
             <img src={frequency} alt="" /> 发送频率
           </p>
           <p className={styles.con}>
-            {frequencyType === 'once' ? '第' : '每'}
-            {custom.join()}天发送一次
+            {/* {frequencyType === 'once' ? '第' : '每'} */}
+            每
+            {/* {custom.join()} */}2
+            天发送一次
           </p>
         </div>
         <div className={styles.item}>
           <p>
             <img src={condition} alt="" /> 发送条件
           </p>
-          {item.conditions.map((i) => (
+          {/* {item.conditions.map((i) => (
             <>
               {i.type === 'age' && (
                 <p className={styles.con}>
@@ -114,7 +137,7 @@ const PlanItem: FC<IProps> = ({ data, status }) => {
               )}
               {i.type === 'sex' && <p className={styles.con}>性别：{i.value}</p>}
             </>
-          ))}
+          ))} */}
           {!!diagnosisArr?.length && (
             <p className={styles.con}>
               诊断：{diagnosisArr.map((i) => i.value).join(', ')}

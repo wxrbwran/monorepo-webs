@@ -126,4 +126,8 @@ export default {
   getContactLocation(data?: any): Promise<any> {
     return http.get('doctor/contact/location', { data });
   },
+  // 获取宣教、随访、CRF规则小组 "type": 1 //0：随访表 1：CRF量表 2:宣教
+  getPublicizeGroup(data?: any): Promise<any> {
+    return http.get('publicize/group', { data });
+  },
 };
