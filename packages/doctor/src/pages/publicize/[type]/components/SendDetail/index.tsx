@@ -3,12 +3,20 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { sendAt, senderFileName, patientName } from '@/utils/columns';
 
-const SendDetail: FC = ({ children }) => {
+interface IProps {
+  actionType: number;
+  startTime: number;
+  ruleId: string;
+  sourceType: number;
+}
+const SendDetail: FC<IProps> = (props) => {
+  const { children, actionType, startTime, ruleId, sourceType } = props;
   const [showModal, setShowModal] = useState(false);
-  const [tableOptions, settableOptions] = useState({ pageAt: 0, pageSize: 10 });
+  const [tableOptions, settableOptions] = useState({ pageAt: 1, pageSize: 10, actionType, startTime, ruleId, sourceType });
   console.log(settableOptions);
   const handleShow = () => {
     setShowModal(true);
+    console.log('sourceType333', sourceType);
   };
   const col = [patientName, sendAt, senderFileName];
   return (
@@ -23,11 +31,11 @@ const SendDetail: FC = ({ children }) => {
         wrapClassName="ant-modal-wrap-center"
       >
         <XzlTable
-          request={window.$api.publicizi?.sendDetail}
+          request={window.$api.education?.getPublicizSendInfo}
           depOptions={tableOptions}
           // noPagination={true}
           columns={col}
-          dataKey="sendList"
+          dataKey={actionType === 0 ? 'sendInfoList' : 'todoSendInfoList'}
           tableOptions={{
             rowSelection: false,
             // pagination: false,

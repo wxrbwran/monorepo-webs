@@ -13,10 +13,18 @@ import styles from './index.scss';
 const { TabPane } = Tabs;
 const EducationDetail: FC<ILocation> = ({ location }) => {
   const sourceType: string =  useParams<{ type: string }>()?.type;
+  console.log(99, location);
   const isScale = location.pathname.includes('suifang');
   const [sendContent, setSendContent] = useState([]);
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
+  useEffect(() => {
+    if (location.query?.id) {
+      api.education.getPublicizeGroupDetail(location.query?.id).then(res => {
+        console.log('8888111111111', res);
+      });
+    }
+  }, [location]);
   useEffect(() => {
     api.education
       .getSendContent({

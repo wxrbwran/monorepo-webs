@@ -32,6 +32,11 @@
   }
 }
 .calendar_wrap {
+  .count_wrap {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+  }
   :global {
     .ant-picker-calendar-header {
       justify-content: center;
@@ -76,12 +81,9 @@
         position: relative;
         height: 74px;
         .red, .green {
-          position: absolute;
-          right: 8px;
-          bottom: 8px;
-          width: 32px;
-          height: 32px;
-          line-height: 32px;
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
           text-align: center;
           font-size: 18px;
           font-weight: 600;
@@ -96,6 +98,7 @@
       .green {
         color: #15AD31;
         background: #E1FFD8;
+        margin-top: 5px;
       }
     }
   }

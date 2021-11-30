@@ -64,7 +64,7 @@ export default {
   },
   // 查看随访表所有回复情况
   getScaleReplyList(data?: any): Promise<any> {
-    return http.get('statistics/list', { data });
+    return http.get('out/reply/count', { data });
   },
   // 查询列表回复和未回复列表
   getScalePatientReply(data?: any): Promise<any> {
@@ -133,5 +133,21 @@ export default {
   // 新建宣教随访crf
   addPublicizeRules(data?: any): Promise<any> {
     return http.post('publicize/rules', { data });
+  },
+  // 获取规则详情
+  getPublicizeGroupDetail(groupId: string): Promise<any> {
+    return http.get(`publicize/${groupId}`);
+  },
+  // 统计发送日历
+  getPublicizSendCount(data?: any): Promise<any> {
+    return http.get('out/send/count', { data });
+  },
+  // 统计发送日历--发送详情
+  getPublicizSendInfo(data?: any): Promise<any> {
+    return http.get('out/send/info', { data });
+  },
+  // 删除宣教、随访、crf量表
+  delPublicizRule(ruleId: string): Promise<any> {
+    return http.delete(`rules/${ruleId}`);
   },
 };

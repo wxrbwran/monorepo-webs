@@ -5,6 +5,7 @@ import ReplyTable from '../reply_table';
 import styles from './index.scss';
 import { pageSize } from 'xzl-web-shared/src/utils/consts';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
+import { useLocation } from 'umi';
 
 interface IProps {
   id: string;
@@ -12,6 +13,7 @@ interface IProps {
 }
 const { Option } = Select;
 function Reply({ id, children }: IProps) {
+  const { query } = useLocation();
   const [showModal, setShowModal] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [sendNumber, setSendNumber] = useState(0);
@@ -23,6 +25,7 @@ function Reply({ id, children }: IProps) {
       api.education.getScaleReplyList({
         planRuleId: id,
         pageAt: current,
+        scaleId: query?.id, // 新增 scaleId属性
         pageSize,
       }).then((res: any) => {
         if (res.list.length > 0){

@@ -159,14 +159,17 @@ export const sfType = ['随访', 'CRF', '宣教'];
 export const sfTypeUrl = {
   suifang: {
     text: '随访',
-    type: 0,
+    type: 0, // 侧边栏分组type枚举
+    sourceType: 2, // 来源枚举--后端
   },
   crf_scale: {
     text: 'CRF',
     type: 1,
+    sourceType: 9,
   },
   education: {
     text: '宣教',
     type:2,
+    sourceType: 3,
   },
 };

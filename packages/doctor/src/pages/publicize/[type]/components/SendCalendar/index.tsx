@@ -3,43 +3,82 @@ import DragModal from 'xzl-web-shared/src/components/DragModal';
 import SendDetail from '../SendDetail';
 import { Calendar } from 'antd';
 import moment from 'moment';
-import { isEmpty } from 'lodash';
+import * as api from '@/services/api';
+import { sfTypeUrl } from '../../../utils';
+import { useParams } from 'umi';
 import styles from './index.scss';
 
-const SendCalendar: FC = ({ children }) => {
+interface ISendItem {
+  sendTime: number;
+  sendCount: number;
+}
+interface IDatData {
+  [key: string]: {
+    todoSendCount?: number;
+    sendCount?: number
+  }
+}
+interface IProps {
+  ruleId: string;
+}
+const SendCalendar: FC<IProps> = ({ children, ruleId }) => {
   const [showModal, setShowModal] = useState(false);
+  const [sendDatas, setsendDatas] = useState({});
+  const { type } = useParams();
   const handleShow = () => {
     setShowModal(true);
+    const params = {
+      startTime: '1635696000000',   			//起始时间
+      endTime: '1638248340000',     			//截止时间
+      ruleId,      // 规则id
+    };
+    const sendCount = {};
+    api.education.getPublicizSendCount(params).then((res: { sendList: ISendItem[], todoSendList: ISendItem[] }) =>{
+      console.log('=====发送日历', res);
+      res.sendList.forEach(item => {
+        sendCount[item.sendTime] = { sendCount: item.sendCount };
+      });
+      res.todoSendList.forEach(item => {
+        sendCount[item.sendTime] = {
+          ...sendCount?.[item.sendTime],
+          todoSendCount: item.sendCount,
+        };
+      });
+      setsendDatas(sendCount);
+      console.log('sendCount=====11', sendCount);
+    });
   };
-  function getCurCount(value: moment.Moment) {
-    let countObj = {};
-    console.log('=====21', value);
-    console.log('========222', moment(value).format('YYYY.MM.DD'));
-    switch (value.date()) {
-      case 28:
-        countObj = {
-          num: 10,
-          status: 'red',
-        };
-        break;
-      case 29:
-        countObj = {
-          num: 5,
-          status: 'green',
-        };
-        break;
-      default:
-    }
-    return countObj;
-  }
 
   function dateCellRender(value: moment.Moment) {
-    const countObj: { num?: number, status?: string } = getCurCount(value);
-    if (isEmpty(countObj)) {
+    // console.log('item 日', value.date());
+    // console.log('=====item  当日0点', new Date(value).setHours(0, 0, 0, 0));
+    const itemTime =  new Date(value).setHours(0, 0, 0, 0);
+    const { todoSendCount, sendCount }: IDatData = sendDatas?.[itemTime] || {};
+    if (!todoSendCount && !todoSendCount) {
       return <></>;
     }
-    return <SendDetail><div className={countObj?.status}>{countObj?.num}</div></SendDetail>;
+    // actionType 0已发送  1待发送
+    const detailProp = {
+      ruleId,
+      startTime: itemTime,
+      sourceType: sfTypeUrl?.[type]?.sourceType,
+    };
+    return (
+      <div className={styles.count_wrap}>
+        <SendDetail actionType={1} { ...detailProp }>
+          {todoSendCount && <div className='red'>{todoSendCount}</div>}
+        </SendDetail>
+        <SendDetail actionType={0} { ...detailProp }>
+          {sendCount && <div className='green'>{sendCount}</div>}
+        </SendDetail>
+      </div>
+    );
   }
+  // 开始时间，暂时先写当前，加完数据再改
+  // 计划创建日期的月份  ~ 当前时间的月份 + 2
+  let startDate = new Date();
+  startDate.setDate(1);
+  startDate.setHours(0, 0, 0, 0);
   return (
     <div>
       <span onClick={handleShow}>{children}</span>
@@ -61,7 +100,8 @@ const SendCalendar: FC = ({ children }) => {
           <Calendar
             dateCellRender={dateCellRender}
             // 开始时间：计划创建日期的月份，结束时间：当前时间的月份+2
-            validRange={[moment(new Date()), moment(new Date().setMonth(new Date().getMonth() + 2))]}
+            validRange={[moment(startDate),
+              moment(new Date().setMonth(new Date().getMonth() + 2))]}
           />
         </div>
       </DragModal>

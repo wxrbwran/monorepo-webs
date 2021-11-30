@@ -113,10 +113,11 @@ export const sendAt = {
   title: '时间',
   dataIndex: 'sendTime',
   width: 236,
-  render: (text: number) => <span>{moment(text).format('YYYY.MM.DD HH:mm:ss')}</span>,
+  render: (text: number) => <span>{moment(text).format('YYYY.MM.DD HH:mm')}</span>,
 };
 
 export const senderFileName = {
   title: '文件名称',
   dataIndex: 'fileName',
+  render: (text: string[]) => <span>{text.join(' ')}</span>,
 };
