@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, message, Input } from 'antd';
-import { history, useSelector } from 'umi';
+import { history, useSelector, useParams } from 'umi';
 // import type { IValues, IRule } from '../../const';
 // import { handleFormatValues, getCheckedContent } from '../../utils';
 import styles from './index.scss';
@@ -11,13 +11,16 @@ import TemplateRule from '../../components/TemplateRule';
 import { LeftOutlined } from '@ant-design/icons';
 import create from '@/assets/img/create.svg';
 import { cloneDeep, isEmpty } from 'lodash';
-
+import { sfTypeUrl } from '../../utils';
 // const { Step } = Steps;
 // type IAbled = Record<string, boolean>;
-const EducationCreate: FC<ILocation> = ({ location }) => {
 
-  const type = location.pathname.includes('suifang') ? 'suifang' : (location.pathname.includes('education') ? 'education' : 'crf');
-  const typeNumber = type == 'education' ? 2 : (type == 'suifang' ? 0 : 1);
+// const EducationCreate: FC<ILocation> = ({ location }) => {
+
+const EducationCreate: FC<ILocation> = ({ }) => {
+
+  // const type = location.pathname.includes('suifang') ? 'suifang' : (location.pathname.includes('education') ? 'education' : 'crf');
+  const type: string = useParams<{ type: string }>()?.type;
 
 
 
@@ -181,7 +184,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
 
       const params = {
         ruleDocs: ruleDocs,
-        type: typeNumber,
+        type: sfTypeUrl?.[type].type,
         title: formName,
         operatorSid: window.$storage.getItem('sid'),
         operatorWcId: window.$storage.getItem('nsId'),
@@ -196,7 +199,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
           message.success('添加成功');
           setLoading(false);
           // handleUpdataStatus(content);
-          history.goBack();
+          history.push(`/publicize/${type}/detail?name=${formName}`);
         })
         .catch((err: string) => {
           console.log('err', err);
@@ -222,7 +225,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   return (
     <div className={styles.gauge_table}>
       <div className={styles.head}>
-        <LeftOutlined className={styles.back} onClick={() => history.go(-1)} />
+        <LeftOutlined className={styles.back} onClick={() => history.push(`/publicize/${type}/detail`)} />
         <div className={styles.table_name}>
           <p className={styles.title}>
             <Input

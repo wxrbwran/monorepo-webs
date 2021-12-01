@@ -24,12 +24,13 @@ export interface DoctorOrgsProp {
 interface IProps {
 
   type: 'crf' | 'education' | 'suifang';
+  choicesContentList: any[];
   onSaveChoices: (choiceIds: IList[]) => void; // 选中的所有数据id,
   onDragModalDidShow: () => void; // 弹窗显示会调
 }
 
 const ChoiceContent: FC<IProps> = (props) => {
-  const { children, onSaveChoices, type, onDragModalDidShow } = props;
+  const { children, onSaveChoices, type, onDragModalDidShow, choicesContentList } = props;
   const [showModal, setshowModal] = useState(false);
   const [contentList, setContentList] = useState<ContentListModel[]>([]);
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
@@ -74,10 +75,11 @@ const ChoiceContent: FC<IProps> = (props) => {
       const list: any[] = [];
       fileTypes.forEach((fileType: any) => {
 
-        if (res.list.filter(p => p.type === fileType.code).length > 0) {
+        const unChoicesList = res.list.filter(p => !choicesContentList.find((item) => item.id == p.id));
+        if (unChoicesList.filter(p => p.type === fileType.code).length > 0) {
           list.push({
             title: fileType.name,
-            lists: res.list.filter(p => p.type === fileType.code).map((item) => {
+            lists: unChoicesList.filter(p => p.type === fileType.code).map((item) => {
               return ({
                 ...item,
                 extraFileType: { ...fileType },

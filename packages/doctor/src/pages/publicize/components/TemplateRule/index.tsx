@@ -19,6 +19,7 @@ import { cloneDeep, isEmpty } from 'lodash';
 import ContentPopover from './ContentPopover/index';
 import { IList } from '../../const';
 import dayjs from 'dayjs';
+import { sfTypeUrl } from '../../utils';
 
 
 
@@ -387,8 +388,9 @@ const TemplateRule: FC<IProps> = ({
 
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
-  const sourceType = pageType == 'education' ? 3 : (pageType == 'suifang' ? 2 : 6);
-  const ruleType = pageType == 'education' ? 'PUBLICIZE_EDUCATION' : (pageType == 'suifang' ? 'FOLLOW' : 'CRF_SCALE');
+
+  // const sourceType = pageType == 'education' ? 3 : (pageType == 'suifang' ? 2 : 6);
+  // const ruleType = pageType == 'education' ? 'PUBLICIZE_EDUCATION' : (pageType == 'suifang' ? 'FOLLOW' : 'CRF_SCALE');
   // const [contentListVisible, setContentListVisible] = useState(false); //选中的起始发送时间子item
 
   const startTimeRef = useRef<IItem>();
@@ -422,7 +424,7 @@ const TemplateRule: FC<IProps> = ({
 
   useEffect(() => {
     api.education
-      .getRules(ruleType)
+      .getRules(sfTypeUrl?.[pageType].templateType)
       .then((res) => {
         console.log('resrules', res);
 
@@ -444,7 +446,7 @@ const TemplateRule: FC<IProps> = ({
             if (element.type == 'dynamic') {
 
               const params = {
-                sourceType: sourceType,
+                sourceType: sfTypeUrl?.[pageType].sourceType,
                 kp: element.name,
                 rsList: [{
                   sid: window.$storage.getItem('sid'),
@@ -549,7 +551,7 @@ const TemplateRule: FC<IProps> = ({
 
     // 如果是添加
     let meta: any = {
-      sourceType: sourceType,
+      sourceType: sfTypeUrl?.[pageType].sourceType,
       teamLocations: [
         {
           sid: window.$storage.getItem('sid'),

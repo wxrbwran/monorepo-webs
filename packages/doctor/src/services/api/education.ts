@@ -134,9 +134,9 @@ export default {
   addPublicizeRules(data?: any): Promise<any> {
     return http.post('publicize/rules', { data });
   },
-  // 获取规则详情
-  getPublicizeGroupDetail(groupId: string): Promise<any> {
-    return http.get(`publicize/${groupId}`);
+  // // 获取规则详情
+  getPublicizeGroupDetail(data: string): Promise<any> {
+    return http.get('publicize/rules', { data });
   },
   // 统计发送日历
   getPublicizSendCount(data?: any): Promise<any> {
@@ -150,4 +150,6 @@ export default {
   delPublicizRule(ruleId: string): Promise<any> {
     return http.delete(`rules/${ruleId}`);
   },
+
+
 };

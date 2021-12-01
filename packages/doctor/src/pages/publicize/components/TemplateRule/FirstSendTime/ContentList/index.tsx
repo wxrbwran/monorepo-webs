@@ -56,10 +56,10 @@ function ContentList({ sources, onRemoveSuccess, type, onSaveChoices, onDragModa
         ))
       }
       {
-        <ChoiceContent type={type} onSaveChoices={saveChoices} onDragModalDidShow={onDragModalDidShow}>
+        <ChoiceContent choicesContentList={contentList} type={type} onSaveChoices={saveChoices} onDragModalDidShow={onDragModalDidShow}>
           <div className={`flex items-center justify-center box-shadow w-86 h-86 rounded-md mt-15 ${styles.item}`}>
             <img src={iconAdd} alt="" />
-          </div>,
+          </div>
         </ChoiceContent>
       }
     </div>
