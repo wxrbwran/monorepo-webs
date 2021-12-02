@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || function () {
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
 import dayjs from 'dayjs';
-// 获取患者列表（做为独立、上级、下级医生的患者列表）
+// 获取患者列表（做为独立、主管、医生助手的患者列表）
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
     var newObj = {};
@@ -28,6 +28,13 @@ var handlePatientsTeamDataSource = function (data) {
                 newObj.nsOwner = {
                     wcId: member.wcId,
                     sid: member.sid, //创建者的sid -  患者列表是否展示更换服务按钮使用
+                };
+            }
+            // 在members里过滤出sid与当前登录者sid相同,并且与侧边栏医生角色一致的医生信息，取出wcId，im聊天会话需要此参数
+            if (member.sid === window.$storage.getItem('sid') && member.role === window.$storage.getItem('currRoleId')) {
+                newObj.currLoginDoctorInfo = {
+                    wcId: member.wcId,
+                    sid: member.sid,
                 };
             }
             switch (member.role) {

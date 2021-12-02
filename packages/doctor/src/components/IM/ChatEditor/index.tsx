@@ -6,7 +6,6 @@ import {
 } from 'antd';
 import { useSelector } from 'umi';
 import request from 'umi-request';
-import { getFromDoctorInfo } from '@/utils/utils';
 import * as api from '@/services/api';
 import picture from '@/assets/img/im/bar_pic.png';
 import filePic from '@/assets/img/im/bar_file.png';
@@ -20,8 +19,6 @@ const ChatEditor: FC = () => {
   const [msgToSent, setMsg] = useState('');
   const [toWcIds, setToWcIds] = useState<string[]>([]);
   // const fromWcId = useSelector((state: IState) => state.auth.wcl[0]?.wcId);
-  // 发送者的wcId
-  const [fromWcId, setFromWcId] = useState('');
   // 接收人的wcId和sId
   const patientWcId = window.$storage.getItem('patientWcId');
   const patientSid = window.$storage.getItem('patientSid');
@@ -29,23 +26,25 @@ const ChatEditor: FC = () => {
   const currSessionId = useSelector((state: IState) => state.im.currSessionId);
   // 所有会话组
   const sessions = useSelector((state: IState) => state.im.sessions);
+  // 发送者的wcId: 患者列表的members里匹配出sid与当前登录者sid一致的member,取出对应的wcId
+  const { currLoginDoctorInfo } = useSelector((state: IState) => state.currentPatient);
 
   const imgToSent:any = useRef<HTMLInputElement>();
   const fileToSent:any = useRef<HTMLInputElement>();
   const textarea: any = useRef<HTMLTextAreaElement>();
 
   useEffect(() => {
+    console.log('currSessionId', currSessionId);
+    console.log('sessions', sessions);
     if (currSessionId && sessions.length > 0) {
       // 过滤出当前会话组成员
       const currSession:IPerson[] = sessions.filter(
         (item:IPerson) => `p2p-${item.sessionId}` === currSessionId,
       );
-      const doctorWcId = getFromDoctorInfo(currSession[0])[0]?.wcId;
-      setFromWcId(doctorWcId);
-      window.$storage.setItem('fromWcId', doctorWcId);
+      window.$storage.setItem('fromWcId', currLoginDoctorInfo?.wcId);
       // 从会话组中去除自己
       const removeOwnAfter = currSession[0].members.filter(
-        (item: { wcId: string | undefined }) => item.wcId !== doctorWcId,
+        (item: { wcId: string | undefined }) => item.wcId !== currLoginDoctorInfo?.wcId,
       );
       // 得到要发送给的成员的wcId
       const sendWcIds = removeOwnAfter.map((item: { wcId: any }) => item.wcId);
@@ -60,7 +59,7 @@ const ChatEditor: FC = () => {
 
   const sendMsg = (msgTypes: number, content: string) => {
     const params = {
-      operatorWcId: fromWcId,
+      operatorWcId: currLoginDoctorInfo?.wcId,
       // toWcIds,
       msgTypes: [msgTypes],
       content,
@@ -187,7 +186,7 @@ const ChatEditor: FC = () => {
     }
     e.preventDefault();
     const params = {
-      operatorWcId: fromWcId,
+      operatorWcId: currLoginDoctorInfo?.wcId,
       // toWcIds,
       msgTypes: [0],
       content: JSON.stringify({

@@ -69,7 +69,7 @@ function Setting() {
     },
     // {
     //   key: 'upperLower',
-    //   value: '我的上下级医生',
+    //   value: '我的主管医生和医生助手',
     //   src: upperLowerDoctor,
     // },
     // {

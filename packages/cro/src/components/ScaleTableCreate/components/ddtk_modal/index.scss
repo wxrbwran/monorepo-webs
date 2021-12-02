@@ -12,4 +12,10 @@
     margin: 0 auto;
     padding: 0;
   }
+  .required_wrap {
+    .ant-checkbox-inner {
+      width: 20px;
+      height: 20px;
+    }
+  }
 }

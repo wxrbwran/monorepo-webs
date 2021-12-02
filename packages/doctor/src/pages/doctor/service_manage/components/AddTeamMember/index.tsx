@@ -7,7 +7,7 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
 import styles from './index.scss';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, debounce } from 'lodash';
 interface IProps {
   handleRefresh: () => void;
 }
@@ -73,7 +73,7 @@ const AddTeamMember: FC<IProps> = (props) => {
       },
     },
     {
-      title: '互联网医院',
+      title: '线上医院和项目机构',
       dataIndex: 'orgs',
       width: 147,
       render: (orgs: { name: string }[]) => {
@@ -222,7 +222,7 @@ const AddTeamMember: FC<IProps> = (props) => {
                     }
                   </div>
                 </div>
-                <Button type="primary" onClick={handleSubmit} className="mt-40" disabled={!!isEmpty(selectDoctor.flat())}>确认添加</Button>
+                <Button type="primary" onClick={debounce(handleSubmit, 500)} className="mt-40" disabled={!!isEmpty(selectDoctor.flat())}>确认添加</Button>
               </div>
             </>
            )

@@ -152,6 +152,8 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         // message.success('添加成功');
         setLoading(false);
         history.push(`/end_event/detail?name=${tit}`);
+      }).catch(() => {
+        setLoading(false);
       });
     } else {
 
@@ -161,6 +163,8 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         // message.success('修改成功');
         setLoading(false);
         history.push(`/subjective_table/detail?name=${tit}`);
+      }).catch(() => {
+        setLoading(false);
       });
     }
   };

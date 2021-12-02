@@ -58,8 +58,8 @@ export const Role: RolesMap = {
   NURSE: roleType('2Wmj4M', 109, 100, 108, '护士(角色默认在 xinzhili - 护士团队)'), // 11
   DOCTOR: roleType('n41zeZ', 119, 110, 118, '医生'), // 12 医生(角色默认在xinzhili - 全科
   SYS_DOCTOR: roleType('ZW7Qew', 129, 120, 128, '系统智能医生'), // 13
-  UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '上级医生'), // 14
-  LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '下级医生'), // 15
+  UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '主管医生'), // 14
+  LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '医生助手'), // 15
   ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
 
   COUNSELOR_DOCTOR: roleType('2eAEeG', 169, 160, 168, '顾问医生'), // 17 顾问医生(角色默认在xinzhili - 顾问医生团队)
@@ -68,11 +68,11 @@ export const Role: RolesMap = {
   NONE: roleType('bWlZez', 199, 190, 198, '任何角色都没有，即没有任何身份，默认都进入xinzhili空间'), // 20
   VISITOR: roleType('keaR09', 209, 200, 208, '游客'), // 21
 
-  ORG_IH: roleType('jW2m0r', 219, 210, 218, '互联网医院'), // 22
-  PATIENT_IH: roleType('Y4nb4D', 0, 0, 0, '互联网医院患者'), // 23
-  DOCTOR_IH: roleType('r4qE4y', 0, 0, 0, '互联网医院医生'), // 24
-  DOCTOR_IH_SENIOR: roleType('Y0ZD4o', 0, 0, 0, '互联网医院科室正高级医师'), // 25
-  DOCTOR_IH_DEPUTY: roleType('6e8JWY', 0, 0, 0, '互联网医院科室副高级医师'), // 26
+  ORG_IH: roleType('jW2m0r', 219, 210, 218, '线上医院和项目机构'), // 22
+  PATIENT_IH: roleType('Y4nb4D', 0, 0, 0, '线上医院和项目机构患者'), // 23
+  DOCTOR_IH: roleType('r4qE4y', 0, 0, 0, '线上医院和项目机构医生'), // 24
+  DOCTOR_IH_SENIOR: roleType('Y0ZD4o', 0, 0, 0, '线上医院和项目机构科室正高级医师'), // 25
+  DOCTOR_IH_DEPUTY: roleType('6e8JWY', 0, 0, 0, '线上医院和项目机构科室副高级医师'), // 26
 
   RESEARCH_PROJECT_ORG: roleType('V0bD49', 0, 0, 0, '科研 机构'), // 29
   RESEARCH_PROJECT: roleType('YePZWq', 0, 0, 0, '科研项目'), // 30

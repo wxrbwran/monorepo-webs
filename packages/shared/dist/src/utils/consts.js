@@ -16,14 +16,14 @@ export var rolePriceList = [
         extra: null,
     },
     {
-        text: '我做上级医生',
+        text: '我做主管医生',
         key: 'SUPERIOR_VIP',
-        extra: '我做上级医生',
+        extra: '我做主管医生',
     },
     {
-        text: '我做下级医生',
+        text: '我做医生助手',
         key: 'SUBORDINATE_VIP',
-        extra: '我找上级医生一起管',
+        extra: '我找主管医生一起管',
     },
 ];
 //  '', 'SUBORDINATE_VIP';

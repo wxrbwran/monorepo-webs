@@ -75,22 +75,25 @@ function ScaleDetail(props: IProps) {
                 }
                 {
                   item.type === 'COMPLETION' && (
-                    <pre style={{ color: '#000' }}>
-                      {
-                        (item.detail.stem as string[]).map((stemItem, index) => {
-                          return (
-                            <>
-                              <span>{stemItem}</span>
-                              {
-                                index !== item.detail.stem.length - 1 && (
-                                  <span className="border">{(item.detail.answer as string[])[index]}</span>
-                                )
-                              }
-                            </>
-                          );
-                        })
-                      }
-                    </pre>
+                    <div className="flex">
+                      <span>{item.code}、</span>
+                      <pre style={{ color: '#000' }}>
+                        {
+                          (item.detail.stem as string[]).map((stemItem, index) => {
+                            return (
+                              <>
+                                <span>{stemItem}</span>
+                                {
+                                  index !== item.detail.stem.length - 1 && (
+                                    <span className="border">{(item.detail.answer as string[])[index]}</span>
+                                  )
+                                }
+                              </>
+                            );
+                          })
+                        }
+                      </pre>
+                    </div>
                   )
                 }
               </div>

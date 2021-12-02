@@ -39,15 +39,15 @@ export interface IRecord {
   avatarUrl: string;
   isYlPatient: boolean; // 是否是养老患者
   inCro: boolean; // 是否参与了科研项目
-  nsOwner: {
+  currLoginDoctorInfo: {
     wcId: string;
     sid: string;
-  }; // 创建者信息
+  }; // 当前登录医生的信息
 }
 const patientPage = (record: IRecord, actionType?: string, other?: string) => {
   console.log('跳转', record, actionType, other);
   const {
-    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, nsOwner,
+    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, currLoginDoctorInfo,
   } = record;
   window.$storage.setItem('patientWcId', wcId);
   window.$storage.setItem('patientSid', sid);
@@ -66,7 +66,7 @@ const patientPage = (record: IRecord, actionType?: string, other?: string) => {
       issueCount,
       name,
       avatarUrl,
-      nsOwner,
+      currLoginDoctorInfo,
     },
   });
   history.push(`/patient_panel/${record.sid}`);
@@ -143,7 +143,7 @@ export const riskFactor = {
 };
 
 export const upperDoctor = {
-  title: '上级医生',
+  title: '主管医生',
   dataIndex: 'upperDoctor',
 };
 

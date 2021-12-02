@@ -233,7 +233,6 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
                             field={field}
                             nameKey="name"
                             idKey="standardId"
-                            request={window.$api.base.fetchHospitals}
                             disabled={false}
                           />
                           <span className="mr-15 ml-10 mt-3">-</span>
@@ -266,7 +265,7 @@ function UserInfoEdit({ toggleEdit }: Iporps) {
               </Form.List>
               <div className={styles.line_input}>
                 <Form.Item
-                  label="所在互联网医院"
+                  label="线上医院和项目机构"
                   name="doctorGroup"
                 >
                   <Input disabled />

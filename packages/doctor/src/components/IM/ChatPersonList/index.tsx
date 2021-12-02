@@ -4,6 +4,7 @@ import * as api from '@/services/api';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import ChatPersonItem from '../ChatPersonItem';
 import styles from './index.scss';
+import { IPersonNew } from 'packages/doctor/typings/global';
 
 const ChatPersonList: FC = () => {
   const dispatch = useDispatch();
@@ -12,8 +13,7 @@ const ChatPersonList: FC = () => {
   const [persons, setPersons] = useState<IPersonNew>({ members: [] });
   // 所有会话组
   const sessions = useSelector((state: IState) => state.im.sessions);
-  const { nsOwner } = useSelector((state: IState) => state.currentPatient);
-  console.log('---------currentPatient', nsOwner);
+  const { currLoginDoctorInfo } = useSelector((state: IState) => state.currentPatient);
   useEffect(() => {
     if (sessions.length > 0) {
       // 过滤出患者所有会话
@@ -33,12 +33,12 @@ const ChatPersonList: FC = () => {
   }, [sessions]);
 
   useEffect(() => {
-    if (currentPatientWcId && nsOwner?.wcId) {
+    if (currentPatientWcId && currLoginDoctorInfo?.wcId) {
       const otherRole = window.$storage.getItem('patientRoleId');
       const params = {
         otherRole, // 患者角色
         otherSid: currentPatientSid, // 患者SID
-        fromWcId: nsOwner.wcId, // 医生wcId, 在该行对应的team 中的members的wcId
+        fromWcId: currLoginDoctorInfo.wcId, // members里匹配出与当前登录者sid相同的医生的wcId
       };
       api.im
         .getPickSessionGroup(params)
@@ -61,7 +61,7 @@ const ChatPersonList: FC = () => {
           console.log('err', err);
         });
     }
-  }, [nsOwner]);
+  }, [currLoginDoctorInfo]);
 
   console.log('persons', persons);
   return (

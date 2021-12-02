@@ -13,7 +13,7 @@ const NSLabelType = {
   NURSE_TEAM: fetchData('nurse_team', '护士团队空间'), // 6
   COUNSELOR_DOCTOR_TEAM: fetchData('counselor_doctor_team', '顾问医生团队空间'), // 7
   CRO_ORG: fetchData('cro_org', '区分CRO业务执行区域的空间'), // 8
-  IH_ORG: fetchData('ih_org_space', '互联网医院机构'), // 9
+  IH_ORG: fetchData('ih_org_space', '线上医院和项目机构'), // 9
   IH_LIN_FEN_ORG: fetchData('ih_lin_fen_org', '临汾市互联网医院机构'), // 10
   IH_XIN_ZHOU_ORG: fetchData('ih_xin_zhou_org', '忻州互联网医院机构'), // 11
 

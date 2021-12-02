@@ -14,7 +14,7 @@ interface IProps {
 const { TextArea } = Input;
 function Remind({ refresh, data }: IProps) {
   const dispatch = useDispatch();
-  const { sid } = useParams<{sid: string}>();
+  const { sid } = useParams<{ sid: string }>();
   const lowerAdvice = data.body.content?.advice;
   const [advice, setAdvice] = useState(data.body.content?.advice);
   /* status: 0-> 同意, 1->忽略, 2-> 修改 */
@@ -63,7 +63,7 @@ function Remind({ refresh, data }: IProps) {
         value={advice}
       />
       <div className={styles.btn_wrap}>
-        <Button onClick={handleSubmit}>发送患者及下级医生</Button>
+        <Button onClick={handleSubmit}>发送患者及医生助手</Button>
         {/* <Popconfirm
           title="确定忽略此条信息?"
           onConfirm={() => handleConfirmEdit(1)}

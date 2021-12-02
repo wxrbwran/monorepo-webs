@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 
 export interface IItem {
   name: string;
@@ -87,7 +88,7 @@ export function getHierarchyFromItem(originItem: {}) {
   return fatherItem;
 }
 
-export function getChooseValueFromItem(item: {}) {
+export function getChooseValueFromItem(item: any) {
 
   if (item.name == 'basic.age') {
 
@@ -98,7 +99,7 @@ export function getChooseValueFromItem(item: {}) {
   } else if (item.name == 'basic.sex') {
     return { value: item.value };
   } else {
-    return { id: item.value, value: item.description };
+    return { id: item?.items?.length > 0 ? (item.items[0]?.value ?? '') : '', value: item.value };
   }
 }
 
@@ -111,27 +112,68 @@ export function changeDescritionWithItem(item: IItem) {
   }
 }
 
+// 除掉首尾的大括号
+export function deleteStartOrEndSymbol(str: string) {
+
+  if (str.startsWith('{')) {
+
+    // 除完'{'可能还有'}'
+    return deleteStartOrEndSymbol(str.substring(1));
+  } else if (str.endsWith('}')) {
+
+    return str.substring(0, str.length - 1);
+  } else {
+    return str;
+  }
+}
+
 export function getChooseValuesKeyFromRules(rule: IRule) {
 
-  console.log('========== getStartTimeKeyFromRules', JSON.stringify(rule));
   let chooseStartTime;
   const choseConditions = [];
   for (let i = 0; i < rule.match.must.length; i++) {
     const mustItem = rule.match.must[i];
-    if (Object.keys(mustItem).length > 1) {
+
+    if (Object.keys(mustItem).includes('team.init_time') || Object.keys(mustItem).includes('diagnose.treatment.start')) {
       const fatherItem = getHierarchyFromItem(mustItem);
       chooseStartTime = fatherItem;
     } else {
 
-      const key = Object.keys(mustItem)[0];
-      const item = mustItem[key];
-      item.name = key;
+      if (Object.keys(mustItem).length > 0) {
 
-      choseConditions.push({
-        chooseItem: item,
-        chooseValue: getChooseValueFromItem(item),
-      });
-      changeDescritionWithItem(item);
+        const fatherItem = getHierarchyFromItem(mustItem);
+        changeDescritionWithItem(fatherItem);
+        // 分割诊断处理成多个数组
+        if (fatherItem.name == 'diagnose.treatment' || fatherItem.name == 'diagnose.disease') {
+
+          const valueArray = fatherItem.value.split('},{');
+          const idArray = fatherItem?.items?.length > 0 ? fatherItem.items[0].value.split('},{') : [];
+
+          const conditionArr = [];
+          for (let j = 0; j < valueArray.length; j++) {
+            const obj = cloneDeep(fatherItem);
+            obj.value = deleteStartOrEndSymbol(valueArray[j]);
+            if (idArray.length > j && obj?.items?.length > 0) {
+              obj.items[0].value = deleteStartOrEndSymbol(idArray[j]);
+            }
+            conditionArr.push({
+              chooseItem: obj,
+              chooseValue: getChooseValueFromItem(obj),
+            });
+          }
+          choseConditions.push(...conditionArr);
+        } else {
+
+          const key = Object.keys(mustItem)[0];
+          const item = mustItem[key];
+          item.name = key;
+          choseConditions.push({
+            chooseItem: item,
+            chooseValue: getChooseValueFromItem(item),
+          });
+          changeDescritionWithItem(item);
+        }
+      }
     }
   }
 
@@ -143,7 +185,6 @@ export function getChooseValuesKeyFromRules(rule: IRule) {
   }
 
   const frequency = { frequency: 'CUSTOM', custom: [] };
-  console.log('================ rule.actions', JSON.stringify(rule.actions));
   for (let i = 0; i < rule.actions.length; i++) {
     const action = rule.actions[i];
     console.log('================ action', JSON.stringify(action));
@@ -154,6 +195,7 @@ export function getChooseValuesKeyFromRules(rule: IRule) {
     }
     frequency.custom.push(action.params.period);
   }
+
   return {
     chooseStartTime: chooseStartTime,
     choseConditions: choseConditions,
@@ -167,16 +209,15 @@ export function getChooseValuesKeyFromRules(rule: IRule) {
 
 
 
-export function getConditionDescriptionFromConditionss(conditions: []) {
+export function getConditionDescriptionFromConditionss(conditions: any[]) {
 
-  let ageDes: string;
-  let sexDes: string;
-  let diseaseDes: any;
-  let treatmentDes: string;
+  let ageDes: string = '';
+  let sexDes: string = '';
+  let diseaseDes: any = '';
+  let treatmentDes: string = '';
 
   for (let i = 0; i < conditions.length; i++) {
     const condi = conditions[i];
-    console.log('================== condi', condi);
     if (condi.chooseItem.name == 'basic.age') {
       ageDes = '年龄: ' + condi.chooseValue.min + '-' + condi.chooseValue.max;
     } else if (condi.chooseItem.name == 'basic.sex') {

@@ -105,7 +105,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
         )
       }
       {
-        item.chooseItem.name === 'diagnose.disease.uid' && (
+        item.chooseItem.name.includes('disease') && (
           <div className={styles.item_value}>
             <span className={styles.label}>诊断：</span>
             <Select
@@ -140,7 +140,7 @@ function ScaleListItem({ changeStateByValue, item }: IProps) {
         )
       }
       {
-        item.chooseItem.name === 'diagnose.treatment.uid' && (
+        item.chooseItem.name.includes('treatment') && (
           <div className={styles.item_value}>
             <span className={styles.label}>处理：</span>
             <Select

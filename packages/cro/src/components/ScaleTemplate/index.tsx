@@ -127,25 +127,106 @@ const tileChooseToArray = (item: IItem) => {
   return array;
 };
 
+const addTreatmentOrDiseaseItem = (item: any, childItem: any) => {
+
+  let treatmentObj: any = {};
+  if (item.chooseItem.operator == 'in') {
+    item.chooseItem.value = '{' + item.chooseItem.value + '}';
+  }
+  treatmentObj = {
+    ...treatmentObj,
+    [item.chooseItem.name]: item.chooseItem,
+  };
+
+  if (!isEmpty(childItem)) {
+    if (childItem.chooseItem.operator == 'in') {
+      childItem.chooseItem.value = '{' + childItem.chooseItem.value + '}';
+    }
+    treatmentObj = {
+      ...treatmentObj,
+      [childItem.chooseItem.name]: childItem.chooseItem,
+    };
+  }
+  return treatmentObj;
+};
+
 const tileChooseConditionToArray = (conditions: ICondition[]) => {
 
   const array = [];
+  const diseaseItem: any = {};
+  const childDiseaseItem: any = {};
+  const treatmentItem: any = {};
+  const childTreatmentItem: any = {};
+
   for (let i = 0; i < conditions.length; i++) {
     if (conditions[i].chooseItem.name == 'basic.age') {
       conditions[i].chooseItem.operator = '<>';
       conditions[i].chooseItem.value = '[' + conditions[i].chooseValue.min + ',' + conditions[i].chooseValue.max + ')';
+
+      if (conditions[i].chooseItem.name.length > 0) {
+        array.push({ [conditions[i].chooseItem.name]: conditions[i].chooseItem });
+      }
     } else if (conditions[i].chooseItem.name == 'basic.sex') {
       conditions[i].chooseItem.operator = '=';
       conditions[i].chooseItem.value = conditions[i].chooseValue.value;
-    } else {
-      conditions[i].chooseItem.operator = '=';
-      conditions[i].chooseItem.value = conditions[i].chooseValue.id;
-      conditions[i].chooseItem.description = conditions[i].chooseValue.value;
-    }
-    if (conditions[i].chooseItem.name.length > 0) {
-      array.push({ [conditions[i].chooseItem.name]: conditions[i].chooseItem });
+
+      if (conditions[i].chooseItem.name.length > 0) {
+        array.push({ [conditions[i].chooseItem.name]: conditions[i].chooseItem });
+      }
+    } else { // 诊断，多个用，连接
+
+      let currentItem;
+      let currentChildItem;
+      if (conditions[i].chooseItem.name == 'diagnose.disease') {
+        currentItem = diseaseItem;
+        currentChildItem = childDiseaseItem;
+      } else if (conditions[i].chooseItem.name == 'diagnose.treatment') {
+        currentItem = treatmentItem;
+        currentChildItem = childTreatmentItem;
+      }
+      if (currentItem) {
+        let isIn = false;
+        if (isEmpty(currentItem)) {
+          currentItem.chooseItem = { ...conditions[i].chooseItem };
+          delete currentItem.chooseItem.items;
+        } else {
+          isIn = true;
+        }
+        currentItem.chooseItem.operator = 'in';
+
+        const descriptions = (isIn ? (currentItem.chooseItem.value + '},{') : '') + conditions[i].chooseValue.value;
+        currentItem.chooseItem.value = descriptions;
+      }
+      if (currentChildItem) {
+
+        let isIn = false;
+        if (isEmpty(currentChildItem) && conditions[i]?.chooseItem?.items?.length > 0) {
+          currentChildItem.chooseItem = { ...conditions[i].chooseItem.items[0] };
+          delete currentChildItem.chooseItem.items;
+        } else {
+          isIn = true;
+        }
+        if (!isEmpty(currentChildItem)) {
+          currentChildItem.chooseItem.operator = 'in';
+          currentChildItem.chooseItem.value = (isIn ? currentChildItem.chooseItem.value + '},{' : '') + conditions[i].chooseValue.id;
+        }
+      }
     }
   }
+
+
+  console.log('========================= diseaseItem childDiseaseItem', JSON.stringify(childDiseaseItem), JSON.stringify(diseaseItem));
+  if (treatmentItem?.chooseItem?.name?.length > 0) {
+
+    const treatmentObj = addTreatmentOrDiseaseItem(treatmentItem, childTreatmentItem);
+    array.push(treatmentObj);
+  }
+
+  if (diseaseItem?.chooseItem?.name?.length > 0) {
+    const treatmentObj = addTreatmentOrDiseaseItem(diseaseItem, childDiseaseItem);
+    array.push(treatmentObj);
+  }
+
   return array;
 };
 
@@ -384,6 +465,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   //确定，回传拼好的数据格式
   const handleSubmit = () => {
     setLoading(true);
+
     // console.log('callBackPlans', callBackPlans);
     // const conditionArr = formatConditions(callBackPlans);
     // console.log('conditionArr', conditionArr);
@@ -395,7 +477,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     // const params = {
     //   // plans: [startTime, ...conditionArr, frequency, group],
     //   // questions: remind,
-    //   // ruleDoc: 
+    //   // ruleDoc:
     // };
     //年龄限制
     // const filterAgeObj = callBackPlans.filter((item) => item.detail.send === 'AGE')[0];
@@ -424,7 +506,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     console.log('============= choseConditions', JSON.stringify(choseConditions));
     console.log('============= choseScope', JSON.stringify(choseScope));
     console.log('============= frequency', JSON.stringify(frequency));
-    const arrParma = tileAllChoosesToArray(chooseStartTime, choseConditions, choseScope);
+    const hasValConditions = choseConditions.filter(item => !isEmpty(item.chooseValue));
+    const arrParma = tileAllChoosesToArray(chooseStartTime, hasValConditions, choseScope);
+
+
+    console.log('=============arrParma arrParma', JSON.stringify(arrParma));
 
     setLoading(false);
     // 如果是添加
@@ -460,13 +546,12 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     if (originRuleDoc) {
       params.id = originRuleDoc.id;
     }
-
     addPlan({
       ruleDoc: params,
       questions: remind,
       chooseValues: {
         chooseStartTime: chooseStartTime,
-        choseConditions: choseConditions,
+        choseConditions: hasValConditions,
         choseScope: choseScope,
         frequency: frequency,
       },

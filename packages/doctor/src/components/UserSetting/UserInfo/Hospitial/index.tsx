@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import {
-  Form, Select, Spin, Input,
-} from 'antd';
-import debounce from 'lodash/debounce';
+import React from 'react';
+import { Form, Input } from 'antd';
+import SearchHospital from '@/components/SearchHospital';
 
 interface Iprops {
   setFieldsValue: (params: any) => void;
   getFieldValue: (params: any) => void;
   nameKey: string;
   idKey: string;
-  request: (params: any) => Promise<any>;
   disabled: boolean;
   field: any;
 }
@@ -18,35 +15,22 @@ export interface Ihospital {
   name: string;
 }
 
-const { Option } = Select;
-
 function Hospitial(props: Iprops) {
   const {
-    setFieldsValue, getFieldValue, nameKey, idKey, request, field,
+    setFieldsValue, getFieldValue, nameKey, idKey, field,
   } = props;
-  const [hospitals, setHospitals] = useState <Ihospital[]>([]);
-  const [fetching, setFetching] = useState(false);
-  const fetchHospitals = (value: string) => {
-    if (value) {
-      setFetching(true);
-      const params = {
-        name: value,
-      };
-      request(params).then((res) => {
-        setHospitals(res.organizationInfos);
-        setFetching(false);
-      });
-    }
-  };
   const handleSelect = (value: string, option: any) => {
+    console.log('====1', value);
+    console.log(option);
     const practiceAreas = getFieldValue('practiceAreas');
     practiceAreas[field.name] = {
       ...practiceAreas[field.name],
-      [nameKey]: option.children,
-      [idKey]: value,
+      [nameKey]: option.hospitalName,
+      [idKey]: option.hospitalId,
     };
     setFieldsValue({ practiceAreas });
   };
+  const initShowOrg = getFieldValue('practiceAreas')[field.name];
   return (
     <>
       <Form.Item
@@ -59,26 +43,17 @@ function Hospitial(props: Iprops) {
         label={field.name === 0 ? '执业医院和科室' : ' '}
         name={[field.name, nameKey]}
       >
-        <Select
-          showSearch
-          placeholder="第一执业医院"
-          showArrow={false}
-          filterOption={false}
-          onSearch={debounce((value) => {
-            fetchHospitals(value);
-          }, 500)}
-          onSelect={handleSelect}
-          notFoundContent={fetching ? <Spin size="small" /> : null}
+        <SearchHospital
+          placeholder='请输入医院名称'
+          callback={handleSelect}
+          fieldName="hospital"
           style={{ width: '285px' }}
-          allowClear
-          // disabled={disabled}
-        >
-          {hospitals.map((medicine) => (
-            <Option key={medicine.id} value={medicine.id}>
-              {medicine.name}
-            </Option>
-          ))}
-        </Select>
+          allowClear={true}
+          defaultValue={{
+            hospitalId: initShowOrg?.standardId,
+            hospitalName: initShowOrg?.name,
+          }}
+        />
       </Form.Item>
     </>
   );

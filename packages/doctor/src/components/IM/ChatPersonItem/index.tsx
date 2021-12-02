@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react';
-import { useSelector, useDispatch } from 'umi';
+import { useSelector } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/src/utils/role';
 import IconMore from '@/assets/img/icon_more.png';
+import { getRole } from '@/utils/utils';
 import { Dropdown } from 'antd';
 import styles from './index.scss';
 
@@ -12,44 +13,25 @@ interface IProps {
 }
 
 const ChatPersonItem: FC<IProps> = (props) => {
-  const { person, sessionId } = props;
-  const dispatch = useDispatch();
+  const { person } = props;
+  // const dispatch = useDispatch();
   const im = useSelector((state: IState) => state.im);
-  const handleUpdateSessionId = (id: string) => {
-    if (im.currSessionId !== `p2p-${id}`) {
-      // 更新当前会话id
-      const payload = { type: 'init', sessionId: `p2p-${id}` };
-      dispatch({
-        type: 'im/UPDATE_CURR_SESSION_ID',
-        payload,
-      });
-      // 更新当前消息列表
-      console.log(999992);
-      dispatch({
-        type: 'im/UPDATE_CURR_SESSION_MSGS',
-        payload,
-      });
-    }
-  };
-  const getRole = (role: string) => {
-    switch (role) {
-      case Role.NURSE.id:
-        return '护士';
-      case Role.PATIENT.id:
-      case Role.PATIENT_VIP.id:
-        return '患者';
-      case Role.UPPER_DOCTOR.id:
-        return '主管医生';
-      case Role.ALONE_DOCTOR.id:
-        return '独立医生';
-      case Role.LOWER_DOCTOR.id:
-        return '医助';
-      case Role.RESEARCH_PROJECT_DOCTOR.id:
-        return '研究者';
-      default:
-        return fetchRolePropValue(role, 'desc');
-    }
-  };
+  // const handleUpdateSessionId = (id: string) => {
+  //   if (im.currSessionId !== `p2p-${id}`) {
+  //     // 更新当前会话id
+  //     const payload = { type: 'init', sessionId: `p2p-${id}` };
+  //     dispatch({
+  //       type: 'im/UPDATE_CURR_SESSION_ID',
+  //       payload,
+  //     });
+  //     // 更新当前消息列表
+  //     console.log(999992);
+  //     dispatch({
+  //       type: 'im/UPDATE_CURR_SESSION_MSGS',
+  //       payload,
+  //     });
+  //   }
+  // };
   // 各角色排序优先级
   // 患者 > 独立管理 > 护士 > 研究者 > PM > CRA > CRC
   // 患者 > 主管医生 > 医生助手 > 营养师 > 护士 > 研究者 > PM > CRA > CRC
@@ -87,7 +69,7 @@ const ChatPersonItem: FC<IProps> = (props) => {
   return (
     <li
       className={`${styles.item} ${im.currSessionId === `p2p-${person.sessionId}` ? styles.active : ''}`}
-      onClick={() => handleUpdateSessionId(sessionId)}
+      // onClick={() => handleUpdateSessionId(sessionId)}
     >
       <div className={styles.team}>
         <div className={styles.names}>

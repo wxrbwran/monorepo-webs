@@ -203,7 +203,7 @@ export const department = {
   key: 'firstPracticeDepartment',
 };
 export const orgName = {
-  title: '互联网医院',
+  title: '线上医院和项目机构',
   dataIndex: 'orgName',
   key: 'orgName',
 };

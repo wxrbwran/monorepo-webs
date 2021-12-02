@@ -9,7 +9,7 @@ import styles from './index.scss';
 import ChoiceSelfRole from '../ChoiceSelfRole';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
-import { isEmpty } from 'lodash';
+import { isEmpty, debounce } from 'lodash';
 import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/src/components/XzlTable/util';
 interface IProps {
   initData?: {
@@ -177,20 +177,22 @@ const AddServicePackage: FC<IProps> = (props) => {
     const initWordOrgs = {};
     members.forEach(member => initWordOrgs[member.sid!] = member.sourceNSId);
     return (
-      <div className="mt-20" key={roleInfo.role}>
+      <div className="mt-15" key={roleInfo.role}>
         <div className="text-base font-bold mb-10">{roleInfo.title}</div>
         <div className="flex flex-wrap">
           {
             curRoleMembers.map(doctor => (
-              <div className="box-shadow relative w-160 h-188 text-center rounded-md mr-20" key={doctor.role + doctor.sid}>
+              <div className="box-shadow relative w-150 h-80 text-center rounded-md mr-20 flex items-center" key={doctor.role + doctor.sid}>
                 {
                   doctor.sid !== doctorSid && (
                     <img className="absolute right-10 top-10 w-14" src={iconClose} alt="" onClick={() => handleDel(doctor.sid, roleInfo.role)} />
                   )
                 }
-                <img className="w-80 h-80 rounded mt-30" src={doctor.avatarUrl || defaultAvatar} alt="" />
-                <div className="text-lg font-bold mt-5">{doctor.name}</div>
-                <div className={`text-gray-600 ${styles.org_name}`} title={doctor.orgName}>{doctor.orgName}</div>
+                <img className="w-50 h-50 rounded m-12 mr-6" src={doctor.avatarUrl || defaultAvatar} alt="" />
+                <div className="w-78">
+                  <div className="text-sm font-bold mt-5 hide-text" title={doctor.name}>{doctor.name}</div>
+                  <div className={`text-gray-600 text-xs ${styles.org_name}`} title={doctor.orgName}>{doctor.orgName}</div>
+                </div>
               </div>
             ))
           }
@@ -206,7 +208,7 @@ const AddServicePackage: FC<IProps> = (props) => {
                 members={members}
                 initWorkOrgs={initWordOrgs}
               >
-                <div className="flex items-center justify-center box-shadow w-160 h-188 rounded-md">
+                <div className="flex items-center justify-center box-shadow w-80 h-80 rounded-md">
                   <img src={iconAdd} alt="" />
                 </div>
               </ChoiceDoctor>
@@ -221,7 +223,7 @@ const AddServicePackage: FC<IProps> = (props) => {
       <div onClick={handleShowModal}>{children}</div>
       <DragModal
         wrapClassName="ant-modal-wrap-center cancel_text_blue"
-        width={1000}
+        width={1200}
         maskClosable
         visible={showModal}
         onCancel={() => setshowModal(false)}
@@ -238,7 +240,7 @@ const AddServicePackage: FC<IProps> = (props) => {
           />
           <ChoiceSelfRole callback={handleSelfRole} initData={initSelfInfo} />
           { roleMembers.map(item => renderDom(item)) }
-          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={handleSubmit}>完成</Button>
+          <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={debounce(handleSubmit, 500)}>完成</Button>
         </div>
       </DragModal>
     </div>

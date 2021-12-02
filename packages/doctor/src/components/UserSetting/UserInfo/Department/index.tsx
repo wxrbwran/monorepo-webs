@@ -92,7 +92,7 @@ function Department(props: Iprops) {
         <Select
           showSearch
           onSearch={debounce((value) => handleSearch(value), 500)}
-          placeholder="第一执业医院所在科室"
+          placeholder="请输入科室名称"
           showArrow={false}
           filterOption={false}
           onSelect={handleSelect}

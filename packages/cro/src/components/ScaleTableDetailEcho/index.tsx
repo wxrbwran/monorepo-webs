@@ -101,6 +101,7 @@ function ScaleTableDetailEcho(props: IProps) {
               {item.type !== 'COMPLETION' &&
                 // (scaleType === 'CRF' ? item.detail.stem : item.code + '、' + item.detail.stem)}
                 (item.code + '、' + item.detail.stem)}
+
             </div>
             <div>
               {item.type === 'RADIO' &&
@@ -124,18 +125,21 @@ function ScaleTableDetailEcho(props: IProps) {
                 <TextArea placeholder="请输入" value={item.detail.answer} />
               )}
               {item.type === 'COMPLETION' && (
-                <pre style={{ color: '#000' }}>
-                  {(item.detail.stem as string[]).map((stemItem, edx) => {
-                    return (
-                      <>
-                        <span>{stemItem}</span>
-                        {edx !== item.detail.stem.length - 1 && (
-                          <span className="border">{(item.detail.answer as string[])[edx]}</span>
-                        )}
-                      </>
-                    );
-                  })}
-                </pre>
+                <div className="flex">
+                  <span className={styles.item__issue}>{item.code + '、'}</span>
+                  <pre style={{ color: '#000' }}>
+                    {(item.detail.stem as string[]).map((stemItem, edx) => {
+                      return (
+                        <>
+                          <span>{stemItem}</span>
+                          {edx !== item.detail.stem.length - 1 && (
+                            <span className="border">{(item.detail.answer as string[])[edx]}</span>
+                          )}
+                        </>
+                      );
+                    })}
+                  </pre>
+                </div>
               )}
             </div>
           </div>

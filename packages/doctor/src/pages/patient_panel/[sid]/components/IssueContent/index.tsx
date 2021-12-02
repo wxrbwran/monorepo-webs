@@ -33,7 +33,7 @@ function IssueContent() {
       pageAt: paramsPageAt,
       pageSize: config.ISSUE_LIST,
     };
-    window.$api.issue.fetchIssue(params).then((res: {issueMessages: IIssueList[]}) => {
+    window.$api.issue.fetchIssue(params).then((res: { issueMessages: IIssueList[] }) => {
       if (res.issueMessages.length > 0) {
         if (paramsPageAt !== 1) {
           setIssueList((prevIssueList: IIssueList[]) => [...prevIssueList, ...res.issueMessages]);
@@ -77,7 +77,7 @@ function IssueContent() {
   };
   /*
     160 更新诊断或处理   161 更新大病历   162 生活达标值调整  163 生活达标值-用药达标值调整  type 164  165 医生提醒
-    162:下级和独立管理，是直接调。上级是先显示下级的调整详情再调
+    162:医生助手和独立管理，是直接调。主管医生是先显示医生助手的调整详情再调
   */
   const getConfirmList = useMemo(() => () => (
     issueList.map((item, index) => (

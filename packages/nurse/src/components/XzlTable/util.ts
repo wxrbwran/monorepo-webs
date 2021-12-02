@@ -4,7 +4,7 @@ interface ITeam {
   members: ISubject[];
 }
 
-// 获取患者列表（做为独立、上级、下级医生的患者列表）
+// 获取患者列表（做为独立、主管医生、医生助手的患者列表）
 const handlePatientsTeamDataSource = (data) => {
   console.log(5432, data);
   const newPatients: CommonData[] = [];

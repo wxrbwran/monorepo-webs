@@ -44,6 +44,8 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
 
   const [choseConditions, setChoseConditions] = useState<ICondition[]>(values);//年龄性别是否禁用状态
 
+
+  console.log('============================ conditions conditions ', JSON.stringify(choseConditions), status);
   //起始发送时间->患者做处理的时间->处理方式改变
   // useEffect(() => {
   //   const ifHas = conditions.filter(item => {
@@ -79,6 +81,8 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
 
   useEffect(() => {
     // updateSubmitPlan(conditions);
+
+
   }, [conditions]);
 
   useEffect(() => {
