@@ -1,6 +1,25 @@
 .topic_list {
   font-size: 14px;
   :global {
+    .topic_title {
+      display: flex;
+      font-weight: 600;
+      align-items: center;
+      .edit_btn {
+        display: none;
+      }
+      &:hover {
+        .edit_btn {
+          display: block;
+          color: #3296FA;
+          cursor: pointer;
+          span {
+            color: #3296FA;
+            font-size: 14px;
+          }
+        }
+      }
+    }
     .topic-item {
       width: 100%;
       margin: 0 auto 5px;
@@ -156,10 +175,10 @@
     }
     .answer-wrap {
       margin-top: 5px;
-      width: 100%;
+      margin-left: 20px;
       textarea.ant-input {
         resize: none;
-        height: 50px;
+        height: 80px;
       }
     }
   }

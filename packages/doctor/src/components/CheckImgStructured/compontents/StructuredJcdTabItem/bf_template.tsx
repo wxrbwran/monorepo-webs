@@ -156,6 +156,7 @@ const StructuredDetailTopic: FC<IProps> = (props) => {
 
   const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly, tabKey, tempKey };
   const dataAndTemp = (inx: number) => {
+    console.log('initTopic===', initTopic);
     console.log('inxx', inx);
     let originInitTopic = [];
     // 如果有初始化数据 ，判断初始化数据的方法+部位 与当前用户输入的方法+部位是否一致，不一致的情况，清空之前的问题列表。

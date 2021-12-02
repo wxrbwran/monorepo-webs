@@ -2,21 +2,23 @@ import React, { FC, useState } from 'react';
 import { Radio, Input, RadioChangeEvent, Button } from 'antd';
 import { CloseCircleFilled, BorderOutlined, CheckSquareFilled, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { checkboxData, msg } from '../utils';
-import { IAddTopicProps } from '../type';
+import { IAddTopicProps, IQaItem } from '../type';
 import uuid from 'react-uuid';
 import { cloneDeep } from 'lodash';
 import styles from './index.scss';
 
-interface IChoiceItem {
+export interface IChoiceItem {
   uuid: string;
   question_type: string;
   question: string;
   answer: string[];
   options: string[];
+  createdTime?: number; // 创建时不存在，编辑和删除时存在，此时要把这个时间传给api
 }
 const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) => {
-  const { actionType, handleDelQuestion, editInx, closeModal, templateId } = props;
-  const [qa, setQa] = useState<IChoiceItem>({ ...cloneDeep(checkboxData), uuid: uuid() });
+  const { actionType, handleDelQuestion, handleSaveQuestion, closeModal, templateId, initData, editGroupInx } = props;
+  const initQa = initData ? cloneDeep(initData as IQaItem) : { ...cloneDeep(checkboxData), uuid: uuid() };
+  const [qa, setQa] = useState<IQaItem>(initQa);
   const handleEditCont = (e: any, type: string) => {
     if (type === 'question') {
       qa[type] = e.target.value;
@@ -26,19 +28,19 @@ const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) 
     setQa({ ...qa });
   };
   const handleSaveOption = (e: React.ChangeEvent<HTMLInputElement>, inx: number) => {
-    qa.options[inx] = e.target.value;
+    qa.options![inx] = e.target.value;
     setQa({ ...qa });
   };
   const handleDelOptions = (optionIndex: number, option?: string) => {
     if (option) {
       qa.answer = qa.answer!.filter((item: string) => item !== option);
     }
-    qa.options.splice(optionIndex, 1);
+    qa.options!.splice(optionIndex, 1);
     setQa({ ...qa });
   };
   // 添加选项 index表示第几题
   const handleAddOptions = () => {
-    qa.options.push('');
+    qa.options!.push('');
     setQa({ ...qa });
   };
   // 修改题型
@@ -59,26 +61,38 @@ const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) 
     console.log('------qas', qa);
     if (qa.question === '') {
       msg('请输入问题', 'error');
-    } else if (qa.options.includes('')) {
+    } else if (qa.options!.includes('')) {
       msg('内容不得为空', 'error');
-    } else if ([...new Set(qa.options)].length !== qa.options.length){
+    } else if ([...new Set(qa.options)].length !== qa.options!.length){
       msg('存在重复选项', 'error');
     } else {
+      const paramsQa = {
+        ...qa,
+        action: actionType === 'add' ? 'ADD' : 'ALTER',
+        answer: [],
+      };
+      if (initData) {
+        paramsQa.createdTime = (initData as IQaItem)?.createdTime;
+      }
       const params = {
         meta: { id: templateId },
-        data: [ qa ],
+        data: [ paramsQa ],
       };
-      console.log('------1', params);
-      // api.image.postImageTemplate(params).then(res => {
-      //   console.log('添加成功', res);
-      //   // handleSaveQuestion(qas, actionType);
-      //   // closeModal();
-      // });
+      window.$api.image.postImageTemplate(params).then(() => {
+        msg('保存成功', 'success');
+        handleSaveQuestion(qa, actionType, editGroupInx);
+        closeModal();
+      });
     }
   };
   const handleDelete = () => {
-    if (actionType === 'edit' && editInx) {
-      handleDelQuestion(editInx);
+    if (actionType === 'edit' && editGroupInx && initData) {
+      const qasData = { ...initData, action: 'DELETE' };
+      const params = { meta: { id: templateId }, data: [qasData] };
+      window.$api.image.postImageTemplate(params).then(() => {
+        msg('删除成功', 'success');
+        handleDelQuestion(editGroupInx);
+      });
     }
     closeModal();
   };

@@ -1,0 +1,14 @@
+.choice {
+  :global {
+    .ant-radio-wrapper {
+      display: block;
+      margin-left: 20px;
+    }
+    .ant-checkbox-wrapper {
+      font-size: 14px;
+      display: flex;
+      margin-left: 20px;
+      margin-bottom: 5px;
+    }
+  }
+}

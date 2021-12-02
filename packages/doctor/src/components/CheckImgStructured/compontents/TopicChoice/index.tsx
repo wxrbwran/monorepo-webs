@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Checkbox, Radio } from 'antd';
-import { IQuestions } from 'typings/imgStructured';
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
+import { IQaItem } from '../type';
+import styles from './index.scss';
 
 interface IProps {
   changeCallbackFns: (params: ICallbackFn) => void;
-  initData: IQuestions[] | undefined;
+  initData: IQaItem[] | undefined;
   isViewOnly: boolean;
   templateId: string;
+  isFirstEdit: boolean; // 是否首次结构化
 }
 // saveAddQa
 function TopicChoice(props: IProps) {
   console.log('choiceProps', props);
-  const { changeCallbackFns, initData, isViewOnly, templateId } = props;
-  const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
+  const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
+  const [questions, setQuestions] = useState<IQaItem[]>(initData ? initData : []);
+  const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
   const handleSave = (a) => new Promise((resolve) => {
     console.log(a);
     // resolve(fetchSubmitData(questions, 2));
@@ -26,6 +29,8 @@ function TopicChoice(props: IProps) {
   useEffect(() => {
     if (initData && isEmpty(questions)) {
       setQuestions(initData);
+      const hasVal: IQaItem[] = initData.filter(qaItem => !isEmpty(qaItem.answer));
+      setValuableQas(hasVal);
     }
   }, [initData]);
   useEffect(() => {
@@ -38,7 +43,7 @@ function TopicChoice(props: IProps) {
   }, [questions]);
 
   // 勾选操作---显示状态勾选
-  const handleChangeOptions = (e: any, item: IQuestions, quesInx: number) => {
+  const handleChangeOptions = (e: any, item: IQaItem, quesInx: number) => {
     if (item.question_type === 'RADIO') {
       questions[quesInx].answer = [e.target.value];
     } else {
@@ -47,67 +52,70 @@ function TopicChoice(props: IProps) {
     setQuestions([...questions]);
   };
 
-  const handleDelQuestion = () => {
-
+  const handleDelQuestion = (editIndex: number) => {
+    questions.splice(editIndex, 1);
+    setQuestions(cloneDeep(questions));
   };
-  const handleSaveQuestion = () => {
-
+  const handleSaveQuestion = (data: IQaItem, actionType: string, editIndex?: number) => {
+    if (actionType === 'add') {
+      setQuestions([...questions, data]);
+    } else if (actionType === 'edit' && editIndex !== undefined) {
+      questions[editIndex] = data;
+      setQuestions(cloneDeep(questions));
+    }
   };
-  console.log('最新questions', questions);
-  let emptyAnsNum = 0;
+  console.log('最新questions---choice', questions);
+  const editProps = {
+    templateId,
+    handleDelQuestion,
+    handleSaveQuestion,
+    isFirstEdit,
+    topicType: 'RADIO',
+  };
   return (
-    <div className="p-15 my-15">
-      {/* <TopicTitle number="二" handleAdd={debounce(handleAddTopic, 300)} btnText='添加新的选择题' /> */}
+    <div className={styles.choice}>
       <div className="qa-wrap">
       {
-        questions.map((item: IQuestions, quesIndex: number) => {
-          let isShow = true;
-          if (isViewOnly) {
-            if (isEmpty(item.answer) || !item.answer?.[0]?.trim()) {
-              isShow = false;
-              ++emptyAnsNum;
+        (isViewOnly ? valuableQas : questions).map((item: IQaItem, quesIndex: number) => (
+          <div key={item.question} className="relative ">
+            <div className="topic_title">
+              <span>{quesIndex + 1}. </span>
+              <span className="mr-10">{item.question}</span>
+              <TopicAddBtn
+                {...editProps}
+                actionType="edit"
+                initData={item}
+                editGroupInx={quesIndex}
+              />
+            </div>
+            {
+              item.question_type === 'RADIO' ? (
+                <Radio.Group
+                  onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
+                  value={item.answer[0]}
+                >
+                  {
+                    item.options!.map((option, optionInx) => (
+                      <Radio key={optionInx} value={option} disabled={isViewOnly}>{option}</Radio>
+                    ))
+                  }
+                </Radio.Group>
+              ) : (
+                <Checkbox.Group
+                  options={item.options}
+                  onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
+                  value={item.answer}
+                  disabled={isViewOnly}
+                />
+              )
             }
-          }
-          if (isShow) {
-            return (
-              <div key={quesIndex} className="mb-10 pl-12 relative topic-item-show">
-                <span>
-                  <span>{quesIndex - emptyAnsNum + 1}. </span>
-                  <span className="mr-10">{item.question}</span>
-                </span>
-                {
-                  item.question_type === 'RADIO' ? (
-                    <Radio.Group
-                      onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
-                      value={item.answer[0]}
-                    >
-                      {
-                        item.options!.map((option, optionInx) => (
-                          <Radio key={optionInx} value={option} disabled={isViewOnly}>{option}</Radio>
-                        ))
-                      }
-                    </Radio.Group>
-                  ) : (
-                    <Checkbox.Group
-                      options={item.options}
-                      onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
-                      value={item.answer}
-                      disabled={isViewOnly}
-                    />
-                  )
-                }
-              </div>
-            );
-          }
-        })
+          </div>
+        ))
       }
       </div>
       <TopicAddBtn
-        topicType="RADIO"
+        {...editProps}
         actionType="add"
-        templateId={templateId}
-        handleDelQuestion={handleDelQuestion}
-        handleSaveQuestion={handleSaveQuestion}
       />
     </div>
   );

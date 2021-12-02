@@ -4,8 +4,9 @@ import TopicChoice from '../TopicChoice';
 import TopicProblem from '../TopicProblem';
 import TopicDdtk from '../TopicDdtk';
 import styles from './index.scss';
-import { fetchInitData } from '../utils';
-import { IJcdTabItem } from '../type';
+// import { fetchInitData } from '../utils';
+import { IJcdTabItem, IQaItem } from '../type';
+import { cloneDeep } from 'lodash';
 import * as api from '@/services/api';
 
 interface IProps {
@@ -21,18 +22,36 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
   console.log('gggprops', props);
   const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, imageId, outType } = props;
   const { tabKey } = initData.meta;
-  console.log('isEmpty(initData)', initData.meta);
-  const [initTopic, setinitTopic] = useState(initData.data ? fetchInitData(initData) : []);
+  const initEmptyData: { [key: string]: IQaItem[] } = { COMPLETION: [], CHOICE: [], TEXT: [], BASE: [] };
+  const fetchInitData = (data: IQaItem[]) => {
+    let initD: { [key: string]: IQaItem[] } = cloneDeep(initEmptyData);
+    data.forEach(item => {
+      switch (item.question_type) {
+        case 'TEXT':
+        case 'BASE':
+        case 'COMPLETION':
+          initD[item.question_type].push(item);
+          break;
+        case 'RADIO':
+        case 'CHECKBOX':
+          initD.CHOICE.push(item);
+          break;
+        default:
+          break;
+      }
+    });
+    console.log('========initD', initD);
+    return initD;
+  };
+  const [initTopic, setinitTopic] = useState(initData.data ? fetchInitData(initData.data) : cloneDeep(initEmptyData));
   const topicCallbackFns = useRef({});
   useEffect(() => {
     if (initData.data) {
-      setinitTopic(fetchInitData(initData));
+      setinitTopic(fetchInitData(initData.data));
     } else {
       api.image.fetchImageTopicTemplate({ id: initData.meta.id }).then((res: any) => {
-        console.log('=======12', res);
-        // 接口原来数据格式没变，返回list数组，目前只取第一个即可 11.18 琳
-        console.log('fetchInitData(res?.list?.[0])', fetchInitData(res?.list?.[0]));
-        setinitTopic(res?.list?.[0] ? fetchInitData(res?.list?.[0]) : []);
+        // 接口原来数据格式没变，返回list数组，目前只取第一个即可 11.18 琳巍
+        setinitTopic(res?.list?.[0] ? fetchInitData(res?.list?.[0]?.data) : cloneDeep(initEmptyData));
       });
     }
   }, [initData]);
@@ -41,6 +60,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
     jcdCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
       Promise.all(Object.values(topicCallbackFns.current)
         .map((fn) => fn())).then((topicList) => {
+        console.log('=======883883', topicList);
         resolve({
           data: topicList,
           meta: {
@@ -65,23 +85,23 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
     fns[type] = fn;
     topicCallbackFns.current = { ...fns };
   };
-
-  const subProps = { changeCallbackFns: changeTopicCallbackFns, isViewOnly, templateId: initData.meta.id };
-  const dataAndTemp = (inx: number) => {
-    console.log('inxx', inx);
-    let originInitTopic = initTopic?.[inx];
-    return originInitTopic;
+  const subProps = {
+    changeCallbackFns: changeTopicCallbackFns,
+    isViewOnly,
+    templateId: initData.meta.id,
+    meta: initData.meta,
+    isFirstEdit: !initData.data, // 是否是修改化验单
   };
   return (
     <div className={`${styles.topic_list}`}>
       <TopicBaseInfo
         outType={outType}
-        initData={[...initTopic?.[0] || []]}
+        initData={initTopic.BASE}
         {...subProps}
       />
-      <TopicDdtk initData={dataAndTemp(1)} {...subProps} />
-      <TopicChoice initData={dataAndTemp(2)} {...subProps} />
-      <TopicProblem initData={dataAndTemp(3)} {...subProps} />
+      <TopicDdtk initData={initTopic.COMPLETION} {...subProps} />
+      <TopicChoice initData={initTopic.CHOICE} {...subProps} />
+      <TopicProblem initData={initTopic.TEXT} {...subProps} />
     </div>
   );
 };

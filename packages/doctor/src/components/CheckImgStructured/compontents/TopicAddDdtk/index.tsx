@@ -1,27 +1,23 @@
 import React, { FC, useState, useRef } from 'react';
 import styles from './index.scss';
 import { ddtkExample, ddtkData, msg } from '../utils';
-import { IAddTopicProps } from '../type';
+import { IAddTopicProps, IQaItem } from '../type';
 import { Input, Button } from 'antd';
 import { CheckCircleOutlined, DeleteOutlined, CloseCircleFilled } from '@ant-design/icons';
 import * as api from '@/services/api';
 import uuid from 'react-uuid';
 import { cloneDeep } from 'lodash';
 
-interface IDdtkItem {
-  uuid: string;
-  question_type: string;
-  question: string;
-  answer: string[],
-}
 const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) => {
-  const { actionType, handleDelQuestion, editInx, closeModal, templateId } = props;
+  const { actionType, handleDelQuestion, closeModal, templateId, handleSaveQuestion,
+    initData, editGroupInx } = props;
+  console.log('====editDdtk', props);
   const curUuid = useRef(uuid());
   let initQas = [];
   for (let i = 0; i < 4; i++) {
     initQas.push(ddtkData(curUuid.current));
   }
-  const [qas, setQas] = useState<IDdtkItem[]>(initQas);
+  const [qas, setQas] = useState<IQaItem[]>(initData ? cloneDeep(initData as IQaItem[]) : initQas);
   const handleEditCont = (e: any, type: string, inx: number) => {
     if (type === 'question') {
       qas[inx][type] = e.target.value;
@@ -44,26 +40,43 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
     } else if (qas.find(qaItem => qaItem.question === '')) {
       msg('请输入问题', 'error');
     } else {
-      // handleSaveQuestion(qas, actionType);
-      // closeModal();
-      qas.map((qaItem, inx) => {
-        return {
+      const qasData = qas.map((qaItem, inx) => {
+        const qa = {
           ...qaItem,
-          group: inx === 0 ?  '1-1' : `1-1-${inx}`,
+          group: inx === 0 ?  '1-1' : `1-1-${inx - 1}`,
+          action: actionType === 'add' ? 'ADD' : 'ALTER',
+          answer: [],
         };
+        if (initData) {
+          qa.createdTime = initData[0].createdTime;
+        }
+        return qa;
       });
       const params = {
         meta: { id: templateId },
+        data: qasData,
       };
-      api.image.postImageTemplate(params).then(res => {
-        console.log('添加多段填空成功', res);
+      api.image.postImageTemplate(params).then(() => {
+        msg('保存成功', 'success');
+        handleSaveQuestion(qas, actionType, editGroupInx);
+        closeModal();
       });
     }
 
   };
   const handleDelete = () => {
-    if (actionType === 'edit') {
-      handleDelQuestion(editInx);
+    if (actionType === 'edit' && editGroupInx && initData) {
+      const qasData = initData.map((qaItem) => {
+        return { ...qaItem, action: 'DELETE' };
+      });
+      const params = {
+        meta: { id: templateId },
+        data: qasData,
+      };
+      api.image.postImageTemplate(params).then(() => {
+        msg('删除成功', 'success');
+        handleDelQuestion(editGroupInx);
+      });
     }
     closeModal();
   };

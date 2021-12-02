@@ -5,10 +5,11 @@ import { IAddTopicProps } from '../type';
 import TopicAddDdtk from '../TopicAddDdtk';
 import TopicAddProblem from '../TopicAddProblem';
 import TopicAddChoice from '../TopicAddChoice';
+import { EditOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
 const TopicAddBtn: FC<IAddTopicProps> = (props) => {
-  const { topicType, actionType } = props;
+  const { topicType, actionType, isFirstEdit } = props;
   const [showModal, setshowModal] = useState(false);
   const closeModal = () => {
     setshowModal(false);
@@ -20,7 +21,7 @@ const TopicAddBtn: FC<IAddTopicProps> = (props) => {
   const typeObj = {
     COMPLETION: {
       title: '多段填空',
-      comp: <TopicAddDdtk {...topicProps}/>,
+      comp: <TopicAddDdtk {...topicProps} />,
     },
     RADIO: {
       title: '选择题',
@@ -37,13 +38,17 @@ const TopicAddBtn: FC<IAddTopicProps> = (props) => {
   return (
     <div className={styles.btn_wrap}>
       {
-        actionType === 'add' ? (
-          <div className={styles.btn}>
-            <span className="cursor-pointer" onClick={debounce(handleShow, 300)}>
-              +添加新的{typeObj[topicType].title}
-            </span>
-          </div>
-        ) : <div onClick={debounce(handleShow, 300)}>编辑</div>
+        isFirstEdit && (
+          actionType === 'add' ? (
+            <div className={styles.btn}>
+              <span className="cursor-pointer" onClick={debounce(handleShow, 300)}>
+                +添加新的{typeObj[topicType].title}
+              </span>
+            </div>
+          ) : <div onClick={debounce(handleShow, 300)} className="edit_btn">
+                <EditOutlined />编辑
+              </div>
+        )
       }
       <DragModal
         wrapClassName="ant-modal-wrap-center cancel_text_blue"
