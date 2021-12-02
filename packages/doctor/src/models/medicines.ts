@@ -3,40 +3,40 @@ import { Effect } from 'dva';
 import medicine from '@/services/api/medicine';
 import { compare } from '@/utils/utils';
 
-export interface DetailModelState {
+export interface MedicineModelState {
   currentMedicinePlans: [];
 }
 
-export interface DetailModelType {
+export interface MedicineModelType {
   namespace: string;
-  state: DetailModelState;
+  state: MedicineModelState;
   effects: {
     fetchMedicineDetail: Effect;
   };
   reducers: {
-    setMedicineDetail: Reducer<DetailModelState>;
+    setMedicineDetail: Reducer<MedicineModelState>;
   };
 }
 
-export const detailState: DetailModelState = {
+export const MedicineState: MedicineModelState = {
   currentMedicinePlans: [],
 };
 
-const Model: DetailModelType = {
+const Model: MedicineModelType = {
   namespace: 'medicines',
-  state: detailState,
+  state: MedicineState,
 
   effects: {
-    * fetchMedicineDetail({ payload }, { call, put }) {
+    *fetchMedicineDetail({ payload }, { call, put }) {
       const response = yield call(medicine.getPlans, payload);
       yield put({
-        type: 'setMedicineDetail',
+        type: 'setMedicineMedicine',
         payload: response,
       });
     },
   },
   reducers: {
-    setMedicineDetail(state = detailState, { payload }) {
+    setMedicineDetail(state = MedicineState, { payload }) {
       // 过滤含有deleteAt字段的计划
       // const filterPlans = payload.allPlans.map((item: { plans: any[] }) => ({
       //   ...item,
