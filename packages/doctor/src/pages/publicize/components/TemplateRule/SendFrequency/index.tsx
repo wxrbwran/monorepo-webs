@@ -8,10 +8,16 @@ import ContentPopover from '../ContentPopover';
 import { IList } from '../../../const';
 
 
+
+interface IFrequency {
+
+  frequency: 'NONE' | 'LOOP' | 'CUSTOM',
+  custom: { day: string, time: string, content: any[] },
+}
 interface IProps {
 
-  initFrequency: any;
-  onFrequencyChange: (frequency: any) => void;
+  initFrequency: IFrequency;
+  onFrequencyChange: (frequency: IFrequency) => void;
   type: 'crf' | 'education' | 'suifang';
 }
 const { Option } = Select;
@@ -34,17 +40,19 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
   //改变发送频率类型
   const handleGetType = (value: string) => {
     frequency.frequency = value;
-    frequency.custom = [''];
+    frequency.custom = [{ day: '', time: '', content: [] }];
     setFrequency({ ...frequency });
   };
   //添加发送频率
   const handleAddDayEdit = () => {
-    frequency.custom.push({ day: '', time: '' });
-
+    frequency.custom.push({ day: '', time: '', content: [] });
     setFrequency({ ...frequency });
   };
   //修改发送频率
   const handleChangeCustomCycleDay = (e: any, index: number) => {
+
+    console.log('============== e e', JSON.stringify(e));
+    console.log('============== frequency', JSON.stringify(frequency));
     frequency.custom[index].day = e;
     setFrequency({ ...frequency });
   };
@@ -55,7 +63,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
   };
   //循环下发天数
   const handleChangeCycleDay = (day: number) => {
-    frequency.custom = [{ day: day, time: '' }];
+    frequency.custom = [{ day: day, time: '', content: [] }];
     setFrequency({ ...frequency });
   };
 
@@ -65,10 +73,10 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
     setFrequency({ ...frequency });
   };
 
-  const onContentListAdd = (choicesSid: IList[], frequencyIndex: number) => {
+  const onContentListAdd = (choices: IList[], frequencyIndex: number) => {
 
     console.log('============ frequency.custom ', JSON.stringify(frequency.custom), frequencyIndex);
-    frequency.custom[frequencyIndex].contents = choicesSid;
+    frequency.custom[frequencyIndex].contents = choices;
     setFrequency({ ...frequency });
   };
 
@@ -94,7 +102,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
   return (
     <div className='mt-20'>
       <h2>
-        <span className={styles.start}>*</span>发送频率：
+        <span className={styles.start}></span>发送频率：
       </h2>
       <div className={styles.send_type}>
         <Select style={{ width: 180 }} onChange={handleGetType} value={frequency.frequency}>
@@ -104,37 +112,39 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
             </Option>
           ))}
         </Select>
-        {frequency.frequency === 'CUSTOM' ? (
+        {frequency.frequency === 'CUSTOM' && (
           <div className={styles.self}>
+            首次发送给患者后
             <div className={styles.self_content}>
               {frequency.custom.map((item: any, index) => (
                 <div className={styles.add_item} key={index}>
-                  <div className={`${styles.add_item_left} w-120`}>
-                    <span>第</span>
+                  <div className={`${styles.add_item_left}`}>
                     <InputNumber
-                      style={{ width: 50 }}
+                      addonBefore={'第'}
+                      addonAfter={'天'}
+                      style={{ width: 120 }}
                       min={1}
                       max={9999}
-                      value={item.day}
+                      value={item.day ?? null}
                       onChange={(e) => handleChangeCustomCycleDay(e, index)}
                     />
-                    <span className={styles.info}>天</span>
                   </div>
-                  <div className={`ml-20 mr-20 ${styles.time}`}>
-                    <TimePicker className='ml-10 mr-10' value={item.time ? moment(item.time, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, index); }} />
+                  <div className={`ml-10 mr-10 ${styles.time}`}>
+                    <TimePicker value={item.time ? moment(item.time, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, index); }} />
                   </div>
-                  <div className={styles.self_add}>
+                  发送一次
+                  <div className='ml-10'>
                     {index === 0 ? (
-                      <Button size="large" onClick={handleAddDayEdit}>
-                        添加更多
+                      <Button className={styles.addBtn} size="large" onClick={handleAddDayEdit}>
+                        添加
                       </Button>
                     ) : (
-                      <Button size="large" onClick={() => handleDeleteDay(index)}>
+                      <Button className={styles.deleteBtn} size="large" type='default' onClick={() => handleDeleteDay(index)}>
                         删除
                       </Button>
                     )}
                   </div>
-                  <div className='ml-20'>
+                  <div className='ml-10'>
                     {
                       contentPopver(index)
                     }
@@ -143,30 +153,36 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
               ))}
             </div>
           </div>
-        ) : (
-          <div className={styles.cycle}>
-
-            <div className='mr-5'>
-              每
-            </div>
-            <InputNumber
-              style={{ width: 50 }}
-              min={1}
-              max={9999}
-              value={frequency.custom[0].day}
-              onChange={handleChangeCycleDay}
-            />
-            <div className='ml-5'>
-              天下发一次
-            </div>
-            <div className='ml-20'>
-              {
-                contentPopver(0)
-              }
-            </div>
-
-          </div>
         )}
+        {
+          frequency.frequency === 'LOOP' &&
+          (
+            <div className={styles.cycle}>
+              <div className='mr-10 ml-10'>
+                首次发送给患者后
+              </div>
+              <InputNumber
+                addonBefore={'每'}
+                addonAfter={'天'}
+                style={{ width: 120 }}
+                min={1}
+                max={9999}
+                value={frequency.custom[0].day}
+                onChange={handleChangeCycleDay}
+              />
+              <div className={`ml-10 mr-10 ${styles.time}`}>
+                <TimePicker value={frequency.custom[0].time ? moment(frequency.custom[0].time, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, 0); }} />
+              </div>
+              发送一次
+              <div className='ml-10'>
+                {
+                  contentPopver(0)
+                }
+              </div>
+
+            </div>
+          )
+        }
       </div>
     </div>
   );

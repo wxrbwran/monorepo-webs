@@ -19,6 +19,9 @@ export const sendType = [
   }, {
     key: 'LOOP',
     value: '循环下发',
+  }, {
+    key: 'NONE',
+    value: '无',
   },
 ];
 
@@ -82,6 +85,13 @@ export interface IModel {
   inputHM?: string; // 当childItemType是diy时，会有输入时间组件，此时才可能有值
   inputTime?: string; // 当childItemType是time时，会有输入年月日时间组件，此时才可能有值
 }
+
+export const AfterPatientBind = '患者与我绑定日期后';
+export const DIY = '自定义';
+export const ImmediatelySend = '立即发送';
+export const SpecificDate = '选择特定日期';
+export const PlanCreatedSendImmediately = '计划创建成功后立即发送';
+
 export const FirstTimeModel: IModel = {
 
   childItemType: 'select',
@@ -89,26 +99,26 @@ export const FirstTimeModel: IModel = {
   childItem: [
     {
       childItemType: 'select',
-      description: '患者与我绑定日期后',
+      description: AfterPatientBind,
       childItem: [
         {
           childItemType: 'diy',
-          description: '自定义',
+          description: DIY,
 
         },
         {
           childItemType: 'none',
-          description: '立即发送',
+          description: ImmediatelySend,
         },
       ],
     },
     {
       childItemType: 'time',
-      description: '选择特定日期',
+      description: SpecificDate,
     },
     {
       childItemType: 'none',
-      description: '计划创建成功后立即发送',
+      description: PlanCreatedSendImmediately,
     },
   ],
 };
@@ -187,22 +197,20 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
   const choiceModel = { childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' };
 
   if (chooseStartTime) { // 说明选择的是 患者与我绑定日期后
-    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == '患者与我绑定日期后')[0];
+    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == AfterPatientBind)[0];
     // action.
     if (action.params.period == 0) { // 选择的是 立即发送
-      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == '立即发送')[0];
+      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == ImmediatelySend)[0];
     } else { // 选择的是自定义
-      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == '自定义')[0];
+      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == DIY)[0];
       choiceModel.choiceModel.choiceModel.choiceModel.inputDay = action.params.period;
       choiceModel.choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
     }
   } else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
-    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == '选择特定日期')[0];
+    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
     choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime * 1000).format('YYYY-MM-DD HH:mm');
-
-    console.log('============ 选择特定日期 ', ruleDoc.meta.firstAtTime * 1000, dayjs(ruleDoc.meta.firstAtTime * 1000).format('YYYY-MM-DD HH:mm'));
   } else {
-    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == '计划创建成功后立即发送')[0];
+    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
   }
   return ({
     choiceModel: choiceModel,
@@ -289,7 +297,9 @@ export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any
       contents: action.params.sourceMember,
     });
   }
-
+  if (frequency.custom.length == 0) {
+    frequency.frequency = 'NONE';
+  }
 
   const firstTime = getStartTimeChoiceModel(chooseStartTime, rule.actions[0], ruleDoc);
 
@@ -307,20 +317,19 @@ export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any
 
 export function getStartTimeDescriptionFromConditionss(firstTime: any) {
 
-  console.log('================ getStartTimeDescriptionFromConditionss', JSON.stringify(firstTime));
   let str = '';
 
   const choiceModel = firstTime?.choiceModel;
-  if (choiceModel?.choiceModel?.choiceModel?.description == '患者与我绑定日期后') {
-    str = str + '患者与我绑定日期后   ';
-    if (choiceModel?.choiceModel?.choiceModel?.choiceModel?.description == '立即发送') {
-      str = str + '立即发送   ';
+  if (choiceModel?.choiceModel?.choiceModel?.description == AfterPatientBind) {
+    str = str + AfterPatientBind + '   ';
+    if (choiceModel?.choiceModel?.choiceModel?.choiceModel?.description == ImmediatelySend) {
+      str = str + ImmediatelySend + '   ';
     } else {
       str = str + '第' + choiceModel.choiceModel.choiceModel.choiceModel.inputDay + '天' + choiceModel.choiceModel.choiceModel.choiceModel.inputHM;
     }
-  } else if (choiceModel?.choiceModel?.choiceModel?.description == '选择特定日期') {
+  } else if (choiceModel?.choiceModel?.choiceModel?.description == SpecificDate) {
 
-    str = str + '选择特定日期   ' + choiceModel.choiceModel.choiceModel.inputTime + '  ';
+    str = str + SpecificDate + '   ' + choiceModel.choiceModel.choiceModel.inputTime + '  ';
   } else {
     str = str + choiceModel?.choiceModel?.choiceModel?.description ?? '';
   }

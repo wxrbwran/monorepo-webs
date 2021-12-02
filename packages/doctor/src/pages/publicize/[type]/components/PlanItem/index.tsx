@@ -6,7 +6,7 @@ import frequency from '@/assets/img/suifang/frequency.svg';
 import groupIcon from '@/assets/img/suifang/group.svg';
 import ListItem from '../../../components/ListItem';
 import openIcon from '@/assets/img/icon_open.png';
-import { ProfileOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ProfileOutlined } from '@ant-design/icons';
 import SendCalendar from '../SendCalendar';
 import { useParams } from 'umi';
 import { Button, Popconfirm, message } from 'antd';
@@ -16,10 +16,12 @@ import { getConditionDescriptionFromConditionss, getStartTimeDescriptionFromCond
 
 interface IProps {
   data: any;
-  status?: string;
-  stopSendSuccess: () => void;
+  status: 'sending' | 'stop' | 'add';
+  stopSendSuccess?: () => void;
+  onEditClick?: () => void;
+  remove?: () => void;
 }
-const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess }) => {
+const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remove }) => {
   const { type } = useParams<{ type: string }>();
   const [open, setopen] = useState(false);
   console.log('======121', data);
@@ -68,7 +70,9 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess }) => {
     window.$api.education.delPublicizRule(data.rule.id).then(() => {
       message.success('操作成功');
       // 这里需要刷新下列表
-      stopSendSuccess();
+      if (stopSendSuccess) {
+        stopSendSuccess();
+      }
     });
   };
   return (
@@ -80,9 +84,12 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess }) => {
           </ReplyDetail>
         )}
         {
-          status === 'stop' ? (<div className={styles.stop}>已停止</div>) : (
+          status === 'stop' && (<div className={styles.stop}>已停止</div>)
+        }
+        {
+          status === 'sending' && (
             <>
-              <Button type="link" icon={<FormOutlined />}>修改</Button>
+              <Button type="link" icon={<FormOutlined />} onClick={onEditClick}>编辑</Button>
               <SendCalendar ruleId={data.rule.id}>
                 <div className={styles.calendar}> <Button type="link" icon={<CalendarOutlined />}>发送日历</Button></div>
               </SendCalendar>
@@ -96,6 +103,14 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess }) => {
               >
                 <Button type="link" icon={<MinusCircleOutlined />}>停止发送</Button>
               </Popconfirm>
+            </>
+          )
+        }
+        {
+          status === 'add' && (
+            <>
+              <Button type="link" icon={<FormOutlined />} onClick={onEditClick}>编辑</Button>
+              <Button type="link" icon={<DeleteOutlined />} onClick={remove}>删除</Button>
             </>
           )
         }
@@ -120,25 +135,47 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess }) => {
               ))}
           </div>
         </div>
-        <div className={`${styles.tit} flex center`}>
-          <img src={frequency} alt="" />
-          <p className="text-gray-900 text-base ml-5">发送频率:</p>
-        </div>
-        {data.chooseValues.frequency && <div className="ml-20 mb-20">首次发送给患者后{data.chooseValues.frequency.frequency == 'CUSTOM' ? '第' : '每'}{data.chooseValues.frequency.custom.map((item) => item.day).join()}天{data.chooseValues.frequency.custom.map((item) => item.time).join()}发送一次</div>}
-        <div className="flex ml-20">
-          <span>发送：</span>
-          <div className={`${styles.block} flex justify-start  items-end flex-wrap`}>
-            {content &&
-              content.map((con) => (
-                <ListItem
-                  key={con.id}
-                  type={fileType[con?.type] || 'accompany'}
-                  item={con}
-                  location={location}
-                />
-              ))}
+        {
+          data.chooseValues.frequency != 'NONE' && (
+            <div className={`${styles.tit} flex center`}>
+              <img src={frequency} alt="" />
+              <p className="text-gray-900 text-base ml-5">发送频率:</p>
+            </div>
+          )
+        }
+        {data.chooseValues.frequency != 'NONE' &&
+          <div className="ml-20 mb-20">
+            {
+              data.chooseValues.frequency.custom.map((item) => {
+
+                return (
+                  <>
+                    首次发送给患者后
+                    {data.chooseValues.frequency.frequency == 'CUSTOM' ? '    第' : '    每'}
+                    {item.day}天{item.time}
+                    <div className="flex">
+                      <span>发送：</span>
+                      <div className={`${styles.block} flex justify-start  items-end flex-wrap`}>
+                        {content &&
+                          content.map((con) => (
+                            <ListItem
+                              key={con.id}
+                              type={fileType[con?.type] || 'accompany'}
+                              item={con}
+                              location={location}
+                            />
+                          ))}
+                      </div>
+                    </div>
+                  </>
+
+
+                );
+              })
+            }
           </div>
-        </div>
+        }
+
         {
           conditionDescription && (conditionDescription.age || conditionDescription.sex || conditionDescription.disease || conditionDescription.treatment) &&
           <div className={`${styles.tit} flex center`}>
@@ -147,7 +184,7 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess }) => {
           </div>
         }
         {(conditionDescription &&
-          <div className='mb-20'>
+          <div className='ml-20 mb-20'>
             {conditionDescription.age && <p>{conditionDescription.age}</p>}
             {conditionDescription.sex && <p>{conditionDescription.sex}</p>}
             {conditionDescription.disease && <p>{conditionDescription.disease}</p>}

@@ -13,8 +13,8 @@ import SendGroup from './SendGroup';
 // import { CrfScaleSourceType, SubectiveScaleSourceType, transformDynamicToStatic, ObjectiveSourceType } from '../../pages/query/util';
 // import { isEmpty, cloneDeep } from 'lodash';
 // import { IChooseValues, ICondition, IItem, IRuleDoc } from '../../pages/subjective_table/util';
-import { Button } from 'antd';
-import { IItem, IRuleDoc } from './util';
+import { Button, message } from 'antd';
+import { AfterPatientBind, DIY, IItem, ImmediatelySend, IRuleDoc, PlanCreatedSendImmediately, SpecificDate } from './util';
 import { cloneDeep, isEmpty } from 'lodash';
 import ContentPopover from './ContentPopover/index';
 import { IList } from '../../const';
@@ -265,13 +265,13 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: { day: 
       // }
       arrary.push(action);
     }
-  } else {
+  } else if (frequency.frequency === 'LOOP') {
 
     const period = frequency.custom[0];
     const action: any = {
       type: 'rolling',
       params: {
-        delay: 9 * 60 * 60,
+        delay: getDelay(period.time),
         period: period.day,
         unit: 'day',
         sourceMember: period.contents.map((item: { id: any; }) => {
@@ -295,8 +295,8 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
   const arr = [];
 
   console.log('==================  firstTime firstTime', JSON.stringify(firstTime));
-  if (firstSteps.includes('自定义')) {
-    const index = firstSteps.indexOf('自定义');
+  if (firstSteps.includes(DIY)) {
+    const index = firstSteps.indexOf(DIY);
     const action: any = {
       type: 'once',
       params: {
@@ -335,7 +335,7 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
 const titleAllChoosesToMustParma = (chooseStartTime: IItem, firstSteps: string[], choseConditions: ICondition[]) => {
 
 
-  if (firstSteps.includes('患者与我绑定日期后')) {
+  if (firstSteps.includes(AfterPatientBind)) {
 
     const must = [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)];
     return must;
@@ -347,10 +347,10 @@ const titleAllChoosesToMustParma = (chooseStartTime: IItem, firstSteps: string[]
 const getFirstSteps = (firstTime: any): string[] => {
   const steps = [];
   steps.push(firstTime.description);
-  if (firstTime.description == '自定义') {
+  if (firstTime.description == DIY) {
     steps.push(firstTime.inputDay);
     steps.push(firstTime.inputHM);
-  } else if (firstTime.description == '选择特定日期') {
+  } else if (firstTime.description == SpecificDate) {
     steps.push(firstTime.inputTime);
   }
   if (firstTime?.choiceModel) {
@@ -358,6 +358,7 @@ const getFirstSteps = (firstTime: any): string[] => {
   }
   return steps;
 };
+
 
 interface IProps {
   originRuleDoc?: IRuleDoc;
@@ -417,7 +418,7 @@ const TemplateRule: FC<IProps> = ({
 
   // 发送发送频率
   const initFrequency = {
-    frequency: 'CUSTOM',
+    frequency: 'NONE',
     custom: [{ day: '', time: '', contents: [] }],
   };
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
@@ -525,8 +526,105 @@ const TemplateRule: FC<IProps> = ({
     setChoseScope(scope);
   };
 
+  const canSave = (firstSteps: string[]) => {
+
+    // 首次发送时间一定要填写
+    console.log('============= firstTime', JSON.stringify(firstTime));
+
+    if (firstSteps.includes(AfterPatientBind)) {
+
+      if (firstSteps.includes(ImmediatelySend)) {
+        // 填全了
+      } else if (firstSteps.includes(DIY)) {
+
+        const diyIndex = firstSteps.indexOf(DIY);
+        if (firstSteps.length > diyIndex + 2) {
+          if (!firstSteps[diyIndex + 1]) { // 没填写自定义的天数
+            return '请补全首次发送时间';
+          } else if (!firstSteps[diyIndex + 2]) { // 没填写自定义的时分
+            return '请补全首次发送时间';
+          }
+          // 填全了
+        } else {
+          return '请补全首次发送时间'; // 没填写自定义的天数或时间
+        }
+      } else {
+        return '请补全首次发送时间'; // 没选择自定义还是立即发送
+      }
+    } else if (firstSteps.includes(SpecificDate)) {
+      const dateIndex = firstSteps.indexOf(SpecificDate);
+      if (firstSteps.length > dateIndex + 1) {
+        if (!firstSteps[dateIndex + 1]) { // 没填写特定日期的时间
+          return '请补全首次发送时间';
+        }
+        // 填全了
+      } else {
+        return '请补全首次发送时间';
+      }
+    } else if (firstSteps.includes(PlanCreatedSendImmediately)) {
+      // 填全了
+    } else {
+      return '请补全首次发送时间';
+    }
+    if (!(firstTime?.choiceContents?.length > 0)) {
+      return '请补全首次发送的发送内容';
+    }
+
+
+    // 发送频率
+    if (frequency.frequency == 'CUSTOM' || frequency.frequency == 'LOOP') {
+      for (let i = 0; i < frequency.custom.length; i++) {
+        const period = frequency.custom[i];
+        if (!period.day || !period.time) {
+          return '请补全发送频率';
+        } else if (!(period.contents?.length > 0)) {
+          return '请补全发送频率的发送内容';
+        }
+      }
+    }
+
+    // 发送对象
+    if (!(choseScope.length > 0)) {
+      return '请选择发送对象';
+    }
+
+    // 发送条件
+    for (let i = 0; i < choseConditions.length; i++) {
+      if (choseConditions[i].chooseItem.name == 'basic.age') {
+        if (!choseConditions[i].chooseValue.min || !choseConditions[i].chooseValue.max) {
+          return '请补全发送条件的年龄范围';
+        }
+      } else if (choseConditions[i].chooseItem.name == 'basic.sex') {
+        if (!choseConditions[i].chooseValue.value) {
+          return '请补全发送条件的性别';
+        }
+      } else if (choseConditions[i].chooseItem.name == 'diagnose.disease') { // 诊断，多个用，连接
+
+        if (!choseConditions[i].chooseValue.value) {
+          return '请补全发送条件的诊断内容';
+        }
+      } else if (choseConditions[i].chooseItem.name == 'diagnose.treatment') { // 诊断，多个用，连接
+
+        if (!choseConditions[i].chooseValue.value) {
+          return '请补全发送条件的处理内容';
+        }
+      }
+    }
+
+    return null;
+  };
+
   const saveClick = () => {
 
+
+    const firstSteps = getFirstSteps(firstTime.choiceModel);
+    console.log('============= firsts', JSON.stringify(firstSteps));
+
+    const can = canSave(firstSteps);
+    if (can) {
+      message.error(can);
+      return;
+    }
 
     const set = Array.from(new Set(frequency.custom));
     const filter = set.filter((item) => !!item);
@@ -541,7 +639,6 @@ const TemplateRule: FC<IProps> = ({
     console.log('============= frequency', JSON.stringify(frequency));
 
 
-    const firstSteps = getFirstSteps(firstTime);
     const must = titleAllChoosesToMustParma(startTimeRef.current, firstSteps, choseConditions);
     console.log('=============must must', JSON.stringify(must));
     const should1 = tileChooseScopeToArray(choseScope);
@@ -569,8 +666,8 @@ const TemplateRule: FC<IProps> = ({
     };
 
     // 判断是不是要添加时间firstAtTime
-    if (firstSteps.includes('选择特定日期')) {
-      const index = firstSteps.indexOf('选择特定日期');
+    if (firstSteps.includes(SpecificDate)) {
+      const index = firstSteps.indexOf(SpecificDate);
       meta.firstAtTime = dayjs(firstSteps[index + 1], 'YYYY-MM-DD HH:mm').valueOf() / 1000;
     }
     // if (originRuleDoc) { // 说明是修改

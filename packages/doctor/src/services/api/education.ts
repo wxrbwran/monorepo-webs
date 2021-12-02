@@ -134,6 +134,11 @@ export default {
   addPublicizeRules(data?: any): Promise<any> {
     return http.post('publicize/rules', { data });
   },
+
+  // 新建宣教随访crf
+  appendRules(data?: any): Promise<any> {
+    return http.post('rules', { data });
+  },
   // // 获取规则详情
   getPublicizeGroupDetail(data: string): Promise<any> {
     return http.get('publicize/rules', { data });

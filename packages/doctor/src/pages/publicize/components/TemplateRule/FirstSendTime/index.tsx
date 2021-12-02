@@ -75,21 +75,21 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
           choiceItem.childItemType == 'diy' &&
           [
             <>
-              <div className={`ml-10 mr-10 ${styles.diy}`}>
-                第
+              <div className={`mr-10 ${styles.diy}`}>
                 <InputNumber
-                  style={{ width: 50 }}
+                  addonBefore={'第'}
+                  addonAfter={'天'}
+                  style={{ width: 120 }}
                   min={1}
+                  max={9999}
                   onChange={(val) => { dayChange(val, choiceItem); }}
                   value={choiceItem.inputDay}
-                  max={9999}
                 />
-                天
               </div>
             </>,
             <>
               <div className={styles.hm}>
-                <TimePicker className='ml-10 mr-10' value={choiceItem?.inputHM ? moment(choiceItem.inputHM, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} />
+                <TimePicker className='mr-10' value={choiceItem?.inputHM ? moment(choiceItem.inputHM, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} />
               </div>
 
             </>,
@@ -100,7 +100,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
         {
           choiceItem.childItemType == 'time' &&
           <div className={styles.time}>
-            <DatePicker showTime={{ format: 'HH:mm' }} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} format={'YYYY-MM-DD HH:mm'} />
+            <DatePicker showTime={{ format: 'HH:mm' }} value={choiceItem?.inputTime ? moment(choiceItem.inputTime, 'YYYY-MM-DD HH:mm') : null} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} format={'YYYY-MM-DD HH:mm'} />
           </div>
         }
       </>,

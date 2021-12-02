@@ -43,11 +43,10 @@ const SendGroup: FC<IProps> = ({ scopeSources, onGroupChange, choseScopes }: IPr
 
   const des = choseScope.map(item => item.description);
 
-  console.log('================== des des', JSON.stringify(choseScope));
   return (
     <div>
       <h2>
-        <span className={styles.start}>*</span>发送试验组：
+        <span className={styles.start}>*</span>发送对象：
       </h2>
       <CheckboxGroup
         options={options}
