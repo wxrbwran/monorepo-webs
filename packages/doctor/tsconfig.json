@@ -21,6 +21,10 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "esModuleInterop": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@@/*": ["./src/.umi/*"]
+    }
   },
   "include": ["src/**/*", "config/**/*"],
   "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
