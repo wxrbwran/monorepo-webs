@@ -64,17 +64,25 @@ const fillValueInScopeKey = (scopeKey: IItem) => {
   }
   for (let i = 0; i < scopeKey.items.length; i++) {
     const item = scopeKey.items[i];
-    item.operator = '=';
-    item.value = item.assign?.value ?? '';
 
+    item.value = item.assign?.value ?? '';
+    if (item.value.includes('{')) {
+      item.operator = 'in';
+    } else {
+      item.operator = '=';
+    }
     for (let j = 0; j < item.items.length; j++) {
       const subItem = item.items[j];
-      subItem.operator = '=';
+
       subItem.value = subItem.assign?.value ?? '';
+      if (subItem.value.includes('{')) {
+        subItem.operator = 'in';
+      } else {
+        subItem.operator = '=';
+      }
     }
   }
 };
-
 
 // const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
 
@@ -109,6 +117,7 @@ const tileChooseToArray = (item: IItem) => {
   if (cloneItem.items && cloneItem.items.length > 0) {
     // 将每个子项拿出来
     for (let i = 0; i < cloneItem.items.length; i++) {
+      console.log('=============== i', i, JSON.stringify(tileChooseToArray(cloneItem.items[i])));
       array = { ...array, ...tileChooseToArray(cloneItem.items[i]) };
     }
     // 将自己拼进去
@@ -475,7 +484,7 @@ const TemplateRule: FC<IProps> = ({
                   });
                 })
                 .catch((err: string) => {
-                  console.log('err', err);
+                  message.error(err?.result);
                 });
             }
           } else if (res.keys[i].name == 'condition') {
@@ -670,9 +679,9 @@ const TemplateRule: FC<IProps> = ({
       const index = firstSteps.indexOf(SpecificDate);
       meta.firstAtTime = dayjs(firstSteps[index + 1], 'YYYY-MM-DD HH:mm').valueOf() / 1000;
     }
-    // if (originRuleDoc) { // 说明是修改
-    //   meta = originRuleDoc.meta;
-    // }
+    if (originRuleDoc) { // 说明是修改
+      meta = originRuleDoc.meta;
+    }
     const params: any = {
       rules: [{
         match: {

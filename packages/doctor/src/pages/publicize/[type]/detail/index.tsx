@@ -10,10 +10,11 @@ import { message, Tabs } from 'antd';
 
 import styles from './index.scss';
 import { sfTypeUrl } from '../../utils';
-import { getChooseValuesKeyFromRules } from '../../components/TemplateRule/util';
+import { fileTypes, getChooseValuesKeyFromRules } from '../../components/TemplateRule/util';
 import PlanContent from '../create/PlanContent';
-import { cloneDeep } from 'lodash';
+
 import TemplateRule from '../../components/TemplateRule';
+
 
 const { TabPane } = Tabs;
 const EducationDetail: FC<ILocation> = ({ location }) => {
@@ -24,7 +25,7 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
 
   const getRules = (docStatusType: number) => {
     api.education
-      .getSendContent({
+      .getAllRules({
         sourceType: sfTypeUrl?.[type].sourceType,
         docStatusType: docStatusType,
         pageSize: 9999,
@@ -36,22 +37,77 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
           },
         ],
       })
-      .then((res) => {
+      .then((ruleList) => {
 
-        const rules = res.rules.map((rule) => {
-          const chooseValues = getChooseValuesKeyFromRules(rule);
-
-          // const conditionDes = getConditionDescriptionFromConditionss(chooseValues.choseConditions);
-          return {
-            rule: rule,
-            chooseValues: chooseValues,
-            status: 'close',
-          };
+        const ids = ruleList.rules.flatMap((ruleDoc) => {
+          return (
+            ruleDoc.rules[0].actions.flatMap((action) => {
+              return action.params.sourceMember.map((source) => source.sourceId);
+            })
+          );
         });
-        setSendContent(rules);
+        console.log('========== ids ids', ids);
+
+        let request = api.education.getScalesSendContents;
+        if (type == 'education') {
+          request = api.education.getEducationSendContents;
+        }
+        // 获取所有的图片资源
+        request({
+          ids: ids.filter((id) => ![null, undefined].includes(id)),
+        })
+          .then((res) => {
+
+            // 获取所有的图片资源
+            const list: any[] = [];
+            if (type == 'education') {
+
+              fileTypes.forEach((fileType: any) => {
+                if (res.list.filter(p => p.type === fileType.code).length > 0) {
+                  list.push(...res.list.filter(p => p.type === fileType.code).map((item) => {
+                    return ({
+                      ...item,
+                      extraFileType: { ...fileType },
+                    });
+                  }));
+                }
+              });
+            } else {
+              const fileType = fileTypes.filter((file) => {
+                if (type == 'suifang') {
+                  return file.type == 'accompany';
+                } else {
+                  return file.type == 'crf';
+                }
+              })[0];
+              if (res.list.length > 0) {
+                list.push(...res.list.map((item) => {
+                  return ({
+                    ...item,
+                    extraFileType: { ...fileType },
+                  });
+                }));
+              }
+            }
+
+            const rules = ruleList.rules.map((rule) => {
+              const chooseValues = getChooseValuesKeyFromRules(rule, list);
+              return {
+                rule: rule,
+                chooseValues: chooseValues,
+                status: 'close',
+              };
+            });
+            setSendContent(rules);
+          })
+          .catch((err: string) => {
+            console.log('err', err);
+            message.error(err?.result);
+          });
       })
-      .catch((err: string) => {
-        console.log('err', err);
+      .catch((err) => {
+        console.log('========== err', err);
+        message.error(err?.result);
       });
   };
 
@@ -88,11 +144,6 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
       tag: 'source_group',
       sourceLocation: 's_contact.t_source_group',
     }];
-    const ruleList = cloneDeep([plan]);
-    const ruleDocs = [];
-    for (let i = 0; i < ruleList.length; i++) {
-      ruleDocs.push(ruleList[i].ruleDoc);
-    }
 
     console.log('================= 添加宣教随访参数 ', JSON.stringify(plan.ruleDoc));
 
@@ -108,16 +159,26 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
       .catch((err: string) => {
         console.log('err', err);
       });
-
   };
 
   const onPlanChanged = (_plans: any[]) => {
     // setInfos(plans);
   };
 
-  const onEditPlan = (_editPlan: { ruleDoc: any, chooseValues: any }, _sen: any) => {
+  const onEditPlan = (editPlan: { ruleDoc: any, chooseValues: any }, _sen: any) => {
 
-
+    api.education
+      .editRules(editPlan.ruleDoc)
+      .then(() => {
+        message.success('修改成功');
+        getRules(0);
+        if (plansRef.current) {
+          plansRef.current.clearInfos();
+        }
+      })
+      .catch((err: string) => {
+        console.log('err', err);
+      });
   };
 
   const onEditClick = (index: number) => {

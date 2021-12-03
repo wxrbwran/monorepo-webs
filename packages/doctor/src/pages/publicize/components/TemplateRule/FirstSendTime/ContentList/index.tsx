@@ -40,9 +40,12 @@ function ContentList({ sources, onRemoveSuccess, type, onSaveChoices, onDragModa
 
   const saveChoices = (source: IList[]) => {
 
+    console.log('============= source source', JSON.stringify(source.length));
     setContentList([...source]);
     onSaveChoices(source);
   };
+
+  console.log('============= render', JSON.stringify(contentList));
 
   return (
     <div className='flex flex-wrap'>

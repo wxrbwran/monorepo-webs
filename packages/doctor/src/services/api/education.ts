@@ -95,9 +95,19 @@ export default {
     return http.post('rules', { data });
   },
   // 获取已发送内容
-  getSendContent(data?: any): Promise<any> {
+  getAllRules(data?: any): Promise<any> {
     return http.get('rules', { data });
   },
+  // 获取已发送内容
+  getEducationSendContents(data?: any): Promise<any> {
+    return http.get('publicizes', { data });
+  },
+  // 获取已发送内容
+  getScalesSendContents(data?: any): Promise<any> {
+    return http.get('publicize/scales', { data });
+  },
+
+
   // 查询诊断处理
   fetchKvScope(data: any): Promise<any> {
     return http.get('kv/scope', { data });
@@ -135,6 +145,10 @@ export default {
     return http.post('publicize/rules', { data });
   },
 
+  // 新建宣教随访crf
+  editRules(data?: any): Promise<any> {
+    return http.patch('rules', { data });
+  },
   // 新建宣教随访crf
   appendRules(data?: any): Promise<any> {
     return http.post('rules', { data });

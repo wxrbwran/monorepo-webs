@@ -33,7 +33,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   };
   const handleDel = (id: string) => {
     let request = api.education.delPublicize;
-    if (['accompany', 'crf'].includes(type) ) {
+    if (['accompany', 'crf'].includes(type)) {
       request = api.education.delPublicizeScale;
     }
     request(id).then(() => {
@@ -53,7 +53,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   // 是否显示编辑或者删除按钮
   const isShowBtn = (['accompany', 'crf'].includes(type) && item?.edit) || (!item?.inSchedule && item?.del);
   // 是否显示分隔线
-  const isShowSplit = (['accompany', 'crf'].includes(type)  && item?.edit) && (!item?.inSchedule && item?.del);
+  const isShowSplit = (['accompany', 'crf'].includes(type) && item?.edit) && (!item?.inSchedule && item?.del);
   console.log('====22', type);
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>
@@ -133,7 +133,6 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
               </QuestionDetail>
               : <img src={suifang} alt="" />
           )
-
         }
         {
           type === 'audio' && <img src={audio} alt="" />
@@ -142,7 +141,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
           type === 'article' && <img src={item.content.cover} alt="" className='w-240 h-120' />
         }
       </p>
-      <p className={styles.name}>{`${!['accompany', 'crf'].includes(type)  ? item.content.filename || '' : item.title}`}</p>
+      <p className={styles.name}>{`${!['accompany', 'crf'].includes(type) ? item.content.filename || '' : item.title}`}</p>
     </div>
   );
 }

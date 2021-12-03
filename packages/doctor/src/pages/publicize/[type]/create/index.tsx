@@ -165,7 +165,7 @@ const EducationCreate: FC<ILocation> = ({ }) => {
   const handleSubmit = () => {
     // setLoading(true);
     if (!formName.trim()) {
-      message.error('请输入提醒类型');
+      message.error(`请输入${sfTypeUrl?.[type].text}类型`);
       setLoading(false);
     } else {
       const ruleList = cloneDeep(infos);
@@ -206,16 +206,16 @@ const EducationCreate: FC<ILocation> = ({ }) => {
         <div className={styles.table_name}>
           <p className={styles.title}>
             <Input
-              placeholder="请输入宣教类型，例：高血压病人宣教"
+              placeholder={`请输入${sfTypeUrl?.[type].text}类型，例：高血压病人${sfTypeUrl?.[type].text}`}
               onChange={changeFormName}
-              style={{ width: 400 }}
+              style={{ width: 480 }}
             />
           </p>
         </div>
       </div>
       <div className={styles.add} onClick={addInfo}>
         <img src={create} alt="" />
-        创建新宣教
+        创建新{sfTypeUrl?.[type].text}
       </div>
 
       <PlanContent type={type} onSavePlan={onSavePlan} onPlanChanged={onPlanChanged} ref={plansRef}>

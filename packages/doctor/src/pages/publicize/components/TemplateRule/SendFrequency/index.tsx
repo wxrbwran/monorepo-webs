@@ -6,6 +6,7 @@ import { sendType } from '../util';
 import moment from 'moment';
 import ContentPopover from '../ContentPopover';
 import { IList } from '../../../const';
+import { cloneDeep } from 'lodash';
 
 
 
@@ -41,12 +42,12 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
   const handleGetType = (value: string) => {
     frequency.frequency = value;
     frequency.custom = [{ day: '', time: '', content: [] }];
-    setFrequency({ ...frequency });
+    setFrequency(cloneDeep(frequency));
   };
   //添加发送频率
   const handleAddDayEdit = () => {
     frequency.custom.push({ day: '', time: '', content: [] });
-    setFrequency({ ...frequency });
+    setFrequency(cloneDeep(frequency));
   };
   //修改发送频率
   const handleChangeCustomCycleDay = (e: any, index: number) => {
@@ -54,41 +55,46 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
     console.log('============== e e', JSON.stringify(e));
     console.log('============== frequency', JSON.stringify(frequency));
     frequency.custom[index].day = e;
-    setFrequency({ ...frequency });
+    setFrequency(cloneDeep(frequency));
   };
   //删除自定义发送频率
   const handleDeleteDay = (index: number) => {
     frequency.custom.splice(index, 1);
-    setFrequency({ ...frequency });
+    setFrequency(cloneDeep(frequency));
   };
   //循环下发天数
   const handleChangeCycleDay = (day: number) => {
     frequency.custom = [{ day: day, time: '', content: [] }];
-    setFrequency({ ...frequency });
+    setFrequency(cloneDeep(frequency));
   };
 
   const dateChange = (_val: any, str: string, index: number) => {
 
     frequency.custom[index].time = str;
-    setFrequency({ ...frequency });
+    setFrequency(cloneDeep(frequency));
   };
 
   const onContentListAdd = (choices: IList[], frequencyIndex: number) => {
 
-    console.log('============ frequency.custom ', JSON.stringify(frequency.custom), frequencyIndex);
-    frequency.custom[frequencyIndex].contents = choices;
-    setFrequency({ ...frequency });
+    console.log('============ frequency.custom ', !frequency.custom[frequencyIndex].contents);
+    if (!frequency.custom[frequencyIndex].contents) {
+      frequency.custom[frequencyIndex].contents = [];
+    }
+    frequency.custom[frequencyIndex].contents.push(...choices);
+    console.log('============ frequency.custom ', JSON.stringify(frequency.custom[frequencyIndex].contents));
+    setFrequency(cloneDeep(frequency));
   };
 
   const onContentsRemoveSuccess = (_item: any, _index: number, list: any[], frequencyIndex: number) => {
     console.log('================= onRemoveSuccess choicesSid', JSON.stringify(list));
     frequency.custom[frequencyIndex].contents = list;
-    setFrequency({ ...frequency });
+    setFrequency(cloneDeep(frequency));
   };
 
   const contentPopver = (frequencyIndex: number) => {
 
     const getContentList = () => {
+
       return frequency.custom[frequencyIndex]?.contents ?? [];
     };
 

@@ -1,6 +1,44 @@
 import { cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 
+
+export const fileTypes = [
+  {
+    name: '视频',
+    code: 1,
+    type: 'video',
+  }, {
+    name: '文件',
+    code: 2,
+    type: 'document',
+  }, {
+    name: '文章',
+    code: 3,
+    type: 'article',
+  }, {
+    name: '图片',
+    code: 4,
+    type: 'picture',
+  }, {
+    name: '音频',
+    code: 6,
+    type: 'audio',
+  },
+
+  {
+    name: '随访表',
+    code: -1000,
+    type: 'accompany',
+  },
+  {
+    name: 'CRF量表',
+    code: -2000,
+    type: 'crf',
+  },
+
+
+  // type='accompany'
+];
 export interface IItem {
   name: string;
   type: string;
@@ -192,7 +230,7 @@ export function getHMstr(delay: number) {
   return (hour < 10 ? '0' + hour : hour) + ':' + (min < 10 ? '0' + min : min);
 }
 
-export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, ruleDoc: { rules: IRule[], meta: any }) {
+export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
 
   const choiceModel = { childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' };
 
@@ -212,19 +250,14 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
   } else {
     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
   }
+  const sourceIds = action.params.sourceMember.flatMap((item) => item.sourceId);
   return ({
     choiceModel: choiceModel,
-    choiceContents: action.params.sourceMember,
+    choiceContents: list.filter((item) => sourceIds.includes(item.id)),
   });
 }
 
-// {"choiceModel":{"childItemType":"select","choiceModel":{"childItemType":"select","description":"首次发送时间","childItem":[{"childItemType":"select","description":"患者与我绑定日期后","childItem":[{"childItemType":"diy","description":"自定义","inputDay":1,"inputHM":"01:00"},{"childItemType":"none","description":"立即发送"}],"choiceModel":{"childItemType":"diy","description":"自定义","inputDay":1,"inputHM":"01:00"}},{"childItemType":"time","description":"选择特定日期"},{"childItemType":"none","description":"计划创建成功后立即发送"}],"choiceModel":{"childItemType":"select","description":"患者与我绑定日期后","childItem":[{"childItemType":"diy","description":"自定义","inputDay":1,"inputHM":"01:00"},{"childItemType":"none","description":"立即发送"}],"choiceModel":{"childItemType":"diy","description":"自定义","inputDay":1,"inputHM":"01:00"}}},"description":"first"},"choiceContents":[{"id":"dev.jW2Pne","type":1,"content":{"filename":"院外.mp4","address":"https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/4/0a76ae5a-c21a-46c9-bcb7-029265036f5a院外.mp4","convertAddress":"https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/4/0a76ae5a-c21a-46c9-bcb7-029265036f5a院外.mp4"},"inSchedule":true,"edit":false,"del":false,"extraFileType":{"name":"视频","code":1,"type":"video"}}]}
-
-// [{"chooseItem":{"name":"basic.sex","type":"string","level":"option","show":false,"assign":{},"description":"性别"},"chooseValue":{"value":"男"}},{"chooseItem":{"name":"basic.age","type":"int","level":"entity","show":false,"assign":{"unit":"岁"},"description":"年龄"},"chooseValue":{"min":1,"max":2}},{"chooseItem":{"name":"diagnose.disease","type":"refs","level":"element","show":false,"assign":{"value":"","unit":""},"description":"诊断","items":[{"name":"diagnose.disease.uid","type":"int","level":"entity","show":false,"assign":{},"description":"诊断"}]},"chooseValue":{"value":"Lennox-Gastaut综合征","id":"63514"}},{"chooseItem":{"name":"diagnose.treatment","type":"refs","level":"element","show":false,"assign":{"value":"","unit":""},"description":"处理","items":[{"name":"diagnose.treatment.uid","type":"int","level":"option","show":false,"assign":{},"description":"处理"}]},"chooseValue":{"value":"马氏(Maddox)杆试验","id":"10180"}}]
-// [{"name":"team","type":"node","level":"element","show":true,"assign":{"value":"","unit":""},"description":"全部患者","items":[{"name":"team.role","type":"int","level":"option","show":false,"assign":{"value":"dev.L03Beb","unit":""},"description":"角色","operator":"=","value":"dev.L03Beb"},{"name":"team.subject","type":"int","level":"option","show":false,"assign":{"value":"dev.bWwvV0","unit":""},"description":"主体id","operator":"=","value":"dev.bWwvV0"},{"name":"team.role","type":"int","level":"option","show":false,"assign":{"value":"dev.bWwj0P","unit":""},"description":"角色","operator":"=","value":"dev.bWwj0P"},{"name":"team.subject","type":"int","level":"option","show":false,"assign":{"value":"dev.qWGyBe","unit":""},"description":"主体id","operator":"=","value":"dev.qWGyBe"}],"operator":"=","value":""},{"name":"team","type":"final","level":"element","show":true,"assign":{"value":"","unit":""},"description":"11.29小组","items":[{"name":"team.namespace.nsId","type":"int","level":"option","show":false,"assign":{"value":"dev.WgmrXe","unit":""},"description":"空间id","operator":"=","value":"dev.WgmrXe"}],"operator":"=","value":""},{"name":"team","type":"final","level":"element","show":true,"assign":{"value":"","unit":""},"description":"小组5","items":[{"name":"team.namespace.nsId","type":"int","level":"option","show":false,"assign":{"value":"dev.4NN3q4","unit":""},"description":"空间id","operator":"=","value":"dev.4NN3q4"}],"operator":"=","value":""},{"name":"team","type":"final","level":"element","show":true,"assign":{"value":"","unit":""},"description":"小组4","items":[{"name":"team.namespace.nsId","type":"int","level":"option","show":false,"assign":{"value":"dev.WBP5ae","unit":""},"description":"空间id","operator":"=","value":"dev.WBP5ae"}],"operator":"=","value":""},{"name":"team","type":"final","level":"element","show":true,"assign":{"value":"","unit":""},"description":"小组紫","items":[{"name":"team.namespace.nsId","type":"int","level":"option","show":false,"assign":{"value":"dev.Ww5Bje","unit":""},"description":"空间id","operator":"=","value":"dev.Ww5Bje"}],"operator":"=","value":""}]
-// {"frequency":"CUSTOM","custom":[{"day":2,"time":"02:00","contents":[{"id":"dev.r4qQd4","type":2,"content":{"filename":"院外.doc","address":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/dev/300/c7f0175d-1f5a-411c-8e8d-52edae22e234院外.doc","convertAddress":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/output/ca40212ffdf0467faff0844ab0c99f7e","size":9728},"inSchedule":true,"edit":false,"del":false,"extraFileType":{"name":"文件","code":2,"type":"document"}},{"id":"dev.NeEk1W","type":2,"content":{"filename":"19床罗克东.docx","address":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/dev/300/0ce27700-db8c-422e-904e-8a18c0af0df819床罗克东.docx","convertAddress":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/output/8ed6561eec8044ab8f3b2fc49fdeeaa7","size":14724},"inSchedule":false,"edit":false,"del":true,"extraFileType":{"name":"文件","code":2,"type":"document"}}]},{"day":3,"time":"03:00","contents":[{"id":"dev.Y0O1g4","type":2,"content":{"filename":"05_Java基础语法_第5天（方法）_讲义.pdf","address":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/dev/300/970f5f3b-f680-4ffd-a52c-7259af9efeee05_Java基础语法_第5天（方法）_讲义.pdf","convertAddress":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/dev/300/970f5f3b-f680-4ffd-a52c-7259af9efeee05_Java基础语法_第5天（方法）_讲义.pdf","size":4208099},"inSchedule":true,"edit":false,"del":true,"extraFileType":{"name":"文件","code":2,"type":"document"}},{"id":"dev.r4qQd4","type":2,"content":{"filename":"院外.doc","address":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/dev/300/c7f0175d-1f5a-411c-8e8d-52edae22e234院外.doc","convertAddress":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/output/ca40212ffdf0467faff0844ab0c99f7e","size":9728},"inSchedule":true,"edit":false,"del":false,"extraFileType":{"name":"文件","code":2,"type":"document"}},{"id":"dev.NeEk1W","type":2,"content":{"filename":"19床罗克东.docx","address":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/dev/300/0ce27700-db8c-422e-904e-8a18c0af0df819床罗克东.docx","convertAddress":"https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com/output/8ed6561eec8044ab8f3b2fc49fdeeaa7","size":14724},"inSchedule":false,"edit":false,"del":true,"extraFileType":{"name":"文件","code":2,"type":"document"}}]}]}
-
-export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any }) {
+export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
 
   const rule = ruleDoc.rules[0];
   let chooseStartTime;
@@ -285,23 +318,23 @@ export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any
   const frequency = { frequency: 'CUSTOM', custom: [] };
   for (let i = 1; i < rule.actions.length; i++) {
     const action = rule.actions[i];
-    console.log('================ action', JSON.stringify(action));
     if (action.type == 'once') {
       frequency.frequency = 'CUSTOM';
     } else {
       frequency.frequency = 'LOOP';
     }
+    const sourceIds = action.params.sourceMember.flatMap((item) => item.sourceId);
     frequency.custom.push({
       day: action.params.period,
       time: getHMstr(action.params.delay),
-      contents: action.params.sourceMember,
+      contents: list.filter((item) => sourceIds.includes(item.id)),
     });
   }
   if (frequency.custom.length == 0) {
     frequency.frequency = 'NONE';
   }
 
-  const firstTime = getStartTimeChoiceModel(chooseStartTime, rule.actions[0], ruleDoc);
+  const firstTime = getStartTimeChoiceModel(chooseStartTime, rule.actions[0], ruleDoc, list);
 
 
   console.log('=================fan xian firstTime firstTime', JSON.stringify(firstTime));

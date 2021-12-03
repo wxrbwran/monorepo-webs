@@ -26,6 +26,7 @@ function SideMenu({ location }: IProps) {
   const soruceType = {
     education: { text: '宣教' },
     suifang: { text: '随访' },
+    crf_scale: { text: 'CRF量表' },
   };
   const fetchData = () => {
     const params = {

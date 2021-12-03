@@ -164,7 +164,7 @@ export const sfTypeUrl = {
     templateType: 'FOLLOW',
   },
   crf_scale: {
-    text: 'CRF',
+    text: 'CRF量表',
     type: 1,
     sourceType: 9,
     templateType: 'CRF_SCALE',

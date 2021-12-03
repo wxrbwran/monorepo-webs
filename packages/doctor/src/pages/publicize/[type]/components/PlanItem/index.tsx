@@ -38,33 +38,6 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
     }
   }, [data]);
 
-
-  // rule: rule,
-  //           chooseValues: chooseValues,
-  //           status: 'close',
-
-  const fileType = {
-    1: 'video',
-    2: 'document',
-    3: 'article',
-    4: 'picture',
-    6: 'audio',
-  };
-  const content = [
-    {
-      'inSchedule': true,
-      'edit': false,
-      'del': false,
-      'id': 152,
-      'type': 4,
-      'content': {
-        'filename': 'avatar_doctor.jpg',
-        'address': 'https://xzl-user-avatar.oss-cn-hangzhou.aliyuncs.com/test/0/f3b663b3-5439-42ba-adae-8528307150a8avatar_doctor.jpg',
-        'size': 9038,
-        'convertAddress': 'https://xzl-user-avatar.oss-cn-hangzhou.aliyuncs.com/test/0/f3b663b3-5439-42ba-adae-8528307150a8avatar_doctor.jpg',
-      },
-    },
-  ];
   const handleStopSend = () => {
     // q4tHa30BPHeunwv_quPK
     window.$api.education.delPublicizRule(data.rule.id).then(() => {
@@ -79,7 +52,7 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
     <div className={`${styles.card} ${open ? styles.h_auto : ''}`}>
       <div className={styles.btn_wrap}>
         {type === 'suifang' && (
-          <ReplyDetail id={data.rule.id}>
+          <ReplyDetail rule={data.rule} chooseValues={data.chooseValues}>
             <Button type="link" icon={<ProfileOutlined />}>回复详情</Button>
           </ReplyDetail>
         )}
@@ -90,7 +63,7 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
           status === 'sending' && (
             <>
               <Button type="link" icon={<FormOutlined />} onClick={onEditClick}>编辑</Button>
-              <SendCalendar ruleId={data.rule.id}>
+              <SendCalendar rule={data.rule}>
                 <div className={styles.calendar}> <Button type="link" icon={<CalendarOutlined />}>发送日历</Button></div>
               </SendCalendar>
               <Popconfirm
@@ -122,13 +95,13 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
         </div>
         <div className="ml-20 mb-20">{firstTimeStr}</div>
         <div className="flex ml-20">
-          <span>发送：</span>
+          <span className='w-50 flex-shrink-0'>发送：</span>
           <div className={`${styles.block} flex justify-start  items-end flex-wrap`}>
-            {content &&
-              content.map((con) => (
+            {data?.chooseValues?.firstTime?.choiceContents &&
+              data?.chooseValues?.firstTime?.choiceContents.map((con) => (
                 <ListItem
                   key={con.id}
-                  type={fileType[con?.type] || 'accompany'}
+                  type={con.extraFileType.type}
                   item={con}
                   location={location}
                 />
@@ -153,14 +126,15 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
                     首次发送给患者后
                     {data.chooseValues.frequency.frequency == 'CUSTOM' ? '    第' : '    每'}
                     {item.day}天{item.time}
-                    <div className="flex">
-                      <span>发送：</span>
+
+                    <div className="flex mt-20">
+                      <span className='w-50 flex-shrink-0'>发送：</span>
                       <div className={`${styles.block} flex justify-start  items-end flex-wrap`}>
-                        {content &&
-                          content.map((con) => (
+                        {item?.contents &&
+                          item?.contents.map((con) => (
                             <ListItem
                               key={con.id}
-                              type={fileType[con?.type] || 'accompany'}
+                              type={con.extraFileType.type}
                               item={con}
                               location={location}
                             />
