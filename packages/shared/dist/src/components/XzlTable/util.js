@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || function () {
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
 import dayjs from 'dayjs';
-// 获取患者列表（做为独立、主管、医生助手的患者列表）
+// 获取患者列表（做为独立、上级、下级医生的患者列表）
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
     var newObj = {};
