@@ -31,13 +31,16 @@ const AddType: FC<IProps> = (props) => {
       sourceSid: window.$storage.getItem('sid'),
       wcId: window.$storage.getItem('wcId'),
     };
-    api.indexLibrary.putIndexDocument(params).then(() => {
-      message.success('添加成功');
-      onSuccess();
-      setshowModal(false);
-    }).catch((err) => {
-      message.error(err?.result || '添加失败');
-    });
+    api.indexLibrary
+      .putIndexDocument(params)
+      .then(() => {
+        message.success('添加成功');
+        onSuccess();
+        setshowModal(false);
+      })
+      .catch((err) => {
+        message.error(err?.result || '添加失败');
+      });
   };
   const layout = {
     labelCol: { span: 6 },
@@ -48,7 +51,9 @@ const AddType: FC<IProps> = (props) => {
   };
   return (
     <div>
-      <span><PlusOutlined onClick={handleAddBtn} /></span>
+      <span>
+        <PlusOutlined onClick={handleAddBtn} />
+      </span>
       <DragModal
         title="添加"
         footer={null}
@@ -76,7 +81,9 @@ const AddType: FC<IProps> = (props) => {
             <Form.Item style={{ textAlign: 'center' }} {...submitLayout}>
               <div className="common__btn">
                 <Button onClick={toggleShowModal}>取消</Button>
-                <Button className="finish" htmlType="submit" type="primary">保存</Button>
+                <Button className="finish" htmlType="submit" type="primary">
+                  保存
+                </Button>
               </div>
             </Form.Item>
           </Form>

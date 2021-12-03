@@ -30,12 +30,12 @@ interface IOnSelectChange {
 
 
 const XzlTable: FC<IProps> = (props) => {
-  console.log('this is table shared~111');
+  // console.log('this is table shared~111');
   const {
     columns, request, dataKey, depOptions, tableOptions, handleCallback,
-    handleCallbackSelectKeys, category, noPagination, extra,
+    category, noPagination, extra,
   } = props;
-  console.log(category, handleCallbackSelectKeys);
+  // console.log(category, handleCallbackSelectKeys);
   const [size, setSize] = useState(pageSize);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(0);
@@ -61,7 +61,7 @@ const XzlTable: FC<IProps> = (props) => {
   };
   const fetchTableDataSource = (query = {}) => {
     setLoading(true);
-    console.log('query', query);
+    // console.log('query', query);
     const params: Store = {
       pageAt: 1,
       pageSize: size,
@@ -105,8 +105,8 @@ const XzlTable: FC<IProps> = (props) => {
   }, [depOptions]);
 
   const handlePagerChange = (page: number, changedSize: number | undefined) => {
-    console.log('handlePagerChange', page);
-    console.log('handlePagerChange', changedSize);
+    // console.log('handlePagerChange', page);
+    // console.log('handlePagerChange', changedSize);
     const params: Store = { pageAt: page };
     if (changedSize) {
       params.pageSize = changedSize;

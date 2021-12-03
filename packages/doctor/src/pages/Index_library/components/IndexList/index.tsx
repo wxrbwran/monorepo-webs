@@ -37,17 +37,19 @@ const IndexList: FC = () => {
     documentId,
     pageSize: 9999999,
     sourceSid: window.$storage.getItem('sid'),
+    sid: window.$storage.getItem('sid'),
   };
   const [depOptions, setOptions] = useState<IParams>(initDepOptions);
   // 刷新列表
   const onSuccess = () => {
     setOptions({ ...depOptions });
   };
-  console.log('documentId', documentId);
+
   useEffect(() => {
     form.resetFields();
     setOptions({ ...initDepOptions });
   }, [documentId]);
+  
   const handleSelectChange = (changedValues: string[], allValues: CommonData) => {
     console.log('allValues', allValues, changedValues);
     const params: IParams = { ...depOptions };

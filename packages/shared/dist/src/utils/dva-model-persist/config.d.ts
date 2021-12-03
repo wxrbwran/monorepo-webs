@@ -1,8 +1,8 @@
 declare const config: {
     key: string;
     storage: any;
-    blacklist: string[];
-    whitelist: any[];
+    blacklist: {};
+    whitelist: {};
     keyPrefix: string;
 };
 export default config;
