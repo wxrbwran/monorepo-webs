@@ -1,23 +1,26 @@
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, message, Input } from 'antd';
-import { history, useSelector } from 'umi';
+import { history, useSelector, useParams } from 'umi';
 // import type { IValues, IRule } from '../../const';
 // import { handleFormatValues, getCheckedContent } from '../../utils';
 import styles from './index.scss';
 import * as api from '@/services/api';
-import TemplateRule from '../../components/TemplateRule';
 // import PlanItem from '../components/PlanItem';
 import { LeftOutlined } from '@ant-design/icons';
 import create from '@/assets/img/create.svg';
-import { cloneDeep, isEmpty } from 'lodash';
-
+import { cloneDeep } from 'lodash';
+import { sfTypeUrl } from '../../utils';
+import PlanContent from './PlanContent';
 // const { Step } = Steps;
 // type IAbled = Record<string, boolean>;
-const EducationCreate: FC<ILocation> = ({ location }) => {
 
-  const type = location.pathname.includes('suifang') ? 'suifang' : (location.pathname.includes('education') ? 'education' : 'crf');
-  const typeNumber = type == 'education' ? 2 : (type == 'suifang' ? 0 : 1);
+// const EducationCreate: FC<ILocation> = ({ location }) => {
+
+const EducationCreate: FC<ILocation> = ({ }) => {
+
+  // const type = location.pathname.includes('suifang') ? 'suifang' : (location.pathname.includes('education') ? 'education' : 'crf');
+  const type: string = useParams<{ type: string }>()?.type;
 
 
 
@@ -119,49 +122,41 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   // };
 
 
-  let initInfos: any = {
-    // plans: [
-    //   {
-    //     type: '',
-    //     detail: {},
-    //   },
-    // ],
-    // questions: '',
-    // scaleId: '',
-  };
-  // const projectSid = window.$storage.getItem('projectSid');
+
+
   const [infos, setInfos] = useState<any[]>([]);
   const [formName, setFormName] = useState('');
   const [disabled, setDidabled] = useState(true);
-  const [status, setEditStatus] = useState<string[]>([]); //open开，为编辑状态
+  const plansRef = useRef(null);
+
+
   // const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [loading, setLoading] = useState(false);
 
+
+
   //添加条件生成一条空计划
   const addInfo = () => {
-    setInfos([initInfos, ...infos]);
-    setEditStatus(['open', ...status]);
-  };
-  useEffect(() => {
-    addInfo();
-  }, []);
-  // 删除条件
-  const delPlan = (index: number) => {
-    const newInfos = infos.filter((_item, vIndex) => vIndex !== index);
-    const newStatus = status.filter((_item, sIndex) => sIndex !== index);
-    setInfos([...newInfos]);
-    setEditStatus([...newStatus]);
-  };
-  //提醒计划的确定按钮回传回来的数据
-  const addPlan = (params: any, index: number) => {
 
-    console.log('===================== addPlan', JSON.stringify(params), index);
-    infos[index] = params;
-    setInfos([...infos]);
-    status[index] = 'lock';
-    setEditStatus([...status]);
+    if (plansRef.current) {
+      plansRef.current.addInfo();
+    }
+  };
+
+  useEffect(() => {
+    addInfo(); // 默认有一个plan
+  }, []);
+
+  const onSavePlan = (_plans: any) => {
+
     setDidabled(false);
   };
+
+  const onPlanChanged = (plans: any[]) => {
+
+    setInfos(plans);
+  };
+
   //表单标题
   const changeFormName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormName(e.target.value);
@@ -170,7 +165,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
   const handleSubmit = () => {
     // setLoading(true);
     if (!formName.trim()) {
-      message.error('请输入提醒类型');
+      message.error(`请输入${sfTypeUrl?.[type].text}类型`);
       setLoading(false);
     } else {
       const ruleList = cloneDeep(infos);
@@ -181,7 +176,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
 
       const params = {
         ruleDocs: ruleDocs,
-        type: typeNumber,
+        type: sfTypeUrl?.[type].type,
         title: formName,
         operatorSid: window.$storage.getItem('sid'),
         operatorWcId: window.$storage.getItem('nsId'),
@@ -196,48 +191,37 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
           message.success('添加成功');
           setLoading(false);
           // handleUpdataStatus(content);
-          history.goBack();
+          history.push(`/publicize/${type}/detail?name=${formName}`);
         })
         .catch((err: string) => {
           console.log('err', err);
         });
     }
   };
-  //格式化点击编辑需要反显的数据（非编辑状态下也是此数据格式）
-  const changeEditStatus = (index: number) => {
-    status[index] = 'open';
-    setEditStatus([...status]);
-  };
-  //提醒计划的取消按钮执行操作
-  const handleCancel = (index: number) => {
-    //点击取消，如果是空计划，直接删除，如果是编辑的之前的计划则直接更改状态为lock
-    if (isEmpty(infos[index])) {
-      delPlan(index);
-    } else {
-      status[index] = 'lock';
-      setEditStatus([...status]);
-    }
-  };
 
   return (
     <div className={styles.gauge_table}>
       <div className={styles.head}>
-        <LeftOutlined className={styles.back} onClick={() => history.go(-1)} />
+        <LeftOutlined className={styles.back} onClick={() => history.push(`/publicize/${type}/detail`)} />
         <div className={styles.table_name}>
           <p className={styles.title}>
             <Input
-              placeholder="请输入宣教类型，例：高血压病人宣教"
+              placeholder={`请输入${sfTypeUrl?.[type].text}类型，例：高血压病人${sfTypeUrl?.[type].text}`}
               onChange={changeFormName}
-              style={{ width: 400 }}
+              style={{ width: 480 }}
             />
           </p>
         </div>
       </div>
       <div className={styles.add} onClick={addInfo}>
         <img src={create} alt="" />
-        创建新宣教
+        创建新{sfTypeUrl?.[type].text}
       </div>
-      {infos.map((item, index) =>
+
+      <PlanContent type={type} onSavePlan={onSavePlan} onPlanChanged={onPlanChanged} ref={plansRef}>
+
+      </PlanContent>
+      {/* {infos.map((item, index) =>
 
         status[index] === 'open' ? (
           <TemplateRule
@@ -258,7 +242,7 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
           </div>
           // <PlanItem data={infos[index]} />
         ),
-      )}
+      )} */}
       {infos.length > 0 && (
         <div className={styles.operate}>
           <Button type="primary" onClick={handleSubmit} disabled={disabled} loading={loading}>

@@ -1,5 +1,44 @@
 import { cloneDeep } from 'lodash';
+import dayjs from 'dayjs';
 
+
+export const fileTypes = [
+  {
+    name: '视频',
+    code: 1,
+    type: 'video',
+  }, {
+    name: '文件',
+    code: 2,
+    type: 'document',
+  }, {
+    name: '文章',
+    code: 3,
+    type: 'article',
+  }, {
+    name: '图片',
+    code: 4,
+    type: 'picture',
+  }, {
+    name: '音频',
+    code: 6,
+    type: 'audio',
+  },
+
+  {
+    name: '随访表',
+    code: -1000,
+    type: 'accompany',
+  },
+  {
+    name: 'CRF量表',
+    code: -2000,
+    type: 'crf',
+  },
+
+
+  // type='accompany'
+];
 export interface IItem {
   name: string;
   type: string;
@@ -18,6 +57,9 @@ export const sendType = [
   }, {
     key: 'LOOP',
     value: '循环下发',
+  }, {
+    key: 'NONE',
+    value: '无',
   },
 ];
 
@@ -62,7 +104,62 @@ export interface IAction {
   };
 }
 
+export interface IChooseValues {
+  firstTime: any;
+  choseConditions: ICondition[];
+  choseScope: [],
+  frequency: {
+    frequency: string,
+    custom: [],
+  },
+}
 
+export interface IModel {
+  childItemType: 'select' | 'diy' | 'time' | 'none';
+  childItem?: IModel[];
+  description: string;
+  choiceModel?: IModel;
+  inputDay?: number; // 当childItemType是diy时，会有输入day组件，此时才可能有值
+  inputHM?: string; // 当childItemType是diy时，会有输入时间组件，此时才可能有值
+  inputTime?: string; // 当childItemType是time时，会有输入年月日时间组件，此时才可能有值
+}
+
+export const AfterPatientBind = '患者与我绑定日期后';
+export const DIY = '自定义';
+export const ImmediatelySend = '立即发送';
+export const SpecificDate = '选择特定日期';
+export const PlanCreatedSendImmediately = '计划创建成功后立即发送';
+
+export const FirstTimeModel: IModel = {
+
+  childItemType: 'select',
+  description: '首次发送时间',
+  childItem: [
+    {
+      childItemType: 'select',
+      description: AfterPatientBind,
+      childItem: [
+        {
+          childItemType: 'diy',
+          description: DIY,
+
+        },
+        {
+          childItemType: 'none',
+          description: ImmediatelySend,
+        },
+      ],
+    },
+    {
+      childItemType: 'time',
+      description: SpecificDate,
+    },
+    {
+      childItemType: 'none',
+      description: PlanCreatedSendImmediately,
+    },
+  ],
+};
 
 export function getHierarchyFromItem(originItem: {}) {
 
@@ -126,8 +223,43 @@ export function deleteStartOrEndSymbol(str: string) {
   }
 }
 
-export function getChooseValuesKeyFromRules(rule: IRule) {
+export function getHMstr(delay: number) {
 
+  const hour = Math.floor(delay / 3600);
+  const min = (delay - hour * 3600) / 60;
+  return (hour < 10 ? '0' + hour : hour) + ':' + (min < 10 ? '0' + min : min);
+}
+
+export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
+
+  const choiceModel = { childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' };
+
+  if (chooseStartTime) { // 说明选择的是 患者与我绑定日期后
+    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == AfterPatientBind)[0];
+    // action.
+    if (action.params.period == 0) { // 选择的是 立即发送
+      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == ImmediatelySend)[0];
+    } else { // 选择的是自定义
+      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == DIY)[0];
+      choiceModel.choiceModel.choiceModel.choiceModel.inputDay = action.params.period;
+      choiceModel.choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
+    }
+  } else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
+    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
+    choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime * 1000).format('YYYY-MM-DD HH:mm');
+  } else {
+    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
+  }
+  const sourceIds = action.params.sourceMember.flatMap((item) => item.sourceId);
+  return ({
+    choiceModel: choiceModel,
+    choiceContents: list.filter((item) => sourceIds.includes(item.id)),
+  });
+}
+
+export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
+
+  const rule = ruleDoc.rules[0];
   let chooseStartTime;
   const choseConditions = [];
   for (let i = 0; i < rule.match.must.length; i++) {
@@ -184,28 +316,58 @@ export function getChooseValuesKeyFromRules(rule: IRule) {
   }
 
   const frequency = { frequency: 'CUSTOM', custom: [] };
-  for (let i = 0; i < rule.actions.length; i++) {
+  for (let i = 1; i < rule.actions.length; i++) {
     const action = rule.actions[i];
-    console.log('================ action', JSON.stringify(action));
     if (action.type == 'once') {
       frequency.frequency = 'CUSTOM';
     } else {
       frequency.frequency = 'LOOP';
     }
-    frequency.custom.push(action.params.period);
+    const sourceIds = action.params.sourceMember.flatMap((item) => item.sourceId);
+    frequency.custom.push({
+      day: action.params.period,
+      time: getHMstr(action.params.delay),
+      contents: list.filter((item) => sourceIds.includes(item.id)),
+    });
+  }
+  if (frequency.custom.length == 0) {
+    frequency.frequency = 'NONE';
   }
 
+  const firstTime = getStartTimeChoiceModel(chooseStartTime, rule.actions[0], ruleDoc, list);
+
+
+  console.log('=================fan xian firstTime firstTime', JSON.stringify(firstTime));
+  console.log('=================fan xian frequency frequency', JSON.stringify(frequency));
+
   return {
-    chooseStartTime: chooseStartTime,
+    firstTime: firstTime,
     choseConditions: choseConditions,
     choseScope: choseScope,
     frequency: frequency,
   };
 }
 
+export function getStartTimeDescriptionFromConditionss(firstTime: any) {
 
+  let str = '';
 
+  const choiceModel = firstTime?.choiceModel;
+  if (choiceModel?.choiceModel?.choiceModel?.description == AfterPatientBind) {
+    str = str + AfterPatientBind + '   ';
+    if (choiceModel?.choiceModel?.choiceModel?.choiceModel?.description == ImmediatelySend) {
+      str = str + ImmediatelySend + '   ';
+    } else {
+      str = str + '第' + choiceModel.choiceModel.choiceModel.choiceModel.inputDay + '天' + choiceModel.choiceModel.choiceModel.choiceModel.inputHM;
+    }
+  } else if (choiceModel?.choiceModel?.choiceModel?.description == SpecificDate) {
 
+    str = str + SpecificDate + '   ' + choiceModel.choiceModel.choiceModel.inputTime + '  ';
+  } else {
+    str = str + choiceModel?.choiceModel?.choiceModel?.description ?? '';
+  }
+  return str;
+}
 
 
 export function getConditionDescriptionFromConditionss(conditions: any[]) {
@@ -243,3 +405,4 @@ export function getConditionDescriptionFromConditionss(conditions: any[]) {
     treatment: treatmentDes,
   };
 }
+

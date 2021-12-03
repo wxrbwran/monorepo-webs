@@ -6,7 +6,7 @@ import { sfTypeUrl } from '../../../utils';
 import './index.scss';
 import { IState } from 'packages/doctor/typings/model';
 
-interface IProps{
+interface IProps {
   location: {
     pathname: string;
     query: {
@@ -26,12 +26,13 @@ function SideMenu({ location }: IProps) {
   const soruceType = {
     education: { text: '宣教' },
     suifang: { text: '随访' },
+    crf_scale: { text: 'CRF量表' },
   };
   const fetchData = () => {
     const params = {
       operatorSid: window.$storage.getItem('sid'),
       operatorWcId: window.$storage.getItem('wcId'),
-      ownershipSid:  currentOrgInfo.sid, // 机构的sid
+      ownershipSid: currentOrgInfo.sid, // 机构的sid
       type: sfTypeUrl?.[type].type, //0：随访表 1：CRF量表 2:宣教
     };
     api.education.getPublicizeGroup(params).then((res) => {
@@ -42,11 +43,14 @@ function SideMenu({ location }: IProps) {
       }
     });
   };
+
   useEffect(() => {
+
+    console.log('=============== useEffect useEffect location');
     const id = location.query.id;
     if (!id) {
       fetchData();
-    } else if ( id !== currentId) {
+    } else if (id !== currentId) {
       setCurrentId(id);
     }
   }, [location]);

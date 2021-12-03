@@ -1,6 +1,6 @@
 .card {
   width: 880px;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 5px;
   box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
   border-radius: 3px;
@@ -8,27 +8,44 @@
   margin: 7px;
   margin-bottom: 20px;
   position: relative;
-  overflow-y: hidden;
-  transition: all 0.5s;
-  overflow-y: hidden;
-  max-height: 340px;
+  // overflow-y: hidden;
+  // transition: all 0.5s;
+  // overflow-y: hidden;
+  // max-height: 340px;
   font-size: 14px;
-  &.h_auto {
-    max-height: 900px;
-    overflow-y: auto;
+
+  height: 340px;
+  overflow: hidden;
+  transition: height 0.25s;
+
+  :global {
+    .url___3inmo {
+      img,
+      video {
+        width: 80px !important;
+        height: 80px !important;
+        border-radius: 5px;
+      }
+    }
   }
-  .tit{
+
+  &.h_auto {
+    height: auto;
+    // max-height: 900px;
+    // overflow-y: auto;
+  }
+  .tit {
     position: relative;
     font-weight: bold;
     margin-bottom: 20px;
   }
   .block {
-    >div {
+    > div {
       margin: 0 40px 30px 0;
     }
   }
   .content {
-    background: #F8F8F8;
+    background: #f8f8f8;
     border-radius: 5px;
     padding: 20px 30px;
   }
@@ -44,7 +61,7 @@
       color: #666;
       margin-top: 8px;
       line-height: 20px;
-      margin-left: 16px;;
+      margin-left: 16px;
     }
   }
   :global {
@@ -64,14 +81,15 @@
   }
   .stop {
     margin-right: 30px;
-    color: #F32C2E;
+    color: #f32c2e;
     font-size: 14px;
   }
   .calendar {
     // border-left: 1px solid #E0E0E0;
     // border-right: 1px solid #E0E0E0;
     position: relative;
-    &::before, &::after {
+    &::before,
+    &::after {
       content: '';
       width: 1px;
       height: 14px;
@@ -79,7 +97,7 @@
       margin-top: -7px;
       position: absolute;
       left: 0;
-      background-color: #E0E0E0;
+      background-color: #e0e0e0;
     }
     &::after {
       left: 100%;

@@ -181,9 +181,9 @@ h2 {
         font-size: 14px;
       }
     }
-    .ant-input-number {
-      margin: 0 6px;
-    }
+    // .ant-input-number {
+    //   margin: 0 6px;
+    // }
     .ant-input-number-input {
       height: 40px;
     }
@@ -212,7 +212,6 @@ h2 {
     margin-right: 10px;
   }
   .hm {
-    margin-left: 10px;
     margin-right: 10px;
 
     :global {
@@ -223,10 +222,11 @@ h2 {
     }
   }
   .time {
+    margin-right: 10px;
     :global {
       .ant-picker {
         height: 40px;
-        width: 160px;
+        width: 250px;
       }
     }
   }

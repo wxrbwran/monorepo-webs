@@ -4,7 +4,8 @@
   text-align: left;
   padding-left: 30px;
   font-weight: normal;
-  .green, .red {
+  .green,
+  .red {
     position: relative;
     padding-left: 20px;
     margin-right: 20px;
@@ -13,7 +14,7 @@
       position: absolute;
       width: 16px;
       height: 4px;
-      background: #15AD31;
+      background: #15ad31;
       border-radius: 3px;
       left: 0;
       top: 55%;
@@ -22,7 +23,7 @@
   }
   .red {
     &::after {
-      background: #EC4437;
+      background: #ec4437;
     }
   }
 }
@@ -43,9 +44,9 @@
       align-items: center;
       height: 40px;
       line-height: 40px;
-      border: 1px solid #DFDFDF;
+      border: 1px solid #dfdfdf;
       margin-bottom: 10px;
-      background: #F7F7F7;
+      background: #f7f7f7;
       margin: 0;
     }
     table {
@@ -55,22 +56,23 @@
       display: none;
     }
     .ant-picker-body {
-      padding: 0px!important;
-      th, td {
+      padding: 0px !important;
+      th,
+      td {
         text-align: left;
       }
       .ant-picker-calendar-date {
         border: none;
       }
       thead {
-        border-left: 1px solid #DFDFDF;
-        border-right: 1px solid #DFDFDF;
+        border-left: 1px solid #dfdfdf;
+        border-right: 1px solid #dfdfdf;
         th {
-          padding: 9px 0 9px 3px!important;
+          padding: 9px 0 9px 3px !important;
         }
       }
       td {
-        border: 1px solid #DFDFDF;
+        border: 1px solid #dfdfdf;
         width: 140px;
         height: 100px;
       }
@@ -80,8 +82,9 @@
       .ant-picker-calendar-date-content {
         position: relative;
         height: 74px;
-        .red, .green {
-          width: 30px;
+        .red,
+        .green {
+          // width: 30px;
           height: 30px;
           line-height: 30px;
           text-align: center;
@@ -92,15 +95,14 @@
         }
       }
       .red {
-        color: #EC4437;
-        background: #FFECEA;
+        color: #ec4437;
+        background: #ffecea;
       }
       .green {
-        color: #15AD31;
-        background: #E1FFD8;
+        color: #15ad31;
+        background: #e1ffd8;
         margin-top: 5px;
       }
     }
   }
-
 }

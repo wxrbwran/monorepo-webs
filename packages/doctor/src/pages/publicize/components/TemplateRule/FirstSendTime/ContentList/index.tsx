@@ -40,9 +40,12 @@ function ContentList({ sources, onRemoveSuccess, type, onSaveChoices, onDragModa
 
   const saveChoices = (source: IList[]) => {
 
+    console.log('============= source source', JSON.stringify(source.length));
     setContentList([...source]);
     onSaveChoices(source);
   };
+
+  console.log('============= render', JSON.stringify(contentList));
 
   return (
     <div className='flex flex-wrap'>
@@ -56,10 +59,10 @@ function ContentList({ sources, onRemoveSuccess, type, onSaveChoices, onDragModa
         ))
       }
       {
-        <ChoiceContent type={type} onSaveChoices={saveChoices} onDragModalDidShow={onDragModalDidShow}>
+        <ChoiceContent choicesContentList={contentList} type={type} onSaveChoices={saveChoices} onDragModalDidShow={onDragModalDidShow}>
           <div className={`flex items-center justify-center box-shadow w-86 h-86 rounded-md mt-15 ${styles.item}`}>
             <img src={iconAdd} alt="" />
-          </div>,
+          </div>
         </ChoiceContent>
       }
     </div>

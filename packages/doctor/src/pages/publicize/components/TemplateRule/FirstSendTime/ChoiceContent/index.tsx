@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { Checkbox, Row, Col, message } from 'antd';
 import styles from './index.scss';
@@ -7,6 +7,7 @@ import ListItem from '../../../ListItem';
 import { IList } from '../../../../const';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
+import { fileTypes } from '../../util';
 
 export interface ContentListModel {
   title: string,
@@ -24,44 +25,62 @@ export interface DoctorOrgsProp {
 interface IProps {
 
   type: 'crf' | 'education' | 'suifang';
+  choicesContentList: any[];
   onSaveChoices: (choiceIds: IList[]) => void; // 选中的所有数据id,
   onDragModalDidShow: () => void; // 弹窗显示会调
 }
 
 const ChoiceContent: FC<IProps> = (props) => {
-  const { children, onSaveChoices, type, onDragModalDidShow } = props;
+  const { children, onSaveChoices, type, onDragModalDidShow, choicesContentList } = props;
   const [showModal, setshowModal] = useState(false);
   const [contentList, setContentList] = useState<ContentListModel[]>([]);
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
-  const choicesRef = useRef<IList[]>([]);
+  const [choices, setChoices] = useState<IList[]>([]);
 
-  const fileTypes = [
-    {
-      name: '视频',
-      code: 1,
-      type: 'video',
-    }, {
-      name: '文件',
-      code: 2,
-      type: 'document',
-    }, {
-      name: '文章',
-      code: 3,
-      type: 'article',
-    }, {
-      name: '图片',
-      code: 4,
-      type: 'picture',
-    }, {
-      name: '音频',
-      code: 6,
-      type: 'audio',
-    },
-  ];
+
 
   // 查询随访表列表
-  const getPublicizeScaleList = () => {
+  const getPublicizeScaleList = (scaleType: number) => {
+    api.education.getPublicizeScale({
+      operatorSid: window.$storage.getItem('sid'),
+      operatorWcId: window.$storage.getItem('wcId'),
+      ownershipSid: currentOrgInfo.sid,
+      roleType: window.$storage.getItem('roleId'),
+      type: scaleType, //0：随访表 1：CRF量表
+    }).then((res) => {
+
+      const list: any[] = [];
+      const fileType = fileTypes.filter((file) => {
+        if (scaleType == 0) {
+          return file.type == 'accompany';
+        } else {
+          return file.type == 'crf';
+        }
+      })[0];
+      const unChoicesList = res.list.filter(p => !choicesContentList.find((item) => item.id == p.id));
+      if (unChoicesList.length > 0) {
+        list.push({
+          title: fileType.name,
+          lists: unChoicesList.map((item) => {
+            return ({
+              ...item,
+              extraFileType: { ...fileType },
+            });
+          }),
+          ...fileType,
+        });
+      }
+      setContentList(list);
+    })
+      .catch((err: string) => {
+        message.error(err?.result);
+      });
+  };
+
+
+  // 查询随访表列表
+  const getPublicizeList = () => {
     api.education.getPublicizeList({
       // fromSid: window.$storage.getItem('orgSid'),
       types: ['DOCUMENT', 'VIDEO', 'ARTICLE', 'AUDIO', 'PICTURE'],
@@ -74,10 +93,11 @@ const ChoiceContent: FC<IProps> = (props) => {
       const list: any[] = [];
       fileTypes.forEach((fileType: any) => {
 
-        if (res.list.filter(p => p.type === fileType.code).length > 0) {
+        const unChoicesList = res.list.filter(p => !choicesContentList.find((item) => item.id == p.id));
+        if (unChoicesList.filter(p => p.type === fileType.code).length > 0) {
           list.push({
             title: fileType.name,
-            lists: res.list.filter(p => p.type === fileType.code).map((item) => {
+            lists: unChoicesList.filter(p => p.type === fileType.code).map((item) => {
               return ({
                 ...item,
                 extraFileType: { ...fileType },
@@ -96,15 +116,20 @@ const ChoiceContent: FC<IProps> = (props) => {
 
   const getContentListSources = () => {
 
+    console.log('===============getContentListSources getContentListSources ');
     if (type == 'education') {
-      getPublicizeScaleList();
+      getPublicizeList();
+    } else if (type == 'suifang') {
+      getPublicizeScaleList(0);
+    } else {
+      getPublicizeScaleList(1);
     }
   };
 
   const handleShowModal = () => {
 
     // 每次弹窗重新弹出时, 清空选中的数据源
-    choicesRef.current = [];
+    setChoices([]);
     setshowModal(true);
     onDragModalDidShow();
     // 请求接口
@@ -114,7 +139,7 @@ const ChoiceContent: FC<IProps> = (props) => {
   const onChange = (val) => {
 
     const source = contentList.flatMap((model) => model.lists).filter((item) => val.includes(item.id));
-    choicesRef.current = source;
+    setChoices(source);
   };
 
   // 点击取消
@@ -170,7 +195,7 @@ const ChoiceContent: FC<IProps> = (props) => {
           }
           <div className='flex flex-row justify-center'>
             <Button className="w-98 mt-20 mb-0 mr-20" type="primary" onClick={onCancelChoices}>取消</Button>
-            <Button className="w-98 mt-20 mb-0 " type="primary" onClick={() => { setshowModal(false); onSaveChoices(choicesRef.current); }}>完成</Button>
+            <Button className="w-98 mt-20 mb-0 " type="primary" onClick={() => { setshowModal(false); onSaveChoices(choices); }}>完成</Button>
           </div>
 
         </div>

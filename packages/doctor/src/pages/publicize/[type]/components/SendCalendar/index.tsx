@@ -7,6 +7,7 @@ import * as api from '@/services/api';
 import { sfTypeUrl } from '../../../utils';
 import { useParams } from 'umi';
 import styles from './index.scss';
+import dayjs from 'dayjs';
 
 interface ISendItem {
   sendTime: number;
@@ -19,21 +20,21 @@ interface IDatData {
   }
 }
 interface IProps {
-  ruleId: string;
+  rule: any;
 }
-const SendCalendar: FC<IProps> = ({ children, ruleId }) => {
+const SendCalendar: FC<IProps> = ({ children, rule }) => {
   const [showModal, setShowModal] = useState(false);
   const [sendDatas, setsendDatas] = useState({});
   const { type } = useParams();
-  const handleShow = () => {
-    setShowModal(true);
+
+  const getDatas = (startTime: any, endTime: any) => {
     const params = {
-      startTime: '1635696000000',   			//起始时间
-      endTime: '1638248340000',     			//截止时间
-      ruleId,      // 规则id
+      startTime: startTime,   			//起始时间
+      endTime: endTime, //截止时间
+      ruleId: rule.id,      // 规则id
     };
     const sendCount = {};
-    api.education.getPublicizSendCount(params).then((res: { sendList: ISendItem[], todoSendList: ISendItem[] }) =>{
+    api.education.getPublicizSendCount(params).then((res: { sendList: ISendItem[], todoSendList: ISendItem[] }) => {
       console.log('=====发送日历', res);
       res.sendList.forEach(item => {
         sendCount[item.sendTime] = { sendCount: item.sendCount };
@@ -45,30 +46,39 @@ const SendCalendar: FC<IProps> = ({ children, ruleId }) => {
         };
       });
       setsendDatas(sendCount);
-      console.log('sendCount=====11', sendCount);
     });
   };
 
+  const handleShow = () => {
+    setShowModal(true);
+    getDatas(rule.createdAtTime, dayjs(rule.createdAtTime).endOf('month').valueOf());
+  };
+
+
+  // 切换年/月，刷新
+  const onPanelChange = (value: moment.Moment) => {
+    getDatas(+moment(value).startOf('month'), +moment(value).endOf('month'));
+  };
+
   function dateCellRender(value: moment.Moment) {
-    // console.log('item 日', value.date());
-    // console.log('=====item  当日0点', new Date(value).setHours(0, 0, 0, 0));
-    const itemTime =  new Date(value).setHours(0, 0, 0, 0);
+
+    const itemTime = new Date(value).setHours(0, 0, 0, 0);
     const { todoSendCount, sendCount }: IDatData = sendDatas?.[itemTime] || {};
     if (!todoSendCount && !todoSendCount) {
       return <></>;
     }
     // actionType 0已发送  1待发送
     const detailProp = {
-      ruleId,
+      ruleId: rule.id,
       startTime: itemTime,
       sourceType: sfTypeUrl?.[type]?.sourceType,
     };
     return (
       <div className={styles.count_wrap}>
-        <SendDetail actionType={1} { ...detailProp }>
+        <SendDetail actionType={1} {...detailProp}>
           {todoSendCount && <div className='red'>{todoSendCount}</div>}
         </SendDetail>
-        <SendDetail actionType={0} { ...detailProp }>
+        <SendDetail actionType={0} {...detailProp}>
           {sendCount && <div className='green'>{sendCount}</div>}
         </SendDetail>
       </div>
@@ -99,8 +109,9 @@ const SendCalendar: FC<IProps> = ({ children, ruleId }) => {
         <div className={styles.calendar_wrap}>
           <Calendar
             dateCellRender={dateCellRender}
+            onPanelChange={onPanelChange}
             // 开始时间：计划创建日期的月份，结束时间：当前时间的月份+2
-            validRange={[moment(startDate),
+            validRange={[moment(rule.createdAtTime),
               moment(new Date().setMonth(new Date().getMonth() + 2))]}
           />
         </div>

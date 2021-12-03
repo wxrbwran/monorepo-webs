@@ -1,6 +1,8 @@
 h2 {
   font-size: 15px;
   margin: 30px 0 15px;
+  font-weight: 600;
+  color: #181818;
   &:first-child {
     margin-top: 0;
     margin-top: 30px;
@@ -17,13 +19,6 @@ h2 {
     @include flex-lay(row, nowrap, flex-start, flex-start);
     height: 40px;
     line-height: 40px;
-    margin-left: 50px;
-    color: #666;
-    :global {
-      .ant-input-number {
-        margin-right: 8px;
-      }
-    }
   }
   :global {
     .ant-input {
@@ -57,33 +52,56 @@ h2 {
 
 .self {
   @include flex-lay(row, nowrap, space-between, flex-start);
+  margin-left: 10px;
+  line-height: 40px;
   &_content {
     flex: 1 1 auto;
     @include flex-lay(column, nowrap, flex-start, flex-start);
-    margin: 0 12px 0 50px;
+    // margin: 0 12px 0 50px;
+    margin-left: 10px;
   }
   .add_item {
     @include flex-lay(row, nowrap, space-between, center);
     margin-bottom: 10px;
-    :global {
-      .ant-input-number {
-        border: none;
-        flex: 1;
-        margin: 0 10px;
-      }
-    }
-    &_left {
-      width: 250px;
+
+    .addBtn,
+    .deleteBtn {
+      width: 50px;
       height: 40px;
-      border: 1px solid #e0e0e0;
+      background: #ffffff;
       border-radius: 3px;
-      overflow: hidden;
-      padding: 0 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-right: 10px;
+      border: 1px solid #d3e8fb;
+
+      font-size: 14px;
+      font-weight: 500;
+      color: #218ce9;
     }
+
+    // ={styles.addBtn} size="large" onClick={handleAddDayEdit}>
+    //                     添加
+    //                   </Button>
+    //                 ) : (
+    //                   <Button className={styles.deleteBtn}
+
+    // :global {
+    //   .ant-input-number {
+    //     border: none;
+    //     flex: 1;
+    //     margin: 0 10px;
+    //   }
+    // }
+    // &_left {
+    //   width: 250px;
+    //   height: 40px;
+    //   border: 1px solid #e0e0e0;
+    //   border-radius: 3px;
+    //   overflow: hidden;
+    //   padding: 0 10px;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: space-between;
+    //   margin-right: 10px;
+    // }
   }
   ul {
     margin-top: 10px;

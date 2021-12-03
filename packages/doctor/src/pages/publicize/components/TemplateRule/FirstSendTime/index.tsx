@@ -4,6 +4,7 @@ import { DatePicker, InputNumber, Select, TimePicker } from 'antd';
 import styles from './index.scss';
 import moment from 'moment';
 import { cloneDeep, isEmpty } from 'lodash';
+import { IModel, FirstTimeModel } from '../util';
 
 interface IProps {
 
@@ -16,50 +17,10 @@ interface IProps {
   choiceModelSource?: any;
 }
 const { Option } = Select;
-export interface IModel {
-  childItemType: 'select' | 'diy' | 'time' | 'none';
-  childItem?: IModel[];
-  description: string;
-  choiceModel?: IModel;
-  inputDay?: number; // 当childItemType是diy时，会有输入day组件，此时才可能有值
-  inputHM?: string; // 当childItemType是diy时，会有输入时间组件，此时才可能有值
-  inputTime?: string; // 当childItemType是time时，会有输入年月日时间组件，此时才可能有值
-}
-const model: IModel = {
-
-  childItemType: 'select',
-  description: '首次发送时间',
-  childItem: [
-    {
-      childItemType: 'select',
-      description: '患者与我绑定日期后',
-      childItem: [
-        {
-          childItemType: 'diy',
-          description: '自定义',
-
-        },
-        {
-          childItemType: 'none',
-          description: '立即发送',
-        },
-      ],
-    },
-    {
-      childItemType: 'time',
-      description: '选择特定日期',
-    },
-    {
-      childItemType: 'none',
-      description: '计划创建成功后立即发送',
-    },
-  ],
-};
-
 
 const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceModelSource }: IProps) => {
 
-  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: cloneDeep(model), description: 'first' });
+  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' });
   // const [contentList, setContentList] = useState<any[]>([]);
 
   const handleChangeType = (val: any, currentItem: IModel) => {
@@ -114,21 +75,21 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
           choiceItem.childItemType == 'diy' &&
           [
             <>
-              <div className={`ml-10 mr-10 ${styles.diy}`}>
-                第
+              <div className={`mr-10 ${styles.diy}`}>
                 <InputNumber
-                  style={{ width: 50 }}
+                  addonBefore={'第'}
+                  addonAfter={'天'}
+                  style={{ width: 120 }}
                   min={1}
+                  max={9999}
                   onChange={(val) => { dayChange(val, choiceItem); }}
                   value={choiceItem.inputDay}
-                  max={9999}
                 />
-                天
               </div>
             </>,
             <>
               <div className={styles.hm}>
-                <TimePicker className='ml-10 mr-10' value={choiceItem?.inputHM ? moment(choiceItem.inputHM, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} />
+                <TimePicker className='mr-10' value={choiceItem?.inputHM ? moment(choiceItem.inputHM, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} />
               </div>
 
             </>,
@@ -139,7 +100,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
         {
           choiceItem.childItemType == 'time' &&
           <div className={styles.time}>
-            <DatePicker showTime={{ format: 'HH:mm' }} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} format={'YYYY-MM-DD HH:mm'} />
+            <DatePicker showTime={{ format: 'HH:mm' }} value={choiceItem?.inputTime ? moment(choiceItem.inputTime, 'YYYY-MM-DD HH:mm') : null} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} format={'YYYY-MM-DD HH:mm'} />
           </div>
         }
       </>,
@@ -151,11 +112,6 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
       </>,
     ]);
   };
-
-  // const onRemoveSuccess = (_item: any, _index: number, list: any[]) => {
-
-  //   setContentList(list);
-  // };
 
   useEffect(() => {
 
