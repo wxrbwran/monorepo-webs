@@ -125,7 +125,7 @@ function Reply({ location }: IProps) {
           columns={columns}
           tableOptions={{
             rowSelection: false,
-            pagination: true,
+            // pagination: true,
           }}
         />
       </div>
