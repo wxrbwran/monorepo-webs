@@ -70,7 +70,7 @@ function AddTopic(props: IProps) {
   const ddtkData = {
     'type': 'COMPLETION',
     'detail': {
-      'stem': '填空1＿＿＿，填空2＿＿＿',
+      'stem': '填空1「」，填空2「」',
       'answer': [],
       'content': [],
     },

@@ -210,7 +210,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
             questions[i].detail.options = options;
           }
         } else if (questions[i].type === 'COMPLETION' && typeof (questions[i].detail.stem) === 'string') {
-          questions[i].detail.stem = questions[i].detail.stem?.split('＿＿＿');
+          questions[i].detail.stem = questions[i].detail.stem?.split('「」');
         }
         questions[i].code = i + 1;
       }

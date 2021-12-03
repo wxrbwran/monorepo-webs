@@ -28,14 +28,14 @@ const AddPatient = (props: IProps) => {
   const [currentStem, setCurrentStem] = useState('');
 
   useEffect(() => {
-    if (showModal){
+    if (showModal) {
       let stemArr = [];
-      if (typeof(item.detail.stem) === 'string'){
-        stemArr = item.detail.stem?.split('＿＿＿');
+      if (typeof (item.detail.stem) === 'string') {
+        stemArr = item.detail.stem?.split('「」');
         setCurrentStem(item.detail.stem);
       } else {
         stemArr = [...item.detail.stem];
-        setCurrentStem(item.detail.stem.join('＿＿＿'));
+        setCurrentStem(item.detail.stem.join('「」'));
       }
       // 去掉最后一个元素
       stemArr.pop();
@@ -43,7 +43,7 @@ const AddPatient = (props: IProps) => {
         questions[_idx] = JSON.parse(JSON.stringify(originQue))[_idx];
       });
 
-      if (!questions[quesIndex].detail.content){
+      if (!questions[quesIndex].detail.content) {
         questions[quesIndex].detail = {
           ...questions[quesIndex].detail,
           content: [],
@@ -54,7 +54,7 @@ const AddPatient = (props: IProps) => {
           key: idx,
           name: `填空${idx + 1}`,
         };
-        if (questions[quesIndex].detail.content[idx]?.type){
+        if (questions[quesIndex].detail.content[idx]?.type) {
           questions[quesIndex].detail.content[idx] = {
             ...questions[quesIndex].detail.content[idx],
           };
@@ -94,7 +94,7 @@ const AddPatient = (props: IProps) => {
   const changeQuestionType = (value: string, record: any) => {
     console.log('record', record);
 
-    if (['radio', 'checkbox'].includes(value)){
+    if (['radio', 'checkbox'].includes(value)) {
       questions[quesIndex].detail.content[record.key] = {
         ...questions[quesIndex].detail.content[record.key],
         type: value,
@@ -149,7 +149,7 @@ const AddPatient = (props: IProps) => {
           changeQues={changeQues}
           quesIndex={quesIndex}
           item={item}
-          optionIdx = {record.key}
+          optionIdx={record.key}
         />;
       default:
         return '由答题者随便填写';
@@ -249,7 +249,7 @@ const AddPatient = (props: IProps) => {
         <p className="text-base mb-10">
           当前题目: {currentStem}
         </p>
-        <Table dataSource={dataSource} columns={columns} bordered pagination={false} className="mb-20"/>
+        <Table dataSource={dataSource} columns={columns} bordered pagination={false} className="mb-20" />
         {btnRender({
           okText: '确定',
           cancelText: '取消',

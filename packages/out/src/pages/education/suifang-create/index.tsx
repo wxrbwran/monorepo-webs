@@ -37,7 +37,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
       return initSf.question.map(item => {
         const newItem = { ...item };
         if (item.type === 'COMPLETION' && isArray(item.detail.stem)) {
-          newItem.detail.stem = item.detail.stem.join('＿＿＿');
+          newItem.detail.stem = item.detail.stem.join('「」');
         }
         return newItem;
       });
@@ -161,7 +161,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
             questions[i].detail.options = options;
           }
         } else if (questions[i].type === 'COMPLETION') {
-          questions[i].detail.stem = questions[i].detail.stem?.split('＿＿＿');
+          questions[i].detail.stem = questions[i].detail.stem?.split('「」');
         }
         questions[i].code = i + 1;
       }

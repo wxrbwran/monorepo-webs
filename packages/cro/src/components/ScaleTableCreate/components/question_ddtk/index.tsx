@@ -26,11 +26,11 @@ function questionGapFilling(props: IProps) {
   const [cursorIndex, setCursorIndex] = useState();
   const getStemString = (stem) => {
     let newStem = stem;
-    if (stem instanceof Array){
+    if (stem instanceof Array) {
       newStem = '';
       stem.forEach((i, idx) => {
-        if (idx !== stem.length - 1){
-          newStem = newStem + i + '＿＿＿';
+        if (idx !== stem.length - 1) {
+          newStem = newStem + i + '「」';
         } else {
           newStem += i;
         }
@@ -40,7 +40,7 @@ function questionGapFilling(props: IProps) {
   };
   // 保存当前点击的位置
   const handleSaveIndex = () => {
-    const dom =  document.getElementsByClassName(`ddtk_${quesIndex}`)[0];
+    const dom = document.getElementsByClassName(`ddtk_${quesIndex}`)[0];
     // @ts-ignore
     dom?.focus();
     // @ts-ignore
@@ -49,11 +49,11 @@ function questionGapFilling(props: IProps) {
   // 添加填空符
   const handleAddSymbol = () => {
     let oldStem = getStemString(questions[quesIndex].detail.stem);
-    let newCont = oldStem + '＿＿＿';
+    let newCont = oldStem + '「」';
     if (cursorIndex) {
-      newCont = oldStem.slice(0, cursorIndex) + '＿＿＿' + oldStem.slice(cursorIndex);
+      newCont = oldStem.slice(0, cursorIndex) + '「」' + oldStem.slice(cursorIndex);
     }
-    questions[quesIndex].detail.stem =  newCont ;
+    questions[quesIndex].detail.stem = newCont;
     changeDdtkQues([...questions]);
     console.log('newnewnew', [...questions]);
   };
