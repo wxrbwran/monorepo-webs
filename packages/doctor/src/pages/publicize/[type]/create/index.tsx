@@ -199,10 +199,11 @@ const EducationCreate: FC<ILocation> = ({ }) => {
     }
   };
 
+  // publicize/education
   return (
     <div className={styles.gauge_table}>
       <div className={styles.head}>
-        <LeftOutlined className={styles.back} onClick={() => history.push(`/publicize/${type}/detail`)} />
+        <LeftOutlined className={styles.back} onClick={() => history.push(`/publicize/${type}`)} />
         <div className={styles.table_name}>
           <p className={styles.title}>
             <Input

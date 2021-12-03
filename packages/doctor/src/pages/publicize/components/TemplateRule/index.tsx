@@ -377,6 +377,7 @@ interface IProps {
 
   onCancelClick: () => void;
   onSaveClick: (data: { ruleDoc: any, chooseValues: any }) => void;
+  loading?: boolean;
 }
 
 // chooseValues: {
@@ -394,6 +395,7 @@ const TemplateRule: FC<IProps> = ({
   chooseValues,
   onCancelClick,
   onSaveClick,
+  loading,
 }: IProps) => {
 
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
@@ -763,7 +765,7 @@ const TemplateRule: FC<IProps> = ({
       <SendGroup scopeSources={scopeSource} onGroupChange={onGroupChange} choseScopes={choseScope}></SendGroup>
       <div className='flex flex-row justify-center'>
         <Button className="w-98 mt-20 mb-0 mr-20" type="primary" onClick={onCancelClick}>取消</Button>
-        <Button className="w-98 mt-20 mb-0 " type="primary" onClick={saveClick}>完成</Button>
+        <Button className="w-98 mt-20 mb-0 " type="primary" onClick={saveClick} loading={loading}>完成</Button>
       </div>
     </div >
   );

@@ -19,11 +19,14 @@ import TemplateRule from '../../components/TemplateRule';
 const { TabPane } = Tabs;
 const EducationDetail: FC<ILocation> = ({ location }) => {
   const type: string = useParams<{ type: string }>()?.type;
-  console.log(99, location);
   const [sendContent, setSendContent] = useState([]);
+  const [activeKey, setActiveKey] = useState('0');
+  const [loading, setLoading] = useState(false);
   // const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
-  const getRules = (docStatusType: number) => {
+  const getRules = (docStatusType: string) => {
+    // 先清空，以防止闪屏
+    setSendContent([]);
     api.education
       .getAllRules({
         sourceType: sfTypeUrl?.[type].sourceType,
@@ -98,6 +101,7 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
                 status: 'close',
               };
             });
+            setLoading(false);
             setSendContent(rules);
           })
           .catch((err: string) => {
@@ -112,15 +116,13 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
   };
 
   useEffect(() => {
-    getRules(0);
+    getRules(activeKey);
   }, [location]);
-
-  console.log('=====121', location);
 
   const tabChange = (key) => {
 
+    setActiveKey(key);
     getRules(key);
-    console.log('============ key key', JSON.stringify(key));
   };
 
   const onStopSendSuccess = (key) => {
@@ -132,6 +134,10 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
   //添加条件生成一条空计划
   const addInfo = () => {
 
+    if (activeKey != '0') {
+      getRules('0');
+    }
+    setActiveKey('0');
     if (plansRef.current) {
       plansRef.current.addInfo();
     }
@@ -145,19 +151,19 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
       sourceLocation: 's_contact.t_source_group',
     }];
 
-    console.log('================= 添加宣教随访参数 ', JSON.stringify(plan.ruleDoc));
-
     api.education
       .appendRules(plan.ruleDoc)
       .then(() => {
         message.success('添加成功');
-        getRules(0);
+        setActiveKey('0');
+        getRules('0');
         if (plansRef.current) {
           plansRef.current.clearInfos();
         }
       })
-      .catch((err: string) => {
+      .catch((err) => {
         console.log('err', err);
+        message.error(err?.result ?? '添加失败');
       });
   };
 
@@ -167,17 +173,22 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
 
   const onEditPlan = (editPlan: { ruleDoc: any, chooseValues: any }, _sen: any) => {
 
+    setLoading(true);
     api.education
       .editRules(editPlan.ruleDoc)
       .then(() => {
         message.success('修改成功');
-        getRules(0);
+        setActiveKey('0');
+        setTimeout(() => {
+          getRules('0');
+        }, 1000);
         if (plansRef.current) {
           plansRef.current.clearInfos();
         }
       })
-      .catch((err: string) => {
+      .catch((err) => {
         console.log('err', err);
+        message.error(err?.result ?? '修改失败');
       });
   };
 
@@ -198,7 +209,7 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
     <div className={styles.patient_edu}>
       <CreateBox onClick={addInfo} />
 
-      <Tabs defaultActiveKey="0" onChange={tabChange}>
+      <Tabs defaultActiveKey="0" onChange={tabChange} activeKey={activeKey}>
         <TabPane tab="发送中" key="0">
           {
             <PlanContent type={type} onSavePlan={onSavePlan} onPlanChanged={onPlanChanged} ref={plansRef}>
@@ -212,6 +223,7 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
               return (
                 <TemplateRule
                   pageType={type}
+                  loading={loading}
                   onCancelClick={() => { onEditCancel(index); }}
                   originRuleDoc={sen.rule}
                   chooseValues={sen.chooseValues}
