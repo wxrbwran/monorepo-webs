@@ -1,19 +1,21 @@
 import React from 'react';
 import { Button, Avatar } from 'antd';
-import { projectStatus } from 'xzl-web-shared/src/utils/consts';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-
-import {
-  sexList,
-  orgCategroy,
-  inviteStatusLists,
-  accountStatus,
-  roleList,
-  defaultAvatar,
-} from './consts';
+import { defaultAvatar } from './consts';
 
 export type SexType = 'MALE' | 'FEMALE';
-
+export const columnCreator = (title: string, dataIndex: string, prop?: Object = {}) => {
+  let column: CommonData = {
+    title,
+    dataIndex,
+  };
+  if (prop) {
+    column = {
+      ...column,
+      ...prop,
+    };
+  }
+  return column;
+};
 export const avatar = {
   title: '头像',
   dataIndex: 'avatarUrl',
@@ -56,3 +58,32 @@ export const navName = (params: Store) => ({
     </Button>
   ),
 });
+
+export const doctorName = columnCreator('医生姓名', 'name');
+export const responseRate = {
+  title: '平均每天回复率',
+  dataIndex: 'responseRate',
+  render: (text: number) => {
+    <span>{text}%</span>;
+  },
+  sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
+};
+export const sendScaleNum = {
+  title: '发送随访表数量',
+  dataIndex: 'sendScaleNum',
+  sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
+};
+export const receivedScaleNum = {
+  title: '收到随访表数量',
+  dataIndex: 'receivedScaleNum',
+  sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
+};
+export const followUpRate = {
+  title: '随访率',
+  dataIndex: 'followUpRate',
+  render: (text: number) => {
+    <span>{text}%</span>;
+  },
+  sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
+};
+

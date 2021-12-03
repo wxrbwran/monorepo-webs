@@ -1,0 +1,15 @@
+
+.count_item {
+  position: relative;
+  text-align: center;
+  border-right: 1px solid #F0F0F0;
+  flex: 1;
+  &:last-child {
+    border-right: none;
+  }
+  .num {
+    font-size: 40px;
+    font-weight: bold;
+  }
+}
+
