@@ -74,7 +74,6 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
 // 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
 export const handleInviteMemberList = (dataSource: Store[]) => {
   const newData: Array<ISubject> = [];
-  console.log('dataSource', dataSource);
   dataSource.forEach((item: any) => {
     const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
     newData.push({
