@@ -23,105 +23,7 @@ const EducationCreate: FC<ILocation> = ({ }) => {
   const type: string = useParams<{ type: string }>()?.type;
 
 
-
-  // const sendList = useSelector((state: IState) => state.education.sendList);
-  // const [form] = Form.useForm();
-  // const [current, setCurrent] = useState(0);
-  // const [checked, setChecked] = useState<string>(''); // 选择的要发送的内容的id
-  // const [rules, setRules] = useState<IRule>();
-  // const [initFormVal, setInitFormVal] = useState({ frequencyType: 'once' });
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
-  // const [scopeItems, setScopeItems] = useState([]);
-
-
-  // 更新状态：列表判断是否已有发送计划使用 暂时先不调用
-  // const handleUpdataStatus = (content: any) => {
-  //   let statusParams = content;
-  //   if (type == 'suifang') {
-  //     statusParams = content.map((item) => {
-  //       return { ...item, type: 5 };
-  //     });
-  //   }
-  //   api.education.postPublicizeBatchStatus({ content: statusParams });
-  // };
-  // const onFinish = (values: IValues) => {
-  //   console.log('Received values of form:', values);
-  //   const result = handleFormatValues(values, rules, isScale, checked, currentOrgInfo.sid, currentOrgInfo.role, scopeItems);
-  //   if (result) {
-  //     // eslint-disable-next-line @typescript-eslint/naming-convention
-  //     const { start, must, should_1, actions } = result;
-  //     const content = getCheckedContent(checked.split(','), sendList);
-  //     // 提交参数
-  //     const params = {
-  //       rules: [
-  //         {
-  //           title: '',
-  //           match: {
-  //             must: [...start, ...must],
-  //             should_1: [...should_1],
-  //           },
-  //           actions: [...actions],
-  //         },
-  //       ],
-  //       localRules: [
-  //         {
-  //           content,
-  //           ...values,
-  //         },
-  //       ],
-  //       meta: {
-  //         // sid: window.$storage.getItem('sid'),
-  //         sourceType: isScale ? 2 : 3,
-  //         teamLocations: [{
-  //           sid: window.$storage.getItem('sid'),
-  //           ns: window.$storage.getItem('nsId'),
-  //           role: window.$storage.getItem('currRoleId'),
-  //           tag: 'operator',
-  //         }, {
-  //           sid: currentOrgInfo.sid,
-  //           ns: currentOrgInfo.nsId,
-  //           role: currentOrgInfo.role,
-  //           tag: 'ownership',
-  //         }],
-  //       },
-  //     };
-  //     console.log('params666', params);
-  //     api.education
-  //       .sendPlan(params) addPublicizeRules
-  //       .then(() => {
-  //         // message.success('发送成功')
-  //         // history.push('/education/patient/publicize');
-  //         handleUpdataStatus(content);
-  //         history.goBack();
-  //       })
-  //       .catch((err: string) => {
-  //         console.log('err', err);
-  //       });
-  //   }
-  // };
-
-  // const handleChange = (changedValues: any, allValues: { conditions: { type: string }[] }) => {
-  //   console.log('changedValues', changedValues, allValues);
-  //   setInitFormVal({ ...allValues });
-  //   const disableObj = {
-  //     age: false,
-  //     sex: false,
-  //   };
-  //   const vals = allValues.conditions.map((item) => item?.type);
-  //   if (vals.includes('age')) {
-  //     disableObj.age = true;
-  //   }
-  //   if (vals.includes('sex')) {
-  //     disableObj.sex = true;
-  //   }
-  //   setDisabled(disableObj);
-  // };
-
-  // const changeContent = (ids: string) => {
-  //   setChecked(ids);
-  // };
-
-
 
 
   const [infos, setInfos] = useState<any[]>([]);
@@ -185,7 +87,6 @@ const EducationCreate: FC<ILocation> = ({ }) => {
         ownershipSid: currentOrgInfo.sid,
         // projectNsId,
       };
-      console.log('================= 添加宣教随访参数 ', JSON.stringify(params));
 
       api.education
         .addPublicizeRules(params)

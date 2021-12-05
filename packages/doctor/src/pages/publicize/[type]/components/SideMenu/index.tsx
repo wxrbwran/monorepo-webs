@@ -46,24 +46,28 @@ function SideMenu({ location }: IProps) {
             setCurrentId(sameName[0].id);
             history.replace(`/publicize/${type}/detail?id=${sameName[0].id}`);
           } else {
-            history.replace(`/publicize/${type}/detail?id=${currentId ? currentId : res.list[0].id}`);
+            history.replace(`/publicize/${type}/detail?id=${location.query.id ? location.query.id : res.list[0].id}`);
           }
         } else {
-
-          console.log('=========== 111', currentId.length + '===' + res.list[0].id);
-
-          console.log('=========== 111', `/publicize/${type}/detail?id=${(currentId ? currentId : res.list[0].id)}`);
-          history.replace(`/publicize/${type}/detail?id=${currentId ? currentId : res.list[0].id}`);
+          history.replace(`/publicize/${type}/detail?id=${location.query.id ? location.query.id : res.list[0].id}`);
         }
       }
     });
   };
 
   useEffect(() => {
+    // 机构更新了直接刷新整个页面
+    history.replace(`/publicize/${type}`);
+  }, [currentOrgInfo]);
+
+
+  useEffect(() => {
 
     console.log('=============== useEffect useEffect location', location);
+    console.log('=============== useEffect useEffect currentOrgInfo', currentOrgInfo);
     const id = location.query.id;
     if (!id) {
+      setCurrentId('');
       fetchData();
     } else if (id !== currentId) {
       setCurrentId(id);

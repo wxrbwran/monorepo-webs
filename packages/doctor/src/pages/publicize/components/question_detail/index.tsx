@@ -23,14 +23,16 @@ function QuestionDetail(props: IProps) {
   const [isShowModal, setIsShowModal] = useState(false);
 
   useEffect(() => {
+    console.log('================ question isShowModal ', isShowModal, id);
     if (isShowModal) {
-      if (id){
+      if (id) {
+        console.log('================ question id ', id);
         api.education
           .getScaleDetail(id)
           .then((res) => {
-            setTitle(res.title);
-            setSubTitle(res.subTitle);
-            setQuestion(res.questions);
+            setTitle(res.result.scaleName);
+            setSubTitle(res.result.scaleSubName);
+            setQuestion(res.result.questions);
           })
           .catch((err: string) => {
             console.log('err', err);
@@ -43,6 +45,7 @@ function QuestionDetail(props: IProps) {
     }
   }, [isShowModal]);
 
+  console.log('================ question question 1111', JSON.stringify(question));
   return (
     <>
       <span onClick={() => setIsShowModal(!isShowModal)}>{children}</span>

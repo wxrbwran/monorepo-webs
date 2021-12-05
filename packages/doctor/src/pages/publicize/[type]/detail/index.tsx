@@ -22,7 +22,6 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
   const [sendContent, setSendContent] = useState([]);
   const [activeKey, setActiveKey] = useState('0');
   const [loading, setLoading] = useState(false);
-  // const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
 
   const getRules = (docStatusType: string) => {
     // 先清空，以防止闪屏
@@ -204,7 +203,6 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
   };
 
 
-  console.log('================= sendContent sendContent', JSON.stringify(sendContent));
   return (
     <div className={styles.patient_edu}>
       <CreateBox onClick={addInfo} />

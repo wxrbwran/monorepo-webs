@@ -33,13 +33,12 @@ function Reply({ rule, children, chooseValues }: IProps) {
       scaleId: choiceContent.id,
       pageSize,
     }).then((res: any) => {
-      if (res.list.length > 0) {
-        const { list, total, sum, replySum } = res;
-        setDataSource(list);
-        setSendNumber(sum);
-        setReplyNumber(replySum);
-        setTotals(total);
-      }
+
+      const { list, total, sum, replySum } = res;
+      setDataSource(list);
+      setSendNumber(sum);
+      setReplyNumber(replySum);
+      setTotals(total);
     });
   };
 

@@ -169,7 +169,6 @@ export function getHierarchyFromItem(originItem: {}) {
   for (let i = 0; i < keys.length; i++) {
     const item = originItem[keys[i]];
     item.name = keys[i];
-    console.log('============ getHierarchyFromItem', JSON.stringify(item));
     if (!fatherItem || fatherItem.name.length > item.name.length) {
       if (fatherItem) {
         childItem.push(fatherItem);
@@ -180,7 +179,6 @@ export function getHierarchyFromItem(originItem: {}) {
     }
   }
   fatherItem.items = childItem;
-  console.log('========== getStartTimeKeyFromRules  startKey', JSON.stringify(fatherItem));
   return fatherItem;
 }
 
@@ -335,10 +333,6 @@ export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any
   }
 
   const firstTime = getStartTimeChoiceModel(chooseStartTime, rule.actions[0], ruleDoc, list);
-
-
-  console.log('=================fan xian firstTime firstTime', JSON.stringify(firstTime));
-  console.log('=================fan xian frequency frequency', JSON.stringify(frequency));
 
   return {
     firstTime: firstTime,

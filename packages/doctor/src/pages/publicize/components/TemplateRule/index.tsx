@@ -684,6 +684,7 @@ const TemplateRule: FC<IProps> = ({
     };
     if (originRuleDoc) {
       params.id = originRuleDoc.id;
+      params.createdAtTime = originRuleDoc.createdAtTime;
     }
 
     onSaveClick({
