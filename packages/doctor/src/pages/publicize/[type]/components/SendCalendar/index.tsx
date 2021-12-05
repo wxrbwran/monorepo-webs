@@ -69,9 +69,10 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
       return <></>;
     }
     // actionType 0已发送  1待发送
+
     const detailProp = {
       ruleId: rule.id,
-      startTime: itemTime,
+      startTime: new Date(value).setHours(dayjs(rule.createdAtTime).hour(), dayjs(rule.createdAtTime).minute(), dayjs(rule.createdAtTime).second(), dayjs(rule.createdAtTime).millisecond()),
       sourceType: sfTypeUrl?.[type]?.sourceType,
     };
     return (
@@ -112,7 +113,7 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
             dateCellRender={dateCellRender}
             onPanelChange={onPanelChange}
             // 开始时间：计划创建日期的月份，结束时间：当前时间的月份+2
-            validRange={[moment(rule.createdAtTime),
+            validRange={[moment(new Date(rule.createdAtTime).setHours(0, 0, 0, 0)),
               moment(new Date().setMonth(new Date().getMonth() + 2))]}
           />
         </div>
