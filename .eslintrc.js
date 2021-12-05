@@ -36,6 +36,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 0,
     'import/extensions': 0,
     'react/destructuring-assignment': 0,
+    '@typescript-eslint/naming-convention': 0,
   },
   globals: {
     vis: true,

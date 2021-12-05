@@ -95,7 +95,7 @@ const DoctorQRCode:FC = ({ children }) => {
       const aDom = document.getElementById('downloadImg');
       try {
         (aDom as HTMLElement).click();
-      } catch (err) {
+      } catch (err: any) {
         console.log('下载二维码失败', err);
       }
     }

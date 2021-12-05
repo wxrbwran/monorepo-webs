@@ -162,3 +162,6 @@ export declare const statusLists: {
     118: string;
     117: string;
 };
+declare type docTypeKeys = 'HYD' | 'JCD' | 'OTHER';
+export declare const DocumentType: Record<docTypeKeys, string>;
+export {};

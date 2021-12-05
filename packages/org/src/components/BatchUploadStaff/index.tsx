@@ -59,7 +59,7 @@ const BatchUploadStaff: FC<IProps> = (props) => {
         content: '上传成功',
       });
       setShow(false);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       message.error('上传失败');
     }

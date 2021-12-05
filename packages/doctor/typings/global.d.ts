@@ -1,4 +1,4 @@
-interface CommonData {
+declare interface CommonData {
   [index: string]: any;
 }
 

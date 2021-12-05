@@ -392,3 +392,8 @@ export var statusLists = (_b = {},
     _b[UserStatus.Refused] = '审核失败',
     _b[UserStatus.ToBeActivated] = '待激活',
     _b);
+export var DocumentType = {
+    HYD: '化验单',
+    JCD: '检查单',
+    OTHER: '其他医学单据',
+};

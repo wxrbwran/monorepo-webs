@@ -4,44 +4,28 @@ import { Input, List, Space } from 'antd';
 import { history, useDispatch } from 'umi';
 import * as api from '@/services/api';
 import { isOneSelf, isOthers, isSystem } from './util';
-import AddType from '../AddType';
+import AddEditDocument from '../AddEditDocument';
 import styles from './index.scss';
-
-export type IIndexItem = {
-  id: string;
-  type: string;
-  name?: string;
-  sample?: string;
-  title?: string;
-  jcdName?: string;
-  method?: string;
-  source: string;
-  sourceSid?: string;
-};
 
 // type ITemplate = {
 //   list: IIndexItem;
 //   meta: any;
 // };
 
-type TSearchType = {
-  name?: string;
-};
-
 const { Search } = Input;
 const SideMenu: FC = () => {
   const [activeMenu, setActiveMenu] = useState<string>(''); // 当前选中项
-  const [HYD, setHYD] = useState<IIndexItem[]>([]);
-  const [JCD, setJCD] = useState<IIndexItem[]>([]);
-  const [OTHER, setOther] = useState<IIndexItem[]>([]);
+  const [HYD, setHYD] = useState<TIndexItem[]>([]);
+  const [JCD, setJCD] = useState<TIndexItem[]>([]);
+  const [OTHER, setOther] = useState<TIndexItem[]>([]);
   const [activeSubMenu, setActiveSubMenu] = useState<string>('');
   const dispatch = useDispatch();
   // const [imgType, setImgType] = useState<IImgType>({});
   const [keyword, setKeyword] = useState(''); // 只用于搜索框展示文案用，点击菜单时会清空这里
-  const [menu, setMenu] = useState<IIndexItem[]>([]);
+  const [menu, setMenu] = useState<TIndexItem[]>([]);
   const [showSubMenu, setShowSubMenu] = useState(false);
   const curSid = window.$storage.getItem('sid');
-  const handleClickMenu = async (item: IIndexItem) => {
+  const handleClickMenu = async (item: TIndexItem) => {
     if (item) {
       console.log(item);
       const curDocument = { ...item };
@@ -67,13 +51,13 @@ const SideMenu: FC = () => {
     }
   };
 
-  const fetchHYD = async (params?: TSearchType) => {
+  const fetchHYD = async (params?: Record<string, string>) => {
     const apiParams: { name?: string; sourceSid: string; source: string } = {
       sourceSid: curSid,
       source: 'DOCTOR',
       ...params,
     };
-    const res: { list: IIndexItem[] } = await api.indexLibrary.fetchIndexDocument(apiParams);
+    const res: { list: TIndexItem[] } = await api.indexLibrary.fetchIndexDocument(apiParams);
     console.log('fetchHYD', res);
     if (res.list?.length > 0) {
       setHYD([...res.list]);
@@ -83,7 +67,7 @@ const SideMenu: FC = () => {
     return [...res.list];
   };
 
-  const fetchJcdAndOther = async (param?: TSearchType) => {
+  const fetchJcdAndOther = async (param?: Record<string, string>) => {
     console.log('fetchJcdAndOther', param);
     // const params: { source: string; jcdName?: string } = {
     //   ...param,
@@ -104,7 +88,7 @@ const SideMenu: FC = () => {
     // }
   };
 
-  const fetchImageType = async (params: TSearchType) => {
+  const fetchImageType = async (params: Record<string, string>) => {
     const hyds = await fetchHYD(params);
     const jcds = await fetchJcdAndOther(params);
     // await fetchJcdAndOther(params);
@@ -128,7 +112,7 @@ const SideMenu: FC = () => {
     setKeyword('');
     setActiveMenu(typeItem + source);
     setShowSubMenu(true);
-    let tmp: IIndexItem[] = [];
+    let tmp: TIndexItem[] = [];
     let handledList = HYD;
     if (typeItem === 'JCD') {
       handledList = JCD;
@@ -154,10 +138,14 @@ const SideMenu: FC = () => {
   };
 
 
-  const imgTypeText: CommonData = { HYD: '化验单', JCD: '检查单', OTHER: '其他医学单据' };
-  const imgTypeSource: CommonData = { SYSTEM: '系统', ONESELF: '自己', OTHERS: '他人' };
+  const documentTypeText: Record<string, string> = { HYD: '化验单', JCD: '检查单', OTHER: '其他医学单据' };
+  const documentTypeSource: Record<string, string> = {
+    SYSTEM: '系统',
+    ONESELF: '自己',
+    OTHERS: '他人',
+  };
   return (
-    <div className={styles.menu}>
+    <div className={styles.menu} onMouseLeave={() => setShowSubMenu(false)}>
       <Search
         placeholder="请输入名称"
         className={styles.search_wrap}
@@ -167,14 +155,14 @@ const SideMenu: FC = () => {
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       />
-      {Object.keys(imgTypeText).map((typeItem) => (
+      {Object.keys(documentTypeText).map((typeItem) => (
         <div key={typeItem}>
           <div className={styles.title}>
-            <span>{imgTypeText[typeItem]}</span>
-            <AddType imageType={typeItem} onSuccess={fetchImageType} />
+            <span>{documentTypeText[typeItem]}</span>
+            <AddEditDocument mode="add" type={typeItem} onSuccess={fetchImageType} />
           </div>
           <div className={styles.type_list}>
-            {Object.keys(imgTypeSource).map((source) => (
+            {Object.keys(documentTypeSource).map((source) => (
               <div
                 className={`${styles.type_item} ${
                   typeItem + source === activeMenu ? styles.active : ''
@@ -182,9 +170,9 @@ const SideMenu: FC = () => {
                 data-type={typeItem}
                 data-source={source}
                 key={typeItem + source}
-                onClick={() => handleChangeMenu(typeItem, source)}
+                onMouseEnter={() => handleChangeMenu(typeItem, source)}
               >
-                <span>{imgTypeSource[source]}添加</span>
+                <span>{documentTypeSource[source]}添加</span>
                 <RightOutlined />
               </div>
             ))}
@@ -197,7 +185,7 @@ const SideMenu: FC = () => {
             size="default"
             dataSource={menu}
             className="cursor-pointer"
-            renderItem={(item: IIndexItem) => (
+            renderItem={(item: TIndexItem) => (
               <List.Item className={activeSubMenu === item.id ? 'font-bold' : ''}>
                 <Space>
                   <span onClick={() => handleClickMenu(item)}>{item.name || item.jcdName}</span>{' '}

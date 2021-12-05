@@ -414,8 +414,6 @@ export const projectDefaultImg = [
 ];
 
 
-
-
 export const statusLists = {
   [UserStatus.Accepted]: '已认证',
   // [UserStatus.InitState]: '未完成注册',
@@ -424,3 +422,10 @@ export const statusLists = {
   [UserStatus.ToBeActivated]: '待激活',
 };
 
+type docTypeKeys = 'HYD' | 'JCD' | 'OTHER';
+
+export const DocumentType: Record<docTypeKeys, string> = {
+  HYD: '化验单',
+  JCD: '检查单',
+  OTHER: '其他医学单据',
+};

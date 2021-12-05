@@ -12,7 +12,7 @@ const DeleteDepOrg: FC<IProps> = (props) => {
   //   try {
   //     const values = await form.validateFields();
   //     console.log(values);
-  //   } catch (err) {
+  //   } catch (err: any) {
   //     console.log(err);
   //   }
   // };
