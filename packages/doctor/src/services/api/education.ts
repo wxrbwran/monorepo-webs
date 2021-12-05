@@ -96,7 +96,7 @@ export default {
   },
   // 获取已发送内容
   getAllRules(data?: any): Promise<any> {
-    return http.get('rules', { data });
+    return http.get('publicize/rules', { data });
   },
   // 获取已发送内容
   getEducationSendContents(data?: any): Promise<any> {

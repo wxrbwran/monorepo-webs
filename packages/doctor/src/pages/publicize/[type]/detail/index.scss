@@ -1,9 +1,16 @@
 .patient_edu {
   height: 100%;
   overflow: auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
   :global {
     .ant-tabs-tab-btn {
       font-size: 14px;
     }
+  }
+  p,
+  input {
+    text-align: center;
   }
 }

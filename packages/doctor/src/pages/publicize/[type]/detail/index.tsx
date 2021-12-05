@@ -6,7 +6,7 @@ import CreateBox from '../../components/create_box';
 // import type { IValues } from '../const';
 import PlanItem from '../components/PlanItem';
 
-import { message, Tabs } from 'antd';
+import { Input, message, Tabs } from 'antd';
 
 import styles from './index.scss';
 import { sfTypeUrl } from '../../utils';
@@ -14,6 +14,7 @@ import { fileTypes, getChooseValuesKeyFromRules } from '../../components/Templat
 import PlanContent from '../create/PlanContent';
 
 import TemplateRule from '../../components/TemplateRule';
+import { FormOutlined } from '@ant-design/icons';
 
 
 const { TabPane } = Tabs;
@@ -22,8 +23,12 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
   const [sendContent, setSendContent] = useState([]);
   const [activeKey, setActiveKey] = useState('0');
   const [loading, setLoading] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [scaleName, setScaleName] = useState('');
 
   const getRules = (docStatusType: string) => {
+    setIsEdit(false);
     // 先清空，以防止闪屏
     setSendContent([]);
     api.education
@@ -48,7 +53,6 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
             })
           );
         });
-        console.log('========== ids ids', ids);
 
         let request = api.education.getScalesSendContents;
         if (type == 'education') {
@@ -109,7 +113,6 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
           });
       })
       .catch((err) => {
-        console.log('========== err', err);
         message.error(err?.result);
       });
   };
@@ -202,9 +205,60 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
     setSendContent([...sendContent]);
   };
 
+  const changeIsEdit = () => {
+    setIsEdit(true);
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 300);
+  };
+
+  const changeFormName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setScaleName(e.target.value);
+  };
+
+  const handleChangeName = () => {
+    if (!scaleName) {
+      message.error('客观检查名称不能为空');
+    } else {
+      setIsEdit(false);
+      // api.subjective.patchSubjectiveScale({
+      //   name: scaleName,
+      //   projectSid: window.$storage.getItem('projectSid'),
+      //   scaleGroupId: location.query.id,
+      // }).then(() => {
+      //   message.success('修改成功');
+      //   dispatch({
+      //     type: 'project/fetchObjectiveScale',
+      //     payload: location.query.id,
+      //   });
+      //   history.push(`${location.pathname}?name=${scaleName}`);
+      // });
+    }
+  };
 
   return (
     <div className={styles.patient_edu}>
+
+      {isEdit ? (
+        <p className={styles.title}>
+          <Input
+            placeholder={`请输入${sfTypeUrl?.[type].text}类型，例：高血压病人${sfTypeUrl?.[type].text}`}
+            onChange={changeFormName}
+            defaultValue={'11'}
+            style={{ width: 320 }}
+            onBlur={handleChangeName}
+            ref={inputRef}
+          />
+        </p>
+      ) : (
+        <p className={styles.title}>
+          {'11'}
+          <FormOutlined onClick={changeIsEdit} />
+        </p>
+      )}
+
       <CreateBox onClick={addInfo} />
 
       <Tabs defaultActiveKey="0" onChange={tabChange} activeKey={activeKey}>
