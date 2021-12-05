@@ -37,7 +37,7 @@ function QuestionChoice(props: IProps) {
   };
   // 修改题型
   const handleChangeTx = (e: RadioChangeEvent, qIndex: number) => {
-    console.log(33, e.target.value);
+    console.log(33, e.target.value, qIndex);
     console.log(questions[qIndex]);
     questions[qIndex].type = e.target.value;
     changeQues([...questions]);
@@ -47,7 +47,6 @@ function QuestionChoice(props: IProps) {
   // 保存输入的选项   保存后不可再编辑，只能删除
   const handleSaveOption = (ev: React.FocusEvent<HTMLInputElement>, qIndex: number, oIndex: number) => {
     const val = ev.target.value;
-    console.log('=============== handleSaveOption handleSaveOption');
     if (val.trim()) {
       questions[qIndex].detail.options[oIndex].content = val;
       changeQues([...questions]);
@@ -61,6 +60,7 @@ function QuestionChoice(props: IProps) {
     questions[quesIndex].detail.required = e.target.checked;
     changeQues([...questions]);
   };
+
   return (
     <div
       className={`topic-item ${(editIndex === quesIndex) ? 'edit' : ''}`}

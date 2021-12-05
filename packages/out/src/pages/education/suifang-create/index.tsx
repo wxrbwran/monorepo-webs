@@ -235,16 +235,15 @@ function SuifangCreate({ location, scaleType }: IProps) {
                 };
                 if (['RADIO', 'CHECKBOX'].includes(item.type)) {
                   return (
-                    <QuestionChoice {...props} key={item.type} />
+                    <QuestionChoice {...props} />
                   );
                 } if (['TEXT', 'END'].includes(item.type)) {
                   return (
-                    <QuestionText {...props} key={item.type} />
+                    <QuestionText {...props} />
                   );
                 } if (item.type === 'COMPLETION') {
                   return <QuestionDdtk
                     {...props}
-                    key={quesIndex}
                     changeDdtkQues={changeDdtkQues}
                     handSaveDdtkModify={handSaveDdtkModify}
                     originQue={originQue}

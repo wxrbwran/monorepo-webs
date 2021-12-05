@@ -318,13 +318,12 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
                 scaleType,
               };
               if (['RADIO', 'CHECKBOX'].includes(item.type)) {
-                return <QuestionChoice {...props} key={quesIndex} />;
+                return <QuestionChoice {...props} />;
               } else if (['TEXT', 'END'].includes(item.type)) {
-                return <QuestionText {...props} key={quesIndex} />;
+                return <QuestionText {...props} />;
               } else if (item.type === 'COMPLETION') {
                 return <QuestionDdtk
                   {...props}
-                  key={quesIndex}
                   changeDdtkQues={changeDdtkQues}
                   handSaveDdtkModify={handSaveDdtkModify}
                   originQue={originQue}

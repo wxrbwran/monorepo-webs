@@ -49,11 +49,10 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
     });
   };
 
-  console.log('=============== data.chooseValues.frequency ', data.chooseValues.frequency, data.chooseValues.frequency != 'NONE');
   return (
     <div className={`${styles.card} ${open ? styles.h_auto : ''}`}>
       <div className={styles.btn_wrap}>
-        {type === 'suifang' && (
+        {(type === 'suifang' || type == 'crf_scale') && (
           <ReplyDetail rule={data.rule} chooseValues={data.chooseValues}>
             <Button type="link" icon={<ProfileOutlined />}>回复详情</Button>
           </ReplyDetail>
@@ -151,7 +150,6 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
             }
           </div>
         }
-
         {
           conditionDescription && (conditionDescription.age || conditionDescription.sex || conditionDescription.disease || conditionDescription.treatment) &&
           <div className={`${styles.tit} flex center`}>
@@ -184,10 +182,10 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
         </div>
       </div>
       <div
-        className="flex justify-center items-center absolute left-1/2 bottom-0 w-55 cursor-pointer  bg-white pb-11"
+        className="flex justify-center items-center absolute left-1/2 bottom-0 w-55 cursor-pointer  bg-white pb-11 color-red-100"
         onClick={() => setopen(prev => !prev)}
       >
-        <span>{open ? '收起' : '展开'}</span>
+        <span className='color-red-100'>{open ? '收起' : '展开'}</span>
         <img src={openIcon} style={{ transform: `rotate(${open ? 180 : 0}deg)` }} className="w-14 h-14" />
       </div>
     </div>
