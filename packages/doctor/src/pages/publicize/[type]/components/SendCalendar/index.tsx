@@ -35,7 +35,6 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
     };
     const sendCount = {};
     api.education.getPublicizSendCount(params).then((res: { sendList: ISendItem[], todoSendList: ISendItem[] }) => {
-      console.log('=====发送日历', res);
       res.sendList.forEach(item => {
         sendCount[item.sendTime] = { sendCount: item.sendCount };
       });
@@ -63,8 +62,10 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
   function dateCellRender(value: moment.Moment) {
 
     const itemTime = new Date(value).setHours(0, 0, 0, 0);
+
     const { todoSendCount, sendCount }: IDatData = sendDatas?.[itemTime] || {};
-    if (!todoSendCount && !todoSendCount) {
+
+    if (!todoSendCount && !sendCount) {
       return <></>;
     }
     // actionType 0已发送  1待发送

@@ -23,10 +23,8 @@ function QuestionDetail(props: IProps) {
   const [isShowModal, setIsShowModal] = useState(false);
 
   useEffect(() => {
-    console.log('================ question isShowModal ', isShowModal, id);
     if (isShowModal) {
       if (id) {
-        console.log('================ question id ', id);
         api.education
           .getScaleDetail(id)
           .then((res) => {
@@ -45,7 +43,6 @@ function QuestionDetail(props: IProps) {
     }
   }, [isShowModal]);
 
-  console.log('================ question question 1111', JSON.stringify(question));
   return (
     <>
       <span onClick={() => setIsShowModal(!isShowModal)}>{children}</span>
