@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { FC } from 'react';
-import { useParams } from 'umi';
+import { useParams, history } from 'umi';
 import * as api from '@/services/api';
 import CreateBox from '../../components/create_box';
 // import type { IValues } from '../const';
@@ -26,6 +26,7 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
   const [isEdit, setIsEdit] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [scaleName, setScaleName] = useState('');
+  const [groupId, setGroupId] = useState('');
 
   const getRules = (docStatusType: string) => {
     setIsEdit(false);
@@ -46,6 +47,8 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
       })
       .then((ruleList) => {
 
+        setScaleName(ruleList.groupName);
+        setGroupId(ruleList.groupId);
         const ids = ruleList.rules.flatMap((ruleDoc) => {
           return (
             ruleDoc.rules[0].actions.flatMap((action) => {
@@ -223,18 +226,13 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
       message.error('客观检查名称不能为空');
     } else {
       setIsEdit(false);
-      // api.subjective.patchSubjectiveScale({
-      //   name: scaleName,
-      //   projectSid: window.$storage.getItem('projectSid'),
-      //   scaleGroupId: location.query.id,
-      // }).then(() => {
-      //   message.success('修改成功');
-      //   dispatch({
-      //     type: 'project/fetchObjectiveScale',
-      //     payload: location.query.id,
-      //   });
-      //   history.push(`${location.pathname}?name=${scaleName}`);
-      // });
+      api.education.patchGroupName({
+        title: scaleName,
+        groupId: groupId,
+      }).then(() => {
+        message.success('修改成功');
+        history.push(`/publicize/${type}/?name=${scaleName}`);
+      });
     }
   };
 
@@ -246,7 +244,7 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
           <Input
             placeholder={`请输入${sfTypeUrl?.[type].text}类型，例：高血压病人${sfTypeUrl?.[type].text}`}
             onChange={changeFormName}
-            defaultValue={'11'}
+            defaultValue={scaleName}
             style={{ width: 320 }}
             onBlur={handleChangeName}
             ref={inputRef}
@@ -254,7 +252,7 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
         </p>
       ) : (
         <p className={styles.title}>
-          {'11'}
+          {scaleName}
           <FormOutlined onClick={changeIsEdit} />
         </p>
       )}

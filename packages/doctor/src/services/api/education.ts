@@ -91,17 +91,16 @@ export default {
     return http.get(`template/${source_type}`);
   },
   // 发送计划
-  sendPlan(data?: any): Promise<any> {
-    return http.post('rules', { data });
-  },
-  // // 获取已发送内容
-  // getAllRules(data?: any): Promise<any> {
-  //   return http.get('publicize/rules', { data });
+  // sendPlan(data?: any): Promise<any> {
+  //   return http.post('rules', { data });
   // },
-
   // 获取已发送内容
   getAllRules(data?: any): Promise<any> {
-    return http.get('rules', { data });
+    return http.get('publicize/rules', { data });
+  },
+
+  patchGroupName(data?: any): Promise<any> {
+    return http.patch('publicize/group', { data });
   },
   // 获取已发送内容
   getEducationSendContents(data?: any): Promise<any> {
