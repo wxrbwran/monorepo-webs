@@ -49,10 +49,11 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
     });
   };
 
+  console.log('=============== data.chooseValues.frequency ', data.chooseValues.frequency, data.chooseValues.frequency != 'NONE');
   return (
     <div className={`${styles.card} ${open ? styles.h_auto : ''}`}>
       <div className={styles.btn_wrap}>
-        {(type === 'suifang' || type == 'crf_scale') && (
+        {type === 'suifang' && (
           <ReplyDetail rule={data.rule} chooseValues={data.chooseValues}>
             <Button type="link" icon={<ProfileOutlined />}>回复详情</Button>
           </ReplyDetail>
@@ -183,7 +184,7 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
         </div>
       </div>
       <div
-        className="flex justify-center absolute left: 50% w-55  bottom-0 items-center cursor-pointer w-full bg-white pb-11"
+        className="flex justify-center items-center absolute left-1/2 bottom-0 w-55 cursor-pointer  bg-white pb-11"
         onClick={() => setopen(prev => !prev)}
       >
         <span>{open ? '收起' : '展开'}</span>
