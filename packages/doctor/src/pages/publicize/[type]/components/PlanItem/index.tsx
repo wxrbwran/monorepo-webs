@@ -48,6 +48,8 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
       }
     });
   };
+
+  console.log('=============== data.chooseValues.frequency ', data.chooseValues.frequency, data.chooseValues.frequency != 'NONE');
   return (
     <div className={`${styles.card} ${open ? styles.h_auto : ''}`}>
       <div className={styles.btn_wrap}>
@@ -109,14 +111,14 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
           </div>
         </div>
         {
-          data.chooseValues.frequency != 'NONE' && (
+          data.chooseValues.frequency.frequency != 'NONE' && (
             <div className={`${styles.tit} flex center`}>
               <img src={frequency} alt="" />
               <p className="text-gray-900 text-base ml-5">发送频率:</p>
             </div>
           )
         }
-        {data.chooseValues.frequency != 'NONE' &&
+        {data.chooseValues.frequency.frequency != 'NONE' &&
           <div className="ml-20 mb-20">
             {
               data.chooseValues.frequency.custom.map((item) => {
