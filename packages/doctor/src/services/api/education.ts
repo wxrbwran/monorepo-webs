@@ -94,9 +94,14 @@ export default {
   sendPlan(data?: any): Promise<any> {
     return http.post('rules', { data });
   },
+  // // 获取已发送内容
+  // getAllRules(data?: any): Promise<any> {
+  //   return http.get('publicize/rules', { data });
+  // },
+
   // 获取已发送内容
   getAllRules(data?: any): Promise<any> {
-    return http.get('publicize/rules', { data });
+    return http.get('rules', { data });
   },
   // 获取已发送内容
   getEducationSendContents(data?: any): Promise<any> {
@@ -152,10 +157,6 @@ export default {
   // 新建宣教随访crf
   appendRules(data?: any): Promise<any> {
     return http.post('rules', { data });
-  },
-  // // 获取规则详情
-  getPublicizeGroupDetail(data: string): Promise<any> {
-    return http.get('publicize/rules', { data });
   },
   // 统计发送日历
   getPublicizSendCount(data?: any): Promise<any> {
