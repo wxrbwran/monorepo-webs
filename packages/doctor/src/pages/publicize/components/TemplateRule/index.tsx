@@ -117,7 +117,6 @@ const tileChooseToArray = (item: IItem) => {
   if (cloneItem.items && cloneItem.items.length > 0) {
     // 将每个子项拿出来
     for (let i = 0; i < cloneItem.items.length; i++) {
-      console.log('=============== i', i, JSON.stringify(tileChooseToArray(cloneItem.items[i])));
       array = { ...array, ...tileChooseToArray(cloneItem.items[i]) };
     }
     // 将自己拼进去
@@ -214,9 +213,6 @@ const tileChooseConditionToArray = (conditions: ICondition[]) => {
       }
     }
   }
-
-
-  console.log('========================= diseaseItem childDiseaseItem', JSON.stringify(childDiseaseItem), JSON.stringify(diseaseItem));
   if (treatmentItem?.chooseItem?.name?.length > 0) {
 
     const treatmentObj = addTreatmentOrDiseaseItem(treatmentItem, childTreatmentItem);
@@ -303,7 +299,6 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
 
   const arr = [];
 
-  console.log('==================  firstTime firstTime', JSON.stringify(firstTime));
   if (firstSteps.includes(DIY)) {
     const index = firstSteps.indexOf(DIY);
     const action: any = {
@@ -438,7 +433,6 @@ const TemplateRule: FC<IProps> = ({
     api.education
       .getRules(sfTypeUrl?.[pageType].templateType)
       .then((res) => {
-        console.log('resrules', res);
 
         for (let i = 0; i < res.keys.length; i++) {
           if (res.keys[i].name == 'start') {
@@ -479,7 +473,6 @@ const TemplateRule: FC<IProps> = ({
 
 
                     if (isEmpty(preState)) {
-                      console.log('============== preState preState', JSON.stringify(r.items[0]));
                       return [r.items[0]];
                     }
                     return preState;
@@ -497,10 +490,6 @@ const TemplateRule: FC<IProps> = ({
   }, []);
 
   useEffect(() => {
-
-
-    console.log('=============== originRuleDoc', JSON.stringify(originRuleDoc));
-    console.log('=============== chooseValues', JSON.stringify(chooseValues));
     if (chooseValues) {
 
       setFirstTime(cloneDeep(chooseValues.firstTime));
@@ -533,14 +522,13 @@ const TemplateRule: FC<IProps> = ({
   // 发送小组
   const onGroupChange = (scope: IItem[]) => {
 
-    console.log('=================== onGroupChange', JSON.stringify(scope));
+
     setChoseScope(scope);
   };
 
   const canSave = (firstSteps: string[]) => {
 
-    // 首次发送时间一定要填写
-    console.log('============= firstTime', JSON.stringify(firstTime));
+    // 首次发送时间一定要填写 
 
     if (firstSteps.includes(AfterPatientBind)) {
 
@@ -629,7 +617,6 @@ const TemplateRule: FC<IProps> = ({
 
 
     const firstSteps = getFirstSteps(firstTime.choiceModel);
-    console.log('============= firsts', JSON.stringify(firstSteps));
 
     const can = canSave(firstSteps);
     if (can) {
@@ -640,7 +627,6 @@ const TemplateRule: FC<IProps> = ({
     const set = Array.from(new Set(frequency.custom));
     const filter = set.filter((item) => !!item);
     frequency.custom = filter;
-    console.log('============= frequency 11', JSON.stringify(filter), JSON.stringify(frequency.custom));
 
     //去重、过滤空数据
     frequency.custom = Array.from(new Set(frequency.custom)).filter((item) => !!item);
@@ -700,8 +686,6 @@ const TemplateRule: FC<IProps> = ({
       params.id = originRuleDoc.id;
     }
 
-    console.log('========================= params params ', JSON.stringify(params));
-
     onSaveClick({
       ruleDoc: params,
       chooseValues: {
@@ -714,8 +698,6 @@ const TemplateRule: FC<IProps> = ({
   };
 
   const onContentListAdd = (contentType: ContentType, choicesSid: IList[]) => {
-    console.log('================= onContentListAdd choicesSid', JSON.stringify(choicesSid));
-    console.log('================= onContentListAdd choicesSid 11', JSON.stringify(firstTime.choiceContents));
 
     if (contentType == 'firstTime') {
       firstTime.choiceContents.push(...choicesSid);
@@ -724,7 +706,6 @@ const TemplateRule: FC<IProps> = ({
   };
 
   const onRemoveSuccess = (contentType: ContentType, _item: any, _index: number, list: any[]) => {
-    console.log('================= onRemoveSuccess choicesSid', JSON.stringify(list));
     if (contentType == 'firstTime') {
       firstTime.choiceContents = list;
       setFirstTime({ ...firstTime });
@@ -733,8 +714,6 @@ const TemplateRule: FC<IProps> = ({
   };
 
   const contentPopver = (contentType: ContentType) => {
-
-    console.log('================= render contentType', firstTime.choiceContents.length);
 
     const getContentList = () => {
       if (contentType == 'firstTime') {
@@ -752,7 +731,6 @@ const TemplateRule: FC<IProps> = ({
     );
   };
 
-  console.log('================= render', JSON.stringify(firstTime.choiceModel));
   return (
     <div className={styles.send_plan}>
       <FirstSendTime choiceModelChange={onChoiceModelChange} popverContent={

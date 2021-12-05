@@ -33,10 +33,16 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   };
   const handleDel = (id: string) => {
     let request = api.education.delPublicize;
+    let requestType = '';
     if (['accompany', 'crf'].includes(type)) {
       request = api.education.delPublicizeScale;
+      if (type == 'accompany') {
+        requestType = 'FOLLOW';
+      } else if (type == 'crf') {
+        requestType = 'FOLLOW_CRF';
+      }
     }
-    request(id).then(() => {
+    request(requestType, id).then(() => {
       message.success('删除成功');
       onSuccess();
     }).catch(err => {
@@ -54,7 +60,6 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   const isShowBtn = (['accompany', 'crf'].includes(type) && item?.edit) || (!item?.inSchedule && item?.del);
   // 是否显示分隔线
   const isShowSplit = (['accompany', 'crf'].includes(type) && item?.edit) && (!item?.inSchedule && item?.del);
-  console.log('====22', type);
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>
       {

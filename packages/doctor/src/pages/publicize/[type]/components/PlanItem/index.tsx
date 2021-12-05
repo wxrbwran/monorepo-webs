@@ -49,11 +49,10 @@ const PlanItem: FC<IProps> = ({ data, status, stopSendSuccess, onEditClick, remo
     });
   };
 
-  console.log('=============== data.chooseValues.frequency ', data.chooseValues.frequency, data.chooseValues.frequency != 'NONE');
   return (
     <div className={`${styles.card} ${open ? styles.h_auto : ''}`}>
       <div className={styles.btn_wrap}>
-        {type === 'suifang' && (
+        {(type === 'suifang' || type == 'crf_scale') && (
           <ReplyDetail rule={data.rule} chooseValues={data.chooseValues}>
             <Button type="link" icon={<ProfileOutlined />}>回复详情</Button>
           </ReplyDetail>

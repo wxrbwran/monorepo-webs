@@ -171,7 +171,9 @@ const EducationCreate: FC<ILocation> = ({ }) => {
       const ruleList = cloneDeep(infos);
       const ruleDocs = [];
       for (let i = 0; i < ruleList.length; i++) {
-        ruleDocs.push(ruleList[i].ruleDoc);
+        if (ruleList[i].ruleDoc) {
+          ruleDocs.push(ruleList[i].ruleDoc);
+        }
       }
 
       const params = {
@@ -191,7 +193,7 @@ const EducationCreate: FC<ILocation> = ({ }) => {
           message.success('添加成功');
           setLoading(false);
           // handleUpdataStatus(content);
-          history.push(`/publicize/${type}/detail?name=${formName}`);
+          history.push(`/publicize/${type}/?name=${formName}`);
         })
         .catch((err: string) => {
           console.log('err', err);

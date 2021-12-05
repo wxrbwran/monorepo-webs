@@ -11,6 +11,7 @@ interface IProps {
     pathname: string;
     query: {
       id: string;
+      name?: string;
     }
   };
 }
@@ -39,14 +40,28 @@ function SideMenu({ location }: IProps) {
       console.log(34343, res);
       setfileNameList(res.list);
       if (res.list?.length > 0) {
-        history.replace(`/publicize/${type}/detail?id=${res.list[0].id}`);
+        if (location.query.name) {
+          const sameName = res.list.filter((item) => item.title == location.query.name);
+          if (sameName.length > 0) {
+            setCurrentId(sameName[0].id);
+            history.replace(`/publicize/${type}/detail?id=${sameName[0].id}`);
+          } else {
+            history.replace(`/publicize/${type}/detail?id=${currentId ? currentId : res.list[0].id}`);
+          }
+        } else {
+
+          console.log('=========== 111', currentId.length + '===' + res.list[0].id);
+
+          console.log('=========== 111', `/publicize/${type}/detail?id=${(currentId ? currentId : res.list[0].id)}`);
+          history.replace(`/publicize/${type}/detail?id=${currentId ? currentId : res.list[0].id}`);
+        }
       }
     });
   };
 
   useEffect(() => {
 
-    console.log('=============== useEffect useEffect location');
+    console.log('=============== useEffect useEffect location', location);
     const id = location.query.id;
     if (!id) {
       fetchData();
