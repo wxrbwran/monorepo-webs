@@ -424,8 +424,72 @@ export const statusLists = {
 
 type docTypeKeys = 'HYD' | 'JCD' | 'OTHER';
 
-export const DocumentType: Record<docTypeKeys, string> = {
+export const documentType: Record<docTypeKeys, string> = {
   HYD: '化验单',
   JCD: '检查单',
   OTHER: '其他医学单据',
 };
+
+
+export const referenceList: Record<string, string>[] = [
+  {
+    value: 'RANGE',
+    label: 'a-b',
+  },
+  {
+    value: 'GT',
+    label: '>a',
+  },
+  {
+    value: 'LT',
+    label: '<a',
+  },
+  {
+    value: 'AROUND',
+    label: 'a±b',
+  },
+  {
+    value: 'RADIO',
+    label: '阴阳',
+  },
+  {
+    value: 'OTHER',
+    label: '其他',
+  },
+];
+
+export const referenceMap: Record<string, string> = {
+  RANGE: 'a-b',
+  GT: '>a',
+  LT: '<a',
+  AROUND: 'a±b',
+  RADIO: '阴阳',
+  OTHER: '其他',
+};
+
+export const yinYang = [
+  {
+    value: 'YIN',
+    label: '阴',
+  },
+  {
+    value: 'YANG',
+    label: '阳',
+  },
+];
+
+export const yinYangMap = {
+  YIN: '阴',
+  YANG: '阳',
+};
+
+export const documentMap: Record<docTypeKeys, string> = {
+  HYD: '化验单',
+  JCD: '检查单',
+  OTHER: '其他医学单据',
+};
+
+export const commonCheckbox: Record<string, string>[] = [
+  { label: '常用', value: 'true' },
+  { label: '不常用', value: 'false' },
+];

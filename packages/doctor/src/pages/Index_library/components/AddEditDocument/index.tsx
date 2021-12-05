@@ -1,11 +1,10 @@
-import React, { FC, useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
+import React, { FC, useState, useEffect } from 'react';
 import {
   Form, Input, Button, message,
 } from 'antd';
 import { debounce } from 'lodash';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { DocumentType } from 'xzl-web-shared/src/utils/consts';
+import { documentType } from 'xzl-web-shared/src/utils/consts';
 import * as api from '@/services/api';
 
 interface IProps {
@@ -14,14 +13,19 @@ interface IProps {
   onSuccess: (params: Record<string, string>) => void;
   record?: TIndexItem
 }
-const AddType: FC<IProps> = (props) => {
-  const { type, onSuccess, mode, record } = props;
+const AddEditDocument: FC<IProps> = (props) => {
+  const { type, onSuccess, mode, record, children } = props;
+  console.log('record', record);
   const [showModal, setshowModal] = useState(false);
-  // 点击添加
-  const handleAddBtn = () => {
-    setshowModal(true);
-  };
-  console.log(32);
+  const [form] = Form.useForm();
+  const sid = window.$storage.getItem('sid');
+
+  useEffect(() => {
+    if (record) {
+      form.setFieldsValue({ ...record });
+    }
+  }, [record]);
+
   const toggleShowModal = () => {
     setshowModal(false);
   };
@@ -31,7 +35,7 @@ const AddType: FC<IProps> = (props) => {
       ...values,
       type: type,
       source: 'DOCTOR',
-      sourceSid: window.$storage.getItem('sid'),
+      sourceSid: sid,
       wcId: window.$storage.getItem('wcId'),
     };
     try {
@@ -39,7 +43,7 @@ const AddType: FC<IProps> = (props) => {
         if (mode === 'add') {
           await api.indexLibrary.putIndexDocument(params);
         } else {
-          params.id = record.id;
+          params.id = record?.id;
           await api.indexLibrary.patchIndexDocument(params);
         }
       } else if (['JCD', 'OTHER'].includes(type)) {
@@ -61,7 +65,7 @@ const AddType: FC<IProps> = (props) => {
           });
         } else {
           await api.indexLibrary.patchImageTemplate({
-            id: record.id,
+            id: record?.id,
             ...params,
           });
         }
@@ -82,9 +86,7 @@ const AddType: FC<IProps> = (props) => {
   };
   return (
     <div>
-      <span>
-        <PlusOutlined onClick={handleAddBtn} />
-      </span>
+      <span onClick={() => setshowModal(true)}>{children}</span>
       <DragModal
         title="添加"
         footer={null}
@@ -97,10 +99,10 @@ const AddType: FC<IProps> = (props) => {
         <div>
           <Form
             {...layout}
+            form={form}
             name="basic"
             onFinish={debounce(handleSave, 300)}
             id="height42"
-            draggable
           >
             {type === 'HYD' && (
               <>
@@ -123,11 +125,11 @@ const AddType: FC<IProps> = (props) => {
             {type !== 'HYD' && (
               <>
                 <Form.Item
-                  label={`${DocumentType[type]}名称`}
+                  label={`${documentType[type]}名称`}
                   name="name"
-                  rules={[{ required: true, message: `请输入${DocumentType[type]}名称!` }]}
+                  rules={[{ required: true, message: `请输入${documentType[type]}名称!` }]}
                 >
-                  <Input placeholder={`请输入${DocumentType[type]}名称`} />
+                  <Input placeholder={`请输入${documentType[type]}名称`} />
                 </Form.Item>
               </>
             )}
@@ -136,10 +138,7 @@ const AddType: FC<IProps> = (props) => {
                 <Form.Item label="检查部位" name="part">
                   <Input placeholder="请输入检查部位" />
                 </Form.Item>
-                <Form.Item
-                  label="检查方法"
-                  name="method"
-                >
+                <Form.Item label="检查方法" name="method">
                   <Input placeholder="请输入检查方法" />
                 </Form.Item>
               </>
@@ -160,4 +159,4 @@ const AddType: FC<IProps> = (props) => {
   );
 };
 
-export default AddType;
+export default AddEditDocument;

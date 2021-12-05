@@ -163,5 +163,17 @@ export declare const statusLists: {
     117: string;
 };
 declare type docTypeKeys = 'HYD' | 'JCD' | 'OTHER';
-export declare const DocumentType: Record<docTypeKeys, string>;
+export declare const documentType: Record<docTypeKeys, string>;
+export declare const referenceList: Record<string, string>[];
+export declare const referenceMap: Record<string, string>;
+export declare const yinYang: {
+    value: string;
+    label: string;
+}[];
+export declare const yinYangMap: {
+    YIN: string;
+    YANG: string;
+};
+export declare const documentMap: Record<docTypeKeys, string>;
+export declare const commonCheckbox: Record<string, string>[];
 export {};

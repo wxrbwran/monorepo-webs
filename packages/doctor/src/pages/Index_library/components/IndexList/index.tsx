@@ -49,8 +49,8 @@ const IndexList: FC = () => {
     form.resetFields();
     setOptions({ ...initDepOptions });
   }, [documentId]);
-  
-  const handleSelectChange = (changedValues: string[], allValues: CommonData) => {
+
+  const handleSelectChange = (changedValues: string[], allValues: Record<string, string>) => {
     console.log('allValues', allValues, changedValues);
     const params: IParams = { ...depOptions };
     Object.keys(allValues).forEach((key: string) => {

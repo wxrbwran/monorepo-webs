@@ -5,21 +5,6 @@
       font-size: 14px;
       margin: 0 10px;
     }
-    .ant-form-item {
-      display: block;
-      input {
-        width: 393px;
-        height: 40px;
-        line-height: 40px;
-      }
-    }
-    .ant-form-item-label {
-      text-align: left;
-      label {
-        color: #666666;
-        font-size: 14px;
-      }
-    }
     .unit-tit {
       display: flex;
       width: 417px;
@@ -40,27 +25,12 @@
       span {
         color: #666666;
       }
-      .ant-form-item {
-        margin-bottom: 0;
-      }
-      .anticon-delete {
-        color: #3296FA;
-      }
-    }
-    .common {
-      &.ant-form-item {
-        display: flex;
-      }
     }
     .common {
       &__btn {
         margin-top: 40px;
         button {
           min-width: 98px;
-          &:first-child {
-            border: 1px solid #E0E0E0;
-            color: #666666;
-          }
         }
       }
     }

@@ -392,8 +392,65 @@ export var statusLists = (_b = {},
     _b[UserStatus.Refused] = '审核失败',
     _b[UserStatus.ToBeActivated] = '待激活',
     _b);
-export var DocumentType = {
+export var documentType = {
     HYD: '化验单',
     JCD: '检查单',
     OTHER: '其他医学单据',
 };
+export var referenceList = [
+    {
+        value: 'RANGE',
+        label: 'a-b',
+    },
+    {
+        value: 'GT',
+        label: '>a',
+    },
+    {
+        value: 'LT',
+        label: '<a',
+    },
+    {
+        value: 'AROUND',
+        label: 'a±b',
+    },
+    {
+        value: 'RADIO',
+        label: '阴阳',
+    },
+    {
+        value: 'OTHER',
+        label: '其他',
+    },
+];
+export var referenceMap = {
+    RANGE: 'a-b',
+    GT: '>a',
+    LT: '<a',
+    AROUND: 'a±b',
+    RADIO: '阴阳',
+    OTHER: '其他',
+};
+export var yinYang = [
+    {
+        value: 'YIN',
+        label: '阴',
+    },
+    {
+        value: 'YANG',
+        label: '阳',
+    },
+];
+export var yinYangMap = {
+    YIN: '阴',
+    YANG: '阳',
+};
+export var documentMap = {
+    HYD: '化验单',
+    JCD: '检查单',
+    OTHER: '其他医学单据',
+};
+export var commonCheckbox = [
+    { label: '常用', value: 'true' },
+    { label: '不常用', value: 'false' },
+];
