@@ -679,7 +679,7 @@ const TemplateRule: FC<IProps> = ({
     // 判断是不是要添加时间firstAtTime
     if (firstSteps.includes(SpecificDate)) {
       const index = firstSteps.indexOf(SpecificDate);
-      meta.firstAtTime = dayjs(firstSteps[index + 1], 'YYYY-MM-DD HH:mm').valueOf() / 1000;
+      meta.firstAtTime = dayjs(firstSteps[index + 1], 'YYYY-MM-DD HH:mm').valueOf();
     }
     if (originRuleDoc) { // 说明是修改
       meta = originRuleDoc.meta;

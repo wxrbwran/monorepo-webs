@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button, Table, Spin, message } from 'antd';
 import { useSelector, useLocation } from 'umi';
-import  * as api from '@/services/api';
+import * as api from '@/services/api';
 import { pname, groupName, initAt } from 'xzl-web-shared/src/utils/columns';
 import SelectGroup from 'xzl-web-shared/src/components/SelectGroup';
 import { Search } from 'xzl-web-shared/src/components/Selects';
@@ -51,7 +51,9 @@ function Patients() {
         if (pageAt === 1) {
           setDataSource([...res.lists]);
         } else {
-          setDataSource([...dataSource, ...res.lists]);
+          setDataSource((pre) => {
+            return [...pre, ...res.lists];
+          });
         }
         if (res.lists.length < pageSize) {
           if (pageAt === 1 && retryTimes.current < 3) {
@@ -93,7 +95,7 @@ function Patients() {
   };
 
   useEffect(() => {
-    if (!isEmpty(currentOrgInfo)){
+    if (!isEmpty(currentOrgInfo)) {
       changeTableOption(window.$storage.getItem('keyWord'));
       retryTimes.current = 1;
       setLoading(true);
@@ -141,19 +143,19 @@ function Patients() {
 
   return (
     <div>
-      <Form form={form} className="text-right"  onValuesChange={handleSelectChange}>
+      <Form form={form} className="text-right" onValuesChange={handleSelectChange}>
         {
           showSearch
             ?
-              <Search
-                form={form}
-                searchKey="keyword"
-                placeholder="搜索姓名或诊断名称"
-                focus={true}
-                float='inherit'
-                width={170}
-              />
-            : <SearchOutlined onMouseEnter={() => setShowSearch(true)} className="mr-10"/>
+            <Search
+              form={form}
+              searchKey="keyword"
+              placeholder="搜索姓名或诊断名称"
+              focus={true}
+              float='inherit'
+              width={170}
+            />
+            : <SearchOutlined onMouseEnter={() => setShowSearch(true)} className="mr-10" />
         }
         <SelectGroup
           selectPatient={selectPatient}

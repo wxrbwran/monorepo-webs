@@ -246,7 +246,7 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
     }
   } else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
-    choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime * 1000).format('YYYY-MM-DD HH:mm');
+    choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
   } else {
     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
   }
