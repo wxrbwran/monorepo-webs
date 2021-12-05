@@ -670,6 +670,8 @@ const TemplateRule: FC<IProps> = ({
     if (firstSteps.includes(SpecificDate)) {
       const index = firstSteps.indexOf(SpecificDate);
       meta.firstAtTime = dayjs(firstSteps[index + 1], 'YYYY-MM-DD HH:mm').valueOf();
+    } else {
+      delete meta.firstAtTime;
     }
 
     const params: any = {
