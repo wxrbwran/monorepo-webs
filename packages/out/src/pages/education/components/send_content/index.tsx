@@ -49,6 +49,7 @@ function SendContent({ location, changeContent, defaultChecked }: IProps) {
       roleType: window.$storage.getItem('roleId'),
       operatorWcId: window.$storage.getItem('wcId'),
       operatorSid: window.$storage.getItem('sid'),
+      type: 0, //0：随访表 1：CRF量表
     }).then((res) => {
       setScaleList(res.list);
       dispatch({

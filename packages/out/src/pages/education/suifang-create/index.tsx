@@ -189,7 +189,9 @@ function SuifangCreate({ location, scaleType }: IProps) {
       question: questions,
       title: formTit,
       subTitle: subTit,
+      type: 0, //0：随访表 1：CRF量表
     };
+
     handleCreate(params);
     return true;
   };

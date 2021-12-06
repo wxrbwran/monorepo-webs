@@ -111,6 +111,7 @@ function Reply({ rule, children, chooseValues }: IProps) {
           planRuleId={rule.id}
           sid={record.sid}
           status={3}
+          scaleId={choiceContent.id}
         >
           <span className={styles.number}>
             {text}
@@ -127,6 +128,7 @@ function Reply({ rule, children, chooseValues }: IProps) {
           planRuleId={rule.id}
           sid={record.sid}
           status={1}
+          scaleId={choiceContent.id}
         >
           <span className={styles.number}>
             {text}
