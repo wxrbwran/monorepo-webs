@@ -24,14 +24,6 @@ function DataStatistics() {
     api.overview.getProjectStatistics(window.$storage.getItem('nsId')!).then(res => {
       setProjectData(res);
     });
-    // api.org.getOrgInfo({
-    //   sid: window.$storage.getItem('sid'),
-    //   sRole: Role.ORG_ADMIN.id,
-    // }).then(res => {
-
-    //   window.$storage.setItem('orgSid', res.orgSid);
-    //   window.$storage.setItem('orgRole', res.orgRole);
-    // });
   }, []);
   return (
     <div className="flex items-start h-full bg-white">

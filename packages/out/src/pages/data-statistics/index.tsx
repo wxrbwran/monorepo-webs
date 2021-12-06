@@ -4,6 +4,8 @@ import DoctorData from './components/doctor-data';
 import PatientData from './components/patient-data';
 import Layouts from '@/layouts';
 import styles from './index.scss';
+import * as api from '@/services/api';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 interface IDocItem {
   depName: string;
@@ -40,6 +42,14 @@ const DataStatistics: FC = ({ location }) => {
       setPersonCount(res);
     });
     fetchDepDoctor();
+    api.org.getOrgInfo({
+      sid: window.$storage.getItem('sid'),
+      sRole: Role.ORG_ADMIN.id,
+    }).then(res => {
+
+      window.$storage.setItem('orgSid', res.orgSid);
+      window.$storage.setItem('orgRole', res.orgRole);
+    });
   }, []);
   const counts = [
     { title: '昨日新增患者数', key: 'yest_count' },

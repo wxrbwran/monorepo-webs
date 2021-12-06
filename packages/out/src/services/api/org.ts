@@ -36,29 +36,29 @@ export default {
   editDoctor(data?: any): Promise<any> {
     return http.patch('user/settings/info/own', { data });
   },
-   // 查找机构-添加 上下级机构里使用
-   getSearchOrg(data?: any): Promise<any> {
-    return http.get(`admin/organizations_stats`, { data });
+  // 查找机构-添加 上下级机构里使用
+  getSearchOrg(data?: any): Promise<any> {
+    return http.get('admin/organizations_stats', { data });
   },
   // 查找该机构的上-下级机构
   getOrgUnionStats(data?: any): Promise<any> {
-    return http.get(`management/union/stats`, { data });
+    return http.get('management/union/stats', { data });
   },
   // 查找该机构的所有上下级机构-医院关系图使用此接口
   getOrgUnionStatsGraph(): Promise<any> {
-    return http.get(`management/union/stats/graph`);
+    return http.get('management/union/stats/graph');
   },
   // 绑定上-下级机构,传入待绑定机构的机构sid和待绑定的角色
-  bindOrg({orgSid, roleId}: any): Promise<any> {
+  bindOrg({ orgSid, roleId }: any): Promise<any> {
     return http.put(`management/union/${orgSid}/${roleId}`);
   },
   // 解绑上-下级机构,传入待解绑机构的机构sid和待解绑的角色
-  unbindOrg({orgSid, roleId}: any): Promise<any> {
+  unbindOrg({ orgSid, roleId }: any): Promise<any> {
     return http.delete(`management/union/${orgSid}/${roleId}`);
   },
   // 查询机构信息
   getOutOfOrgInfo(): Promise<any> {
-    return http.get(`outOf/organizations`);
+    return http.get('outOf/organizations');
   },
   // 待审核医生数量和已认证数量
   getCountStaff(nsId: string): Promise<any> {
@@ -74,12 +74,12 @@ export default {
   },
   // 医生护士人员管理下添加医生
   addOrgDoctor(data: any): Promise<any> {
-    return http.put(`management/organization/staffs`, { data });
+    return http.put('management/organization/staffs', { data });
   },
 
   // 添加医生到科室下的医生列表
   getManagementDoctor(data: any): Promise<any> {
-    return http.get(`management/doctor`, { data });
+    return http.get('management/doctor', { data });
   },
   // 参与院外管理的科室下添加医生
   postManagementDoctor(data: any): Promise<any> {
@@ -89,15 +89,15 @@ export default {
   postManagementNurse(data: any): Promise<any> {
     return http.post('management/department/nurse', { data });
   },
-   // 查询机构信息
-   getOrgInfo(data: any): Promise<any> {
-    return http.get(`management/organizations`, {data});
+  // 查询机构信息
+  getOrgInfo(data: any): Promise<any> {
+    return http.get('management/organizations', { data });
   },
-   // 修改机构信息
+  // 修改机构信息
   patchOrgInfo(data: any): Promise<any> {
-    return http.patch(`management/organizations`, {data});
+    return http.patch('management/organizations', { data });
   },
-   // 院外科室结构图
+  // 院外科室结构图
   getDepartmentTree(nsId: string): Promise<any> {
     return http.get(`management/department/${nsId}`);
   },
@@ -117,7 +117,7 @@ export default {
   postMoveOrgNurse(data: any): Promise<any> {
     return http.post('management/move/org/nurse', { data });
   },
-  filePrepare(data: any): Promise < any > {
+  filePrepare(data: any): Promise<any> {
     return http.get('base/file/prepare', { data });
   },
 };
