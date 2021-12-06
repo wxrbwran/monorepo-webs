@@ -1,20 +1,40 @@
 import React, { useEffect, useRef } from 'react';
 
-interface IProps {
-  data: IData[];
-  id: string;
+export interface ISfChartProps {
+  seriesData: {
+    name: string;
+    type: string;
+    data: number[];
+  };
+  xAxisData: string[];
 }
-interface IData {
-  name: string;
-  value: number;
-}
-
-function ChartFollowUpRate(props: IProps) {
-  const { data } = props;
-  console.log('data', data);
-  const timer = useRef<any>();
+function ChartFollowUpRate(props: ISfChartProps) {
+  const { seriesData, xAxisData } = props;
+  // console.log('data', data);
   const chartResize = useRef(() => {});
-  const dateList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  let myChart: any = null;
+  // const xAxisData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  // const seriesData = [
+  //   {
+  //     name: '收到消息数',
+  //     type: 'bar',
+  //     data: [ 2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+  //   },
+  //   {
+  //     name: '发送消息数',
+  //     type: 'bar',
+  //     data: [ 2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6 ],
+  //   },
+  //   {
+  //     name: '回复率',
+  //     type: 'line',
+  //     yAxisIndex: 1,
+  //     axisLabel: {
+  //       formatter: '{value} %',
+  //     },
+  //     data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3],
+  //   },
+  // ];
   const getOption = () => {
     const option = {
       tooltip: {
@@ -43,12 +63,12 @@ function ChartFollowUpRate(props: IProps) {
       xAxis: [
         {
           type: 'category',
-          data: dateList,
+          data: xAxisData,
           axisPointer: {
             type: 'shadow',
           },
           axisLabel: {
-            rotate: dateList.length > 4 ? 20 : 0,
+            rotate: xAxisData.length > 4 ? 20 : 0,
           },
         },
       ],
@@ -69,36 +89,12 @@ function ChartFollowUpRate(props: IProps) {
           },
         },
       ],
-      series: [
-        {
-          name: '收到消息数',
-          type: 'bar',
-          data: [
-            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3,
-          ],
-        },
-        {
-          name: '发送消息数',
-          type: 'bar',
-          data: [
-            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3,
-          ],
-        },
-        {
-          name: '回复率',
-          type: 'line',
-          yAxisIndex: 1,
-          axisLabel: {
-            formatter: '{value} %',
-          },
-          data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
-        },
-      ],
+      series: seriesData,
       dataZoom: [{
         zoomLock: true,
         brushSelect: false, // 是否开启刷选功能，绽放滚动条
         type: 'slider',
-        show: dateList.length > 5,
+        show: xAxisData.length > 5,
         xAxisIndex: 0,
         filterMode: 'none',
         // right: '0',
@@ -118,17 +114,18 @@ function ChartFollowUpRate(props: IProps) {
     return option;
   };
   useEffect(() => {
-    timer.current = setTimeout(() => {
-      const myChart = echarts.init(document.getElementById('followUpRate'));
+    if (myChart === null) {
+      myChart = echarts.init(document.getElementById('followUpRate'));
       myChart.setOption(getOption());
       chartResize.current = () => {myChart.resize(); };
       window.addEventListener('resize', chartResize.current);
-    }, 300);
+    } else {
+      myChart.setOption(getOption());
+    }
     return () => {
-      clearTimeout(timer.current);
       window.removeEventListener('resize', chartResize.current);
     };
-  }, []);
+  }, [seriesData, xAxisData]);
 
   return (
     <div id="followUpRate" style={{ width: '90%', height: 430, margin: '0 auto' }}></div>

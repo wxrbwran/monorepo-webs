@@ -1,45 +1,40 @@
 import React, { FC } from 'react';
 import { Cascader } from 'antd';
 
-const SelectDoctor: FC = () => {
-  const options = [
-    {
-      label: 'Light',
-      value: 'light',
-      children: new Array(20)
-        .fill(null)
-        .map((_, index) => ({ label: `Number ${index}`, value: index })),
-    },
-    {
-      label: 'Bamboo',
-      value: 'bamboo',
-      children: [
-        {
-          label: 'Little',
-          value: 'little',
-          children: [
-            {
-              label: 'Toy Fish',
-              value: 'fish',
-            },
-            {
-              label: 'Toy Cards',
-              value: 'cards',
-            },
-            {
-              label: 'Toy Bird',
-              value: 'bird',
-            },
-          ],
-        },
-      ],
-    },
-  ];
+export type IDocList = {
+  doctorList: {
+    label: string;
+    value: string;
+    children: {
+      label: string;
+      value: string;
+    }[]
+  }
+};
+type IProps = {
+  handleSelect: (ids: string[]) => void;
+} & IDocList;
+
+const SelectDoctor: FC<IProps> = ({ handleSelect, doctorList }) => {
+  const options = doctorList;
 
   function handleChangeDoctor(value) {
-    console.log(value);
+    console.log('=======12111', value);
+    let doctors: string[] = [];
+    value.forEach((item: string[]) => {
+      if (item.length > 1) {
+        doctors.push(item[1]);
+      } else {
+        doctors = [
+          ...doctors,
+          ...options.filter(dep => dep.value === item[0])[0].children.map(doc => doc.value),
+        ];
+      }
+    });
+    console.log('doctors11', doctors);
+    handleSelect(doctors);
   }
-  function filter(inputValue, path) {
+  function filter(inputValue: string, path: any[]) {
     return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
   }
   return (

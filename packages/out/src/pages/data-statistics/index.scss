@@ -11,5 +11,12 @@
     font-size: 40px;
     font-weight: bold;
   }
-}
 
+}
+.statistics {
+  :global {
+    .ant-pagination {
+      justify-content: center;
+    }
+  }
+}

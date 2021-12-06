@@ -1,78 +1,88 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import IconPatient from '@/assets/img/icon_patient.png';
-import SelectDoctor from '../select-doctor';
+import SelectDoctor, { IDocList } from '../select-doctor';
 import ChartPatientPie from '../chart-patient-pie';
+import { isEmpty, debounce } from 'lodash';
 import { Button, Table } from 'antd';
 
-const PatientData: FC = () => {
-  const PatientColumns = [
-    {
-      title: '患者姓名',
-      dataIndex: 'patientName',
-    },
-    {
-      title: '目前科室',
-      dataIndex: 'patientName1',
-    },
-    {
-      title: '是否有服药计划',
-      dataIndex: 'patientName2',
-    },
-    {
-      title: '是否调药',
-      dataIndex: 'patientName3',
-    },
-    {
-      title: '调药次数',
-      dataIndex: 'patientName4',
-    },
-    {
-      title: '上传血糖次数',
-      dataIndex: 'patientName5',
-    },
-    {
-      title: '最近血糖',
-      dataIndex: 'patientName6',
-    },
-    {
-      title: '上传血压/心率次数',
-      dataIndex: 'patientName7',
-    },
-    {
-      title: '最近血压',
-      dataIndex: 'patientName8',
-    },
-    {
-      title: '最近心率',
-      dataIndex: 'patientName9',
-    },
+interface IChartItem {
+  value: number;
+  name: string;
+}
+const PatientData: FC<IDocList> = ({ doctorList }) => {
+  const [doctorSids, setdoctorSids] = useState<string[]>([]);
+  const [planChartData, setPlanChartData] = useState<IChartItem[]>([]);
+  const [medicineChartData, setMedicineChartData] = useState<IChartItem[]>([]);
+  const [patientList, setPatientList] = useState([]);
+  const nsId = window.$storage.getItem('nsId');
 
+  const fetchData = () => {
+    const params: { nsId: string; doctorSids?: string[] } = { nsId };
+    if (!isEmpty(doctorSids)) {
+      params.doctorSids = doctorSids;
+    }
+    window.$api.count.getPatientAdjustAndPlan(params).then(res => {
+      const { plan, tiaoyao, total } = res;
+      setPlanChartData([
+        { value: total - plan, name: '否' },
+        { value: plan, name: '是' },
+      ]);
+      setMedicineChartData([
+        { value: total - tiaoyao, name: '否' },
+        { value: tiaoyao, name: '是' },
+      ]);
+    });
+    window.$api.count.getPatientOperationData(params).then(res => {
+      console.log('list', res);
+      setPatientList(res.patientList);
+    });
+  };
+  const PatientColumns = [
+    { title: '患者姓名',  dataIndex: 'name' },
+    { title: '目前科室', dataIndex: 'depName' },
+    { title: '是否有服药计划', dataIndex: 'plan' },
+    { title: '是否调药', dataIndex: 'tiaoyao' },
+    { title: '调药次数', dataIndex: 'tyCount' },
+    { title: '上传血糖次数', dataIndex: 'bgCount' },
+    { title: '最近血糖', dataIndex: 'bgVal' },
+    { title: '上传血压/心率次数', dataIndex: 'bgCount' },
+    { title: '最近血压', dataIndex: 'bpVal', render: (text) => {
+      console.log('tex2323t', text);
+      return <span>{text?.high}/{text?.low}</span>;
+    } },
+    { title: '最近心率', dataIndex: 'heartVal' },
   ];
-  const medicineData = [
-    { value: 1048, name: '有服患者数量' },
-    { value: 735, name: '无服药计划' },
-  ];
-  const drugAdjustmentData = [
-    { value: 1048, name: '已调药患者数量' },
-    { value: 735, name: '未调药' },
-  ];
+  console.log('patientList', patientList);
   return (
     <div className="shadow p-15 mt-20 w-full">
       <div className="flex text-sm items-center">
         <img className="w-18 h-18" src={IconPatient} />
         <span className="text-base font-bold mr-60 ml-5">患者数据</span>
-        <SelectDoctor />
-        <Button type="primary" className="ml-10">查询</Button>
+        <SelectDoctor
+          doctorList={doctorList}
+          handleSelect={(ids: string[]) => setdoctorSids(ids)}
+        />
+        <Button type="primary" className="ml-10" onClick={debounce(fetchData, 500)}>查询</Button>
       </div>
-      <div className="flex w-full">
-        <ChartPatientPie id="medicinePlan" chartData={medicineData}  />
-        <ChartPatientPie id="drugAdjustment" chartData={drugAdjustmentData} />
-      </div>
-      <Table
-        dataSource={[]}
-        columns={PatientColumns}
-        rowKey={(record: { id: string }) => record.id}
-      />
+      {
+        isEmpty(patientList) ? (
+          <div className="text-center pt-30 pb-20 text-sm text-gray-700">请选择医生进行查看</div>
+        ) : (
+          <>
+            <div className="flex w-full">
+              <ChartPatientPie id="medicinePlan" chartData={planChartData} chartTit="是否有服药计划" />
+              <ChartPatientPie id="drugAdjustment" chartData={medicineChartData} chartTit="是否调药" />
+            </div>
+            <Table
+              bordered
+              dataSource={patientList}
+              columns={PatientColumns}
+              rowKey={(record: { id: string }) => record.id}
+              pagination={false}
+            />
+          </>
+        )
+      }
     </div>
   );
 };

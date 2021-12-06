@@ -60,29 +60,29 @@ export const navName = (params: Store) => ({
 });
 
 export const doctorName = columnCreator('医生姓名', 'name');
-export const responseRate = {
+export const replyRatio = {
   title: '平均每天回复率',
-  dataIndex: 'responseRate',
+  dataIndex: 'replyRatio',
   render: (text: number) => {
-    <span>{text}%</span>;
+    return <span>{text}%</span>;
   },
   sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
 };
-export const sendScaleNum = {
+export const sendSfCount = {
   title: '发送随访表数量',
-  dataIndex: 'sendScaleNum',
+  dataIndex: 'sendSfCount',
   sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
 };
-export const receivedScaleNum = {
+export const receiveSfCount = {
   title: '收到随访表数量',
-  dataIndex: 'receivedScaleNum',
+  dataIndex: 'receiveSfCount',
   sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
 };
-export const followUpRate = {
+export const sfRatio = {
   title: '随访率',
-  dataIndex: 'followUpRate',
+  dataIndex: 'sfRatio',
   render: (text: number) => {
-    <span>{text}%</span>;
+    return <span>{text}%</span>;
   },
   sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
 };

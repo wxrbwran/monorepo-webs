@@ -4,24 +4,28 @@ import styles from './index.scss';
 interface IProps {
   data: IData[];
   id: string;
+  handleChangeShowDoctor?: (curDepId: string) => void;
 }
 interface IData {
   name: string;
   value: number;
+  id: string;
 }
 
 function ChartPersonPie(props: IProps) {
-  const { data, id } = props;
+  const { data, id, handleChangeShowDoctor } = props;
+  let myChart: any = null;
   const color = ['#72ADFF', '#51D9C8', '#FFCD88', '#FD8684', '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
-  const getOption = (datas: IData[]) => {
+  const getOption = () => {
     const option = {
       tooltip: {
         trigger: 'item',
+
       },
       color,
       series: [
         {
-          name: '医生数',
+          name: id === 'patient' ? '患者数' : '医生数',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -33,30 +37,32 @@ function ChartPersonPie(props: IProps) {
           labelLine: {
             show: false,
           },
-          data: datas,
+          data,
         },
       ],
-      grid: {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-      },
     };
     return option;
   };
   useEffect(() => {
-    const myChart = echarts.init(document.getElementById(id));
-    const option = getOption(data);
-    myChart.setOption(option);
-  }, []);
+    if (myChart === null) {
+      myChart = echarts.init(document.getElementById(id));
+      myChart.setOption(getOption());
+      if (id === 'im' && handleChangeShowDoctor) {
+        myChart.on('click', (param: { data: { id: string } }) => {
+          handleChangeShowDoctor(param.data?.id);
+        });
+      }
+    } else {
+      myChart.setOption(getOption());
+    }
+  }, [data]);
 
   return (
     <div className={styles.pie_chart}>
       <div className='flex jusitify-center flex-wrap px-30'>
         {
           data.map((item, inx) => (
-            <div className={styles.legend_item} key={item.name}>
+            <div className={styles.legend_item} key={item.name + item?.id}>
               <span className={styles.color} style={{ background: color[inx] }}></span>
               <span>{item.name}</span>
             </div>

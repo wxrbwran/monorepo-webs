@@ -2,26 +2,34 @@ import React, { useEffect } from 'react';
 
 interface IProps {
   id: string;
+  chartTit: string;
   chartData: {
     value: number;
     name: string;
   }[]
 }
-// interface IData {
-//   name: string;
-//   value: number;
-// }
 
 function ChartPatientPie(props: IProps) {
-  const { id, chartData } = props;
+  const { id, chartData, chartTit } = props;
+  let myChart: any = null;
   const getOption = () => {
     const option = {
+      title: {
+        text: chartTit,
+        left: 'center',
+        bottom: 30,
+        textStyle: {
+          color: '#000',
+          fontSize: 14,
+          fontWeight: 'normal',
+        },
+      },
       tooltip: {
         trigger: 'item',
       },
       series: [
         {
-          name: '患者数据',
+          name: '患者数量',
           type: 'pie',
           radius: '50%',
           data: chartData,
@@ -44,10 +52,14 @@ function ChartPatientPie(props: IProps) {
     return option;
   };
   useEffect(() => {
-    const myChart = echarts.init(document.getElementById(id));
-    const option = getOption();
-    myChart.setOption(option);
-  }, []);
+    console.log('chartData', chartData);
+    if (myChart === null) {
+      myChart = echarts.init(document.getElementById(id));
+      myChart.setOption(getOption());
+    } else {
+      myChart.setOption(getOption());
+    }
+  }, [chartData]);
 
   return (
     <div id={id} style={{ width: '100%', height: 328, margin: '0 auto' }}></div>
