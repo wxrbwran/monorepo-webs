@@ -82,6 +82,7 @@ function Patients() {
       .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
       .then((res) => {
         if (res) {
+
           fetchPatientList(res?.id, 1);
         } else {
           clearInterval(timer);
@@ -120,6 +121,7 @@ function Patients() {
   }, []);
 
   const refreshList = () => {
+    retryTimes.current = 1;
     changeTableOption(window.$storage.getItem('keyWord'));
   };
 
