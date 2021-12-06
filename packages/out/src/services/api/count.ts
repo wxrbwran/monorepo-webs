@@ -8,7 +8,7 @@ export default {
   },
   // 院外各科室医生数
   getDepDoctorCount(orgNsId: string): Promise<any> {
-    return http.get(`/management/dep/doctor/count/${orgNsId}`);
+    return http.get(`management/dep/doctor/count/${orgNsId}`);
   },
   // 院外各科室患者数据
   getDepPatientCount(orgNsId: string): Promise<any> {

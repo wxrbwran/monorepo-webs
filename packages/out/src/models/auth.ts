@@ -18,7 +18,7 @@ export interface AuthModelType {
 const localUid = window.$storage?.getItem('uid') || '';
 
 export const authState = {
-  isLogin: !!localUid,
+  isLogin: false,
   uid: localUid,
   wcl: [],
 };
