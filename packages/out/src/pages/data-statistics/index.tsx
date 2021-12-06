@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import PersonCount from './components/person-count';
 import DoctorData from './components/doctor-data';
 import PatientData from './components/patient-data';
+import Layouts from '@/layouts';
 import styles from './index.scss';
 
 interface IDocItem {
@@ -10,7 +11,7 @@ interface IDocItem {
   name: string;
   sid: string;
 }
-const DataStatistics: FC = () => {
+const DataStatistics: FC = ({ location }) => {
   const [personCount, setPersonCount] = useState({});
   const [doctorList, setDoctorList] = useState([]);
   const orgNsId = window.$storage.getItem('nsId');
@@ -48,24 +49,26 @@ const DataStatistics: FC = () => {
     { title: '目前护士数', key: 'curr_nur_count' },
   ];
   return (
-    <div className={`py-20 px-30 w-full ${styles.statistics}`} id='gxx'>
-      <div className="flex shadow h-124 py-30">
-        {
-          counts.map(item => (
-            <div className={styles.count_item} key={item.key}>
-              <div className="text-gray-600 mb-10">{item.title}</div>
-              <div>
-                <span className={styles.num}>{personCount?.[item.key] ?? '--'}</span>
-                <span className="text-gray-600">人</span>
+    <Layouts location={location}>
+      <div className={`py-20 px-30 w-full ${styles.statistics}`} id='gxx'>
+        <div className="flex shadow h-124 py-30">
+          {
+            counts.map(item => (
+              <div className={styles.count_item} key={item.key}>
+                <div className="text-gray-600 mb-10">{item.title}</div>
+                <div>
+                  <span className={styles.num}>{personCount?.[item.key] ?? '--'}</span>
+                  <span className="text-gray-600">人</span>
+                </div>
               </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
+        <PersonCount />
+        <DoctorData doctorList={doctorList} />
+        <PatientData doctorList={doctorList} />
       </div>
-      <PersonCount />
-      <DoctorData doctorList={doctorList} />
-      <PatientData doctorList={doctorList} />
-    </div>
+    </Layouts>
   );
 };
 
