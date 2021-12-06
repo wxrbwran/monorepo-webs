@@ -59,7 +59,7 @@ function ChartPersonPie(props: IProps) {
 
   return (
     <div className={styles.pie_chart}>
-      <div className='flex jusitify-center flex-wrap px-30'>
+      <div className='flex justify-center flex-wrap px-30'>
         {
           data.map((item, inx) => (
             <div className={styles.legend_item} key={item.name + item?.id}>
