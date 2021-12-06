@@ -1,6 +1,8 @@
 import type { Reducer, Effect } from 'umi';
 import { setAuthorizationToken } from '@/services/http';
 // import * as api from '@/services/api';
+import * as api from '@/services/api';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 export interface AuthModelType {
   namespace: string;
@@ -59,6 +61,14 @@ const Model: AuthModelType = {
             nsId: window.$storage.getItem('nsId'),
             sid: window.$storage.getItem('sid'),
           },
+        });
+        api.org.getOrgInfo({
+          sid: window.$storage.getItem('sid'),
+          sRole: Role.ORG_ADMIN.id,
+        }).then(res => {
+
+          window.$storage.setItem('orgSid', res.orgSid);
+          window.$storage.setItem('orgRole', res.orgRole);
         });
       }
     },

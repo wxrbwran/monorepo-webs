@@ -5,7 +5,6 @@ import ChartProject from '../components/ChartProject';
 // import { projectListChart } from '../mock';
 import * as api from '@/services/api';
 import styles from './index.scss';
-import { Role } from 'xzl-web-shared/src/utils/role';
 
 function DataStatistics() {
   const [projectData, setProjectData] = useState({ infos: [] });
@@ -18,18 +17,21 @@ function DataStatistics() {
     { countKey: 'multiCount', desc: '单中心临床试验' },
     { countKey: 'singleCount', desc: '多中心临床试验' },
   ];
+
+  console.log('============= ');
   useEffect(() => {
+
     api.overview.getProjectStatistics(window.$storage.getItem('nsId')!).then(res => {
       setProjectData(res);
     });
-    api.org.getOrgInfo({
-      sid: window.$storage.getItem('sid'),
-      sRole: Role.ORG_ADMIN.id,
-    }).then(res => {
+    // api.org.getOrgInfo({
+    //   sid: window.$storage.getItem('sid'),
+    //   sRole: Role.ORG_ADMIN.id,
+    // }).then(res => {
 
-      window.$storage.setItem('orgSid', res.orgSid);
-      window.$storage.setItem('orgRole', res.orgRole);
-    });
+    //   window.$storage.setItem('orgSid', res.orgSid);
+    //   window.$storage.setItem('orgRole', res.orgRole);
+    // });
   }, []);
   return (
     <div className="flex items-start h-full bg-white">

@@ -105,6 +105,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
 
   // 创建量表
   const handleCreate = (params: IParams) => {
+
     setLoading(true);
     api.education.addPublicizeScale(params).then(() => {
       message.success('添加成功');
