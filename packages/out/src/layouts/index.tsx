@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { ConfigProvider } from 'antd';
 import config from '@/config';
 import type { IRoute } from 'umi';
-import { history, useDispatch } from 'umi';
+import { history, useDispatch, useSelector } from 'umi';
 import zhCN from 'antd/es/locale/zh_CN';
 import styles from './index.scss';
 
@@ -11,6 +11,7 @@ const logPages: string[] = ['/user/login', '/user/find_pwd'];
 
 const BasicLayout: FC = (props: IRoute) => {
   const { location } = props;
+  const auth = useSelector(state => state.auth);
   console.log(location);
   const dispatch = useDispatch();
   const isGoLoginSome = logPages.includes(location.pathname);
@@ -19,15 +20,15 @@ const BasicLayout: FC = (props: IRoute) => {
   console.log(isLogin);
   console.log(isGoLoginSome);
   useEffect(() => {
-    if(!isLogin){
+    if (!isLogin){
       dispatch({
         type: 'auth/login',
       });
     }
-  }, [isLogin])
+  }, [isLogin]);
   // 已登录，去往登录等页面
   if (isLogin && isGoLoginSome) {
-    history.push('/hospital/account');
+    history.push('/data-statistics');
   }
   // 未登录，去往需验证等页面
   if (!isLogin && isGoLoginSome) {
@@ -35,7 +36,11 @@ const BasicLayout: FC = (props: IRoute) => {
   }
   return (
     <ConfigProvider locale={zhCN}>
-      <div className={styles.main}>{props.children}</div>
+      {
+        auth.isLogin && (
+          <div className={styles.main}>{props.children}</div>
+        )
+      }
     </ConfigProvider>
   );
 };
