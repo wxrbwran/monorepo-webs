@@ -110,6 +110,12 @@ function ChartFollowUpRate(props: ISfChartProps) {
         // width: 10,
         height: 12,
       }],
+      grid: {
+        left: '3%',
+        right: '3%',
+        bottom: '10%',
+        containLabel: true,
+      },
     };
     return option;
   };
