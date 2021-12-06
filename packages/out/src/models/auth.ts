@@ -15,7 +15,7 @@ export interface AuthModelType {
   // subscriptions: { setup: Subscription };
 }
 
-const localUid = window.$storage.getItem('uid') || '';
+const localUid = window.$storage?.getItem('uid') || '';
 
 export const authState = {
   isLogin: !!localUid,

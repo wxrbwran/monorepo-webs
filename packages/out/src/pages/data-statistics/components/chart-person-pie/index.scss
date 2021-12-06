@@ -1,0 +1,20 @@
+.legend_item {
+  font-size: 12px;
+  line-height: 12px;
+  margin: 4px 8px;
+
+  .color {
+    width: 12px;
+    height: 3px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-right: 3px;
+  }
+}
+
+.pie_chart {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}

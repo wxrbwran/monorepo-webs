@@ -19,15 +19,15 @@ const BasicLayout: FC = (props: IRoute) => {
   console.log(isLogin);
   console.log(isGoLoginSome);
   useEffect(() => {
-    if(!isLogin){
+    if (!isLogin){
       dispatch({
         type: 'auth/login',
       });
     }
-  }, [isLogin])
+  }, [isLogin]);
   // 已登录，去往登录等页面
   if (isLogin && isGoLoginSome) {
-    history.push('/hospital/account');
+    history.push('/data-statistics');
   }
   // 未登录，去往需验证等页面
   if (!isLogin && isGoLoginSome) {

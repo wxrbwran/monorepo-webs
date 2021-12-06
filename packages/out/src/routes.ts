@@ -1,3 +1,4 @@
+// https://procomponents.ant.design/components/layout/#route
 export const page404 = {
   component: './404',
 };
@@ -88,6 +89,13 @@ const routes = [
         component: './user/find_pwd',
       },
     ],
+  },
+  {
+    path: '/data-statistics',
+    name: '数据统计',
+    icon: 'Icon0',
+    component: './data-statistics',
+
   },
   hospital,
   // {

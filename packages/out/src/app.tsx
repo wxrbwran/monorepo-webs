@@ -13,10 +13,12 @@ import storage from 'xzl-web-shared/src/utils/dva-model-persist/storage';
 import { persistEnhancer } from 'xzl-web-shared/src/utils/dva-model-persist';
 // import Icon, { SmileOutlined, HeartOutlined, CrownOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
+import { PieChartOutlined } from '@ant-design/icons';
 import { Icon1, Icon2, Icon3, Icon4, Icon5, Icon6 } from '@/utils/menuIcon';
 // import icont from '@/assets/img/menuIcon/icongx1.svg';
 
 const IconMap = {
+  Icon0: <PieChartOutlined />,
   Icon1: <Icon1 />,
   Icon2: <Icon2 />,
   Icon3: <Icon3 />,

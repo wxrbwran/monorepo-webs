@@ -1,4 +1,3 @@
-/// <reference types="react" />
 export declare enum ActionType {
     zoomIn = 1,
     zoomOut = 2,
