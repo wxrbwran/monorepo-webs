@@ -1,4 +1,3 @@
-/// <reference types="react" />
 interface IProps {
     uploadPublicizeRequest: (params: any) => Promise<any>;
     filePrepareRequest: (params: any) => Promise<any>;
