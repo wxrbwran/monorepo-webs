@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import CountItem from '../components/CountItem';
 import type { ICountItem } from '@/types/clinical';
 import ChartProject from '../components/ChartProject';
-// import { projectListChart } from '../mock';
 import * as api from '@/services/api';
 import styles from './index.scss';
 
