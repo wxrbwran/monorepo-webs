@@ -26,7 +26,7 @@ const SideMenu: FC = () => {
   const [activeSubMenu, setActiveSubMenu] = useState<string>('');
   const [keyword, setKeyword] = useState(''); // 只用于搜索框展示文案用，点击菜单时会清空这里
   const [menu, setMenu] = useState<TIndexItem[]>([]);
-  const [source, _] = useState<string>(query?.src || 'SYSTEM');
+  const [source, setSource] = useState<string>(query?.src || 'SYSTEM');
   const [showSubMenu, setShowSubMenu] = useState(false);
   const curDocument = useSelector((state: IState) => state.document.curDocument);
 
@@ -45,15 +45,9 @@ const SideMenu: FC = () => {
         type: 'document/setCurDocument',
         payload: document,
       });
-      const { sourceSid } = document;
-      let from = 'SYSTEM';
-      if (document.source === 'DOCTOR' && sourceSid === curSid) {
-        from = 'ONESELF';
-      } else if (document.source === 'DOCTOR' && sourceSid !== curSid) {
-        from = 'OTHERS';
-      }
+
       setActiveSubMenu(document.id);
-      setActiveMenu(document.type + from);
+      setActiveMenu(document.type + src);
       setShowSubMenu(false);
       history.push({
         pathname: '/index_library',
@@ -108,28 +102,23 @@ const SideMenu: FC = () => {
   const fetchImageType = async (params: Record<string, string>) => {
     const hyds = await fetchHYD(params);
     const { jcds, others } = await fetchJcdAndOther(params);
-    // await fetchJcdAndOther(params);
-    // if (!route.query.documentId && !route.query.documentType) {
-    // console.log('fetchImageType', hyds, res);
-    // console.log('location', location);
     const {
       query: { documentId, documentType, src },
     } = location;
     const firstDoc = hyds[0] || jcds[0] || others[0];
     firstDoc.sourceSid = firstDoc.sourceSid || firstDoc.sid;
     if (!(documentId && documentType && src)) {
-      let type = 'SYSTEM';
+      let to = 'SYSTEM';
       if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid === curSid) {
-        type = 'ONESELF';
+        to = 'ONESELF';
       } else if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid !== curSid) {
-        type = 'OTHERS';
+        to = 'OTHERS';
       }
-      console.log('fetchImageType', firstDoc, type);
-      handleClickMenu(firstDoc, type);
+      console.log('fetchImageType', firstDoc, to);
+      handleClickMenu(firstDoc, to);
     } else {
       handleClickMenu(curDocument, src);
     }
-    // }
   };
 
   useEffect(() => {
@@ -142,13 +131,14 @@ const SideMenu: FC = () => {
   };
   const handleMouseOverMenu = (docType: string, src: string) => {
     console.log(docType, src);
-
     let tmp: TIndexItem[] = [];
     let handledList = HYD;
     if (docType === 'JCD') {
       handledList = JCD;
+      handledList.forEach((h) => h.sourceSid === h.sid);
     } else if (docType === 'OTHER') {
       handledList = OTHER;
+      handledList.forEach(h => h.sourceSid === h.sid);
     }
     switch (src) {
       case 'SYSTEM':
@@ -162,14 +152,10 @@ const SideMenu: FC = () => {
         break;
     }
     console.log('handledList', handledList);
-    console.log('source', src);
     console.log('tmp', tmp);
     setMenu([...tmp]);
-    // setKeyword('');
-    // setActiveMenu(docType + src);
-    // setSource(src);
+    setSource(src);
     setShowSubMenu(true);
-    // fetchImageType({});
   };
 
   const handleDeleteDocument = async (item: TIndexItem, ev?: MouseEvent) => {

@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CopyOutlined } from '@ant-design/icons';
 import { Form, Button, Popconfirm, message, Space } from 'antd';
 import { useLocation, Location, useSelector } from 'umi';
 import { Common, Search } from 'xzl-web-shared/src/components/Selects';
@@ -17,7 +17,6 @@ import { documentMap } from 'xzl-web-shared/src/utils/consts';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import ViewIndex from '../ViewIndex';
-
 import Initials from '../Initials';
 
 type ILocation = {
@@ -32,6 +31,8 @@ interface IParams {
   common?: boolean;
   source?: string;
   character?: string; // 首字母
+  sourceSid?: string;
+  sid?: string;
   pageSize: number;
 }
 const IndexList: FC = () => {
@@ -40,10 +41,10 @@ const IndexList: FC = () => {
   const { getFieldValue } = form;
   // @ts-ignore
   const {
-    query: { documentId, documentType },
+    query: { documentId, documentType, src },
   } = useLocation<Location & ILocation>();
   const [total, setTotal] = useState(0);
-  const initDepOptions = {
+  const initDepOptions: IParams = {
     documentId,
     pageSize: 9999999,
     source: 'DOCTOR',
@@ -102,6 +103,9 @@ const IndexList: FC = () => {
         message.error(err?.result ?? '删除失败');
       });
   };
+  const handleCopyIndex = () => {
+
+  };
   const operation = {
     title: '操作',
     dataIndex: 'id',
@@ -140,7 +144,6 @@ const IndexList: FC = () => {
     setTotal(dataSource.length);
   };
 
-
   const columns = [
     indexName,
     indexAbbr,
@@ -154,15 +157,25 @@ const IndexList: FC = () => {
   return (
     <div className="ui-index-library__index-list">
       <Initials initialCallback={initialCallback} indexId={documentId} />
-      <div className="operation-warp">
-        <div className="flex">
+      <div className="flex justify-between py-10 px-20">
+        <Space>
           <h2 className="font-bold text-base mr-20">
             {`${documentMap[curDocument.type]}-系统添加-${curDocument.name}`}
           </h2>
-          <span>指标数量：</span>
-          <span className="num">{total}</span>
-          <span>个</span>
-        </div>
+          {src !== 'ONESELF' && (
+            <Button
+              icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
+              onClick={handleCopyIndex}
+            >
+              复制化验单
+            </Button>
+          )}
+          <div>
+            <span>指标数量：</span>
+            <span className="num">{total}</span>
+            <span>个</span>
+          </div>
+        </Space>
         <div className="flex">
           <div>
             <Form form={form} onValuesChange={handleSelectChange}>
@@ -172,17 +185,19 @@ const IndexList: FC = () => {
               </Space>
             </Form>
           </div>
-          <EditIndex
-            onSuccess={onSuccess}
-            documentId={documentId}
-            level1Type={documentType}
-            source="libraryAdd"
-          >
-            <Button type="primary" className="create-btn">
-              <PlusOutlined />
-              新建
-            </Button>
-          </EditIndex>
+          {src === 'ONESELF' && (
+            <EditIndex
+              onSuccess={onSuccess}
+              documentId={documentId}
+              level1Type={documentType}
+              source="libraryAdd"
+            >
+              <Button type="primary" className="create-btn">
+                <PlusOutlined />
+                新建
+              </Button>
+            </EditIndex>
+          )}
         </div>
       </div>
       {documentId && (

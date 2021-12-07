@@ -15,7 +15,7 @@ interface IProps {
 }
 const AddEditDocument: FC<IProps> = (props) => {
   const { type, onSuccess, mode, record, children } = props;
-  console.log('record', record);
+  // console.log('record', record);
   const [showModal, setshowModal] = useState(false);
   const [form] = Form.useForm();
   const sid = window.$storage.getItem('sid');

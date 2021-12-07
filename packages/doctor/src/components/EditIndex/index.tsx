@@ -1,5 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Form, Input, Button, Radio, message, Select, Space, InputNumber, Tooltip, Checkbox } from 'antd';
+import {
+  Form, Input, Button, message, Select, Space, InputNumber,
+  Radio, Row, Col,
+} from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 // import { isEqual } from 'lodash';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
@@ -7,7 +10,6 @@ import { referenceList, referenceMap, yinYang } from 'xzl-web-shared/src/utils/c
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import './index.scss';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Option } = Select;
 interface IProps {
@@ -33,9 +35,7 @@ const EditIndex: FC<IProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [selectReferecnce, setSelectReference] = useState<string>('');
   const [references, setReferences] = useState<string[]>([]);
-  const [hasDefault, setHasDefault] = useState<{ position: number, checked: boolean }>({
-    position: 0, checked: false,
-  });
+  const [defaultReference, setDefaultReference] = useState(0);
   const curDocument = useSelector((state: IState) => state.document.curDocument);
   const documentId = curDocument.id;
 
@@ -43,7 +43,14 @@ const EditIndex: FC<IProps> = (props) => {
     if (showModal && initFormVal) {
       setFieldsValue({ ...initFormVal });
       if (initFormVal.references) {
-        setReferences(initFormVal.references.map(r => r.type));
+        setReferences(initFormVal.references.map((r: TReference) => r.type));
+        let index = 0;
+        initFormVal.references.forEach((r: TReference, idx: number) => {
+          if (r.isDefault) {
+            index = idx;
+          }
+        });
+        setDefaultReference(index);
       }
     } else {
       setFieldsValue({ common: true });
@@ -60,6 +67,7 @@ const EditIndex: FC<IProps> = (props) => {
     setShowModal(true);
   };
   const handleRequest = (params: any, request: any) => {
+    console.log('handleRequest', params);
     request(params).then((res: any) => {
       message.success('保存成功');
       if (['imgAddIndex'].includes(source)) { // 编辑时没有此参数
@@ -73,16 +81,6 @@ const EditIndex: FC<IProps> = (props) => {
       message.error(err.result || '操作失败');
     });
   };
-  // const handleRequestTypeAndIndex = (params: any) => {
-  //   api.indexLibrary.putIndexDocumentAndIndex(params).then((res) => {
-  //     console.log(res);
-  //     message.success('添加成功');
-  //     setShowModal(false);
-  //     onSuccess({ ...res, documentName: params.documentName });
-  //   }).catch((err) => {
-  //     message.error(err.result || '操作失败');
-  //   });
-  // };
 
   const handleSubmit = async (values: IData) => {
     // documentName
@@ -90,7 +88,9 @@ const EditIndex: FC<IProps> = (props) => {
     if (values.references) {
       values.references.forEach((r, index) => {
         r.type = references[index];
+        r.isDefault = false;
       });
+      values.references[defaultReference].isDefault = true;
     }
     let params: any = {
       ...values,
@@ -111,24 +111,18 @@ const EditIndex: FC<IProps> = (props) => {
         wcId: window.$storage.getItem('wcId'),
         documentId,
       };
-      // if (source === 'imgAddTypeIndex') {
-      //   params.type = level1Type;
-      //   if (!params.documentName) {
-      //     params.documentName = '检查报告单';
-      //   }
-      //   handleRequestTypeAndIndex(params);
-      //   console.log('params92892', params);
-      // } else {
       handleRequest(params, api.indexLibrary.putIndexDocumentIndex);
-      // }
     }
   };
-
+  // const Default = (referenceList) => {
+  //   return false;
+  // }
   const handleAddReference = (cb: Function) => {
     if (selectReferecnce) {
       setReferences((prev) => [...prev, selectReferecnce]);
       cb();
-
+      const values = form.getFieldsValue();
+      console.log('handleAddReference', values);
     } else {
       message.warn('请选择类型');
     }
@@ -142,10 +136,6 @@ const EditIndex: FC<IProps> = (props) => {
     setReferences([...tmp]);
   };
 
-  const handleChangeDefault = (e: CheckboxChangeEvent, index: number) => {
-    setHasDefault({ position: index, checked: e.target.checked });
-    console.log('handleChangeDefault', e, index);
-  };
 
   const createProps = (field: any, key: string) => {
     return {
@@ -178,7 +168,7 @@ const EditIndex: FC<IProps> = (props) => {
             preserve={false}
             layout="horizontal"
             size="large"
-            labelCol={{ span: 3 }}
+            labelCol={{ span: 4 }}
           >
             <Form.Item name="documentId" style={{ display: 'none' }}>
               <Input placeholder="化验单Id" disabled type="hidden" />
@@ -203,7 +193,7 @@ const EditIndex: FC<IProps> = (props) => {
                     <Space>
                       <Select
                         onSelect={setSelectReference}
-                        style={{ width: 360 }}
+                        style={{ width: 260 }}
                         placeholder="请选择参考值"
                       >
                         {referenceList.map((reference) => (
@@ -215,98 +205,106 @@ const EditIndex: FC<IProps> = (props) => {
                       </Button>
                     </Space>
                   </Form.Item>
-                  {fields.map((field, index) => (
-                    <Form.Item key={field.key} label={referenceMap[references[index]]}>
-                      <Space align="baseline">
-                        {['RANGE', 'GT', 'LT', 'AROUND', 'RADIO'].includes(references[index]) && (
-                          <Form.Item
-                            {...createProps(field, 'note')}
-                            // rules={[{ required: true, message: '' }]}
-                          >
-                            <Input placeholder="请输入备注" />
-                          </Form.Item>
-                        )}
-                        {['RANGE', 'GT', 'LT', 'AROUND'].includes(references[index]) && (
-                          <>
-                            <Form.Item
-                              {...createProps(field, 'value')}
-                              rules={
-                                references[index] ==
-                                'LT' ? [] : [{ required: true, message: '请输入参考值' }]
-                              }
-                            >
-                              <InputNumber
-                                disabled={references[index] == 'LT'}
-                                min={0}
-                                style={{ width: 110 }}
-                                placeholder="请输入参考值"
-                              />
-                            </Form.Item>
-                            <Form.Item
-                              {...createProps(field, 'secondValue')}
-                              rules={
-                                references[index] == 'GT'
-                                  ? []
-                                  : [{ required: true, message: '请输入参考值' }]
-                              }
-                            >
-                              <InputNumber
-                                disabled={references[index] == 'GT'}
-                                min={0}
-                                style={{ width: 110 }}
-                                placeholder="请输入参考值"
-                              />
-                            </Form.Item>
-                            <Form.Item {...createProps(field, 'unit')}>
-                              <Input placeholder="请输入单位" style={{ width: 120 }} />
-                            </Form.Item>
-                          </>
-                        )}
-                        {['RADIO'].includes(references[index]) && (
-                          <Form.Item
-                            {...createProps(field, 'value')}
-                            rules={[{ required: true, message: '请选择' }]}
-                          >
-                            <Select style={{ width: 357 }} placeholder="请选择">
-                              {yinYang.map((yy) => (
-                                <Option value={yy.value}>{yy.label}</Option>
-                              ))}
-                            </Select>
-                          </Form.Item>
-                        )}
+                  <Row>
+                    <Col span={21}>
+                      {fields.map((field, index) => (
+                        <Form.Item key={field.key} label={referenceMap[references[index]]}>
+                          <Space align="baseline">
+                            {['RANGE', 'GT', 'LT', 'AROUND', 'RADIO'].includes(
+                              references[index],
+                            ) && (
+                              <Form.Item
+                                {...createProps(field, 'note')}
+                                // rules={[{ required: true, message: '' }]}
+                              >
+                                <Input placeholder="请输入备注" />
+                              </Form.Item>
+                            )}
+                            {['RANGE', 'GT', 'LT', 'AROUND'].includes(references[index]) && (
+                              <>
+                                <Form.Item
+                                  {...createProps(field, 'value')}
+                                  rules={
+                                    references[index] == 'LT'
+                                      ? []
+                                      : [{ required: true, message: '请输入参考值' }]
+                                  }
+                                >
+                                  <InputNumber
+                                    disabled={references[index] == 'LT'}
+                                    min={0}
+                                    style={{ width: 110 }}
+                                    placeholder="请输入参考值"
+                                  />
+                                </Form.Item>
+                                <Form.Item
+                                  {...createProps(field, 'secondValue')}
+                                  rules={
+                                    references[index] == 'GT'
+                                      ? []
+                                      : [{ required: true, message: '请输入参考值' }]
+                                  }
+                                >
+                                  <InputNumber
+                                    disabled={references[index] == 'GT'}
+                                    min={0}
+                                    style={{ width: 110 }}
+                                    placeholder="请输入参考值"
+                                  />
+                                </Form.Item>
+                                <Form.Item {...createProps(field, 'unit')}>
+                                  <Input placeholder="请输入单位" style={{ width: 120 }} />
+                                </Form.Item>
+                              </>
+                            )}
+                            {['RADIO'].includes(references[index]) && (
+                              <Form.Item
+                                {...createProps(field, 'value')}
+                                rules={[{ required: true, message: '请选择' }]}
+                              >
+                                <Select style={{ width: 357 }} placeholder="请选择">
+                                  {yinYang.map((yy) => (
+                                    <Option value={yy.value}>{yy.label}</Option>
+                                  ))}
+                                </Select>
+                              </Form.Item>
+                            )}
 
-                        {['OTHER'].includes(references[index]) && (
-                          <Form.Item
-                            {...createProps(field, 'value')}
-                            rules={[{ required: true, message: '请输入内容' }]}
-                          >
-                            <Input placeholder="请输入内容" style={{ width: 537 }} />
-                          </Form.Item>
-                        )}
-                        {/* remove(field.name) */}
-                        <DeleteOutlined
-                          onClick={() => handleRemoveReference(remove, field.name, index)}
-                        />
-                        <Form.Item
-                          {...field}
-                          noStyle
-                          name={[field.name, 'isDefault']}
-                          fieldKey={[field.fieldKey, 'isDefault']}
-                          valuePropName="checked"
-                        >
-                          <Checkbox
-                            disabled={hasDefault.checked && hasDefault.position !== index}
-                            onChange={(e) => handleChangeDefault(e, index)}
-                          >
-                            <Tooltip title="设置为默认单位">默认</Tooltip>
-                          </Checkbox>
+                            {['OTHER'].includes(references[index]) && (
+                              <Form.Item
+                                {...createProps(field, 'value')}
+                                rules={[{ required: true, message: '请输入内容' }]}
+                              >
+                                <Input placeholder="请输入内容" style={{ width: 507 }} />
+                              </Form.Item>
+                            )}
+                            {/* remove(field.name) */}
+                            <DeleteOutlined
+                              onClick={() => handleRemoveReference(remove, field.name, index)}
+                            />
+                          </Space>
                         </Form.Item>
-                      </Space>
-                    </Form.Item>
-                  ))}
+                      ))}
+                    </Col>
+                    {fields.length > 0 && (
+                      <Col span={3}>
+                        <Radio.Group
+                          value={defaultReference}
+                          onChange={(e) => setDefaultReference(e.target.value)}
+                        >
+                          {fields.map((field, index) => (
+                            <Form.Item key={field.key}>
+                              <Radio value={index}>默认</Radio>
+                            </Form.Item>
+                          ))}
+                        </Radio.Group>
+                      </Col>
+                    )}
+                  </Row>
                 </>
               )}
             </Form.List>
+
             <Form.Item name="common" rules={rules} label="是否常用：" className="common">
               <Radio.Group>
                 <Radio value>是</Radio>
