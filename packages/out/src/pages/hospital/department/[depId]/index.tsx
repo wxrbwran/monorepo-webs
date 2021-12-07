@@ -1,7 +1,7 @@
 /**
  *
  */
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import { useSelector, useDispatch } from 'umi';
