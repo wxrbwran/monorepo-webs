@@ -75,6 +75,7 @@ const Model: AuthModelType = {
       setAuthorizationToken(false);
       const storages = ['access_token', 'refresh_token', 'uid', 'sid', 'xzl-web-out-org_token'];
       storages.forEach((item) => window.$storage.removeItem(item));
+      localStorage.removeItem('xzl-web-out-org_token');
       return {
         isLogin: false,
         uid: '',

@@ -150,13 +150,25 @@ export const handleTeamInviteMemberList = (dataSource: Store[]) => {
 
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
-  dataSource
-    .map((member) => member.members[0])
-    .forEach((member) => {
-      const tmp = { ...member };
-      tmp.patientNum = member.counters[0]?.count;
-      res.push(tmp);
+  // dataSource
+  //   .map((member) => member.members[0])
+  //   .forEach((member) => {
+  //     const tmp = { ...member };
+  //     tmp.patientNum = member.counters[0]?.count;
+  //     res.push(tmp);
+  //   });
+  dataSource.forEach(item => {
+    let doctor: any = { depHeadDoctor: false };
+    item.members.forEach((member: Store) => {
+      if (member.role === Role.DOCTOR.id || !member.role) {
+        doctor = { ...member, patientNum: member.counters[0]?.count };
+      } else if (member.role === Role.DEP_HEAD_DOCTOR.id) {
+        doctor.depHeadDoctor = true;
+        doctor.depHeadDoctorWcId = member.wcId;
+      }
     });
+    res.push(doctor);
+  });
   return res;
 };
 
