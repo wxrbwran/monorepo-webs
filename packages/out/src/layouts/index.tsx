@@ -11,12 +11,10 @@ const logPages: string[] = ['/user/login', '/user/find_pwd'];
 
 const BasicLayout: FC = (props: IRoute) => {
   const { location } = props;
-  const auth = useSelector(state => state.auth);
+  const { isLogin } = useSelector(state => state.auth);
   console.log(location);
   const dispatch = useDispatch();
   const isGoLoginSome = logPages.includes(location.pathname);
-  const accessToken = window.$storage.getItem('access_token');
-  const isLogin = !!accessToken;
   console.log(isLogin);
   console.log(isGoLoginSome);
   useEffect(() => {
@@ -37,7 +35,7 @@ const BasicLayout: FC = (props: IRoute) => {
   return (
     <ConfigProvider locale={zhCN}>
       {
-        auth.isLogin && (
+        isLogin && (
           <div className={styles.main}>{props.children}</div>
         )
       }
