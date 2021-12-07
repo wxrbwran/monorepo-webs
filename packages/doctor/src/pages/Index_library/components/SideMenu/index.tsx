@@ -1,7 +1,7 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, MouseEvent } from 'react';
 import { SearchOutlined, RightOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Input, List, Space, Popconfirm, message } from 'antd';
-import { history, useDispatch, useLocation } from 'umi';
+import { history, useDispatch, useLocation, useSelector } from 'umi';
 import * as api from '@/services/api';
 import { isOneSelf, isOthers, isSystem } from './util';
 import AddEditDocument from '../AddEditDocument';
@@ -16,6 +16,9 @@ type TTemplate = {
 
 const { Search } = Input;
 const SideMenu: FC = () => {
+  const dispatch = useDispatch();
+  const location: ILocation = useLocation<undefined>();
+  const { query } = location;
   const [activeMenu, setActiveMenu] = useState<string>(''); // 当前选中项
   const [HYD, setHYD] = useState<TIndexItem[]>([]);
   const [JCD, setJCD] = useState<TIndexItem[]>([]);
@@ -23,36 +26,43 @@ const SideMenu: FC = () => {
   const [activeSubMenu, setActiveSubMenu] = useState<string>('');
   const [keyword, setKeyword] = useState(''); // 只用于搜索框展示文案用，点击菜单时会清空这里
   const [menu, setMenu] = useState<TIndexItem[]>([]);
-  const [source, setSource] = useState<string>('SYSTEM');
+  const [source, _] = useState<string>(query?.src || 'SYSTEM');
   const [showSubMenu, setShowSubMenu] = useState(false);
-  const dispatch = useDispatch();
-  const location = useLocation();
+  const curDocument = useSelector((state: IState) => state.document.curDocument);
+
   // const [imgType, setImgType] = useState<IImgType>({});
 
   const curSid = window.$storage.getItem('sid');
-  const handleClickMenu = async (item: TIndexItem) => {
+  const handleClickMenu = async (item: TIndexItem, src: string) => {
     if (item) {
-      console.log(item);
-      const curDocument = { ...item };
+      // console.log('handleClickMenu', item, src);
+      const document = { ...item };
       if (item.title) {
-        curDocument.name = item.jcdName;
-        curDocument.type = item.title;
+        document.name = item.jcdName;
+        document.type = item.title;
       }
       dispatch({
         type: 'document/setCurDocument',
-        payload: curDocument,
+        payload: document,
       });
-      const { sourceSid } = curDocument;
+      const { sourceSid } = document;
       let from = 'SYSTEM';
-      if (curDocument.source === 'DOCTOR' && sourceSid === curSid) {
+      if (document.source === 'DOCTOR' && sourceSid === curSid) {
         from = 'ONESELF';
-      } else if (curDocument.source === 'DOCTOR' && sourceSid !== curSid) {
+      } else if (document.source === 'DOCTOR' && sourceSid !== curSid) {
         from = 'OTHERS';
       }
-      setActiveSubMenu(curDocument.id);
-      setActiveMenu(curDocument.type + from);
+      setActiveSubMenu(document.id);
+      setActiveMenu(document.type + from);
       setShowSubMenu(false);
-      history.push(`/index_library?documentId=${item.id}&documentType=${curDocument.type}`);
+      history.push({
+        pathname: '/index_library',
+        query: {
+          documentId: item.id,
+          documentType: document.type,
+          src,
+        },
+      });
     }
   };
 
@@ -101,11 +111,23 @@ const SideMenu: FC = () => {
     // await fetchJcdAndOther(params);
     // if (!route.query.documentId && !route.query.documentType) {
     // console.log('fetchImageType', hyds, res);
-    console.log('location', location);
-    const { query } = location;
+    // console.log('location', location);
+    const {
+      query: { documentId, documentType, src },
+    } = location;
     const firstDoc = hyds[0] || jcds[0] || others[0];
-    if (!(query.documentId && query.documentType)) {
-      handleClickMenu(firstDoc);
+    firstDoc.sourceSid = firstDoc.sourceSid || firstDoc.sid;
+    if (!(documentId && documentType && src)) {
+      let type = 'SYSTEM';
+      if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid === curSid) {
+        type = 'ONESELF';
+      } else if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid !== curSid) {
+        type = 'OTHERS';
+      }
+      console.log('fetchImageType', firstDoc, type);
+      handleClickMenu(firstDoc, type);
+    } else {
+      handleClickMenu(curDocument, src);
     }
     // }
   };
@@ -118,19 +140,17 @@ const SideMenu: FC = () => {
     fetchImageType({ name: value });
     setShowSubMenu(true);
   };
-  const handleChangeMenu = (typeItem: string, src: string) => {
-    console.log(typeItem, src);
-    setKeyword('');
-    setActiveMenu(typeItem + src);
-    setShowSubMenu(true);
+  const handleMouseOverMenu = (docType: string, src: string) => {
+    console.log(docType, src);
+
     let tmp: TIndexItem[] = [];
     let handledList = HYD;
-    if (typeItem === 'JCD') {
+    if (docType === 'JCD') {
       handledList = JCD;
-    } else if (typeItem === 'OTHER') {
+    } else if (docType === 'OTHER') {
       handledList = OTHER;
     }
-    switch (source) {
+    switch (src) {
       case 'SYSTEM':
         tmp = handledList.filter(isSystem);
         break;
@@ -141,16 +161,19 @@ const SideMenu: FC = () => {
         tmp = handledList.filter((h) => isOthers(h, curSid));
         break;
     }
-    // console.log('handledList', handledList);
-    // console.log('source', source);
-    // console.log('tmp', tmp);
+    console.log('handledList', handledList);
+    console.log('source', src);
+    console.log('tmp', tmp);
     setMenu([...tmp]);
-    setSource(source);
+    // setKeyword('');
+    // setActiveMenu(docType + src);
+    // setSource(src);
+    setShowSubMenu(true);
     // fetchImageType({});
   };
 
-  const handleDeleteDocument = async (ev: MouseEvent, item: TIndexItem) => {
-    ev.stopPropagation();
+  const handleDeleteDocument = async (item: TIndexItem, ev?: MouseEvent) => {
+    ev?.stopPropagation();
     const type = item.type || item.title;
     try {
       if (type === 'HYD') {
@@ -173,7 +196,13 @@ const SideMenu: FC = () => {
     OTHERS: '他人',
   };
   return (
-    <div className={styles.menu} onMouseLeave={() => setShowSubMenu(false)}>
+    <div
+      className={styles.menu}
+      onMouseLeave={() => {
+        // handleClickMenu(curDocument, source);
+        setShowSubMenu(false);
+      }}
+    >
       <Search
         placeholder="请输入名称"
         className={styles.search_wrap}
@@ -183,11 +212,11 @@ const SideMenu: FC = () => {
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       />
-      {Object.keys(documentTypeText).map((typeItem) => (
-        <div key={typeItem}>
+      {Object.keys(documentTypeText).map((docType) => (
+        <div key={docType}>
           <div className={styles.title}>
-            <span>{documentTypeText[typeItem]}</span>
-            <AddEditDocument mode="add" type={typeItem} onSuccess={fetchImageType}>
+            <span>{documentTypeText[docType]}</span>
+            <AddEditDocument mode="add" type={docType} onSuccess={fetchImageType}>
               <PlusOutlined />
             </AddEditDocument>
           </div>
@@ -195,12 +224,12 @@ const SideMenu: FC = () => {
             {Object.keys(documentTypeSource).map((src) => (
               <div
                 className={`${styles.type_item} ${
-                  typeItem + src === activeMenu ? styles.active : ''
+                  docType + src === activeMenu ? styles.active : ''
                 }`}
-                data-type={typeItem}
+                data-type={docType}
                 data-source={src}
-                key={typeItem + src}
-                onMouseEnter={() => handleChangeMenu(typeItem, src)}
+                key={docType + src}
+                onMouseEnter={() => handleMouseOverMenu(docType, src)}
               >
                 <span>{documentTypeSource[src]}添加</span>
                 <RightOutlined />
@@ -218,7 +247,9 @@ const SideMenu: FC = () => {
           renderItem={(item: TIndexItem) => (
             <List.Item className={activeSubMenu === item.id ? 'font-bold' : ''}>
               <Space>
-                <span onClick={() => handleClickMenu(item)}>{item.name || item.jcdName}</span>
+                <span onClick={() => handleClickMenu(item, source)}>
+                  {item.name || item.jcdName}
+                </span>
                 {source === 'ONESELF' && (
                   <>
                     <AddEditDocument
@@ -231,7 +262,7 @@ const SideMenu: FC = () => {
                     </AddEditDocument>
                     <Popconfirm
                       title="确认删除吗?"
-                      onConfirm={(e) => handleDeleteDocument(e, item)}
+                      onConfirm={(e?: React.MouseEvent<HTMLElement>) => handleDeleteDocument(item, e)}
                       okText="确认"
                       cancelText="取消"
                     >

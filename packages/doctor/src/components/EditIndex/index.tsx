@@ -22,6 +22,7 @@ interface IProps {
 interface IData {
   common: string | boolean;
   documentName: string;
+  references?: TReference[]
 }
 const EditIndex: FC<IProps> = (props) => {
   const {
@@ -41,6 +42,9 @@ const EditIndex: FC<IProps> = (props) => {
   useEffect(() => {
     if (showModal && initFormVal) {
       setFieldsValue({ ...initFormVal });
+      if (initFormVal.references) {
+        setReferences(initFormVal.references.map(r => r.type));
+      }
     } else {
       setFieldsValue({ common: true });
     }
@@ -82,10 +86,14 @@ const EditIndex: FC<IProps> = (props) => {
 
   const handleSubmit = async (values: IData) => {
     // documentName
-    const formatVals: IData = { ...values };
     console.log('values', values);
-    let params: Record<string, string | boolean> = {
-      ...formatVals,
+    if (values.references) {
+      values.references.forEach((r, index) => {
+        r.type = references[index];
+      });
+    }
+    let params: any = {
+      ...values,
       source: 'DOCTOR',
       sourceSid: window.$storage.getItem('sid'),
     };
@@ -120,9 +128,18 @@ const EditIndex: FC<IProps> = (props) => {
     if (selectReferecnce) {
       setReferences((prev) => [...prev, selectReferecnce]);
       cb();
+
     } else {
       message.warn('请选择类型');
     }
+  };
+
+  const handleRemoveReference = (cb: Function, fieldName: number, index: number) => {
+    cb(fieldName);
+    console.log('handleRemoveReference references', JSON.stringify(references));
+    const tmp = [...references];
+    tmp.splice(index, 1);
+    setReferences([...tmp]);
   };
 
   const handleChangeDefault = (e: CheckboxChangeEvent, index: number) => {
@@ -182,10 +199,10 @@ const EditIndex: FC<IProps> = (props) => {
             <Form.List name="references">
               {(fields, { add, remove }) => (
                 <>
-                  <Form.Item label="参考值及单位">
+                  <Form.Item key="referenceSelect" label="参考值及单位">
                     <Space>
                       <Select
-                        onSelect={(v) => setSelectReference(v as string)}
+                        onSelect={setSelectReference}
                         style={{ width: 360 }}
                         placeholder="请选择参考值"
                       >
@@ -199,8 +216,8 @@ const EditIndex: FC<IProps> = (props) => {
                     </Space>
                   </Form.Item>
                   {fields.map((field, index) => (
-                    <Form.Item label={referenceMap[references[index]]}>
-                      <Space key={field.key} align="baseline">
+                    <Form.Item key={field.key} label={referenceMap[references[index]]}>
+                      <Space align="baseline">
                         {['RANGE', 'GT', 'LT', 'AROUND', 'RADIO'].includes(references[index]) && (
                           <Form.Item
                             {...createProps(field, 'note')}
@@ -213,7 +230,10 @@ const EditIndex: FC<IProps> = (props) => {
                           <>
                             <Form.Item
                               {...createProps(field, 'value')}
-                              rules={[{ required: true, message: '请输入参考值' }]}
+                              rules={
+                                references[index] ==
+                                'LT' ? [] : [{ required: true, message: '请输入参考值' }]
+                              }
                             >
                               <InputNumber
                                 disabled={references[index] == 'LT'}
@@ -224,7 +244,11 @@ const EditIndex: FC<IProps> = (props) => {
                             </Form.Item>
                             <Form.Item
                               {...createProps(field, 'secondValue')}
-                              rules={[{ required: true, message: '请输入参考值' }]}
+                              rules={
+                                references[index] == 'GT'
+                                  ? []
+                                  : [{ required: true, message: '请输入参考值' }]
+                              }
                             >
                               <InputNumber
                                 disabled={references[index] == 'GT'}
@@ -259,8 +283,10 @@ const EditIndex: FC<IProps> = (props) => {
                             <Input placeholder="请输入内容" style={{ width: 537 }} />
                           </Form.Item>
                         )}
-
-                        <DeleteOutlined onClick={() => remove(field.name)} />
+                        {/* remove(field.name) */}
+                        <DeleteOutlined
+                          onClick={() => handleRemoveReference(remove, field.name, index)}
+                        />
                         <Form.Item
                           {...field}
                           noStyle

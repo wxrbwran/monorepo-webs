@@ -9,16 +9,18 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+import dayjs from 'dayjs';
+//@ts-ignore
+import { getDvaApp } from 'umi';
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
-import dayjs from 'dayjs';
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
     var newObj = {};
     // 签约患者下，当前选中菜单的role
     var currentMenuRole = window.$storage.getItem('role');
-    console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
+    // console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
     var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
     data.forEach(function (team) {
         newObj = {};
@@ -31,7 +33,8 @@ var handlePatientsTeamDataSource = function (data) {
                 };
             }
             // 在members里过滤出sid与当前登录者sid相同,并且与侧边栏医生角色一致的医生信息，取出wcId，im聊天会话需要此参数
-            if (member.sid === window.$storage.getItem('sid') && member.role === window.$storage.getItem('currRoleId')) {
+            if (member.sid === window.$storage.getItem('sid') &&
+                member.role === window.$storage.getItem('currRoleId')) {
                 newObj.currLoginDoctorInfo = {
                     wcId: member.wcId,
                     sid: member.sid,
@@ -83,7 +86,7 @@ var handlePatientsTeamDataSource = function (data) {
 // 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
 export var handleInviteMemberList = function (dataSource) {
     var newData = [];
-    console.log('dataSource', dataSource);
+    // console.log('dataSource', dataSource);
     dataSource.forEach(function (item) {
         var _a;
         var _b = item.subjectDetail || {}, title = _b.title, avatarUrl = _b.avatarUrl, firstProfessionCompany = _b.firstProfessionCompany, firstPracticeDepartment = _b.firstPracticeDepartment, name = _b.name, tel = _b.tel, provinceName = _b.provinceName, sex = _b.sex;
@@ -119,22 +122,6 @@ export var handleTeamInviteMemberList = function (dataSource) {
             }
         });
         newData.push(doctor);
-        // const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
-        // newData.push({
-        //   ...item,
-        //   title,
-        //   avatarUrl,
-        //   name,
-        //   joinTime: item?.interval?.start ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
-        //   status: projectInviteStatus[item.status],
-        //   tel,
-        //   provinceName,
-        //   sex: sexList[sex],
-        //   firstProfessionCompany,
-        //   firstPracticeDepartment,
-        //   role: fetchRolePropValue(item.role, 'desc'),
-        //   roleId: item.role,
-        // });
     });
     console.log('handleTeamInviteMemberList newData', newData);
     return newData;
@@ -202,12 +189,12 @@ export var handleRelatedDoctorsDataSource = function (dataSource) {
     return doctors;
 };
 export var handleTableDataSource = function (dataKey, dataSource, category) {
-    console.log('dataSource', dataSource);
-    console.log('dataKey', dataKey);
-    console.log('category', category);
-    console.log('Role.DOCTOR.id', Role.DOCTOR.id);
-    console.log('Role.PATIENT_VIP.id', Role.PATIENT_VIP.id);
-    console.log('Role.PATIENT.id', Role.PATIENT.id);
+    // console.log('dataSource', dataSource);
+    // console.log('dataKey', dataKey);
+    // console.log('category', category);
+    // console.log('Role.DOCTOR.id', Role.DOCTOR.id);
+    // console.log('Role.PATIENT_VIP.id', Role.PATIENT_VIP.id);
+    // console.log('Role.PATIENT.id', Role.PATIENT.id);
     switch (dataKey) {
         case 'teams':
             if (category === 'patientList') {
@@ -231,6 +218,12 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             return dataSource;
         case 'infos':
             return handleInviteMemberList(dataSource);
+        case 'indexTable':
+            var curDocument_1 = getDvaApp()._store.getState().document.curDocument;
+            dataSource.forEach(function (datum) {
+                datum.sampleFrom = curDocument_1.sampleFrom;
+            });
+            return dataSource;
         default:
             return dataSource;
     }

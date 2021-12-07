@@ -4,6 +4,10 @@ export declare const clName: CommonData;
 export declare const clTitle: CommonData;
 export declare const clGoodsPrice: CommonData;
 export declare const indexName: CommonData;
+export declare const note: CommonData;
+export declare const reference: CommonData;
+export declare const unit: CommonData;
+export declare const indexCommon: CommonData;
 export declare const clAvatar: {
     title: string;
     dataIndex: string;
@@ -15,11 +19,6 @@ export declare const clDepartment: {
     render: (text: {
         name: string;
     }) => string;
-};
-export declare const indexUnits: {
-    title: () => JSX.Element;
-    dataIndex: string;
-    render: (text: string[]) => JSX.Element;
 };
 export declare const indexAbbr: {
     title: string;

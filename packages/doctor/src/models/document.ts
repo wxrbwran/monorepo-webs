@@ -1,19 +1,8 @@
 import { Reducer } from 'redux';
 
-export type TDocument = {
-  id?: string;
-  name?: string;
-  sampleFrom?: string;
-  part?: string;
-  method?: string;
-  data?: any[];
-};
-
 export type TDocumentState = {
   curDocument: TDocument;
 };
-
-
 
 export interface DocumentModelType {
   namespace: string;

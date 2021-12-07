@@ -1,7 +1,18 @@
+declare type TDocument = {
+  id?: string;
+  name?: string;
+  sampleFrom?: string;
+  part?: string;
+  method?: string;
+  data?: any[];
+};
+
 declare type TIndexItem = {
   id: string;
   type: string;
   name?: string;
+  abbreviation?: string;
+  common?: boolean;
   sampleFrom?: string;
   title: string;
   jcdName?: string;
@@ -9,6 +20,7 @@ declare type TIndexItem = {
   source: string;
   sourceSid?: string;
   sid?: string;
+  references?: TReference[]
 };
 
 declare type TReference = {
@@ -19,5 +31,3 @@ declare type TReference = {
   note: string | null;
   isDefault: boolean;
 };
-
-

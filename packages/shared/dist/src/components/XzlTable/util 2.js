@@ -44,7 +44,7 @@ var handlePatientsTeamDataSource = function (data) {
     return newPatients;
 };
 export var handleTableDataSource = function (dataKey, dataSource, category) {
-    console.log('dataSource', dataSource);
+    // console.log('dataSource', dataSource);
     switch (dataKey) {
         case 'teams':
             if (category === 'patientList') {

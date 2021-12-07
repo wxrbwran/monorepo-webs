@@ -1,14 +1,23 @@
 import React, { FC, useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Form, Button, Popconfirm, message, Switch } from 'antd';
-import { useLocation, Location } from 'umi';
-import { Common, Source, Search } from 'xzl-web-shared/src/components/Selects';
+import { Form, Button, Popconfirm, message, Space } from 'antd';
+import { useLocation, Location, useSelector } from 'umi';
+import { Common, Search } from 'xzl-web-shared/src/components/Selects';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
-  indexName, indexUnits, indexAbbr, indexSource, columnCreator,
+  indexName,
+  indexAbbr,
+  indexCommon,
+  columnCreator,
+  note,
+  reference,
+  unit,
 } from 'xzl-web-shared/src/utils/columns';
+import { documentMap } from 'xzl-web-shared/src/utils/consts';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
+import ViewIndex from '../ViewIndex';
+
 import Initials from '../Initials';
 
 type ILocation = {
@@ -27,6 +36,7 @@ interface IParams {
 }
 const IndexList: FC = () => {
   const [form] = Form.useForm();
+  const sid = window.$storage.getItem('sid');
   const { getFieldValue } = form;
   // @ts-ignore
   const {
@@ -36,10 +46,12 @@ const IndexList: FC = () => {
   const initDepOptions = {
     documentId,
     pageSize: 9999999,
-    sourceSid: window.$storage.getItem('sid'),
-    sid: window.$storage.getItem('sid'),
+    source: 'DOCTOR',
+    sourceSid: sid,
+    sid: sid,
   };
   const [depOptions, setOptions] = useState<IParams>(initDepOptions);
+  const curDocument = useSelector((state: IState) => state.document.curDocument);
   // 刷新列表
   const onSuccess = () => {
     setOptions({ ...depOptions });
@@ -53,19 +65,17 @@ const IndexList: FC = () => {
   const handleSelectChange = (changedValues: string[], allValues: Record<string, string>) => {
     console.log('allValues', allValues, changedValues);
     const params: IParams = { ...depOptions };
-    Object.keys(allValues).forEach((key: string) => {
-      if (allValues[key]) {
-        if (key === 'common') {
-          params.common = !!(allValues.common === 'true');
-        } else {
-          // @ts-ignore
-          params[key] = allValues[key];
-        }
-      } else {
-        // @ts-ignore
-        delete params[key];
-      }
-    });
+    if (allValues.common?.length === 1) {
+      params.common = !!(allValues.common[0] === 'true');
+    } else if ([0, 2].includes(allValues.common?.length)) {
+      // @ts-ignore
+      delete params.common;
+    }
+    if (allValues.name) {
+      params.name = allValues.name;
+    } else {
+      delete params.name;
+    }
     setOptions({ ...params });
   };
   const initialCallback = (key: string) => {
@@ -80,7 +90,10 @@ const IndexList: FC = () => {
 
   const handleDel = (id: string) => {
     api.indexLibrary
-      .deleteIndexDocumentIndex(id)
+      .deleteIndexDocumentIndex({
+        documentId: curDocument.id,
+        indexId: id,
+      })
       .then(() => {
         message.success('删除成功');
         onSuccess();
@@ -93,16 +106,19 @@ const IndexList: FC = () => {
     title: '操作',
     dataIndex: 'id',
     render: (text: string, record: any) => (
-      <div className="operation-btn">
-        {record.source === 'DOCTOR' && (
-          <>
+      <div>
+        {record.source === 'DOCTOR' && record.sourceSid === sid && (
+          <Space>
+            <ViewIndex record={record} curDocument={curDocument}>
+              <Button type="link">查看</Button>
+            </ViewIndex>
             <Popconfirm
               title="确定删除此指标吗?"
               onConfirm={() => handleDel(text)}
               okText="是"
               cancelText="否"
             >
-              <span>删除</span>
+              <Button type="link">删除</Button>
             </Popconfirm>
             {!record.used && (
               <EditIndex
@@ -112,75 +128,48 @@ const IndexList: FC = () => {
                 level1Type={documentType}
                 source="libraryEdit"
               >
-                <span>编辑</span>
+                <Button type="link">编辑</Button>
               </EditIndex>
             )}
-          </>
+          </Space>
         )}
       </div>
     ),
   };
-  const handleCallback = (data: object[]) => {
-    setTotal(data.length);
+  const handleCallback = ({ dataSource }: { dataSource: TIndexItem[] }) => {
+    setTotal(dataSource.length);
   };
 
-  const handleCommon = (common: boolean, editData: object, refreshList: () => void) => {
-    const params = {
-      ...editData,
-      common,
-    };
-    api.indexLibrary.patchIndexDocumentIndex(params).then(() => {
-      message.success('修改成功');
-      refreshList();
-    }).catch((err) => {
-      message.error(err?.result ?? '修改失败');
-    });
-  };
-  const indexCommon = (refreshList: () => void) => ({
-    title: () => (
-      <div>
-        <span>是否常用</span>
-      </div>
-    ),
-    dataIndex: 'common',
-    render: (_text: boolean, record: any) => (
-      <div className="table-operating">
-        <Switch
-          checkedChildren="是"
-          unCheckedChildren="否"
-          checked={_text}
-          disabled={record.source === 'SYSTEM' || !!record.used}
-          onChange={(e) => {
-            handleCommon(e, record, refreshList);
-          }}
-        />
-      </div>
-    ),
-  });
+
   const columns = [
     indexName,
-    indexUnits,
-    columnCreator(`${documentType === 'HYD' ? '样本来源' : '检查部位'}`, 'sampleFrom'),
     indexAbbr,
-    indexCommon(onSuccess),
-    indexSource,
+    columnCreator('样本来源', 'sampleFrom', () => <span>{curDocument.sampleFrom}</span>),
+    note,
+    reference,
+    unit,
+    indexCommon,
     operation,
   ];
   return (
     <div className="ui-index-library__index-list">
       <Initials initialCallback={initialCallback} indexId={documentId} />
       <div className="operation-warp">
-        <div>
+        <div className="flex">
+          <h2 className="font-bold text-base mr-20">
+            {`${documentMap[curDocument.type]}-系统添加-${curDocument.name}`}
+          </h2>
           <span>指标数量：</span>
           <span className="num">{total}</span>
           <span>个</span>
         </div>
         <div className="flex">
           <div>
-            <Form form={form} onValuesChange={handleSelectChange} id="height34">
-              <Common />
-              <Source />
-              <Search form={form} searchKey="name" value={getFieldValue('name')} />
+            <Form form={form} onValuesChange={handleSelectChange}>
+              <Space>
+                <Common />
+                <Search form={form} searchKey="name" value={getFieldValue('name')} />
+              </Space>
             </Form>
           </div>
           <EditIndex
@@ -199,8 +188,7 @@ const IndexList: FC = () => {
       {documentId && (
         <XzlTable
           columns={columns}
-          dataKey="list"
-          category="list"
+          dataKey="indexTable"
           request={api.indexLibrary.fetchIndexDocumentIndex}
           depOptions={depOptions}
           handleCallback={handleCallback}

@@ -97,7 +97,7 @@ const XzlTable: FC<IProps> = (props) => {
       fetchTableDataSource(params);
     }
   };
-  console.log('dataSource', dataSource);
+  // console.log('dataSource', dataSource);
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Table

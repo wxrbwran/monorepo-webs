@@ -22,7 +22,7 @@ function ImWindow() {
   const [curNetCallStatus, setCurNetCallStatus] = useState(netcallStatus);
   const [remoteBig, setRemoteBig] = useState(false);
   const [durationTimer, setDurationTimer] = useState<string>();
-  console.log('windowwwim');
+  // console.log('windowwwim');
   // 清除通话时长
   const clearDurationTimer = () => {
     if (netcallDurationTimer) {

@@ -35,7 +35,7 @@ export const handleTableDataSource = (
   dataSource: Store[],
   category?: string,
 ) => {
-  console.log('dataSource', dataSource);
+  // console.log('dataSource', dataSource);
   switch (dataKey) {
     case 'teams':
       if (category === 'patientList') {

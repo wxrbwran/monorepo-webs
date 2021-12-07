@@ -1,8 +1,22 @@
 import React from 'react';
 import { Avatar, Button } from 'antd';
-import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus } from './consts';
+import {
+  defaultAvatar, sexList, inviteStatusLists,
+  statusLists, orgCategroy, roleList, projectStatus,
+  yinYangMap,
+} from './consts';
 import { Role, fetchRolePropValue } from './role';
 import moment from 'moment';
+
+function getDefaultReferenceValue(references) {
+  if (references) {
+    const defaultReference = references.filter((r) => r.isDefault)?.[0];
+    // console.log('defaultReference', defaultReference)
+    return defaultReference || {};
+  }
+  return {};
+}
+
 export const columnCreator = (title: string, dataIndex: string, customRender = undefined) => {
   const column: CommonData = {
     title,
@@ -17,6 +31,41 @@ export const clName = columnCreator('姓名', 'name');
 export const clTitle = columnCreator('职称', 'title');
 export const clGoodsPrice = columnCreator('收费标准', 'goodsDescriptions');
 export const indexName = columnCreator('指标名称', 'name');
+
+export const note = columnCreator('参考值备注', 'note', (_, record) => {
+  return getDefaultReferenceValue(record.references)?.note;
+});
+export const reference = columnCreator('参考值', 'reference', (_, record) => {
+  const defaultReference = getDefaultReferenceValue(record.references);
+  const { type, value, secondValue } = defaultReference;
+  if (type) {
+    switch (type) {
+      case 'RANGE':
+        return `${value}-${secondValue}`;
+      case 'GT':
+        return `>${value}`;
+      case 'LT':
+        return `<${secondValue}`;
+      case 'AROUND':
+        return `${value}±${secondValue}`;
+      case 'RADIO':
+        return `${yinYangMap[value]}`;
+      case 'OTHER':
+        return `${value}`;
+    }
+  }
+  return '';
+
+  // return getDefaultReferenceValue(record.references, note)
+});
+export const unit = columnCreator('单位', 'unit', (_, record) => {
+  return getDefaultReferenceValue(record.references)?.unit;
+});
+
+export const indexCommon = columnCreator('是否常用', 'common', (text: string) => (
+  <span>{text ? '是' : '否'}</span>
+));
+
 
 export const clAvatar = {
   title: '头像',
@@ -34,21 +83,7 @@ export const clDepartment = {
   dataIndex: 'department',
   render: (text: { name: string }) => text.name,
 };
-export const indexUnits = {
-  title: () => (
-    <div>
-      <span>单位</span>
-    </div>
-  ),
-  dataIndex: 'units',
-  render: (text: string[]) => (
-    <>
-      {text?.length === 0 || !text ? <span className="unit no-units">无单位</span> : (
-        text.map((item, index) => <span key={item} className={index === 0 ? 'unit default' : 'unit'}>{item}</span>)
-      )}
-    </>
-  ),
-};
+
 export const indexAbbr = {
   title: '缩写',
   dataIndex: 'abbreviation',
@@ -58,6 +93,7 @@ export const indexAbbr = {
     </div>
   ),
 };
+
 
 export const indexSource = {
   title: '数据来源',
@@ -386,178 +422,3 @@ export const bindAt = {
     </div>
   ),
 };
-
-
-// export const rootOrgColumns = (params) => [
-//   organizationName(params),
-//   // organizationCategory,
-//   organizationCode,
-//   adminName,
-//   lowOrgCount,
-//   upOrgCount,
-//   deptCount,
-//   doctorCount,
-//   nurseCount,
-//   patientCount,
-// {
-//   title: '操作',
-//   dataIndex: 'operate',
-//   // width: 200,
-//   className: 'action',
-//   render: (_text, _record) => (
-//     <div className="column_btn">
-//       <Button type="ghost" icon={<EditOutlined />}>
-//         编辑
-//       </Button>
-//       <Button type="ghost" icon={<DeleteOutlined />}>
-//         删除
-//       </Button>
-//     </div>
-//   ),
-// },
-// ];
-
-
-// 医联体->机构列表
-// export const orgListColumnsOut = (params: any) => [
-//   organizationNameOut(params),
-//   adminName,
-//   organizationCode,
-//   deptCount,
-//   doctorCount,
-//   nurseCount,
-//   patientCount,
-// ];
-// export const addOrgListColumns = [
-//   orgName,
-//   organizationCode,
-//   adminName,
-//   lowOrgCount,
-//   deptCount,
-//   doctorCount,
-//   nurseCount,
-//   patientCount,
-// ];
-
-
-
-// export const groupOperatorAdminColumns = (props) => [
-//   avatar,
-//   navName(props),
-//   sex,
-//   role,
-//   workload,
-//   lastMonthWorkload,
-//   monthWorkload,
-//   department,
-//   adminDepartment,
-//   // inviteStatus,
-//   status,
-//   {
-//     title: '操作',
-//     dataIndex: 'operate',
-//     width: 100,
-//     className: 'action',
-//     render: (text, record) => (
-//       <Popconfirm
-//         placement="topRight"
-//         overlayClassName="delete__pop-confirm"
-//         title={deletePop}
-//         onConfirm={() => props.delete([record.id])}
-//       >
-//         <Button type="link" icon={<DeleteOutlined />}>
-//           删除
-//         </Button>
-//       </Popconfirm>
-//     ),
-//   },
-// ];
-// const departmentOperatorRemoveTitle = (
-//   <div>
-//     <h3>移出科室？</h3>
-//     <p>确认将护士移出科室吗?</p>
-//   </div>
-// );
-// export const departmentOperatorColumns = (props) => [
-//   avatar,
-//   navName(props),
-//   sex,
-//   role,
-//   workload,
-//   lastMonthWorkload,
-//   monthWorkload,
-//   // inviteStatus,
-//   status,
-//   {
-//     title: '操作',
-//     dataIndex: 'operate',
-//     width: 120,
-//     className: 'action',
-//     render: (text, record) => (
-//       <>
-//         <Popconfirm
-//           placement="topRight"
-//           overlayClassName="delete__pop-confirm"
-//           title={departmentOperatorRemoveTitle}
-//           onConfirm={() => props.remove([record.id])}
-//         >
-//           <Button type="link" icon={<DeleteOutlined />}>
-//             删除
-//           </Button>
-//         </Popconfirm>
-//         <Popover
-//           placement="bottomLeft"
-//           title={text}
-//           content={<h3>{record.role === 'OPERATOR' ? '设为管理员' : '取消管理员'}</h3>}
-//           trigger="hover"
-//         >
-//           <span>...</span>
-//         </Popover>
-//       </>
-//     ),
-//   },
-// ];
-
-// export const rootOrgColumns = (params) => [
-//   organizationName(params),
-//   // organizationCategory,
-//   organizationCode,
-//   adminName,
-//   lowOrgCount,
-//   upOrgCount,
-//   deptCount,
-//   doctorCount,
-//   nurseCount,
-//   patientCount,
-//   {
-//     title: '操作',
-//     dataIndex: 'operate',
-//     // width: 200,
-//     className: 'action',
-//     render: (_text, record) => (
-//       <div className="column_btn">
-//         <AddEditHospital info={record} mode="edit" refresh={params.refresh}>
-//           <Button type="ghost" icon={<EditOutlined />}>
-//             编辑
-//           </Button>
-//         </AddEditHospital>
-//         {/* <DeleteDepOrg level="org"> */}
-//         {/* <Button type="ghost" icon={<DeleteOutlined />}>
-//           删除
-//         </Button> */}
-//         {/* </DeleteDepOrg> */}
-//       </div>
-//     ),
-//   },
-// ];
-
-// export const departmentDoctorColumns = (params) => [
-//   navAvatar(params),
-//   navName(params),
-//   sex,
-//   title,
-//   patientNum,
-//   status,
-
-// ];
-
