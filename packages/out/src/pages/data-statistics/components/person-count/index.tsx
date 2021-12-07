@@ -44,11 +44,15 @@ const PersonCount: FC = () => {
       setDepPatients(doctors);
     });
   };
-  const fetchNoReplyDoctor = (startDate: string) => {
+  const fetchNoReplyDoctor = (curDate: number) => {
     const deps = {};
     const params = {
       nsId,
-      startDate,
+      range: {
+        start: new Date(curDate).setHours(0, 0, 0, 0),
+        end: new Date(curDate).setHours(23, 59, 59, 59),
+      },
+
     };
     window.$api.count.getNoReplyDoctor(params).then((res: { noReplyDoctors: IDepItem[] }) => {
       res.noReplyDoctors.forEach(item => {
@@ -72,12 +76,12 @@ const PersonCount: FC = () => {
   useEffect(() => {
     fetchDepDoctor();
     fetchDepPatient();
-    fetchNoReplyDoctor( moment(yesterday).format('YYYY-MM-DD'));
+    fetchNoReplyDoctor(yesterday);
   }, []);
 
-  const handleChangeDate = (date: moment.Moment, dateString: string) => {
+  const handleChangeDate = (date: moment.Moment) => {
     if (date) {
-      fetchNoReplyDoctor(dateString);
+      fetchNoReplyDoctor(moment(date).valueOf());
     }
   };
   // 可选时间范围中最近的时间仅可选到当前时间的前一天，默认显示前一天的00：00到23：59

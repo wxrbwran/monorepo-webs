@@ -4,7 +4,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import { Row, Col, Form, Input, Button } from 'antd';
-import { history, useDispatch } from 'umi';
+import { history } from 'umi';
 import './login.scss';
 
 const FormItem = Form.Item;
@@ -12,18 +12,15 @@ const FormItem = Form.Item;
 const Login: FC = () => {
   // const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-  const dispatch = useDispatch();
   const handleLogin = async (values: Store) => {
     const params = {
       ...values,
       authType: 'password_type',
+      clientId: 'xzl-web-out-org',
     };
-    // const res = window.$api.auth.token(params);
-    dispatch({
-      type: 'auth/login',
-      payload: params,
-    }).then(() => {
-      history.push('/hospital/account');
+    window.$api.auth.token(params).then(res => {
+      localStorage.setItem('xzl-web-out-org_token', JSON.stringify(res.data));
+      history.push('/data-statistics');
     });
   };
 

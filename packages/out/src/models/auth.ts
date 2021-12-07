@@ -36,12 +36,12 @@ const Model: AuthModelType = {
       } else {
         const data = JSON.parse(token);
         console.log('dataaaaaa', data);
+        setAuthorizationToken(data.accessToken);
         window.$storage.setItem('access_token', data.accessToken);
         window.$storage.setItem('sid', data.wcl[0].roles[0].subject.id);
         window.$storage.setItem('nsId', data.wcl[0].ns.id);
         window.$storage.setItem('wcId', data.wcl[0].wcId);
         window.$storage.setItem('roleId', data.wcl[0].roles[0].id);
-        setAuthorizationToken(data.accessToken);
         yield put({
           type: 'changeLoginStatus',
           payload: data,

@@ -40,8 +40,11 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const [total, setTotal] = useState(0);
   const nsId = window.$storage.getItem('nsId');
 
-  const toDate = (date: moment.Moment) => {
-    return moment(date).format('YYYY-MM-DD');
+  const toDate = (date: moment.Moment[]) => {
+    return {
+      start: moment(date[0]).startOf('day').format('x'),
+      end: moment(date[1]).endOf('day').format('x'),
+    };
   };
 
   // 时间范围最多365天，并且结束时间是前一天23.59.59
@@ -70,8 +73,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const fetchReplyRatio = async (sids: string[]) => {
     const params = {
       nsId,
-      startDate: toDate(value[0]),
-      endDate: toDate(value[1]),
+      range: toDate(value),
     };
     const doctors: { [key: string]: IDocRatioItem[] } = {};
     let xDate: number[] = []; // 所有人日期时间集合,且去重
@@ -132,8 +134,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const fetchPatientOperationData = (changeParams: any = {}) => {
     const params = {
       nsId,
-      startDate: toDate(value[0]),
-      endDate: toDate(value[1]),
+      range: toDate(value),
       pageAt,
       pageSize: config.TABLE_PAGESIZE,
       ...changeParams,
