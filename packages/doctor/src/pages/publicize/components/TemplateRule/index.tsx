@@ -33,6 +33,7 @@ const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRole
       for (let j = 0; j < item.items.length; j++) {
         const subItem = item.items[j];
         subItem.operator = '=';
+        subItem.value = subItem?.assign?.value ?? '';
         if (subItem.name === 'team.role') {
           subItem.value = projectRoleType;
         } else if (subItem.name === 'team.subject') {
@@ -40,8 +41,6 @@ const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRole
         } else if (subItem.name === 'team.init_time') {
           subItem.value = '*';
           subItem.starting = true;
-        } else if (subItem.name === 'team.namespace.label.value') {
-          subItem.value = subItem?.assign?.value ?? '';
         }
       }
     } else if (item.name === 'diagnose.treatment') {
