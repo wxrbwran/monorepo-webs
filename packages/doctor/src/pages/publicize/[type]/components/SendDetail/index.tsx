@@ -5,13 +5,12 @@ import { sendAt, senderFileName, patientName } from '@/utils/columns';
 
 interface IProps {
   actionType: number;
-  realTime: number;
   startTime: number;
   ruleId: string;
   sourceType: number;
 }
 const SendDetail: FC<IProps> = (props) => {
-  const { children, actionType, startTime, ruleId, sourceType, realTime } = props;
+  const { children, actionType, startTime, ruleId, sourceType } = props;
   const [showModal, setShowModal] = useState(false);
   const [tableOptions, settableOptions] = useState({ pageAt: 1, pageSize: 10, actionType, startTime, ruleId, sourceType });
   console.log(settableOptions);
@@ -19,7 +18,7 @@ const SendDetail: FC<IProps> = (props) => {
     setShowModal(true);
     console.log('sourceType333', sourceType);
   };
-  const col = [patientName, sendAt(realTime), senderFileName];
+  const col = [patientName, sendAt, senderFileName];
   return (
     <div>
       <span onClick={handleShow}>{children}</span>

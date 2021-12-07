@@ -109,15 +109,11 @@ export const patientName = {
   width: 122,
 };
 
-export const sendAt = (realTime) => {
-  return (
-    {
-      title: '时间',
-      dataIndex: 'sendTime',
-      width: 236,
-      render: (text: number) => <span>{realTime ? (moment(realTime).format('YYYY.MM.DD ') + moment(text).format('HH:mm')) : (moment(text).format('YYYY.MM.DD HH:mm'))}</span>,
-    }
-  );
+export const sendAt = {
+  title: '时间',
+  dataIndex: 'sendTime',
+  width: 236,
+  render: (text: number) => <span>{(moment(text).format('YYYY.MM.DD HH:mm'))}</span>,
 };
 
 export const senderFileName = {

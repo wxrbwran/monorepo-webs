@@ -8,8 +8,6 @@ import { sfTypeUrl } from '../../../utils';
 import { useParams } from 'umi';
 import styles from './index.scss';
 import dayjs from 'dayjs';
-import { isEmpty } from 'lodash';
-
 interface ISendItem {
   sendTime: number;
   sendCount: number;
@@ -27,7 +25,7 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
   const [showModal, setShowModal] = useState(false);
   const [sendDatas, setsendDatas] = useState({});
   const { type } = useParams();
-  const [lastTodoSend, setLastTodoSend] = useState<any>();
+  // const [lastTodoSend, setLastTodoSend] = useState<any>();
 
   const getDatas = (startTime: any, endTime: any) => {
     const params = {
@@ -47,10 +45,10 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
         };
       });
 
-      const last = res.todoSendList.pop();
-      if (last) {
-        setLastTodoSend(last);
-      }
+      // const last = res.todoSendList.pop();
+      // if (last) {
+      //   setLastTodoSend(last);
+      // }
       setsendDatas(sendCount);
     });
   };
@@ -61,22 +59,22 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
   };
 
 
-  const isInRollingTime = (itemTime) => {
+  // const isInRollingTime = (itemTime) => {
 
-    const lastTodoSendTime = (lastTodoSend && !isEmpty(lastTodoSend) ? new Date(lastTodoSend.sendTime).setHours(0, 0, 0, 0) : 0);
+  //   const lastTodoSendTime = (lastTodoSend && !isEmpty(lastTodoSend) ? new Date(lastTodoSend.sendTime).setHours(0, 0, 0, 0) : 0);
 
-    if (rule?.rules[0].actions?.length == 2) { // 发送频率是循环发送的时候，一定是2，第一个是首次发送，第二次是循环发送或者一次自定义
-      const frequency = rule?.rules[0].actions[1];
-      if (frequency.type == 'rolling' && lastTodoSendTime > 0 && itemTime > lastTodoSendTime) { // 循环发送
-        const difference = itemTime - lastTodoSendTime;
-        console.log('================== difference ', difference);
-        if (difference % (frequency.params.period * 24 * 60 * 60 * 1000) === 0) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
+  //   if (rule?.rules[0].actions?.length == 2) { // 发送频率是循环发送的时候，一定是2，第一个是首次发送，第二次是循环发送或者一次自定义
+  //     const frequency = rule?.rules[0].actions[1];
+  //     if (frequency.type == 'rolling' && lastTodoSendTime > 0 && itemTime > lastTodoSendTime) { // 循环发送
+  //       const difference = itemTime - lastTodoSendTime;
+  //       console.log('================== difference ', difference);
+  //       if (difference % (frequency.params.period * 24 * 60 * 60 * 1000) === 0) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // };
 
 
   // 切换年/月，刷新
@@ -88,12 +86,12 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
 
     let itemTime = new Date(value).setHours(0, 0, 0, 0);
 
-    let { todoSendCount, sendCount }: IDatData = sendDatas?.[itemTime] || {};
+    const { todoSendCount, sendCount }: IDatData = sendDatas?.[itemTime] || {};
 
-    if (isInRollingTime(itemTime)) {
-      todoSendCount = lastTodoSend.sendCount;
-      itemTime = new Date(lastTodoSend.sendTime).setHours(0, 0, 0, 0);
-    }
+    // if (isInRollingTime(itemTime)) {
+    //   todoSendCount = lastTodoSend.sendCount;
+    //   itemTime = new Date(lastTodoSend.sendTime).setHours(0, 0, 0, 0);
+    // }
 
     if (!todoSendCount && !sendCount) {
       return <></>;
@@ -102,7 +100,6 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
 
     const detailProp = {
       ruleId: rule.id,
-      realTime: new Date(value).setHours(dayjs(rule.createdAtTime).hour(), dayjs(rule.createdAtTime).minute(), dayjs(rule.createdAtTime).second(), dayjs(rule.createdAtTime).millisecond()),
       startTime: new Date(itemTime).setHours(dayjs(rule.createdAtTime).hour(), dayjs(rule.createdAtTime).minute(), dayjs(rule.createdAtTime).second(), dayjs(rule.createdAtTime).millisecond()),
       sourceType: sfTypeUrl?.[type]?.sourceType,
     };
