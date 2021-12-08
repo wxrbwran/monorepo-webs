@@ -3,21 +3,18 @@ import React, { useEffect } from 'react';
 import { ConfigProvider } from 'antd';
 import config from '@/config';
 import type { IRoute } from 'umi';
-import { history, useDispatch, useSelector } from 'umi';
+import { history, useDispatch, useSelector, useLocation } from 'umi';
 import zhCN from 'antd/es/locale/zh_CN';
 import styles from './index.scss';
 
 const logPages: string[] = ['/user/login', '/user/find_pwd'];
 
 const BasicLayout: FC = (props: IRoute) => {
-  const { location } = props;
-  const auth = useSelector(state => state.auth);
-  console.log(location);
+  const location = useLocation();
+  const { isLogin } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const isGoLoginSome = logPages.includes(location.pathname);
-  const accessToken = window.$storage.getItem('access_token');
-  const isLogin = !!accessToken;
-  console.log(isLogin);
+  console.log('isLoginxxxxxx', isLogin);
   console.log(isGoLoginSome);
   useEffect(() => {
     if (!isLogin){
@@ -37,7 +34,7 @@ const BasicLayout: FC = (props: IRoute) => {
   return (
     <ConfigProvider locale={zhCN}>
       {
-        auth.isLogin && (
+        isLogin && (
           <div className={styles.main}>{props.children}</div>
         )
       }

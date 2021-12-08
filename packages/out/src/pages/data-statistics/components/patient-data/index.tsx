@@ -3,20 +3,23 @@ import IconPatient from '@/assets/img/icon_patient.png';
 import SelectDoctor, { IDocList } from '../select-doctor';
 import ChartPatientPie from '../chart-patient-pie';
 import { isEmpty, debounce } from 'lodash';
-import { Button, Table } from 'antd';
+import { Button } from 'antd';
+import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 
 interface IChartItem {
   value: number;
   name: string;
 }
 const PatientData: FC<IDocList> = ({ doctorList }) => {
+  const nsId = window.$storage.getItem('nsId');
   const [doctorSids, setdoctorSids] = useState<string[]>([]);
   const [planChartData, setPlanChartData] = useState<IChartItem[]>([]);
   const [medicineChartData, setMedicineChartData] = useState<IChartItem[]>([]);
-  const [patientList, setPatientList] = useState([]);
-  const nsId = window.$storage.getItem('nsId');
+  const [isSearch, setIsSearch] = useState(false);
+  const [tableOptions, setOptions] = useState({ nsId, pageAt: 1 });
 
   const fetchData = () => {
+    setIsSearch(true);
     const params: { nsId: string; doctorSids?: string[] } = { nsId };
     if (!isEmpty(doctorSids)) {
       params.doctorSids = doctorSids;
@@ -32,10 +35,14 @@ const PatientData: FC<IDocList> = ({ doctorList }) => {
         { value: tiaoyao, name: '是' },
       ]);
     });
-    window.$api.count.getPatientOperationData(params).then(res => {
-      console.log('list', res);
-      setPatientList(res.patientList);
-    });
+    if (!isEmpty(doctorSids)) {
+      setOptions({
+        ...tableOptions,
+        doctorSids,
+      });
+    } else {
+      setOptions({  ...tableOptions });
+    }
   };
   const PatientColumns = [
     { title: '患者姓名',  dataIndex: 'name' },
@@ -45,14 +52,13 @@ const PatientData: FC<IDocList> = ({ doctorList }) => {
     { title: '调药次数', dataIndex: 'tyCount' },
     { title: '上传血糖次数', dataIndex: 'bgCount' },
     { title: '最近血糖', dataIndex: 'bgVal' },
-    { title: '上传血压/心率次数', dataIndex: 'bgCount' },
+    { title: '上传血压/心率次数', dataIndex: 'bpCount' },
     { title: '最近血压', dataIndex: 'bpVal', render: (text) => {
       console.log('tex2323t', text);
       return <span>{text?.high}/{text?.low}</span>;
     } },
     { title: '最近心率', dataIndex: 'heartVal' },
   ];
-  console.log('patientList', patientList);
   return (
     <div className="shadow p-15 mt-20 w-full">
       <div className="flex text-sm items-center">
@@ -65,7 +71,7 @@ const PatientData: FC<IDocList> = ({ doctorList }) => {
         <Button type="primary" className="ml-10" onClick={debounce(fetchData, 500)}>查询</Button>
       </div>
       {
-        isEmpty(patientList) ? (
+        !isSearch ? (
           <div className="text-center pt-30 pb-20 text-sm text-gray-700">请选择医生进行查看</div>
         ) : (
           <>
@@ -73,12 +79,14 @@ const PatientData: FC<IDocList> = ({ doctorList }) => {
               <ChartPatientPie id="medicinePlan" chartData={planChartData} chartTit="是否有服药计划" />
               <ChartPatientPie id="drugAdjustment" chartData={medicineChartData} chartTit="是否调药" />
             </div>
-            <Table
-              bordered
-              dataSource={patientList}
+            <XzlTable
+              request={window.$api.count.getPatientOperationData}
+              depOptions={tableOptions}
               columns={PatientColumns}
-              rowKey={(record: { id: string }) => record.id}
-              pagination={false}
+              dataKey="patientList"
+              tableOptions={{
+                rowSelection: false,
+              }}
             />
           </>
         )

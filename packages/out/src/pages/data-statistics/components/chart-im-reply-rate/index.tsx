@@ -7,6 +7,10 @@ export interface IChartProps {
     name: string;
     type: string;
     data: number[];
+    imCount?: {
+      receive_count: number;
+      reply_count: number;
+    },
   }[];
 }
 
@@ -26,6 +30,22 @@ function ChartImReplyRate(props: IProps) {
     const option = {
       tooltip: {
         trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          crossStyle: {
+            color: '#999',
+          },
+        },
+        formatter: function (params) {
+          console.log('params23', params);
+          var relVal = params[0].axisValue;
+          params.forEach(item => {
+            const { receive_count: receive, reply_count: reply } = seriesData[item.seriesIndex].imCount[item.dataIndex];
+            relVal += '<br/>' + '<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:'
+            + item.color + '"></span>' + '<span style="display:inline-block; min-width: 90px">' + item.seriesName + '</span>' + ' : ' + item.data + '%' + '&nbsp;&nbsp;' + '患者发送消息数: ' + receive + '&nbsp;&nbsp;' + '医生回复消息数: ' + reply;
+          });
+          return relVal;
+        },
       },
       legend: { //底部图例
         type: 'scroll',

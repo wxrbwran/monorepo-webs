@@ -56,7 +56,8 @@ export var Role = {
     DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'),
     CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'PM'),
     CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRA'),
-    CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRC'), //CRO业务-CRC
+    CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRC'),
+    DEP_HEAD_DOCTOR: roleType('jW23m4', 0, 0, 0, '科主任'), //科主任
 };
 export function fetchRolePropById(id) {
     var roleKey = Object.keys(Role);

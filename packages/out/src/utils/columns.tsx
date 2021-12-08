@@ -64,7 +64,7 @@ export const replyRatio = {
   title: '平均每天回复率',
   dataIndex: 'replyRatio',
   render: (text: number) => {
-    return <span>{text}%</span>;
+    return <span>{text * 1000 / 10}%</span>;
   },
   sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
 };
@@ -82,7 +82,7 @@ export const sfRatio = {
   title: '随访率',
   dataIndex: 'sfRatio',
   render: (text: number) => {
-    return <span>{text}%</span>;
+    return <span>{text * 1000 / 10}%</span>;
   },
   sorter: (a: { deptCount: number }, b: { deptCount: number }) => a.deptCount - b.deptCount,
 };

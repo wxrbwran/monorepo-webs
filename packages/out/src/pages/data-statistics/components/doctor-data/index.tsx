@@ -7,26 +7,28 @@ import SelectDoctor, { IDocList } from '../select-doctor';
 import { doctorName, replyRatio, sendSfCount, receiveSfCount, sfRatio } from '@/utils/columns';
 import moment from 'moment';
 import config from '@/config';
-import { isEmpty, debounce } from 'lodash';
+import { isEmpty, debounce, cloneDeep } from 'lodash';
 const { RangePicker } = DatePicker;
 interface IDocRatioItem {
   msgdate: number;
   name: string;
   percent: 0,
   sid: number;
+  receive_count: number;
+  reply_count: number;
 }
 const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const [dates, setDates] = useState([]);
   const [hackValue, setHackValue] = useState();
   // 默认时间是t-7到t-  总计7天
   const [value, setValue] = useState<moment.Moment[]>([
-    moment().subtract(7, 'days').startOf('day'),
+    moment().subtract(300, 'days').startOf('day'),
     moment().subtract(1, 'days').startOf('day'),
   ]);
   // ['dev.V0Xwme']
   const [doctorSids, setdoctorSids] = useState<string[]>([]);
   const initRatio = { xAxisData: [], legendData:[], seriesData:[] };
-  const [docRatioData, setDocRatioData] = useState(initRatio); // 回复率拆线图数据
+  const [docRatioData, setDocRatioData] = useState(cloneDeep(initRatio)); // 回复率拆线图数据
   const initSfRatio = { xAxisData: [], seriesData: [
     { name: '发送随访表数量', type: 'bar', data: [] },
     { name: '回复的随访表数量', type: 'bar', data: [] },
@@ -38,8 +40,11 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const [total, setTotal] = useState(0);
   const nsId = window.$storage.getItem('nsId');
 
-  const toDate = (date: moment.Moment) => {
-    return moment(date).format('YYYY-MM-DD');
+  const toDate = (date: moment.Moment[]) => {
+    return {
+      start: moment(date[0]).startOf('day').format('x'),
+      end: moment(date[1]).endOf('day').format('x'),
+    };
   };
 
   // 时间范围最多365天，并且结束时间是前一天23.59.59
@@ -68,12 +73,11 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const fetchReplyRatio = async (sids: string[]) => {
     const params = {
       nsId,
-      startDate: toDate(value[0]),
-      endDate: toDate(value[1]),
+      range: toDate(value),
     };
     const doctors: { [key: string]: IDocRatioItem[] } = {};
     let xDate: number[] = []; // 所有人日期时间集合,且去重
-    const doctorsChartData: IChartProps = initRatio; // 传递给chart
+    const doctorsChartData: IChartProps = cloneDeep(initRatio); // 传递给chart
 
     Promise.all(sids.map(sidItem => window.$api.count.getDoctorReplyRatio({ ...params, doctorSids: [sidItem] })))
       .then((res: { doctorRatios: IDocRatioItem[] }[]) => {
@@ -90,7 +94,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
             let curDoc = doctors[doctorSid];
             if (!curDoc.find(itemDay => itemDay.msgdate === dateItem)) {
               // 保证时间顺序
-              curDoc.splice(inx, 0, { msgdate: dateItem, name: curDoc[0].name, percent: 0,  sid: curDoc[0].sid });
+              curDoc.splice(inx, 0, { msgdate: dateItem, name: curDoc[0].name, percent: 0,  sid: curDoc[0].sid, receive_count: 0, reply_count: 0 });
             }
           });
         });
@@ -101,7 +105,13 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
           doctorsChartData.seriesData.push({
             name: curDoc[0].name,
             type: 'line',
-            data: curDoc.map(item => item.percent),
+            data: curDoc.map(item => item.percent * 100),
+            imCount: curDoc.map(item => {
+              return {
+                receive_count: item.receive_count,
+                reply_count: item.reply_count,
+              };
+            }),
           });
         });
         console.log('doctorsChartData', doctorsChartData);
@@ -116,7 +126,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
       sfDatas.xAxisData.push(docItem.name);
       sfDatas.seriesData[0].data.push(docItem.sendSfCount);
       sfDatas.seriesData[1].data.push(docItem.receiveSfCount);
-      sfDatas.seriesData[2].data.push(Number(docItem.sfRatio));
+      sfDatas.seriesData[2].data.push(Number(docItem.sfRatio) * 100);
     });
     console.log('xxcdsfad', sfDatas);
     setSfData(sfDatas);
@@ -124,8 +134,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const fetchPatientOperationData = (changeParams: any = {}) => {
     const params = {
       nsId,
-      startDate: toDate(value[0]),
-      endDate: toDate(value[1]),
+      range: toDate(value),
       pageAt,
       pageSize: config.TABLE_PAGESIZE,
       ...changeParams,
@@ -157,6 +166,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   };
 
   const handleSearch = () => {
+    setDocRatioData(initRatio);
     fetchPatientOperationData();
   };
   const columns = [doctorName, replyRatio, sendSfCount, receiveSfCount, sfRatio];
