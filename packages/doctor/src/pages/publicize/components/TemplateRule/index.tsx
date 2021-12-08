@@ -337,15 +337,21 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
   return arr;
 };
 
-const titleAllChoosesToMustParma = (chooseStartTime: IItem, firstSteps: string[], choseConditions: ICondition[]) => {
+const titleAllChoosesToMustParma = (chooseStartTime: IItem, firstSteps: string[], choseConditions: ICondition[], scopeSource: IItem) => {
 
+
+  const allPatient = scopeSource.items.filter((item) => item.description == '全部患者');
+
+  const allPatientArr = allPatient.length > 0 ? [tileChooseToArray(allPatient[0])] : [];
+
+  console.log('=================== allPatientArr', JSON.stringify(allPatientArr));
 
   if (firstSteps.includes(AfterPatientBind)) {
 
-    const must = [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)];
+    const must = [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions), ...allPatientArr];
     return must;
   } else {
-    return [...tileChooseConditionToArray(choseConditions)];
+    return [...tileChooseConditionToArray(choseConditions), ...allPatientArr];
   }
 };
 
@@ -637,7 +643,7 @@ const TemplateRule: FC<IProps> = ({
     console.log('============= frequency', JSON.stringify(frequency));
 
 
-    const must = titleAllChoosesToMustParma(startTimeRef.current, firstSteps, choseConditions);
+    const must = titleAllChoosesToMustParma(startTimeRef.current, firstSteps, choseConditions, scopeSource);
     console.log('=============must must', JSON.stringify(must));
     const should1 = tileChooseScopeToArray(choseScope);
     console.log('=============should_1 should_1', JSON.stringify(should1));
