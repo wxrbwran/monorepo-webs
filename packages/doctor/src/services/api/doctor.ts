@@ -60,4 +60,16 @@ export default {
   getDotorExistedRoles(): Promise<any> {
     return http.get('doctor/existed_roles');
   },
+  //  查询科主任的所有医生列表
+  getDoctorHeadingDoctors(data: any): Promise<any> {
+    return http.get('doctor/heading_doctors', { data });
+  },
+  //  查询科主任-- 查看某个医生的角色列表
+  getDoctorHeadingDoctorRoles(id: string): Promise<any> {
+    return http.get(`doctor/existed_roles/${id}`);
+  },
+  // 选中某个医生查看其中患者列表
+  getDoctorHeadingPatients(data: any): Promise<any> {
+    return http.get('doctor/heading_patients', { data });
+  },
 };

@@ -30,6 +30,7 @@ function AdjustInspection(props: Iprops) {
     UPPER_DOCTOR: '发送',
     LOWER_DOCTOR: '发给主管医生',
     ALONE_DOCTOR: '发送',
+    DEP_HEAD: '发送',
   };
 
   const saveMedicalList = (medicalListParams: IMedicalList[]) => {

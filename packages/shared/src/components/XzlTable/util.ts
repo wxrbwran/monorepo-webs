@@ -9,7 +9,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   // 签约患者下，当前选中菜单的role
   const currentMenuRole = window.$storage.getItem('role');
   console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
-  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
+  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'DEP_HEAD'];
   data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
@@ -162,7 +162,7 @@ const handleDoctorTeamDataSource = (dataSource: Store[]) => {
     item.members.forEach((member: Store) => {
       if (member.role === Role.DOCTOR.id || !member.role) {
         doctor = { ...member, patientNum: member.counters[0]?.count };
-      } else if (member.role === Role.DEP_HEAD_DOCTOR.id) {
+      } else if (member.role === Role.DEP_HEAD.id) {
         doctor.depHeadDoctor = true;
         doctor.depHeadDoctorWcId = member.wcId;
       }
