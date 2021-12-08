@@ -6,7 +6,12 @@ import {
 import { DeleteOutlined } from '@ant-design/icons';
 // import { isEqual } from 'lodash';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { referenceList, referenceMap, yinYang } from 'xzl-web-shared/src/utils/consts';
+import {
+  referenceList,
+  referenceMap,
+  yinYang,
+  createFormListProps,
+} from 'xzl-web-shared/src/utils/consts';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import './index.scss';
@@ -114,9 +119,6 @@ const EditIndex: FC<IProps> = (props) => {
       handleRequest(params, api.indexLibrary.putIndexDocumentIndex);
     }
   };
-  // const Default = (referenceList) => {
-  //   return false;
-  // }
   const handleAddReference = (cb: Function) => {
     if (selectReferecnce) {
       setReferences((prev) => [...prev, selectReferecnce]);
@@ -136,15 +138,6 @@ const EditIndex: FC<IProps> = (props) => {
     setReferences([...tmp]);
   };
 
-
-  const createProps = (field: any, key: string) => {
-    return {
-      ...field,
-      noStyle: true,
-      name: [field.name, key],
-      fieldKey: [field.fieldKey, key],
-    };
-  };
 
   const rules = [{ required: true }];
   return (
@@ -213,17 +206,14 @@ const EditIndex: FC<IProps> = (props) => {
                             {['RANGE', 'GT', 'LT', 'AROUND', 'RADIO'].includes(
                               references[index],
                             ) && (
-                              <Form.Item
-                                {...createProps(field, 'note')}
-                                // rules={[{ required: true, message: '' }]}
-                              >
+                              <Form.Item {...createFormListProps(field, 'note')}>
                                 <Input placeholder="请输入备注" />
                               </Form.Item>
                             )}
                             {['RANGE', 'GT', 'LT', 'AROUND'].includes(references[index]) && (
                               <>
                                 <Form.Item
-                                  {...createProps(field, 'value')}
+                                  {...createFormListProps(field, 'value')}
                                   rules={
                                     references[index] == 'LT'
                                       ? []
@@ -238,7 +228,7 @@ const EditIndex: FC<IProps> = (props) => {
                                   />
                                 </Form.Item>
                                 <Form.Item
-                                  {...createProps(field, 'secondValue')}
+                                  {...createFormListProps(field, 'secondValue')}
                                   rules={
                                     references[index] == 'GT'
                                       ? []
@@ -252,14 +242,14 @@ const EditIndex: FC<IProps> = (props) => {
                                     placeholder="请输入参考值"
                                   />
                                 </Form.Item>
-                                <Form.Item {...createProps(field, 'unit')}>
+                                <Form.Item {...createFormListProps(field, 'unit')}>
                                   <Input placeholder="请输入单位" style={{ width: 120 }} />
                                 </Form.Item>
                               </>
                             )}
                             {['RADIO'].includes(references[index]) && (
                               <Form.Item
-                                {...createProps(field, 'value')}
+                                {...createFormListProps(field, 'value')}
                                 rules={[{ required: true, message: '请选择' }]}
                               >
                                 <Select style={{ width: 357 }} placeholder="请选择">
@@ -272,13 +262,12 @@ const EditIndex: FC<IProps> = (props) => {
 
                             {['OTHER'].includes(references[index]) && (
                               <Form.Item
-                                {...createProps(field, 'value')}
+                                {...createFormListProps(field, 'value')}
                                 rules={[{ required: true, message: '请输入内容' }]}
                               >
                                 <Input placeholder="请输入内容" style={{ width: 507 }} />
                               </Form.Item>
                             )}
-                            {/* remove(field.name) */}
                             <DeleteOutlined
                               onClick={() => handleRemoveReference(remove, field.name, index)}
                             />

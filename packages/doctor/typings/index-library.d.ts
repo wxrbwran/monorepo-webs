@@ -20,7 +20,13 @@ declare type TIndexItem = {
   source: string;
   sourceSid?: string;
   sid?: string;
-  references?: TReference[]
+  references?: TReference[];
+  question_type?: string;
+  question?: string;
+  group?: string;
+  action?: string;
+  isAdd?: boolean;
+  answer?: string[] | string | undefined;
 };
 
 declare type TReference = {

@@ -2,80 +2,67 @@ import React, { FC, useState, useEffect } from 'react';
 import {
   Form, Input, Button, message,
 } from 'antd';
-import { debounce } from 'lodash';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { documentType } from 'xzl-web-shared/src/utils/consts';
 import * as api from '@/services/api';
 
 interface IProps {
   type: string;
-  mode: 'add' | 'edit';
   onSuccess: (params: Record<string, string>) => void;
-  record?: TIndexItem
+  document: TIndexItem
 }
-const AddEditDocument: FC<IProps> = (props) => {
-  const { type, onSuccess, mode, record, children } = props;
+const CopyDocument: FC<IProps> = (props) => {
+  const { type, onSuccess, document, children } = props;
   // console.log('record', record);
-  const [showModal, setshowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const sid = window.$storage.getItem('sid');
 
   useEffect(() => {
-    if (record) {
-      form.setFieldsValue({ ...record });
+    if (document) {
+      form.setFieldsValue({ ...document });
     }
-  }, [record]);
+  }, [document]);
 
   const toggleShowModal = () => {
-    setshowModal(false);
+    setShowModal(false);
   };
   const handleSave = async (values: any) => {
     console.log(values);
+    setLoading(true);
     let params = {
       ...values,
-      type: type,
+      type,
       source: 'DOCTOR',
       sourceSid: sid,
       wcId: window.$storage.getItem('wcId'),
     };
     try {
       if (type === 'HYD') {
-        if (mode === 'add') {
-          await api.indexLibrary.putIndexDocument(params);
-        } else {
-          params.id = record?.id;
-          await api.indexLibrary.patchIndexDocument(params);
-        }
+        params.fromDocumentId = document?.id;
+        params.fromSid = document?.sourceSid;
+        await api.indexLibrary.copyIndexDocument(params);
       } else if (['JCD', 'OTHER'].includes(type)) {
         params = {
           ...params,
           sid: params.sourceSid,
-          creatorSid: params.sourceSid,
           createdTime: +new Date(),
           title: type,
           jcdName: params.name,
         };
-        if (mode === 'add') {
-          console.log('params', params);
-          await api.indexLibrary.putImageTemplate({
-            list: [
-              {
-                meta: params,
-              },
-            ],
-          });
-        } else {
-          await api.indexLibrary.patchImageTemplate({
-            id: record?.id,
-            ...params,
-          });
-        }
+        await api.indexLibrary.patchImageTemplate({
+          id: document?.id,
+          ...params,
+        });
       }
-      message.success('添加成功');
+      message.success('复制成功');
       onSuccess({});
-      setshowModal(false);
+      setShowModal(false);
     } catch (err: any) {
-      message.error(err?.result || '添加失败');
+      message.error(err?.result || '复制失败');
+    } finally {
+      setLoading(false);
     }
   };
   const layout = {
@@ -87,24 +74,18 @@ const AddEditDocument: FC<IProps> = (props) => {
   };
   return (
     <div>
-      <span onClick={() => setshowModal(true)}>{children}</span>
+      <span onClick={() => setShowModal(true)}>{children}</span>
       <DragModal
         title="添加"
         footer={null}
         width={600}
         visible={showModal}
-        onCancel={() => setshowModal(false)}
+        onCancel={() => setShowModal(false)}
         wrapClassName="ant-modal-wrap-center"
         destroyOnClose
       >
         <div>
-          <Form
-            {...layout}
-            form={form}
-            name="basic"
-            onFinish={debounce(handleSave, 300)}
-            id="height42"
-          >
+          <Form {...layout} form={form} name="basic" onFinish={handleSave}>
             {type === 'HYD' && (
               <>
                 <Form.Item
@@ -148,7 +129,7 @@ const AddEditDocument: FC<IProps> = (props) => {
             <Form.Item style={{ textAlign: 'center' }} {...submitLayout}>
               <div className="common__btn">
                 <Button onClick={toggleShowModal}>取消</Button>
-                <Button className="finish" htmlType="submit" type="primary">
+                <Button loading={loading} className="finish" htmlType="submit" type="primary">
                   保存
                 </Button>
               </div>
@@ -160,4 +141,4 @@ const AddEditDocument: FC<IProps> = (props) => {
   );
 };
 
-export default AddEditDocument;
+export default CopyDocument;

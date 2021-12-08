@@ -176,4 +176,8 @@ export declare const yinYangMap: {
 };
 export declare const documentMap: Record<docTypeKeys, string>;
 export declare const commonCheckbox: Record<string, string>[];
+export declare const createFormListProps: (field: any, key: string) => any;
+export declare const requiredRule: {
+    required: boolean;
+}[];
 export {};

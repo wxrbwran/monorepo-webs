@@ -17,6 +17,7 @@ import { documentMap } from 'xzl-web-shared/src/utils/consts';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import ViewIndex from '../ViewIndex';
+import CopyDocument from '../CopyDocument';
 import Initials from '../Initials';
 
 type ILocation = {
@@ -38,6 +39,8 @@ interface IParams {
 const IndexList: FC = () => {
   const [form] = Form.useForm();
   const sid = window.$storage.getItem('sid');
+  const curDocument = useSelector((state: IState) => state.document.curDocument);
+
   const { getFieldValue } = form;
   // @ts-ignore
   const {
@@ -47,12 +50,11 @@ const IndexList: FC = () => {
   const initDepOptions: IParams = {
     documentId,
     pageSize: 9999999,
-    source: 'DOCTOR',
-    sourceSid: sid,
+    source: curDocument.source,
+    sourceSid: curDocument.sourceSid,
     sid: sid,
   };
   const [depOptions, setOptions] = useState<IParams>(initDepOptions);
-  const curDocument = useSelector((state: IState) => state.document.curDocument);
   // 刷新列表
   const onSuccess = () => {
     setOptions({ ...depOptions });
@@ -102,9 +104,6 @@ const IndexList: FC = () => {
       .catch((err) => {
         message.error(err?.result ?? '删除失败');
       });
-  };
-  const handleCopyIndex = () => {
-
   };
   const operation = {
     title: '操作',
@@ -163,12 +162,13 @@ const IndexList: FC = () => {
             {`${documentMap[curDocument.type]}-系统添加-${curDocument.name}`}
           </h2>
           {src !== 'ONESELF' && (
-            <Button
-              icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
-              onClick={handleCopyIndex}
-            >
-              复制化验单
-            </Button>
+            <CopyDocument type="HYD" onSuccess={onSuccess} document={curDocument}>
+              <Button
+                icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
+              >
+                复制化验单
+              </Button>
+            </CopyDocument>
           )}
           <div>
             <span>指标数量：</span>

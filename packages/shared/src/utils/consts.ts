@@ -493,3 +493,14 @@ export const commonCheckbox: Record<string, string>[] = [
   { label: '常用', value: 'true' },
   { label: '不常用', value: 'false' },
 ];
+
+export const createFormListProps = (field: any, key: string) => {
+  return {
+    ...field,
+    noStyle: true,
+    name: [field.name, key],
+    fieldKey: [field.fieldKey, key + Math.random()],
+  };
+};
+
+export const requiredRule = [{ required: true }];

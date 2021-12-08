@@ -130,29 +130,39 @@ const SideMenu: FC = () => {
     setShowSubMenu(true);
   };
   const handleMouseOverMenu = (docType: string, src: string) => {
-    console.log(docType, src);
+    // console.log(docType, src);
     let tmp: TIndexItem[] = [];
     let handledList = HYD;
     if (docType === 'JCD') {
-      handledList = JCD;
-      handledList.forEach((h) => h.sourceSid === h.sid);
+      handledList = [...JCD];
     } else if (docType === 'OTHER') {
-      handledList = OTHER;
-      handledList.forEach(h => h.sourceSid === h.sid);
+      handledList = [...OTHER];
     }
+    // console.log('handledList1', handledList);
+
     switch (src) {
       case 'SYSTEM':
         tmp = handledList.filter(isSystem);
         break;
       case 'ONESELF':
-        tmp = handledList.filter((h) => isOneSelf(h, curSid));
+        tmp = handledList
+          .map((h) => {
+            h.sourceSid = h.sourceSid || h.sid;
+            return h;
+          })
+          .filter((h) => isOneSelf(h, curSid));
         break;
       case 'OTHERS':
-        tmp = handledList.filter((h) => isOthers(h, curSid));
+        tmp = handledList
+          .map((h) => {
+            h.sourceSid = h.sourceSid || h.sid;
+            return h;
+          })
+          .filter((h) => isOthers(h, curSid));
         break;
     }
-    console.log('handledList', handledList);
-    console.log('tmp', tmp);
+    // console.log('handledList2', handledList);
+    // console.log('tmp', tmp);
     setMenu([...tmp]);
     setSource(src);
     setShowSubMenu(true);
@@ -241,7 +251,7 @@ const SideMenu: FC = () => {
                     <AddEditDocument
                       mode="edit"
                       record={item}
-                      type={item.type || item.title}
+                      type={item.title || item.type}
                       onSuccess={fetchImageType}
                     >
                       <EditOutlined title="编辑" />

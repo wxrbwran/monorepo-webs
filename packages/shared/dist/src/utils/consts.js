@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var _a, _b;
 import { Role } from './role';
 import { croStatus, UserStatus } from './enums';
@@ -454,3 +465,7 @@ export var commonCheckbox = [
     { label: '常用', value: 'true' },
     { label: '不常用', value: 'false' },
 ];
+export var createFormListProps = function (field, key) {
+    return __assign(__assign({}, field), { noStyle: true, name: [field.name, key], fieldKey: [field.fieldKey, key + Math.random()] });
+};
+export var requiredRule = [{ required: true }];

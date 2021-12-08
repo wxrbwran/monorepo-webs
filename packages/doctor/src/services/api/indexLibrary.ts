@@ -17,6 +17,11 @@ export default {
     return http.put('index/document', { data });
   },
 
+  // 复制单据：化验单
+  copyIndexDocument(data: CommonData): Promise<any> {
+    return http.put('index/document/copy', { data });
+  },
+
   // 编辑单据：化验单
   patchIndexDocument(data: CommonData): Promise<any> {
     return http.patch('index/document', { data });
@@ -40,6 +45,7 @@ export default {
   putIndexDocumentIndex(data: CommonData): Promise<any> {
     return http.put('index/document/index', { data });
   },
+
   // 获取样本来源-检查部位
   fetchIndexSampleFrom(): Promise<any> {
     return http.get('index/sampleFrom');

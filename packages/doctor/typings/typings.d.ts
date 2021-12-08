@@ -25,6 +25,10 @@ declare module '*.svg' {
   export default url;
 }
 
+declare interface CommonData {
+  [key: string]: any;
+}
+
 declare interface Window {
   NIM: Store; // SDK
   nim: Store; // NIM 实例
