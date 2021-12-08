@@ -33,11 +33,12 @@ const ChatPersonItem: FC<IProps> = (props) => {
   //   }
   // };
   // 各角色排序优先级
-  // 患者 > 独立管理 > 护士 > 研究者 > PM > CRA > CRC
+  // 患者 > 科主任 > 独立管理 > 护士 > 研究者 > PM > CRA > CRC
   // 患者 > 主管医生 > 医生助手 > 营养师 > 护士 > 研究者 > PM > CRA > CRC
   const orderId: string[] = [
     Role.PATIENT.id,
     Role.PATIENT_VIP.id,
+    Role.DEP_HEAD.id,
     Role.ALONE_DOCTOR.id,
     Role.UPPER_DOCTOR.id,
     Role.LOWER_DOCTOR.id,

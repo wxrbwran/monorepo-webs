@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Menu } from 'antd';
 import Icon, { UserOutlined, BarChartOutlined, ProfileOutlined } from '@ant-design/icons';
 import { history } from 'umi';
@@ -59,6 +59,11 @@ function SideMenu({ location }: Iprops) {
   useEffect(() => {
     if (serviceMenu[roleText]) {
       setActiveMenu(roleText);
+    } else if (roleText === 'DEP_HEAD'){
+      console.log('=3-232', history.location.query.orgId);
+      setActiveMenu(history.location.query.orgId.toUpperCase());
+      window.$storage.setItem('role', roleText);
+      window.$storage.setItem('roleId', Role[`${roleText}`].id);
     } else {
       window.$storage.setItem('roleId', Role[`${roleText}`].id);
       window.$storage.setItem('role', `${roleText}`);
@@ -72,13 +77,45 @@ function SideMenu({ location }: Iprops) {
   const handleClick = (e) => {
     console.log('click ', e);
   };
+  const defaultKey = () => {
+    if (['SERVICE_PACKAGE', 'TEAM'].includes(roleText)) {
+      return 'sub3';
+    } else if ('DEP_HEAD' === roleText) {
+      return 'sub2';
+    } else {
+      return 'sub1';
+    }
+  };
+  const getDepHead = useMemo(() => () => {
+    if (existedRoles.length > 1) {
+      return (
+        <SubMenu key="sub2" icon={<UserOutlined />} title="科室管理">
+          {
+            [...existedRoles].splice(1).map(item => {
+              const curOrg = item.members.filter(member => member.role === Role.ORG.id)[0];
+              const curDepHead = item.members.filter(member => member.role === Role.DEP_HEAD.id)[0];
+              return (
+                <Menu.Item
+                  key={curOrg.id.toUpperCase()}
+                  onClick={() => history.push(`/doctor/dep_head?orgId=${curOrg.id}&depHeadWcId=${curDepHead?.wcId}`)}
+                >
+                  {curOrg.name}
+                </Menu.Item>
+              );
+            })
+          }
+        </SubMenu>
+      );
+    }
+  }, [existedRoles]);
   return (
     <div className={styles.side_menu}>
       <Menu
         onClick={handleClick}
         style={{ width: 256 }}
-        defaultSelectedKeys={[activeMenu.toUpperCase()]}
-        defaultOpenKeys={['SERVICE_PACKAGE', 'TEAM'].includes(roleText) ? ['sub2'] : ['sub1']}
+        // defaultSelectedKeys={[activeMenu.toUpperCase()]}
+        selectedKeys={[activeMenu.toUpperCase()]}
+        defaultOpenKeys={[defaultKey()]}
         mode="inline"
       >
         <SubMenu key="sub1" icon={<UserOutlined />} title="签约患者">
@@ -96,9 +133,10 @@ function SideMenu({ location }: Iprops) {
             })
           }
         </SubMenu>
+        { getDepHead() }
         { // utils-tools.ts  accountStatus  110已认证
           userInfo.status === 110 && (
-            <SubMenu key="sub2" icon={<Icon className="menuIcon" component={icon1} />} title="服务管理">
+            <SubMenu key="sub3" icon={<Icon className="menuIcon" component={icon1} />} title="服务管理">
               {
                 Object.keys(serviceMenu).map((key) => (
                   <Menu.Item

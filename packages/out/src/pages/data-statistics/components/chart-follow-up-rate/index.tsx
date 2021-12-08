@@ -35,6 +35,7 @@ function ChartFollowUpRate(props: ISfChartProps) {
   //     data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3],
   //   },
   // ];
+  console.log('seriesData', seriesData);
   const getOption = () => {
     const option = {
       tooltip: {
@@ -82,8 +83,8 @@ function ChartFollowUpRate(props: ISfChartProps) {
         {
           type: 'value',
           min: 0,
-          max: 25,
-          interval: 5,
+          max: Math.max(...seriesData[2].data),
+          interval: Math.max(...seriesData[2].data) / 5,
           axisLabel: {
             formatter: '{value} %',
           },
