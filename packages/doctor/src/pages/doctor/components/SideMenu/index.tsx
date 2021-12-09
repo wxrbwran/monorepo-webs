@@ -60,8 +60,8 @@ function SideMenu({ location }: Iprops) {
     if (serviceMenu[roleText]) {
       setActiveMenu(roleText);
     } else if (roleText === 'DEP_HEAD'){
-      console.log('=3-232', history.location.query.orgId);
-      setActiveMenu(history.location.query.orgId.toUpperCase());
+      console.log('=3-232', history.location.query.depHeadNsId);
+      setActiveMenu(history.location.query.depHeadNsId.toUpperCase());
       window.$storage.setItem('role', roleText);
       window.$storage.setItem('roleId', Role[`${roleText}`].id);
     } else {
@@ -96,8 +96,8 @@ function SideMenu({ location }: Iprops) {
               const curDepHead = item.members.filter(member => member.role === Role.DEP_HEAD.id)[0];
               return (
                 <Menu.Item
-                  key={curOrg.id.toUpperCase()}
-                  onClick={() => history.push(`/doctor/dep_head?orgId=${curOrg.nsId}&depHeadWcId=${curDepHead?.wcId}`)}
+                  key={curDepHead.nsId.toUpperCase()}
+                  onClick={() => history.push(`/doctor/dep_head?depHeadNsId=${curDepHead.nsId}&depHeadWcId=${curDepHead?.wcId}`)}
                 >
                   {curOrg.name}
                 </Menu.Item>
