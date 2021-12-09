@@ -46,19 +46,20 @@ function ChartFollowUpRate(props: ISfChartProps) {
             color: '#999',
           },
         },
-        // formatter:function (params){
-        //   var relVal = params[0].name;
-        //   for (var i = 0, l = params.length; i < l; i++) {
-        //     relVal += '<br/>' + params[i].seriesName + ' : ' + params[i].value;
-        //     if (params[i].seriesName === '回复率') {
-        //       relVal += '%';
-        //     }
-        //   }
-        //   return relVal;
-        // },
+        formatter:function (params){
+          var relVal = params[0].name;
+          for (var i = 0, l = params.length; i < l; i++) {
+            relVal += '<br/>' + '<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:'
+            + params[i].color + '"></span>' + params[i].seriesName + ' : ' + params[i].value;
+            if (params[i].seriesName === '随访率') {
+              relVal += '%';
+            }
+          }
+          return relVal;
+        },
       },
       legend: {
-        data: ['收到消息数', '发送消息数', '回复率'],
+        data: ['发送随访表数量', '回复的随访表数量', '随访率'],
         bottom: 0,
       },
       xAxis: [
@@ -77,8 +78,8 @@ function ChartFollowUpRate(props: ISfChartProps) {
         {
           type: 'value',
           min: 0,
-          max: 250,
-          interval: 50,
+          max: Math.max(...[...seriesData[0].data, ...seriesData[1].data]),
+          interval: Math.max(...[...seriesData[0].data, ...seriesData[1].data]) / 5,
         },
         {
           type: 'value',

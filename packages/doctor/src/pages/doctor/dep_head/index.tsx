@@ -50,7 +50,7 @@ const DepHead: FC = ({ location }) => {
     });
   };
 
-  const columns = [name, org, patientLevel(() => setOptions({ ...depOptions })), noteC, sex, age, address, msgCount];
+  const columns = [name, org, patientLevel(() => setOptions({ ...depOptions })), noteC(() => setOptions({ ...depOptions })), sex, age, address, msgCount];
   console.log('curDocRoles', curDocRoles);
   return (
     <div className={styles.dep_head}>
@@ -82,8 +82,6 @@ const DepHead: FC = ({ location }) => {
           </div>
         ) : <div className={styles.no_data}><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无患者" /></div>
       }
-
-
     </div>
   );
 };
