@@ -167,7 +167,7 @@ export const sfTypeUrl = {
     text: 'CRF量表',
     type: 1,
     sourceType: 9,
-    templateType: 'CRF_SCALE',
+    templateType: 'FOLLOW_CRF',
   },
   education: {
     text: '宣教',
