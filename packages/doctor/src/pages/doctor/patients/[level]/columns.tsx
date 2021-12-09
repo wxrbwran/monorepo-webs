@@ -44,11 +44,19 @@ export interface IRecord {
     sid: string;
   }; // 当前登录医生的信息
 }
-const patientPage = (record: IRecord, actionType?: string, other?: string) => {
-  console.log('跳转', record, actionType, other);
+const patientPage = (props: { record: IRecord, actionType?: string }) => {
+  const { record, actionType } = props;
+  console.log('跳转', record, actionType);
   const {
     wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, currLoginDoctorInfo,
   } = record;
+  let imDocInfo = currLoginDoctorInfo;
+  // 如果是从左侧科室管理(科主任)，看其他医生患者的详情，那这个currLoginDoctorInfo的wcId要使用科主任角色的wcID
+  if (window.$storage.getItem('role') === 'DEP_HEAD') {
+    imDocInfo = {
+      wcId: history.location.query.depHeadWcId,
+    };
+  }
   window.$storage.setItem('patientWcId', wcId);
   window.$storage.setItem('patientSid', sid);
   window.$storage.setItem('patientName', name);
@@ -66,7 +74,7 @@ const patientPage = (record: IRecord, actionType?: string, other?: string) => {
       issueCount,
       name,
       avatarUrl,
-      currLoginDoctorInfo,
+      currLoginDoctorInfo: imDocInfo,
     },
   });
   history.push(`/patient_panel/${record.sid}`);
@@ -82,20 +90,22 @@ const patientPage = (record: IRecord, actionType?: string, other?: string) => {
 export const name = {
   title: '姓名',
   dataIndex: 'name',
-  render: (data: string, record: IRecord) => (
-    <div onClick={() => patientPage(record)}>
+  render: (data: string, record: IRecord) => {
+    return (
+      <div onClick={() => patientPage({ record })}>
       <span>
         {data}
-        { record.inCro && <img src={patientIcon} alt="" className={styles.tag} /> }
+        { record.inCro && window.$storage.getItem('role') !== 'DEP_HEAD' && <img src={patientIcon} alt="" className={styles.tag} /> }
       </span>
     </div>
-  ),
+    );
+  },
 };
 export const org = {
   title: '机构',
   dataIndex: 'organizationName',
   render: (data: string, record: IRecord) => (
-    <div onClick={() => patientPage(record)}>
+    <div onClick={() => patientPage({ record })}>
       {data}
     </div>
   ),
@@ -104,7 +114,7 @@ export const project = {
   title: ' 科研项目',
   dataIndex: 'projectName',
   render: (data: string, record: IRecord) => (
-    <div onClick={() => patientPage(record)}>
+    <div onClick={() => patientPage({ record })}>
       {data}
     </div>
   ),
@@ -114,7 +124,7 @@ export const sex = {
   title: '性别',
   dataIndex: 'sex',
   render: (text: string, record: IRecord) => (
-    <div onClick={() => patientPage(record)}>
+    <div onClick={() => patientPage({ record })}>
       {sexList[text]}
     </div>
   ),
@@ -125,7 +135,7 @@ export const age = {
   dataIndex: 'age',
   sorter: (a: { age: number }, b: { age: number }) => a.age - b.age,
   render: (text: string, record: IRecord) => (
-    <div onClick={() => patientPage(record)}>
+    <div onClick={() => patientPage({ record })}>
       {text}
     </div>
   ),
@@ -184,7 +194,7 @@ export const issueCount = {
         className={className}
         style={{ backgroundColor: bgColor }}
       >
-        <img src={imgSrc} onClick={() => patientPage(record, 'issue')} alt="" />
+        <img src={imgSrc} onClick={() => patientPage({ record, actionType: 'issue' })} alt="" />
       </Badge>
     );
   },
@@ -206,7 +216,7 @@ export const msgCount = {
         <span style={{ color: color as string }}>
           <MessageOutlined
             className={styles.msg}
-            onClick={() => patientPage(record, 'im')}
+            onClick={() => patientPage({ record, actionType: 'im' })}
           />
         </span>
       </Badge>

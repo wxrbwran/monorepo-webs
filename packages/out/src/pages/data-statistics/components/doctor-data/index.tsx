@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { DatePicker, Button, Table, Empty } from 'antd';
+import { DatePicker, Button, Table, Empty, message } from 'antd';
 import IconDoctor from '@/assets/img/icon_doctor.png';
 import ChartImReplyRate, { IChartProps } from '../chart-im-reply-rate';
 import ChartFollowUpRate from '../chart-follow-up-rate';
@@ -145,10 +145,15 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
     // "orderBy":"reply_ratio desc",  //倒排用 desc,正排 不用传后缀, 非必传参数
     window.$api.count.getDoctorMsgSfList(params).then(res => {
       console.log('23232322222', res);
-      setDoctorTableDatas(res.doctorList);
-      fetchSfRatio(res.doctorList);
-      fetchReplyRatio(res.doctorList.map(item => item.sid));
-      setTotal(res.total);
+      if (isEmpty(res.doctorList)) {
+        message.success('查询数据为空');
+        setDoctorTableDatas([]);
+      } else {
+        setDoctorTableDatas(res.doctorList);
+        fetchSfRatio(res.doctorList);
+        fetchReplyRatio(res.doctorList.map(item => item.sid));
+        setTotal(res.total);
+      }
     });
   };
   const handleChangeTable = (pagination: any, filters: any, sorter: any, extra: { currentDataSource: [], action: 'paginate' | 'sort' | 'filter' }) => {

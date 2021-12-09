@@ -35,7 +35,11 @@ function ChartFollowUpRate(props: ISfChartProps) {
   //     data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3],
   //   },
   // ];
+  console.log('seriesData', seriesData);
+  console.log('Math.max(...seriesData[2].data) ?? 100', Math.max(...seriesData[2].data) ?? 100);
   const getOption = () => {
+    const sfRatioMax = Math.max(...seriesData[2].data);
+    const leftYMax = Math.max(...[...seriesData[0].data, ...seriesData[1].data]);
     const option = {
       tooltip: {
         trigger: 'axis',
@@ -45,19 +49,20 @@ function ChartFollowUpRate(props: ISfChartProps) {
             color: '#999',
           },
         },
-        // formatter:function (params){
-        //   var relVal = params[0].name;
-        //   for (var i = 0, l = params.length; i < l; i++) {
-        //     relVal += '<br/>' + params[i].seriesName + ' : ' + params[i].value;
-        //     if (params[i].seriesName === '回复率') {
-        //       relVal += '%';
-        //     }
-        //   }
-        //   return relVal;
-        // },
+        formatter:function (params){
+          var relVal = params[0].name;
+          for (var i = 0, l = params.length; i < l; i++) {
+            relVal += '<br/>' + '<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:'
+            + params[i].color + '"></span>' + params[i].seriesName + ' : ' + params[i].value;
+            if (params[i].seriesName === '随访率') {
+              relVal += '%';
+            }
+          }
+          return relVal;
+        },
       },
       legend: {
-        data: ['收到消息数', '发送消息数', '回复率'],
+        data: ['发送随访表数量', '回复的随访表数量', '随访率'],
         bottom: 0,
       },
       xAxis: [
@@ -76,14 +81,14 @@ function ChartFollowUpRate(props: ISfChartProps) {
         {
           type: 'value',
           min: 0,
-          max: 250,
-          interval: 50,
+          max: leftYMax || 100,
+          interval: leftYMax / 5 || 20,
         },
         {
           type: 'value',
           min: 0,
-          max: 25,
-          interval: 5,
+          max: sfRatioMax || 100,
+          interval: sfRatioMax / 5 || 20,
           axisLabel: {
             formatter: '{value} %',
           },
