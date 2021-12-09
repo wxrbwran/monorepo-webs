@@ -4,7 +4,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
 import { BloodType } from '@/utils/tools';
-import { getRole } from '@/utils/utils';
+import { getRoles } from '@/utils/utils';
 import './index.scss';
 
 interface IMsg {
@@ -62,7 +62,7 @@ const BloodCustom: FC<IMsg> = (props) => {
       </div>
       <div className="chat__item-content">
         <p className="msg-user">
-          {`${msg.fromNick} (${getRole(msg.custom.fromUser?.role)})`}
+          {`${msg.fromNick} (${getRoles(msg.custom)})`}
         </p>
         <div className="msg-content blood">
           {

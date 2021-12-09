@@ -10,3 +10,5 @@ export { default as system } from './system';
 export { default as education } from './education';
 
 export { default as base } from './base';
+export { default as count } from './count';
+export { default as management } from './management';

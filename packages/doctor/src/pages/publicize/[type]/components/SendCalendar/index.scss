@@ -1,0 +1,108 @@
+.modal_title {
+  font-size: 14px;
+  color: #666666;
+  text-align: left;
+  padding-left: 30px;
+  font-weight: normal;
+  .green,
+  .red {
+    position: relative;
+    padding-left: 20px;
+    margin-right: 20px;
+    &::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 4px;
+      background: #15ad31;
+      border-radius: 3px;
+      left: 0;
+      top: 55%;
+      margin-top: -2px;
+    }
+  }
+  .red {
+    &::after {
+      background: #ec4437;
+    }
+  }
+}
+:global {
+  .ant-modal-body {
+    padding-top: 0;
+  }
+}
+.calendar_wrap {
+  .count_wrap {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+  }
+  :global {
+    .ant-picker-calendar-header {
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      line-height: 40px;
+      border: 1px solid #dfdfdf;
+      margin-bottom: 10px;
+      background: #f7f7f7;
+      margin: 0;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    .ant-picker-calendar-mode-switch {
+      display: none;
+    }
+    .ant-picker-body {
+      padding: 0px !important;
+      th,
+      td {
+        text-align: left;
+      }
+      .ant-picker-calendar-date {
+        border: none;
+      }
+      thead {
+        border-left: 1px solid #dfdfdf;
+        border-right: 1px solid #dfdfdf;
+        th {
+          padding: 9px 0 9px 3px !important;
+        }
+      }
+      td {
+        border: 1px solid #dfdfdf;
+        width: 140px;
+        height: 100px;
+      }
+      .ant-picker-calendar-date {
+        margin: 0;
+      }
+      .ant-picker-calendar-date-content {
+        position: relative;
+        height: 74px;
+        .red,
+        .green {
+          // width: 30px;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          font-size: 18px;
+          font-weight: 600;
+          cursor: pointer;
+          border-radius: 3px;
+        }
+      }
+      .red {
+        color: #ec4437;
+        background: #ffecea;
+      }
+      .green {
+        color: #15ad31;
+        background: #e1ffd8;
+        margin-top: 5px;
+      }
+    }
+  }
+}

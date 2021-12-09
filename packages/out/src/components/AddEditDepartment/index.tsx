@@ -1,7 +1,7 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useLayoutEffect } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import StopService from '@/components/StopService';
+// import StopService from '@/components/StopService';
 import { Form, Input, message, Radio } from 'antd';
 import { useDispatch } from 'umi';
 import { labelCol, departmentType } from 'xzl-web-shared/src/utils/consts';
@@ -18,6 +18,7 @@ interface IProps {
 
 const AddEditDepartment: FC<IProps> = (props) => {
   const { children, mode, info, refresh } = props;
+
   const [form] = Form.useForm();
   const [show, setShow] = useState<boolean>(false);
   // const orgBase = useSelector((state: IState) => state.org.currentOrg.orgBase);
@@ -30,7 +31,7 @@ const AddEditDepartment: FC<IProps> = (props) => {
       const labelType = departmentType.filter((type) => {
         const typeKey = type.key.toLowerCase();
         return info.labels.includes(typeKey);
-      })[0].key;
+      })?.[0]?.key;
       console.log(labelType);
       initialValues.labelType = labelType;
     }
@@ -51,36 +52,36 @@ const AddEditDepartment: FC<IProps> = (props) => {
         dispatch({
           type: 'org/getOrgMenu',
           payload: {
-            nsId: window.$storage.getItem("nsId"),
-            sid: window.$storage.getItem('sid')
+            nsId: window.$storage.getItem('nsId'),
+            sid: window.$storage.getItem('sid'),
           },
         });
         setShow(false);
         refresh();
-    })
-    .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   };
-  const handlePatchHospital = (e) => {
-    e.stopPropagation();
-    handleSubmit();
-  };
+  // const handlePatchHospital = (e) => {
+  //   e.stopPropagation();
+  //   handleSubmit();
+  // };
   let modalProps: Store = {
-    okText: '添加',
+    okText: mode === 'edit' ? '保存' : '添加',
     cancelText: '退出',
     onOk: form.submit,
     onCancel: () => setShow(!show),
   };
   if (mode === 'edit') {
-    modalProps = {
-      onCancel: () => setShow(!show),
-      okText: (
-        <StopService>
-          <span>停止服务</span>
-        </StopService>
-      ),
-      okButtonProps: { danger: true },
-      cancelText: <span onClick={handlePatchHospital}>完成</span>,
-    };
+    // modalProps = {
+    //   onCancel: () => setShow(!show),
+    //   okText: (
+    //     <StopService>
+    //       <span>停止服务</span>
+    //     </StopService>
+    //   ),
+    //   okButtonProps: { danger: true },
+    //   cancelText: <span onClick={handlePatchHospital}>完成</span>,
+    // };
   }
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -88,7 +89,8 @@ const AddEditDepartment: FC<IProps> = (props) => {
       <div style={{ display: 'inline' }} onClick={() => setShow(!show)}>
         {children}
       </div>
-      <DragModal
+      {
+        <DragModal
         {...modalProps}
         width={520}
         visible={show}
@@ -103,7 +105,7 @@ const AddEditDepartment: FC<IProps> = (props) => {
           form={form}
           labelCol={labelCol}
           initialValues={initialValues}
-          preserve={false}
+          preserve={true}
         >
           <div>
             <FormItem label="科室名称" name="name" rules={[{ required: true, message: '请填写科室名称!' }]}>
@@ -121,6 +123,8 @@ const AddEditDepartment: FC<IProps> = (props) => {
           </div>
         </Form>
       </DragModal>
+      }
+
     </>
   );
 };

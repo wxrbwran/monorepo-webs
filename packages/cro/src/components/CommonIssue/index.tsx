@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-import {Radio, Input, Checkbox, Button, message} from 'antd';
+import { Radio, Input, Checkbox, Button, message } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { BorderOutlined, CloseOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
@@ -14,23 +14,23 @@ interface IProps {
 }
 function CommonIssue({ children, updateInfo }: IProps) {
   const checkboxData = {
-    "type": "RADIO",
-    "detail": {
-      "stem": "",
-      "options": [
+    'type': 'RADIO',
+    'detail': {
+      'stem': '',
+      'options': [
         {
-          "content": "",
-          "checked": false
+          'content': '',
+          'checked': false,
         },
-      ]
-    }
+      ],
+    },
   };
   const textData = {
-    "type": 'TEXT',
-    "detail": {
-      "stem": '',
-      "answer": ''
-    }
+    'type': 'TEXT',
+    'detail': {
+      'stem': '',
+      'answer': '',
+    },
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -43,9 +43,9 @@ function CommonIssue({ children, updateInfo }: IProps) {
     setType('TEXT');
     setQuestions(textData);
     setTitle('');
-  }, [showModal])
+  }, [showModal]);
 
-  const onChange = (e:any) => {
+  const onChange = (e: any) => {
     setType(e.target.value);
     switch (e.target.value) {
       case 'RADIO':
@@ -54,56 +54,69 @@ function CommonIssue({ children, updateInfo }: IProps) {
       case 'TEXT':
         setQuestions(textData);
     }
-  }
+  };
 
   // 保存输入的问题
   const handleSaveStem = (ev: React.FocusEvent<HTMLInputElement>) => {
     questions.detail.stem = ev.target.value;
-    setQuestions({...questions});
-  }
+    setQuestions({ ...questions });
+  };
 
   // 删除选项
   const handleDelOptions = (oIndex: number) => {
-    const newOptions = questions.detail.options.filter((item, index) => { return index !== oIndex });
+    const newOptions = questions.detail.options.filter((_item, index) => { return index !== oIndex; });
     questions.detail.options = newOptions;
-    setQuestions({...questions});
-  }
+    setQuestions({ ...questions });
+  };
 
   // 保存输入的选项   保存后不可再编辑，只能删除
   const handleSaveOption = (ev: React.FocusEvent<HTMLInputElement>, oIndex: number) => {
     const val = ev.target.value;
     if (val) {
       questions.detail.options[oIndex].content = val;
-      setQuestions({...questions});
+      setQuestions({ ...questions });
+    } else {
+      questions.detail.options[oIndex].content = '';
+      setQuestions({ ...questions });
     }
-  }
+  };
 
   // 添加选项 index表示第几题
   const handleAddOptions = () => {
     questions.detail.options.push({
-      "content": "",
-      "checked": false
-    })
-    setQuestions({...questions});
-  }
+      'content': '',
+      'checked': false,
+    });
+    setQuestions({ ...questions });
+  };
 
   // 修改题型
-  const handleChangeTx = (e:RadioChangeEvent) => {
+  const handleChangeTx = (e: RadioChangeEvent) => {
     questions.type = e.target.value;
-    setQuestions({...questions});
-  }
+    setQuestions({ ...questions });
+  };
 
   // 保存输入的问答题的答案
   const handleSaveAnswer = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     questions.detail.answer = ev.target.value;
-    setQuestions({...questions});
-  }
+    setQuestions({ ...questions });
+  };
+
+  const checkOptionsValue = (options: Ioptions[]) => {
+    const validOptions: Ioptions[] = [];
+    options.forEach((item: Ioptions) => {
+      if (item.content) {
+        validOptions.push(item);
+      }
+    });
+    return validOptions;
+  };
 
   const handleSubmit = () => {
-    console.log('questions',questions);
+    console.log('questions', questions);
     let isEmpty = false;
     if (!questions.detail.stem) {
-      message.error('问题不能为空!')
+      message.error('问题不能为空!');
       isEmpty = true;
     } else {
       if (['RADIO', 'CHECKBOX'].includes(questions.type)) {
@@ -125,35 +138,25 @@ function CommonIssue({ children, updateInfo }: IProps) {
       const params = {
         title: title || questions.detail.stem,
         question: questions,
-      }
-      api.subjective.postCommonQuestion(params).then(res => {
+      };
+      api.subjective.postCommonQuestion(params).then(() => {
         message.success('添加成功');
         setShowModal(!showModal);
         //更新常用问题列表
         updateInfo();
         setLoading(false);
-      })
+      });
     }
-  }
-
-  const checkOptionsValue = (options: Ioptions[]) => {
-    const validOptions: Ioptions[] = [];
-    options.forEach((item: Ioptions) => {
-      if(item.content) {
-        validOptions.push(item);
-      }
-    })
-    return validOptions;
-  }
+  };
 
   const handleSaveTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-  }
+  };
 
   return (
     <>
       <div style={{ display: 'inline' }} onClick={() => setShowModal(!showModal)}>{children}</div>
-			{showModal && (
+      {showModal && (
         <DragModal
           visible={showModal}
           title='添加常用题'
@@ -177,7 +180,7 @@ function CommonIssue({ children, updateInfo }: IProps) {
           />
           <div className="topic-list">
             {
-              type==='RADIO' && (
+              type === 'RADIO' && (
                 <div className="topic-item">
                   <div className={['issue', !!questions.detail.stem ? '' : 'input-empty'].join(' ')}>
                     <Input
@@ -191,18 +194,19 @@ function CommonIssue({ children, updateInfo }: IProps) {
                       if (!!option.content) {
                         return (
                           <div className="item input-empty" key={oIndex}>
-                            <Checkbox>{option.content}</Checkbox>
+                            <Checkbox className='flex-1'></Checkbox>
+                            <Input placeholder={`选项${oIndex + 1}`} value={option.content} onChange={(ev) => handleSaveOption(ev, oIndex)} />
                             <CloseOutlined onClick={() => handleDelOptions(oIndex)} />
                           </div>
-                        )
-                      }else {
+                        );
+                      } else {
                         return (
                           <div className="item input-empty" key={oIndex}>
                             <BorderOutlined />
                             <Input placeholder={`选项${oIndex + 1}`} onBlur={(ev) => handleSaveOption(ev, oIndex)} />
                             <CloseOutlined onClick={() => handleDelOptions(oIndex)} />
                           </div>
-                        )
+                        );
                       }
                     })}
                   </div>
@@ -219,14 +223,14 @@ function CommonIssue({ children, updateInfo }: IProps) {
               )
             }
             {
-              type==='TEXT' && (
+              type === 'TEXT' && (
                 <div className="topic-item">
                   <div className={['issue', !!questions.detail.stem ? '' : 'input-empty'].join(' ')}>
                     <Input
                       placeholder='1. 请输入问题'
                       value={questions.detail.stem}
                       onChange={handleSaveStem}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
                   <div className="answer-wrap">
@@ -245,9 +249,9 @@ function CommonIssue({ children, updateInfo }: IProps) {
             <Button type="primary" onClick={handleSubmit} loading={loading}> 完成 </Button>
           </div>
         </DragModal>
-      ) }
+      )}
     </>
-  )
+  );
 }
 
 export default CommonIssue;

@@ -40,21 +40,11 @@ function Reply({ location }: IProps) {
   };
   const columns: any = [
     {
-      title: '研究者姓名',
-      dataIndex: 'doctorName',
-    },
-    {
-      title: '角色',
-      dataIndex: 'roleType',
-      render: (text: string) => {
+      title: '研究者姓名(角色)',
+      dataIndex: 'doctorNameAndRoles',
+      render: (text: any[]) => {
         // const type = window.$storage.getItem('croLabel');
-        if (!text) {
-          return '--';
-        } else if (text?.split('.')[1] === 'aeJk0w') {
-          return '暂未分配';
-        } else {
-          return fetchRolePropValue(text, 'desc');
-        }
+        return text.map((item) => item.doctorName + '(' + (item.roleType?.split('.')[1] === 'aeJk0w' ? '暂未分配' : fetchRolePropValue(item.roleType, 'desc')) + ')').join(',');
       },
     },
     {

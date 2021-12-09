@@ -12,14 +12,14 @@ var __assign = (this && this.__assign) || function () {
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
 import dayjs from 'dayjs';
-// 获取患者列表（做为独立、主管、医生助手的患者列表）
+// 获取患者列表（做为独立、上级、下级医生的患者列表）
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
     var newObj = {};
     // 签约患者下，当前选中菜单的role
     var currentMenuRole = window.$storage.getItem('role');
     console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
-    var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
+    var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'DEP_HEAD'];
     data.forEach(function (team) {
         newObj = {};
         team.members.forEach(function (member) {
@@ -83,7 +83,6 @@ var handlePatientsTeamDataSource = function (data) {
 // 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
 export var handleInviteMemberList = function (dataSource) {
     var newData = [];
-    console.log('dataSource', dataSource);
     dataSource.forEach(function (item) {
         var _a;
         var _b = item.subjectDetail || {}, title = _b.title, avatarUrl = _b.avatarUrl, firstProfessionCompany = _b.firstProfessionCompany, firstPracticeDepartment = _b.firstPracticeDepartment, name = _b.name, tel = _b.tel, provinceName = _b.provinceName, sex = _b.sex;
@@ -141,13 +140,26 @@ export var handleTeamInviteMemberList = function (dataSource) {
 };
 var handleDoctorTeamDataSource = function (dataSource) {
     var res = [];
-    dataSource
-        .map(function (member) { return member.members[0]; })
-        .forEach(function (member) {
-        var _a;
-        var tmp = __assign({}, member);
-        tmp.patientNum = (_a = member.counters[0]) === null || _a === void 0 ? void 0 : _a.count;
-        res.push(tmp);
+    // dataSource
+    //   .map((member) => member.members[0])
+    //   .forEach((member) => {
+    //     const tmp = { ...member };
+    //     tmp.patientNum = member.counters[0]?.count;
+    //     res.push(tmp);
+    //   });
+    dataSource.forEach(function (item) {
+        var doctor = { depHeadDoctor: false };
+        item.members.forEach(function (member) {
+            var _a;
+            if (member.role === Role.DOCTOR.id || !member.role) {
+                doctor = __assign(__assign({}, member), { patientNum: (_a = member.counters[0]) === null || _a === void 0 ? void 0 : _a.count });
+            }
+            else if (member.role === Role.DEP_HEAD.id) {
+                doctor.depHeadDoctor = true;
+                doctor.depHeadDoctorWcId = member.wcId;
+            }
+        });
+        res.push(doctor);
     });
     return res;
 };

@@ -451,6 +451,7 @@ export const Receiver = {
   title: '接收人',
   dataIndex: 'receiver',
   width: 150,
+  render: (text: string[]) => <span>{text ? text.join(',') : ''}</span>,
 };
 
 export const replyAt = {

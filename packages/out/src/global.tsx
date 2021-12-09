@@ -6,7 +6,8 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import storage from 'xzl-web-shared/src/utils/storage';
 import { setAuthorizationToken } from '@/services/http';
-import pkg from '../package.json'
+import pkg from '../package.json';
+import './global.scss';
 
 if (window.location.href.includes('openSub')) {
   sessionStorage.setItem('openSub', 'YES'); // 防止url丢失openSub参数

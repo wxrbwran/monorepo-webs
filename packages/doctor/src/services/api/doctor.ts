@@ -5,6 +5,10 @@ export default {
   getDoctorOrgs(): Promise<any> {
     return http.get('doctor/organizations');
   },
+  // 患者列表，筛选条件：机构列表
+  getPatientOrgs(): Promise<any> {
+    return http.get('doctor/patient_organizations');
+  },
   // 获取医生的患者列表
   getDoctorPatients(data: CommonData): Promise<any> {
     return http.get('doctor/patients/own', { data });
@@ -55,5 +59,17 @@ export default {
   // 医生角色列表  --- 说明： 主管、医助、独立，三个角色有无患者，都会返回显示
   getDotorExistedRoles(): Promise<any> {
     return http.get('doctor/existed_roles');
+  },
+  //  查询科主任的所有医生列表
+  getDoctorHeadingDoctors(data: any): Promise<any> {
+    return http.get('doctor/heading_doctors', { data });
+  },
+  //  查询科主任-- 查看某个医生的角色列表
+  getDoctorHeadingDoctorRoles(id: string): Promise<any> {
+    return http.get(`doctor/existed_roles/${id}`);
+  },
+  // 选中某个医生查看其中患者列表
+  getDoctorHeadingPatients(data: any): Promise<any> {
+    return http.get('doctor/heading_patients', { data });
   },
 };

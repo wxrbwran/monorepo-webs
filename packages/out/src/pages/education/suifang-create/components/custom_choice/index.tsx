@@ -48,6 +48,9 @@ function CustomChoice(props: IProps) {
     if (val.trim()) {
       questions[quesIndex].detail.content[optionIdx].options[oIndex].content = val;
       changeQues([...questions]);
+    } else {
+      questions[quesIndex].detail.content[optionIdx].options[oIndex].content = '';
+      changeQues([...questions]);
     }
   };
   console.log('item.detail.options', item);
@@ -61,7 +64,8 @@ function CustomChoice(props: IProps) {
           if (!!option.content) {
             return (
               <div className="item input-empty" key={oIndex}>
-                <Checkbox>{option.content}</Checkbox>
+                <Checkbox className='flex-1'></Checkbox>
+                <Input placeholder={`选项${oIndex + 1}`} value={option.content} onChange={(ev) => handleSaveOption(ev, oIndex)} />
                 <CloseOutlined onClick={() => handleDelOptions(oIndex)} />
               </div>
             );

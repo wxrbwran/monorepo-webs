@@ -12,6 +12,16 @@ interface UserModelState {
   userInfo: ISubject;
   organizations: IOrganizations;
   filterOrgs: any[];
+  existedRoles: {
+    checked: boolean;
+    counters: {
+      role: string;
+      count: number;
+    }[],
+    role: string;
+    sid: string;
+    timeLines: any[]
+  }[]
 }
 
 interface CurrentPatientModelState {

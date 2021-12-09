@@ -1,0 +1,171 @@
+.send_plan {
+  font-size: 14px;
+  color: #181818;
+  padding: 20px 25px;
+  margin: 10px;
+  // box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 5px 2px #eaeaea;
+  border-radius: 3px;
+  width: 880px;
+  border: 1px solid #e0e0e0;
+  textarea {
+    resize: none;
+  }
+  // :global {
+  // 	.ant-input {
+  // 			height: 40px;
+  // 			font-size: 14px;
+  // 			color: #181818;
+  // 	}
+  // 	.ant-select-selector {
+  // 		width: 180px!important;
+  // 		height: 40px!important;
+  // 		border-radius: 3px;
+  // 		.ant-select-selection-item,.ant-select-selection-placeholder {
+  // 			line-height: 40px!important;
+  // 			font-size: 14px;
+  // 		}
+  // 	}
+  // 	.ant-input-number-input {
+  // 		height: 40px;
+  // 	}
+  // 	.ant-checkbox-group-item {
+  // 		color: #181818;
+  // 		font-size: 14px;
+  // 	}
+  // 	.ant-checkbox-input {
+  // 		width: 16px;
+  // 		height: 16px;
+  // 	}
+  // }
+  h2 {
+    font-size: 15px;
+    margin: 30px 0 15px;
+    &:first-child {
+      margin-top: 0;
+    }
+    .start {
+      color: red;
+      margin-right: 3px;
+    }
+  }
+  .self {
+    @include flex-lay(row, nowrap, space-between, flex-start);
+    &_content {
+      flex: 1 1 auto;
+      @include flex-lay(column, nowrap, flex-start, flex-start);
+      margin: 0 12px 0 50px;
+    }
+    .add_item {
+      @include flex-lay(row, nowrap, space-between, center);
+      margin-bottom: 10px;
+      :global {
+        .ant-input-number {
+          border: none;
+          flex: 1;
+          margin: 0 10px;
+        }
+      }
+      &_left {
+        width: 250px;
+        height: 40px;
+        border: 1px solid #e0e0e0;
+        border-radius: 3px;
+        overflow: hidden;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-right: 10px;
+      }
+    }
+    ul {
+      margin-top: 10px;
+    }
+    .add_day {
+      display: inline-block;
+      background: rgba(0, 122, 218, 0.1);
+      border-radius: 3px;
+      margin: 0 10px 10px 0;
+      padding: 5px 10px;
+      color: #3296fa;
+      font-size: 14px;
+      .delete {
+        margin-left: 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+    }
+    :global {
+      .ant-btn {
+        width: 66px;
+        height: 40px;
+        font-size: 14px;
+        color: #666;
+        padding: 0;
+      }
+    }
+  }
+  .send_type {
+    @include flex-lay(row, nowrap, flex-start, flex-start);
+    .cycle {
+      margin-left: 50px;
+      color: #666;
+      :global {
+        .ant-input-number {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+  .send_time {
+    @include flex-lay(row, nowrap, flex-start, flex-start);
+    .item_value {
+      @include flex-lay(row, nowrap, center, center);
+      :global {
+        .ant-select-selector {
+          width: 237px !important;
+        }
+      }
+    }
+    .label {
+      color: #666;
+      margin: 0 5px 0 40px;
+    }
+    .after {
+      color: #666;
+      margin-left: 5px;
+    }
+    :global {
+      .ant-select-selector .ant-select-selection-search-input {
+        height: 40px;
+      }
+    }
+  }
+  .question {
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    min-height: 80px;
+    &::placeholder {
+      color: #999 !important;
+      font-size: 16px;
+    }
+  }
+  .submit {
+    margin-top: 50px;
+    text-align: center;
+    :global {
+      .ant-btn {
+        width: 98px;
+        height: 40px;
+        font-size: 14px;
+        margin: 0 16px;
+      }
+    }
+  }
+}
+.edit {
+  margin-bottom: 0;
+  padding: 0;
+  box-shadow: none;
+}

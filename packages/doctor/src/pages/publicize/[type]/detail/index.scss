@@ -1,0 +1,27 @@
+.patient_edu {
+  height: 100%;
+  overflow: auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  :global {
+    .ant-tabs-tab-btn {
+      font-size: 14px;
+    }
+  }
+
+  .title {
+    color: #181818;
+    text-align: center;
+    font-size: 20px;
+    input {
+      font-size: 20px;
+    }
+    :global {
+      .anticon {
+        margin-left: 5px;
+        color: #3296fa;
+      }
+    }
+  }
+}
