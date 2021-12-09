@@ -20,7 +20,7 @@ const DepHeadDoctors: FC<IProps> = ({ handleChangeDoc, handleNoData }) => {
   useEffect(() => {
     console.log('---3--3', location);
     const params = {
-      targetNSId:location.query?.orgId,
+      targetNSId:location.query?.depHeadNsId,
     };
     window.$api.doctor.getDoctorHeadingDoctors(params).then((res: { teams: ITeams[] }) => {
       console.log('======32', res);

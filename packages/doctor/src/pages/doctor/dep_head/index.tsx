@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import DepHeadDoctors from '../components/DepHeadDoctors';
 import { Tabs, Empty } from 'antd';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { name, org,  patientLevel, sex, age, address, msgCount, noteC } from '../patients/[level]/columns';
+import { name, org,  patientLevel, sex, age, address } from '../patients/[level]/columns';
 import { Role } from 'xzl-web-shared/src/utils/role';
 import styles from './index.scss';
 
@@ -18,7 +18,7 @@ interface IOption {
 const { TabPane } = Tabs;
 const DepHead: FC = ({ location }) => {
   console.log('=======12133', location);
-  const [depOptions, setOptions] = useState<IOption>({ pageAt:1, targetNSId: location.query.orgId });
+  const [depOptions, setOptions] = useState<IOption>({ pageAt:1, targetNSId: location.query.depHeadNsId });
   const [curDocRoles, setCurDocRoles] = useState([]);
   const [curTabRole, setTabRole] = useState<string>('');
   const [noDoctor, setNoDoctor] = useState(false);
@@ -50,7 +50,7 @@ const DepHead: FC = ({ location }) => {
     });
   };
 
-  const columns = [name, org, patientLevel(() => setOptions({ ...depOptions })), noteC(() => setOptions({ ...depOptions })), sex, age, address, msgCount];
+  const columns = [name, org, patientLevel(() => setOptions({ ...depOptions })), sex, age, address];
   console.log('curDocRoles', curDocRoles);
   return (
     <div className={styles.dep_head}>

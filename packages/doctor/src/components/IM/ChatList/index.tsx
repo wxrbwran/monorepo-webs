@@ -8,14 +8,13 @@ import { IState } from 'typings/model';
 import Viewer from '@/components/Viewer';
 import * as api from '@/services/api';
 // import { Role } from 'xzl-web-shared/src/utils/role';
-import { compareMsgs, getFromDoctorInfo, getRole } from '@/utils/utils';
+import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
 import { imMsgType } from '@/utils/tools';
 import reCalcAllMessageTime from '@/utils/reCalcAllMessageTime';
 import CheckImgStructured from '@/components/CheckImgStructured';
 import jgh from '@/assets/img/jgh.png';
 import ChatItem, { IAvatar } from '../ChatItem';
 import styles from './index.scss';
-import { CommonData } from 'packages/doctor/typings/global';
 
 interface IHistory {
   time?: number;
@@ -66,23 +65,8 @@ const ChatList: FC = () => {
   const [fetching, setFetching] = useState(false);
   const [avatarArr, setAvatarArr] = useState<IAvatar[]>([]); // 存储通过sid拉取的包含有头像的用户信息
   const [sidArr, setSidArr] = useState<string[]>([]); // 存储用于拉取头像信息的sid
-  const [personRole, setPersonRole] = useState<CommonData>();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // 整理出聊天成员，以人为单位，对应出所拥有的所有角色，在im会话中，在（）中标识出角色
-    const persons = {};
-    sessions[0]?.members?.forEach(item => {
-      const curRole = getRole(item.role);
-      if (persons[item.sid]) {
-        persons[item.sid].push(curRole);
-      } else {
-        persons[item.sid] = [curRole];
-      }
-    });
-    setPersonRole(persons);
-    // setPersonRole
-  }, [sessions]);
   const closeImageViewer = () => {
     dispatch({ type: 'im/TOGGLE_VIEWER', payload: { isShow: false } });
   };
@@ -246,6 +230,7 @@ const ChatList: FC = () => {
     console.log(activeImage);
     dispatch({ type: 'im/TOGGLE_VIEWER_ACTIVE_INDEX', payload: { index } });
   };
+  console.log('reCalcAllMessageTime(currSessionMsgs)', reCalcAllMessageTime(currSessionMsgs));
   return (
     <>
       <ul id="CHAT_LIST" ref={chatList} className={styles.chat_list}>
@@ -273,7 +258,6 @@ const ChatList: FC = () => {
             myInfo={myInfo}
             rawMsg={msg}
             avatarArr={avatarArr}
-            personRole={personRole}
           />
         ))}
         {/* {
