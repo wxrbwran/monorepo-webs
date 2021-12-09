@@ -121,7 +121,7 @@ export default {
     return http.delete(`publicize/${id}`);
   },
   // 删除随访表
-  delPublicizeScale(type: string, id: string): Promise<any> {
+  delPublicizeScale(id: string, type: string): Promise<any> {
     return http.delete(`publicize/scale/${type}/${id}`);
   },
   // 修改随访表

@@ -42,7 +42,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
         requestType = 'FOLLOW_CRF';
       }
     }
-    request(requestType, id).then(() => {
+    request(id, requestType).then(() => {
       message.success('删除成功');
       onSuccess();
     }).catch(err => {
