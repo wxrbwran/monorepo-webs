@@ -146,7 +146,7 @@ const ChatList: FC = () => {
             } else if ([1, 2, 3, 6].includes(type)) {
               formatMsgsItem.file = { ...body }; // 视频、图片、声音、文件
             } else if (
-              [103, 106, 110, 111, 102, 101, 116, 118, 119, 120, 114, 115, 123, 124, 127].includes(type)
+              [103, 106, 110, 111, 102, 101, 116, 118, 119, 120, 114, 115, 123, 124, 127, 129].includes(type)
             ) {
               formatMsgsItem.type = 'custom';
               formatMsgsItem.content = { ...body }; // 调达标值、调药、血压、医生提醒、医生通知
@@ -230,7 +230,7 @@ const ChatList: FC = () => {
     console.log(activeImage);
     dispatch({ type: 'im/TOGGLE_VIEWER_ACTIVE_INDEX', payload: { index } });
   };
-  console.log('reCalcAllMessageTime(currSessionMsgs)', reCalcAllMessageTime(currSessionMsgs));
+  console.log('===========**********历史msg', reCalcAllMessageTime(currSessionMsgs));
   return (
     <>
       <ul id="CHAT_LIST" ref={chatList} className={styles.chat_list}>
@@ -252,7 +252,7 @@ const ChatList: FC = () => {
             )}
           </li>
         )}
-        {reCalcAllMessageTime(currSessionMsgs).map((msg: Store) => (
+        {reCalcAllMessageTime(currSessionMsgs).filter(item => item.type).map((msg: Store) => (
           <ChatItem
             key={msg.time}
             myInfo={myInfo}

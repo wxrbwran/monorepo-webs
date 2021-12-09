@@ -38,8 +38,19 @@ const OrgMenu: FC = () => {
   return (
     <Row justify="start" align ="top" className={styles.org_menu}>
       {
+        !isOpenSub && (
+          <div className=" mt-10 pt-30">
+            <AddEditDepartment mode="add" refresh={getDepList}>
+              <Button icon={<PlusOutlined />} type="link" className="px-0">
+                增加科室
+              </Button>
+            </AddEditDepartment>
+          </div>
+        )
+      }
+      {
         departmentList.length > 0 && (
-          <Menu className="w-full pt-90" defaultSelectedKeys={[location.query?.depId || departmentList[0]?.id]}>
+          <Menu className="w-full pt-50" defaultSelectedKeys={[location.query?.depId || departmentList[0]?.id]}>
             {departmentList
               .map((department: Department) => (
                 <Menu.Item key={department.id} onClick={() => nav2OrgDepartmentPage(department)}>
@@ -52,17 +63,6 @@ const OrgMenu: FC = () => {
                 </Menu.Item>
               ))}
           </Menu>
-        )
-      }
-      {
-        !isOpenSub && (
-          <div className="pl-16 mt-10">
-            <AddEditDepartment mode="add" refresh={getDepList}>
-              <Button icon={<PlusOutlined />} type="link" className="px-0">
-                增加科室1
-              </Button>
-            </AddEditDepartment>
-          </div>
         )
       }
     </Row>
