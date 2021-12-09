@@ -36,7 +36,10 @@ function ChartFollowUpRate(props: ISfChartProps) {
   //   },
   // ];
   console.log('seriesData', seriesData);
+  console.log('Math.max(...seriesData[2].data) ?? 100', Math.max(...seriesData[2].data) ?? 100);
   const getOption = () => {
+    const sfRatioMax = Math.max(...seriesData[2].data);
+    const leftYMax = Math.max(...[...seriesData[0].data, ...seriesData[1].data]);
     const option = {
       tooltip: {
         trigger: 'axis',
@@ -78,14 +81,14 @@ function ChartFollowUpRate(props: ISfChartProps) {
         {
           type: 'value',
           min: 0,
-          max: Math.max(...[...seriesData[0].data, ...seriesData[1].data]),
-          interval: Math.max(...[...seriesData[0].data, ...seriesData[1].data]) / 5,
+          max: leftYMax || 100,
+          interval: leftYMax / 5 || 20,
         },
         {
           type: 'value',
           min: 0,
-          max: Math.max(...seriesData[2].data),
-          interval: Math.max(...seriesData[2].data) / 5,
+          max: sfRatioMax || 100,
+          interval: sfRatioMax / 5 || 20,
           axisLabel: {
             formatter: '{value} %',
           },

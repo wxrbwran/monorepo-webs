@@ -45,7 +45,9 @@ const OrgMenu: FC = () => {
                 <Menu.Item key={department.id} onClick={() => nav2OrgDepartmentPage(department)}>
                   <div className={`flex justify-between items-center ${styles.dep_item}`}>
                     <div className={styles.name} title={department.name}>{department.name}</div>
-                    <EditOutlined />
+                    <AddEditDepartment mode="edit" refresh={getDepList} info={department}>
+                      <EditOutlined />
+                    </AddEditDepartment>
                   </div>
                 </Menu.Item>
               ))}
