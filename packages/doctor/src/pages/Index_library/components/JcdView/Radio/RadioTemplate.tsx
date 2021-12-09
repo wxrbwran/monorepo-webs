@@ -12,7 +12,7 @@ interface IProps {
 
 const RadioTemplate: FC<IProps> = (props) => {
   // props: ["id", "type", 'onSuccess', 'questions'],
-  const { id, type, questions, onSuccess } = props;
+  const { id, questions, onSuccess } = props;
 
   const getNextGroupNumber = () => {
     if (questions.length === 0) {
@@ -32,7 +32,25 @@ const RadioTemplate: FC<IProps> = (props) => {
   return (
     <div>
       {questions.map((c, index) => (
-        <RadioItem item={c} index={index} key={index} />
+        <RadioItem item={c} index={index} key={index}>
+          <AddEditRadioModal
+            mode="ALTER"
+            onSuccess={onSuccess}
+            title={c}
+            questions={questions.filter((filterQuestion) => {
+              return (
+                filterQuestion.group !== c.group &&
+                filterQuestion.group?.includes(c.group as string)
+              );
+            })}
+            position={getNextGroupNumber()}
+            id={id}
+          >
+            <Button className="mx-10" type="primary" ghost size="small">
+              编辑
+            </Button>
+          </AddEditRadioModal>
+        </RadioItem>
       ))}
       <Divider plain dashed>
         <AddEditRadioModal
@@ -40,7 +58,6 @@ const RadioTemplate: FC<IProps> = (props) => {
           onSuccess={onSuccess}
           position={getNextGroupNumber()}
           id={id}
-          type={type}
         >
           <Button type="link">添加新的选择题</Button>
         </AddEditRadioModal>

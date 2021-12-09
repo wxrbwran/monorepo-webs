@@ -29,12 +29,9 @@ const CompletionTemplate:FC<IProps> = (props) => {
   return (
     <div>
       {questions.map((q, index) => (
-        <CompletionItem
-          item={q}
-          key={index}
-        >
+        <CompletionItem item={q} key={index}>
           <AddEditInputModal
-            mode="ALERT"
+            mode="ALTER"
             questions={questions.filter((filterQuestion) => {
               return (
                 filterQuestion.group !== q.group &&
@@ -47,9 +44,11 @@ const CompletionTemplate:FC<IProps> = (props) => {
             position={getNextGroupNumber()}
             onSuccess={onSuccess}
           >
-            <Button className="mx-10" type="primary" ghost size="small">
-              编辑
-            </Button>
+            <>
+              <Button className="mx-10" type="primary" ghost size="small">
+                编辑
+              </Button>
+            </>
           </AddEditInputModal>
         </CompletionItem>
       ))}

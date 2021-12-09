@@ -27,6 +27,7 @@ declare type TIndexItem = {
   action?: string;
   isAdd?: boolean;
   answer?: string[] | string | undefined;
+  uuid?: number;
 };
 
 declare type TReference = {

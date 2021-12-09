@@ -8,7 +8,6 @@ import * as api from '@/services/api';
 
 interface IProps {
   id: string;
-  type: string;
   mode: string;
   onSuccess: () => void;
   title?: TIndexItem;
@@ -27,15 +26,16 @@ const AddEditRadio: FC<IProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<string>('RADIO');
+  const [count, setCount] = useState<number>(0);
   const samples = [{ value: '1', label: '形态' }, { value: '2', label: '大小' }];
   const [form] = Form.useForm();
   // const curDocument = useSelector((state: IState) => state.document.curDocument);
   const sid = window.$storage.getItem('sid');
   const position = mode === 'ADD' ? props.position : props.title?.group?.split('-')[1];
   const fixedData = {
-    isAdd: true,
+    // isAdd: false,
     sid,
-    action: props.mode,
+    action: 'ADD',
     creatorSid: sid,
   };
 
@@ -49,8 +49,8 @@ const AddEditRadio: FC<IProps> = (props) => {
         if (q.answer && q.answer.length > 0) {
           q.answer = q.answer[0];
         }
-        q.action = 'ALERT';
-        q.isAdd = false;
+        q.action = 'ALTER';
+        q.isNew = 'no';
         return q;
       });
     }
@@ -59,31 +59,37 @@ const AddEditRadio: FC<IProps> = (props) => {
 
   const handleSave = async (values: any) => {
     setLoading(true);
+    console.log('handleSave', values);
     try {
-      const titlePart = mode === 'ADD' ?
-        {
-          ...fixedData,
-          question: values.title,
-          answer: [],
-          group: `2-${position}`,
-          question_type: type,
-          uuid: +new Date() + Math.random(),
-        }
-        : {
-          ...title,
-          question: values.title,
-          isAdd: false,
-          action: 'ALERT',
-        };
+      const titlePart =
+        mode === 'ADD'
+          ? {
+            ...fixedData,
+            question: values.title,
+            answer: [],
+            group: `2-${position}`,
+            question_type: type,
+            uuid: +new Date() + Math.random(),
+          }
+          : {
+            ...title,
+            question: values.title,
+            // isAdd: false,
+            action: 'ALTER',
+          };
       await api.indexLibrary.handleImageTemplate({
         meta: { id },
         data: [
           titlePart,
           ...values.questions
-            .filter((q: TIndexItem) => !(q.action === 'DELETE' && q.isAdd))
+            .filter((q: TIndexItem) => !(q.action === 'DELETE' && q.isNew === 'yes'))
             .map((q: TIndexItem) => {
               if (!Array.isArray(q.answer)) {
                 q.answer = (q.answer as string | undefined) ? [q.answer as string] : [];
+              }
+              if (q.action === 'ADD') {
+                q.createdTime = +new Date();
+                // q.isAdd = true;
               }
               q.question_type = type;
               return q;
@@ -101,7 +107,13 @@ const AddEditRadio: FC<IProps> = (props) => {
       setLoading(false);
     }
   };
-
+  const handleDeleteQuestion = (index: number) => {
+    console.log('handleDeleteQuestion', index);
+    const values = form.getFieldsValue();
+    values.questions.filter((q: TIndexItem) => q.action !== 'DELETE')[index].action = 'DELETE';
+    setCount((prev) => prev + 1);
+    console.log(count);
+  };
   return (
     <div>
       <span onClick={() => setShowModal(true)}>{children}</span>
@@ -127,45 +139,59 @@ const AddEditRadio: FC<IProps> = (props) => {
               <Input placeholder="请输入题目" />
             </Form.Item>
             <Form.List name="questions">
-              {(fields, { add, remove }) => (
+              {(fields, { add }) => (
                 <>
-                  {fields.map((field) => (
-                    <Space align="baseline" className="mb-10" key={field.key}>
-                      <Form.Item
-                        {...field}
-                        noStyle={true}
-                        name={[field.name, 'question']}
-                        fieldKey={[field.fieldKey, 'question']}
-                        rules={[{ required: true, message: '请输入选项' }]}
-                      >
-                        <Input placeholder="请输入选项" style={{ width: 280 }} />
-                      </Form.Item>
-                      <DeleteOutlined onClick={() => remove(field.name)} />
-                      <Form.Item
-                        {...createFormListProps(field, 'uuid')}
-                        initialValue={+new Date() + Math.random()}
-                        className="hidden"
-                      >
-                        <Input type="hidden" />
-                      </Form.Item>
-                      <Form.Item
-                        {...createFormListProps(field, 'group')}
-                        initialValue={`2-${position}-${fields.length}`}
-                        className="hidden"
-                      >
-                        <Input type="hidden" />
-                      </Form.Item>
-                      {Object.keys(fixedData).map((key) => (
+                  {fields
+                    .filter((_f, index) => {
+                      console.log('index', index);
+                      const values = form.getFieldsValue();
+                      return values.questions?.[index]?.action !== 'DELETE';
+                    })
+                    .map((field, index) => (
+                      <Space align="baseline" className="mb-10" key={field.key}>
                         <Form.Item
-                          {...createFormListProps(field, key)}
+                          {...field}
+                          noStyle={true}
+                          name={[field.name, 'question']}
+                          fieldKey={[field.fieldKey, 'question']}
+                          rules={[{ required: true, message: '请输入选项' }]}
+                        >
+                          <Input placeholder="请输入选项" style={{ width: 280 }} />
+                        </Form.Item>
+                        <DeleteOutlined onClick={() => handleDeleteQuestion(index)} />
+                        <Form.Item
+                          {...createFormListProps(field, 'uuid')}
+                          initialValue={+new Date() + Math.random()}
                           className="hidden"
-                          initialValue={fixedData[key]}
                         >
                           <Input type="hidden" />
                         </Form.Item>
-                      ))}
-                    </Space>
-                  ))}
+                        <Form.Item
+                          {...createFormListProps(field, 'group')}
+                          initialValue={`2-${position}-${fields.length}`}
+                          className="hidden"
+                        >
+                          <Input type="hidden" />
+                        </Form.Item>
+                        {/* 标记这条为前端新增 */}
+                        <Form.Item
+                          {...createFormListProps(field, 'isNew')}
+                          initialValue={'yes'}
+                          className="hidden"
+                        >
+                          <Input type="hidden" />
+                        </Form.Item>
+                        {Object.keys(fixedData).map((key) => (
+                          <Form.Item
+                            {...createFormListProps(field, key)}
+                            className="hidden"
+                            initialValue={fixedData[key]}
+                          >
+                            <Input type="hidden" />
+                          </Form.Item>
+                        ))}
+                      </Space>
+                    ))}
                   <div>
                     <Button onClick={() => add()}>添加选项</Button>
                   </div>

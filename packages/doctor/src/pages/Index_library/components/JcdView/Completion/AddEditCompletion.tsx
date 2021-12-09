@@ -34,9 +34,9 @@ const AddEditCompletion: FC<IProps> = (props) => {
   const position = mode === 'ADD' ? props.position : props?.title?.group?.split('-')[1];
   const fixedData = {
     question_type: 'COMPLETION',
-    isAdd: true,
+    isAdd: false,
     sid,
-    action: props.mode,
+    action: 'ADD',
     creatorSid: sid,
   };
 
@@ -50,8 +50,9 @@ const AddEditCompletion: FC<IProps> = (props) => {
         if (q.answer && q.answer.length > 0) {
           q.answer = q.answer[0];
         }
-        q.action = 'ALERT';
+        q.action = 'ALTER';
         q.isAdd = false;
+        q.isNew = 'no';
         return q;
       });
     }
@@ -61,27 +62,29 @@ const AddEditCompletion: FC<IProps> = (props) => {
   const handleSave = async (values: any) => {
     setLoading(true);
     try {
-      const titlePart = mode === 'ADD' ? {
-        ...fixedData,
-        question: values.title,
-        answer: [],
-        group: `1-${position}`,
-        uuid: +new Date() + Math.random(),
-      }
-        : {
-          ...title,
-          question: values.title,
-          isAdd: false,
-          action: 'ALERT',
-        };
+      const titlePart =
+        mode === 'ADD'
+          ? {
+            ...fixedData,
+            question: values.title,
+            answer: [],
+            group: `1-${position}`,
+            uuid: +new Date() + Math.random(),
+          }
+          : {
+            ...title,
+            question: values.title,
+            isAdd: false,
+            action: 'ALTER',
+          };
       await api.indexLibrary.handleImageTemplate({
         meta: { id },
         data: [
           { ...titlePart },
           ...values.questions
-            .filter((q: TIndexItem) => !(q.action === 'DELETE' && q.isAdd))
+            .filter((q: TIndexItem) => !(q.action === 'DELETE' && q.isNew === 'yes'))
             .map((q: TIndexItem) => {
-              q.answer = (q.answer as string | undefined) ? [q.answer as string] : [];
+              q.answer = q.answer ? [q.answer] : [];
               return q;
             })
           ,
@@ -136,7 +139,7 @@ const AddEditCompletion: FC<IProps> = (props) => {
               <Input placeholder="请输入题目" />
             </Form.Item>
             <Form.List name="questions">
-              {(fields, { add } ) => (
+              {(fields, { add }) => (
                 <>
                   <div className="hidden">{count}</div>
                   {fields
@@ -176,6 +179,13 @@ const AddEditCompletion: FC<IProps> = (props) => {
                         <Form.Item
                           {...createFormListProps(field, 'group')}
                           initialValue={`1-${position}-${fields.length}`}
+                          className="hidden"
+                        >
+                          <Input type="hidden" />
+                        </Form.Item>
+                        <Form.Item
+                          {...createFormListProps(field, 'isNew')}
+                          initialValue={'yes'}
                           className="hidden"
                         >
                           <Input type="hidden" />

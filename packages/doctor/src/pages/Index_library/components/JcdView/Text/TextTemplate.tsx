@@ -34,7 +34,7 @@ const TextTemplate: FC<IProps> = (props) => {
           <div key={index} className="mb-10">
             <TextItem item={q} index={index}>
               <AddTextModal
-                mode="ALERT"
+                mode="ALTER"
                 onSuccess={onSuccess}
                 position={getNextGroupNumber()}
                 question={q}

@@ -12,7 +12,7 @@ interface IProps {
   question?: TIndexItem;
   position: number;
   title?: TIndexItem;
-  group: string;
+  // group: string;
 }
 
 // interface IForm {
@@ -31,15 +31,15 @@ const AddEditText: FC<IProps> = (props) => {
   const position = mode === 'ADD' ? props.position : props.question?.group?.split('-')[1];
   const fixedData = {
     question_type: 'TEXT',
-    isAdd: true,
+    isAdd: false,
     sid,
-    action: props.mode,
+    action: 'ADD',
     creatorSid: sid,
   };
 
   useEffect(() => {
     if (question) {
-      let tmp: TIndexItem = { ...question };
+      let tmp: TIndexItem = { ...question, isAdd: false, action: 'ALTER' };
       if (question.answer && question.answer.length > 0) {
         tmp.answer = question.answer[0];
       }
@@ -55,7 +55,8 @@ const AddEditText: FC<IProps> = (props) => {
         data: [
           {
             ...fixedData,
-            uuid: +new Date() + Math.random(),
+            uuid: question?.uuid || +new Date() + Math.random(),
+            createdTime: question?.createdTime || +new Date(),
             question: values.question,
             answer: [values.answer],
             group: `3-${position}`,
