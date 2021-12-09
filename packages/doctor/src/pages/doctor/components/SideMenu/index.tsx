@@ -97,7 +97,7 @@ function SideMenu({ location }: Iprops) {
               return (
                 <Menu.Item
                   key={curOrg.id.toUpperCase()}
-                  onClick={() => history.push(`/doctor/dep_head?orgId=${curOrg.id}&depHeadWcId=${curDepHead?.wcId}`)}
+                  onClick={() => history.push(`/doctor/dep_head?orgId=${curOrg.nsId}&depHeadWcId=${curDepHead?.wcId}`)}
                 >
                   {curOrg.name}
                 </Menu.Item>

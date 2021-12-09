@@ -1,8 +1,8 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { useLocation, history } from 'umi';
 import { Row, Button, Menu } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import AddEditDepartment from '@/components/AddEditDepartment';
 // import DeleteDepOrg from '@/components/DeleteDepOrg';
 // import AddEditHospital from '@/components/AddEditHospital';
@@ -17,23 +17,23 @@ const OrgMenu: FC = () => {
   const getDepList = () => {
     const params = {
       sid: isOpenSub ? sessionStorage.getItem('upperOrgSid') : window.$storage.getItem('sid'),
-      nsId: isOpenSub ? upperOrgNsId() : window.$storage.getItem('nsId')
-    }
+      nsId: isOpenSub ? upperOrgNsId() : window.$storage.getItem('nsId'),
+    };
     window.$api.org.getOrgMenu(params).then(res => {
       const depList = res.departmentInfoList
-      .filter((dep: Department) => dep.labels.includes('department'))
+        .filter((dep: Department) => dep.labels.includes('department'));
       setDepartmentList(depList);
       const urlDepId = location.query?.depId  || depList?.[0].id;
-      history.replace(`/hospital/department/list?depId=${urlDepId}`)
-    })
-  }
+      history.replace(`/hospital/department/list?depId=${urlDepId}`);
+    });
+  };
   useEffect(() => {
     getDepList();
-  }, [])
+  }, []);
 
   const nav2OrgDepartmentPage = (department: Department) => {
-    console.log('department', department)
-    history.replace(`/hospital/department/list?depId=${department.id}`)
+    console.log('department', department);
+    history.replace(`/hospital/department/list?depId=${department.id}`);
   };
   return (
     <Row justify="start" align ="top" className={styles.org_menu}>
@@ -43,7 +43,10 @@ const OrgMenu: FC = () => {
             {departmentList
               .map((department: Department) => (
                 <Menu.Item key={department.id} onClick={() => nav2OrgDepartmentPage(department)}>
-                  <div className={styles.name} title={department.name}>{department.name}</div>
+                  <div className={`flex justify-between items-center ${styles.dep_item}`}>
+                    <div className={styles.name} title={department.name}>{department.name}</div>
+                    <EditOutlined />
+                  </div>
                 </Menu.Item>
               ))}
           </Menu>
@@ -54,7 +57,7 @@ const OrgMenu: FC = () => {
           <div className="pl-16 mt-10">
             <AddEditDepartment mode="add" refresh={getDepList}>
               <Button icon={<PlusOutlined />} type="link" className="px-0">
-                增加科室
+                增加科室1
               </Button>
             </AddEditDepartment>
           </div>
