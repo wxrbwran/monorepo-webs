@@ -11,7 +11,7 @@ export interface ISfChartProps {
 function ChartFollowUpRate(props: ISfChartProps) {
   const { seriesData, xAxisData } = props;
   // console.log('data', data);
-  const chartResize = useRef(() => {});
+  const chartResize = useRef(() => { });
   let myChart: any = null;
   // const xAxisData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   // const seriesData = [
@@ -36,9 +36,9 @@ function ChartFollowUpRate(props: ISfChartProps) {
   //   },
   // ];
   console.log('seriesData', seriesData);
-  console.log('Math.max(...seriesData[2].data) ?? 100', Math.max(...seriesData[2].data) ?? 100);
+  console.log('Math.max(...seriesData[2].data) ?? 100', Math.max(...seriesData[2].data).toFixed(2) ?? 100);
   const getOption = () => {
-    const sfRatioMax = Math.max(...seriesData[2].data);
+    const sfRatioMax = Math.round(Math.max(...seriesData[2].data));
     const leftYMax = Math.max(...[...seriesData[0].data, ...seriesData[1].data]);
     const option = {
       tooltip: {
@@ -49,11 +49,11 @@ function ChartFollowUpRate(props: ISfChartProps) {
             color: '#999',
           },
         },
-        formatter:function (params){
+        formatter: function (params) {
           var relVal = params[0].name;
           for (var i = 0, l = params.length; i < l; i++) {
             relVal += '<br/>' + '<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:'
-            + params[i].color + '"></span>' + params[i].seriesName + ' : ' + params[i].value;
+              + params[i].color + '"></span>' + params[i].seriesName + ' : ' + params[i].value;
             if (params[i].seriesName === '随访率') {
               relVal += '%';
             }
@@ -87,7 +87,7 @@ function ChartFollowUpRate(props: ISfChartProps) {
         {
           type: 'value',
           min: 0,
-          max: sfRatioMax || 100,
+          max: sfRatioMax.toFixed(2) || 100,
           interval: sfRatioMax / 5 || 20,
           axisLabel: {
             formatter: '{value} %',
@@ -128,7 +128,7 @@ function ChartFollowUpRate(props: ISfChartProps) {
     if (myChart === null) {
       myChart = echarts.init(document.getElementById('followUpRate'));
       myChart.setOption(getOption());
-      chartResize.current = () => {myChart.resize(); };
+      chartResize.current = () => { myChart.resize(); };
       window.addEventListener('resize', chartResize.current);
     } else {
       myChart.setOption(getOption());
