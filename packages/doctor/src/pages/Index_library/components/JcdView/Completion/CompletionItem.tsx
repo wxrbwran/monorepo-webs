@@ -1,8 +1,6 @@
 
 import React, { FC } from 'react';
 import { Space } from 'antd';
-
-
 interface IProps {
   item: TIndexItem;
 }
@@ -23,7 +21,7 @@ const CompletionItem: FC<IProps> = (props) => {
       {groupNumberSize() === 2 && (
         <Space className="mb-10">
           <h2 className="font-bold text-base">{item.question}</h2>
-          { children }
+          {children}
         </Space>
       )}
       {groupNumberSize() >= 3 && (

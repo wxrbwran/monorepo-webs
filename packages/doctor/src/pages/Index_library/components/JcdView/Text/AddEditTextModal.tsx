@@ -1,8 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Form, Input, message } from 'antd';
+import { Form, Input, Popconfirm, Button } from 'antd';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
-
-import * as api from '@/services/api';
+import { handleQuestions } from '../utils';
 
 interface IProps {
   id: string;
@@ -48,36 +47,51 @@ const AddEditText: FC<IProps> = (props) => {
   }, [question]);
 
   const handleSave = async (values: any) => {
-    setLoading(true);
-    try {
-      await api.indexLibrary.handleImageTemplate({
-        meta: { id },
-        data: [
-          {
-            ...fixedData,
-            uuid: question?.uuid || +new Date() + Math.random(),
-            createdTime: question?.createdTime || +new Date(),
-            question: values.question,
-            answer: [values.answer],
-            group: `3-${position}`,
-          },
-        ],
-      });
-      message.success('操作成功');
-      setShowModal(false);
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (err: any) {
-      message.error(err?.result || '操作失败');
-    } finally {
-      setLoading(false);
-    }
+    const params = {
+      meta: { id },
+      data: [
+        {
+          ...fixedData,
+          uuid: question?.uuid || +new Date() + Math.random(),
+          createdTime: question?.createdTime || +new Date(),
+          question: values.question,
+          answer: [values.answer],
+          group: `3-${position}`,
+        },
+      ],
+    };
+    handleQuestions({
+      params,
+      fn: { setLoading, setShowModal, onSuccess },
+    });
+  };
+
+  const handleDeleteQuestions = async () => {
+    const params = {
+      meta: { id },
+      data: [{ ...question, action: 'DELETE' }],
+    };
+    handleQuestions({
+      params,
+      fn: { setLoading, setShowModal, onSuccess },
+    });
   };
 
   return (
     <div>
       <span onClick={() => setShowModal(true)}>{children}</span>
+      {mode === 'ALTER' && (
+        <Popconfirm
+          cancelButtonProps={{ size: 'small' }}
+          okButtonProps={{ size: 'small' }}
+          title="确认删除吗"
+          onConfirm={handleDeleteQuestions}
+        >
+          <Button danger ghost size="small">
+            删除
+          </Button>
+        </Popconfirm>
+      )}
       <DragModal
         title="添加问答题"
         width={700}

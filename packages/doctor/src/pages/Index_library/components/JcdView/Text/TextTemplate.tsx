@@ -41,7 +41,7 @@ const TextTemplate: FC<IProps> = (props) => {
                 id={id}
                 type={type}
               >
-                <Button type="primary" ghost className="ml-10">编辑</Button>
+                <Button type="primary" ghost className="mx-10" size="small">编辑</Button>
               </AddTextModal>
             </TextItem>
           </div>

@@ -1,11 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Form, Input, Button, message, Space } from 'antd';
+import { Form, Input, Button, Space, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { createFormListProps } from 'xzl-web-shared/src/utils/consts';
-
-import * as api from '@/services/api';
-
+import { handleQuestions, handleQuestionAnswer, filterNotNew, setDelete } from '../utils';
 interface IProps {
   id: string;
   type: string;
@@ -47,59 +45,57 @@ const AddEditCompletion: FC<IProps> = (props) => {
     }
     if (questions && questions.length > 0) {
       tmp.questions = questions.map((q: TIndexItem) => {
-        if (q.answer && q.answer.length > 0) {
-          q.answer = q.answer[0];
+        const tmpQuestion = { ...q };
+        if (tmpQuestion.answer && tmpQuestion.answer.length > 0) {
+          tmpQuestion.answer = tmpQuestion.answer[0];
         }
-        q.action = 'ALTER';
-        q.isAdd = false;
-        q.isNew = 'no';
-        return q;
+        tmpQuestion.action = 'ALTER';
+        tmpQuestion.isAdd = false;
+        tmpQuestion.isNew = 'no';
+        return tmpQuestion;
       });
     }
     form.setFieldsValue(tmp);
   }, [questions, title]);
 
   const handleSave = async (values: any) => {
-    setLoading(true);
-    try {
-      const titlePart =
-        mode === 'ADD'
-          ? {
-            ...fixedData,
-            question: values.title,
-            answer: [],
-            group: `1-${position}`,
-            uuid: +new Date() + Math.random(),
-          }
-          : {
-            ...title,
-            question: values.title,
-            isAdd: false,
-            action: 'ALTER',
-          };
-      await api.indexLibrary.handleImageTemplate({
-        meta: { id },
-        data: [
-          { ...titlePart },
-          ...values.questions
-            .filter((q: TIndexItem) => !(q.action === 'DELETE' && q.isNew === 'yes'))
-            .map((q: TIndexItem) => {
-              q.answer = q.answer ? [q.answer] : [];
-              return q;
-            })
-          ,
-        ],
-      });
-      message.success('操作成功');
-      setShowModal(false);
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (err: any) {
-      message.error(err?.result || '操作失败');
-    } finally {
-      setLoading(false);
-    }
+    const titlePart =
+      mode === 'ADD'
+        ? {
+          ...fixedData,
+          question: values.title,
+          answer: [],
+          group: `1-${position}`,
+          uuid: +new Date() + Math.random(),
+        }
+        : {
+          ...title,
+          question: values.title,
+          isAdd: false,
+          action: 'ALTER',
+        };
+    const params = {
+      meta: { id },
+      data: [{ ...titlePart }, ...values.questions.filter(filterNotNew).map(handleQuestionAnswer)],
+    };
+    handleQuestions({
+      params,
+      fn: { setLoading, setShowModal, onSuccess },
+    });
+  };
+  const handleDeleteQuestions = async () => {
+    const params = {
+      meta: { id },
+      data: [
+        { ...title, action: 'DELETE' },
+        ...(questions as TIndexItem[]).map(setDelete),
+      ],
+    };
+    // console.log("params", params);
+    handleQuestions({
+      params,
+      fn: { setLoading, setShowModal, onSuccess },
+    });
   };
 
   const handleDeleteQuestion = (index: number) => {
@@ -113,6 +109,18 @@ const AddEditCompletion: FC<IProps> = (props) => {
   return (
     <div>
       <span onClick={() => setShowModal(true)}>{children}</span>
+      {mode === 'ALTER' && (
+        <Popconfirm
+          cancelButtonProps={{ size: 'small' }}
+          okButtonProps={{ size: 'small' }}
+          title="确认删除吗"
+          onConfirm={handleDeleteQuestions}
+        >
+          <Button danger ghost size="small">
+            删除
+          </Button>
+        </Popconfirm>
+      )}
       <DragModal
         title="添加多段填空题"
         width={700}

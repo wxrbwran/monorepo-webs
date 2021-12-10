@@ -1,11 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Form, Input, Radio, Checkbox, Button, message, Space } from 'antd';
+import { Form, Input, Radio, Checkbox, Button, Space, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { createFormListProps } from 'xzl-web-shared/src/utils/consts';
-
-import * as api from '@/services/api';
-
+import { handleQuestions, handleQuestionAnswer, filterNotNew, setDelete } from '../utils';
 interface IProps {
   id: string;
   mode: string;
@@ -26,7 +24,7 @@ const AddEditRadio: FC<IProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<string>('RADIO');
-  const [count, setCount] = useState<number>(0);
+  const [_, setCount] = useState<number>(0);
   const samples = [{ value: '1', label: '形态' }, { value: '2', label: '大小' }];
   const [form] = Form.useForm();
   // const curDocument = useSelector((state: IState) => state.document.curDocument);
@@ -46,77 +44,87 @@ const AddEditRadio: FC<IProps> = (props) => {
     }
     if (questions && questions.length > 0) {
       tmp.questions = questions.map((q: TIndexItem) => {
-        if (q.answer && q.answer.length > 0) {
-          q.answer = q.answer[0];
+        const tmpQuestion = { ...q };
+        if (tmpQuestion.answer && tmpQuestion.answer.length > 0) {
+          tmpQuestion.answer = tmpQuestion.answer[0];
         }
-        q.action = 'ALTER';
-        q.isNew = 'no';
-        return q;
+        tmpQuestion.action = 'ALTER';
+        tmpQuestion.isNew = 'no';
+        return tmpQuestion;
       });
     }
     form.setFieldsValue(tmp);
   }, [questions, title]);
 
   const handleSave = async (values: any) => {
-    setLoading(true);
-    console.log('handleSave', values);
-    try {
-      const titlePart =
-        mode === 'ADD'
-          ? {
-            ...fixedData,
-            question: values.title,
-            answer: [],
-            group: `2-${position}`,
-            question_type: type,
-            uuid: +new Date() + Math.random(),
-          }
-          : {
-            ...title,
-            question: values.title,
-            // isAdd: false,
-            action: 'ALTER',
-          };
-      await api.indexLibrary.handleImageTemplate({
-        meta: { id },
-        data: [
-          titlePart,
-          ...values.questions
-            .filter((q: TIndexItem) => !(q.action === 'DELETE' && q.isNew === 'yes'))
-            .map((q: TIndexItem) => {
-              if (!Array.isArray(q.answer)) {
-                q.answer = (q.answer as string | undefined) ? [q.answer as string] : [];
-              }
-              if (q.action === 'ADD') {
-                q.createdTime = +new Date();
-                // q.isAdd = true;
-              }
-              q.question_type = type;
-              return q;
-            }),
-        ],
-      });
-      message.success('操作成功');
-      setShowModal(false);
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (err: any) {
-      message.error(err?.result || '操作失败');
-    } finally {
-      setLoading(false);
-    }
+    const titlePart =
+      mode === 'ADD'
+        ? {
+          ...fixedData,
+          question: values.title,
+          answer: [],
+          group: `2-${position}`,
+          question_type: type,
+          uuid: +new Date() + Math.random(),
+        }
+        : {
+          ...title,
+          question: values.title,
+          // isAdd: false,
+          action: 'ALTER',
+        };
+    const params = {
+      meta: { id },
+      data: [
+        titlePart,
+        ...values.questions
+          .filter(filterNotNew)
+          .map(handleQuestionAnswer)
+          .map((q: TIndexItem) => {
+            q.question_type = type;
+            return q;
+          }),
+      ],
+    };
+    handleQuestions({
+      params,
+      fn: { setLoading, setShowModal, onSuccess },
+    });
+  };
+  const handleDeleteQuestions = async () => {
+    const params = {
+      meta: { id },
+      data: [
+        { ...title, action: 'DELETE' },
+        ...(questions as TIndexItem[])
+          .map(setDelete),
+      ],
+    };
+    handleQuestions({
+      params,
+      fn: { setLoading, setShowModal, onSuccess },
+    });
   };
   const handleDeleteQuestion = (index: number) => {
-    console.log('handleDeleteQuestion', index);
     const values = form.getFieldsValue();
     values.questions.filter((q: TIndexItem) => q.action !== 'DELETE')[index].action = 'DELETE';
     setCount((prev) => prev + 1);
-    console.log(count);
   };
   return (
     <div>
       <span onClick={() => setShowModal(true)}>{children}</span>
+      {mode === 'ALTER' && (
+        <Popconfirm
+          cancelButtonProps={{ size: 'small' }}
+          okButtonProps={{ size: 'small' }}
+          title="确认删除吗"
+          onConfirm={handleDeleteQuestions}
+        >
+          <Button danger ghost size="small">
+            删除
+          </Button>
+        </Popconfirm>
+      )}
       <DragModal
         title="添加问答题"
         width={700}
@@ -200,7 +208,7 @@ const AddEditRadio: FC<IProps> = (props) => {
             </Form.List>
           </Form>
           <div className="mt-10">
-            <Radio.Group value={type} onChange={(e: RadioChangeEvent) => setType(e.target.value)}>
+            <Radio.Group value={type} onChange={(e) => setType(e.target.value)}>
               <Radio value="RADIO">单选</Radio>
               <Radio value="CHECKBOX">多选</Radio>
             </Radio.Group>
