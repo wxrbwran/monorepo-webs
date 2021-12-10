@@ -93,4 +93,8 @@ export default {
   patchImageTemplate(data: CommonData): Promise<any> {
     return http.patch('image/template', { data });
   },
+  // 复制单据
+  copyImageTemplate(data: CommonData): Promise<any> {
+    return http.put('image/template/copy', { data });
+  },
 };

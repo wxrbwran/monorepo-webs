@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Divider, Button } from 'antd';
-import AddTextModal from './AddEditTextModal';
+import AddEditTextModal from './AddEditTextModal';
 import TextItem from './TextItem';
 
 interface IProps {
@@ -33,7 +33,7 @@ const TextTemplate: FC<IProps> = (props) => {
         {questions.map((q: TIndexItem, index: number) => (
           <div key={index} className="mb-10">
             <TextItem item={q} index={index}>
-              <AddTextModal
+              <AddEditTextModal
                 mode="ALTER"
                 onSuccess={onSuccess}
                 position={getNextGroupNumber()}
@@ -42,12 +42,12 @@ const TextTemplate: FC<IProps> = (props) => {
                 type={type}
               >
                 <Button type="primary" ghost className="mx-10" size="small">编辑</Button>
-              </AddTextModal>
+              </AddEditTextModal>
             </TextItem>
           </div>
         ))}
         <Divider plain dashed>
-          <AddTextModal
+          <AddEditTextModal
             mode="ADD"
             onSuccess={onSuccess}
             position={getNextGroupNumber()}
@@ -55,7 +55,7 @@ const TextTemplate: FC<IProps> = (props) => {
             type={type}
           >
             <Button type="link">添加新的问答题</Button>
-          </AddTextModal>
+          </AddEditTextModal>
         </Divider>
       </div>
   );

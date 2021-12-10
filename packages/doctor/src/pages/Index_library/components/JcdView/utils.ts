@@ -32,7 +32,9 @@ export const handleQuestions = async ({
 };
 
 export const handleQuestionAnswer = (q: TIndexItem): TIndexItem => {
-  q.answer = (q.answer as string | undefined) ? [q.answer as string] : [];
+  if (!Array.isArray(q.answer)) {
+    q.answer = (q.answer as string | undefined) ? [q.answer as string] : [];
+  }
   return q;
 };
 

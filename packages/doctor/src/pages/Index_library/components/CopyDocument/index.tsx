@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import {
   Form, Input, Button, message,
 } from 'antd';
+// import { useSelector } from 'umi';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { documentType } from 'xzl-web-shared/src/utils/consts';
 import * as api from '@/services/api';
@@ -16,6 +17,7 @@ const CopyDocument: FC<IProps> = (props) => {
   // console.log('record', record);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const curDocument = useSelector((state: IState) => state.document.curDocument);
   const [form] = Form.useForm();
   const sid = window.$storage.getItem('sid');
 
@@ -51,7 +53,7 @@ const CopyDocument: FC<IProps> = (props) => {
           title: type,
           jcdName: params.name,
         };
-        await api.indexLibrary.patchImageTemplate({
+        await api.indexLibrary.copyImageTemplate({
           id: document?.id,
           ...params,
         });
@@ -73,10 +75,10 @@ const CopyDocument: FC<IProps> = (props) => {
     wrapperCol: { span: 24 },
   };
   return (
-    <div>
+    <div className="inline-block">
       <span onClick={() => setShowModal(true)}>{children}</span>
       <DragModal
-        title="添加"
+        title="复制单据"
         footer={null}
         width={600}
         visible={showModal}
