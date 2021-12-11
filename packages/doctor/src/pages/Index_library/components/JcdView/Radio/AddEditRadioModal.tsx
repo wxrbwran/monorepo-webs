@@ -69,6 +69,7 @@ const AddEditRadio: FC<IProps> = (props) => {
         }
         : {
           ...title,
+          question_type: type,
           question: values.title,
           // isAdd: false,
           action: 'ALTER',

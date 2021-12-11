@@ -51,7 +51,6 @@ const CopyDocument: FC<IProps> = (props) => {
           sid: params.sourceSid,
           createdTime: +new Date(),
           title: type,
-          jcdName: params.name,
         };
         await api.indexLibrary.copyImageTemplate({
           id: document?.id,
@@ -110,7 +109,7 @@ const CopyDocument: FC<IProps> = (props) => {
               <>
                 <Form.Item
                   label={`${documentType[type]}名称`}
-                  name="name"
+                  name="jcdName"
                   rules={[{ required: true, message: `请输入${documentType[type]}名称!` }]}
                 >
                   <Input placeholder={`请输入${documentType[type]}名称`} />
