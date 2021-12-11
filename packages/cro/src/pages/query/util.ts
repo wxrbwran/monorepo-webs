@@ -22,7 +22,6 @@ export const transformDynamicToStatic = (item: { type: string, name: string, ass
       };
 
       api.query.fetchNodeEl(
-
         item.assign.value,
         params,
       ).then((response: { items: any; }) => {
@@ -335,7 +334,7 @@ export const handleFormatValues = (values: any, checkedField: any[], projectSid:
   //     message.error('所选条件不能为空');
   //     return;
   //   }
-  // } 
+  // }
   const rules = handleFormValues(formatValues, checkedField, projectSid);
   return rules;
 };
