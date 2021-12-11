@@ -26,17 +26,23 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
   const isList = location?.pathname.includes('files');
   const lookFile = (_item: IList) => {
     const aEl = document.getElementById('upload');
-    if (aEl && !!location){
+    if (aEl && !!location) {
       aEl.setAttribute('href', _item.content.convertAddress);
       aEl.click();
     }
   };
   const handleDel = (id: string) => {
     let request = api.education.delPublicize;
-    if (type === 'accompany') {
+    let requestType = '';
+    if (['accompany', 'crf'].includes(type)) {
       request = api.education.delPublicizeScale;
+      if (type == 'accompany') {
+        requestType = 'FOLLOW';
+      } else if (type == 'crf') {
+        requestType = 'FOLLOW_CRF';
+      }
     }
-    request(id).then( () => {
+    request(id, requestType).then(() => {
       message.success('删除成功');
       onSuccess();
     }).catch(err => {
@@ -48,19 +54,19 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
       type: 'suifang/saveCurrentEditScale',
       payload: item,
     });
-    history.push('/publicize/files/accompany/create');
+    history.push(`/publicize/files/scale/create?type=${type}`);
   };
   // 是否显示编辑或者删除按钮
-  const isShowBtn = (type === 'accompany' && item?.edit) || (!item?.inSchedule && item?.del);
+  const isShowBtn = (['accompany', 'crf'].includes(type) && item?.edit) || (!item?.inSchedule && item?.del);
   // 是否显示分隔线
-  const isShowSplit = (type === 'accompany' && item?.edit) && (!item?.inSchedule && item?.del);
+  const isShowSplit = (['accompany', 'crf'].includes(type) && item?.edit) && (!item?.inSchedule && item?.del);
   return (
     <div key={item.id} className={`text-center relative ${styles.item_wrap}`}>
       {
         isList && isShowBtn && (
           <div className={styles.del_wrap}>
             {
-              type === 'accompany' && item?.edit && (
+              ['accompany', 'crf'].includes(type) && item?.edit && (
                 <>
                   <FormOutlined onClick={handleEdit} />
                 </>
@@ -84,7 +90,7 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
           </div>
         )
       }
-      <p>
+      <p className={styles.url}>
         {
           type === 'video' && (
             <video
@@ -101,26 +107,26 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
         {
           type === 'document' && (
             <>
-            {['doc', 'docx'].includes(ext) && <img src={word} alt="" onClick={() => lookFile(item)}/>}
-            {['xlsx', 'xls'].includes(ext) && <img src={excel} alt="" onClick={() => lookFile(item)}/>}
-            {['pdf'].includes(ext) && <img src={pdf} alt="" onClick={() => lookFile(item)}/>}
-            <a id="upload" className='hidden' target="_blank"></a>
+              {['doc', 'docx'].includes(ext) && <img src={word} alt="" onClick={() => lookFile(item)} />}
+              {['xlsx', 'xls'].includes(ext) && <img src={excel} alt="" onClick={() => lookFile(item)} />}
+              {['pdf'].includes(ext) && <img src={pdf} alt="" onClick={() => lookFile(item)} />}
+              <a id="upload" className='hidden' target="_blank"></a>
             </>
           )
         }
         {
           type === 'picture' && (
-              <Image
-                width={86}
-                height={86}
-                src={item.content.address}
-                alt=""
-                className='w-86 h-86 rounded'
-              />
+            <Image
+              width={86}
+              height={86}
+              src={item.content.address}
+              alt=""
+              className='w-86 h-86 rounded'
+            />
           )
         }
         {
-          type === 'accompany' && (
+          ['accompany', 'crf'].includes(type) && (
             location ?
               <QuestionDetail
                 title={item.title}
@@ -132,16 +138,15 @@ function ListItem({ type, item, location, onSuccess }: IProps) {
               </QuestionDetail>
               : <img src={suifang} alt="" />
           )
-
         }
         {
-          type === 'audio' && <img src={audio} alt=""/>
+          type === 'audio' && <img src={audio} alt="" />
         }
         {
-          type === 'article' && <img src={item.content.cover} alt="" className='w-240 h-120'/>
+          type === 'article' && <img src={item.content.cover} alt="" className='w-240 h-120' />
         }
       </p>
-      <p className={styles.name}>{`${type !== 'accompany' ? item.content.filename || '' : item.title}`}</p>
+      <p className={styles.name}>{`${!['accompany', 'crf'].includes(type) ? item.content.filename || '' : item.title}`}</p>
     </div>
   );
 }

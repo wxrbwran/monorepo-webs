@@ -94,7 +94,7 @@ function AddTopic(props: IProps) {
   const ddtkData = {
     'type': 'COMPLETION',
     'detail': {
-      'stem': '填空1＿＿＿，填空2＿＿＿',
+      'stem': '填空1「」，填空2「」',
       'answer': [],
       'content': [],
     },
@@ -128,13 +128,13 @@ function AddTopic(props: IProps) {
       setInfos(res.infos);
     });
   };
-  useEffect(()=> {
-    if (props.location.query.isTemp){
+  useEffect(() => {
+    if (props.location.query.isTemp) {
       fetchList();
     }
   }, []);
 
-  const updateInfo = ()=> {
+  const updateInfo = () => {
     fetchList();
   };
 
@@ -171,8 +171,8 @@ function AddTopic(props: IProps) {
                   <ManageIssue infos={infos} updateInfo={updateInfo}><p>管理</p></ManageIssue>
                   <ul>
                     {
-                      infos.map((item: IItem, index)=>(
-                      <li key={index} onClick={() => addCommon(item.question)}>{item.title}</li>
+                      infos.map((item: IItem, index) => (
+                        <li key={index} onClick={() => addCommon(item.question)}>{item.title}</li>
                       ))
                     }
                   </ul>

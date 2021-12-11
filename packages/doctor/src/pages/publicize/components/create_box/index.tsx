@@ -1,15 +1,20 @@
 import React from 'react';
-import { history } from 'umi';
+import { useParams } from 'umi';
+import { PlusOutlined } from '@ant-design/icons';
 import styles from './index.scss';
+import { sfTypeUrl } from '../../utils';
 
 interface IProps {
-  toAddress: string
+  onClick: () => void;
 }
-function PatientEducation({ toAddress }: IProps) {
+function PatientEducation({ onClick }: IProps) {
+  const { type } = useParams<{ type: string }>();
+
 
   return (
-    <div className={styles.create_new} onClick={() => history.push(toAddress)}>
-      创建
+    <div className={styles.create_new} onClick={onClick}>
+      <PlusOutlined />
+      <span>创建新{sfTypeUrl?.[type].text}</span>
     </div>
   );
 }

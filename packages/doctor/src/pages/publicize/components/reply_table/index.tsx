@@ -12,19 +12,21 @@ interface IProps {
   planRuleId: string;
   sid: string;
   status: number;
+  scaleId: string;
 }
-function RePlyTable({ children, planRuleId, sid, status }: IProps) {
+function RePlyTable({ children, planRuleId, sid, status, scaleId }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
 
   useEffect(() => {
-    if (showModal){
+    if (showModal) {
       api.education.getScalePatientReply({
         planRuleId,
         sid,
         status,
+        scaleId,
         pageAt: current,
         pageSize,
       }).then((res: { list: [], total: number }) => {
@@ -93,17 +95,17 @@ function RePlyTable({ children, planRuleId, sid, status }: IProps) {
           maskClosable
           footer={null}
         >
-        <Table
-          dataSource={dataSource}
-          columns={status === 1 ? columnsNotReply : columns}
-          pagination={{
-            pageSize,
-            total,
-            onChange: handlePagerChange,
-          }}
-        />
+          <Table
+            dataSource={dataSource}
+            columns={status === 1 ? columnsNotReply : columns}
+            pagination={{
+              pageSize,
+              total,
+              onChange: handlePagerChange,
+            }}
+          />
         </DragModal>
-      ) }
+      )}
     </>
   );
 }

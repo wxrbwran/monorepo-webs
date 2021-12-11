@@ -12,7 +12,7 @@
     border-right: 10px solid #F5F5F5;
     overflow-y: auto;
     //报告
-    height: calc(100vh - 97px);
+    height: calc(100vh - 100px);
     flex-shrink: 0;
     &.close {
       width: 57px;
@@ -23,7 +23,7 @@
     .cont {
       transition: all 0.5s;
       overflow: hidden;
-      height: 100%;
+      height: calc(100% - 22px);
     }
   }
   &__right {

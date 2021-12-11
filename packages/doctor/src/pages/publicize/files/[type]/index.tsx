@@ -44,6 +44,7 @@ function List({ location }: IProps) {
         operatorWcId: window.$storage.getItem('wcId'),
         ownershipSid: currentOrgInfo.sid,
         roleType: window.$storage.getItem('roleId'),
+        type: type === 'accompany' ? 0 : 1,  //0：随访表 1：CRF量表
       })
       .then((res) => {
         setSourceList(res.list);
@@ -53,7 +54,7 @@ function List({ location }: IProps) {
       });
   };
   const fetchListData = () => {
-    if (type === 'accompany') {
+    if (['accompany', 'crf'].includes(type) ) {
       getPublicizeScaleList();
     } else if (type !== 'article') {
       getPublicizeList();
@@ -168,10 +169,10 @@ function List({ location }: IProps) {
               <PlusOutlined />
             </Upload>
           )}
-          {type === 'accompany' && (
+          {['accompany', 'crf'].includes(type) && (
             <p
               className={`${styles.upload} ${styles.add}`}
-              onClick={() => history.push('/publicize/files/accompany/create')}
+              onClick={() => history.push(`/publicize/files/scale/create?type=${type}`)}
             >
               <PlusOutlined />
             </p>

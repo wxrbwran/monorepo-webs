@@ -4,10 +4,6 @@ export default {
   filePrepare(data: object): Promise<any> {
     return http.get('base/file/prepare', { data });
   },
-  // 初始化随访团队
-  initContact(data: object): Promise<any> {
-    return http.post('doctor/init/contact', { data });
-  },
   // 创建随访小组
   addGroup(data: object): Promise<any> {
     return http.post('doctor/contact/group', { data });
@@ -22,11 +18,11 @@ export default {
   },
   // 为患者分配小组
   postGroupPatient(data: any): Promise<any> {
-    return http.post('doctor/contact/patient', { data });
+    return http.post('doctor/contact/group/patient', { data });
   },
   // 获取小组下患者列表
   getGroupPatientList(data: any): Promise<any> {
-    return http.get(`doctor/contact/group/patient/${data.groupId}`);
+    return http.get('doctor/contact/group/patient', { data });
   },
   // 获取列表logId
   getLogId(data: any): Promise<any> {
@@ -34,7 +30,7 @@ export default {
   },
   // 获取全部患者列表
   getPatientsList(data: any): Promise<any> {
-    return http.get(`contact/patient/${data.actionLogId}`);
+    return http.get('contact/patient', { data });
   },
   // 新增视频-文件-文章-图片
   addPublicize(data: any): Promise<any> {
@@ -68,7 +64,7 @@ export default {
   },
   // 查看随访表所有回复情况
   getScaleReplyList(data?: any): Promise<any> {
-    return http.get('statistics/list', { data });
+    return http.get('out/reply/count', { data });
   },
   // 查询列表回复和未回复列表
   getScalePatientReply(data?: any): Promise<any> {
@@ -95,13 +91,27 @@ export default {
     return http.get(`template/${source_type}`);
   },
   // 发送计划
-  sendPlan(data?: any): Promise<any> {
-    return http.post('rules', { data });
+  // sendPlan(data?: any): Promise<any> {
+  //   return http.post('rules', { data });
+  // },
+  // 获取已发送内容
+  getAllRules(data?: any): Promise<any> {
+    return http.get('publicize/rules', { data });
+  },
+
+  patchGroupName(data?: any): Promise<any> {
+    return http.patch('publicize/group', { data });
   },
   // 获取已发送内容
-  getSendContent(data?: any): Promise<any> {
-    return http.get('rules', { data });
+  getEducationSendContents(data?: any): Promise<any> {
+    return http.get('publicizes', { data });
   },
+  // 获取已发送内容
+  getScalesSendContents(data?: any): Promise<any> {
+    return http.get('publicize/scales', { data });
+  },
+
+
   // 查询诊断处理
   fetchKvScope(data: any): Promise<any> {
     return http.get('kv/scope', { data });
@@ -111,8 +121,8 @@ export default {
     return http.delete(`publicize/${id}`);
   },
   // 删除随访表
-  delPublicizeScale(id: string): Promise<any> {
-    return http.delete(`publicize/scale/${id}`);
+  delPublicizeScale(id: string, type: string): Promise<any> {
+    return http.delete(`publicize/scale/${type}/${id}`);
   },
   // 修改随访表
   patchPublicizeScale(data: any): Promise<any> {
@@ -130,4 +140,35 @@ export default {
   getContactLocation(data?: any): Promise<any> {
     return http.get('doctor/contact/location', { data });
   },
+  // 获取宣教、随访、CRF规则小组 "type": 1 //0：随访表 1：CRF量表 2:宣教
+  getPublicizeGroup(data?: any): Promise<any> {
+    return http.get('publicize/group', { data });
+  },
+  // 新建宣教随访crf
+  addPublicizeRules(data?: any): Promise<any> {
+    return http.post('publicize/rules', { data });
+  },
+
+  // 新建宣教随访crf
+  editRules(data?: any): Promise<any> {
+    return http.patch('rules', { data });
+  },
+  // 新建宣教随访crf
+  appendRules(data?: any): Promise<any> {
+    return http.post('rules', { data });
+  },
+  // 统计发送日历
+  getPublicizSendCount(data?: any): Promise<any> {
+    return http.get('out/send/count', { data });
+  },
+  // 统计发送日历--发送详情
+  getPublicizSendInfo(data?: any): Promise<any> {
+    return http.get('out/send/info', { data });
+  },
+  // 删除宣教、随访、crf量表
+  delPublicizRule(ruleId: string): Promise<any> {
+    return http.delete(`rules/${ruleId}`);
+  },
+
+
 };

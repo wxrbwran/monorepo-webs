@@ -26,7 +26,7 @@ function questionGapFilling(props: IProps) {
 
   // 保存当前点击的位置
   const handleSaveIndex = () => {
-    const dom =  document.getElementsByClassName(`ddtk_${quesIndex}`)[0];
+    const dom = document.getElementsByClassName(`ddtk_${quesIndex}`)[0];
     // @ts-ignore
     dom?.focus();
     // @ts-ignore
@@ -35,11 +35,11 @@ function questionGapFilling(props: IProps) {
   // 添加填空符
   const handleAddSymbol = () => {
     const oldStem = questions[quesIndex].detail.stem;
-    let newCont = `${questions[quesIndex].detail.stem  }＿＿＿`;
+    let newCont = `${questions[quesIndex].detail.stem}「」`;
     if (cursorIndex) {
-      newCont = `${oldStem.slice(0, cursorIndex)  }＿＿＿${  oldStem.slice(cursorIndex)}`;
+      newCont = `${oldStem.slice(0, cursorIndex)}「」${oldStem.slice(cursorIndex)}`;
     }
-    questions[quesIndex].detail.stem =  newCont ;
+    questions[quesIndex].detail.stem = newCont;
     changeDdtkQues([...questions]);
   };
   const handleChangeVal = (ev: React.ChangeEventHandler<HTMLTextAreaElement>) => {

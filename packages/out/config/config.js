@@ -124,4 +124,11 @@ export default defineConfig({
     //   .loader(require.resolve('file-loader'));
     // config.plugin('umi-webpack-bundle-analyzer').use(BundleAnalyzerPlugin);
   },
+  proxy: {
+    '/api': {
+      target: 'http://172.16.10.16:8000/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
 });

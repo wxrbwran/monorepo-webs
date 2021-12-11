@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './index.scss';
-import { DoubleLeftOutlined, DoubleRightOutlined} from '@ant-design/icons';
+import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons';
 interface IProps {
   children: React.ReactElement[]
 }
@@ -9,7 +9,7 @@ function ToogleSide(props: IProps) {
 
   const handleOpenSide = () => {
     setIsOpen(!isOpen);
-  }
+  };
 
   return (
     <div className='toogle-side'>
@@ -23,7 +23,7 @@ function ToogleSide(props: IProps) {
               <DoubleRightOutlined style={{ fontSize: 12 }} />
           }
         </div>
-        <div className="cont" style={{ width: isOpen ? '100%' : '0'}}>
+        <div className="cont" style={{ width: isOpen ? '100%' : '0' }}>
           {props.children[0]}
         </div>
       </div>
@@ -31,7 +31,7 @@ function ToogleSide(props: IProps) {
         {props.children[1]}
       </div>
     </div>
-  )
+  );
 }
 
 export default ToogleSide;

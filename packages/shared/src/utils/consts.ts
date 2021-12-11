@@ -28,7 +28,6 @@ export const rolePriceList = [
   },
 ];
 
-//  '', 'SUBORDINATE_VIP';
 export const roleType: string[] = ['INDEPENDENT_VIP', 'SUPERIOR_VIP', 'SUBORDINATE_VIP'];
 export const VIPType: { type: string; divide: number }[] = [
   {

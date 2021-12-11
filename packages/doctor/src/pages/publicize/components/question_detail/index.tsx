@@ -24,13 +24,13 @@ function QuestionDetail(props: IProps) {
 
   useEffect(() => {
     if (isShowModal) {
-      if (id){
+      if (id) {
         api.education
           .getScaleDetail(id)
           .then((res) => {
-            setTitle(res.title);
-            setSubTitle(res.subTitle);
-            setQuestion(res.questions);
+            setTitle(res.result.scaleName);
+            setSubTitle(res.result.scaleSubName);
+            setQuestion(res.result.questions);
           })
           .catch((err: string) => {
             console.log('err', err);

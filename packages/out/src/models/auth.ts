@@ -1,7 +1,6 @@
 import type { Reducer, Effect } from 'umi';
 import { setAuthorizationToken } from '@/services/http';
 // import * as api from '@/services/api';
-
 export interface AuthModelType {
   namespace: string;
   state: AuthModelState;
@@ -15,10 +14,10 @@ export interface AuthModelType {
   // subscriptions: { setup: Subscription };
 }
 
-const localUid = window.$storage.getItem('uid') || '';
+const localUid = window.$storage?.getItem('uid') || '';
 
 export const authState = {
-  isLogin: !!localUid,
+  isLogin: false,
   uid: localUid,
   wcl: [],
 };
@@ -37,12 +36,12 @@ const Model: AuthModelType = {
       } else {
         const data = JSON.parse(token);
         console.log('dataaaaaa', data);
+        setAuthorizationToken(data.accessToken);
         window.$storage.setItem('access_token', data.accessToken);
         window.$storage.setItem('sid', data.wcl[0].roles[0].subject.id);
         window.$storage.setItem('nsId', data.wcl[0].ns.id);
         window.$storage.setItem('wcId', data.wcl[0].wcId);
         window.$storage.setItem('roleId', data.wcl[0].roles[0].id);
-        setAuthorizationToken(data.accessToken);
         yield put({
           type: 'changeLoginStatus',
           payload: data,
@@ -76,6 +75,7 @@ const Model: AuthModelType = {
       setAuthorizationToken(false);
       const storages = ['access_token', 'refresh_token', 'uid', 'sid', 'xzl-web-out-org_token'];
       storages.forEach((item) => window.$storage.removeItem(item));
+      localStorage.removeItem('xzl-web-out-org_token');
       return {
         isLogin: false,
         uid: '',

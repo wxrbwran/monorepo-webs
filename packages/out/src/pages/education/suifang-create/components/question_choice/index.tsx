@@ -50,6 +50,9 @@ function QuestionChoice(props: IProps) {
     if (val.trim()) {
       questions[qIndex].detail.options[oIndex].content = val;
       changeQues([...questions]);
+    } else {
+      questions[qIndex].detail.options[oIndex].content = '';
+      changeQues([...questions]);
     }
   };
 
@@ -76,17 +79,18 @@ function QuestionChoice(props: IProps) {
           if (option.content) {
             return (
               <div className="item input-empty" key={oIndex}>
-                <Checkbox>{option.content}</Checkbox>
+                <Checkbox className='flex-1'></Checkbox>
+                <Input placeholder={`选项${oIndex + 1}`} value={option.content} onChange={(ev) => handleSaveOption(ev, quesIndex, oIndex)} />
                 <CloseOutlined onClick={() => handleDelOptions(quesIndex, oIndex)} />
               </div>
             );
           }
           return (
-              <div className="item input-empty" key={oIndex}>
-                <BorderOutlined />
-                <Input placeholder={`选项${oIndex + 1}`} onBlur={(ev) => handleSaveOption(ev, quesIndex, oIndex)} />
-                <CloseOutlined onClick={() => handleDelOptions(quesIndex, oIndex)} />
-              </div>
+            <div className="item input-empty" key={oIndex}>
+              <BorderOutlined />
+              <Input placeholder={`选项${oIndex + 1}`} onBlur={(ev) => handleSaveOption(ev, quesIndex, oIndex)} />
+              <CloseOutlined onClick={() => handleDelOptions(quesIndex, oIndex)} />
+            </div>
           );
 
         })}

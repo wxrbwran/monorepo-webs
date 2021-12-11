@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import './style/index.less';
 import ViewerProps from './ViewerProps';
 export interface ViewerCoreState {

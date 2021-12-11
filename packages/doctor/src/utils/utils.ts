@@ -91,12 +91,20 @@ export function getRole(role: string) {
     default:
       return fetchRolePropValue(role, 'desc');
   }
+}
 
+export function getRoles(msgCustom: { fromUsers?: { role: string }[], fromUser: { role: string } }) {
+  if (msgCustom?.fromUsers) {
+    return [...new Set(msgCustom?.fromUsers.map(item => item.role))].map(roleId => getRole(roleId)).join('、');
+  } else {
+    return getRole(msgCustom?.fromUser?.role) || '';
+  }
 }
 
 // 得到IM发送者的信息(只要有智能医生角色，发送者就是智能医生，否则以什么角色进的详情页谁就是发送者)
 export function getFromDoctorInfo(currSession: IPerson) {
   let fromDoctorInfo:[] = [];
+  console.log('currSession', currSession);
   // 非智能医生
   const doctorInfo = currSession.members.filter(
     (item) => item.role === window.$storage.getItem('currRoleId'),

@@ -108,14 +108,18 @@ function SubType({ name, icon, type }: IProps) {
 
   const go2CreatePage = (e: { stopPropagation: (arg0: any) => void }) => {
     e.stopPropagation(e);
-    history.push(`/publicize/files/${type}/create`);
+    if (type === 'article') {
+      history.push('/publicize/files/article/create');
+    } else {
+      history.push(`/publicize/files/scale/create?type=${type}`);
+    }
   };
 
   return (
     <>
       <div className={styles.box} onClick={go2NewPage}>
         <div className={styles.upload}>
-          {['accompany', 'article'].includes(type) ? (
+          {['accompany', 'article', 'crf'].includes(type) ? (
             <p onClick={go2CreatePage} className={styles.btn}>
               <FormOutlined /> 创建
             </p>
@@ -134,7 +138,7 @@ function SubType({ name, icon, type }: IProps) {
           )}
         </div>
         <p className={styles.file}>
-          <img src={icon} alt="" />
+          <img className="w-70 h-70" src={icon} alt="" />
         </p>
         <p>{name}</p>
       </div>

@@ -1,140 +1,100 @@
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
-import { Steps, Button, Form, message } from 'antd';
-import { history, useSelector } from 'umi';
-import type { IValues, IRule } from '../../const';
-import { handleFormatValues, getCheckedContent } from '../../utils';
-import SendContent from '../../components/send_content';
-import SendPlan from '../../components/send_plan';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, message, Input } from 'antd';
+import { history, useSelector, useParams } from 'umi';
+// import type { IValues, IRule } from '../../const';
+// import { handleFormatValues, getCheckedContent } from '../../utils';
 import styles from './index.scss';
 import * as api from '@/services/api';
+// import PlanItem from '../components/PlanItem';
+import { LeftOutlined } from '@ant-design/icons';
+import create from '@/assets/img/create.svg';
+import { cloneDeep } from 'lodash';
+import { sfTypeUrl } from '../../utils';
+import PlanContent from './PlanContent';
+// const { Step } = Steps;
+// type IAbled = Record<string, boolean>;
 
-const { Step } = Steps;
-type IAbled = Record<string, boolean>;
-const EducationCreate: FC<ILocation> = ({ location }) => {
-  const isScale = location.pathname.includes('suifang');
-  const sendList = useSelector((state: IState) => state.education.sendList);
-  const [form] = Form.useForm();
-  const [current, setCurrent] = useState(0);
-  const [disabled, setDisabled] = useState<IAbled>({}); // 年龄性别是否禁用状态
-  const [checked, setChecked] = useState<string>(''); // 选择的要发送的内容的id
-  const [rules, setRules] = useState<IRule>();
-  const [initFormVal, setInitFormVal] = useState({ frequencyType: 'once' });
+// const EducationCreate: FC<ILocation> = ({ location }) => {
+
+const EducationCreate: FC<ILocation> = ({ }) => {
+
+  // const type = location.pathname.includes('suifang') ? 'suifang' : (location.pathname.includes('education') ? 'education' : 'crf');
+  const type: string = useParams<{ type: string }>()?.type;
+
+
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
-  const [scopeItems, setScopeItems] = useState([]);
 
-  const next = () => {
-    if (!checked) {
-      message.error('请选择发送内容!');
-    } else {
-      setCurrent(current + 1);
+
+  const [infos, setInfos] = useState<any[]>([]);
+  const [formName, setFormName] = useState('');
+  const [disabled, setDidabled] = useState(true);
+  const plansRef = useRef(null);
+
+
+  // const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const [loading, setLoading] = useState(false);
+
+
+
+  //添加条件生成一条空计划
+  const addInfo = () => {
+
+    if (plansRef.current) {
+      plansRef.current.addInfo();
     }
   };
 
-  const prev = () => {
-    setCurrent(current - 1);
-  };
-
   useEffect(() => {
-    api.education
-      .getRules(isScale ? 'FOLLOW' : 'PUBLICIZE_EDUCATION')
-      .then((res) => {
-        console.log('resrules', res);
-        setRules(res.keys);
-        const scopeListApi = res.keys.filter(item => item.name === 'scope')[0].items[0].assign.value;
-        if (scopeListApi) {
-          const params = {
-            sourceType: isScale ? 2 : 3,
-            kp: 'team',
-            rsList: [{
-              sid: window.$storage.getItem('sid'),
-              roleType: window.$storage.getItem('currRoleId'),
-              nsId: window.$storage.getItem('nsId'),
-            }, {
-              sid: currentOrgInfo.sid,
-              roleType: currentOrgInfo.role,
-              nsId: currentOrgInfo.nsId,
-            }],
-          };
-          api.education
-            .fetchNodeEl(scopeListApi, params)
-            .then((r) => {
-              setScopeItems([...r.items]);
-            })
-            .catch((err: string) => {
-              console.log('err', err);
-            });
-        }
-      })
-      .catch((err: string) => {
-        console.log('err', err);
-      });
+    addInfo(); // 默认有一个plan
   }, []);
 
-  useEffect(() => {
-    // 为了上一步 下一步来回操作时能记录值
-    form.setFieldsValue({ ...initFormVal });
-  }, [current]);
+  const onSavePlan = (_plans: any) => {
 
-  // 更新状态：列表判断是否已有发送计划使用
-  const handleUpdataStatus = (content: any) => {
-    let statusParams = content;
-    if (isScale) {
-      statusParams = content.map((item) => {
-        return { ...item, type: 5 };
-      });
-    }
-    api.education.postPublicizeBatchStatus({ content: statusParams });
+    setDidabled(false);
   };
-  const onFinish = (values: IValues) => {
-    console.log('Received values of form:', values);
-    const result = handleFormatValues(values, rules, isScale, checked, currentOrgInfo.sid, currentOrgInfo.role, scopeItems);
-    if (result) {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { start, must, should_1, actions } = result;
-      const content = getCheckedContent(checked.split(','), sendList);
-      // 提交参数
+
+  const onPlanChanged = (plans: any[]) => {
+
+    setInfos(plans);
+  };
+
+  //表单标题
+  const changeFormName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormName(e.target.value);
+  };
+  //量表提交
+  const handleSubmit = () => {
+    // setLoading(true);
+    if (!formName.trim()) {
+      message.error(`请输入${sfTypeUrl?.[type].text}类型`);
+      setLoading(false);
+    } else {
+      const ruleList = cloneDeep(infos);
+      const ruleDocs = [];
+      for (let i = 0; i < ruleList.length; i++) {
+        if (ruleList[i].ruleDoc) {
+          ruleDocs.push(ruleList[i].ruleDoc);
+        }
+      }
+
       const params = {
-        rules: [
-          {
-            title: '',
-            match: {
-              must: [...start, ...must],
-              should_1: [...should_1],
-            },
-            actions: [...actions],
-          },
-        ],
-        localRules: [
-          {
-            content,
-            ...values,
-          },
-        ],
-        meta: {
-          // sid: window.$storage.getItem('sid'),
-          sourceType: isScale ? 2 : 3,
-          teamLocations: [{
-            sid: window.$storage.getItem('sid'),
-            ns: window.$storage.getItem('nsId'),
-            role: window.$storage.getItem('currRoleId'),
-            tag: 'operator',
-          }, {
-            sid: currentOrgInfo.sid,
-            ns: currentOrgInfo.nsId,
-            role: currentOrgInfo.role,
-            tag: 'ownership',
-          }],
-        },
+        ruleDocs: ruleDocs,
+        type: sfTypeUrl?.[type].type,
+        title: formName,
+        operatorSid: window.$storage.getItem('sid'),
+        operatorWcId: window.$storage.getItem('nsId'),
+        ownershipSid: currentOrgInfo.sid,
+        // projectNsId,
       };
-      console.log('params666', params);
+
       api.education
-        .sendPlan(params)
+        .addPublicizeRules(params)
         .then(() => {
-          // message.success('发送成功')
-          // history.push('/education/patient/publicize');
-          handleUpdataStatus(content);
-          history.goBack();
+          message.success('添加成功');
+          setLoading(false);
+          // handleUpdataStatus(content);
+          history.push(`/publicize/${type}/?name=${formName}`);
         })
         .catch((err: string) => {
           console.log('err', err);
@@ -142,84 +102,61 @@ const EducationCreate: FC<ILocation> = ({ location }) => {
     }
   };
 
-  const handleChange = (changedValues: any, allValues: { conditions: { type: string }[] }) => {
-    console.log('changedValues', changedValues, allValues);
-    setInitFormVal({ ...allValues });
-    const disableObj = {
-      age: false,
-      sex: false,
-    };
-    const vals = allValues.conditions.map((item) => item?.type);
-    if (vals.includes('age')) {
-      disableObj.age = true;
-    }
-    if (vals.includes('sex')) {
-      disableObj.sex = true;
-    }
-    setDisabled(disableObj);
-  };
-
-  const changeContent = (ids: string) => {
-    setChecked(ids);
-  };
-
-  const steps = [
-    {
-      title: '选择发送内容',
-      content: (
-        <SendContent location={location} changeContent={changeContent} defaultChecked={checked} />
-      ),
-    },
-    {
-      title: '制定发送计划',
-      content: <SendPlan form={form} disabled={disabled} />,
-    },
-  ];
+  // publicize/education
   return (
-    <Form
-      name="send_plane"
-      // initialValues={{...initFormVal}}
-      onFinish={onFinish}
-      autoComplete="off"
-      form={form}
-      onValuesChange={handleChange}
-      className={styles.send_form}
-    >
-      <div className={`${styles.edu_create} px-60 py-20`}>
-        <Steps current={current}>
-          {steps.map((item) => (
-            <Step key={item.title} title={item.title} />
-          ))}
-        </Steps>
-        <div className="steps-content">{steps[current].content}</div>
-        <div className="steps-action">
-          {!current ? (
-            <Button style={{ margin: '0 8px' }} onClick={() => history.goBack()}>
-              返回
-            </Button>
-          ) : (
-            <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-              上一步
-            </Button>
-          )}
-          {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => next()} disabled={!checked}>
-              下一步
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            // <Button type="primary" onClick={() => message.success('Processing complete!')}>
-            //   完成
-            // </Button>
-            <Form.Item noStyle>
-              <Button type="primary" htmlType="submit">
-                完成
-              </Button>
-            </Form.Item>
-          )}
+    <div className={styles.gauge_table}>
+      <div className={styles.head}>
+        <LeftOutlined className={styles.back} onClick={() => history.push(`/publicize/${type}`)} />
+        <div className={styles.table_name}>
+          <p className={styles.title}>
+            <Input
+              placeholder={`请输入${sfTypeUrl?.[type].text}类型，例：高血压病人${sfTypeUrl?.[type].text}`}
+              onChange={changeFormName}
+              style={{ width: 480 }}
+            />
+          </p>
         </div>
       </div>
-    </Form>
+      <div className={styles.add} onClick={addInfo}>
+        <img src={create} alt="" />
+        创建新{sfTypeUrl?.[type].text}
+      </div>
+
+      <PlanContent type={type} onSavePlan={onSavePlan} onPlanChanged={onPlanChanged} ref={plansRef}>
+
+      </PlanContent>
+      {/* {infos.map((item, index) =>
+
+        status[index] === 'open' ? (
+          <TemplateRule
+            pageType='education'
+
+            onCancelClick={() => { handleCancel(index); }}
+            originRuleDoc={item.ruleDoc}
+            chooseValues={item.chooseValues}
+            onSaveClick={(data: { ruleDoc: any, chooseValues: any }) => {
+
+              console.log('============= onSaveClick ducation', JSON.stringify(data));
+              addPlan(data, index);
+            }}>
+          </TemplateRule>
+        ) : (
+          <div onClick={() => changeEditStatus(index)}>
+            123
+          </div>
+          // <PlanItem data={infos[index]} />
+        ),
+      )} */}
+      {infos.length > 0 && (
+        <div className={styles.operate}>
+          <Button type="primary" onClick={handleSubmit} disabled={disabled} loading={loading}>
+            完成
+          </Button>
+        </div>
+      )}
+    </div>
+
+
   );
 };
 
