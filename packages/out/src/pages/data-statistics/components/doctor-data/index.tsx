@@ -22,7 +22,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   const [hackValue, setHackValue] = useState();
   // 默认时间是t-7到t-  总计7天
   const [value, setValue] = useState<moment.Moment[]>([
-    moment().subtract(300, 'days').startOf('day'),
+    moment().subtract(7, 'days').startOf('day'),
     moment().subtract(1, 'days').startOf('day'),
   ]);
   // ['dev.V0Xwme']
