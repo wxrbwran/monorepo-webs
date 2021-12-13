@@ -468,4 +468,14 @@ export var commonCheckbox = [
 export var createFormListProps = function (field, key) {
     return __assign(__assign({}, field), { noStyle: true, name: [field.name, key], fieldKey: [field.fieldKey, key + Math.random()] });
 };
+export var documentTypeText = {
+    HYD: '化验单',
+    JCD: '检查单',
+    OTHER: '其他医学单据',
+};
+export var documentTypeSource = {
+    SYSTEM: '系统',
+    ONESELF: '自己',
+    OTHERS: '他人',
+};
 export var requiredRule = [{ required: true }];

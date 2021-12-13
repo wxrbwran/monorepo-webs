@@ -69,7 +69,7 @@ export default {
 
   // 根据index获取参考值列表
   getReferencesByIndex(data: CommonData): Promise<any> {
-    return http.get('/index/references', { data });
+    return http.get('index/references', { data });
   },
   // 8月17xr接口-e
   // 新增单据：检查单
@@ -79,7 +79,7 @@ export default {
 
   // 获取检查单列表
   fetchImageTemplate(data: CommonData): Promise<any> {
-    return http.get('/image/template', { data });
+    return http.get('image/template', { data });
   },
   // 新增/修改/删除检查单问题
   handleImageTemplate(data: CommonData): Promise<any> {

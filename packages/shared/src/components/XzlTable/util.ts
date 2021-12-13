@@ -114,7 +114,7 @@ export const handleInviteMemberList = (dataSource: Store[]) => {
 // cro邀请研究者参与管理数据处理使用此方法
 export const handleTeamInviteMemberList = (dataSource: Store[]) => {
   const newData: Array<ISubject> = [];
-  console.log('handleTeamInviteMemberList dataSource', dataSource);
+  // console.log('handleTeamInviteMemberList dataSource', dataSource);
   dataSource.forEach((team: any) => {
     let doctor: any = {};
     team.members.forEach((item) => {
@@ -140,7 +140,7 @@ export const handleTeamInviteMemberList = (dataSource: Store[]) => {
     });
     newData.push(doctor);
   });
-  console.log('handleTeamInviteMemberList newData', newData);
+  // console.log('handleTeamInviteMemberList newData', newData);
   return newData;
 };
 
@@ -242,10 +242,6 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
     case 'infos':
       return handleInviteMemberList(dataSource);
     case 'indexTable':
-      const curDocument = getDvaApp()._store.getState().document.curDocument;
-      dataSource.forEach((datum) => {
-        datum.sampleFrom = curDocument.sampleFrom;
-      });
       return dataSource;
     default:
       return dataSource;

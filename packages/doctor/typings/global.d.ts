@@ -1,4 +1,30 @@
 declare interface CommonData {
+  [key: string]: any;
+}
+
+declare interface Window {
+  NIM: Store; // SDK
+  nim: Store; // NIM 实例
+  $dva: Store;
+  $store: Store;
+  $api: Store;
+  reloadAuthorized: Store;
+  $storage: {
+    setType: (key: 'localStorage' | 'sessionStorage') => any;
+    init: () => any;
+    getItem: (key: string) => string;
+    setItem: (key: string, val: any) => void;
+    removeItem: (key: string) => void;
+    clear: () => void;
+  };
+  echarts: any;
+}
+
+declare interface ILocation extends Partial<Location> {
+  query: Record<string, string>;
+}
+
+declare interface CommonData {
   [index: string]: any;
 }
 
@@ -28,23 +54,6 @@ declare interface Store {
   [name: string]: StoreValue;
 }
 
-declare interface Window {
-  NIM: Store; // SDK
-  nim: Store; // NIM 实例
-  $dva: Store;
-  $store: Store;
-  $api: Store;
-  reloadAuthorized: Store;
-  $storage: {
-    setType: (key: 'localStorage' | 'sessionStorage') => any;
-    init: () => any;
-    getItem: (key: string) => string;
-    setItem: (key: string, val: any) => void;
-    removeItem: (key: string) => void;
-    clear: () => void;
-  };
-  echarts: any;
-}
 interface INs {
   id?: string;
   name?: string;
@@ -96,17 +105,17 @@ declare interface IMedicinePlans {
     count: number;
     confirmAt: number;
     actions: {
-      actionType: number
+      actionType: number;
     }[];
-  }[],
+  }[];
   medicine: {
-    medicineType: number
-  }
+    medicineType: number;
+  };
 }
 declare interface IPlansState {
   medicines: {
     currentMedicinePlans: IMedicinePlans[];
-  }
+  };
 }
 declare interface IPatient {
   detail: {
@@ -213,7 +222,7 @@ interface IPerson {
   infos: IInfos[];
   sessionId: string;
 }
-export interface IPersonNew {
+declare interface IPersonNew {
   members: IInfos[];
   sessionId: string;
 }

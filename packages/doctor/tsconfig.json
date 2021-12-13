@@ -23,8 +23,8 @@
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types", "node", "typings"],
     "paths": {
-      "@/*": ["./src/*"],
-      "@@/*": ["./src/.umi/*"]
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"]
     }
   },
   "include": ["src/**/*", "config/**/*", "typings/**/*"],

@@ -503,4 +503,15 @@ export const createFormListProps = (field: any, key: string) => {
   };
 };
 
+export const documentTypeText: Record<string, string> = {
+  HYD: '化验单',
+  JCD: '检查单',
+  OTHER: '其他医学单据',
+};
+export const documentTypeSource: Record<string, string> = {
+  SYSTEM: '系统',
+  ONESELF: '自己',
+  OTHERS: '他人',
+};
+
 export const requiredRule = [{ required: true }];

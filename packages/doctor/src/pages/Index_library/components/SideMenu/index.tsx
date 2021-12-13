@@ -3,6 +3,8 @@ import { SearchOutlined, RightOutlined, PlusOutlined, EditOutlined, DeleteOutlin
 import { Input, List, Space, Popconfirm, message } from 'antd';
 import { history, useDispatch, useLocation, useSelector } from 'umi';
 import * as api from '@/services/api';
+import event from 'xzl-web-shared/src/utils/events/eventEmitter';
+import { documentTypeText, documentTypeSource } from 'xzl-web-shared/src/utils/consts';
 import { isOneSelf, isOthers, isSystem } from './util';
 import AddEditDocument from '../AddEditDocument';
 import styles from './index.scss';
@@ -30,12 +32,10 @@ const SideMenu: FC = () => {
   const [showSubMenu, setShowSubMenu] = useState(false);
   const curDocument = useSelector((state: IState) => state.document.curDocument);
 
-  // const [imgType, setImgType] = useState<IImgType>({});
-
   const curSid = window.$storage.getItem('sid');
   const handleClickMenu = async (item: TIndexItem, src: string) => {
     if (item) {
-      // console.log('handleClickMenu', item, src);
+      console.log('handleClickMenu', item, src);
       const document = { ...item };
       if (item.title) {
         document.name = item.jcdName;
@@ -114,7 +114,7 @@ const SideMenu: FC = () => {
       } else if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid !== curSid) {
         to = 'OTHERS';
       }
-      console.log('fetchImageType', firstDoc, to);
+      // console.log('fetchImageType', firstDoc, to);
       handleClickMenu(firstDoc, to);
     } else {
       handleClickMenu(curDocument, src);
@@ -124,11 +124,6 @@ const SideMenu: FC = () => {
   useEffect(() => {
     fetchImageType({});
   }, []);
-
-  const handleSearch = (value: string) => {
-    fetchImageType({ name: value });
-    setShowSubMenu(true);
-  };
   const handleMouseOverMenu = (docType: string, src: string) => {
     // console.log(docType, src);
     let tmp: TIndexItem[] = [];
@@ -138,8 +133,6 @@ const SideMenu: FC = () => {
     } else if (docType === 'OTHER') {
       handledList = [...OTHER];
     }
-    // console.log('handledList1', handledList);
-
     switch (src) {
       case 'SYSTEM':
         tmp = handledList.filter(isSystem);
@@ -167,6 +160,27 @@ const SideMenu: FC = () => {
     setSource(src);
     setShowSubMenu(true);
   };
+  useEffect(() => {
+    const listener = async (doc: TIndexItem) => {
+      console.log('listener', doc);
+      await fetchHYD();
+      await fetchJcdAndOther();
+      handleClickMenu(doc, 'ONESELF');
+      handleMouseOverMenu(doc.title || doc.type, 'ONESELF');
+      setShowSubMenu(false);
+    };
+    event.addListener('refershMenu', listener);
+    return () => {
+      event.removeListener('refershMenu', listener);
+    };
+
+  }, []);
+
+  const handleSearch = (value: string) => {
+    fetchImageType({ name: value });
+    setShowSubMenu(true);
+  };
+
 
   const handleDeleteDocument = async (item: TIndexItem, ev?: MouseEvent) => {
     ev?.stopPropagation();
@@ -178,24 +192,28 @@ const SideMenu: FC = () => {
         await api.indexLibrary.deleteImageTemplate(item.id);
       }
       message.success('删除成功');
-      fetchImageType({});
+      // 如果删除的是当前展示的页面单据，刷新
+      if (location.query.documentId === item.id) {
+        console.log('刷新');
+        window.location.href = `${window.location.origin}/#/index_library`;
+        window.location.reload();
+      } else {
+        // 如果删除的不是当前展示的页面单据
+        await fetchHYD({});
+        await fetchJcdAndOther({});
+        setMenu((prev) => prev.filter((p) => p.id !== item.id));
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
 
-  const documentTypeText: Record<string, string> = { HYD: '化验单', JCD: '检查单', OTHER: '其他医学单据' };
-  const documentTypeSource: Record<string, string> = {
-    SYSTEM: '系统',
-    ONESELF: '自己',
-    OTHERS: '他人',
-  };
+
   return (
     <div
       className={styles.menu}
       onMouseLeave={() => {
-        // handleClickMenu(curDocument, source);
         setShowSubMenu(false);
       }}
     >

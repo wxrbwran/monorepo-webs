@@ -5,7 +5,9 @@ import {
 // import { useSelector } from 'umi';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { documentType } from 'xzl-web-shared/src/utils/consts';
+import event from 'xzl-web-shared/src/utils/events/eventEmitter';
 import * as api from '@/services/api';
+
 
 interface IProps {
   type: string;
@@ -13,7 +15,7 @@ interface IProps {
   document: TIndexItem
 }
 const CopyDocument: FC<IProps> = (props) => {
-  const { type, onSuccess, document, children } = props;
+  const { type, document, children } = props;
   // console.log('record', record);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -44,7 +46,9 @@ const CopyDocument: FC<IProps> = (props) => {
       if (type === 'HYD') {
         params.fromDocumentId = document?.id;
         params.fromSid = document?.sourceSid;
-        await api.indexLibrary.copyIndexDocument(params);
+        const res = await api.indexLibrary.copyIndexDocument(params);
+        // console.log("copy hyd", res);
+        event.emit('refershMenu', res);
       } else if (['JCD', 'OTHER'].includes(type)) {
         params = {
           ...params,
@@ -52,13 +56,18 @@ const CopyDocument: FC<IProps> = (props) => {
           createdTime: +new Date(),
           title: type,
         };
-        await api.indexLibrary.copyImageTemplate({
+        const res = await api.indexLibrary.copyImageTemplate({
           id: document?.id,
           ...params,
         });
+        event.emit('refershMenu', {
+          id: res.meta.id,
+          jcdName: params.jcdName,
+          title: type,
+        });
       }
       message.success('复制成功');
-      onSuccess({});
+      // onSuccess({});
       setShowModal(false);
     } catch (err: any) {
       message.error(err?.result || '复制失败');

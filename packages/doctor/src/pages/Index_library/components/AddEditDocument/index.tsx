@@ -5,16 +5,17 @@ import {
 import { debounce } from 'lodash';
 import DragModal from 'xzl-web-shared/src/components/DragModal';
 import { documentType } from 'xzl-web-shared/src/utils/consts';
+import event from 'xzl-web-shared/src/utils/events/eventEmitter';
 import * as api from '@/services/api';
 
 interface IProps {
   type: string;
   mode: 'add' | 'edit';
-  onSuccess: (params: Record<string, string>) => void;
+  onSuccess?: (params: Record<string, string>) => void;
   record?: TIndexItem
 }
 const AddEditDocument: FC<IProps> = (props) => {
-  const { type, onSuccess, mode, record, children } = props;
+  const { type, mode, record, children } = props;
   // console.log('record', record);
   const [showModal, setshowModal] = useState(false);
   const [form] = Form.useForm();
@@ -37,15 +38,18 @@ const AddEditDocument: FC<IProps> = (props) => {
       source: 'DOCTOR',
       sourceSid: sid,
       wcId: window.$storage.getItem('wcId'),
+      creatorSid: sid,
     };
     try {
       if (type === 'HYD') {
+        let res = {};
         if (mode === 'add') {
-          await api.indexLibrary.putIndexDocument(params);
+          res = await api.indexLibrary.putIndexDocument(params);
         } else {
           params.id = record?.id;
-          await api.indexLibrary.patchIndexDocument(params);
+          res = await api.indexLibrary.patchIndexDocument(params);
         }
+        event.emit('refershMenu', { ...res, type: 'HYD' });
       } else if (['JCD', 'OTHER'].includes(type)) {
         params = {
           ...params,
@@ -55,24 +59,31 @@ const AddEditDocument: FC<IProps> = (props) => {
           title: type,
           jcdName: params.name,
         };
+        let res = {};
         if (mode === 'add') {
-          console.log('params', params);
-          await api.indexLibrary.putImageTemplate({
+          // console.log('params', params);
+          res = await api.indexLibrary.putImageTemplate({
             list: [
               {
                 meta: params,
               },
             ],
           });
+
         } else {
-          await api.indexLibrary.patchImageTemplate({
+          res = await api.indexLibrary.patchImageTemplate({
             id: record?.id,
             ...params,
           });
         }
+        event.emit('refershMenu', {
+          id: res.meta.id,
+          jcdName: params.jcdName,
+          title: type,
+          ...params,
+        });
       }
       message.success('添加成功');
-      onSuccess({});
       setshowModal(false);
     } catch (err: any) {
       message.error(err?.result || '添加失败');

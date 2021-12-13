@@ -7,13 +7,13 @@ import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import {
   indexName,
   indexAbbr,
-  indexCommon,
   columnCreator,
+  indexCommon,
   note,
   reference,
   unit,
 } from 'xzl-web-shared/src/utils/columns';
-import { documentMap } from 'xzl-web-shared/src/utils/consts';
+import { documentMap, documentTypeSource } from 'xzl-web-shared/src/utils/consts';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import ViewIndex from '../ViewIndex';
@@ -159,17 +159,15 @@ const IndexList: FC = () => {
       <div className="flex justify-between py-10 px-20">
         <Space>
           <h2 className="font-bold text-base mr-20">
-            {`${documentMap[curDocument.type]}-系统添加-${curDocument.name}`}
+            {`${documentMap[curDocument.type]}-${documentTypeSource[src]}添加-${curDocument.name}`}
           </h2>
-          {src !== 'ONESELF' && (
-            <CopyDocument type="HYD" onSuccess={onSuccess} document={curDocument}>
-              <Button
-                icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
-              >
-                复制化验单
-              </Button>
-            </CopyDocument>
-          )}
+          <CopyDocument type="HYD" onSuccess={onSuccess} document={curDocument}>
+            <Button
+              icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
+            >
+              复制化验单
+            </Button>
+          </CopyDocument>
           <div>
             <span>指标数量：</span>
             <span className="num">{total}</span>

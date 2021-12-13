@@ -24,29 +24,3 @@ declare module '*.svg' {
   const url: string;
   export default url;
 }
-
-declare interface CommonData {
-  [key: string]: any;
-}
-
-declare interface Window {
-  NIM: Store; // SDK
-  nim: Store; // NIM 实例
-  $dva: Store;
-  $store: Store;
-  $api: Store;
-  reloadAuthorized: Store;
-  $storage: {
-    setType: (key: 'localStorage' | 'sessionStorage') => any;
-    init: () => any;
-    getItem: (key: string) => string;
-    setItem: (key: string, val: any) => void;
-    removeItem: (key: string) => void;
-    clear: () => void;
-  };
-  echarts: any;
-}
-
-declare interface ILocation extends Partial<Location> {
-  query: Record<string, string>;
-}

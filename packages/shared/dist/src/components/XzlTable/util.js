@@ -10,8 +10,6 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import dayjs from 'dayjs';
-//@ts-ignore
-import { getDvaApp } from 'umi';
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
@@ -102,7 +100,7 @@ export var handleInviteMemberList = function (dataSource) {
 // cro邀请研究者参与管理数据处理使用此方法
 export var handleTeamInviteMemberList = function (dataSource) {
     var newData = [];
-    console.log('handleTeamInviteMemberList dataSource', dataSource);
+    // console.log('handleTeamInviteMemberList dataSource', dataSource);
     dataSource.forEach(function (team) {
         var doctor = {};
         team.members.forEach(function (item) {
@@ -123,7 +121,7 @@ export var handleTeamInviteMemberList = function (dataSource) {
         });
         newData.push(doctor);
     });
-    console.log('handleTeamInviteMemberList newData', newData);
+    // console.log('handleTeamInviteMemberList newData', newData);
     return newData;
 };
 var handleDoctorTeamDataSource = function (dataSource) {
@@ -219,10 +217,6 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
         case 'infos':
             return handleInviteMemberList(dataSource);
         case 'indexTable':
-            var curDocument_1 = getDvaApp()._store.getState().document.curDocument;
-            dataSource.forEach(function (datum) {
-                datum.sampleFrom = curDocument_1.sampleFrom;
-            });
             return dataSource;
         default:
             return dataSource;
