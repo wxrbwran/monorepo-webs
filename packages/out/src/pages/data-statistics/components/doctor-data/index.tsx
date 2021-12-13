@@ -83,24 +83,31 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
       .then((res: { doctorRatios: IDocRatioItem[] }[]) => {
         res.forEach((docItem) => {
           doctors[docItem.doctorRatios[0].sid] = docItem.doctorRatios;
-          xDate = [ ...xDate, ...docItem.doctorRatios.map(item => item.msgdate)];
+          xDate = [ ...xDate, ...docItem.doctorRatios.map(item => item.msgdate).filter(date => !!date)];
         });
         xDate = [...new Set(xDate)].sort((a, b) => a - b); // 去重排序
         // 遍历时间集合，
-        xDate.forEach((dateItem, inx) => {
+        xDate.forEach((dateItem) => {
           doctorsChartData.xAxisData.push( moment(dateItem).format('YYYY-MM-DD')); // 时间轴
           // 如果医生不存在此时间，就push进去，数值为0
           Object.keys(doctors).forEach(doctorSid => {
             let curDoc = doctors[doctorSid];
             if (!curDoc.find(itemDay => itemDay.msgdate === dateItem)) {
               // 保证时间顺序
-              curDoc.splice(inx, 0, { msgdate: dateItem, name: curDoc[0].name, percent: 0,  sid: curDoc[0].sid, receive_count: 0, reply_count: 0 });
+              curDoc.push({
+                msgdate: dateItem,
+                name: curDoc[0].name,
+                percent: 0,
+                sid: curDoc[0].sid,
+                receive_count: 0,
+                reply_count: 0,
+              });
             }
           });
         });
 
         Object.keys(doctors).forEach(doctorSid => {
-          let curDoc = doctors[doctorSid];
+          let curDoc = doctors[doctorSid].sort((a, b) => a.msgdate - b.msgdate);
           doctorsChartData.legendData.push(curDoc[0].name);
           doctorsChartData.seriesData.push({
             name: curDoc[0].name,
