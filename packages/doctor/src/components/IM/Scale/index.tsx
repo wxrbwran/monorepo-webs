@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import dayjs from 'dayjs';
 import scale from '@/assets/img/scale.png';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { getRole } from '@/utils/utils';
+import { getRoles } from '@/utils/utils';
 import '../Project/index.scss';
 
 interface IMsg {
@@ -45,7 +45,7 @@ const Scale: FC<IMsg> = (props) => {
             </div>
             <div className="chat__item-content">
               <p className="msg-user">
-                {`${msg.fromNick} (${getRole(msg.custom.fromUser?.role)})`}
+                {`${msg.fromNick} (${getRoles(msg.custom)})`}
               </p>
               <div className="msg-content project">
                 <p className="project_status">

@@ -2,7 +2,7 @@
 import React, { FC, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { getRole } from '@/utils/utils';
+import { getRoles } from '@/utils/utils';
 // import moment from 'moment';
 import './index.scss';
 
@@ -128,7 +128,7 @@ const AdjustMedicineCustom: FC<IMsg> = (props) => {
       </div>
       <div className="chat__item-content">
         <p className="msg-user">
-          {`${msg.fromNick} (${getRole(msg.custom.fromUser?.role)})`}
+          {`${msg.fromNick} (${getRoles(msg.custom)})`}
         </p>
         <p className="msg-doctor patient-group-msg medicine">帮患者修改服药计划</p>
         <div className="msg-text adjust-medicine-msg">

@@ -1,5 +1,4 @@
 import { cloneDeep } from 'lodash';
-
 export interface IItem {
   name: string;
   type: string;
@@ -164,14 +163,16 @@ export function getChooseValuesKeyFromRules(rule: IRule) {
           choseConditions.push(...conditionArr);
         } else {
 
-          const key = Object.keys(mustItem)[0];
-          const item = mustItem[key];
-          item.name = key;
-          choseConditions.push({
-            chooseItem: item,
-            chooseValue: getChooseValueFromItem(item),
-          });
-          changeDescritionWithItem(item);
+          if (fatherItem.name == 'basic.age' || fatherItem.name == 'basic.sex') {
+            const key = Object.keys(mustItem)[0];
+            const item = mustItem[key];
+            item.name = key;
+            choseConditions.push({
+              chooseItem: item,
+              chooseValue: getChooseValueFromItem(item),
+            });
+            changeDescritionWithItem(item);
+          }
         }
       }
     }

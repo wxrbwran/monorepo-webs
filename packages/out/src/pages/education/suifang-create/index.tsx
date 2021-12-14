@@ -37,7 +37,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
       return initSf.question.map(item => {
         const newItem = { ...item };
         if (item.type === 'COMPLETION' && isArray(item.detail.stem)) {
-          newItem.detail.stem = item.detail.stem.join('＿＿＿');
+          newItem.detail.stem = item.detail.stem.join('「」');
         }
         return newItem;
       });
@@ -161,7 +161,7 @@ function SuifangCreate({ location, scaleType }: IProps) {
             questions[i].detail.options = options;
           }
         } else if (questions[i].type === 'COMPLETION') {
-          questions[i].detail.stem = questions[i].detail.stem?.split('＿＿＿');
+          questions[i].detail.stem = questions[i].detail.stem?.split('「」');
         }
         questions[i].code = i + 1;
       }
@@ -189,7 +189,9 @@ function SuifangCreate({ location, scaleType }: IProps) {
       question: questions,
       title: formTit,
       subTitle: subTit,
+      type: 0, //0：随访表 1：CRF量表
     };
+
     handleCreate(params);
     return true;
   };
@@ -235,16 +237,15 @@ function SuifangCreate({ location, scaleType }: IProps) {
                 };
                 if (['RADIO', 'CHECKBOX'].includes(item.type)) {
                   return (
-                    <QuestionChoice {...props} key={item.type} />
+                    <QuestionChoice {...props} />
                   );
                 } if (['TEXT', 'END'].includes(item.type)) {
                   return (
-                    <QuestionText {...props} key={item.type} />
+                    <QuestionText {...props} />
                   );
                 } if (item.type === 'COMPLETION') {
                   return <QuestionDdtk
                     {...props}
-                    key={quesIndex}
                     changeDdtkQues={changeDdtkQues}
                     handSaveDdtkModify={handSaveDdtkModify}
                     originQue={originQue}

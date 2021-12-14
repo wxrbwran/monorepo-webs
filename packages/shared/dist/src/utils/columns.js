@@ -311,7 +311,7 @@ export var groupName = {
     title: '所在分组',
     dataIndex: 'groupName',
     key: 'groupName',
-    render: function (_text, record) { return (React.createElement("div", null, record.groupName.join())); },
+    render: function (_text, record) { return (React.createElement("div", null, record.groupName.join(','))); },
 };
 export var initAt = {
     title: '与医生绑定时间',

@@ -12,7 +12,7 @@ import styles from './index.scss';
 import { IState } from 'packages/doctor/typings/model';
 
 const { TabPane } = Tabs;
-const DoctorQRCode:FC = ({ children }) => {
+const DoctorQRCode: FC = ({ children }) => {
   const organizations: IOrganizations = useSelector((state: IState) => state.user.organizations);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,7 +21,7 @@ const DoctorQRCode:FC = ({ children }) => {
   const [orgList, setOrgList] = useState<any[]>([]);
   useEffect(() => {
     if (organizations.teams.length > 0) {
-      const filterOrgList:any[] = [];
+      const filterOrgList: any[] = [];
       console.log('organizations232', organizations);
       organizations.teams.forEach((item) => {
         let orgItem: CommonData = {};
@@ -67,7 +67,7 @@ const DoctorQRCode:FC = ({ children }) => {
       useCORS: true,
       backgroundColor: null,
       scale: 1.5,
-      width: 340,
+      width: domNode.offsetWidth,
       height: dom === 'wxewm' ? 480 : 401,
     }).then((canvas) => {
       const qrCodeDownloadUrl = canvas.toDataURL('image/png', 1.0).replace('image/png', 'image/octet-stream');

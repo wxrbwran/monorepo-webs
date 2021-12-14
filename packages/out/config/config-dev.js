@@ -63,7 +63,7 @@ export default defineConfig({
   // proxy: ['bj_dev', 'dev'].includes(APP_ENV) ? proxy[APP_ENV] : {},
   proxy: {
     '/api': {
-      target: 'http://172.16.10.25:8000/',
+      target: 'http://172.16.10.9:8000/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

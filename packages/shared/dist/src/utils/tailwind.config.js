@@ -1,3 +1,4 @@
+// @ts-nocheck
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9,7 +10,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-/* eslint-disable global-require */
 var colors = require('./colors');
 // console.log('tailwind', process.env.NODE_ENV);
 var spacing = {};
@@ -72,15 +72,6 @@ var config = {
     },
     variants: {},
     plugins: [],
-    // corePlugins: {
-    //   borderWidth: false,
-    //   borderStyle: false,
-    //   divideColor: false,
-    //   divideStyle: false,
-    //   divideWidth: false,
-    //   divideOpacity: false,
-    //   transform: false,
-    // },
 };
 if (process.env.NODE_ENV === 'production') {
     config.purge = ['./src/**/*.{vue,js,ts,jsx,tsx,html}'];

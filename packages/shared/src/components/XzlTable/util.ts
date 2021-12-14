@@ -10,8 +10,8 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   let newObj: CommonData = {};
   // 签约患者下，当前选中菜单的role
   const currentMenuRole = window.$storage.getItem('role');
-  // console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
-  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN'];
+  console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
+  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'DEP_HEAD'];
   data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: ISubject) => {
@@ -79,7 +79,6 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
 // 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
 export const handleInviteMemberList = (dataSource: Store[]) => {
   const newData: Array<ISubject> = [];
-  // console.log('dataSource', dataSource);
   dataSource.forEach((item: any) => {
     const {
       title,
@@ -146,13 +145,25 @@ export const handleTeamInviteMemberList = (dataSource: Store[]) => {
 
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
-  dataSource
-    .map((member) => member.members[0])
-    .forEach((member) => {
-      const tmp = { ...member };
-      tmp.patientNum = member.counters[0]?.count;
-      res.push(tmp);
+  // dataSource
+  //   .map((member) => member.members[0])
+  //   .forEach((member) => {
+  //     const tmp = { ...member };
+  //     tmp.patientNum = member.counters[0]?.count;
+  //     res.push(tmp);
+  //   });
+  dataSource.forEach(item => {
+    let doctor: any = { depHeadDoctor: false };
+    item.members.forEach((member: Store) => {
+      if (member.role === Role.DOCTOR.id || !member.role) {
+        doctor = { ...member, patientNum: member.counters[0]?.count };
+      } else if (member.role === Role.DEP_HEAD.id) {
+        doctor.depHeadDoctor = true;
+        doctor.depHeadDoctorWcId = member.wcId;
+      }
     });
+    res.push(doctor);
+  });
   return res;
 };
 

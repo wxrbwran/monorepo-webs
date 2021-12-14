@@ -1,3 +1,4 @@
+// https://procomponents.ant.design/components/layout/#route
 export const page404 = {
   component: './404',
 };
@@ -70,10 +71,12 @@ export const hospital = {
 };
 const routes = [
   {
-    path: '/user',
+    path: '/userxzl',
+    // path: '/user',  // 12.7号，本地调试，自用~~登录页面
     layout: false,
     lacale: false,
-    component: '@/layouts/index',
+    // component: '@/layouts/index',
+    component: './user/login',
     routes: [
       {
         name: '登录',
@@ -88,6 +91,13 @@ const routes = [
         component: './user/find_pwd',
       },
     ],
+  },
+  {
+    path: '/data-statistics',
+    name: '数据统计',
+    icon: 'Icon0',
+    component: './data-statistics',
+
   },
   hospital,
   // {

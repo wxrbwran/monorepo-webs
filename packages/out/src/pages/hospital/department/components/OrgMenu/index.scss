@@ -41,3 +41,17 @@ $active-color: #cfdfff;
     margin-left: 1px !important;
   }
 }
+.dep_item {
+  :global {
+    .anticon-edit {
+      display: none;
+    }
+  }
+  &:hover {
+    :global {
+      .anticon-edit {
+        display: inline-block;
+      }
+    }
+  }
+}

@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import { Button, Tabs, message } from 'antd';
 import { useDispatch } from 'react-redux';
-import { IStructuredDetailProps, ITopicItemApi, IApiDocumentList } from 'typings/imgStructured';
 import * as api from '@/services/api';
 import StructuredDetailHydPanel from '../StructuredDetailHydPanel';
 import StructuredDetailJcdPanel from '../StructuredDetailJcdPanel';
@@ -16,8 +15,8 @@ const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const { hydData, jcdData, imageId, handleRefresh, handleClose, // jcdOriginIds,
   } = props;
-  console.log('hydData232', hydData);
-  console.log('jcdData', jcdData);
+  // console.log('hydData232', hydData);
+  // console.log('jcdData', jcdData);
   const initTypeTabs = () => {
     const jcdTabs = jcdData.map((jctItem: ITopicItemApi) => {
       return {  ...jctItem, outType: jctItem.meta.title };
@@ -80,20 +79,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       message.error(err?.result || '保存失败');
     });
   };
-  // const saveJcdData = (params: any) => {
-  //   // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
-  //   if (!isEmpty(jcdOriginIds) ||  !isEmpty(params.list)) {
-  //     params.originIds = jcdOriginIds;
-  //     api.image.putImageJcdAndOther(params).then(() => {
-  //       console.log('添加检查单成功');
-  //       setSaveSuccess(prev => prev + 1);
-  //     }).catch((err: any) => {
-  //       console.log('添加检查单失败', err);
-  //     });
-  //   } else {
-  //     setSaveSuccess(prev => prev + 1);
-  //   }
-  // };
 
   const handleSaveClick = async () => {
     if (isViewOnly) {
@@ -196,18 +181,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             {...baseProps}
           />;
           break;
-        // case 'JCD':
-        //   dom = <StructuredJcdTabItem
-        //     jcdCallbackFns={jcdCallbackFns}
-        //     setJcdCallbackFns={setJcdCallbackFns}
-        //     tempAll={tempAll}
-        //     initData={fetInitData(inx)}
-        //     {...baseProps}
-        //   />;
-        //   break;
-        // default:
-        //   dom = <Nodata {...baseProps} hydCallbackFns={hydCallbackFns} />;
-        //   break;
         default:
           dom = <div>无数据</div>;
           break;

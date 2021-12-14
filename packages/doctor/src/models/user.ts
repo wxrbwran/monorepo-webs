@@ -88,7 +88,7 @@ const Model: UserModelType = {
       console.log(339383, data.teams[0].members);
       yield put({
         type: 'saveDoctorExistedRoles',
-        payload: data.teams[0].members,
+        payload: data.teams,
       });
     },
   },

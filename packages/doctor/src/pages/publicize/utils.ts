@@ -43,12 +43,12 @@ export const handleFormatValues = (
   filterCondition.forEach((item) => {
     const mapObj: { operator?: string, value?: string } = {};
     // 年龄
-    if (item.type === 'age'){
-      if (item.min >= item.max){
+    if (item.type === 'age') {
+      if (item.min >= item.max) {
         message.error('请输入正确的年龄范围');
         return;
       }
-      const key: any = conditionItems.items.filter(i => i.description.includes('年龄') )[0].name;
+      const key: any = conditionItems.items.filter(i => i.description.includes('年龄'))[0].name;
       // const key: any = 'basic.age'
       mapObj[key] = {
         operator: '<>',
@@ -56,7 +56,7 @@ export const handleFormatValues = (
       };
     }
     // 性别
-    if (item.type === 'sex'){
+    if (item.type === 'sex') {
       const key: any = conditionItems.items.filter(i => i.description === '性别')[0].name;
       // const key: any = 'basic.sex'
       mapObj[key] = {
@@ -65,7 +65,7 @@ export const handleFormatValues = (
       };
     }
     // 诊断
-    if (item.type === 'diagnosis'){
+    if (item.type === 'diagnosis') {
       const filterItem = conditionItems.items.filter(i => i.description === '疾病')[0];
       const key: any = filterItem?.name;
       // const key: any = 'diagnose.disease'
@@ -76,7 +76,7 @@ export const handleFormatValues = (
       };
     }
     // 处理
-    if (item.type === 'treatment'){
+    if (item.type === 'treatment') {
       const filterItem = conditionItems.items.filter(i => i.description === '处理')[0];
       const key: any = filterItem?.name;
       // const key: any = 'diagnose.treatment'
@@ -91,7 +91,7 @@ export const handleFormatValues = (
   // 发送对象
   // eslint-disable-next-line @typescript-eslint/naming-convention
   let should_1: any = [];
-  if (group.includes('PATIENT_ALL')){
+  if (group.includes('PATIENT_ALL')) {
     const mapObj: { operator?: string, value?: string } = {};
     const currentGroup = scopeItems.filter(scope => scope.description === '全部患者')[0];
     currentGroup.items.forEach((i) => {
@@ -116,14 +116,14 @@ export const handleFormatValues = (
   }
   // 发送频率
   let actions: any = [];
-  custom.filter(cu => !!cu).forEach((item)=> {
+  custom.filter(cu => !!cu).forEach((item) => {
     const mapObj = {
       type: frequencyType,
       params: {
         delay: 32400,
         period: item,
         unit: 'day',
-        sourceMember: checked.split(',').map((ck)=>({
+        sourceMember: checked.split(',').map((ck) => ({
           sourceId: ck,
         })),
       },
@@ -139,7 +139,7 @@ export const handleFormatValues = (
 };
 
 // 通过id获取相关数据
-export function getCheckedContent(idArr: string[], listArr: []){
+export function getCheckedContent(idArr: string[], listArr: []) {
   // if (idArr.includes('PATIENT_ALL')) {
   //   return '全部患者'
   // }
@@ -154,3 +154,25 @@ export function getCheckedContent(idArr: string[], listArr: []){
   });
   return result;
 }
+
+export const sfType = ['随访', 'CRF', '宣教'];
+export const sfTypeUrl = {
+  suifang: {
+    text: '随访',
+    type: 0, // 侧边栏分组type枚举
+    sourceType: 2, // 来源枚举--后端
+    templateType: 'FOLLOW',
+  },
+  crf_scale: {
+    text: 'CRF量表',
+    type: 1,
+    sourceType: 9,
+    templateType: 'FOLLOW_CRF',
+  },
+  education: {
+    text: '宣教',
+    type: 2,
+    sourceType: 3,
+    templateType: 'PUBLICIZE_EDUCATION',
+  },
+};

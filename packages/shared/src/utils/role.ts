@@ -97,6 +97,9 @@ export const Role: RolesMap = {
   CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'PM'), // CRO业务-PM
   CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRA'), // CRO业务-CRA
   CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRC'), //CRO业务-CRC
+
+  DEP_HEAD: roleType('jW23m4', 0, 0, 0, '科主任'), //科主任
+  DOCTOR_INTELLIGENT_ASSISTANT: roleType('2Wm7je', 0, 0, 0, '医生智能助手'), // 医生智能助手
 };
 
 export function fetchRolePropById(id: string) {

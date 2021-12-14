@@ -65,6 +65,9 @@ function QuestionChoice(props: IProps) {
     if (val.trim()) {
       questions[quesIndex].detail.options[oIndex].content = val;
       changeQues([...questions]);
+    } else {
+      questions[quesIndex].detail.options[oIndex].content = '';
+      changeQues([...questions]);
     }
   };
   const changeRequired = (e: any) => {
@@ -96,7 +99,8 @@ function QuestionChoice(props: IProps) {
           if (!!option.content) {
             return (
               <div className="item input-empty" key={oIndex}>
-                <Checkbox>{option.content}</Checkbox>
+                <Checkbox className='flex-1'></Checkbox>
+                <Input placeholder={`选项${oIndex + 1}`} value={option.content} onChange={(ev) => handleSaveOption(ev, oIndex)} />
                 <CloseOutlined onClick={() => handleDelOptions(oIndex)} />
               </div>
             );

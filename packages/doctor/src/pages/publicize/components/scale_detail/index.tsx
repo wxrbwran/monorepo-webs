@@ -26,6 +26,8 @@ function ScaleDetail(props: IProps) {
     });
     history.push('/publicize/files/accompany/create');
   };
+
+  console.log('=============== question 111111', JSON.stringify(question));
   return (
     <div className={styles.detail}>
       {
@@ -45,7 +47,7 @@ function ScaleDetail(props: IProps) {
               <div className={styles.item__issue}>
                 {item.type === 'END' && <span className={styles.end}>终点事件</span>}
                 {
-                  item.type !== 'COMPLETION' && (`${item.code  }、${  item.detail.stem}`)
+                  item.type !== 'COMPLETION' && (`${item.code}、${item.detail.stem}`)
                 }
               </div>
               <div>
@@ -70,7 +72,7 @@ function ScaleDetail(props: IProps) {
                 }
                 {
                   ['TEXT', 'END'].includes(item.type) && (
-                    <TextArea placeholder="请输入" value={item.detail.answer}/>
+                    <TextArea placeholder="请输入" value={item.detail.answer} />
                   )
                 }
                 {

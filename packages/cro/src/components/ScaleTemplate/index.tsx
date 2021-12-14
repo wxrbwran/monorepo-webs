@@ -41,6 +41,7 @@ const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRole
       for (let j = 0; j < item.items.length; j++) {
         const subItem = item.items[j];
         subItem.operator = '=';
+        subItem.value = subItem?.assign?.value ?? '';
         if (subItem.name === 'team.role') {
           subItem.value = projectRoleType;
         } else if (subItem.name === 'team.subject') {

@@ -37,7 +37,6 @@ export var rolePriceList = [
         extra: '我找主管医生一起管',
     },
 ];
-//  '', 'SUBORDINATE_VIP';
 export var roleType = ['INDEPENDENT_VIP', 'SUPERIOR_VIP', 'SUBORDINATE_VIP'];
 export var VIPType = [
     {

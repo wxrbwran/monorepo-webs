@@ -396,7 +396,7 @@ export const groupName = {
   key: 'groupName',
   render: (_text: any, record: any) => (
     <div>
-      {record.groupName.join()}
+      {record.groupName.join(',')}
     </div>
   ),
 };

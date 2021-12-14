@@ -16,13 +16,12 @@ import Scale from '../Scale';
 import './index.scss';
 import BindCustom from '../BindCustom';
 import Video from '../Video';
-import { CommonData } from 'packages/doctor/typings/global';
+import { getRoles } from '@/utils/utils';
 
 interface IProps {
   rawMsg: Store;
   // myInfo: Store;
   avatarArr: IAvatar[];
-  personRole: CommonData
 }
 interface IFile {
   dur: number,
@@ -42,7 +41,7 @@ const audio:any = { // 正在播放音频的 audio、target
 };
 
 const ChatItem: FC<IProps> = (props) => {
-  const { rawMsg, avatarArr, personRole } = props;
+  const { rawMsg, avatarArr } = props;
   const [show, setShow] = useState(false);
   // console.log('rawMsg', JSON.stringify(rawMsg));
   const dispatch = useDispatch();
@@ -250,7 +249,7 @@ const ChatItem: FC<IProps> = (props) => {
           </div>
           <div className="chat__item-content">
             <p className="msg-user">
-              {`${msg.fromNick} (${personRole?.[custom.fromUser?.sid]?.join('、')})`}
+              {`${msg.fromNick} (${getRoles(msg.custom)})`}
             </p>
             {msg.type === 'text' && popoverDom(<p className="msg-text">{msg.showText}</p>)}
             {msg.type === 'image' && (

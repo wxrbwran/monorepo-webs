@@ -3,9 +3,6 @@ import React, {
 } from 'react';
 import { Tabs, Popconfirm } from 'antd';
 // import { IDocmentItem, IDocmentItemApi } from 'typings/checkimg';
-import {
-  IApiDocumentItem, IApiIndexItem, IIndexItem, ISearchDocumentItem,
-} from 'typings/imgStructured';
 import { CloseOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
 import SearchTypeIndex from '../SearchTypeIndex';
@@ -44,7 +41,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const {
     hydCallbackFns, setHydCallbackFns, tabKey, outType, initData, imageId, isViewOnly,
   } = props;
-  console.log('initDddd', initData);
   const activeType1 = useRef('');
   let initSubType: string[] = [];
   const initCheckTypes: ICheckTypesItem[] = [];

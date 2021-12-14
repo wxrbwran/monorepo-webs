@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import dayjs from 'dayjs';
 import project from '@/assets/img/project.png';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { getRole } from '@/utils/utils';
+import { getRoles } from '@/utils/utils';
 import '../Project/index.scss';
 
 interface IMsg {
@@ -43,7 +43,7 @@ const ProjectInvite: FC<IMsg> = (props) => {
       </div>
       <div className="chat__item-content">
         <p className="msg-user">
-          {`${msg.fromNick} (${getRole(msg.custom.fromUser?.role)})`}
+          {`${msg.fromNick} (${getRoles(msg.custom)})`}
         </p>
         <div className="msg-content project">
           <p className="project_status">

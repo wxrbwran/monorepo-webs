@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { FC } from 'react';
 import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { getRole } from '@/utils/utils';
+import { getRoles } from '@/utils/utils';
 import './index.scss';
 
 interface IMsg {
@@ -32,7 +32,7 @@ const DoctorTip: FC<IMsg> = (props) => {
       </div>
       <div className="chat__item-content">
         <p className="msg-user">
-          {`${msg.fromNick} (${getRole(msg.custom.fromUser?.role)})`}
+          {`${msg.fromNick} (${getRoles(msg.custom)})`}
         </p>
         <p
           className={`msg-doctor patient-group-msg ${

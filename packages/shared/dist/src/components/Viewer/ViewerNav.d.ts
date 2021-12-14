@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { ImageDecorator } from './ViewerProps';
 export interface ViewerNavProps {
     prefixCls: string;
