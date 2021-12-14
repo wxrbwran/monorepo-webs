@@ -7,7 +7,7 @@ const env = {
     BASEURL: 'http://napi.xzlcorp.com/',
     NAMESPACE: '',
     AUTH_NAMESPACE: '',
-    APP_ENV: 'dev',
+    APP_ENV: 'test',
   },
   test: {
     BASEURL: 'https://testapi.xinzhili.cn/',

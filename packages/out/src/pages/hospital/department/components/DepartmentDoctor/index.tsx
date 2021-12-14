@@ -108,7 +108,7 @@ const DepartmentDoctor: FC = () => {
     className: 'action',
     render: (_text: string, record: any) => (
       <Popconfirm
-        title='确定要设为科室管理员吗？'
+        title={`确定要${record.depHeadDoctor ? '取消' : '设为'}科室管理员吗？`}
         onConfirm={() => handleChangeDepAdmin(record)}
         // onCancel={cancel}
         okText="确定"
