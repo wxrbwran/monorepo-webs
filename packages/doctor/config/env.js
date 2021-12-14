@@ -5,7 +5,7 @@ module.exports = {
   dev: {
     BASEURL: 'http://napi.xzlcorp.com/',
     // BASEURL: 'http://localhost:8000/api/',
-    APP_ENV: 'dev',
+    APP_ENV: 'test',
   },
   test: {
     BASEURL: 'https://testapi.xinzhili.cn/',
