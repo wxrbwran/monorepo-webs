@@ -41,6 +41,7 @@ const DepartmentDoctor: FC = () => {
   };
   useEffect(() => {
     const urlDepId = location.query?.depId;
+    setNotHeadDoctor(null);
     if (urlDepId && depId !== urlDepId) {
       setDepId(urlDepId);
       setOptions({ ...tableOptions, targetNSId: location.query?.depId });
