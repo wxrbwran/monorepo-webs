@@ -7,7 +7,7 @@ import { useDispatch } from 'umi';
 import { DeleteOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
 import { BloodType2 } from '@/utils/tools';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import styles from './index.scss';
 
 interface IItem {

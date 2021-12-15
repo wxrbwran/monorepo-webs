@@ -3,9 +3,9 @@ import {
   Form, Input, Button, message,
 } from 'antd';
 import { debounce } from 'lodash';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
-import { documentType } from 'xzl-web-shared/dist/src/utils/consts';
-import event from 'xzl-web-shared/dist/src/utils/events/eventEmitter';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
+import { documentType } from 'xzl-web-shared/dist/utils/consts';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import * as api from '@/services/api';
 
 interface IProps {

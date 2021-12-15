@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import * as api from '@/services/api';
 import { setXzlClientId } from '@/services/http';
 // import config from '@/config';
-import { clientType } from 'xzl-web-shared/dist/src/utils/consts';
+import { clientType } from 'xzl-web-shared/dist/utils/consts';
 import logo from '@/assets/img/logo.svg';
 import refresh from '@/assets/img/refresh.svg';
 import styles from './index.scss';

@@ -3,7 +3,7 @@ import {
   Input, InputNumber, Radio, Button, message,
 } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import styles from './index.scss';
 
 const RadioGroup = Radio.Group;

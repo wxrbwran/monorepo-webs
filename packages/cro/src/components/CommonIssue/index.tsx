@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Radio, Input, Checkbox, Button, message } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { BorderOutlined, CloseOutlined } from '@ant-design/icons';

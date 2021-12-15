@@ -4,7 +4,7 @@ import { Tree, Spin } from 'antd';
 import ArchitectureTreeItem from '../ArchitectureTreeItem';
 import { CaretDownOutlined } from '@ant-design/icons';
 import PeopleGroup from '@/assets/img/icon_people_group.svg';
-import { fetchRolePropValue } from 'xzl-web-shared/dist/src/utils/role'; import styles from './index.scss';
+import { fetchRolePropValue } from 'xzl-web-shared/dist/utils/role'; import styles from './index.scss';
 import { IState } from 'typings/global';
 import { useSelector } from 'umi';
 import { ITree } from 'typings/researcher';

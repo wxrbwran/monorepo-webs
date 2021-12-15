@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // @ts-ignore
-import events from 'xzl-web-shared/dist/src/utils/events/eventEmitter';
+import events from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import DatePicker from './DatePicker';
 import dayjs from 'dayjs';
 

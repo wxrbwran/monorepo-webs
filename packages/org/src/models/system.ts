@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi';
-import { fetchRolePropById } from 'xzl-web-shared/dist/src/utils/role';
+import { fetchRolePropById } from 'xzl-web-shared/dist/utils/role';
 // import org from '@/services/api/org';
 
 export interface SystemModelType {

@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button, Table, Spin, message } from 'antd';
 import { useSelector, useLocation } from 'umi';
 import * as api from '@/services/api';
-import { pname, groupName, initAt } from 'xzl-web-shared/dist/src/utils/columns';
-import SelectGroup from 'xzl-web-shared/dist/src/components/SelectGroup';
-import { Search } from 'xzl-web-shared/dist/src/components/Selects';
+import { pname, groupName, initAt } from 'xzl-web-shared/dist/utils/columns';
+import SelectGroup from 'xzl-web-shared/dist/components/SelectGroup';
+import { Search } from 'xzl-web-shared/dist/components/Selects';
 import { SearchOutlined } from '@ant-design/icons';
 import DiagnosisDetail from '../components/DiagnosisDetail';
 import { isEmpty } from 'lodash';
 import styles from './index.scss';
-// import { handleSelection } from 'xzl-web-shared/dist/src/utils/conditions';
+// import { handleSelection } from 'xzl-web-shared/dist/utils/conditions';
 
 interface IOnSelectChange {
   (selectedRowKeys: React.ReactText[], selectedRows?: Store[]): void;

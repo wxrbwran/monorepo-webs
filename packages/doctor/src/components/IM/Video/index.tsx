@@ -1,11 +1,11 @@
 // 语音视频通话记录显示通话操作详情或时长
 import React, { FC } from 'react';
-import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import phoneGray from '@/assets/img/im/phone_gray.svg';
 import phoneWhite from '@/assets/img/im/phone_white.svg';
 import videoGray from '@/assets/img/im/video_gray.svg';
 import videoWhite from '@/assets/img/im/video_white.svg';
-import ErrorHandler from 'xzl-web-shared/dist/src/components/Error/ErrorHandler';
+import ErrorHandler from 'xzl-web-shared/dist/components/Error/ErrorHandler';
 import './index.scss';
 
 /* eslint-disable */

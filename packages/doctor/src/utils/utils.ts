@@ -1,6 +1,6 @@
 // import dayjs from 'dayjs';
 import moment from 'moment';
-import { Role, fetchRolePropValue } from 'xzl-web-shared/dist/src/utils/role';
+import { Role, fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
 
 export function unique(arr: { id: string, content: string }[]) {
   const result: never[] = [];

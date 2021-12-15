@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { getCondition } from '@/utils/utils';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 
 const { Option } = Select;

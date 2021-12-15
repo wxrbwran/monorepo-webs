@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { PlusSquareOutlined, DeleteOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import * as api from '@/services/api';

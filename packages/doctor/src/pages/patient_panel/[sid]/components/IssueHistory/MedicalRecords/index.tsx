@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import DiffShow from '@/components/AdjustMedicine/DiffShow';
 import InspectionDiff from '@/components/AdjustInspection/InspectionDiff';
-import { fetchRolePropValue } from 'xzl-web-shared/dist/src/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
 
 interface IProps {

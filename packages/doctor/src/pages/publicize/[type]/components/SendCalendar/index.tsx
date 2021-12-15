@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import SendDetail from '../SendDetail';
 import { Calendar } from 'antd';
 import moment from 'moment';

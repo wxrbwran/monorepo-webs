@@ -1,5 +1,5 @@
 import type { Effect, Reducer } from 'umi';
-// import { initialOrg, localRole } from 'xzl-web-shared/dist/src/utils/consts';
+// import { initialOrg, localRole } from 'xzl-web-shared/dist/utils/consts';
 import user from '@/services/api/user';
 
 export interface UserModelType {

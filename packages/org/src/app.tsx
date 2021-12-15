@@ -3,8 +3,8 @@
 import { createLogger } from 'redux-logger';
 // import { getDvaApp, history } from 'umi';
 import { message } from 'antd';
-import storage from 'xzl-web-shared/dist/src/utils/dva-model-persist/storage/session';
-import { persistEnhancer } from 'xzl-web-shared/dist/src/utils/dva-model-persist';
+import storage from 'xzl-web-shared/dist/utils/dva-model-persist/storage/session';
+import { persistEnhancer } from 'xzl-web-shared/dist/utils/dva-model-persist';
 import page404 from '@/pages/404';
 export const dva = {
   config: {

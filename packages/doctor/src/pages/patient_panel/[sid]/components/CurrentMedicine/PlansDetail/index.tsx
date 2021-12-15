@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'umi';
 import moment from 'moment';
 import * as api from '@/services/api';
 import { unitFlagRe } from '@/utils/tools';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import styles from './index.scss';
 
 interface IFormatPlansItem {

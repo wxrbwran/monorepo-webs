@@ -1,9 +1,9 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
 import { Tabs, Form } from 'antd';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import styles from './index.scss';
 import { sendAt, Sender, Receiver, replyAt } from '@/utils/columns';
-import { Search } from 'xzl-web-shared/dist/src/components/Selects';
+import { Search } from 'xzl-web-shared/dist/components/Selects';
 import { useForm } from 'antd/lib/form/Form';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';

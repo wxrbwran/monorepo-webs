@@ -11,7 +11,7 @@ import { avatar,
   workload,
   lastMonthWorkload,
   monthWorkload,
-  status } from 'xzl-web-shared/dist/src/utils/columns';
+  status } from 'xzl-web-shared/dist/utils/columns';
 import { operators } from './mock';
 // import data from './mock';
 import styles from '../DepartmentDoctor/index.scss';

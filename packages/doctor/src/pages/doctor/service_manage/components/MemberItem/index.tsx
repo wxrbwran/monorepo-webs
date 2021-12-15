@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import female from '@/assets/img/icon_female.svg';
 import male from '@/assets/img/icon_male.svg';
-import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { isEmpty } from 'lodash';
 import styles from './index.scss';
 

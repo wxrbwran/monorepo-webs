@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'umi';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 import GoBack from '@/components/GoBack';
 import ControlLineX from './components/ControlLineX';

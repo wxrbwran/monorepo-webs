@@ -11,8 +11,8 @@ import {
   titleList,
   sexList,
   basicInfoTab,
-} from 'xzl-web-shared/dist/src/utils/consts';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+} from 'xzl-web-shared/dist/utils/consts';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { UserStatus } from '@/utils/enums';
 import certified from './img/certified.svg';
 import notCertified from './img/not_certified.svg';

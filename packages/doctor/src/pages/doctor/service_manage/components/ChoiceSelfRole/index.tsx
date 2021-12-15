@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Select } from 'antd';
 import { IState } from 'packages/doctor/typings/model';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { isEmpty } from 'lodash';
 
 interface IProps {

@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Form, Input, Popconfirm, Button } from 'antd';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { handleQuestions } from '../utils';
 
 interface IProps {

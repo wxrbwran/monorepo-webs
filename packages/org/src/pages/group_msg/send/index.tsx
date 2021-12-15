@@ -9,11 +9,11 @@ import {
   province,
   upperDoctor,
   lowerDoctor,
-} from 'xzl-web-shared/dist/src/utils/columns';
-import { Province, Sex, Age, Search } from 'xzl-web-shared/dist/src/components/Selects';
+} from 'xzl-web-shared/dist/utils/columns';
+import { Province, Sex, Age, Search } from 'xzl-web-shared/dist/components/Selects';
 
 // import SelectGroup from '@/components/SelectGroup';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import GroupMsg from '../components/GroupMsg';
 import styles from './index.scss';
 

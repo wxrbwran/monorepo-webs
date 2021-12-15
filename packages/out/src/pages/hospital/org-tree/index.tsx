@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Tree from '@/utils/tree';
 // import rootData from '@/utils/tree/mock';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { isOpenSub as getIsOpenSub, upperOrgNsId } from '@/utils/tools';
 import styles from './index.scss';
 

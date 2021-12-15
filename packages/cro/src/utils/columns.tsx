@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchRolePropValue } from 'xzl-web-shared/dist/src/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
 import { eventList, exitReason } from '@/utils/consts';
 import moment from 'moment';
 

@@ -3,8 +3,8 @@ import { Table, Select } from 'antd';
 import * as api from '@/services/api';
 import ReplyTable from '../reply_table';
 import styles from './index.scss';
-import { pageSize } from 'xzl-web-shared/dist/src/utils/consts';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import { pageSize } from 'xzl-web-shared/dist/utils/consts';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 
 interface IProps {
   // id: string;

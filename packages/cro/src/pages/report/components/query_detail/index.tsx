@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { message, Table } from 'antd';
 import * as api from '@/services/api';
 import moment from 'moment';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import ImgViewer from '../img_viewer';
 import QuestionDetail from '../../../subjective_table/components/question_detail';
 import styles from './index.scss';

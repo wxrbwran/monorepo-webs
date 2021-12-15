@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Input, Button, message } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import {
   orgName,
   organizationCode,
@@ -14,7 +14,7 @@ import {
   doctorCount,
   nurseCount,
   patientCount,
-} from 'xzl-web-shared/dist/src/utils/columns';
+} from 'xzl-web-shared/dist/utils/columns';
 // import { DisconnectOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
 import { debounce } from 'lodash';

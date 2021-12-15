@@ -13,7 +13,7 @@ import {
   monthWorkload,
   adminDepartment,
   status,
-} from 'xzl-web-shared/dist/src/utils/columns';
+} from 'xzl-web-shared/dist/utils/columns';
 import { operators } from '../GroupOperator/mock';
 // import data from './mock';
 import styles from '../DepartmentDoctor/index.scss';

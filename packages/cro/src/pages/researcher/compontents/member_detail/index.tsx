@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import styles from './index.scss';
 
 interface IProps {

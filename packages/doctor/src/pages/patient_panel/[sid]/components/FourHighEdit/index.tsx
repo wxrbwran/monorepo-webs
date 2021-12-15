@@ -4,7 +4,7 @@ import {
   Form, Checkbox, Select, message,
 } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { btnRender } from '@/utils/button';
 import * as api from '@/services/api';
 import { hyperList } from '@/utils/tools';

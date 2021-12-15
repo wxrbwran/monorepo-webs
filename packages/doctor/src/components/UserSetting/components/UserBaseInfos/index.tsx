@@ -3,7 +3,7 @@ import { useSelector } from 'umi';
 import { Input } from 'antd';
 import moment from 'moment';
 import { basicInfoTab } from '@/utils/tools';
-import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import UserAvatar from '../../components/UserAvatar';
 import { IState } from 'packages/doctor/typings/model';
 import telIcon from '@/assets/img/icon_tel.png';

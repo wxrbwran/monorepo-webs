@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Radio } from 'antd';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
 import * as api from '@/services/api';
 import { projectDefaultImg } from '@/utils/consts';

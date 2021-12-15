@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import DoctorList, { Irecord } from '../doctor_list';
 import { Button, message } from 'antd';
 import { useSelector } from 'umi';

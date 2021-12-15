@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Descriptions } from 'antd';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import ReferenceItem from './ReferenceItem';
 
 interface IProps {

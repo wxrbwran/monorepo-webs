@@ -1,6 +1,6 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-case-declarations */
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import type { Store } from 'antd/lib/form/interface';
 
 export const handleTableDataSource = (dataSource: Store[]) => {

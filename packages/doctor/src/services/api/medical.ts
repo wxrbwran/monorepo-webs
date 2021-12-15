@@ -1,6 +1,6 @@
 import http from '@/services/http';
 // import qs from 'qs';
-// import { Base64 } from 'xzl-web-shared/dist/src/utils/base64';
+// import { Base64 } from 'xzl-web-shared/dist/utils/base64';
 
 export default {
   // 查询查询最后一次用药达标

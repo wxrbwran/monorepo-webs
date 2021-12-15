@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { debounce } from 'lodash';
 import { IAddTopicProps } from '../type';
 import TopicAddDdtk from '../TopicAddDdtk';

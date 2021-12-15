@@ -4,7 +4,7 @@ import SelectDoctor, { IDocList } from '../select-doctor';
 import ChartPatientPie from '../chart-patient-pie';
 import { isEmpty, debounce } from 'lodash';
 import { Button } from 'antd';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 
 interface IChartItem {
   value: number;

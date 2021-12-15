@@ -2,8 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import { PlusOutlined, CopyOutlined } from '@ant-design/icons';
 import { Form, Button, Popconfirm, message, Space } from 'antd';
 import { useLocation, Location, useSelector } from 'umi';
-import { Common, Search } from 'xzl-web-shared/dist/src/components/Selects';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import { Common, Search } from 'xzl-web-shared/dist/components/Selects';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import {
   indexName,
   indexAbbr,
@@ -12,8 +12,8 @@ import {
   note,
   reference,
   unit,
-} from 'xzl-web-shared/dist/src/utils/columns';
-import { documentMap, documentTypeSource } from 'xzl-web-shared/dist/src/utils/consts';
+} from 'xzl-web-shared/dist/utils/columns';
+import { documentMap, documentTypeSource } from 'xzl-web-shared/dist/utils/consts';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import ViewIndex from '../ViewIndex';

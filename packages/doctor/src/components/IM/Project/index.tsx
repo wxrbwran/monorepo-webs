@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { FC } from 'react';
 import project from '@/assets/img/project.png';
-import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { getRoles } from '@/utils/utils';
 import './index.scss';
 

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 
 // interface IProps {
 //   children: React.ReactElement;

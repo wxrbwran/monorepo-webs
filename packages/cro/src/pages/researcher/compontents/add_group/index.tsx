@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import DoctorList, { Irecord } from '../doctor_list';
 import { Button, Input, message } from 'antd';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
 import { debounce } from 'lodash';
 import { useSelector } from 'umi';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { queryFields } from '../../consts';
 import '../ReportTable/index.scss';
 import Viewer from 'react-viewer';

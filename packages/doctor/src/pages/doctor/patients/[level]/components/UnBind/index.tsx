@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { IRecord } from '../../columns';
 import styles from '../../index.scss';
 

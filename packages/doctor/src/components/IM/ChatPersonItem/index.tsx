@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'umi';
-import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import IconMore from '@/assets/img/icon_more.png';
 import { getRole } from '@/utils/utils';
 import { Dropdown } from 'antd';

@@ -1,7 +1,7 @@
 import React, { useState, useRef, FC } from 'react';
 import { Tooltip, Row, Col, Button, Avatar } from 'antd';
 import dayjs from 'dayjs';
-import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import Slider from 'react-slick';
 import next from './img/right.svg';
 import prev from './img/lift.svg';

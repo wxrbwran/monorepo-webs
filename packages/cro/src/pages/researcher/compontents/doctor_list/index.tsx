@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { addGroupDoctorListColumns } from '@/utils/columns';
 import { useSelector } from 'umi';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { IState } from 'typings/global';
 
 export interface Irecord {

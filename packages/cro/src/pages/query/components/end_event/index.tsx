@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { endEventColumns } from '@/utils/columns';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import styles from './index.scss';
 interface IProps {
   children: React.ReactElement;

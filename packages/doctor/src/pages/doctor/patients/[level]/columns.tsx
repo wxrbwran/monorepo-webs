@@ -9,7 +9,7 @@ import confirmsOrange from '@/assets/img/doctor_patients/confirms_orange.svg';
 import confirmsGreen from '@/assets/img/doctor_patients/confirms_green.svg';
 import confirmsRed from '@/assets/img/doctor_patients/confirms_red.svg';
 import patientIcon from '@/assets/img/patient.png';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 import Note from './components/Note';
 // import ChangeServicePackage from './components/ChangeServicePackage';

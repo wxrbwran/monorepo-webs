@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { sendAt, senderFileName, patientName } from '@/utils/columns';
 
 interface IProps {

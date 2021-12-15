@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { useLocation } from 'umi';
 import { isEmpty } from 'lodash';
 import styles from './index.scss';

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import dayjs from 'dayjs';
 import * as api from '@/services/api';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import convertDietData from '@/utils/convertDietData';
 import convertSportData from '@/utils/convertSportData';
 import convertSleepData from '@/utils/convertSleepData';

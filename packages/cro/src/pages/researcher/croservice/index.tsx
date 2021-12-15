@@ -8,7 +8,7 @@ import AddServicePackage from './components/AddServicePackage';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import { TeamMember } from './components/Member';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { hasPermissions } from '@/utils/utils';
 import { debounce } from 'lodash';
 interface IProps {

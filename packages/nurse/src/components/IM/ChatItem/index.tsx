@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import { useDispatch } from 'umi';
-import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { getRole } from '@/utils/utils';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 //@ts-ignore
 import { IAvatar } from '../ChatList';
 import AdjustMedicineCustom from '../AdjustMedicineCustom';

@@ -5,7 +5,7 @@ import PackageDoctorItem from '../PackageDoctorItem';
 import AddServicePackage from '../AddServicePackage';
 import { Popconfirm, message } from 'antd';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
 
 export interface IDataList {

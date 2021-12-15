@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import { useSelector } from 'umi';
-import { addtionalMenuList } from 'xzl-web-shared/dist/src/utils/consts';
+import { addtionalMenuList } from 'xzl-web-shared/dist/utils/consts';
 import styles from './index.scss';
 
 const DepartmentGroupBanner: FC = () => {

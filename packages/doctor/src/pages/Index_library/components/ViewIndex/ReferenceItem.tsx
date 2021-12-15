@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { yinYangMap } from 'xzl-web-shared/dist/src/utils/consts';
+import { yinYangMap } from 'xzl-web-shared/dist/utils/consts';
 interface IProps {
   reference: TReference;
 }

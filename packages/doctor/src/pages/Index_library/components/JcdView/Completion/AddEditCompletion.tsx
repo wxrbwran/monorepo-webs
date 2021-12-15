@@ -1,8 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Form, Input, Button, Space, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
-import { createFormListProps } from 'xzl-web-shared/dist/src/utils/consts';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
+import { createFormListProps } from 'xzl-web-shared/dist/utils/consts';
 import { handleQuestions, handleQuestionAnswer, filterNotNew, setDelete } from '../utils';
 interface IProps {
   id: string;

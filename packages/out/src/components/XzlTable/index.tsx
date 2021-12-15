@@ -1,7 +1,7 @@
 import type { FC, ReactText } from 'react';
 import React, { useState, useEffect } from 'react';
 // import Mock from 'mockjs';
-import { pageSize } from 'xzl-web-shared/dist/src/utils/consts';
+import { pageSize } from 'xzl-web-shared/dist/utils/consts';
 import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
 

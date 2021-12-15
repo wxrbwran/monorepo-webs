@@ -7,7 +7,7 @@ import { IPlanItem } from '@/utils/consts';
 import { useSelector } from 'umi';
 import { getConditionDetail, getStandardDetail } from '@/utils/tools';
 import { IState } from 'typings/global';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { isEmpty } from 'lodash';
 
 let timer:any = null;

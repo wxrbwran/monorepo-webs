@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { handleBaseObj } from '../../../report/util';
 import { sexList, INFO } from '@/utils/consts';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Pagination } from 'antd';
 import { history } from 'umi';
 import { useDispatch } from 'react-redux';

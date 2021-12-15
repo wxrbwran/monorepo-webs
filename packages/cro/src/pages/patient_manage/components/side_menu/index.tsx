@@ -6,7 +6,7 @@ import './index.scss';
 import { CommonData, IState } from 'typings/global';
 import { InputNumber, message } from 'antd';
 import AddEditGroup from '../add_edit_group';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 import { hasPermissions } from '@/utils/utils';
 

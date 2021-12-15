@@ -3,7 +3,7 @@ import {
   Form, Select, Button, Input, message,
 } from 'antd';
 import debounce from 'lodash/debounce';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import SearchHospital from '@/components/SearchHospital';
 import Calendar from '@/components/Calendar';
 import * as api from '@/services/api';

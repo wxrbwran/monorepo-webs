@@ -1,6 +1,6 @@
 import React from 'react';
 // import { useSelector } from 'umi';
-import ErrorHandler from 'xzl-web-shared/dist/src/components/Error/ErrorHandler';
+import ErrorHandler from 'xzl-web-shared/dist/components/Error/ErrorHandler';
 import Logo from './components/Logo';
 import MenuTab from './components/MenuTab';
 // import WorkingTime from './components/WorkingTime';

@@ -8,12 +8,12 @@ import {
   lowerDoctor,
   serviceLevel,
   tel,
-} from 'xzl-web-shared/dist/src/utils/columns';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
-import { handleSelection } from 'xzl-web-shared/dist/src/utils/conditions';
+} from 'xzl-web-shared/dist/utils/columns';
+import { Role } from 'xzl-web-shared/dist/utils/role';
+import { handleSelection } from 'xzl-web-shared/dist/utils/conditions';
 
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
-import { PatientLevel, Search } from  'xzl-web-shared/dist/src/components/Selects';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
+import { PatientLevel, Search } from  'xzl-web-shared/dist/components/Selects';
 // import AddPatient from '../AddPatient';
 import styles from '../DepartmentDoctor/index.scss';
 

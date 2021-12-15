@@ -9,7 +9,7 @@ import add from '@/assets/img/icon_add.svg';
 import CreateReport from '../CreateReport';
 import AddField from '../AddField';
 import * as api from '@/services/api';
-import { sexList } from 'xzl-web-shared/dist/src/utils/consts';
+import { sexList } from 'xzl-web-shared/dist/utils/consts';
 import { queryFields, columnFields } from '../../consts';
 import { handleTableDataSource } from '../../util';
 import './index.scss';

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import hand from '@/assets/img/change.svg';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import PackageTeamItem from '../../../../service_manage/components/PackageTeamItem';
 // import PackageTeamItem, { IDataList } from '@/pages/doctor/service_manage/components/PackageTeamItem';
 import { Radio, message } from 'antd';

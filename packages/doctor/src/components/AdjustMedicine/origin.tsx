@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import { Button, message } from 'antd';
 import { useDispatch, useParams, useSelector } from 'umi';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import * as api from '@/services/api';
 import { getIssueParams } from '@/utils/utils';
 import { AdjustMedicineBtn } from '@/utils/tools';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import DiffShow from './DiffShow';
 import AdjustPanel from './AdjustPanel';
 import styles from './index.scss';

@@ -1,4 +1,4 @@
-import { roleType, VIPType } from 'xzl-web-shared/dist/src/utils/consts';
+import { roleType, VIPType } from 'xzl-web-shared/dist/utils/consts';
 
 const formatOrgList = (orgList) => orgList.map((org) => ({
   organizationName: org.name,

@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import InspectionDiff from '@/components/AdjustInspection/InspectionDiff';
-import { fetchRolePropValue } from 'xzl-web-shared/dist/src/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
 import { AdviceTitle } from '@/utils/tools';
 import styles from '../index.scss';
 

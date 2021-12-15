@@ -4,7 +4,7 @@ import '@/assets/styles/antd.scss';
 import * as api from '@/services/api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
-import storage from 'xzl-web-shared/dist/src/utils/storage';
+import storage from 'xzl-web-shared/dist/utils/storage';
 import { setAuthorizationToken } from '@/services/http';
 import pkg from '../package.json';
 import './global.scss';

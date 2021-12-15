@@ -4,13 +4,13 @@ import {
   Radio, Row, Col,
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import {
   referenceList,
   referenceMap,
   yinYang,
   createFormListProps,
-} from 'xzl-web-shared/dist/src/utils/consts';
+} from 'xzl-web-shared/dist/utils/consts';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import './index.scss';

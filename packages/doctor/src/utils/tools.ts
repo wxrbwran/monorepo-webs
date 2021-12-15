@@ -1,4 +1,4 @@
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 export const titleList: CommonData = ['主任医师', '副主任医师', '主治医师', '住院医师'];
 export const relatedOptions = [

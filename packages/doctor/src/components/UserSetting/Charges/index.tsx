@@ -3,7 +3,7 @@ import { Popover, Form, InputNumber } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import question from '@/assets/img/question.svg';
 import { btnRender } from '@/utils/button';
-import { rolePriceList, VIPType, doctorRole } from 'xzl-web-shared/dist/src/utils/consts';
+import { rolePriceList, VIPType, doctorRole } from 'xzl-web-shared/dist/utils/consts';
 import formatOrgList, { handleServePrice2Local } from './util';
 import Tabs from '../components/Tabs';
 import styles from './index.scss';

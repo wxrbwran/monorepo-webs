@@ -11,7 +11,7 @@ import Edit from '@/assets/edit.svg';
 import Delete from '@/assets/delete.svg';
 import { useSelector } from 'react-redux';
 import PlanModal from '@/components/PlanModal';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import Reply from '../reply';
 import { message } from 'antd';
 import * as api from '@/services/api';

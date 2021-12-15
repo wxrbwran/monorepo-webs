@@ -1,9 +1,9 @@
 import React, { FC, useState, useLayoutEffect } from 'react';
-import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import StopService from '@/components/StopService';
 import { Form, Radio, Input, message } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-import { labelCol, departmentType } from 'xzl-web-shared/dist/src/utils/consts';
+import { labelCol, departmentType } from 'xzl-web-shared/dist/utils/consts';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;

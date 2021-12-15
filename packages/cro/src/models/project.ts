@@ -4,7 +4,7 @@ import project from '@/services/api/project';
 import detail from '@/services/api/detail';
 import { IPlanInfos } from '@/utils/consts';
 import { patientManage, subjective } from '@/services/api';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { getChooseValuesKeyFromRules } from '../pages/subjective_table/util';
 import * as api from '@/services/api';
 import { history } from 'umi';

@@ -1,4 +1,4 @@
-const config = require('xzl-web-shared/dist/src/utils/tailwind.config');
+const config = require('xzl-web-shared/dist/utils/tailwind.config');
 
 
 module.exports = config;

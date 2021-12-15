@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
-import { Title, Search } from 'xzl-web-shared/dist/src/components/Selects';
-import { Role } from 'xzl-web-shared/dist/src/utils/role';
-import { handleSelection } from 'xzl-web-shared/dist/src/utils/conditions';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
+import { Title, Search } from 'xzl-web-shared/dist/components/Selects';
+import { Role } from 'xzl-web-shared/dist/utils/role';
+import { handleSelection } from 'xzl-web-shared/dist/utils/conditions';
 import {
   navAvatar,
   navName,
@@ -12,7 +12,7 @@ import {
   title,
   patientNum,
   status,
-} from 'xzl-web-shared/dist/src/utils/columns';
+} from 'xzl-web-shared/dist/utils/columns';
 import AddEditDoctor from '@/components/AddEditDoctor';
 import styles from './index.scss';
 
