@@ -7,19 +7,22 @@ const env = {
     BASEURL: 'http://napi.xzlcorp.com/',
     NAMESPACE: '',
     AUTH_NAMESPACE: '',
-    APP_ENV: 'test',
+    APP_ENV: 'dev',
+    PREFIX: 'test',
   },
   test: {
     BASEURL: 'https://testapi.xinzhili.cn/',
     NAMESPACE: '',
     AUTH_NAMESPACE: '',
     APP_ENV: 'test',
+    PREFIX: 'test',
   },
   prod: {
     BASEURL: 'https://napi.xinzhili.cn/',
     NAMESPACE: '',
     AUTH_NAMESPACE: '',
     APP_ENV: 'prod',
+    PREFIX: 'prod',
   },
 };
 

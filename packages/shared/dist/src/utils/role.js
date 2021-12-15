@@ -3,7 +3,7 @@
  * @Date: 2020-10-20 03:51:21
  */
 var roleType = function (id, initState, accepted, refused, desc) { return ({
-    id: process.env.APP_ENV + "." + id,
+    id: process.env.PREFIX + "." + id,
     initState: initState,
     accepted: accepted,
     refused: refused,
