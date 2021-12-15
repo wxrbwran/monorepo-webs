@@ -1,14 +1,14 @@
 import React, { FC, useState, useMemo } from 'react';
 import { Tabs, Popconfirm } from 'antd';
 import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
+import uuid from 'react-uuid';
+import { isEmpty } from 'lodash';
 import iconGf from '@/assets/img/icon_official.png';
 import StructuredJcdTabItem from '../StructuredJcdTabItem';
 import SearchJcd from '../SearchJcd';
 import CreateJcd from '../CreateJcd';
 import { IAddJcdItem, IJcdTabItem } from '../type';
 // import * as api from '@/services/api';
-import uuid from 'react-uuid';
-import { isEmpty } from 'lodash';
 import styles from './index.scss';
 
 interface IProps {

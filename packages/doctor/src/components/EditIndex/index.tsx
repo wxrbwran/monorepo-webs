@@ -42,7 +42,7 @@ const EditIndex: FC<IProps> = (props) => {
   const [defaultReference, setDefaultReference] = useState(0);
   const curDocument = useSelector((state: IState) => state.document.curDocument);
   const documentId = curDocument.id;
-
+  const sid = window.$storage.getItem('sid');
   useEffect(() => {
     if (showModal && initFormVal) {
       setFieldsValue({ ...initFormVal });
@@ -99,7 +99,7 @@ const EditIndex: FC<IProps> = (props) => {
     let params: any = {
       ...values,
       source: 'DOCTOR',
-      sourceSid: window.$storage.getItem('sid'),
+      sourceSid: sid,
     };
 
     if (initFormVal) {
@@ -111,11 +111,18 @@ const EditIndex: FC<IProps> = (props) => {
       params = {
         ...params,
         source: 'DOCTOR', // 医生添加DOCTOR，系统添加SYSTEM
-        sourceSid: window.$storage.getItem('sid'),
+        sourceSid: sid,
         wcId: window.$storage.getItem('wcId'),
-        documentId,
       };
-      handleRequest(params, api.indexLibrary.putIndexDocumentIndex);
+      if (source === 'imgAddTypeIndex') {
+        // 医生添加单据及指标
+        console.log('医生添加单据及指标 params', params);
+        handleRequest(params, api.indexLibrary.putIndexDocumentAndIndex);
+      } else {
+        // 指标库添加指标
+        params.documentId = documentId;
+        handleRequest(params, api.indexLibrary.putIndexDocumentIndex);
+      }
     }
   };
   const handleAddReference = (cb: Function) => {
@@ -131,7 +138,6 @@ const EditIndex: FC<IProps> = (props) => {
 
   const handleRemoveReference = (cb: Function, fieldName: number, index: number) => {
     cb(fieldName);
-    console.log('handleRemoveReference references', JSON.stringify(references));
     const tmp = [...references];
     tmp.splice(index, 1);
     setReferences([...tmp]);

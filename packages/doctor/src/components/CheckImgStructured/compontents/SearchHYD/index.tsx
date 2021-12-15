@@ -16,7 +16,7 @@ interface IProps {
   documentType: string; // HYD JCD
 }
 
-const SearchTypeIndex: FC<IProps> = (props) => {
+const SearchHYD: FC<IProps> = (props) => {
   const {
     sampleFroms, handleSelectTypeIndex, documentType,
   } = props;
@@ -48,7 +48,6 @@ const SearchTypeIndex: FC<IProps> = (props) => {
       handleSelectTypeIndex(typeList[e]);
       setselectVal(e);
     } else {
-      console.log(28323);
       setselectVal('');
       selectRef.current.blur();
       hiddenRef.current.click();
@@ -75,31 +74,23 @@ const SearchTypeIndex: FC<IProps> = (props) => {
         value={selectVal}
         ref={selectRef}
       >
-        {
-          typeList.map((item, index) => (
-            <Option key={item.sampleFrom + item.documentName + item?.id} value={index}>
-              {`${item?.sampleFrom} - ${item?.documentName}${item?.name ? ` - ${item?.name}` : ''}`}
-            </Option>
-          ))
-        }
-        {
-          listEmpty && (
-            <Option key="add" value="add">
-              <div className="text-center text-blue-500">暂无结果，点击+添加新指标</div>
-            </Option>
-          )
-        }
+        {typeList.map((item, index) => (
+          <Option key={item.sampleFrom + item.documentName + item?.id} value={index}>
+            {`${item?.sampleFrom} - ${item?.documentName}${item?.name ? ` - ${item?.name}` : ''}`}
+          </Option>
+        ))}
+        {listEmpty && (
+          <Option key="add" value="add">
+            <div className="text-center text-blue-500">暂无结果，点击+添加新指标</div>
+          </Option>
+        )}
       </Select>
       {/* 放到option里会影响select失去焦点无效，导致编辑弹框内容输入不了 */}
-      <EditIndex
-        onSuccess={addTypeSuccess}
-        level1Type={documentType}
-        source="imgAddTypeIndex"
-      >
+      <EditIndex onSuccess={addTypeSuccess} level1Type="HYD" source="imgAddTypeIndex">
         <input type="hidden" ref={hiddenRef} />
       </EditIndex>
     </div>
   );
 };
 
-export default SearchTypeIndex;
+export default SearchHYD;

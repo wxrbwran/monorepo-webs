@@ -5,7 +5,7 @@ import { Tabs, Popconfirm } from 'antd';
 // import { IDocmentItem, IDocmentItemApi } from 'typings/checkimg';
 import { CloseOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
-import SearchTypeIndex from '../SearchTypeIndex';
+import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
@@ -55,7 +55,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
     initSubType = [...new Set(initSubType)];
   } else {
-    initSubType = [];
+    initSubType = ['血液'];
   }
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
@@ -106,7 +106,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     }
     activeType1.current = params.documentId + params.sampleFrom;
     setActiveType(params.documentId + params.sampleFrom);
-    console.log('===-2', newCheckTypes);
     setCheckTypes([...newCheckTypes]);
   };
   useEffect(() => {
@@ -150,7 +149,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     return (arg as ICheckTypesItem).indexList !== undefined;
   }
   const getInitList = (item: ICheckTypesItem | ISearchDocumentItem) => {
-    console.log('67893467843', item);
     // 有indexList表示是回显数据
     if (isMedicalIndexList(item)) {
       const { documentId, documentName } = item;
@@ -181,7 +179,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     if (activeType1.current === targetKey && newCheckTypes.length > 0) {
       activeType1.current = newCheckTypes[0].documentId + newCheckTypes[0].sampleFrom;
       setActiveType(newCheckTypes[0].documentId + newCheckTypes[0].sampleFrom);
-      console.log('===-3');
     }
   };
   const renderTabPane = useMemo(() => () => checkTypes.map(
@@ -220,7 +217,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     ),
   ), [checkTypes, isViewOnly, initData]);
   const handleActiveTab = (tab: string) => {
-    console.log('===-1');
     activeType1.current = tab;
     setActiveType(tab);
   };
@@ -230,9 +226,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       ...newItem,
     };
   };
-  const handleSetHospital = (key: string, val: any) => {
-    console.log(11111112, key);
-    console.log(val);
+  const handleSetHospital = (_key: string, val: any) => {
     // setHospital({ ...val });
     handleSetTimeAndOrg({
       orgId: val.hospitalId,
@@ -250,7 +244,9 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     <div className={styles.structure_detail_item}>
       <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
         <div className="flex" style={{ flex: '0 0 47%' }}>
-          <div className="font-medium mr-5" style={{ flex: '0 0 63px' }}> 检查机构: </div>
+          <div className="font-medium mr-5" style={{ flex: '0 0 63px' }}>
+            检查机构:
+          </div>
           <SearchHospital
             placeholder="请输入检查机构"
             callback={handleSetHospital}
@@ -271,39 +267,35 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
+      <div className="structured-edit-wrap">
+        <SubType
+          leve1Type={outType}
+          handleChangeSubType={setSampleFroms}
+          initSampleFrom={initSubType}
+        />
+      </div>
+      {sampleFroms.length > 0 && (
+        <>
           <div className="structured-edit-wrap">
-            <SubType
-              leve1Type={outType}
-              handleChangeSubType={setSampleFroms}
-              initSampleFrom={initSubType}
+            <SearchHYD
+              sampleFroms={sampleFroms}
+              handleSelectTypeIndex={handleSelectTypeIndex}
+              // imageId={imageId}
+              documentType={outType}
             />
           </div>
-      {
-          sampleFroms.length > 0 && (
-            <>
-              <div className="structured-edit-wrap">
-                <SearchTypeIndex
-                  sampleFroms={sampleFroms}
-                  handleSelectTypeIndex={handleSelectTypeIndex}
-                  // imageId={imageId}
-                  documentType={outType}
-                />
-              </div>
-              {
-                checkTypes.length > 0 && (
-                  <Tabs
-                    activeKey={activeType}
-                    onChange={(tab: string) => handleActiveTab(tab)}
-                    type="editable-card"
-                    hideAdd
-                  >
-                    {renderTabPane()}
-                  </Tabs>
-                )
-              }
-            </>
-          )
-        }
+          {checkTypes.length > 0 && (
+            <Tabs
+              activeKey={activeType}
+              onChange={(tab: string) => handleActiveTab(tab)}
+              type="editable-card"
+              hideAdd
+            >
+              {renderTabPane()}
+            </Tabs>
+          )}
+        </>
+      )}
     </div>
   );
 };
