@@ -60,7 +60,7 @@ export const Role: RolesMap = {
   SYS_DOCTOR: roleType('ZW7Qew', 129, 120, 128, '系统智能医生'), // 13
   UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '主管医生'), // 14
   LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '医生助手'), // 15
-  ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
+  ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理'), // 16
 
   COUNSELOR_DOCTOR: roleType('2eAEeG', 169, 160, 168, '顾问医生'), // 17 顾问医生(角色默认在xinzhili - 顾问医生团队)
   CONSOLE_ROOT: roleType('6exPeb', 179, 170, 178, '后台系统Root管理员'), // 18
