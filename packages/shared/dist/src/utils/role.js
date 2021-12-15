@@ -52,13 +52,17 @@ export var Role = {
     NURSE_YL: roleType('qWd7L0', 0, 0, 0, '护士'),
     YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '高级管理员'),
     YL_YZ: roleType('YWBka4', 0, 0, 0, '院长'),
+    DOCTOR_INTELLIGENT_ASSISTANT: roleType('2Wm7je', 0, 0, 0, '医生智能助手'),
     NS_OWNER: roleType('80pbO4', 0, 0, 0, '创建人'),
     DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'),
     CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'PM'),
     CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRA'),
     CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRC'),
     DEP_HEAD: roleType('jW23m4', 0, 0, 0, '科主任'),
-    DOCTOR_INTELLIGENT_ASSISTANT: roleType('2Wm7je', 0, 0, 0, '医生智能助手'), // 医生智能助手
+    PHARAMCIST: roleType('Y4n2b4', 0, 0, 0, '药师'),
+    KANGFUSHI: roleType('r4qME4', 0, 0, 0, '康复师'),
+    PSYCHOLOGIST: roleType('Y0ZxD4', 0, 0, 0, '心理医生'),
+    TEAMNURSE: roleType('6e89J0', 0, 0, 0, '护士'), //69 团队护士（医疗服务包里的护士，不是分配工单的护士）
 };
 export function fetchRolePropById(id) {
     var roleKey = Object.keys(Role);
