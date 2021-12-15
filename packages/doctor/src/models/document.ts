@@ -1,4 +1,4 @@
-import { Reducer } from 'redux';
+import { Reducer } from 'umi';
 
 export type TDocumentState = {
   curDocument: TDocument;
@@ -21,7 +21,6 @@ const Model: DocumentModelType = {
   state: documentState,
   reducers: {
     setCurDocument(state: TDocumentState, { payload }: { payload: TDocument }) {
-      console.log('payload', payload);
       return {
         ...state,
         curDocument: payload,

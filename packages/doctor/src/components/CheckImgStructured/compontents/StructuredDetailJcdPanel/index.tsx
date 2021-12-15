@@ -30,7 +30,6 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const [partMethod, setPartMethod] = useState<{ part?: string; method?: string }>(); // 部位+方法，添加检查单时使用
   const [createJcdNum, setCreateJcdNum] = useState(0); // 添加新检查单累加器，searchJcd监听此参数，若变化，更新搜索列表
 
-  console.log( setJcdList, setActiveTabKey);
   const handleRemoveType = (targetItem: IJcdTabItem) => {
     const newJcdList = jcdList.filter(item => item.meta.tabKey !== targetItem.meta.tabKey);
     if (targetItem.meta.tabKey === activeTabKey && !isEmpty(newJcdList)) {

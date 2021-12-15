@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { Select } from 'antd';
 import { debounce, isEmpty } from 'lodash';
-import { ISearchDocumentItem } from 'typings/imgStructured';
+import { useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 // 搜索大分类或者指标
@@ -25,6 +25,7 @@ const SearchHYD: FC<IProps> = (props) => {
   const [typeList, settypeList] = useState<ISearchDocumentItem[]>([]);
   const [selectVal, setselectVal] = useState<string>();
   const [listEmpty, setlistEmpty] = useState(false);
+  const dispatch = useDispatch();
   const handleSearch = (e: React.ChangeEvent<ReactElement>) => {
     console.log(3232, e);
     if (e) {
@@ -41,10 +42,17 @@ const SearchHYD: FC<IProps> = (props) => {
       });
     }
   };
+  const handleChangeCurDocument = (doc: TIndexItem) => {
+    dispatch({
+      type: 'document/setCurDocument',
+      payload: doc,
+    });
+  };
   const handleSelect = (e: string) => {
     if (e !== 'add') {
       // 这里只把选中的项返回出去，选中的大分类下的指标数据，由customIndex组件请求接口获取
-      console.log('******99', typeList);
+      console.log('******99', typeList, e);
+      handleChangeCurDocument(typeList[e]);
       handleSelectTypeIndex(typeList[e]);
       setselectVal(e);
     } else {
@@ -56,6 +64,7 @@ const SearchHYD: FC<IProps> = (props) => {
   const addTypeSuccess = (params: any) => {
     console.log('添加大分类、指标成功', params);
     handleSelectTypeIndex(params, 'add');
+    handleChangeCurDocument(params);
   };
   return (
     <div className="mt-10 mb-10">
@@ -75,8 +84,8 @@ const SearchHYD: FC<IProps> = (props) => {
         ref={selectRef}
       >
         {typeList.map((item, index) => (
-          <Option key={item.sampleFrom + item.documentName + item?.id} value={index}>
-            {`${item?.sampleFrom} - ${item?.documentName}${item?.name ? ` - ${item?.name}` : ''}`}
+          <Option key={item.type + item?.id} value={index}>
+            {`${item?.sampleFrom} - ${item?.type === 'DOCUMENT' ? item?.name : `${item.documentName}-${item.name}` }`}
           </Option>
         ))}
         {listEmpty && (
@@ -86,7 +95,7 @@ const SearchHYD: FC<IProps> = (props) => {
         )}
       </Select>
       {/* 放到option里会影响select失去焦点无效，导致编辑弹框内容输入不了 */}
-      <EditIndex onSuccess={addTypeSuccess} level1Type="HYD" source="imgAddTypeIndex">
+      <EditIndex onSuccess={addTypeSuccess} source="imgAddTypeIndex">
         <input type="hidden" ref={hiddenRef} />
       </EditIndex>
     </div>
