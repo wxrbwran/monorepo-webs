@@ -66,9 +66,9 @@ import { Table } from 'antd';
 import { handleTableDataSource, handleTableRowKey } from './util';
 import { pageSize } from '../../utils/consts';
 var XzlTable = function (props) {
-    // console.log('this is table shared~111');
-    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, category = props.category, noPagination = props.noPagination, extra = props.extra;
-    // console.log(category, handleCallbackSelectKeys);
+    console.log('this is table shared~111');
+    var columns = props.columns, request = props.request, dataKey = props.dataKey, depOptions = props.depOptions, tableOptions = props.tableOptions, handleCallback = props.handleCallback, handleCallbackSelectKeys = props.handleCallbackSelectKeys, category = props.category, noPagination = props.noPagination, extra = props.extra;
+    console.log(category, handleCallbackSelectKeys);
     var _a = __read(useState(pageSize), 2), size = _a[0], setSize = _a[1];
     var _b = __read(useState(0), 2), total = _b[0], setTotal = _b[1];
     var _c = __read(useState(0), 2), current = _c[0], setCurrent = _c[1];
@@ -94,7 +94,7 @@ var XzlTable = function (props) {
     var fetchTableDataSource = function (query) {
         if (query === void 0) { query = {}; }
         setLoading(true);
-        // console.log('query', query);
+        console.log('query', query);
         var params = __assign(__assign({ pageAt: 1, pageSize: size }, depOptions), query);
         // 处理不分页的api请求
         if (noPagination) {
@@ -149,8 +149,8 @@ var XzlTable = function (props) {
         fetchTableDataSource({});
     }, [depOptions]);
     var handlePagerChange = function (page, changedSize) {
-        // console.log('handlePagerChange', page);
-        // console.log('handlePagerChange', changedSize);
+        console.log('handlePagerChange', page);
+        console.log('handlePagerChange', changedSize);
         var params = { pageAt: page };
         if (changedSize) {
             params.pageSize = changedSize;

@@ -162,24 +162,3 @@ export declare const statusLists: {
     118: string;
     117: string;
 };
-declare type docTypeKeys = 'HYD' | 'JCD' | 'OTHER';
-export declare const documentType: Record<docTypeKeys, string>;
-export declare const referenceList: Record<string, string>[];
-export declare const referenceMap: Record<string, string>;
-export declare const yinYang: {
-    value: string;
-    label: string;
-}[];
-export declare const yinYangMap: {
-    YIN: string;
-    YANG: string;
-};
-export declare const documentMap: Record<docTypeKeys, string>;
-export declare const commonCheckbox: Record<string, string>[];
-export declare const createFormListProps: (field: any, key: string) => any;
-export declare const documentTypeText: Record<string, string>;
-export declare const documentTypeSource: Record<string, string>;
-export declare const requiredRule: {
-    required: boolean;
-}[];
-export {};

@@ -49,7 +49,6 @@ import React from 'react';
 import { Upload, message } from 'antd';
 // import { UploadOutlined, FormOutlined } from '@ant-design/icons';
 import request from 'umi-request';
-// @ts-ignore
 import { history } from 'umi';
 import { AcceptType, businessType } from '../const';
 import './index.css';
@@ -95,7 +94,7 @@ function SubType(_a) {
             var url = URL.createObjectURL(file);
             var audioElement = new Audio(url);
             audioElement.addEventListener('loadedmetadata', function (_event) {
-                params.content.duration = parseInt("" + _event.path[0].duration * 1000, 10);
+                params.content.duration = parseInt(_event.path[0].duration * 1000, 10);
                 addPublicize(__assign({}, params));
             });
         }
@@ -151,9 +150,7 @@ function SubType(_a) {
     };
     return (React.createElement(React.Fragment, null,
         React.createElement("div", { className: "box", onClick: go2NewPage },
-            React.createElement("div", { className: "upload" }, ['accompany', 'article'].includes(type) ? (React.createElement("p", { onClick: go2CreatePage, className: "btn" }, "\u521B\u5EFA")) : (React.createElement(Upload, { multiple: false, listType: "text", beforeUpload: fetchUrlThenUpload, showUploadList: false, accept: AcceptType[type], 
-                // @ts-ignore
-                onClick: stopPropagation },
+            React.createElement("div", { className: "upload" }, ['accompany', 'article'].includes(type) ? (React.createElement("p", { onClick: go2CreatePage, className: "btn" }, "\u521B\u5EFA")) : (React.createElement(Upload, { multiple: false, listType: "text", beforeUpload: fetchUrlThenUpload, showUploadList: false, accept: AcceptType[type], onClick: stopPropagation },
                 React.createElement("span", null, "\u4E0A\u4F20")))),
             React.createElement("p", { className: "file" },
                 React.createElement("img", { src: icon, alt: "" })),

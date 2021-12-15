@@ -9,9 +9,9 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import dayjs from 'dayjs';
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
+import dayjs from 'dayjs';
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
 var handlePatientsTeamDataSource = function (data) {
     var newPatients = [];
@@ -31,8 +31,7 @@ var handlePatientsTeamDataSource = function (data) {
                 };
             }
             // 在members里过滤出sid与当前登录者sid相同,并且与侧边栏医生角色一致的医生信息，取出wcId，im聊天会话需要此参数
-            if (member.sid === window.$storage.getItem('sid') &&
-                member.role === window.$storage.getItem('currRoleId')) {
+            if (member.sid === window.$storage.getItem('sid') && member.role === window.$storage.getItem('currRoleId')) {
                 newObj.currLoginDoctorInfo = {
                     wcId: member.wcId,
                     sid: member.sid,
@@ -99,7 +98,7 @@ export var handleInviteMemberList = function (dataSource) {
 // cro邀请研究者参与管理数据处理使用此方法
 export var handleTeamInviteMemberList = function (dataSource) {
     var newData = [];
-    // console.log('handleTeamInviteMemberList dataSource', dataSource);
+    console.log('handleTeamInviteMemberList dataSource', dataSource);
     dataSource.forEach(function (team) {
         var doctor = {};
         team.members.forEach(function (item) {
@@ -119,8 +118,24 @@ export var handleTeamInviteMemberList = function (dataSource) {
             }
         });
         newData.push(doctor);
+        // const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
+        // newData.push({
+        //   ...item,
+        //   title,
+        //   avatarUrl,
+        //   name,
+        //   joinTime: item?.interval?.start ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
+        //   status: projectInviteStatus[item.status],
+        //   tel,
+        //   provinceName,
+        //   sex: sexList[sex],
+        //   firstProfessionCompany,
+        //   firstPracticeDepartment,
+        //   role: fetchRolePropValue(item.role, 'desc'),
+        //   roleId: item.role,
+        // });
     });
-    // console.log('handleTeamInviteMemberList newData', newData);
+    console.log('handleTeamInviteMemberList newData', newData);
     return newData;
 };
 var handleDoctorTeamDataSource = function (dataSource) {
@@ -199,12 +214,12 @@ export var handleRelatedDoctorsDataSource = function (dataSource) {
     return doctors;
 };
 export var handleTableDataSource = function (dataKey, dataSource, category) {
-    // console.log('dataSource', dataSource);
-    // console.log('dataKey', dataKey);
-    // console.log('category', category);
-    // console.log('Role.DOCTOR.id', Role.DOCTOR.id);
-    // console.log('Role.PATIENT_VIP.id', Role.PATIENT_VIP.id);
-    // console.log('Role.PATIENT.id', Role.PATIENT.id);
+    console.log('dataSource', dataSource);
+    console.log('dataKey', dataKey);
+    console.log('category', category);
+    console.log('Role.DOCTOR.id', Role.DOCTOR.id);
+    console.log('Role.PATIENT_VIP.id', Role.PATIENT_VIP.id);
+    console.log('Role.PATIENT.id', Role.PATIENT.id);
     switch (dataKey) {
         case 'teams':
             if (category === 'patientList') {
@@ -228,8 +243,6 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             return dataSource;
         case 'infos':
             return handleInviteMemberList(dataSource);
-        case 'indexTable':
-            return dataSource;
         default:
             return dataSource;
     }
