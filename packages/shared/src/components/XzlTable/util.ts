@@ -14,7 +14,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'DEP_HEAD'];
   data.forEach((team: Store) => {
     newObj = {};
-    team.members.forEach((member: ISubject) => {
+    team.members.forEach((member: any) => {
       // 下级、上级、科研医生、营养师、独立
       if (Role.NS_OWNER.id === member.role) {
         newObj.nsOwner = {
@@ -78,7 +78,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
 
 // 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
 export const handleInviteMemberList = (dataSource: Store[]) => {
-  const newData: Array<ISubject> = [];
+  const newData: Array<any> = [];
   dataSource.forEach((item: any) => {
     const {
       title,
@@ -112,7 +112,7 @@ export const handleInviteMemberList = (dataSource: Store[]) => {
 
 // cro邀请研究者参与管理数据处理使用此方法
 export const handleTeamInviteMemberList = (dataSource: Store[]) => {
-  const newData: Array<ISubject> = [];
+  const newData: Array<any> = [];
   // console.log('handleTeamInviteMemberList dataSource', dataSource);
   dataSource.forEach((team: any) => {
     let doctor: any = {};
