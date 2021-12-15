@@ -4,7 +4,7 @@ interface IRes {
   result?: string;
   message?: string;
 }
-export interface CommonData {
+declare interface CommonData {
   [index: string]: any;
 }
 
@@ -217,7 +217,6 @@ interface ISub {
 
 
 // ----------module---------
-import { IPlanInfos } from '@/utils/consts';
 interface IProjectList {
   projectSid: string,
   projectNsId: string;
@@ -247,7 +246,7 @@ interface IGroup {
 // 两种写法
 interface ProjectModelState {
   projectList: IProjectList[],
-  objectiveScaleList: IPlanInfos[],
+  objectiveScaleList: any[],
   reverData: object,
   objectiveGroup: IGroup[],
   formName: string,

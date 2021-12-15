@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Button, message } from 'antd';
 import { useDispatch, useParams, useSelector } from 'umi';
 import { debounce } from 'lodash';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import DiffShow from '@/components/AdjustMedicine//DiffShow';
 import AdjustPanel from '@/components/AdjustMedicine//AdjustPanel';
 import DiffTable from '@/components/AdjustMedicine/DiffTable';
 import { AdjustMedicineBtn } from '@/utils/tools';
 import { getIssueParams } from '@/utils/utils';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import styles from '../index.scss';
 
 interface Iprops {

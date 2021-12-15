@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
-import {Tabs} from 'antd';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import { Tabs } from 'antd';
 import * as api from '@/services/api';
 import MsgItem from './components/msgItem';
 import styles from './index.scss';
@@ -20,23 +20,23 @@ function MessageBell({ children }: IProps) {
         pageAt: 1,
         pageSize: 9999,
         type: 1000,
-      }
-      api.research.fetchSysMessage(params).then((res: {sysMessages: navBarIMsg[]}) => {
-        setMsgList(res.sysMessages)
+      };
+      api.research.fetchSysMessage(params).then((res: { sysMessages: navBarIMsg[] }) => {
+        setMsgList(res.sysMessages);
         const inviteList = res.sysMessages.filter(item => item.type === 1000);
         setInviteMsgList(inviteList);
-      })
+      });
     }
-  }, [showModal])
+  }, [showModal]);
 
   const msgType = [
     {
       title: '全部消息',
-      msgList: msgList
+      msgList: msgList,
     }, {
       title: '项目邀请',
       msgList: inviteMsgList,
-    }
+    },
   ];
 
   return (
@@ -69,9 +69,9 @@ function MessageBell({ children }: IProps) {
             </Tabs>
           </div>
         </DragModal>
-      ) }
+			) }
     </>
-  )
+  );
 }
 
 export default MessageBell;

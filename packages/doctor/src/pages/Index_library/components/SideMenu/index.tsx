@@ -3,8 +3,8 @@ import { SearchOutlined, RightOutlined, PlusOutlined, EditOutlined, DeleteOutlin
 import { Input, List, Space, Popconfirm, message } from 'antd';
 import { history, useDispatch, useLocation, useSelector } from 'umi';
 import * as api from '@/services/api';
-import event from 'xzl-web-shared/src/utils/events/eventEmitter';
-import { documentTypeText, documentTypeSource } from 'xzl-web-shared/src/utils/consts';
+import event from 'xzl-web-shared/dist/src/utils/events/eventEmitter';
+import { documentTypeText, documentTypeSource } from 'xzl-web-shared/dist/src/utils/consts';
 import { isOneSelf, isOthers, isSystem } from './util';
 import AddEditDocument from '../AddEditDocument';
 import styles from './index.scss';

@@ -1,11 +1,11 @@
 /**
  * Created by wuxiaoran on 2019/1/8.
  */
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState } from 'react';
 import { Button, Input } from 'antd';
 import { useSelector } from 'umi';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
 import defaultHospitalBg from './img/default_hospital_bg.png';
 import defaultHospitalLogo from './img/default_hospital_logo.png';

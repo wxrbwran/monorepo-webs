@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import DoctorList, { Irecord } from '../doctor_list';
 import { Input, Button, message } from 'antd';
-import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/dist/src/utils/role';
 import styles from '../add_group/index.scss';
 import { CommonData, IState } from 'typings/global';
 import { debounce } from 'lodash';
@@ -30,34 +30,34 @@ function EditGroup({ children, data, refresh }: Iprops) {
     setPatientId('');
     setSelectName('');
     setIsUpdatePi(false);
-  }
+  };
   const handleSubmit = () => {
     if (groupName) {
       const apiParams: CommonData = {
         groupName,
         groupId: nsId,
-      }
+      };
       if (selectPatientId) {
         apiParams.doctorSId = selectPatientId;
         apiParams.role = role;
         apiParams.projectNsId = projectNsId;
       }
       window.$api.research.patchPiGroup(apiParams).then(() => {
-        message.success(`修改成功`);
+        message.success('修改成功');
         handleHideModal();
         refresh();
-      })
+      });
     } else {
       message.error('请输入组名');
     }
-  }
-  const handleChangeSelect = (data: Irecord[]) => {
-    setSelectName(data[0].name);
-    setPatientId(data[0].subjectId);
-  }
+  };
+  const handleChangeSelect = (datum: Irecord[]) => {
+    setSelectName(datum[0].name);
+    setPatientId(datum[0].subjectId);
+  };
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupName(e.target.value);
-  }
+  };
   return (
     <div>
       <div onClick={() => setIsShowModal(true)}>{children}</div>
@@ -96,12 +96,12 @@ function EditGroup({ children, data, refresh }: Iprops) {
                   <Button type="primary" onClick={debounce(handleSubmit, 300)}> 完成 </Button>
                 </div>
               </div>
-            )
+              )
           }
         </div>
       </DragModal>
     </div>
-  )
+  );
 }
 
 export default EditGroup;

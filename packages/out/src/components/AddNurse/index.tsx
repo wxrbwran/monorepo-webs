@@ -1,10 +1,10 @@
 import type { FC, ReactText } from 'react';
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { message } from 'antd';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import type { XzlTableCallBackProps } from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import { useLocation } from 'umi';
 import { isOpenSub as getIsOpenSub, upperOrgNsId } from '@/utils/tools';
 import * as api from '@/services/api';
@@ -16,7 +16,7 @@ import {
   // workload,
   // monthWorkload,
   // lastMonthWorkload,
-} from 'xzl-web-shared/src/utils/columns';
+} from 'xzl-web-shared/dist/src/utils/columns';
 
 interface IProps {
   refresh: () => void;

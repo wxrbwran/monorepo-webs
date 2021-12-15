@@ -47,8 +47,8 @@ export default {
   },
 
   // 获取样本来源-检查部位
-  fetchIndexSampleFrom(): Promise<any> {
-    return http.get('index/sampleFrom');
+  fetchIndexSampleFrom(data: CommonData): Promise<any> {
+    return http.get('index/sampleFrom', { data });
   },
   // 图片审核搜索单据-指标
   fetchIndexSearch(data: CommonData): Promise<any> {

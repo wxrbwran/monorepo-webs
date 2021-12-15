@@ -55,7 +55,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
     initSubType = [...new Set(initSubType)];
   } else {
-    initSubType = ['血液'];
+    initSubType = [];
   }
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
@@ -192,7 +192,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         forceRender
         closeIcon={
           <Popconfirm
-            title=" 关闭后，标签内全部指标数据将清空，请确认?"
+            title="关闭后，标签内全部指标数据将清空，请确认?"
             onConfirm={() => handleRemoveType(item)}
             okText="确认"
             cancelText="取消"

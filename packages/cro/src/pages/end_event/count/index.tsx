@@ -3,43 +3,43 @@ import { Form } from 'antd';
 import { isEmpty } from 'lodash';
 import Event from '../components/event';
 import Researcher from '../components/researcher';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
 import { endEventColumns } from '@/utils/columns';
 import styles from './index.scss';
 
 function Count() {
   const [form] = Form.useForm();
   const projectSid =  window.$storage.getItem('projectSid');
-  const [tableOptions, setOptions] = useState({projectSid});
+  const [tableOptions, setOptions] = useState({ projectSid });
 
-  const handleSelectChange = (changedValues: string[], allValues: any) => {
-    console.log('allValues', allValues)
+  const handleSelectChange = (_: string[], allValues: any) => {
+    console.log('allValues', allValues);
     // 过滤其中一个为'全部'的情况，删除该项
     Object.keys(allValues).forEach(item=>{
-        if(!allValues[item])  delete allValues[item]
-    })
+      if (!allValues[item])  delete allValues[item];
+    });
     // 两个都为全部的情况
-    if(isEmpty(allValues)){
-      setOptions({ projectSid});
-    }else{
-      setOptions({ ...tableOptions, ...allValues});
+    if (isEmpty(allValues)){
+      setOptions({ projectSid });
+    } else {
+      setOptions({ ...tableOptions, ...allValues });
     }
   };
   const legendArr = [
     {
       text: '主要终点事件',
-      class: 'MAIN'
+      class: 'MAIN',
     }, {
       text: '严重不良反应事件',
-      class: 'SICK'
+      class: 'SICK',
     }, {
       text: '次要终点事件',
-      class: 'MINOR'
+      class: 'MINOR',
     }, {
       text: '不良事件',
-      class: 'BAD'
-    }
-  ]
+      class: 'BAD',
+    },
+  ];
 
   return (
     <div className={styles.count}>
@@ -77,6 +77,6 @@ function Count() {
         />
       </div>
     </div>
-  )
+  );
 }
 export default Count;

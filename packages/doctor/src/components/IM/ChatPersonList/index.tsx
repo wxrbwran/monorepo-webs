@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'umi';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import ChatPersonItem from '../ChatPersonItem';
 import styles from './index.scss';
 import { IPersonNew } from 'packages/doctor/typings/global';

@@ -11,55 +11,66 @@ interface IProps {
   handleChangeSubType: (params: string[]) => void;
 }
 const SubType: FC<IProps> = (props) => {
-  const { leve1Type, initSampleFrom } = props;
-  const [subTypeList, setsubTypeList] = useState([]); // 子分类列表
+  const { initSampleFrom, handleChangeSubType } = props;
+  const [subTypeList, setSubTypeList] = useState([]); // 子分类列表
   const [form] = Form.useForm();
   useEffect(() => {
     const params = {
-      type: leve1Type,
-      sourceSid: window.$storage.getItem('sid'),
+      keyWord: '',
     };
     api.indexLibrary.fetchIndexSampleFrom(params).then((res: any) => {
-      setsubTypeList(res.list);
+      setSubTypeList(res.list);
     });
   }, []);
-  // const handleChange = (selectType: string[]) => {
-  //   handleChangeSubType(selectType);
-  // };
-  const handleValueChange = (changedValues, allValues) => {
-    console.log(changedValues, allValues);
+
+  const handleValueChange = (_, allValues: any) => {
+    console.log(allValues);
+    handleChangeSubType([
+      ...(allValues?.checkbox || []),
+      ...(allValues?.selects || []),
+    ].filter(v => v !== '其他'));
   };
   return (
     <div className="flex justify-start items-center">
       <span className="font-bold mr-5 text-sm">选择样品来源:</span>
-      <Form form={form} onValuesChange={handleValueChange}>
+      <Form
+        form={form}
+        onValuesChange={handleValueChange}
+        initialValues={{
+          checkbox: [...initSampleFrom],
+          selects: [...initSampleFrom],
+        }}
+      >
         <Form.Item name="checkbox" noStyle>
           <Checkbox.Group>
             <Checkbox value="血液">血液</Checkbox>
             <Checkbox value="其他">其他</Checkbox>
           </Checkbox.Group>
         </Form.Item>
-        <ProFormDependency name="checkbox">
+        <ProFormDependency name={['checkbox']}>
           {({ checkbox }: any) => {
-            console.log('checkbox', checkbox);
-          } }
+            if (checkbox?.includes('其他')) {
+              return (
+                <Form.Item name="selects" noStyle>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ flex: 1, width: 200 }}
+                    placeholder="请选择"
+                    // onChange={handleChange}
+                  >
+                    {subTypeList.map((item) => (
+                      <Option key={item} value={item}>
+                        {item}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              );
+            }
+            return null;
+          }}
         </ProFormDependency>
-        <Form.Item name="selects" noStyle>
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ flex: 1 }}
-            placeholder="请选择"
-            defaultValue={initSampleFrom}
-            // onChange={handleChange}
-          >
-            {subTypeList.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
       </Form>
     </div>
   );

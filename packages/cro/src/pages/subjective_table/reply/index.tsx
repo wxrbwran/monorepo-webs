@@ -5,7 +5,7 @@ import NotReplayTable from '../components/not_reply_table';
 import { useSelector } from 'umi';
 import styles from './index.scss';
 import { IState } from 'typings/global';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
 
 interface IProps {
   location: {

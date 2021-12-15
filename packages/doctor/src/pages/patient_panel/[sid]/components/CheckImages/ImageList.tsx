@@ -141,20 +141,18 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
   ), [imgToReview, imgReview]);
   return (
     <>
-      {
-        Object.keys(imgList).map(dateItem => (
-          <div className='flex'>
+      {Object.keys(imgList).map((dateItem) => (
+        <div className="flex" key={dateItem}>
           <div className="mr-10 mt-20">{dateItem}</div>
-            <div className={styles.images_list}>
-              { imgList[dateItem].map((item, index) => renderItem(item, index)) }
-            </div>
+          <div className={styles.images_list}>
+            {imgList[dateItem].map((item, index) => renderItem(item, index))}
           </div>
-        ))
-      }
+        </div>
+      ))}
       {/* <div className={styles.images_list}>
         { imgReview.map((item, index) => renderItem(item, index + imgToReview.length)) }
       </div> */}
-      { imgToReview.length === 0 && imgReview.length === 0 && <Empty /> }
+      {imgToReview.length === 0 && imgReview.length === 0 && <Empty />}
       <Viewer
         visible={showViewer}
         images={[...imgToReview, ...imgReview].map((image) => ({
@@ -169,30 +167,22 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
         onRotateClick={handleImageRotate}
         onMaskClick={hideViewer}
         disableKeyboardSupport
-        customToolbar={(config) => (
-          [
-            ...config,
-            {
-              key: 'customStructured',
-              render: (
-                <CheckImgStructured
-                  imageInfo={{ imageId }}
-                  handleRefresh={handleRefresh}
-                >
-                  <span
-                    className="react-viewer-btn"
-                    key="structured"
-                  >
-                    <div>
-                      <img src={jgh} alt="" />
-                    </div>
-                    <span>结构化数据</span>
-                  </span>
-                </CheckImgStructured>
-              ),
-            },
-          ]
-        )}
+        customToolbar={(config) => [
+          ...config,
+          {
+            key: 'customStructured',
+            render: (
+              <CheckImgStructured imageInfo={{ imageId }} handleRefresh={handleRefresh}>
+                <span className="react-viewer-btn" key="structured">
+                  <div>
+                    <img src={jgh} alt="" />
+                  </div>
+                  <span>结构化数据</span>
+                </span>
+              </CheckImgStructured>
+            ),
+          },
+        ]}
       />
     </>
   );

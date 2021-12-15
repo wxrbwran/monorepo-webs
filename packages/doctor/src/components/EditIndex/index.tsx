@@ -4,14 +4,13 @@ import {
   Radio, Row, Col,
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-// import { isEqual } from 'lodash';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import {
   referenceList,
   referenceMap,
   yinYang,
   createFormListProps,
-} from 'xzl-web-shared/src/utils/consts';
+} from 'xzl-web-shared/dist/src/utils/consts';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import './index.scss';
@@ -23,7 +22,7 @@ interface IProps {
   documentId?: string; // 图片大分类id,例如生化全项的类型id,如果是结构化入口时(source:imgAddTypeIndex时)，此值不会传过来
   sampleFrom?: string; // 样本来源，同上
   level1Type: string; // 一级分类： HYD  或者   JCD
-  // source:imgAddIndex结构化添加指标 imgAddTypeIndex结构化添加大分类+指标  libraryAdd指标库添加  libraryEdit指标库编辑
+  // source: imgAddIndex结构化添加指标 imgAddTypeIndex结构化添加大分类+指标  libraryAdd指标库添加  libraryEdit指标库编辑
   source: string;
 }
 interface IData {
@@ -163,14 +162,16 @@ const EditIndex: FC<IProps> = (props) => {
             size="large"
             labelCol={{ span: 4 }}
           >
-            <Form.Item name="documentId" style={{ display: 'none' }}>
-              <Input placeholder="化验单Id" disabled type="hidden" />
-            </Form.Item>
+            {source !== 'imgAddTypeIndex' && (
+              <Form.Item name="documentId" style={{ display: 'none' }}>
+                <Input placeholder="化验单Id" disabled type="hidden" />
+              </Form.Item>
+            )}
             <Form.Item name="documentName" label="化验单名称">
-              <Input placeholder="化验单名称" disabled />
+              <Input placeholder="化验单名称" disabled={source !== 'imgAddTypeIndex'} />
             </Form.Item>
             <Form.Item name="sampleFrom" label="样本来源">
-              <Input placeholder="样本来源" disabled />
+              <Input placeholder="样本来源" disabled={source !== 'imgAddTypeIndex'} />
             </Form.Item>
             <Form.Item name="name" rules={rules} label="指标名称">
               <Input placeholder="请输入指标名称" />

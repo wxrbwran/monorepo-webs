@@ -9,8 +9,8 @@ import type { BasicLayoutProps } from '@ant-design/pro-layout';
 import RightContent from '@/components/RightContent';
 
 import routes from '@/routes';
-import storage from 'xzl-web-shared/src/utils/dva-model-persist/storage';
-import { persistEnhancer } from 'xzl-web-shared/src/utils/dva-model-persist';
+import storage from 'xzl-web-shared/dist/src/utils/dva-model-persist/storage';
+import { persistEnhancer } from 'xzl-web-shared/dist/src/utils/dva-model-persist';
 // import Icon, { SmileOutlined, HeartOutlined, CrownOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
 import { PieChartOutlined } from '@ant-design/icons';

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { queryFields } from '../../consts';
 import '../ReportTable/index.scss';
 import Viewer from 'react-viewer';
 import * as api from '@/services/api';
-import moment from 'moment'
+import moment from 'moment';
 
 interface IProps {
   children: string;
@@ -17,7 +17,7 @@ interface IImageList {
   createdAt: string;
 }
 
-function ImgViewer({ imageType, children, sid}: IProps) {
+function ImgViewer({ imageType, children, sid }: IProps) {
   const [imageList, setImageList] = useState<IImageList[]>([]);
   const [isShowImgModal, setIsShowImgModal] = useState(false); // 是否展示图片集弹框
   const [isShowViewer, setIsShowViewer] = useState(false); // 是否显示预览图片
@@ -29,24 +29,24 @@ function ImgViewer({ imageType, children, sid}: IProps) {
     setIsShowViewer(false);
     setIsShowImgModal(true);
     setActiveIndex(idx);
-  }
+  };
 
   const handleShowImgModal = () => {
     const params = {
       imageType: imageType.toUpperCase(),
       sid,
-    }
+    };
     api.query.getImageUrl(params).then((res) => {
       setImageList(res.imageInfos);
-      setImages(res.imageInfos.map((item: {url: string}) => item.url))
-    })
+      setImages(res.imageInfos.map((item: { url: string }) => item.url));
+    });
     setIsShowImgModal(true);
-  }
+  };
   const handleShowViewer = (index: number) => {
     setActiveIndex(index);
     setIsShowImgModal(false);
     setIsShowViewer(true);
-  }
+  };
   return (
     <>
       {
@@ -75,7 +75,7 @@ function ImgViewer({ imageType, children, sid}: IProps) {
                   <img src={item.url} alt="化验单检查单" />
                   <p className="time">{moment(item.createdAt).format('YYYY-MM-DD')}</p>
                 </div>
-              )
+              );
             })
           }
         </div>
@@ -86,11 +86,11 @@ function ImgViewer({ imageType, children, sid}: IProps) {
         activeIndex={activeIndex}
         images={images.map(url => ({
           src: url,
-          alt: "",
+          alt: '',
         }))}
       />
     </>
-  )
+  );
 }
 
 export default ImgViewer;

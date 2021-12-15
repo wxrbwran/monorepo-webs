@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
 import styles from '../PackageTeamItem/index.scss';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 interface IProps {
   members:  ISubject[];
 }

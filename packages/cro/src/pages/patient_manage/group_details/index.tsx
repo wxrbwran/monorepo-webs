@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
 import { groupDetailColumns } from '@/utils/columns';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';

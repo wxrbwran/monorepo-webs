@@ -1,15 +1,15 @@
 import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, message } from 'antd';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import { Search } from 'xzl-web-shared/src/components/Selects';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import type { XzlTableCallBackProps } from 'xzl-web-shared/dist/src/components/XzlTable';
+import { Search } from 'xzl-web-shared/dist/src/components/Selects';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import AddNurse from '@/components/AddNurse';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import { useSelector, useLocation /* , useDispatch */ } from 'umi';
 import { isOpenSub as getIsOpenSub } from '@/utils/tools';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import * as api from '@/services/api';
 import {
   avatar,
@@ -17,7 +17,7 @@ import {
   sex,
   /* role,
   status, */
-} from 'xzl-web-shared/src/utils/columns';
+} from 'xzl-web-shared/dist/src/utils/columns';
 import { handleSelection } from '@/utils/conditions';
 import { debounce } from 'lodash';
 

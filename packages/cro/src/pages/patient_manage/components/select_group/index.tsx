@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Select, message } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { useSelector } from 'react-redux';
 import * as api from '@/services/api';
 import { IState } from 'typings/global';

@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import DepHeadDoctors from '../components/DepHeadDoctors';
 import { Tabs, Empty } from 'antd';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
 import { name, org,  patientLevel, sex, age, address } from '../patients/[level]/columns';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import styles from './index.scss';
 
 interface Imenu {

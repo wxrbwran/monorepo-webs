@@ -3,9 +3,9 @@ import {
   Form, Input, Button, message,
 } from 'antd';
 // import { useSelector } from 'umi';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { documentType } from 'xzl-web-shared/src/utils/consts';
-import event from 'xzl-web-shared/src/utils/events/eventEmitter';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import { documentType } from 'xzl-web-shared/dist/src/utils/consts';
+import event from 'xzl-web-shared/dist/src/utils/events/eventEmitter';
 import * as api from '@/services/api';
 
 

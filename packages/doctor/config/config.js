@@ -56,11 +56,11 @@ const config = {
     },
   },
   extraPostCSSPlugins: [require('@tailwindcss/postcss7-compat')],
-  extraBabelIncludes: ['xzl-web-shared'],
-  nodeModulesTransform: {
-    type: 'none',
-    exclude: ['xzl-web-shared'],
-  },
+  // extraBabelIncludes: ['xzl-web-shared'],
+  // nodeModulesTransform: {
+  //   type: 'none',
+  //   exclude: ['xzl-web-shared'],
+  // },
   extraBabelPlugins: process.env.NODE_ENV === 'production' ? ['transform-remove-console'] : [],
   externals: {
     echarts: 'window.echarts',

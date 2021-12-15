@@ -10,12 +10,12 @@ import {
   lowerDoctor,
   serviceLevel,
   tel,
-} from 'xzl-web-shared/src/utils/columns';
-import { Role } from 'xzl-web-shared/src/utils/role';
+} from 'xzl-web-shared/dist/src/utils/columns';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import { handleSelection } from '@/utils/conditions';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { Search } from 'xzl-web-shared/src/components/Selects';
+import type { XzlTableCallBackProps } from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import { Search } from 'xzl-web-shared/dist/src/components/Selects';
 import styles from '../DepartmentDoctor/index.scss';
 
 interface ILocation {

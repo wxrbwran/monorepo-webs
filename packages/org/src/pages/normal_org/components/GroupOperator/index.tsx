@@ -11,7 +11,7 @@ import { avatar,
   workload,
   lastMonthWorkload,
   monthWorkload,
-  status } from 'xzl-web-shared/src/utils/columns';
+  status } from 'xzl-web-shared/dist/src/utils/columns';
 import { operators } from './mock';
 // import data from './mock';
 import styles from '../DepartmentDoctor/index.scss';
@@ -62,7 +62,7 @@ const DepartmentOperator: FC = () => {
     dataIndex: 'operate',
     width: 100,
     className: 'action',
-    render: (text: string, record: any) => (
+    render: (_: string, record: any) => (
       <Popconfirm
         placement="topRight"
         overlayClassName="delete__pop-confirm"
@@ -135,5 +135,5 @@ const DepartmentOperator: FC = () => {
       </div>
     </div>
   );
-};;
+};
 export default DepartmentOperator;

@@ -4,9 +4,6 @@ import React, {
 import {
   Form, Button,
 } from 'antd';
-import {
-  IApiDocumentItem, IIndexItem, ISearchDocumentItem,
-} from 'typings/imgStructured';
 import { isEmpty } from 'lodash';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
@@ -59,6 +56,7 @@ const CustomIndex: FC<IProps> = (props) => {
   const [apiData, setApiData] = useState<IApiData>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
   const [formInit, setFormInit] = useState({});
+  const sid = window.$storage.getItem('sid');
   // 把点击的指标移到第一行
   const formatFirshIndex = (commonItems: IIndexItemCustom[], noCommonItems:IIndexItemCustom[]) => {
     commonItems.forEach((item: IIndexItemCustom, index: number) => {
@@ -88,7 +86,8 @@ const CustomIndex: FC<IProps> = (props) => {
         const params = {
           documentId: apiParams.documentId,
           sampleFroms: [apiParams.sampleFrom],
-          sourceSid: window.$storage.getItem('sid'),
+          sourceSid: sid,
+          sid,
         };
         api.indexLibrary.fetchIndexDocumentIndex(params).then(
           ({ list }: { list: IIndexItemCustom[] }) => {
@@ -237,22 +236,16 @@ const CustomIndex: FC<IProps> = (props) => {
         <EditIndex
           onSuccess={addIndexSuccess}
           level1Type={level1Type}
-          source="imgAddIndex"
+          source="imgAddTypeIndex"
           documentId={apiParams.documentId}
           sampleFrom={apiParams.sampleFrom}
         >
-          <Button
-            type="link"
-            className="text-sm"
-          >
-            +添加新指标
+          <Button type="link" className="text-sm">
+            +添加新化验单
           </Button>
         </EditIndex>
       </div>
-      <Form
-        name={`custom_${formKey}`}
-        form={form}
-      >
+      <Form name={`custom_${formKey}`} form={form}>
         {renderItem()}
       </Form>
     </div>

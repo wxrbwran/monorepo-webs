@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { message, Form, Tabs, Popconfirm } from 'antd';
 import SelectGroup from '../components/select_group';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
 import * as api from '@/services/api';
 import { handleSelection } from '@/utils/conditions';
-import { Status } from 'xzl-web-shared/src/components/Selects';
+import { Status } from 'xzl-web-shared/dist/src/components/Selects';
 import { Group } from '@/components/Selects';
 import Viewer from 'react-viewer';
 import { patientCroColumns, patientCroStopColumns } from '@/utils/columns';

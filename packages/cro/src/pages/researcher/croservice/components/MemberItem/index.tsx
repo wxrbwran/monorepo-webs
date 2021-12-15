@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import female from '@/assets/img/icon_female.svg';
 import male from '@/assets/img/icon_male.svg';
 import { isEmpty } from 'lodash';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
 import styles from './index.scss';
 
 interface IProps {

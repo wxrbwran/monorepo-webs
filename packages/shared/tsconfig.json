@@ -24,7 +24,7 @@
     "esModuleInterop": true,
     "paths": {
       "@/*": ["src/*"],
-      "xzl-web-shared/src/*": ["src/*"]
+      "xzl-web-shared/dist/src/*": ["src/*"]
     },
     "typeRoots": ["node", "node_modules/@types", "./typings"]
   }

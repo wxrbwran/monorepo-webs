@@ -2,7 +2,7 @@
 // 此文件会在入口文件的最前面被自动引入，可以在这里加载补丁，做一些初始化的操作等。
 
 import * as api from '@/services/api';
-import storage from 'xzl-web-shared/src/utils/storage';
+import storage from 'xzl-web-shared/dist/src/utils/storage';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { setAuthorizationToken } from '@/services/http';

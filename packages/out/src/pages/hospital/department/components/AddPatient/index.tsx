@@ -1,7 +1,7 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState } from 'react';
 import { Form, Input, Select } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 
 const FormItem = Form.Item;
 const { Option } = Select;

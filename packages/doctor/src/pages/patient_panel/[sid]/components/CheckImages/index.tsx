@@ -3,7 +3,7 @@ import { RightOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'umi';
 import { IImageItem, IState } from 'typings/model';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import NoData from '@/assets/img/icon_nodata.png';
 import Title from '../Title';
 import ImageList from './ImageList';

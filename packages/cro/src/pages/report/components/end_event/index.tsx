@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
 import { endEventColumns } from '@/utils/columns';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import styles from './index.scss';
 interface IProps {
   children: React.ReactElement;
@@ -11,24 +11,24 @@ interface IProps {
   }
 }
 function EndEvent({ children, row }:IProps) {
-  const [tableOptions, setOptions] = useState({ kp: row.kp, ids: row.source });
+  const [tableOptions, _setOptions] = useState({ kp: row.kp, ids: row.source });
   const [showModal, setShowModal] = useState(false);
 
   const legendArr = [
     {
       text: '主要终点事件',
-      class: 'MAIN'
+      class: 'MAIN',
     }, {
       text: '严重不良反应事件',
-      class: 'SICK'
+      class: 'SICK',
     }, {
       text: '次要终点事件',
-      class: 'MINOR'
+      class: 'MINOR',
     }, {
       text: '不良事件',
-      class: 'BAD'
-    }
-  ]
+      class: 'BAD',
+    },
+  ];
   const handleShowModal = () => {
     setShowModal(!showModal);
   };
@@ -73,6 +73,6 @@ function EndEvent({ children, row }:IProps) {
         )
       }
     </div>
-  )
+  );
 }
 export default EndEvent;

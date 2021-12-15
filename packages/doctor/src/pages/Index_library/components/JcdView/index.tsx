@@ -3,7 +3,7 @@ import { useSelector /*, useLocation */ } from 'umi';
 import { Space, Button } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
-import { documentMap } from 'xzl-web-shared/src/utils/consts';
+import { documentMap } from 'xzl-web-shared/dist/src/utils/consts';
 import CopyDocument from '../../components/CopyDocument';
 import CompletionTemplate from './Completion/CompletionTemplate';
 import RadioTemplate from './Radio/RadioTemplate';

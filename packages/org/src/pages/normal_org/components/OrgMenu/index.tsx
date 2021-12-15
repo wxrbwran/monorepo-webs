@@ -5,7 +5,7 @@ import { PlusOutlined, /* DeleteOutlined, */ EditOutlined } from '@ant-design/ic
 import AddEditDepartment from '@/components/AddEditDepartment';
 // import DeleteDepOrg from '@/components/DeleteDepOrg';
 import AddEditHospital from '@/components/AddEditHospital';
-// import { addtionalMenuList } from 'xzl-web-shared/src/utils/consts';
+// import { addtionalMenuList } from 'xzl-web-shared/dist/src/utils/consts';
 
 import styles from './index.scss';
 
@@ -72,7 +72,7 @@ const OrgMenu: FC = () => {
     });
     history.push(`/normal_org/${orgId}`);
   };
-  const modalCretor = (action: string, level: string, info?: Department) => {
+  const modalCretor = (action: string, _level: string, info?: Department) => {
     switch (action) {
       case '编辑':
         return (

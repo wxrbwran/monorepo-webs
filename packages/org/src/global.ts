@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
-import storage from 'xzl-web-shared/src/utils/storage';
+import storage from 'xzl-web-shared/dist/src/utils/storage';
 import { setAuthorizationToken } from '@/services/http';
 import '@/assets/styles/global.scss';
 import * as api from '@/services/api';
