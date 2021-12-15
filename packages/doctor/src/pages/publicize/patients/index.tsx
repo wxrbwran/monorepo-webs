@@ -25,7 +25,6 @@ function Patients() {
   const groupList = useSelector((state: IState) => state.education.groupList);
   const columns = [pname, groupName, initAt];
   const [dataSource, setDataSource] = useState<Store[]>([]);
-  const pageSize = 10;
   const [loading, setLoading] = useState(true);
 
   const onSelectChange: IOnSelectChange = (keys: any[]) => {
@@ -35,69 +34,78 @@ function Patients() {
     selectedRowKeys: selectPatient,
     onChange: onSelectChange,
   };
-  // 如果返回条数不足10条
-  //   1.页码为1并且请求次数小于3，则继续请求第一页，
-  //   2.页码大于1，则直接结束请求
-  // 等于10条，继续请求
-  const fetchPatientList = (actionLogId: string, pageAt: number) => {
-    const params = {
-      actionLogId,
-      pageAt,
-      pageSize,
-    };
+  // 返回条数大于0，继续请求
+  // 返回条数为0并且请求次数小于3，则继续请求，否则结束请求
+  const fetchPatientList = (actionLogId: string, initTime?: number) => {
+    console.log('dataSource.reverse', dataSource.reverse());
+    const params = { actionLogId, initTime };
+    if (initTime) {
+      params.initTime = initTime;
+    }
     clearInterval(timer);
     api.education.getPatientsList(params)
       .then((res) => {
-        if (pageAt === 1) {
-          setDataSource([...res.lists]);
-        } else {
-          setDataSource((pre) => {
-            return [...pre, ...res.lists];
-          });
-        }
-        if (res.lists.length < pageSize) {
-          if (pageAt === 1 && retryTimes.current < 3) {
+        const curInitTime = isEmpty(res.lists) ? initTime : [...res.lists].reverse()?.[0]?.initAt;
+        setDataSource((pre) => {
+          return [...pre, ...res.lists];
+        });
+        if (res.lists.length === 0) {
+          if (retryTimes.current <= 3) {
             retryTimes.current += 1;
             clearTimeout(timer);
             timer = setTimeout(() => {
-              fetchPatientList(actionLogId, 1);
+              fetchPatientList(actionLogId, curInitTime);
             }, 2000);
           } else {
             clearTimeout(timer);
             setLoading(false);
           }
         } else {
-          fetchPatientList(actionLogId, pageAt + 1);
+          timer = setTimeout(() => {
+            fetchPatientList(actionLogId, curInitTime);
+          }, 2000);
         }
       })
       .catch((err: any) => {
         console.log('err', err);
         setLoading(false);
+        clearTimeout(timer);
         message.error(err?.result || '加载失败');
       });
   };
 
-  const changeTableOption = (keyword: string) => {
-    api.education
-      .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
-      .then((res) => {
-        if (res) {
+  const changeTableOption = (keyword: string, source?: string) => {
+    // 首次初始化init id并存起来，
+    // 输入关键字会重新请求与关键字相关的id，清空关键字，还用之前存储的init id。
+    // 切换机构需要更新存储的init id
+    const ruleId = sessionStorage.getItem('ruleId');
+    if (ruleId && keyword === '' && source !== 'changeOrg') {
+      fetchPatientList(ruleId);
+    } else {
+      api.education
+        .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
+        .then((res) => {
+          if (res) {
+            fetchPatientList(res?.id);
+            if (!ruleId) {
+              sessionStorage.setItem('ruleId', res?.id);
+            }
+          } else {
+            clearInterval(timer);
+            setDataSource([]);
+            setLoading(false);
+          }
+        })
+        .catch((err: string) => {
+          console.log('err', err);
+        });
+    }
 
-          fetchPatientList(res?.id, 1);
-        } else {
-          clearInterval(timer);
-          setDataSource([]);
-          setLoading(false);
-        }
-      })
-      .catch((err: string) => {
-        console.log('err', err);
-      });
   };
 
   useEffect(() => {
     if (!isEmpty(currentOrgInfo)) {
-      changeTableOption(window.$storage.getItem('keyWord'));
+      changeTableOption(window.$storage.getItem('keyWord'), 'changeOrg');
       retryTimes.current = 1;
       setLoading(true);
     }
