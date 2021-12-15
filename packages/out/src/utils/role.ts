@@ -31,7 +31,7 @@ const roleType = (
   refused: number,
   desc: string,
 ) => ({
-  id: `${process.env.APP_ENV}.${id}`,
+  id: `${process.env.PREFIX}.${id}`,
   initState,
   accepted,
   refused,
