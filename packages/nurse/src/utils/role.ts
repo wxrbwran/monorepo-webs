@@ -31,13 +31,13 @@ const roleType = (
   refused: number,
   desc: string,
 ) => ({
-  id: `${process.env.APP_ENV}.${id}`,
+  id: `${process.env.PREFIX}.${id}`,
   initState,
   accepted,
   refused,
   desc,
 });
-// console.log('process.env.APP_ENV', process.env.APP_ENV);
+// console.log('process.env.PREFIX', process.env.PREFIX);
 export const Role: RolesMap = {
   ROOT: roleType('qWGr0B', 9, 0, 8, 'Root管理员'), // 1
   ORG_ADMIN: roleType('XWrxeA', 19, 10, 18, '机构管理员'), // 2

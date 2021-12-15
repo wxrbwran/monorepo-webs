@@ -17,4 +17,26 @@
   flex-direction: column;
   justify-content: space-between;
   flex: 1;
+  .dep_list {
+    overflow-y: hidden;
+    transition: all 0.5s;
+    min-height: 24px;
+  }
+  &:hover {
+    :global {
+      .anticon-double-right {
+        visibility: visible;
+      }
+    }
+  }
+  :global {
+    .anticon-double-right {
+      font-size: 12px;
+      width: 12px;
+      height: 12px;
+      margin: 0 auto;
+      visibility: hidden;
+    }
+  }
 }
+

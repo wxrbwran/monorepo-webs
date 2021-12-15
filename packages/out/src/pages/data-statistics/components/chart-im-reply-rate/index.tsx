@@ -8,8 +8,8 @@ export interface IChartProps {
     type: string;
     data: number[];
     imCount?: {
-      receive_count: number;
-      reply_count: number;
+      receiveCount: number;
+      replyCount: number;
     },
   }[];
 }
@@ -40,7 +40,7 @@ function ChartImReplyRate(props: IProps) {
           console.log('params23', params);
           var relVal = params[0].axisValue;
           params.forEach(item => {
-            const { receive_count: receive, reply_count: reply } = seriesData[item.seriesIndex].imCount[item.dataIndex];
+            const { receiveCount: receive, replyCount: reply } = seriesData[item.seriesIndex].imCount[item.dataIndex];
             relVal += '<br/>' + '<span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:'
             + item.color + '"></span>' + '<span style="display:inline-block; min-width: 90px">' + item.seriesName + '</span>' + ' : ' + item.data + '%' + '&nbsp;&nbsp;' + '患者发送消息数: ' + receive + '&nbsp;&nbsp;' + '医生回复消息数: ' + reply;
           });
