@@ -1,18 +1,18 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { Title, Search } from 'xzl-web-shared/src/components/Selects';
-import { Role } from 'xzl-web-shared/src/utils/role';
-import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import { Title, Search } from 'xzl-web-shared/dist/src/components/Selects';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
+import { handleSelection } from 'xzl-web-shared/dist/src/utils/conditions';
 import {
-    navAvatar,
-    navName,
-    sex,
-    title,
-    patientNum,
-    status,
-} from 'xzl-web-shared/src/utils/columns';
+  navAvatar,
+  navName,
+  sex,
+  title,
+  patientNum,
+  status,
+} from 'xzl-web-shared/dist/src/utils/columns';
 import AddEditDoctor from '@/components/AddEditDoctor';
 import styles from './index.scss';
 
@@ -39,9 +39,7 @@ const DepartmentDoctor: FC = () => {
     // setRowKeys(selected);
     console.log(selected);
   };
-  const deleteDoctor = (doctorIds: string[]) => {
-    console.log(doctorIds);
-  };
+
   // const handleConfirmDelete = () => {
   //   confirm({
   //     title: '确认删除选中的医生吗?',
@@ -61,7 +59,7 @@ const DepartmentDoctor: FC = () => {
       },
     });
   };
-  const handleSelectChange = (changedValues: string[], allValues: string[]) => {
+  const handleSelectChange = (_: string[], allValues: string[]) => {
     setOptions({ ...tableOptions, conditions: handleSelection(allValues) });
   };
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { message, Form } from 'antd';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
+import { formItemLayout } from 'xzl-web-shared/dist/src/utils/consts';
 import { useSelector } from 'umi';
 // import { useDispatch } from 'umi';
 // import styles from './index.scss';

@@ -3,7 +3,7 @@ import { Menu } from 'antd';
 import Icon, { UserOutlined, BarChartOutlined, ProfileOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import config from '@/config';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './index.scss';
 import { IState } from 'packages/doctor/typings/model';

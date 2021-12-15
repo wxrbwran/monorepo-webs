@@ -4,7 +4,7 @@ import DoctorData from './components/doctor-data';
 import PatientData from './components/patient-data';
 import styles from './index.scss';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 
 interface IDocItem {
   depName: string;

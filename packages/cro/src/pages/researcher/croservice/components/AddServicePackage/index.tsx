@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { Input, Button, Select } from 'antd';
 import styles from './index.scss';
 import * as api from '@/services/api';
-import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/src/components/XzlTable/util';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/dist/src/components/XzlTable/util';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import { useSelector } from 'umi';
 import { message } from '@umijs/plugin-request/lib/ui';
 import Member from '../Member';
@@ -252,7 +252,7 @@ const AddServicePackage: FC<IProps> = (props) => {
         if (onSaveSuccess) {
           onSaveSuccess();
         }
-        // 
+        //
       });
     } else {
       api.service.putTeamMembers(parma).then(() => {
@@ -260,7 +260,7 @@ const AddServicePackage: FC<IProps> = (props) => {
         if (onSaveSuccess) {
           onSaveSuccess();
         }
-        // 
+        //
       });
     }
   };

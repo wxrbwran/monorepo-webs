@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Menu, Dropdown, Avatar, Button } from 'antd';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
 import { DownOutlined, UserOutlined, LogoutOutlined, LockOutlined } from '@ant-design/icons';
-// import DragModal from 'xzl-web-shared/src/components/DragModal';
+// import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { history, useDispatch } from 'umi';
 import ChangePWD from '../ChangePwd';
 import styles from './index.scss';

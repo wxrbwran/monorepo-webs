@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Checkbox, Button, message } from 'antd';
 import { baseOption, extOptions } from '../../consts';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 
 interface IProps {
   children: React.ReactElement;

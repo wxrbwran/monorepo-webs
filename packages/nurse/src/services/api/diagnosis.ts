@@ -3,8 +3,6 @@ import http from '@/services/http';
 export default {
   // 查询诊断
   fetchDisease(data: { name: string }): Promise<any> {
-    // return http.get(`disease?data=${encodeURIComponent(Base64.encode(JSON.stringify(data)))}`);
-    // return http.get(`disease?${qs.stringify(data)}`);
     return http.get(`disease?data=${JSON.stringify(data)}`);
   },
   // 查询患者的诊断列表

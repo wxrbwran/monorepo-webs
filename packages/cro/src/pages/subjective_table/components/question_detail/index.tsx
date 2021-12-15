@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
-import styles from './index.scss'
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import styles from './index.scss';
 import { IQuestions } from '@/utils/consts';
 import ScaleTableDetailEcho from '@/components/ScaleTableDetailEcho';
 
@@ -39,7 +39,7 @@ function QuestionDetail(props: IProps) {
         )
       }
     </>
-  )
+  );
 }
 
 export default QuestionDetail;

@@ -1,6 +1,6 @@
 import React, { FC, useState, ChangeEvent } from 'react';
 import { Input } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import UploadImage from '@/components/UploadImage';
 
 const { TextArea } = Input;

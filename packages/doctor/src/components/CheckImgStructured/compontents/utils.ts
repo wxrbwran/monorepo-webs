@@ -2,6 +2,8 @@ import { cloneDeep, isEmpty } from 'lodash';
 import { IUserAddTopicItem, StructuredModelState } from 'packages/doctor/typings/model';
 import { IMeta, IQuestions, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import { getDvaApp } from 'umi';
+import { IJcdTabItem } from './type';
+import { message } from 'antd';
 
 export const outTypes: CommonData = {
   HYD: '化验单',
@@ -13,32 +15,31 @@ export const outTypes: CommonData = {
 
 export const checkboxData = {
   question_type: 'RADIO',
-  isAdd: true,
   question: '',
   answer: [],
-  options: ['', ''],
+  options: ['', '', ''],
 };
 
 export const textData = {
   question_type: 'TEXT',
-  isAdd: true,
   question: '',
   answer: [],
 };
 
 // 多段填空是二维数组嵌套qa里面每个item是多个问答组成的一道题
-export const ddtkData = {
-  question_type: 'COMPLETION',
-  isAdd: true,
-  question: '',
-  answer: [],
+export const ddtkData = (uuid: string) => {
+  return {
+    uuid,
+    question_type: 'COMPLETION',
+    question: '',
+    answer: [],
+    // isAdd: true,
+  };
 };
 
 export const ddtkExample = [
-  { q: '肝脏形态', a: '有' },
+  { q: '形态', a: '有' },
   { q: '大小', a: '1.5×1×1' },
-  { q: '边缘', a: '清' },
-  { q: '各叶比例', a: '2:2:2' },
 ];
 
 export const baseField: CommonData = {
@@ -58,7 +59,9 @@ export const baseFieldReverse: CommonData = {
   '检查名称': 'name',
   '单据名称': 'djName',
 };
-
+export const msg = (content:string, type: string = 'success') => {
+  message[type]({ content, style: { zIndex: 1111 } });
+};
 // 提交时3，把问题转成api接口参数格式  ui->api
 export const fetchSubmitData = (questions: IQuestions[], startInx: number | string, clickSaveTime: number, gid?: string) => {
   // console.log('gid', gid);
@@ -195,7 +198,7 @@ export const findPosition = (item: ITopicQaItemApi, topicAll: any[], dimension: 
   }
 };
 // 回显时1：后端api返回的平铺格式转成ui格式   api--->ui
-export const fetchInitData = (initData: { data: any[] }) => {
+export const fetchInitData = (initData: IJcdTabItem) => {
   const topicAll: any[] = [[], [], [], []]; // 多维数组
   initData?.data?.forEach(item => {
     findPosition(item, topicAll, 0);
@@ -204,7 +207,6 @@ export const fetchInitData = (initData: { data: any[] }) => {
   return topicAll;
 };
 // 处理检查单类型数据回显---e
-
 
 // 回显时：单独处理多段填空，需要把模板格式转成ui需要的多维数组格式(先根据uuid分组，然后组内排序)   模板--->ui
 export const formatTempDdtk = (tkTmpList: any[]) => {
@@ -218,13 +220,18 @@ export const formatTempDdtk = (tkTmpList: any[]) => {
       groupDdtk[item.uuid] = [item];
     }
   });
+  console.log('groupDdtk', groupDdtk);
   Object.values(groupDdtk).forEach(groupItem => {
     const groupList: ITopicTemplateItemApi[] = [];
     console.log('groupItem', groupItem);
     groupItem.forEach((qaItem: ITopicTemplateItemApi) => {
       console.log('qaItem', qaItem);
+      // 新版多段填空，一组题存在一个题目，例： 1-1（题目）  1-1-0（题目下每一个问答内容） 1-1-1(第二个问答)依次类推
       const targetInx: number = Number(qaItem.group.split('-')[2]); // 根据此值进行小组内问题排序
-      groupList[targetInx] = {
+      // 只有题止的group得到的targetInx是NAN，此时inx设为0；（ui渲染时，默认认为第一个元素为题目，其余为问答）
+      const inx: number = isNaN(targetInx) ? 0 : targetInx + 1;
+      console.log('inx', inx);
+      groupList[inx] = {
         ...qaItem,
         answer: qaItem?.answer!?.map(() => null),
       };
@@ -374,3 +381,4 @@ export const watchUserTopicChange = (
   }
 };
 // 处理用户新加问题多tab共享-e
+

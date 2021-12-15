@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import { useDispatch } from 'umi';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
 import { getRole } from '@/utils/utils';
-import { Role } from 'xzl-web-shared/src/utils/role';
-// eslint-disable-next-line import/no-cycle
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
+//@ts-ignore
 import { IAvatar } from '../ChatList';
 import AdjustMedicineCustom from '../AdjustMedicineCustom';
 import BloodCustom from '../BloodCustom';
@@ -113,7 +113,7 @@ const ChatItem: FC<IMsg> = (props) => {
     }
   };
 
-  const playAudio = (msgItem:{file:IFile, flow: string}, event: any) => {
+  const playAudio = (msgItem:{ file:IFile, flow: string }, event: any) => {
     let $target;
     if (!~event.target.className.indexOf('msg-audio')) {
       $target = event.target.parentElement;

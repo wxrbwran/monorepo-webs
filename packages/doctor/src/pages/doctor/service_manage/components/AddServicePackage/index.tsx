@@ -1,16 +1,16 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { Input, Button, message } from 'antd';
 import iconClose from '@/assets/img/icon_close.png';
 import iconAdd from '@/assets/img/icon_add_large.png';
 import ChoiceDoctor, { IMember } from '../ChoiceDoctor';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
 import styles from './index.scss';
 import ChoiceSelfRole from '../ChoiceSelfRole';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import * as api from '@/services/api';
 import { isEmpty, debounce } from 'lodash';
-import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/src/components/XzlTable/util';
+import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/dist/src/components/XzlTable/util';
 interface IProps {
   initData?: {
     innerTeams: {

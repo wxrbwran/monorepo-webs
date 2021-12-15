@@ -5,7 +5,7 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 // import { history } from 'umi';
-import { Base64 } from 'xzl-web-shared/src/utils/base64';
+import { Base64 } from 'xzl-web-shared/dist/src/utils/base64';
 // import pkg from '../../package.json';
 
 const codeMessage: any = {
@@ -61,15 +61,7 @@ const http = extend({
 // 不需要进行base64编码的接口 开头结尾都不要加'/'
 const whiteList: string[] = [];
 function formatUrl(url: string, data: Store) {
-  // console.log('formatUrl', url);
   let newUrl = url;
-  // console.log('data', data);
-  // console.log('JSON.stringify(data)', JSON.stringify(data));
-  // console.log(
-  //   'window.btoa(JSON.stringify(data))',
-  //   window.btoa(JSON.stringify(data)),
-  // );
-
   if (!whiteList.includes(url) && data) {
     newUrl = `${url}?data=${encodeURIComponent(Base64.encode(JSON.stringify(data)))}`;
   }

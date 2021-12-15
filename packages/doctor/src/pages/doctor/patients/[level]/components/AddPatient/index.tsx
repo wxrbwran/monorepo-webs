@@ -2,11 +2,11 @@ import React, { FC, useState, useEffect } from 'react';
 import { Input, message } from 'antd';
 import { useSelector } from 'umi';
 import { isEmpty } from 'lodash';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { btnRender } from '@/utils/button';
 import * as api from '@/services/api';
 import { getCondition } from '@/utils/utils';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import styles from './index.scss';
 
 const AddPatient:FC = ({ children }) => {

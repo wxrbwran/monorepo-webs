@@ -3,7 +3,7 @@ import { Menu, Dropdown, Avatar } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'umi';
 import config from '@/config';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import UserSetting from '@/components/UserSetting';
 import changePassword from '@/assets/img/nav_bar/lock.svg';
 import logoutIcon from '@/assets/img/nav_bar/logout.svg';

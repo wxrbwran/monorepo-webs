@@ -1,19 +1,4 @@
-import { AnyAction, Dispatch } from 'redux';
-import { RouterTypes } from 'umi';
-import { UserModelState } from './user';
-import { AuthModelState } from './auth';
-import { WorkorderModelState } from './workorder';
-import { MessageCountState } from './messageCount';
-import { InstitutionModelState } from './institution';
-import { ProvincesModelState } from './provinces';
-import { ProjectModelState } from '@/models/project';
-import { QueryModelState } from '@/models/query';
-import { NavBarState } from '@/models/navBar';
-
-
-export { UserModelState, WorkorderModelState, MessageCountState, InstitutionModelState, ProvincesModelState };
-
-export interface Loading {
+declare interface Loading {
   global: boolean;
   effects: { [key: string]: boolean | undefined };
   models: {
@@ -25,7 +10,7 @@ export interface Loading {
   };
 }
 
-export interface ConnectState {
+declare interface ConnectState {
   workorderStatus: WorkorderModelState;
   messageCount: MessageCountState;
   user: UserModelState;
@@ -37,13 +22,10 @@ export interface ConnectState {
   navBar: NavBarState;
 }
 
-export interface Route {
+declare interface Route {
   routes?: Route[];
 }
 
 /**
  * @type T: Params matched in dynamic routing
  */
-export interface ConnectProps<T = {}> extends Partial<RouterTypes<Route, T>> {
-  dispatch?: Dispatch<AnyAction>;
-}

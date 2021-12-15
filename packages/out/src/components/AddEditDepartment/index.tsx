@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 import React, { useState, useLayoutEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 // import StopService from '@/components/StopService';
 import { Form, Input, message, Radio } from 'antd';
 import { useDispatch } from 'umi';
-import { labelCol, departmentType } from 'xzl-web-shared/src/utils/consts';
+import { labelCol, departmentType } from 'xzl-web-shared/dist/src/utils/consts';
 import { debounce } from 'lodash';
 
 const FormItem = Form.Item;

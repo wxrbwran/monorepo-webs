@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { InputNumber } from 'antd';
 import checked from '@/assets/img/nav_bar/visiting_tiime_checked.png';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { btnRender } from '@/utils/button';
 import styles from '../index.scss';
 

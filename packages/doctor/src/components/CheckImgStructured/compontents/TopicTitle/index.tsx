@@ -4,6 +4,7 @@ interface IProps {
   number: string;
   btnText: string;
   handleAdd: (e: any) => void;
+  btnChildren: React.ReactNode;
 }
 const TopicTitle: FC<IProps> = (props) => {
   const { number, btnText, handleAdd } = props;

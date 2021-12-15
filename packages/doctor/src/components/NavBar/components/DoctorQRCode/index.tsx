@@ -3,8 +3,8 @@ import { Tabs, Spin, Button } from 'antd';
 // import QRCode from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import { useSelector } from 'umi';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { Role, isDoctor } from 'xzl-web-shared/src/utils/role';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
+import { Role, isDoctor } from 'xzl-web-shared/dist/src/utils/role';
 import OrgListBtn from './OrgListBtn';
 import DoctorDetailEwm from './OrgDetail/ewm';
 // import DoctorDetailWxEwm from './OrgDetail/wxEwm';
@@ -95,7 +95,7 @@ const DoctorQRCode: FC = ({ children }) => {
       const aDom = document.getElementById('downloadImg');
       try {
         (aDom as HTMLElement).click();
-      } catch (err) {
+      } catch (err: any) {
         console.log('下载二维码失败', err);
       }
     }

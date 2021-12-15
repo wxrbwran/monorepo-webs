@@ -1,9 +1,9 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, Table } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import AddEditNurseAdmin from '@/components/AddEditNurseAdmin';
-import { groupOperatorAdminColumns } from 'xzl-web-shared/src/utils/columns';
+import { groupOperatorAdminColumns } from 'xzl-web-shared/dist/src/utils/columns';
 import { operators } from '../GroupOperator/mock';
 // import data from './mock';
 import styles from '../DepartmentDoctor/index.scss';

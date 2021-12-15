@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Avatar } from 'antd';
 import { QrcodeOutlined } from '@ant-design/icons';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import ewmPic from '@/assets/img/ewm.jpg';
 import styles from './index.scss';
 
@@ -38,7 +38,7 @@ function Ewm() {
         </div>
       </DragModal>
     </div>
-  )
+  );
 }
 
 export default Ewm;

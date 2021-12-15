@@ -2,7 +2,7 @@
 import * as api from '@/services/api';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import storage from 'xzl-web-shared/src/utils/storage';
+import storage from 'xzl-web-shared/dist/src/utils/storage';
 import { setAuthorizationToken } from '@/services/http';
 import pkg from '../package.json';
 

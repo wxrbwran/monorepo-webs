@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { message, Upload, Tag, Button } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import request from 'umi-request';
@@ -59,7 +59,7 @@ const BatchUploadStaff: FC<IProps> = (props) => {
         content: '上传成功',
       });
       setShow(false);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       message.error('上传失败');
     }

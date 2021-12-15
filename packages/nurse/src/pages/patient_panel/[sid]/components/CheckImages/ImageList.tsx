@@ -101,6 +101,7 @@ function ImageList({ data, handleHideCont }: IProps) {
           src: image.url,
           alt: '化验单检查单',
           degree: image.degree,
+          key: image.url,
         }))}
         rotateDegree={degree}
         activeIndex={activeIndex}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import dayjs from 'dayjs';
 import * as api from '@/services/api';
 import { Popover } from 'antd';

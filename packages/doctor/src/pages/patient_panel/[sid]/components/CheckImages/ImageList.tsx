@@ -6,6 +6,7 @@ import jgh from '@/assets/img/jgh.png';
 import CheckImgStructured from '@/components/CheckImgStructured';
 import styles from './index.scss';
 import { IImageItem } from 'typings/model';
+import dayjs from 'dayjs';
 
 interface IProps {
   handleHideCont: () => void;
@@ -26,6 +27,7 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
   const [imageId, setImageId] = useState<string>();
   const [imgToReview, setImgToReview] = useState<IImg[]>([]); // 未结构化
   const [imgReview, setImgReview] = useState<IImg[]>([]); // 已结构化
+  const [imgList, setImgList] = useState< { [key: string]: IImg[] }>({});
   const [degree, setDegree] = useState(0);
   const fetchImgList = () => {
     const params: CommonData = {
@@ -40,6 +42,7 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
     window.$api.image.fetchImageDetailNew(params).then((res: { imageInfos: IImg[] }) => {
       const review: IImg[] = [];
       const toReview: IImg[] = [];
+      let imgs: { [key: string]: IImg[] } = {};
       res.imageInfos.forEach((item: IImg) => {
         if (item.reviewStatus === 'TO_REVIEW') {
           toReview.push(item);
@@ -47,6 +50,18 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
           review.push(item);
         }
       });
+
+      res.imageInfos.forEach(item => {
+        const date = dayjs(item.uploadTime).format('YYYY.MM.DD');
+        if (imgs[date]) {
+          imgs[date].push(item);
+        } else {
+          imgs[date] = [item];
+        }
+      });
+      setImgList(imgs);
+      console.log('434321', imgs);
+      // setImgList
       setImgToReview(toReview);
       setImgReview(review);
     });
@@ -105,7 +120,7 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
           : <span className={styles.normal}>正常</span>
       } */}
       <img
-        alt="化验单检查单"
+        // alt="化验单检查单"
         src={item.url}
         style={{ transform: `rotate(${item.degree}deg)` }}
         onClick={() => toggleShowViewer(index, item.imageId, item.degree)}
@@ -118,20 +133,26 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
           handleRefresh={handleRefresh}
           imageInfo={{ imageId: item.imageId }}
         >
-          {item.reviewStatus === 'TO_REVIEW' ? '单据结构化' : '修改结果'}
+          {/* {item.reviewStatus === 'TO_REVIEW' ? '单据结构化' : '修改结果'} */}
+          查看详情
         </CheckImgStructured>
       </Button>
     </div>
   ), [imgToReview, imgReview]);
   return (
     <>
-      <div className={styles.images_list}>
-        { imgToReview.map((item, index) => renderItem(item, index)) }
-      </div>
-      <div className={styles.images_list}>
+      {Object.keys(imgList).map((dateItem) => (
+        <div className="flex" key={dateItem}>
+          <div className="mr-10 mt-20">{dateItem}</div>
+          <div className={styles.images_list}>
+            {imgList[dateItem].map((item, index) => renderItem(item, index))}
+          </div>
+        </div>
+      ))}
+      {/* <div className={styles.images_list}>
         { imgReview.map((item, index) => renderItem(item, index + imgToReview.length)) }
-      </div>
-      { imgToReview.length === 0 && imgReview.length === 0 && <Empty /> }
+      </div> */}
+      {imgToReview.length === 0 && imgReview.length === 0 && <Empty />}
       <Viewer
         visible={showViewer}
         images={[...imgToReview, ...imgReview].map((image) => ({
@@ -146,30 +167,22 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
         onRotateClick={handleImageRotate}
         onMaskClick={hideViewer}
         disableKeyboardSupport
-        customToolbar={(config) => (
-          [
-            ...config,
-            {
-              key: 'customStructured',
-              render: (
-                <CheckImgStructured
-                  imageInfo={{ imageId }}
-                  handleRefresh={handleRefresh}
-                >
-                  <span
-                    className="react-viewer-btn"
-                    key="structured"
-                  >
-                    <div>
-                      <img src={jgh} alt="" />
-                    </div>
-                    <span>结构化数据</span>
-                  </span>
-                </CheckImgStructured>
-              ),
-            },
-          ]
-        )}
+        customToolbar={(config) => [
+          ...config,
+          {
+            key: 'customStructured',
+            render: (
+              <CheckImgStructured imageInfo={{ imageId }} handleRefresh={handleRefresh}>
+                <span className="react-viewer-btn" key="structured">
+                  <div>
+                    <img src={jgh} alt="" />
+                  </div>
+                  <span>结构化数据</span>
+                </span>
+              </CheckImgStructured>
+            ),
+          },
+        ]}
       />
     </>
   );

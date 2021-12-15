@@ -1,8 +1,8 @@
 import { message } from 'antd';
 import { createLogger } from 'redux-logger';
 // 运行时配置文件，可以在这里扩展运行时的能力，比如修改路由、修改 render 方法等。
-import storage from 'xzl-web-shared/src/utils/dva-model-persist/storage';
-import { persistEnhancer } from 'xzl-web-shared/src/utils/dva-model-persist';
+import storage from 'xzl-web-shared/dist/src/utils/dva-model-persist/storage';
+import { persistEnhancer } from 'xzl-web-shared/dist/src/utils/dva-model-persist';
 import errorPage from '@/pages/404';
 
 // @ts-ignore

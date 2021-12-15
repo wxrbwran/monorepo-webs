@@ -3,11 +3,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import {
   Table, Button, message,
 } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import config from '@/config';
 import {
   clAvatar, clName, clTitle, clDepartment,
-} from 'xzl-web-shared/src/utils/columns';
+} from 'xzl-web-shared/dist/src/utils/columns';
 import { getCondition } from '@/utils/utils';
 import { pageRender } from '@/utils/pager';
 import Title from '../../components/Selects/Title';
@@ -151,7 +151,7 @@ function DoctorList({ activeType, getDoctors, orgNsId }: IProps) {
       message.success('添加成功');
       setIsShowList(!isShowList);
       getDoctors();
-    }).catch((err: {result : string}) => {
+    }).catch((err: { result : string }) => {
       message.error(err?.result || '添加失败');
       setLoading(false);
     });

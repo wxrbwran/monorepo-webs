@@ -7,7 +7,7 @@ import { Effect } from 'dva';
 import { history } from 'umi';
 import { setAuthorizationToken } from '@/services/http';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import config from '@/config';
 
 export interface AuthModelType {
@@ -38,11 +38,11 @@ const Model: AuthModelType = {
   effects: {
     * login({ payload }, { call, put }) {
       console.log(payload, call);
-      let data;
+      let res;
       let token;
       if (process.env.NODE_ENV !== 'production') {
-        data = yield call(api.auth.token, payload);
-        token = JSON.stringify(data);
+        res = yield call(api.auth.token, payload);
+        token = JSON.stringify(res);
       } else {
         token = localStorage.getItem('xzl-web-nurse_token');
       }

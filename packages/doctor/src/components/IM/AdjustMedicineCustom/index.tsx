@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/src/utils/consts';
 import { getRoles } from '@/utils/utils';
 // import moment from 'moment';
 import './index.scss';

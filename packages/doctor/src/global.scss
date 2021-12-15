@@ -505,6 +505,14 @@ body {
       top: 0;
     }
   }
+  .ant-modal-hide-header {
+    .ant-modal-header {
+      display: none;
+    }
+    .ant-modal-close {
+      display: none;
+    }
+  }
   // 全屏modal、化验单检查单审核图片时使用
   .ant-modal-wrap-full {
     display: flex;
@@ -534,11 +542,11 @@ body {
 }
 .ant-modal-footer {
   text-align: center;
-  .ant-btn {
-    font-size: 16px;
-    line-height: 14px;
-    border-radius: 5px;
-  }
+  // .ant-btn {
+  //   font-size: 16px;
+  //   line-height: 14px;
+  //   border-radius: 5px;
+  // }
 }
 .cancel_text_blue {
   .ant-btn {

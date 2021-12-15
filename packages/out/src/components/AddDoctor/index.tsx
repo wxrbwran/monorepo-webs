@@ -1,11 +1,11 @@
 import type { FC, ReactText } from 'react';
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { message } from 'antd';
-import type { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { avatar, name, sex, title, patientNum, status } from 'xzl-web-shared/src/utils/columns';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import type { XzlTableCallBackProps } from 'xzl-web-shared/dist/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
+import { avatar, name, sex, title, patientNum, status } from 'xzl-web-shared/dist/src/utils/columns';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 import { useLocation } from 'umi';
 import * as api from '@/services/api';
 import { debounce } from 'lodash';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { RightOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import Title from '../Title';
 import ImageList from './ImageList';
 import styles from './index.scss';

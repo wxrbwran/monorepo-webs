@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'umi';
 import moment from 'moment';
 import * as api from '@/services/api';
 import { unitFlagRe } from '@/utils/tools';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import styles from './index.scss';
 
 interface IFormatPlansItem {
@@ -137,7 +137,7 @@ function PlansDetail() {
               const isCustomMedicine = currentMedicinePlans[idx].medicine.medicineType === 2;
               // 服药频率数组
               const rateArray = plansArray?.map(
-                (item: { range: { start: Date }}) => item.range.start
+                (item: { range: { start: Date } }) => item.range.start,
               );
               // 频率类型 [7]:周几 [0]: xxxx.xx.xx
               const rateType = plansArray[0]?.cycleDays[0];

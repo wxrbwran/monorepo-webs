@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { handleBaseObj } from '../../../report/util';
 import { sexList, INFO } from '@/utils/consts';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import { Pagination } from 'antd';
 import { history } from 'umi';
 import { useDispatch } from 'react-redux';
-import moment from 'moment'
+import moment from 'moment';
 import styles from './index.scss';
 import * as api from '@/services/api';
 
@@ -39,55 +39,55 @@ interface IImages {
 
 function QueryHistory(props: IProps) {
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { children } = props;
-    const [showModal, setShowModal] = useState(false);
-    const [infos, setInfos] = useState([]);
-    const [pageAt, setPageAt] = useState(1);
-    const [total, setTotal] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [infos, setInfos] = useState([]);
+  const [pageAt, setPageAt] = useState(1);
+  const [total, setTotal] = useState(1);
 
-    useEffect(() => {
-      if(showModal) {
-        const params = {
-          pageAt,
-          pageSize: 15
-        }
-        api.query.getReportQuery(params).then(res => {
-          setInfos(res.queryInfoList);
-          setTotal(res.total)
-        })
-      }
-    }, [showModal])
-
-    const handlePageClick = (page:number) => {
-      setPageAt(page);
+  useEffect(() => {
+    if (showModal) {
       const params = {
-        pageAt: page,
+        pageAt,
         pageSize: 15,
-      }
-      api.query.getReportQuery(params).then((res:{queryInfoList:[]}) => {
+      };
+      api.query.getReportQuery(params).then(res => {
         setInfos(res.queryInfoList);
-      })
+        setTotal(res.total);
+      });
     }
+  }, [showModal]);
 
-    const go2Search = (item:IItem)=> {
-      setShowModal(false);
-      dispatch({
-				type: 'query/setBaseVal',
-        payload: handleBaseObj(item.condition.base)
-      });
-      dispatch({
-        type: 'query/setImages',
-        payload: item.condition.images
-      });
-      dispatch({
-        type: 'query/setOther',
-        payload: item.condition.other
-      });
-      setTimeout(()=>{
-        history.replace(`/query/query_result`);
-      },800)
-    }
+  const handlePageClick = (page:number) => {
+    setPageAt(page);
+    const params = {
+      pageAt: page,
+      pageSize: 15,
+    };
+    api.query.getReportQuery(params).then((res:{ queryInfoList:[] }) => {
+      setInfos(res.queryInfoList);
+    });
+  };
+
+  const go2Search = (item:IItem)=> {
+    setShowModal(false);
+    dispatch({
+      type: 'query/setBaseVal',
+      payload: handleBaseObj(item.condition.base),
+    });
+    dispatch({
+      type: 'query/setImages',
+      payload: item.condition.images,
+    });
+    dispatch({
+      type: 'query/setOther',
+      payload: item.condition.other,
+    });
+    setTimeout(()=>{
+      history.replace('/query/query_result');
+    }, 800);
+  };
   return (
     <>
       <div style={{ display: 'inline' }} onClick={() => setShowModal(!showModal)}>{children}</div>
@@ -112,7 +112,7 @@ function QueryHistory(props: IProps) {
                   {
                       gender && (
                       <p><span>性别:</span> <span>{sexList[gender]}</span></p>
-                    )
+                      )
                   }
                   {
                     minAge && (
@@ -131,7 +131,7 @@ function QueryHistory(props: IProps) {
                   }
                     {
                       images.map((mItem: IImages, mIndex)=>{
-                        const mKey = `${mIndex}${mItem.imageType}`
+                        const mKey = `${mIndex}${mItem.imageType}`;
                         return (
                           <p key={mKey}>
                             <span>{INFO[mItem.imageType]} </span>
@@ -142,11 +142,11 @@ function QueryHistory(props: IProps) {
                                   <span>至</span>
                                   <span>{moment(mItem.endAt).format('YYYY-MM-DD')}</span>)
                                 </>
-                              :
+                                :
                                 <span>(全部日期)</span>
                             }
                           </p>
-                        )
+                        );
                       })
                     }
 
@@ -155,7 +155,7 @@ function QueryHistory(props: IProps) {
                       <p>
                         <span>四大代谢疾病: </span>
                         {
-                          other.fourHigh.map((hItem, hIndex)=>(
+                          other.fourHigh.map((hItem)=>(
                             <span key={hItem}>{INFO[hItem]}、</span>
                           ))
                         }
@@ -163,7 +163,7 @@ function QueryHistory(props: IProps) {
                     )
                   }
                 </li>
-                )
+                );
               })
             }
           </ul>
@@ -177,9 +177,9 @@ function QueryHistory(props: IProps) {
             />
           </div>
         </DragModal>
-      ) }
+			) }
     </>
-  )
+  );
 }
 
 export default QueryHistory;

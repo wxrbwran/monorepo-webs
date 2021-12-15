@@ -6,10 +6,10 @@ import { useSelector } from 'umi';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 import moment from 'moment';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import ScaleTableDetailEcho from '@/components/ScaleTableDetailEcho';
 import { IQuestions } from '@/utils/consts';
-import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/dist/src/utils/role';
 interface IProps {
   location: {
     query: {

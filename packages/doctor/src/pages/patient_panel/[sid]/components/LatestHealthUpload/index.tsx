@@ -7,7 +7,7 @@ import { useDispatch } from 'umi';
 import { DeleteOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
 import { BloodType2 } from '@/utils/tools';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import styles from './index.scss';
 
 interface IItem {
@@ -33,7 +33,7 @@ const LatestHealthUpload: FC = ({ children }) => {
       };
       api.medical.fetchMedicalRecord(params).then((res) => {
         const list: any = [];
-        res.list.forEach((item: {measuredAt: number | null}) => {
+        res.list.forEach((item: { measuredAt: number | null }) => {
           list.push({
             ...item,
             measuredAt: item.measuredAt ? moment(item.measuredAt) : null,
@@ -44,7 +44,7 @@ const LatestHealthUpload: FC = ({ children }) => {
       });
     }
   }, [show]);
-  const handleSubmit = (values: {list: IItem[]}) => {
+  const handleSubmit = (values: { list: IItem[] }) => {
     setBtnLoading(true);
     const list: any = [];
     values.list.forEach((item: IItem) => {

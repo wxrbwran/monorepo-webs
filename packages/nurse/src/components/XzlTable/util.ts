@@ -1,4 +1,4 @@
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/src/utils/role';
 
 interface ITeam {
   members: ISubject[];
@@ -35,7 +35,7 @@ export const handleTableDataSource = (
   dataSource: Store[],
   category?: string,
 ) => {
-  console.log('dataSource', dataSource);
+  // console.log('dataSource', dataSource);
   switch (dataKey) {
     case 'teams':
       if (category === 'patientList') {

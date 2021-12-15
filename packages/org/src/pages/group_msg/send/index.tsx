@@ -9,11 +9,11 @@ import {
   province,
   upperDoctor,
   lowerDoctor,
-} from 'xzl-web-shared/src/utils/columns';
-import { Province, Sex, Age, Search } from 'xzl-web-shared/src/components/Selects';
+} from 'xzl-web-shared/dist/src/utils/columns';
+import { Province, Sex, Age, Search } from 'xzl-web-shared/dist/src/components/Selects';
 
 // import SelectGroup from '@/components/SelectGroup';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/src/components/XzlTable';
 import GroupMsg from '../components/GroupMsg';
 import styles from './index.scss';
 
@@ -22,7 +22,7 @@ const columns = [name, sex, age, province, upperDoctor, lowerDoctor];
 const SendGroupMsg: FC = () => {
   const [options, setOptions] = useState<Store>({});
   const [form] = Form.useForm();
-  const handleValuesChange = (changedValues, allValues) => {
+  const handleValuesChange = (_, allValues) => {
     console.log('SendGroupMsg allValues', allValues);
     setOptions({ ...options, allValues });
   };

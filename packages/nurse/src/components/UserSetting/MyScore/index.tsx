@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import styles from './index.scss';
 
 function MyScore() {

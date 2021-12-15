@@ -3,7 +3,7 @@
  */
 import React, { FC, useState, useEffect, useRef, ChangeEvent } from 'react';
 import { message } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/src/components/DragModal';
 import Cropper from 'react-cropper';
 import request from 'umi-request';
 import 'cropperjs/dist/cropper.css';
