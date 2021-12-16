@@ -17,7 +17,7 @@ interface IRlated {
   name?: string;
   text?: React.ReactElement | string;
 }
-export default function transformMedicalRecordData(type: string, obj:{[key:string]:any}) {
+export default function transformMedicalRecordData(type: string, obj:{ [key:string]:any }) {
   /* eslint-disable */
 	const keysArray = keys(obj);
 	if (keysArray.some(key => !!obj[key])) {

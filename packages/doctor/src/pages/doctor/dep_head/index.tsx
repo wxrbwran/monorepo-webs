@@ -32,7 +32,12 @@ const DepHead: FC = ({ location }) => {
       setCurDocRoles(docRoles);
       setTabRole(docRoles[0].role);
       setNoDoctor(false);
-      setOptions({ ...depOptions, targetSId: sid, sRole: docRoles[0].role });
+      setOptions({
+        ...depOptions,
+        targetSId: sid,
+        sRole: docRoles[0].role,
+        targetNSId: location.query.depHeadNsId,
+      });
     });
   };
 
