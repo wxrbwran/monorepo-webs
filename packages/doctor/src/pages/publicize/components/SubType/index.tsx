@@ -47,7 +47,7 @@ function SubType({ name, icon, type }: IProps) {
       operatorWcId: window.$storage.getItem('wcId'),
       ownershipSid: currentOrgInfo.sid,
     };
-    if (type === 'document') {
+    if (file?.size) {
       params.content.size = file.size;
     }
     if (type !== 'audio') {
