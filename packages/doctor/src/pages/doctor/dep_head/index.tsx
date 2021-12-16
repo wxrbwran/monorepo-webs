@@ -27,10 +27,10 @@ const DepHead: FC = ({ location }) => {
     [Role.UPPER_DOCTOR.id]: { desc: '我是主管医生'  },
     [Role.LOWER_DOCTOR.id]: { desc: '我是医生助手' },
     [Role.DIETITIAN.id]: { desc: '我是营养师' },
-    // [Role.CRO_PM.id]: { desc: '我是PM', url: 'cro_pm' },
-    // [Role.CRO_CRA.id]: { desc: '我是CRA', url: 'cro_cra' },
-    // [Role.CRO_CRC.id]: { desc: '我是CRC', url: 'cro_crc' },
-    // [Role.RESEARCH_PROJECT_DOCTOR.id]: { desc: '我是研究者', url: 'research_project_doctor' },
+    [Role.PHARAMCIST.id]: { desc: '我是药师' },
+    [Role.KANGFUSHI.id]: { desc: '我是康复师' },
+    [Role.PSYCHOLOGIST.id]: { desc: '我是心理医生' },
+    [Role.TEAMNURSE.id]: { desc: '我是护士' },
   };
 
   const handleChangeTabRole = (sRole: string) => {
