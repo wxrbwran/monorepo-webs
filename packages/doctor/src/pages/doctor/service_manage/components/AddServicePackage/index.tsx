@@ -11,6 +11,7 @@ import { Role } from 'xzl-web-shared/src/utils/role';
 import * as api from '@/services/api';
 import { isEmpty, debounce } from 'lodash';
 import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/src/components/XzlTable/util';
+import { roleMembers } from '@/utils/tools';
 interface IProps {
   initData?: {
     innerTeams: {
@@ -162,15 +163,7 @@ const AddServicePackage: FC<IProps> = (props) => {
       });
     }
   };
-  const roleMembers: IRoleMember[] = [
-    { title: '主管医生', role: Role.UPPER_DOCTOR.id },
-    { title: '医生助手', role: Role.LOWER_DOCTOR.id },
-    { title: '营养师', role: Role.DIETITIAN.id },
-    { title: '药师', role: Role.PHARAMCIST.id },
-    { title: '康复师', role: Role.KANGFUSHI.id },
-    { title: '心理医生', role: Role.PSYCHOLOGIST.id },
-    { title: '护士', role: Role.TEAMNURSE.id },
-  ];
+
   const handleDel = (sid: string, role: string) => {
     // 过滤掉，sid一致且角色与当前删除角色一致的
     setMembers([...members.filter(member => !(member.sid === sid && member.role === role))]);

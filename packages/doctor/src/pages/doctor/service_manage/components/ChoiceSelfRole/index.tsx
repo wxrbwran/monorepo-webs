@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Select } from 'antd';
 import { IState } from 'packages/doctor/typings/model';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { roleMembers } from '@/utils/tools';
 import { isEmpty } from 'lodash';
 
 interface IProps {
@@ -18,6 +18,7 @@ interface ISelfInfo {
   role: null | string;
   orgName: null | string;
 }
+
 const { Option } = Select;
 function ChoiceSelfRole({ callback, initData }: IProps) {
   const { filterOrgs, userInfo } = useSelector((state: IState) => state.user);
@@ -52,6 +53,7 @@ function ChoiceSelfRole({ callback, initData }: IProps) {
   if (!initData?.sourceNSId && filterOrgs.length === 1) {
     initOrgNsId = filterOrgs[0]?.nsId;
   }
+
   return (
     <div className="mt-15">
       {
@@ -78,9 +80,7 @@ function ChoiceSelfRole({ callback, initData }: IProps) {
       }
       <span className="mx-15">以</span>
       <Select placeholder='请选择角色' defaultValue={initData.role} style={{ width: 240 }} onChange={(val) => handleChangeOrg('role', val)}>
-        <Option value={Role.UPPER_DOCTOR.id}>主管医生</Option>
-        <Option value={Role.LOWER_DOCTOR.id}>医生助手</Option>
-        <Option value={Role.DIETITIAN.id}>营养师</Option>
+        { roleMembers.map(item => <Option key={item.role} value={item.role}>{item.title}</Option>) }
       </Select>
       <span className="ml-20">角色管理患者</span>
     </div>

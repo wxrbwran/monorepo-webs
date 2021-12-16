@@ -247,3 +247,17 @@ export const accountStatus: CommonData = {
   119: '待审核',
   117: '待激活',
 };
+
+interface IRoleMember {
+  title: string;
+  role: string;
+}
+export const roleMembers: IRoleMember[] = [
+  { title: '主管医生', role: Role.UPPER_DOCTOR.id },
+  { title: '医生助手', role: Role.LOWER_DOCTOR.id },
+  { title: '营养师', role: Role.DIETITIAN.id },
+  { title: '药师', role: Role.PHARAMCIST.id },
+  { title: '康复师', role: Role.KANGFUSHI.id },
+  { title: '心理医生', role: Role.PSYCHOLOGIST.id },
+  { title: '护士', role: Role.TEAMNURSE.id },
+];
