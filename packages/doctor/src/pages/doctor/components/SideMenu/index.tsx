@@ -40,6 +40,12 @@ function SideMenu({ location }: Iprops) {
     [Role.UPPER_DOCTOR.id]: { desc: '我是主管医生', url: 'upper_doctor' },
     [Role.LOWER_DOCTOR.id]: { desc: '我是医生助手', url: 'lower_doctor' },
     [Role.DIETITIAN.id]: { desc: '我是营养师', url: 'dietitian' },
+
+    [Role.PHARAMCIST.id]: { desc: '我是药师', url: 'pharamcist' },
+    [Role.KANGFUSHI.id]: { desc: '我是康复师', url: 'kangfushi' },
+    [Role.PSYCHOLOGIST.id]: { desc: '我是心理医生', url: 'psychologist' },
+    [Role.TEAMNURSE.id]: { desc: '我是护士', url: 'teamnurse' },
+
     [Role.CRO_PM.id]: { desc: '我是PM', url: 'cro_pm' },
     [Role.CRO_CRA.id]: { desc: '我是CRA', url: 'cro_cra' },
     [Role.CRO_CRC.id]: { desc: '我是CRC', url: 'cro_crc' },

@@ -54,7 +54,7 @@ function Patients() {
   const [pageAt, setPageAt] = useState<number>(1);
 
   // 慢病医生角色
-  const isDoctor = ['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level);
+  const isDoctor = ['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian', 'pharamcist', 'kangfushi', 'psychologist', 'teamnurse'].includes(level);
 
   // 切换左侧菜单or刷新页面or从患者详情返回列表页面保留筛选搜索分页条件
   useEffect(() => {
