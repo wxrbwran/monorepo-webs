@@ -66,6 +66,10 @@ const AddServicePackage: FC<IProps> = (props) => {
             case Role.UPPER_DOCTOR.id:
             case Role.LOWER_DOCTOR.id:
             case Role.DIETITIAN.id:
+            case Role.PHARAMCIST.id:
+            case Role.KANGFUSHI.id:
+            case Role.PSYCHOLOGIST.id:
+            case Role.TEAMNURSE.id:
               itemInfo = {
                 ...itemInfo,
                 avatarUrl: member.avatarUrl || defaultAvatar,
