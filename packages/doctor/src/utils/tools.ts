@@ -248,16 +248,53 @@ export const accountStatus: CommonData = {
   117: '待激活',
 };
 
-interface IRoleMember {
-  title: string;
-  role: string;
+export interface IRoleItem {
+  desc: string;
+  url: string;
 }
-export const roleMembers: IRoleMember[] = [
-  { title: '主管医生', role: Role.UPPER_DOCTOR.id },
-  { title: '医生助手', role: Role.LOWER_DOCTOR.id },
-  { title: '营养师', role: Role.DIETITIAN.id },
-  { title: '药师', role: Role.PHARAMCIST.id },
-  { title: '康复师', role: Role.KANGFUSHI.id },
-  { title: '心理医生', role: Role.PSYCHOLOGIST.id },
-  { title: '护士', role: Role.TEAMNURSE.id },
+// ********************关于角色-s********************
+// 医生角色
+export const doctorRoles: { [key: string]: IRoleItem } = {
+  [Role.ALONE_DOCTOR.id]: { desc: '独立管理', url: 'alone_doctor' },
+  [Role.UPPER_DOCTOR.id]: { desc: '主管医生', url: 'upper_doctor' },
+  [Role.LOWER_DOCTOR.id]: { desc: '医生助手', url: 'lower_doctor' },
+  [Role.DIETITIAN.id]: { desc: '营养师', url: 'dietitian' },
+
+  [Role.PHARAMCIST.id]: { desc: '药师', url: 'pharamcist' },
+  [Role.KANGFUSHI.id]: { desc: '康复师', url: 'kangfushi' },
+  [Role.PSYCHOLOGIST.id]: { desc: '心理医生', url: 'psychologist' },
+  [Role.TEAMNURSE.id]: { desc: '护士', url: 'teamnurse' },
+};
+// 科研角色
+export const croRoles = {
+  [Role.CRO_PM.id]: { desc: 'PM', url: 'cro_pm' },
+  [Role.CRO_CRA.id]: { desc: 'CRA', url: 'cro_cra' },
+  [Role.CRO_CRC.id]: { desc: 'CRC', url: 'cro_crc' },
+  [Role.RESEARCH_PROJECT_DOCTOR.id]: { desc: '研究者', url: 'research_project_doctor' },
+};
+
+// 各角色排序优先级
+// 独立管理 > 主管医生 > 医生助手 > 营养师 > 药师 >  康复师  > 心理医生  > 护士 >  其他医生 > 研究者 > PM > CRA > CRC
+export const imRoleOrder: string[] = [
+  Role.PATIENT.id,
+  Role.PATIENT_VIP.id,
+
+  Role.DEP_HEAD.id,
+  Role.ALONE_DOCTOR.id,
+  Role.UPPER_DOCTOR.id,
+  Role.LOWER_DOCTOR.id,
+  Role.DIETITIAN.id,
+  Role.PHARAMCIST.id,
+  Role.KANGFUSHI.id,
+  Role.PSYCHOLOGIST.id,
+  Role.TEAMNURSE.id, // 服务包里的护士角色
+
+  Role.NURSE.id, // im聊天中应该不会出现此角色
+
+  Role.RESEARCH_PROJECT_DOCTOR.id, // 科研项目医生  31
+  // Role.PROJECT_RESEARCHER.id, // 研究者  36只有在组织架构里有存在，其余出现，均为31角色
+  Role.CRO_PM.id,
+  Role.CRO_CRA.id,
+  Role.CRO_CRC.id,
 ];
+// ********************关于角色-e********************

@@ -1,6 +1,7 @@
 // import dayjs from 'dayjs';
 import moment from 'moment';
 import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { imRoleOrder } from './tools';
 
 export function unique(arr: { id: string, content: string }[]) {
   const result: never[] = [];
@@ -71,34 +72,6 @@ export function getCondition(keyName: string, value:any, operator?: string) {
     operator: operator || '=',
   };
 }
-// 各角色排序优先级
-// 患者 > 科主任 > 独立管理 > 护士 > 研究者 > PM > CRA > CRC
-// 患者 > 主管医生 > 医生助手 > 营养师 > 护士 > 研究者 > PM > CRA > CRC
-
-// 当一个医生多个角色时，括号内的排序：
-// 独立管理 > 主管医生 > 医生助手 > 营养师 > 药师 >  康复师  > 心理医生  > 护士 >  其他医生 > 研究者 > PM > CRA > CRC
-export const imRoleOrder: string[] = [
-  Role.PATIENT.id,
-  Role.PATIENT_VIP.id,
-
-  Role.DEP_HEAD.id,
-  Role.ALONE_DOCTOR.id,
-  Role.UPPER_DOCTOR.id,
-  Role.LOWER_DOCTOR.id,
-  Role.DIETITIAN.id,
-  Role.PHARAMCIST.id,
-  Role.KANGFUSHI.id,
-  Role.PSYCHOLOGIST.id,
-  Role.TEAMNURSE.id, // 服务包里的护士角色
-
-  Role.NURSE.id, // im聊天中应该不会出现此角色
-
-  Role.RESEARCH_PROJECT_DOCTOR.id, // 科研项目医生  31
-  // Role.PROJECT_RESEARCHER.id, // 研究者  36只有在组织架构里有存在，其余出现，均为31角色
-  Role.CRO_PM.id,
-  Role.CRO_CRA.id,
-  Role.CRO_CRC.id,
-];
 
 // 获取IM消息角色
 export function getRole(role: string) {
