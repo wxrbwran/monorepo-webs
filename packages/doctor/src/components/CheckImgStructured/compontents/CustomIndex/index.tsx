@@ -50,7 +50,6 @@ const CustomIndex: FC<IProps> = (props) => {
     handleDocumentsCallbackFns,
     formKey,
     initList,
-    level1Type,
     firstIndex,
     apiParams,
     selectIndex,
@@ -164,8 +163,9 @@ const CustomIndex: FC<IProps> = (props) => {
           const params: CommonData = {
             documentId,
             documentName,
-            documentType: level1Type,
+            documentType: 'HYD',
             sampleFroms: [sampleFrom],
+            ...timeAndOrg.current,
             indexList: formatSubmitItems(values, itemsLength),
           };
           console.log('params22221', params);
@@ -259,16 +259,17 @@ const CustomIndex: FC<IProps> = (props) => {
       if (subName) {
         param.subName = subName;
       }
-      return <IndexTable {...param} />;
+      return <IndexTable {...param} form={form} />;
     },
     [apiData, formInit, isViewOnly],
   );
 
   const handleSetTimeAndOrg = (newItem: any) => {
-    timeAndOrg.current = {
+    const params = {
       ...timeAndOrg.current,
       ...newItem,
     };
+    timeAndOrg.current = params;
   };
   const handleSetHospital = (_key: string, val: any) => {
     // setHospital({ ...val });

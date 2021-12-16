@@ -8,12 +8,13 @@ interface IProps {
   apiData: any;
   subName?: string;
   isViewOnly: boolean;
+  form: any;
   getFieldsValue: (key: string) => void;
   formInit: CommonData;
 }
 
 const IndexTable: FC<IProps> = (props) => {
-  const { apiData, subName, isViewOnly, formInit } = props;
+  const { apiData, subName, isViewOnly, formInit, form } = props;
   const [showAll, setshowAll] = useState(isViewOnly);
   // console.log('formInit', formInit);
   useEffect(() => {
@@ -38,7 +39,7 @@ const IndexTable: FC<IProps> = (props) => {
       }
       return (
         <div key={item.formIndex}>
-          <RenderItem item={item} />
+          <RenderItem item={item} form={form} />
           {subName && (
             <Form.Item name={`${item.formIndex}_subCategoryName`} noStyle>
               <Input type="hidden" />

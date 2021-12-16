@@ -6,11 +6,11 @@ const { Option } = Select;
 
 interface IProps {
   item: any;
+  form: any;
 }
 
 const RenderItem: FC<IProps> = (props) => {
-  const { item } = props;
-  console.log('RenderItem', item);
+  const { item, form } = props;
   const [list, setList] = useState<any[]>([]);
   useEffect(() => {
     setList(prev => [...prev, { value: '', key: +new Date() }]);
@@ -34,14 +34,14 @@ const RenderItem: FC<IProps> = (props) => {
           <Form.Item noStyle key={_item.key}>
             <Space align="baseline" style={{ display: 'flex' }}>
               <Form.Item
-                name={`${item.formIndex}_${index}_value`}
+                name={`${item.formIndex}_${index}_indexValue`}
                 rules={[{ required: true, message: '请输入参考值' }]}
               >
                 <Input placeholder="请输入参考值" />
               </Form.Item>
               {item?.references?.length > 0 && (
                 <>
-                  <Form.Item name={`${item.formIndex}_${index}_references`}>
+                  <Form.Item name={`${item.formIndex}_${index}_reference`}>
                     <Select style={{ width: 200 }} placeholder="请选择参考值类型">
                       {item.references?.map((reference: TReference) => (
                         <Option key={`${item.formIndex}_${reference.id}`} value={reference.id}>
@@ -54,12 +54,21 @@ const RenderItem: FC<IProps> = (props) => {
                   </Form.Item>
                 </>
               )}
+              <Form.Item name={`${item.formIndex}_valueCount`} initialValue={1}>
+                <Input type="hidden" />
+              </Form.Item>
+              <Form.Item name={`${item.formIndex}_referenceList`} initialValue={item?.references}>
+                <Input type="hidden" />
+              </Form.Item>
               <Form.Item>
                 {index === 0 && (
                   <Button
                     type="primary"
                     onClick={() => {
                       setList((prev) => [...prev, { value: '', key: +new Date() }]);
+                      form.setFieldsValue({
+                        [`${item.formIndex}_valueCount`]: list.length + 1,
+                      });
                     }}
                     block
                   >
