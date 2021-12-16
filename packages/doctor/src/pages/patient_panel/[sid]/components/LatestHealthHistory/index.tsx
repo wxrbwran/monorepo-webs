@@ -128,7 +128,7 @@ const LatestHealthHistory: FC = ({ children }) => {
   ];
 
   const renderTab = useMemo(() => (tab: string, key: string, col?: object[]) => {
-    console.log('col21', col);
+    // console.log('col21', col);
     let columns = [];
     if (col) {
       columns = col;

@@ -54,7 +54,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
     initSubType = [...new Set(initSubType)];
   } else {
-    initSubType = ['血液'];
+    initSubType = ['血液', '其他', '1', '阿斯顿'];
   }
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
@@ -106,7 +106,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     setCheckTypes([...newCheckTypes]);
   };
   useEffect(() => {
-    console.log('level1Type', tabKey);
+    // console.log('level1Type', tabKey);
     hydCallbackFns[tabKey] = () => new Promise((resolve) => {
       Promise.all(Object.values(documentsCallbackFns.current)
         .map((fn) => fn())).then((documentList) => {

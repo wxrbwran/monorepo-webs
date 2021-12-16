@@ -15,10 +15,8 @@ export const formatSubmitItems = (data: CommonData, length: number) => {
     const newItem: CommonData = {
       indexId: data[`${i}_indexId`],
       name: data[`${i}_name`],
+      referenceList: [],
     };
-    if (data[`${i}_unit`]) {
-      newItem.unit = data[`${i}_unit`];
-    }
     if (data[`${i}_value`]) {
       newItem.value = data[`${i}_value`];
     }

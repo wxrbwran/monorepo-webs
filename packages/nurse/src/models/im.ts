@@ -245,7 +245,7 @@ const IMModel: any = {
     UPDATE_CURR_SESSION_ID(state: IMModelState, action: Store) {
       let id_obj = action.payload;
       let type = id_obj.type || '';
-      console.log('id_obj', id_obj);
+      // console.log('id_obj', id_obj);
       if (type === 'destroy') {
         state.currSessionId = null;
       } else if (type === 'init') {

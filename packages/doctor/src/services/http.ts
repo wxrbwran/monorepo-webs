@@ -41,8 +41,8 @@ function formatUrl(url: string, data: Store) {
 }
 //  **********************非白名单get请求,参数base64处理 **********************
 http.interceptors.request.use((url, options) => {
-  console.log('url', url);
-  console.log('options.data', options.data);
+  // console.log('url', url);
+  // console.log('options.data', options.data);
   if (options.method === 'get'
     && options.data
     && Object.keys(options.data).length > 0
@@ -51,7 +51,7 @@ http.interceptors.request.use((url, options) => {
     const newUrl = formatUrl(url, data);
     delete options.data;
     delete options.params;
-    console.log('resOpts', resOpts);
+    // console.log('resOpts', resOpts);
     return {
       url: newUrl,
       options: {

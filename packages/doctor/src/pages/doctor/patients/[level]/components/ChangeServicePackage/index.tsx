@@ -20,7 +20,7 @@ const ChangeServicePackage: FC<IProps> = (props) => {
   const [selectTeamNSId, setSelectTeamNSId] = useState(null);
   const [packages, setPackages] = useState<CommonData[]>([]);
   const { data, refresh } = props;
-  console.log('fdfdfd', data);
+  // console.log('fdfdfd', data);
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setSelectTeamNSId(e.target.value);
@@ -69,7 +69,7 @@ const ChangeServicePackage: FC<IProps> = (props) => {
     setShowModal(false);
     setSelectTeamNSId(null);
   };
-  console.log('packages32', packages);
+  // console.log('packages32', packages);
   return (
     <div>
       <img

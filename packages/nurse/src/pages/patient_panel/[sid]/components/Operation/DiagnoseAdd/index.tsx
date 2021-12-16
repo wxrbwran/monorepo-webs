@@ -177,7 +177,7 @@ function AddDiagnose({
       fetchDisease(keyWord, nextPageAt);
     }
   };
-  console.log('diseaseList11', diseaseList);
+  // console.log('diseaseList11', diseaseList);
   return (
     <span>
       <span onClick={handleShowModal}>{children}</span>

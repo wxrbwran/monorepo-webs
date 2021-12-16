@@ -18,14 +18,15 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   // console.log('hydData232', hydData);
   // console.log('jcdData', jcdData);
   const initTypeTabs = () => {
-    const jcdTabs = jcdData.map((jctItem: ITopicItemApi) => {
-      return {  ...jctItem, outType: jctItem.meta.title };
-    });
-    const hydTab = hydData.map((hydItem: IApiDocumentList) => {
-      return { ...hydItem, outType: hydItem.outType };
-    });
-    const datas = [...hydTab, ...jcdTabs];
-    return isEmpty(datas) ? [{ outType: 'JCD' }] : datas;
+    // const jcdTabs = jcdData.map((jctItem: ITopicItemApi) => {
+    //   return {  ...jctItem, outType: jctItem.meta.title };
+    // });
+    // const hydTab = hydData.map((hydItem: IApiDocumentList) => {
+    //   return { ...hydItem, outType: hydItem.outType };
+    // });
+    // const datas = [...hydTab, ...jcdTabs];
+    // return isEmpty(datas) ? [{ outType: 'JCD' }] : datas;
+    return [{ outType: 'HYD' }];
   };
   const sid = window.$storage.getItem('sid');
   const dispatch = useDispatch();
@@ -146,8 +147,8 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   };
 
   const fetInitData = (inx: number) => {
-    console.log(34333, inx);
-    console.log('typeTabs', typeTabs);
+    // console.log(34333, inx);
+    // console.log('typeTabs', typeTabs);
     // 化验单是 documentList， 检查单是data
     if (typeTabs[inx]?.documentList || typeTabs[inx]?.data) {
       return typeTabs?.[inx];
