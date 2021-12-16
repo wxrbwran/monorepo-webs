@@ -3,12 +3,9 @@ import DepHeadDoctors from '../components/DepHeadDoctors';
 import { Tabs, Empty } from 'antd';
 import XzlTable from 'xzl-web-shared/src/components/XzlTable';
 import { name, org,  patientLevel, sex, age, address } from '../patients/[level]/columns';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { doctorRoles } from '@/utils/tools';
 import styles from './index.scss';
 
-interface Imenu {
-  desc: string;
-}
 interface IOption {
   pageAt: number;
   sRole?: string;
@@ -22,17 +19,6 @@ const DepHead: FC = ({ location }) => {
   const [curDocRoles, setCurDocRoles] = useState([]);
   const [curTabRole, setTabRole] = useState<string>('');
   const [noDoctor, setNoDoctor] = useState(false);
-  const roleObj: { [key: string]: Imenu } = {
-    [Role.ALONE_DOCTOR.id]: { desc: '我独立管理' },
-    [Role.UPPER_DOCTOR.id]: { desc: '我是主管医生'  },
-    [Role.LOWER_DOCTOR.id]: { desc: '我是医生助手' },
-    [Role.DIETITIAN.id]: { desc: '我是营养师' },
-    [Role.PHARAMCIST.id]: { desc: '我是药师' },
-    [Role.KANGFUSHI.id]: { desc: '我是康复师' },
-    [Role.PSYCHOLOGIST.id]: { desc: '我是心理医生' },
-    [Role.TEAMNURSE.id]: { desc: '我是护士' },
-  };
-
   const handleChangeTabRole = (sRole: string) => {
     setOptions({ ...depOptions, sRole });
     setTabRole(sRole);
@@ -42,7 +28,7 @@ const DepHead: FC = ({ location }) => {
     window.$api.doctor.getDoctorHeadingDoctorRoles(sid).then(res => {
       console.log('====doc', res);
       // res.teams[0] 目前只取teams[0]就可以，后面有别的业务再做区分
-      const docRoles = res.teams[0].members.filter((item: ISubject) => !!roleObj[item.role!]);
+      const docRoles = res.teams[0].members.filter((item: ISubject) => !!doctorRoles[item.role!]);
       setCurDocRoles(docRoles);
       setTabRole(docRoles[0].role);
       setNoDoctor(false);
@@ -60,7 +46,7 @@ const DepHead: FC = ({ location }) => {
         !noDoctor ? (
           <div className={styles.patient_panel}>
             <Tabs activeKey={curTabRole} onChange={handleChangeTabRole} size="large">
-              { curDocRoles.map((item: ISubject) => <TabPane tab={roleObj[item.role!].desc} key={item.role!} />)}
+              { curDocRoles.map((item: ISubject) => <TabPane tab={doctorRoles[item.role!].desc} key={item.role!} />)}
             </Tabs>
             <div className="p-20">
               {

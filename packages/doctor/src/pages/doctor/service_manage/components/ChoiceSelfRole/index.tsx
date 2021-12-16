@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Select } from 'antd';
 import { IState } from 'packages/doctor/typings/model';
-import { roleMembers } from '@/utils/tools';
+import { doctorRoles } from '@/utils/tools';
 import { isEmpty } from 'lodash';
+import { Role } from 'xzl-web-shared/src/utils/role';
 
 interface IProps {
   callback: (selectData: Object) => void;
@@ -80,7 +81,7 @@ function ChoiceSelfRole({ callback, initData }: IProps) {
       }
       <span className="mx-15">以</span>
       <Select placeholder='请选择角色' defaultValue={initData.role} style={{ width: 240 }} onChange={(val) => handleChangeOrg('role', val)}>
-        { roleMembers.map(item => <Option key={item.role} value={item.role}>{item.title}</Option>) }
+        { Object.keys(doctorRoles).filter(item => item !== Role.ALONE_DOCTOR.id).map(roleId => <Option key={roleId} value={roleId}>{doctorRoles[roleId].desc}</Option>) }
       </Select>
       <span className="ml-20">角色管理患者</span>
     </div>
