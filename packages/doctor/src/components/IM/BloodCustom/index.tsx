@@ -33,6 +33,7 @@ interface IContent {
     bgContent: {
       value: number;
       bgType: string;
+      measuredAt: number,
     }
   }
 }
@@ -81,7 +82,7 @@ const BloodCustom: FC<IMsg> = (props) => {
             <span>
               {content.type === 110
                 ? dayjs(bpContent?.measuredAt).format('YYYY-MM-DD HH:mm')
-                : dayjs(bpContent?.measuredAt).format('YYYY-MM-DD')}
+                : dayjs(bgContent?.measuredAt).format('YYYY-MM-DD')}
             </span>
           </div>
           {content.type === 110 ? (

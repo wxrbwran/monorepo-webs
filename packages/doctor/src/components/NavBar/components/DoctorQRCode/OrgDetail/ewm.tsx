@@ -35,10 +35,14 @@ function OrgDetail({ currentOrg }: IProps) {
           <div>
             {orgName}
           </div>
-          <div className={styles.show_id}>
-            <img className="w-10 h-10 mr-5" src={iconShowId} alt="" />
-            {`医生识别码:${uuCode}`}
-          </div>
+          {
+            uuCode && (
+              <div className={styles.show_id}>
+                <img className="w-10 h-10 mr-5" src={iconShowId} alt="" />
+                {`医生识别码:${uuCode}`}
+              </div>
+            )
+          }
         </div>
         <div className={styles.right}>
           <img
