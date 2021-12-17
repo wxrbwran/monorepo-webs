@@ -22,6 +22,7 @@ type IApiParams = {
 // 获取图片详情接口返回的指标item | 搜索点击获取的指标item
 type IIndexItemCustom = {
   formIndex: number; // 自己补充的必要属性，每个指标的固定key值
+  referenceList: TReference[];
 } & IIndexItem;
 
 interface IApiData {
@@ -37,9 +38,15 @@ interface IProps {
   // 原始的初始化数据, 用它里面的单据数据和来源，保存时需要这些数据信息
   apiParams: IApiParams;
   // 分类好的初始化数据
-  initList:{
-    commonItems: IIndexItem[],
-    noCommonItems:IIndexItem[]
+  initList: {
+    commonItems: IIndexItem[];
+    noCommonItems: IIndexItem[];
+    orgAndTime: {
+      orgId?: string;
+      orgName?: string;
+      measuredAt?: number;
+      unknownReport?: boolean;
+    };
   } | null;
   selectIndex?: any;
   isViewOnly: boolean;
@@ -64,17 +71,12 @@ const CustomIndex: FC<IProps> = (props) => {
   const [apiData, setApiData] = useState<IApiData>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
   const [formInit, setFormInit] = useState({});
-  // const timeAndOrg = useRef({
-  //   measuredAt: initData?.measuredAt || new Date().getTime(),
-  //   unknownReport: initData?.unknownReport,
-  //   orgId: initData?.orgId,
-  //   orgName: initData?.orgName,
-  // });
+
   const timeAndOrg = useRef({
-    measuredAt: new Date().getTime(),
-    unknownReport: false,
-    orgId: '',
-    orgName: '',
+    measuredAt: initList?.orgAndTime?.measuredAt || new Date().getTime(),
+    unknownReport: initList?.orgAndTime?.unknownReport || false,
+    orgId: initList?.orgAndTime?.orgId || null,
+    orgName: initList?.orgAndTime?.orgName || null,
   });
   const sid = window.$storage.getItem('sid');
 
@@ -103,7 +105,7 @@ const CustomIndex: FC<IProps> = (props) => {
     if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
       console.log('curtomIndex2');
       if (initList) {
-        console.log('=====+1,initList有数据时');
+        console.log('=====+1,initList有数据时', initList);
         setApiData(formatDataAddIndex(initList, addIndexNum));
       } else {
         console.log('curtomIndex3');
@@ -182,18 +184,35 @@ const CustomIndex: FC<IProps> = (props) => {
       ...(apiData.commonItems || []),
       ...(apiData.noCommonItems || []),
     ];
+    console.log('handleInitForm', all);
     all.forEach((item: IIndexItemCustom) => {
-      const { id, name, value, units, unit, formIndex, advices, indexId, sourceSid, source } = item;
+      const { id, name, formIndex, indexId,
+        sourceSid, source, referenceList, originReferences } = item;
+      const referenceData: Record<string, any> = {};
+      if (referenceList?.length > 0) {
+        const keys: string[] = ['value', 'indexValue'];
+        referenceList.forEach((reference: TReference, index: number) => {
+          keys.forEach((k) => {
+            if (reference[k]) {
+              referenceData[`${formIndex}_${index}_${k}`] = reference[k];
+            }
+          });
+          // 如果有referenceId，则表明指标有参考值，标记select组件选中此条
+          if (reference.referenceId) {
+            referenceData[`${formIndex}_${index}_reference`] = reference.referenceId;
+          }
+        });
+      }
       initForm = {
         ...initForm,
         [`${formIndex}_indexId`]: id || indexId, // 首次根据勾选的内容获取指标列表返回的是id，回显后端返回的是indexId
         [`${formIndex}_name`]: name,
-        [`${formIndex}_value`]: value,
-        [`${formIndex}_minValue`]: advices?.[0] === 'empty' ? null : advices?.[0],
-        [`${formIndex}_maxValue`]: advices?.[1] === 'empty' ? null : advices?.[1],
-        [`${formIndex}_unit`]: unit || units?.[0],
+        // [`${formIndex}_indexValue`]: value,
         [`${formIndex}_sourceSid`]: sourceSid,
         [`${formIndex}_source`]: source,
+        [`${formIndex}_referenceList`]: originReferences,
+        [`${formIndex}_valueCount`]: referenceList.length,
+        ...referenceData,
       };
     });
     setFormInit(initForm);
@@ -310,22 +329,18 @@ const CustomIndex: FC<IProps> = (props) => {
             callback={handleSetHospital}
             fieldName="hospital"
             style={{ flex: 1, maxWidth: '78%' }}
-            defaultValue={
-              {
-                // hospitalId: initData?.orgId,
-                // hospitalName: initData?.orgName,
-              }
-            }
+            defaultValue={{
+              hospitalId: initList?.orgAndTime?.orgId,
+              hospitalName: initList?.orgAndTime?.orgName,
+            }}
           />
         </div>
         <ItemDate
           setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
           setUnknow={(unknownReport: boolean) => handleUnknownReport(unknownReport)}
           // 如果是回显，就直接取回显的时间，没有就设置当前时间
-          // initReportTime={initData?.measuredAt || new Date().getTime()}
-          // isUnknownTime={initData?.unknownReport}
-          initReportTime={new Date().getTime()}
-          isUnknownTime={false}
+          initReportTime={initList?.orgAndTime?.measuredAt || new Date().getTime()}
+          isUnknownTime={initList?.orgAndTime?.unknownReport}
           type="HYD"
         />
       </div>

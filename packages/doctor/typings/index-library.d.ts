@@ -32,8 +32,10 @@ declare type TIndexItem = {
 
 declare type TReference = {
   id: string;
+  referenceId?: string;
   type: string;
   value: string | null;
+  indexValue: string | null;
   secondValue: string | null;
   unit: string | null;
   note: string | null;

@@ -16,7 +16,7 @@ interface IProps {
 const IndexTable: FC<IProps> = (props) => {
   const { apiData, subName, isViewOnly, formInit, form } = props;
   const [showAll, setshowAll] = useState(isViewOnly);
-  // console.log('formInit', formInit);
+  console.log('formInit', formInit);
   useEffect(() => {
     setshowAll(isViewOnly);
   }, [isViewOnly]);
@@ -30,9 +30,16 @@ const IndexTable: FC<IProps> = (props) => {
     showDom = indexListAll[type].map((item: CommonData, _index: number) => {
       // 查看时，隐藏空值的~~~*********
       let isShow = true;
+      // 如果存在originReferences字段，表明是回显
+      if (item?.originReferences?.length > 0) {
+        item.references = item.originReferences.map((r) => {
+          r.id = r.referenceId;
+          return r;
+        });
+      }
       if (isViewOnly) {
         // 值和参考值只要有一个有效，就显示，否则不显示
-        isShow = formInit[`${item.formIndex}_value`] || formInit[`${item.formIndex}_maxValue`] || formInit[`${item.formIndex}_minValue`];
+        isShow = !!item?.referenceList?.[0].indexValue;
       }
       if (!isShow) {
         return null;

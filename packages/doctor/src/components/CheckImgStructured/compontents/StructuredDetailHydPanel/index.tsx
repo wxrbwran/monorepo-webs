@@ -33,6 +33,10 @@ interface IProps {
 interface ICheckTypesItem extends IApiDocumentItem {
   sampleFrom: string;
   firstIndex: string;
+  orgId?: string;
+  orgName?: string;
+  measuredAt?: number;
+  unknownReport?: boolean;
 }
 // ICheckTypesItem保存过后init数据，接口返回的格式。ISearchDocumentItem是搜索时候接口返回的数据格式
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
@@ -45,6 +49,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const initCheckTypes: ICheckTypesItem[] = [];
   if (!isEmpty(initData)) {
     initData.documentList.forEach((item) => {
+      initSubType.push('其他');
       initSubType.push(item.sampleFroms?.[0] as string);
       initCheckTypes.push({
         ...item,
@@ -54,7 +59,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
     initSubType = [...new Set(initSubType)];
   } else {
-    initSubType = ['血液', '其他', '1', '阿斯顿'];
+    initSubType = ['血液'];
   }
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
@@ -64,8 +69,8 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
 
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
-  const handleSelectTypeIndex = (params: ISearchDocumentItem, type?: string) => {
-    console.log('handleSelectTypeIndex', params, type);
+  const handleSelectTypeIndex = (params: ISearchDocumentItem, _type?: string) => {
+    // console.log('handleSelectTypeIndex', params, type);
     let newCheckTypes: ICheckTypes = [];
     let isNew = true;
     // 唯一性根据这两个指标确定： 图片大分类+子分类
@@ -146,6 +151,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   }
   const getInitList = (item: ICheckTypesItem | ISearchDocumentItem) => {
     // 有indexList表示是回显数据
+    console.log('getInitList', item);
     if (isMedicalIndexList(item)) {
       const { documentId, documentName } = item;
       const list: IIndexItem[] = [];
@@ -161,6 +167,12 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       const commonList = list.filter((indexItem) => indexItem.common);
       const noCommonList = list.filter((indexItem) => !indexItem.common);
       return {
+        orgAndTime: {
+          orgId: item.orgId,
+          orgName: item.orgName,
+          measuredAt: item.measuredAt,
+          unknownReport: item.unknownReport,
+        },
         commonItems: commonList,
         noCommonItems: noCommonList,
       };

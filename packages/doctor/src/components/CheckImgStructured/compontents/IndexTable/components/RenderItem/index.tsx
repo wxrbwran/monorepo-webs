@@ -13,6 +13,8 @@ const RenderItem: FC<IProps> = (props) => {
   const { item, form } = props;
   const [list, setList] = useState<any[]>([]);
   useEffect(() => {
+    // const
+    console.log('RenderItem', item);
     setList(prev => [...prev, { value: '', key: +new Date() }]);
   }, []);
   return (

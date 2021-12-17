@@ -55,12 +55,12 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
     (item: IJcdTabItem) => (
       <TabPane
         tab={<span>
-              <SyncOutlined />
-              <span onDoubleClick={() => {}}>
-                {item.meta.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} /> }
-                {item.meta.jcdName}
-              </span>
-            </span> }
+          <SyncOutlined />
+          <span onDoubleClick={() => {}}>
+            {item.meta.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} /> }
+            {item.meta.jcdName}
+          </span>
+        </span> }
         key={`${item.meta.tabKey}`}
         forceRender
         closeIcon={
