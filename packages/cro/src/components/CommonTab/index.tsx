@@ -107,7 +107,7 @@ function CommonTab(props: IProps) {
     //   status: 'report',
     // },
     {
-      statusName: '成员管理',
+      statusName: '研究者管理',
       status: 'researcher',
     },
     // {
