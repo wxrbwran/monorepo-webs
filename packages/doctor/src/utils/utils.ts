@@ -101,7 +101,7 @@ export function getRoles(msgCustom: { fromUsers?: { role: string }[], fromUser: 
   if (msgCustom?.fromUsers) {
     return [...new Set(msgCustom?.fromUsers.map(item => item.role))]
       .sort(roleCompare)
-      .map(roleId => getRole(roleId)).join('、');
+      .map(roleId => getRole(roleId)).filter(Boolean).join('、');
   } else {
     return getRole(msgCustom?.fromUser?.role) || '';
   }
