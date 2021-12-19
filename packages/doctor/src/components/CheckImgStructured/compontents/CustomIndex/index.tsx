@@ -186,7 +186,7 @@ const CustomIndex: FC<IProps> = (props) => {
     ];
     console.log('handleInitForm', all);
     all.forEach((item: IIndexItemCustom) => {
-      const { id, name, formIndex, indexId,
+      const { id, name, formIndex, indexId, references,
         sourceSid, source, referenceList, originReferences } = item;
       const referenceData: Record<string, any> = {};
       if (referenceList?.length > 0) {
@@ -210,7 +210,7 @@ const CustomIndex: FC<IProps> = (props) => {
         // [`${formIndex}_indexValue`]: value,
         [`${formIndex}_sourceSid`]: sourceSid,
         [`${formIndex}_source`]: source,
-        [`${formIndex}_referenceList`]: originReferences,
+        [`${formIndex}_referenceList`]: originReferences || references,
         [`${formIndex}_valueCount`]: referenceList?.length || 1,
         ...referenceData,
       };

@@ -1,7 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Space, Form, Input, Select, Button } from 'antd';
 import EditIndex from '@/components/EditIndex';
+import { ProFormDependency } from '@ant-design/pro-form';
 import { getReferenceTitle } from 'xzl-web-shared/dist/utils/tool';
+import { yinYang } from 'xzl-web-shared/dist/utils/consts';
 
 const { Option } = Select;
 
@@ -35,7 +37,11 @@ const RenderItem: FC<IProps> = (props) => {
   };
   return (
     <div className="flex w-full">
-      <Form.Item initialValue={indexItem.name} name={`${indexItem.formIndex}_name`} style={{ width: 100 }}>
+      <Form.Item
+        initialValue={indexItem.name}
+        name={`${indexItem.formIndex}_name`}
+        style={{ width: 100 }}
+      >
         <Input disabled readOnly />
       </Form.Item>
       <div className="mx-10">
@@ -51,21 +57,46 @@ const RenderItem: FC<IProps> = (props) => {
         {list.map((_item, index) => (
           <Form.Item noStyle key={_item.key}>
             <Space align="baseline" style={{ display: 'flex' }}>
-              <Form.Item
-                name={`${indexItem.formIndex}_${index}_indexValue`}
-                rules={[{ required: true, message: '请输入参考值' }]}
-              >
-                <Input placeholder="请输入参考值" />
-              </Form.Item>
+              <ProFormDependency name={[`${indexItem.formIndex}_${index}_reference`]}>
+                {(deps: any) => {
+                  console.log('deps', deps);
+                  const referenceId = deps[`${indexItem.formIndex}_${index}_reference`];
+                  const curReference = item.references.filter((r: TReference) => r.id === referenceId)[0];
+                  if (curReference?.type === 'RADIO') {
+                    return (
+                      <Form.Item name={`${indexItem.formIndex}_${index}_indexValue`} noStyle>
+                        <Select placeholder="请选择">
+                          {yinYang.map((yy: Record<string, string>) => (
+                            <Option key={yy.value} value={yy.value}>
+                              {yy.label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    );
+                  }
+                  return (
+                    <Form.Item
+                        name={`${indexItem.formIndex}_${index}_indexValue`}
+                        rules={[{ required: true, message: '请输入参考值' }]}
+                      >
+                        <Input placeholder="请输入参考值" />
+                      </Form.Item>
+
+                  );
+                }}
+              </ProFormDependency>
               {indexItem?.references?.length > 0 && (
                 <>
                   <Form.Item name={`${indexItem.formIndex}_${index}_reference`}>
                     <Select style={{ width: 200 }} placeholder="请选择参考值类型">
                       {indexItem.references?.map((reference: TReference) => (
                         <Option key={`${indexItem.formIndex}_${reference.id}`} value={reference.id}>
-                          {`${reference.note || ''} ${getReferenceTitle(reference)} ${
-                            reference.unit || ''
-                          }`}
+                          {reference.type !== 'RADIO' &&
+                            `${reference.note || ''} ${getReferenceTitle(reference)} ${
+                              reference.unit || ''
+                            }`}
+                          {reference.type === 'RADIO' && '阴阳'}
                         </Option>
                       ))}
                     </Select>
@@ -94,7 +125,11 @@ const RenderItem: FC<IProps> = (props) => {
                       >
                         添加更多
                       </Button>
-                      <EditIndex initFormVal={indexItem} onSuccess={handleEditIndex} source="imgEditIndex">
+                      <EditIndex
+                        initFormVal={indexItem}
+                        onSuccess={handleEditIndex}
+                        source="imgEditIndex"
+                      >
                         <Button type="primary" ghost>
                           编辑
                         </Button>
