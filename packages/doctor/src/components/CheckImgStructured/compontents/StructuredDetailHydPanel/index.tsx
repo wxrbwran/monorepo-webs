@@ -2,6 +2,8 @@ import React, {
   FC, useState, useMemo, useRef, useEffect,
 } from 'react';
 import { Tabs, Popconfirm } from 'antd';
+import { useDispatch } from 'umi';
+
 // import { IDocmentItem, IDocmentItemApi } from 'typings/checkimg';
 import { CloseOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
@@ -66,7 +68,14 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const [activeType, setActiveType] = useState<string>();
   const [sampleFroms, setSampleFroms] = useState<string[]>(initSubType);
   const documentsCallbackFns = useRef({});
+  const dispatch = useDispatch();
 
+  const handleCurDocument = (doc: TDocument) => {
+    dispatch({
+      type: 'document/setCurDocument',
+      payload: doc,
+    });
+  };
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
   const handleSelectTypeIndex = (params: ISearchDocumentItem, _type?: string) => {
@@ -76,6 +85,12 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     // 唯一性根据这两个指标确定： 图片大分类+子分类
     checkTypes.forEach((item: ICheckTypesItem | ISearchDocumentItem, index) => {
       if ((item.documentName === params.documentName) && (item.sampleFrom === params.sampleFrom)) {
+        handleCurDocument({
+          id: item.documentId,
+          name: item.documentName,
+          sampleFrom: item.sampleFrom,
+        });
+        console.log(item);
         isNew = false;
         newCheckTypes = [...checkTypes];
         if (params.type !== 'DOCUMENT') {
@@ -225,8 +240,16 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     ),
   ), [checkTypes, isViewOnly, initData]);
   const handleActiveTab = (tab: string) => {
+    // console.log('checkTypes', checkTypes);
+    // console.log('tab', tab);
     activeType1.current = tab;
     setActiveType(tab);
+    const doc = checkTypes.filter(c => tab.includes(c.documentId))[0];
+    handleCurDocument({
+      id: doc.documentId,
+      name: doc.documentName,
+      sampleFrom: doc.sampleFrom,
+    });
   };
 
   return (

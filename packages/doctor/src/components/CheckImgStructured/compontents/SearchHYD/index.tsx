@@ -85,7 +85,12 @@ const SearchHYD: FC<IProps> = (props) => {
       >
         {typeList.map((item, index) => (
           <Option key={item.type + item?.id} value={index}>
-            {`${item?.sampleFrom} - ${item?.type === 'DOCUMENT' ? item?.name : `${item.documentName}-${item.name}` }`}
+            <span>{item.source === 'SYSTEM' ? '官方' : '医生'}</span>
+            <span>
+              {`${item?.sampleFrom} - ${
+                item?.type === 'DOCUMENT' ? item?.name : `${item.documentName}-${item.name}`
+              }`}
+            </span>
           </Option>
         ))}
         {listEmpty && (

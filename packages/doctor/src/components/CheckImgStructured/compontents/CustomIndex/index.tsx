@@ -211,7 +211,7 @@ const CustomIndex: FC<IProps> = (props) => {
         [`${formIndex}_sourceSid`]: sourceSid,
         [`${formIndex}_source`]: source,
         [`${formIndex}_referenceList`]: originReferences,
-        [`${formIndex}_valueCount`]: referenceList.length,
+        [`${formIndex}_valueCount`]: referenceList?.length || 1,
         ...referenceData,
       };
     });
@@ -344,7 +344,8 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      <div>
+      { !initList && (
+        <div className="mb-10">
         <EditIndex
           onSuccess={addIndexSuccess}
           source="imgAddIndex"
@@ -356,6 +357,7 @@ const CustomIndex: FC<IProps> = (props) => {
           </Button>
         </EditIndex>
       </div>
+      ) }
       <Form name={`custom_${formKey}`} form={form}>
         {renderItem()}
       </Form>

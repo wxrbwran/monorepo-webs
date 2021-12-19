@@ -21,7 +21,12 @@ interface IProps {
   onSuccess: (params?: any) => void;
   documentId?: string; // 图片大分类id,例如生化全项的类型id,如果是结构化入口时(source:imgAddTypeIndex时)，此值不会传过来
   sampleFrom?: string; // 样本来源，同上
-  // source: imgAddIndex结构化添加指标 imgAddTypeIndex结构化添加大分类+指标  libraryAdd指标库添加  libraryEdit指标库编辑
+  // source:
+  // imgAddIndex结构化添加指标
+  // imgAddTypeIndex结构化添加大分类 + 指标
+  // libraryAdd指标库添加
+  // libraryEdit指标库编辑
+  // imgEditIndex结构化添加指标
   source: string;
 }
 interface IData {
@@ -73,9 +78,8 @@ const EditIndex: FC<IProps> = (props) => {
     console.log('handleRequest', params);
     request(params).then((res: any) => {
       message.success('保存成功');
-      if (['imgAddIndex', 'imgAddTypeIndex'].includes(source)) { // 编辑时没有此参数
-        const returnData = res;
-        onSuccess(returnData); // 指标库不需要params,结构化需要Params回显到指标列表
+      if (['imgAddIndex', 'imgAddTypeIndex', 'imgEditIndex'].includes(source)) {
+        onSuccess(res); // 指标库不需要params,结构化需要Params回显到指标列表
       } else {
         onSuccess();
       }
@@ -93,7 +97,9 @@ const EditIndex: FC<IProps> = (props) => {
         r.type = references[index];
         r.isDefault = false;
       });
-      values.references[defaultReference].isDefault = true;
+      if (values?.references.length > 0) {
+        values.references[defaultReference].isDefault = true;
+      }
     }
     let params: any = {
       ...values,

@@ -14,7 +14,7 @@ declare type TIndexItem = {
   abbreviation?: string;
   common?: boolean;
   sampleFrom?: string;
-  title: string;
+  title?: string;
   jcdName?: string;
   method?: string;
   source: string;
