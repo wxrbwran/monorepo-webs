@@ -61,11 +61,20 @@ const RenderItem: FC<IProps> = (props) => {
                 {(deps: any) => {
                   console.log('deps', deps);
                   const referenceId = deps[`${indexItem.formIndex}_${index}_reference`];
-                  const curReference = item.references.filter((r: TReference) => r.id === referenceId)[0];
+                  let disabled = true;
+                  if (indexItem?.references?.length === 0) {
+                    disabled = false;
+                  }
+                  if (indexItem?.references?.length > 0 && referenceId) {
+                    disabled = false;
+                  }
+                  const curReference = item.references?.filter(
+                    (r: TReference) => r.id === referenceId,
+                  )[0];
                   if (curReference?.type === 'RADIO') {
                     return (
                       <Form.Item name={`${indexItem.formIndex}_${index}_indexValue`} noStyle>
-                        <Select placeholder="请选择">
+                        <Select placeholder="请选择" disabled={disabled}>
                           {yinYang.map((yy: Record<string, string>) => (
                             <Option key={yy.value} value={yy.value}>
                               {yy.label}
@@ -77,12 +86,11 @@ const RenderItem: FC<IProps> = (props) => {
                   }
                   return (
                     <Form.Item
-                        name={`${indexItem.formIndex}_${index}_indexValue`}
-                        rules={[{ required: true, message: '请输入参考值' }]}
-                      >
-                        <Input placeholder="请输入参考值" />
-                      </Form.Item>
-
+                      name={`${indexItem.formIndex}_${index}_indexValue`}
+                      rules={[{ required: true, message: '请输入参考值' }]}
+                    >
+                      <Input placeholder="请输入参考值" disabled={disabled} />
+                    </Form.Item>
                   );
                 }}
               </ProFormDependency>
