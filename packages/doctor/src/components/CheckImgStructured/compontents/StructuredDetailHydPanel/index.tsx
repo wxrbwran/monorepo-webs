@@ -205,39 +205,48 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     }
   };
   const renderTabPane = useMemo(() => () => checkTypes.map(
-    (item: ICheckTypesItem | ISearchDocumentItem) => (
-      <TabPane
-        tab={`${item.documentName}`}
-        key={`${item.documentId}${item.sampleFrom}`}
-        forceRender
-        closeIcon={
-          <Popconfirm
-            title="关闭后，标签内全部指标数据将清空，请确认?"
-            onConfirm={() => handleRemoveType(item)}
-            okText="确认"
-            cancelText="取消"
-          >
-            <CloseOutlined />
-          </Popconfirm>
-        }
-      >
-        <CustomIndex
-          handleDocumentsCallbackFns={handleDocumentsCallbackFns}
-          formKey={`${item.documentId}${item.sampleFrom}`}
-          level1Type={outType}
-          firstIndex={item.firstIndex as string}
-          initList={getInitList(item)}
-          selectIndex={item?.selectIndex}
-        // 单据和来源等信息,加显时，接口返回的数组格式，需要处理取第一个元素即可，也只有一个元素
-          apiParams={{
-            ...item,
-            sampleFrom: isMedicalIndexList(item)
-              ? item.sampleFroms[0] : item.sampleFrom,
-          }}
-          isViewOnly={isViewOnly}
-        />
-      </TabPane>
-    ),
+    (item: ICheckTypesItem | ISearchDocumentItem) => {
+      console.log('item', item);
+      let prefix = '[系统]';
+      const sid = window.$storage.getItem('sid');
+      if (item.sourceSid === sid) {
+        prefix = '[自己]';
+      } else if (item.sourceSid === sid && item.source === 'DOCTOR') {
+        prefix = '[他人]';
+      }
+      return (
+        <TabPane
+          tab={`${prefix}${item.documentName}`}
+          key={`${item.documentId}${item.sampleFrom}`}
+          forceRender
+          closeIcon={
+            <Popconfirm
+              title="关闭后，标签内全部指标数据将清空，请确认?"
+              onConfirm={() => handleRemoveType(item)}
+              okText="确认"
+              cancelText="取消"
+            >
+              <CloseOutlined />
+            </Popconfirm>
+          }
+        >
+          <CustomIndex
+            handleDocumentsCallbackFns={handleDocumentsCallbackFns}
+            formKey={`${item.documentId}${item.sampleFrom}`}
+            level1Type={outType}
+            firstIndex={item.firstIndex as string}
+            initList={getInitList(item)}
+            selectIndex={item?.selectIndex}
+            // 单据和来源等信息,加显时，接口返回的数组格式，需要处理取第一个元素即可，也只有一个元素
+            apiParams={{
+              ...item,
+              sampleFrom: isMedicalIndexList(item) ? item.sampleFroms[0] : item.sampleFrom,
+            }}
+            isViewOnly={isViewOnly}
+          />
+        </TabPane>
+      );
+    },
   ), [checkTypes, isViewOnly, initData]);
   const handleActiveTab = (tab: string) => {
     // console.log('checkTypes', checkTypes);
