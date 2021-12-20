@@ -113,18 +113,14 @@ const AddServicePackage: FC<IProps> = (props) => {
     setMembers([...members, ...choickMembers]);
   };
   const checkUpperLower = () => {
-    const lower = members.filter(member => member.role === Role.LOWER_DOCTOR.id);
-    // 如果有医生助手就必须有主管医生
-    console.log('lower', lower);
-    if (lower.length > 0){
-      return !!(members.filter(member => member.role === Role.UPPER_DOCTOR.id).length === 0);
-    } else {
-      return false;
-    }
+    // 必须有主管医生
+    return !!(members.filter(member => member.role === Role.UPPER_DOCTOR.id).length === 0);
   };
   const handleSubmit = () => {
     if (!packageName) {
       message.error('请输入服务小组名称');
+    } else if (members.length > 10) {
+      message.error('服务小组内全部成员不能超过十人，请重试');
     } else if (isEmpty(members.filter(member => member.sid === doctorSid))) {
       message.error('请选择你在服务小组中的位置');
     } else if (checkUpperLower()){
@@ -164,7 +160,10 @@ const AddServicePackage: FC<IProps> = (props) => {
     members.forEach(member => initWordOrgs[member.sid!] = member.sourceNSId);
     return (
       <div className={styles.item_panel} key={roleId}>
-        <div className="text-base font-bold mb-10">{doctorRoles[roleId].desc}</div>
+        <div className="text-base font-bold mb-10 flex">
+          {roleId === Role.UPPER_DOCTOR.id && <div style={{ color: '#F74F28' }}>*</div>}
+          {doctorRoles[roleId].desc}
+        </div>
         <div className="flex flex-wrap">
           {
             curRoleMembers.map(doctor => (

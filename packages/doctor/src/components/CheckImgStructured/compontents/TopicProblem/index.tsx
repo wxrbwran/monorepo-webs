@@ -16,7 +16,7 @@ interface IProps {
 function TopicProblem(props: IProps) {
   const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
   console.log('initDatatext', initData);
-  const [questions, setQuestions] = useState<IQuestions[]>(initData ? initData : []);
+  const [questions, setQuestions] = useState<IQuestions[]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
   const handleSave = () => new Promise((resolve) => {
     resolve({
@@ -64,7 +64,7 @@ function TopicProblem(props: IProps) {
     topicType: 'TEXT',
   };
   console.log('最新question text', questions);
-
+  console.log('valuableQas text', valuableQas);
   return (
     <div>
       {
@@ -86,6 +86,7 @@ function TopicProblem(props: IProps) {
             </div>
             <div className="answer-wrap">
               <TextArea
+                style={{ border: isViewOnly ? 'none' : '1px solid #DFDFDF' }}
                 placeholder="请输入"
                 onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
                 value={item.answer?.[0]}

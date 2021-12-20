@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
 import { Form, Input, Row, Col, message } from 'antd';
@@ -16,6 +16,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
   const { initData, changeCallbackFns } = props;
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue } = form;
+  let timeRef = useRef<null | number>(null); // 存一下日期上的时间，当点击时间不详时，存起来，取消时间不详时，恢复此值到measure_at
   const fetchInit = () => {
     const initObj: CommonData = {};
     initData.forEach(item => {
@@ -25,7 +26,8 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           initObj.orgName = ans;
           break;
         case '时间':
-          initObj.measured_at = Number(ans);
+          timeRef.current = ans === null ? null : Number(ans);
+          initObj.measured_at = ans === null ? null : Number(ans);
           break;
         default:
           break;
@@ -41,7 +43,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       Object.keys(values).forEach((item: string) => {
         questions.push({
           question: baseField[item].text,
-          answer: [values[item]],
+          answer: values[item] !== undefined ? [values[item]] : [],
           question_type: 'BASIC',
           group: `0-${baseField[item].inx}`,
           sid: window.$storage.getItem('sid'),
@@ -81,8 +83,12 @@ const TopicBaseInfo: FC<IProps> = (props) => {
   };
   const handleChangeTime = (time: number | null) => {
     setFieldsValue({ measured_at: time });
+    timeRef.current = time;
   };
-
+  const handleChangeUnKonwTime = (isUnKonw) => {
+    console.log('isUnKonw', isUnKonw);
+    setFieldsValue({ measured_at: isUnKonw ? null : timeRef.current });
+  };
   return (
     <div className={`${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
@@ -113,6 +119,8 @@ const TopicBaseInfo: FC<IProps> = (props) => {
               // 如果是回显，就直接取回显的时间，没有就设置当前时间
               initReportTime={initialValues?.measured_at}
               setReporttime={(time: number | null) => handleChangeTime(time)}
+              setUnknow={handleChangeUnKonwTime}
+              isUnknownTime={!!(initialValues?.measured_at === null)}
               style={{ width: 'calc(100% - 168px)' }}
               label="检查时间"
             />

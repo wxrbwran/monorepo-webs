@@ -86,7 +86,7 @@ const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) 
     }
   };
   const handleDelete = () => {
-    if (actionType === 'edit' && editGroupInx && initData) {
+    if (actionType === 'edit' && editGroupInx !== undefined && initData) {
       const qasData = { ...initData, action: 'DELETE' };
       const params = { meta: { id: templateId }, data: [qasData] };
       window.$api.image.postImageTemplate(params).then(() => {

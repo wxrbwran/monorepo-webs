@@ -56,7 +56,10 @@ const CheckImgStructured: FC<IProps> = (props) => {
         return ({ ...item, key: uuid() });
       }));
       setJcdData(jData.list.map(item => {
-        return ({ ...item, key: uuid() });
+        return ({ ...item, meta: {
+          ...item.meta,
+          tabKey: uuid(),
+        } });
       }));
       setImgData({ ...hData, imageId: id });
       setIsLoaded(true);

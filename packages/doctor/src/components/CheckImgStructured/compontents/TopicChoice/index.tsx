@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Checkbox, Radio } from 'antd';
+import { Checkbox, Radio, Divider } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
 import { IQaItem } from '../type';
@@ -16,7 +16,7 @@ interface IProps {
 function TopicChoice(props: IProps) {
   console.log('choiceProps', props);
   const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
-  const [questions, setQuestions] = useState<IQaItem[]>(initData ? initData : []);
+  const [questions, setQuestions] = useState<IQaItem[]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
   const handleSave = (a) => new Promise((resolve) => {
     console.log(a);
@@ -74,6 +74,7 @@ function TopicChoice(props: IProps) {
   };
   return (
     <div className={styles.choice}>
+      {(isViewOnly || !isFirstEdit) && <Divider dashed />}
       <div className="qa-wrap">
       {
         (isViewOnly ? valuableQas : questions).map((item: IQaItem, quesIndex: number) => (
@@ -117,6 +118,7 @@ function TopicChoice(props: IProps) {
         {...editProps}
         actionType="add"
       />
+     {(isViewOnly || !isFirstEdit) && <Divider dashed />}
     </div>
   );
 }

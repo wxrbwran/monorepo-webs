@@ -161,5 +161,6 @@ export const formatDoctorTeams = (teams: any[]) => {
       packs.alone.push(teamItem);
     }
   });
+  console.log('======111', packs);
   return packs;
 };

@@ -171,3 +171,13 @@
     }
   }
 }
+
+.disabled {
+  :global {
+    .ant-tabs-nav-list {
+      .anticon-close {
+        display: none;
+      }
+    }
+  }
+}

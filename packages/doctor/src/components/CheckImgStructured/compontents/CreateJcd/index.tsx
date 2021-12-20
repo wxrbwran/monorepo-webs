@@ -2,79 +2,107 @@ import React, { FC, useState, useEffect } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import * as api from '@/services/api';
 import { IAddJcdItem } from '../type';
-import { Form, Input, Button, message } from 'antd';
+import { msg } from '../utils';
+import { Form, Input, Button } from 'antd';
 
 interface IProps {
   actionType: string;
-  partMethod?: {
+  initData: {
     part?: string;
     method?: string;
+    jcdName?: string; // 编辑时会有此参数，添加时没有。添加时由外面的part+method组合
   };
-  handleAddJcdTab: (data: IAddJcdItem) => void;
+  templateId?: string; // 编辑是传，模板id
+  onSuccess: (data: IAddJcdItem) => void;
+  outType: string;
   updateCreateJcdNum: () => void;
 }
 const CreateJcd: FC<IProps> = (props) => {
-  const { actionType, children, partMethod, handleAddJcdTab, updateCreateJcdNum } = props;
+  const { actionType, children, initData, onSuccess, updateCreateJcdNum, templateId, outType } = props;
   const [form] = Form.useForm();
   const { setFieldsValue } = form;
   const [showModal, setShowModal] = useState(false);
   const doctorSid = window.$storage.getItem('sid');
   useEffect(() => {
-    if (partMethod) {
-      const { part, method } = partMethod;
-      let jcdName = '';
-      if (!!part) jcdName += part;
-      if (!!method) jcdName += method;
-      setFieldsValue({ ...partMethod, jcdName });
+    if (initData) {
+      if (actionType === 'add') {
+        const { part, method } = initData;
+        let jcdName = '';
+        if (!jcdName) {
+          if (!!part) jcdName += part;
+          if (!!method) jcdName += method;
+        }
+        setFieldsValue({ ...initData, jcdName });
+      } else {
+        setFieldsValue({ ...initData });
+      }
     }
-  }, [partMethod, showModal]);
+  }, [initData, showModal]);
 
   const handleShowModal = () => {
     setShowModal(true);
   };
 
   const handleSubmit = (values) => {
-    const params = {
-      list: [
-        {
-          meta: {
-            sid: doctorSid,
-            source: 'DOCTOR',
-            type: 'JCD',
-            title: '检查单',
-            createdTime: new Date().getTime(),
-            ...values,
+    if (actionType === 'add') {
+      const params = {
+        list: [
+          {
+            meta: {
+              creatorSid: doctorSid,
+              sid: doctorSid,
+              source: 'DOCTOR',
+              title: outType, // 根据title来区分  JCD   OTHER
+              createdTime: new Date().getTime(),
+              ...values,
+            },
           },
-        },
-      ],
-    };
-    console.log('params', params);
-    api.image.putImageTopicTemplate(params).then((res: any) => {
-      message.success('添加成功');
-      console.log('success', res);
-      handleAddJcdTab({
-        sid: doctorSid,
-        source: 'DOCTOR',
-        id: res.meta.id,
-        ...values,
+        ],
+      };
+      api.image.putImageTopicTemplate(params).then((res: any) => {
+        msg('添加成功');
+        onSuccess({
+          sid: doctorSid,
+          source: 'DOCTOR',
+          id: res.meta.id,
+          ...values,
+        });
+        setShowModal(false);
+        updateCreateJcdNum();
+      }).catch((err: any) => {
+        msg(err?.result || '添加失败', 'error');
       });
-      setShowModal(false);
-      updateCreateJcdNum();
-    }).catch(err => {
-      message.error(err?.result || '添加失败');
-    });
+    } else {
+      const params = {
+        id: templateId,
+        ...values,
+      };
+      api.image.patchImageTemplateName(params).then(() => {
+        msg('编辑成功');
+        onSuccess({
+          id: templateId,
+          ...values,
+        });
+        setShowModal(false);
+        updateCreateJcdNum();
+      }).catch((err: any) => {
+        msg(err?.result || '编辑失败', 'error');
+      });
+    }
+
   };
 
   const rules = [{ required: true, message: '请输入' }];
+  const clickProp = actionType === 'add' ? { onClick: handleShowModal } : { onDoubleClick: handleShowModal };
   return (
-    <div>
-      <span onClick={handleShowModal}>{children}</span>
+    <>
+      <span { ...clickProp }>{children}</span>
       <DragModal
         wrapClassName="ant-modal-wrap-center new-header"
         zIndex={1011}
         width="600px"
         visible={showModal}
-        title={actionType === 'add' ? '新建检查单' : '编辑检查单'}
+        title={`${actionType === 'add' ? '新建' : '编辑'}${outType === 'JCD' ? '检查单' : '其他医学单据'}`}
         onCancel={() => setShowModal(false)}
         footer={null}
         destroyOnClose
@@ -86,27 +114,34 @@ const CreateJcd: FC<IProps> = (props) => {
             form={form}
             preserve={false}
           >
-            {/* 结构化添加图片类型和指标时才显示此项 */}
-            <Form.Item
-              name="part"
-              rules={rules}
-              label="检查部位"
-            >
-              <Input placeholder="请输入检查部位" />
-            </Form.Item>
-            <Form.Item
-              name="method"
-              rules={rules}
-              label="检查方法"
-            >
-              <Input placeholder="请输入检查方法" />
-            </Form.Item>
+            {
+              outType === 'JCD' && (
+                <>
+                  <Form.Item
+                    name="part"
+                    rules={rules}
+                    label="检查部位"
+                    hidden={actionType === 'edit'}
+                  >
+                    <Input placeholder="请输入检查部位" />
+                  </Form.Item>
+                  <Form.Item
+                    name="method"
+                    rules={rules}
+                    label="检查方法"
+                    hidden={actionType === 'edit'}
+                  >
+                    <Input placeholder="请输入检查方法" />
+                  </Form.Item>
+                </>
+              )
+            }
             <Form.Item
               name="jcdName"
               rules={rules}
-              label="检查名称"
+              label={outType === 'JCD' ? '检查名称' : '单据名称'}
             >
-              <Input placeholder="请输入检查名称" />
+              <Input placeholder={`请输入${outType === 'JCD' ? '检查' : '单据'}名称`} />
             </Form.Item>
             <Form.Item>
               <div className="common__btn">
@@ -121,7 +156,7 @@ const CreateJcd: FC<IProps> = (props) => {
           </Form>
         </div>
       </DragModal>
-    </div>
+    </>
   );
 };
 

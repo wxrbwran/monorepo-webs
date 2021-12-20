@@ -46,7 +46,10 @@ const TopicAddProblem: FC<IAddTopicProps & { closeModal: () => void }> = (props)
     }
   };
   const handleDelete = () => {
-    if (actionType === 'edit' && editGroupInx && initData) {
+    console.log('actionType11', actionType);
+    console.log('editGroupInx', editGroupInx);
+    console.log('initData', initData);
+    if (actionType === 'edit' && editGroupInx !== undefined && initData) {
       const qasData = { ...initData, action: 'DELETE' };
       const params = { meta: { id: templateId }, data: [qasData] };
       window.$api.image.postImageTemplate(params).then(() => {
@@ -56,6 +59,7 @@ const TopicAddProblem: FC<IAddTopicProps & { closeModal: () => void }> = (props)
     }
     closeModal();
   };
+
   return (
     <div className={styles.add_problem}>
       <div className="bg-gray-50 mb-15 p-10">
