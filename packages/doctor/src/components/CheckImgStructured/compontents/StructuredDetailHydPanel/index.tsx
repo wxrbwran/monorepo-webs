@@ -79,23 +79,21 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
   const handleSelectTypeIndex = (params: ISearchDocumentItem, _type?: string) => {
-    // console.log('handleSelectTypeIndex', params, type);
+    console.log('handleSelectTypeIndex', params, _type);
+    console.log('checkTypes', checkTypes);
+
     let newCheckTypes: ICheckTypes = [];
     let isNew = true;
     // 唯一性根据这两个指标确定： 图片大分类+子分类
     checkTypes.forEach((item: ICheckTypesItem | ISearchDocumentItem, index) => {
-      if (
-        item.documentName === params.documentName &&
-        item.sampleFrom === params.sampleFrom &&
-        item.documentId === params.id
-      ) {
+      if (item.documentId === params.documentId) {
+        console.log(item);
+        isNew = false;
         handleCurDocument({
           id: item.documentId,
           name: item.documentName,
           sampleFrom: item.sampleFrom,
         });
-        console.log(item);
-        isNew = false;
         newCheckTypes = [...checkTypes];
         if (params.type !== 'DOCUMENT') {
           // 如果此分类已经存在，那修改下首行指标id
@@ -123,11 +121,8 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           firstIndex: params.id,
         },
       ];
-    } else if (_type === 'copy') {
-      newCheckTypes = [
-        ...checkTypes,
-        { ...params },
-      ];
+    } else if (isNew && _type === 'copy') {
+      newCheckTypes = [...checkTypes, { ...params }];
     }
     activeType1.current = params.documentId + params.sampleFrom;
     setActiveType(params.documentId + params.sampleFrom);

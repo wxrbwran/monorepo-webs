@@ -17,6 +17,7 @@ const RenderItem: FC<IProps> = (props) => {
   const { item, form, onSuccess } = props;
   const [list, setList] = useState<any[]>([]);
   const [indexItem, setIndexItem] = useState<any>(item);
+  const sid = window.$storage.getItem('sid');
   useEffect(() => {
     // const
     console.log('RenderItem', indexItem);
@@ -55,14 +56,14 @@ const RenderItem: FC<IProps> = (props) => {
       </div>
       <div>
         {list.map((_item, index) => (
-          <Form.Item noStyle key={_item.key}>
+          <Form.Item noStyle key={`${_item.key}_${index}`}>
             <Space align="baseline" style={{ display: 'flex' }}>
               <ProFormDependency name={[`${indexItem.formIndex}_${index}_reference`]}>
                 {(deps: any) => {
                   console.log('deps', deps);
                   const referenceId = deps[`${indexItem.formIndex}_${index}_reference`];
                   let disabled = true;
-                  if (indexItem?.references?.length === 0) {
+                  if (!indexItem?.references || indexItem?.references?.length === 0) {
                     disabled = false;
                   }
                   if (indexItem?.references?.length > 0 && referenceId) {
@@ -133,15 +134,17 @@ const RenderItem: FC<IProps> = (props) => {
                       >
                         添加更多
                       </Button>
-                      <EditIndex
-                        initFormVal={indexItem}
-                        onSuccess={handleEditIndex}
-                        source="imgEditIndex"
-                      >
-                        <Button type="primary" ghost>
-                          编辑
-                        </Button>
-                      </EditIndex>
+                      {item.source === 'DOCTOR' && item.sourceSid === sid && (
+                        <EditIndex
+                          initFormVal={indexItem}
+                          onSuccess={handleEditIndex}
+                          source="imgEditIndex"
+                        >
+                          <Button type="primary" ghost>
+                            编辑
+                          </Button>
+                        </EditIndex>
+                      )}
                     </Space>
                   )}
                   {index > 0 && (

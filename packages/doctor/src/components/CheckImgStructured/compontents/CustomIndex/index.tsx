@@ -103,6 +103,25 @@ const CustomIndex: FC<IProps> = (props) => {
       noCommonItems,
     };
   };
+  const fetchIndexDocumentIndex = async () => {
+    const params = {
+      documentId: apiParams.documentId,
+      sourceSid: apiParams.sourceSid,
+      sid,
+    };
+    api.indexLibrary
+      .fetchIndexDocumentIndex(params)
+      .then(({ list }: { list: IIndexItemCustom[] }) => {
+        const commonItems = list.filter((item) => item.common);
+        const noCommonItems = list.filter((item) => !item.common);
+        // 如果有指定首行展示哪个指标，这里移动到第一个
+        const data: IApiData = firstIndex
+          ? formatFirshIndex(commonItems, noCommonItems)
+          : { commonItems, noCommonItems };
+        console.log('=====+2,initList没数据，请求接口时');
+        setApiData({ ...formatDataAddIndex(data, addIndexNum) });
+      });
+  };
   useEffect(() => {
     console.log('curtomIndex1');
     // 首次渲染
@@ -113,27 +132,7 @@ const CustomIndex: FC<IProps> = (props) => {
         setApiData(formatDataAddIndex(initList, addIndexNum));
       } else {
         console.log('curtomIndex3');
-        const params = {
-          documentId: apiParams.documentId,
-          // sampleFroms: [apiParams.sampleFrom],
-          sourceSid: sid,
-          sid,
-        };
-        api.indexLibrary
-          .fetchIndexDocumentIndex(params)
-          .then(({ list }: { list: IIndexItemCustom[] }) => {
-            const commonItems = list.filter((item) => item.common);
-            const noCommonItems = list.filter((item) => !item.common);
-            // 如果有指定首行展示哪个指标，这里移动到第一个
-            const data: IApiData = firstIndex
-              ? formatFirshIndex(commonItems, noCommonItems)
-              : {
-                commonItems,
-                noCommonItems,
-              };
-            console.log('=====+2,initList没数据，请求接口时');
-            setApiData({ ...formatDataAddIndex(data, addIndexNum) });
-          });
+        fetchIndexDocumentIndex();
       }
     }
   }, [initList]);
@@ -368,7 +367,7 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      {!initList && apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && (
+      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && (
         <div className="mb-10">
           <EditIndex
             onSuccess={addIndexSuccess}
