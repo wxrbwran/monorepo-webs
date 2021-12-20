@@ -3,9 +3,8 @@ import React, {
 } from 'react';
 import { Tabs, Popconfirm } from 'antd';
 import { useDispatch } from 'umi';
-
-// import { IDocmentItem, IDocmentItemApi } from 'typings/checkimg';
-import { CloseOutlined } from '@ant-design/icons';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
+import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
@@ -79,15 +78,14 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
   const handleSelectTypeIndex = (params: ISearchDocumentItem, _type?: string) => {
-    console.log('handleSelectTypeIndex', params, _type);
-    console.log('checkTypes', checkTypes);
-
+    // console.log('handleSelectTypeIndex', params, _type);
+    // console.log('checkTypes', checkTypes);
     let newCheckTypes: ICheckTypes = [];
     let isNew = true;
     // 唯一性根据这两个指标确定： 图片大分类+子分类
     checkTypes.forEach((item: ICheckTypesItem | ISearchDocumentItem, index) => {
       if (item.documentId === params.documentId) {
-        console.log(item);
+        // console.log(item);
         isNew = false;
         handleCurDocument({
           id: item.documentId,
@@ -207,6 +205,11 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       setActiveType(newCheckTypes[0].documentId + newCheckTypes[0].sampleFrom);
     }
   };
+  const handleRefershDocument = (e: React.MouseEvent, id: string): void => {
+    e.stopPropagation();
+    console.log(id);
+    event.emit('REFERSH_DOCUMENT_BY_ID', id);
+  };
   const renderTabPane = useMemo(() => () => checkTypes.map(
     (item: ICheckTypesItem | ISearchDocumentItem) => {
       console.log('item', item);
@@ -219,7 +222,18 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       }
       return (
         <TabPane
-          tab={`${prefix}${item.documentName}`}
+          tab={
+            <span>
+              {!isViewOnly && (
+                <SyncOutlined
+                  className="relative top-2"
+                  onClick={(e: React.MouseEvent) => handleRefershDocument(e, item.documentId)}
+                />
+              )}
+              {prefix}
+              {item.documentName}
+            </span>
+          }
           key={`${item.documentId}${item.sampleFrom}`}
           forceRender
           closeIcon={
@@ -236,7 +250,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           <CustomIndex
             handleDocumentsCallbackFns={handleDocumentsCallbackFns}
             formKey={`${item.documentId}${item.sampleFrom}`}
-            level1Type={outType}
+            level1Type={'HYD'}
             firstIndex={item.firstIndex as string}
             initList={getInitList(item)}
             onCopySuccess={handleSelectTypeIndex}
@@ -267,10 +281,9 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
 
   return (
     <div className={styles.structure_detail_item}>
-      {/*  */}
       <div className="structured-edit-wrap">
         <SubType
-          leve1Type={outType}
+          leve1Type={'HYD'}
           handleChangeSubType={setSampleFroms}
           initSampleFrom={initSubType}
         />

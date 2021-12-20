@@ -7,12 +7,12 @@ import { isEmpty } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import CopyDocument from '@/pages/Index_library/components/CopyDocument';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import * as api from '@/services/api';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
 import IndexTable from '../IndexTable';
-import styles from './index.scss';
 
 // 获取图片详情接口返回的格式 | 搜索单据或指标时返回的item格式
 type ICheckTypes = IApiDocumentItem | ISearchDocumentItem;
@@ -24,6 +24,8 @@ type IApiParams = {
 type IIndexItemCustom = {
   formIndex: number; // 自己补充的必要属性，每个指标的固定key值
   referenceList: TReference[];
+  originReferences?: TReference[];
+  references?: TReference[];
 } & IIndexItem;
 
 interface IApiData {
@@ -72,7 +74,7 @@ const CustomIndex: FC<IProps> = (props) => {
     commonItems: [],
     noCommonItems: [],
   };
-  const [apiData, setApiData] = useState<IApiData>(initApiData);
+  const [apiData, setApiData] = useState<any>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
   const [formInit, setFormInit] = useState({});
   const curDocument = useSelector((state: IState) => state.document.curDocument);
@@ -118,7 +120,7 @@ const CustomIndex: FC<IProps> = (props) => {
         const data: IApiData = firstIndex
           ? formatFirshIndex(commonItems, noCommonItems)
           : { commonItems, noCommonItems };
-        console.log('=====+2,initList没数据，请求接口时');
+        // console.log('=====+2,initList没数据，请求接口时');
         setApiData({ ...formatDataAddIndex(data, addIndexNum) });
       });
   };
@@ -126,9 +128,9 @@ const CustomIndex: FC<IProps> = (props) => {
     console.log('curtomIndex1');
     // 首次渲染
     if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
-      console.log('curtomIndex2');
+      // console.log('curtomIndex2');
       if (initList) {
-        console.log('=====+1,initList有数据时', initList);
+        // console.log('=====+1,initList有数据时', initList);
         setApiData(formatDataAddIndex(initList, addIndexNum));
       } else {
         console.log('curtomIndex3');
@@ -137,6 +139,21 @@ const CustomIndex: FC<IProps> = (props) => {
     }
   }, [initList]);
 
+  // 刷新单据
+  useEffect(() => {
+    const listener = (id: string) => {
+      console.log('apiParams.id', apiParams.documentId);
+      console.log('id', id);
+      if (apiParams.documentId === id) {
+        fetchIndexDocumentIndex();
+      }
+    };
+    event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
+    return () => {
+      event.removeListener('REFERSH_DOCUMENT_BY_ID', listener);
+    };
+  }, [apiParams]);
+
   useEffect(() => {
     // 第一行指标有变动时候(并且apiData有数据，可以防止首次渲染走这里)，移下位置
     if (firstIndex && apiData.commonItems.length > 0) {
@@ -144,7 +161,7 @@ const CustomIndex: FC<IProps> = (props) => {
       const curFormData = getFieldsValue(true);
       const commonList = apiData.commonItems;
       const noCommonList = apiData.noCommonItems;
-      console.log('=====+3,firstIndex变化时');
+      // console.log('=====+3,firstIndex变化时');
       setApiData({
         ...formatFirshIndex(commonList, noCommonList),
       });
@@ -191,7 +208,7 @@ const CustomIndex: FC<IProps> = (props) => {
       ...(apiData.commonItems || []),
       ...(apiData.noCommonItems || []),
     ];
-    console.log('handleInitForm', all);
+    // console.log('handleInitForm', all);
     all.forEach((item: IIndexItemCustom) => {
       const { id, name, formIndex, indexId, references,
         sourceSid, source, referenceList, originReferences } = item;
@@ -259,7 +276,7 @@ const CustomIndex: FC<IProps> = (props) => {
     };
     const newAddInx = addIndexNum + 1;
     setaddIndexNum((pre) => pre + 1);
-    console.log('=====+4,当前页面添加了新的指标时');
+    // console.log('=====+4,当前页面添加了新的指标时');
     setApiData({ ...formatDataAddIndex(newApiData, newAddInx) });
     setTimeout(() => {
       // 这里重新设置回去
@@ -329,7 +346,7 @@ const CustomIndex: FC<IProps> = (props) => {
   };
 
   return (
-    <div className={`${styles.biochemistry} relative`}>
+    <div className="relative">
       <div className="flex justify-end absolute -top-52 -right-10 ">
         <EditIndex
           onSuccess={addIndexSuccess}
