@@ -84,7 +84,11 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     let isNew = true;
     // 唯一性根据这两个指标确定： 图片大分类+子分类
     checkTypes.forEach((item: ICheckTypesItem | ISearchDocumentItem, index) => {
-      if ((item.documentName === params.documentName) && (item.sampleFrom === params.sampleFrom)) {
+      if (
+        item.documentName === params.documentName &&
+        item.sampleFrom === params.sampleFrom &&
+        item.documentId === params.id
+      ) {
         handleCurDocument({
           id: item.documentId,
           name: item.documentName,
@@ -108,17 +112,21 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
             },
           };
         }
-
       }
     });
     // 如果是新添加的大分类，则直接push进去
-    if (isNew) {
+    if (isNew && _type !== 'copy') {
       newCheckTypes = [
         ...checkTypes,
         {
           ...params,
           firstIndex: params.id,
         },
+      ];
+    } else if (_type === 'copy') {
+      newCheckTypes = [
+        ...checkTypes,
+        { ...params },
       ];
     }
     activeType1.current = params.documentId + params.sampleFrom;
@@ -236,6 +244,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
             level1Type={outType}
             firstIndex={item.firstIndex as string}
             initList={getInitList(item)}
+            onCopySuccess={handleSelectTypeIndex}
             selectIndex={item?.selectIndex}
             // 单据和来源等信息,加显时，接口返回的数组格式，需要处理取第一个元素即可，也只有一个元素
             apiParams={{

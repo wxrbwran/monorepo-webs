@@ -32,7 +32,7 @@ const SearchJcd: FC<IProps> = (props) => {
   const [methodList, setMethodList] = useState([]);
   const [nameList, setNameList] = useState<INameItem[]>([]);
   const [selectName, setSelectName] = useState<string | undefined>();
-
+  const sid = window.$storage.getItem('sid');
   useEffect(() => {
     api.image.fetchImageTemplatePart().then(res => {
       setPartsMethods(res);
@@ -81,7 +81,7 @@ const SearchJcd: FC<IProps> = (props) => {
   return (
     <div className={styles.search_jcd}>
       <Row>
-        <Col span={11} className='my-10 flex'>
+        <Col span={11} className="my-10 flex">
           <span className={styles.tit}>检查部位：</span>
           <AutoComplete
             options={partList}
@@ -91,7 +91,7 @@ const SearchJcd: FC<IProps> = (props) => {
             onBlur={handleBlur}
           />
         </Col>
-        <Col span={13} className='my-10 flex pl-28'>
+        <Col span={13} className="my-10 flex pl-28">
           <span className={styles.tit}>检查方法：</span>
           <AutoComplete
             options={methodList}
@@ -102,26 +102,28 @@ const SearchJcd: FC<IProps> = (props) => {
           />
         </Col>
       </Row>
-      {
-        !isEmpty(nameList) && (
-          <div className="mt-10 flex items-center">
-            <span className={styles.tit}>检查名称：</span>
-            <Select style={{ flex: 1 }} onChange={handleSelectJcd} placeholder="请选择检查单">
-              {
-                nameList.map(item => (
-                  <Option value={item.jcdName} key={item.jcdName}>
-                    {
-                      item.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} />
-                    }
-                    <span>{ item.source === 'SYSTEM' && '【官方】'}{item.jcdName}</span>
-                  </Option>
-                ))
-              }
-            </Select>
-            <Button className={styles.add_btn} onClick={handleAddJcd}>添加</Button>
-          </div>
-        )
-      }
+      {!isEmpty(nameList) && (
+        <div className="mt-10 flex items-center">
+          <span className={styles.tit}>检查名称：</span>
+          <Select style={{ flex: 1 }} onChange={handleSelectJcd} placeholder="请选择检查单">
+            {nameList.map((item) => (
+              <Option value={item.jcdName} key={item.jcdName}>
+                {item.source === 'SYSTEM' && <img className="w-16 h-16" src={iconGf} />}
+                {item.source === 'SYSTEM' && <span>{`'[官方]'${item.jcdName}`}</span>}
+                {item.source === 'DOCTOR' && item.sourceSid === sid && (
+                  <span>{`'[自己]'${item.jcdName}`}</span>
+                )}
+                {item.source === 'DOCTOR' && item.sourceSid !== sid && (
+                  <span>{`'[他人]'${item.jcdName}`}</span>
+                )}
+              </Option>
+            ))}
+          </Select>
+          <Button className={styles.add_btn} onClick={handleAddJcd}>
+            添加
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

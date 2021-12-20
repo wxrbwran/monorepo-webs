@@ -89,10 +89,11 @@ const CheckImgStructured: FC<IProps> = (props) => {
   }, [showViewer]);
   return (
     <>
-      <span onClick={handleStructured}>{ children }</span>
+      <span onClick={handleStructured}>{children}</span>
       <DragModal
         wrapClassName="ant-modal-wrap-full"
-        zIndex={1010}
+        // zIndex={1010}
+        style={{ top: 0, height: '100vh' }}
         width="100%"
         visible={showViewer}
         title=""
@@ -101,44 +102,40 @@ const CheckImgStructured: FC<IProps> = (props) => {
         destroyOnClose
       >
         <div>
-          {
-            imgData ? (
-              <div className="flex justify-start items-start mt-10" style={{ minWidth: 1400 }}>
-                <ImgWrap
-                  imageUrl={imgData.url}
+          {imgData ? (
+            <div className="flex justify-start items-start mt-10" style={{ minWidth: 1400 }}>
+              <ImgWrap
+                imageUrl={imgData.url}
+                handleClose={() => setShowViewer(false)}
+                imageId={imgData.imageId}
+                degree={Number(imgData?.degree ?? 0)}
+              />
+              {isLoaded && (
+                <StructuredDetail
+                  hydData={hydData}
+                  jcdData={jcdData}
+                  jcdOriginIds={jcdData.map((item) => item.meta.id)}
+                  imageId={imgData?.imageId}
+                  handleRefresh={handleRefresh}
                   handleClose={() => setShowViewer(false)}
-                  imageId={imgData.imageId}
-                  degree={Number(imgData?.degree ?? 0)}
+                  tempAll={{}}
                 />
-                {
-                  isLoaded && (
-                    <StructuredDetail
-                      hydData={hydData}
-                      jcdData={jcdData}
-                      jcdOriginIds={jcdData.map(item => item.meta.id)}
-                      imageId={imgData?.imageId}
-                      handleRefresh={handleRefresh}
-                      handleClose={() => setShowViewer(false)}
-                      tempAll={{}}
-                    />
-                  )
-                }
+              )}
+            </div>
+          ) : (
+            <div className="h-500 w-full flex items-center justify-center">
+              <Spin size="large" />
+            </div>
+          )}
+          {imgData && (
+            <div className="pl-18 flex">
+              <ExclamationCircleFilled style={{ color: '#FFCA4D', paddingTop: '4px' }} />
+              <div className="ml-3">
+                <p>1.如果图片内含多张单据，点击顶部选择图片类型</p>
+                <p>2.添加新的单据,每一张单据结构化后，一并保存</p>
               </div>
-            ) : (
-              <div className="h-500 w-full flex items-center justify-center"><Spin size="large" /></div>
-            )
-          }
-          {
-            imgData && (
-              <div className="pl-18 flex">
-                <ExclamationCircleFilled style={{ color: '#FFCA4D', paddingTop: '4px' }} />
-                <div className="ml-3">
-                  <p>1.如果图片内含多张单据，点击顶部选择图片类型</p>
-                  <p>2.添加新的单据,每一张单据结构化后，一并保存</p>
-                </div>
-              </div>
-            )
-          }
+            </div>
+          )}
         </div>
       </DragModal>
     </>

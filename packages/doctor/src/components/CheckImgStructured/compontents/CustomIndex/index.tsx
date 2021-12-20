@@ -1,11 +1,12 @@
 import React, {
   FC, useEffect, useState, useMemo, useRef,
 } from 'react';
-import {
-  Form, Button,
-} from 'antd';
+import { Form, Button } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
+import { useSelector, useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
+import CopyDocument from '@/pages/Index_library/components/CopyDocument';
 import * as api from '@/services/api';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
@@ -17,7 +18,7 @@ import styles from './index.scss';
 type ICheckTypes = IApiDocumentItem | ISearchDocumentItem;
 type IApiParams = {
   sampleFrom: string; // 自己补充的必要属性
-} & ICheckTypes;
+} & ICheckTypes & TIndexItem;
 
 // 获取图片详情接口返回的指标item | 搜索点击获取的指标item
 type IIndexItemCustom = {
@@ -50,6 +51,7 @@ interface IProps {
   } | null;
   selectIndex?: any;
   isViewOnly: boolean;
+  onCopySuccess: (param: TDocument, type: string) => void;
 }
 
 const CustomIndex: FC<IProps> = (props) => {
@@ -61,8 +63,10 @@ const CustomIndex: FC<IProps> = (props) => {
     apiParams,
     selectIndex,
     isViewOnly,
+    onCopySuccess,
   } = props;
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
   const { validateFields, setFieldsValue, getFieldsValue } = form;
   const initApiData = {
     commonItems: [],
@@ -71,7 +75,7 @@ const CustomIndex: FC<IProps> = (props) => {
   const [apiData, setApiData] = useState<IApiData>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
   const [formInit, setFormInit] = useState({});
-
+  const curDocument = useSelector((state: IState) => state.document.curDocument);
   const timeAndOrg = useRef({
     measuredAt: initList?.orgAndTime?.measuredAt || new Date().getTime(),
     unknownReport: initList?.orgAndTime?.unknownReport || false,
@@ -160,12 +164,16 @@ const CustomIndex: FC<IProps> = (props) => {
       validateFields()
         .then((values) => {
           console.log('validateFields', values);
+          console.log('apiParams', apiParams);
+
           // apiParams
           const { documentId, documentName, sampleFrom } = apiParams;
           const params: CommonData = {
             documentId,
             documentName,
             documentType: 'HYD',
+            source: apiParams.source,
+            sourceSid: apiParams.sourceSid,
             sampleFroms: [sampleFrom],
             ...timeAndOrg.current,
             indexList: formatSubmitItems(values, itemsLength),
@@ -305,6 +313,22 @@ const CustomIndex: FC<IProps> = (props) => {
     handleSetTimeAndOrg(params);
   };
 
+  const handleCopyDocument = (param: TDocument) => {
+    console.log('handleCopyDocument', param);
+    const doc = {
+      ...param,
+      documentId: param.id,
+      documentName: param.name,
+    };
+    if (onCopySuccess) {
+      dispatch({
+        type: 'document/setCurDocument',
+        payload: doc,
+      });
+      onCopySuccess(doc, 'copy');
+    }
+  };
+
   return (
     <div className={`${styles.biochemistry} relative`}>
       <div className="flex justify-end absolute -top-52 -right-10 ">
@@ -344,20 +368,33 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      { !initList && (
+      {!initList && apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && (
         <div className="mb-10">
-        <EditIndex
-          onSuccess={addIndexSuccess}
-          source="imgAddIndex"
-          documentId={apiParams.documentId}
-          sampleFrom={apiParams.sampleFrom}
-        >
-          <Button type="link" className="text-sm">
-            +添加新指标
-          </Button>
-        </EditIndex>
-      </div>
-      ) }
+          <EditIndex
+            onSuccess={addIndexSuccess}
+            source="imgAddIndex"
+            documentId={apiParams.documentId}
+            sampleFrom={apiParams.sampleFrom}
+          >
+            <Button type="link" className="text-sm">
+              +添加新指标
+            </Button>
+          </EditIndex>
+        </div>
+      )}
+      {!initList &&
+        (apiParams.source === 'SYSTEM' ||
+          (apiParams.source === 'DOCTOR' && apiParams.sourceSid !== sid)) && (
+          <div className="mb-10">
+            <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
+              <Button
+                icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
+              >
+                复制化验单
+              </Button>
+            </CopyDocument>
+          </div>
+      )}
       <Form name={`custom_${formKey}`} form={form}>
         {renderItem()}
       </Form>

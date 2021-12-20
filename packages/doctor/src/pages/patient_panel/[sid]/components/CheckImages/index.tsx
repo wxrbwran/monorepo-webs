@@ -82,33 +82,33 @@ function CheckImages() {
     })), [anaImg, insImg, otherImg]);
   return (
     <>
-      {
-        typeList.map((t) => (
-          <div className={styles.check_img} key={t.title}>
-            <Title text={t.title} />
-            <div className={styles.list}>
-              { t.data.length > 0 ? renderItem(t.data) : (
-                <div className="flex flex-col items-center h-full" style={{ justifyContent: 'center' }}>
-                  <img className="w-50 h-50" src={NoData} alt="" />
-                  <span className="text-gray-300 text-sm mt-6">{`暂无${t.title}`}</span>
-                </div>
-              )}
-            </div>
-            {
-              t.title === '检查单' && (
-                <div className="mt-30">
-                  <Title text="其他图片" />
-                  <div className={styles.list}>
-                    {renderItem(otherImg, true)}
-                  </div>
-                </div>
-              )
-            }
+      {typeList.map((t) => (
+        <div className={styles.check_img} key={t.title}>
+          <Title text={t.title} />
+          <div className={styles.list}>
+            {t.data.length > 0 ? (
+              renderItem(t.data)
+            ) : (
+              <div
+                className="flex flex-col items-center h-full"
+                style={{ justifyContent: 'center' }}
+              >
+                <img className="w-50 h-50" src={NoData} alt="" />
+                <span className="text-gray-300 text-sm mt-6">{`暂无${t.title}`}</span>
+              </div>
+            )}
           </div>
-        ))
-      }
+          {t.title === '检查单' && (
+            <div className="mt-30">
+              <Title text="其他图片" />
+              <div className={styles.list}>{renderItem(otherImg, true)}</div>
+            </div>
+          )}
+        </div>
+      ))}
       <DragModal
-        wrapClassName={`ant-modal-wrap-center ${hideCont ? 'mode_hide' : 'mode_block'}`}
+        // ant-modal-wrap-center
+        wrapClassName={`${hideCont ? 'mode_hide' : 'mode_block'}`}
         mask={!hideCont}
         width="1200px"
         visible={showModal}
