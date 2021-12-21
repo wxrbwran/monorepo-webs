@@ -44,7 +44,7 @@ const SendGroup: FC<IProps> = ({ scopeSources, onGroupChange, choseScopes }: IPr
   const des = choseScope.map(item => item.description);
 
   return (
-    <div>
+    <div className={styles.template_rule}>
       <h2>
         <span className={styles.start}>*</span>发送对象：
       </h2>

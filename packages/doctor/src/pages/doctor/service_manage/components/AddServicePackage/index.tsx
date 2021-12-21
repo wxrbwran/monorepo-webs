@@ -166,6 +166,10 @@ const AddServicePackage: FC<IProps> = (props) => {
     { title: '主管医生', role: Role.UPPER_DOCTOR.id },
     { title: '医生助手', role: Role.LOWER_DOCTOR.id },
     { title: '营养师', role: Role.DIETITIAN.id },
+    { title: '药师', role: Role.PHARAMCIST.id },
+    { title: '康复师', role: Role.KANGFUSHI.id },
+    { title: '心理医生', role: Role.PSYCHOLOGIST.id },
+    { title: '护士', role: Role.TEAMNURSE.id },
   ];
   const handleDel = (sid: string, role: string) => {
     // 过滤掉，sid一致且角色与当前删除角色一致的
@@ -177,7 +181,7 @@ const AddServicePackage: FC<IProps> = (props) => {
     const initWordOrgs = {};
     members.forEach(member => initWordOrgs[member.sid!] = member.sourceNSId);
     return (
-      <div className="mt-15" key={roleInfo.role}>
+      <div className={styles.item_panel} key={roleInfo.role}>
         <div className="text-base font-bold mb-10">{roleInfo.title}</div>
         <div className="flex flex-wrap">
           {
@@ -239,7 +243,9 @@ const AddServicePackage: FC<IProps> = (props) => {
             onChange={(e) => setpackageName(e.target.value)}
           />
           <ChoiceSelfRole callback={handleSelfRole} initData={initSelfInfo} />
-          { roleMembers.map(item => renderDom(item)) }
+          <div className="flex flex-wrap">
+            { roleMembers.map(item => renderDom(item)) }
+          </div>
           <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={debounce(handleSubmit, 500)}>完成</Button>
         </div>
       </DragModal>
