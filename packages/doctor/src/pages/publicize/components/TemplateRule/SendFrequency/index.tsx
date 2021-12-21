@@ -106,7 +106,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
   };
 
   return (
-    <div className={`mt-20 ${styles.send}`}>
+    <div className={styles.send_frequency}>
       <h2>
         <span className={styles.start}></span>发送频率：
       </h2>

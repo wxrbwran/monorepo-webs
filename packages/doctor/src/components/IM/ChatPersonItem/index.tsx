@@ -1,9 +1,8 @@
 import React, { FC, useMemo } from 'react';
 import { useSelector } from 'umi';
 import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
-import { Role } from 'xzl-web-shared/dist/utils/role';
 import IconMore from '@/assets/img/icon_more.png';
-import { getRole } from '@/utils/utils';
+import { getRole, imRoleOrder } from '@/utils/utils';
 import { Dropdown } from 'antd';
 import styles from './index.scss';
 
@@ -32,27 +31,9 @@ const ChatPersonItem: FC<IProps> = (props) => {
   //     });
   //   }
   // };
-  // 各角色排序优先级
-  // 患者 > 科主任 > 独立管理 > 护士 > 研究者 > PM > CRA > CRC
-  // 患者 > 主管医生 > 医生助手 > 营养师 > 护士 > 研究者 > PM > CRA > CRC
-  const orderId: string[] = [
-    Role.PATIENT.id,
-    Role.PATIENT_VIP.id,
-    Role.DEP_HEAD.id,
-    Role.ALONE_DOCTOR.id,
-    Role.UPPER_DOCTOR.id,
-    Role.LOWER_DOCTOR.id,
-    Role.DIETITIAN.id,
-    Role.NURSE.id,
 
-    Role.RESEARCH_PROJECT_DOCTOR.id, // 科研项目医生  31
-    // Role.PROJECT_RESEARCHER.id, // 研究者  36只有在组织架构里有存在，其余出现，均为31角色
-    Role.CRO_PM.id,
-    Role.CRO_CRA.id,
-    Role.CRO_CRC.id,
-  ];
   const compare = (obj1: IInfos, obj2: IInfos) => (
-    orderId.indexOf(obj1.role) - orderId.indexOf(obj2.role)
+    imRoleOrder.indexOf(obj1.role) - imRoleOrder.indexOf(obj2.role)
   );
   // console.log('perso3232n', person);
 

@@ -119,7 +119,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
   }, [choiceModel]);
 
   return (
-    <div>
+    <div className={styles.send}>
       <h2>
         <span className={styles.start}>*</span>首次发送时间：
       </h2>

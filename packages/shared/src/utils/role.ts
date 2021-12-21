@@ -60,7 +60,7 @@ export const Role: RolesMap = {
   SYS_DOCTOR: roleType('ZW7Qew', 129, 120, 128, '系统智能医生'), // 13
   UPPER_DOCTOR: roleType('VWVpeR', 139, 130, 138, '主管医生'), // 14
   LOWER_DOCTOR: roleType('80pOeG', 149, 140, 148, '医生助手'), // 15
-  ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理医生'), // 16
+  ALONE_DOCTOR: roleType('L03Beb', 159, 150, 158, '独立管理'), // 16
 
   COUNSELOR_DOCTOR: roleType('2eAEeG', 169, 160, 168, '顾问医生'), // 17 顾问医生(角色默认在xinzhili - 顾问医生团队)
   CONSOLE_ROOT: roleType('6exPeb', 179, 170, 178, '后台系统Root管理员'), // 18
@@ -91,15 +91,19 @@ export const Role: RolesMap = {
   YL_ADMIN: roleType('bWw2j0', 0, 0, 0, '高级管理员'), // 49 管 养老院高级管理员
   YL_YZ: roleType('YWBka4', 0, 0, 0, '院长'), // 50 院 养老院院长
 
+  DOCTOR_INTELLIGENT_ASSISTANT: roleType('2Wm7je', 0, 0, 0, '医生智能助手'), // 55医生智能助手
+
   NS_OWNER: roleType('80pbO4', 0, 0, 0, '创建人'), // 59 空间所属者/创建者  慢病里叫创建人
 
   DIETITIAN: roleType('6exBPW', 0, 0, 0, '营养师'), // 62 营养师
-  CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'PM'), // CRO业务-PM
-  CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRA'), // CRO业务-CRA
-  CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRC'), //CRO业务-CRC
-
-  DEP_HEAD: roleType('jW23m4', 0, 0, 0, '科主任'), //科主任
-  DOCTOR_INTELLIGENT_ASSISTANT: roleType('2Wm7je', 0, 0, 0, '医生智能助手'), // 医生智能助手
+  CRO_PM: roleType('YWQ1DW', 0, 0, 0, 'PM'), // 63 CRO业务-PM
+  CRO_CRA: roleType('bWl1Z4', 0, 0, 0, 'CRA'), // 64 CRO业务-CRA
+  CRO_CRC: roleType('keajR0', 0, 0, 0, 'CRC'), //65 CRO业务-CRC
+  DEP_HEAD: roleType('jW23m4', 0, 0, 0, '科主任'), //66 科主任
+  PHARAMCIST: roleType('Y4n2b4', 0, 0, 0, '药师'), //67 药师
+  KANGFUSHI: roleType('r4qME4', 0, 0, 0, '康复师'), //68 康复师
+  PSYCHOLOGIST: roleType('Y0ZxD4', 0, 0, 0, '心理医生'), //69 心理医生
+  TEAMNURSE: roleType('6e89J0', 0, 0, 0, '护士'), //69 团队护士（医疗服务包里的护士，不是分配工单的护士）
 };
 
 export function fetchRolePropById(id: string) {
