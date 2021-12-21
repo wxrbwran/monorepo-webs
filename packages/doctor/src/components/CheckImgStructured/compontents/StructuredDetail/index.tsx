@@ -33,7 +33,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     const datas = [...hydTab, ...jctAndOther];
     return isEmpty(datas) ? [{ outType: 'JCD' }] : datas;
   };
-  console.log('initTypeTabs', initTypeTabs());
   const sid = window.$storage.getItem('sid');
   const dispatch = useDispatch();
   const isRefreshParent = useRef(false);
@@ -47,9 +46,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const [saveSuccess, setSaveSuccess] = useState(0);
 
   useEffect(() => {
-    const tabs = initTypeTabs();
+    const tabs: any[] = initTypeTabs();
     setTypeTabs(tabs);
-    setActiveType(tabs[0].outType);
+    setActiveType(tabs.filter(item => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(item.outType))?.[0]?.outType);
     setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
   }, [hydData, jcdData]);
 
@@ -166,14 +165,15 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     setTypeTabs(newTabs);
   };
 
+  const showTypeTabs = typeTabs.filter(typeItem => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(typeItem.outType));
   const fetInitData = (inx: number) => {
     console.log(34333, inx);
     console.log('typeTabs', typeTabs);
     // 化验单是 documentList， 检查单是initData
-    if (typeTabs[inx]?.documentList) {
-      return typeTabs?.[inx];
-    } else if (typeTabs[inx]?.initData) {
-      return typeTabs[inx]?.initData;
+    if (showTypeTabs[inx]?.documentList) {
+      return showTypeTabs?.[inx];
+    } else if (showTypeTabs[inx]?.initData) {
+      return showTypeTabs[inx]?.initData;
     }
     return [];
   };
@@ -251,7 +251,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
                 onChange={(tab: string) => setActiveType(tab)}
               >
                 {
-                  typeTabs.filter(typeItem => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(typeItem.outType))
+                  showTypeTabs
                     .map((itemTab: any, inx) => (
                     <TabPane
                       tab={outTypes?.[itemTab.outType]}

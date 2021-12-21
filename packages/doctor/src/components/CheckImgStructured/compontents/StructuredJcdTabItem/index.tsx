@@ -26,6 +26,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
   const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, imageId, outType, refreshTabInx, tabInx } = props;
   const { tabKey } = initData.meta;
   const initEmptyData: { [key: string]: IQaItem[] } = { COMPLETION: [], CHOICE: [], TEXT: [], BASIC: [] };
+  const doctorSid =  window.$storage.getItem('sid');
   const fetchInitData = (data: IQaItem[]) => {
     let initD: { [key: string]: IQaItem[] } = cloneDeep(initEmptyData);
     data.forEach(item => {
@@ -71,13 +72,17 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
       Promise.all(Object.values(topicCallbackFns.current)
         .map((fn) => fn())).then((topicList) => {
         console.log('=======883883', topicList);
+        const meta = initData.meta;
+        if (meta.id) {
+          delete meta.id; // 结构化时不要回传id
+        }
         resolve({
           data: topicList,
           meta: {
             imageId,
             createdTime: clickSaveTime,
             title: outType,
-            ...initData.meta,
+            ...meta,
             sid: window.$storage.getItem('patientSid'),
           },
         });
@@ -100,12 +105,13 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
     isViewOnly,
     templateId: initData.meta.id,
     meta: initData.meta,
-    isFirstEdit: !initData.data, // 是否是修改化验单
+    // 是否显示编辑按钮  1.如果有没有initData.data（首次编辑）并且模板创建人是自己
+    isShowEdit: !initData.data && initData.meta.sid === doctorSid,
   };
   console.log('initTopic', initTopic);
   return (
     <div className={`${styles.topic_list}`}>
-      <div>复制并修改单据</div>
+
       {
         refreshTabInx !== tabInx ? (
           <>

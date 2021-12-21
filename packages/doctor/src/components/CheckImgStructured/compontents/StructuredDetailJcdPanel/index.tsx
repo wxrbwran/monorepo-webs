@@ -32,6 +32,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const [refreshTabInx, setRefreshTsbInx] = useState<null | number>(null);
   const timer = useRef<any>(null);
   console.log( setJcdList, setActiveTabKey);
+  const doctorSid =  window.$storage.getItem('sid');
   const handleRemoveType = (targetItem: IJcdTabItem) => {
     const newJcdList = jcdList.filter(item => item.meta.tabKey !== targetItem.meta.tabKey);
     if (targetItem.meta.tabKey === activeTabKey && !isEmpty(newJcdList)) {
@@ -53,6 +54,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
     setCreateJcdNum(prev => prev + 1);
   };
   const handleEditJcdNameSuccess = (jcdInfo: { id: string; jcdName: string; }) => {
+    console.log('jcdInfo', jcdInfo);
     jcdList.forEach(item => {
       if (item.meta.id === jcdInfo.id) {
         item.meta.jcdName = jcdInfo.jcdName;
@@ -92,6 +94,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
                 templateId={item.meta.id}
                 onSuccess={handleEditJcdNameSuccess}
                 updateCreateJcdNum={updateCreateJcdNum}
+                outType={outType}
               >
                 <span>
                   {item.meta.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} /> }
@@ -112,16 +115,32 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
           </Popconfirm>
         }
       >
-        <StructuredJcdTabItem
-          initData={item}
-          imageId={imageId}
-          outType={outType}
-          isViewOnly={isViewOnly}
-          jcdCallbackFns={jcdCallbackFns}
-          setJcdCallbackFns={setJcdCallbackFns}
-          refreshTabInx={refreshTabInx}
-          tabInx={inx}
-        />
+        <div className={styles.jcd_panel_item}>
+         {!item.data && item.meta.sid !== doctorSid && <div className={styles.copy_temp}>
+          <CreateJcd
+            actionType="copy"
+            initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
+            templateId={item.meta.id}
+            onSuccess={handleAddJcdTab}
+            updateCreateJcdNum={updateCreateJcdNum}
+            outType={outType}
+          >
+            <span>
+              复制并修改单据
+            </span>
+          </CreateJcd>
+          </div>}
+          <StructuredJcdTabItem
+            initData={item}
+            imageId={imageId}
+            outType={outType}
+            isViewOnly={isViewOnly}
+            jcdCallbackFns={jcdCallbackFns}
+            setJcdCallbackFns={setJcdCallbackFns}
+            refreshTabInx={refreshTabInx}
+            tabInx={inx}
+          />
+        </div>
       </TabPane>
     ),
   ), [jcdList, isViewOnly, initData, refreshTabInx]);

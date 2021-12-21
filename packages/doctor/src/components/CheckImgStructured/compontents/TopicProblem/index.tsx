@@ -11,10 +11,10 @@ interface IProps {
   initData: IQuestions[];
   isViewOnly: boolean;
   templateId: string;
-  isFirstEdit: boolean;
+  isShowEdit: boolean;
 }
 function TopicProblem(props: IProps) {
-  const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
   console.log('initDatatext', initData);
   const [questions, setQuestions] = useState<IQuestions[]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
@@ -58,7 +58,7 @@ function TopicProblem(props: IProps) {
   };
   const editProps = {
     templateId,
-    isFirstEdit,
+    isShowEdit,
     handleDelQuestion,
     handleSaveQuestion,
     topicType: 'TEXT',

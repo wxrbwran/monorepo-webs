@@ -17,6 +17,7 @@ interface IProps {
   outType: string;
   updateCreateJcdNum: () => void;
 }
+// 新建、编辑、复制： 编辑和复制存在templateId，添加没有
 const CreateJcd: FC<IProps> = (props) => {
   const { actionType, children, initData, onSuccess, updateCreateJcdNum, templateId, outType } = props;
   const [form] = Form.useForm();
@@ -26,8 +27,9 @@ const CreateJcd: FC<IProps> = (props) => {
   useEffect(() => {
     if (initData) {
       if (actionType === 'add') {
+        // 只有添加时候 ，存在jcdName不确定的情况，这里处理一下
         const { part, method } = initData;
-        let jcdName = '';
+        let jcdName = initData?.jcdName || '';
         if (!jcdName) {
           if (!!part) jcdName += part;
           if (!!method) jcdName += method;
@@ -44,8 +46,8 @@ const CreateJcd: FC<IProps> = (props) => {
   };
 
   const handleSubmit = (values) => {
-    if (actionType === 'add') {
-      const params = {
+    if (['add', 'copy'].includes(actionType)) {
+      const params = actionType === 'add' ? {
         list: [
           {
             meta: {
@@ -58,9 +60,14 @@ const CreateJcd: FC<IProps> = (props) => {
             },
           },
         ],
+      } : {
+        id: templateId,
+        ...values,
+        source: 'DOCTOR',
       };
-      api.image.putImageTopicTemplate(params).then((res: any) => {
-        msg('添加成功');
+      const request = actionType === 'copy' ? api.indexLibrary.copyImageTemplate : api.image.putImageTopicTemplate;
+      request(params).then((res: any) => {
+        msg('保存成功');
         onSuccess({
           sid: doctorSid,
           source: 'DOCTOR',
@@ -70,7 +77,7 @@ const CreateJcd: FC<IProps> = (props) => {
         setShowModal(false);
         updateCreateJcdNum();
       }).catch((err: any) => {
-        msg(err?.result || '添加失败', 'error');
+        msg(err?.result || '保存失败', 'error');
       });
     } else {
       const params = {
@@ -93,7 +100,8 @@ const CreateJcd: FC<IProps> = (props) => {
   };
 
   const rules = [{ required: true, message: '请输入' }];
-  const clickProp = actionType === 'add' ? { onClick: handleShowModal } : { onDoubleClick: handleShowModal };
+  const clickProp = actionType === 'edit' ? { onDoubleClick: handleShowModal } : { onClick: handleShowModal };
+  const actionTit = { add: '新建', edit: '编辑', copy: '复制' };
   return (
     <>
       <span { ...clickProp }>{children}</span>
@@ -102,7 +110,7 @@ const CreateJcd: FC<IProps> = (props) => {
         zIndex={1011}
         width="600px"
         visible={showModal}
-        title={`${actionType === 'add' ? '新建' : '编辑'}${outType === 'JCD' ? '检查单' : '其他医学单据'}`}
+        title={`${actionTit[actionType]}${outType === 'JCD' ? '检查单' : '其他医学单据'}`}
         onCancel={() => setShowModal(false)}
         footer={null}
         destroyOnClose

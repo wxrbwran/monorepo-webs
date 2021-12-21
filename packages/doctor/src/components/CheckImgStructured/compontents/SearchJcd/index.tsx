@@ -8,8 +8,9 @@ import styles from './index.scss';
 
 const { Option } = Select;
 type IPartMethod = {
-  part: string;
-  method: string
+  part?: string;
+  method?: string
+  jcdName?: string;
 };
 type INameItem = {
   jcdName: string;
@@ -95,6 +96,7 @@ const SearchJcd: FC<IProps> = (props) => {
   };
   const handleSearchOtherName = (val: string) => {
     console.log('ddddd', val);
+    changePartMethod({ 'jcdName': val });
     if (val) {
       api.image.fetchImageTemplateName({ jcdName: val }).then(res => {
         console.log('res23232', res);
@@ -102,6 +104,7 @@ const SearchJcd: FC<IProps> = (props) => {
           return { ...item, value: item.jcdName };
         });
         setOtherNames(names);
+        handleShowAddJctBtn(!!isEmpty(res.jcdTitleSet));
       });
     }
   };

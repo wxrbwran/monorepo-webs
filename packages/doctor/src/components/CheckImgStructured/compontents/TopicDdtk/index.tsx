@@ -11,11 +11,11 @@ interface IProps {
   isViewOnly: boolean;
   templateId: string; // 检查单模板id（单据id)
   meta: IMeta;
-  isFirstEdit: boolean; // 是否首次结构化
+  isShowEdit: boolean; // 是否首次结构化
 }
 function Ddtk(props: IProps) {
   console.log('ddtkprops', props);
-  const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
   const [qasGroups, setQasGroups] = useState<IQaItem[][]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[][]>([]);
   const handleSave = () => new Promise((resolve) => {
@@ -79,7 +79,7 @@ function Ddtk(props: IProps) {
     templateId,
     handleDelQuestion,
     handleSaveQuestion,
-    isFirstEdit,
+    isShowEdit,
     topicType: 'COMPLETION',
   };
   return (

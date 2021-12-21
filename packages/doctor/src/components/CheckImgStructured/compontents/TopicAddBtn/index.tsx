@@ -9,7 +9,7 @@ import { EditOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
 const TopicAddBtn: FC<IAddTopicProps> = (props) => {
-  const { topicType, actionType, isFirstEdit } = props;
+  const { topicType, actionType, isShowEdit } = props;
   const [showModal, setshowModal] = useState(false);
   const closeModal = () => {
     setshowModal(false);
@@ -38,7 +38,7 @@ const TopicAddBtn: FC<IAddTopicProps> = (props) => {
   return (
     <div className={styles.btn_wrap}>
       {
-        isFirstEdit && (
+        isShowEdit && (
           actionType === 'add' ? (
             <div className={styles.btn}>
               <span className="cursor-pointer" onClick={debounce(handleShow, 300)}>
