@@ -1,7 +1,7 @@
 import React, {
   FC, useEffect, useState, useMemo, useRef,
 } from 'react';
-import { Form, Button } from 'antd';
+import { Form, Button, message } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
@@ -111,18 +111,16 @@ const CustomIndex: FC<IProps> = (props) => {
       sourceSid: apiParams.sourceSid,
       sid,
     };
-    api.indexLibrary
-      .fetchIndexDocumentIndex(params)
-      .then(({ list }: { list: IIndexItemCustom[] }) => {
-        const commonItems = list.filter((item) => item.common);
-        const noCommonItems = list.filter((item) => !item.common);
-        // 如果有指定首行展示哪个指标，这里移动到第一个
-        const data: IApiData = firstIndex
-          ? formatFirshIndex(commonItems, noCommonItems)
-          : { commonItems, noCommonItems };
-        // console.log('=====+2,initList没数据，请求接口时');
-        setApiData({ ...formatDataAddIndex(data, addIndexNum) });
-      });
+    const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary
+      .fetchIndexDocumentIndex(params);
+    const commonItems = list.filter((item) => item.common);
+    const noCommonItems = list.filter((item) => !item.common);
+    // 如果有指定首行展示哪个指标，这里移动到第一个
+    const data: IApiData = firstIndex
+      ? formatFirshIndex(commonItems, noCommonItems)
+      : { commonItems, noCommonItems };
+    // console.log('=====+2,initList没数据，请求接口时');
+    setApiData({ ...formatDataAddIndex(data, addIndexNum) });
   };
   useEffect(() => {
     console.log('curtomIndex1');
@@ -141,11 +139,12 @@ const CustomIndex: FC<IProps> = (props) => {
 
   // 刷新单据
   useEffect(() => {
-    const listener = (id: string) => {
+    const listener = async (id: string) => {
       console.log('apiParams.id', apiParams.documentId);
       console.log('id', id);
       if (apiParams.documentId === id) {
-        fetchIndexDocumentIndex();
+        await fetchIndexDocumentIndex();
+        message.success('已刷新单据');
       }
     };
     event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
@@ -179,8 +178,8 @@ const CustomIndex: FC<IProps> = (props) => {
         (apiData?.commonItems?.length || 0) + (apiData?.noCommonItems?.length || 0);
       validateFields()
         .then((values) => {
-          console.log('validateFields', values);
-          console.log('apiParams', apiParams);
+          // console.log('validateFields', values);
+          // console.log('apiParams', apiParams);
 
           // apiParams
           const { documentId, documentName, sampleFrom } = apiParams;
@@ -194,7 +193,7 @@ const CustomIndex: FC<IProps> = (props) => {
             ...timeAndOrg.current,
             indexList: formatSubmitItems(values, itemsLength),
           };
-          console.log('params22221', params);
+          // console.log('params22221', params);
           resolve(params);
         })
         .catch((err) => {
