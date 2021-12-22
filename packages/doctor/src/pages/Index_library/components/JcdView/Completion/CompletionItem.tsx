@@ -1,34 +1,30 @@
 
 import React, { FC } from 'react';
-import { Space } from 'antd';
+import { Space, Input } from 'antd';
 interface IProps {
-  item: TIndexItem;
+  groupQas: TIndexItem[];
+  inx: number;
 }
 
 const CompletionItem: FC<IProps> = (props) => {
-  const { item, children } = props;
-  const { group } = item;
-  const groupNumberSize = (): number => {
-    return group?.split('-').length || 0;
-  };
-  const curPosition = () => {
-    const groupNumber = group?.split('-');
-    return groupNumber?.[groupNumber.length - 1];
-  };
-
+  const { groupQas, children, inx } = props;
   return (
     <div>
-      {groupNumberSize() === 2 && (
-        <Space className="mb-10">
-          <h2 className="font-bold text-base">{item.question}</h2>
-          {children}
-        </Space>
-      )}
-      {groupNumberSize() >= 3 && (
-        <div className="mb-20">
-          <span>{`${curPosition()}. ${item.question}: ${item.answer?.[0] || ''}`}</span>
-        </div>
-      )}
+      {
+        groupQas.map((item, index: number) => {
+          return index === 0 ? (
+            <Space className="mb-10 flex items-center topic_title" key={item.uuid! + item.question!}>
+              <div className="font-bold text-base">{inx + 1}.{item.question}</div>
+              {children}
+            </Space>
+          ) : (
+            <div className="mb-20 flex" key={item.uuid! + item.question!}>
+              <span>{`${index}. ${item.question}`}</span>
+              <div className="w-300 ml-10"><Input placeholder="请输入答案" /></div>
+            </div>
+          );
+        })
+      }
     </div>
   );
 };

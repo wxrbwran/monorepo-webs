@@ -19,6 +19,7 @@ const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) 
   const { actionType, handleDelQuestion, handleSaveQuestion, closeModal, templateId, initData, editGroupInx } = props;
   const initQa = initData ? cloneDeep(initData as IQaItem) : { ...cloneDeep(checkboxData), uuid: uuid() };
   const [qa, setQa] = useState<IQaItem>(initQa);
+  console.log('propsradioooo', props);
   const handleEditCont = (e: any, type: string) => {
     if (type === 'question') {
       qa[type] = e.target.value;
@@ -98,7 +99,7 @@ const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) 
   };
   return (
     <div
-      className={styles.choice}
+      className={styles.add_choice}
       onClick={(e) => e.stopPropagation()}
     >
       <div className="bg-gray-50 p-10 mb-15">

@@ -28,6 +28,8 @@ declare type TIndexItem = {
   isAdd?: boolean;
   answer?: string[] | string | undefined;
   uuid?: number;
+  createdTime?: number;
+  options?: string[];
 };
 
 declare type TReference = {

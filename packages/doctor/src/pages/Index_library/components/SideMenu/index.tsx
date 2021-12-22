@@ -85,6 +85,7 @@ const SideMenu: FC = () => {
     };
 
     const res = await api.indexLibrary.fetchImageTemplate(params);
+    console.log('======检查单', res);
     if (res.list.length > 0) {
       const allTemplate: TIndexItem[] = res.list.map((tem: TTemplate) => tem.meta);
       const jcds: TIndexItem[] = allTemplate.filter((tem) => tem.title === 'JCD');

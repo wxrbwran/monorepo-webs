@@ -2,9 +2,9 @@ import React, { FC, useState } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { debounce } from 'lodash';
 import { IAddTopicProps } from '../type';
-import TopicAddDdtk from '../TopicAddDdtk';
-import TopicAddProblem from '../TopicAddProblem';
-import TopicAddChoice from '../TopicAddChoice';
+import TopicAddDdtk from './AddDdtk';
+import TopicAddProblem from './AddProblem';
+import TopicAddChoice from './AddChoice';
 import { EditOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
