@@ -1,0 +1,21 @@
+declare const colors: any;
+declare const spacing: any;
+declare const liteSpacing: any;
+declare const split12: {
+    '1/2': string;
+    '1/3': string;
+    '2/3': string;
+    '1/4': string;
+    '3/4': string;
+    '1/5': string;
+    '2/5': string;
+    '3/5': string;
+    '4/5': string;
+    '1/6': string;
+    '5/6': string;
+    '1/12': string;
+    '5/12': string;
+    '7/12': string;
+    '11/12': string;
+};
+declare const config: any;
