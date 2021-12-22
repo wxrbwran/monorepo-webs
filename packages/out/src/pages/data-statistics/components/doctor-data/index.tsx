@@ -112,7 +112,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
           doctorsChartData.seriesData.push({
             name: curDoc[0].name,
             type: 'line',
-            data: curDoc.map(item => item.percent * 100),
+            data: curDoc.map(item => item.percent * 1000 / 10),
             imCount: curDoc.map(item => {
               return {
                 receiveCount: item.receiveCount,
@@ -127,13 +127,13 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
   };
   const fetchSfRatio = (datas: any[]) => {
     // setSfData
-    const sfDatas = { ...initSfRatio };
+    const sfDatas: any = { ...initSfRatio };
     datas.map(docItem => {
       console.log('====32', docItem);
       sfDatas.xAxisData.push(docItem.name);
       sfDatas.seriesData[0].data.push(docItem.sendSfCount);
       sfDatas.seriesData[1].data.push(docItem.receiveSfCount);
-      sfDatas.seriesData[2].data.push(Number(docItem.sfRatio) * 100);
+      sfDatas.seriesData[2].data.push(Number(docItem.sfRatio) * 1000 / 10);
     });
     console.log('xxcdsfad', sfDatas);
     setSfData(sfDatas);
@@ -193,7 +193,7 @@ const DoctorData: FC<IDocList> = ({ doctorList }) => {
         />
         <span className="ml-30 mr-10">时间范围</span>
         <RangePicker
-          style={{ width: 236 }}
+          style={{ width: 250 }}
           onChange={val => setValue(val)}
           disabledDate={disabledDate} // 时间范围最多365
           onCalendarChange = {val => setDates(val)}

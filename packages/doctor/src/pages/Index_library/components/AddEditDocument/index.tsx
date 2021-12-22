@@ -20,7 +20,7 @@ const AddEditDocument: FC<IProps> = (props) => {
   const [showModal, setshowModal] = useState(false);
   const [form] = Form.useForm();
   const sid = window.$storage.getItem('sid');
-
+  // console.log('添加record', record);
   useEffect(() => {
     if (record) {
       form.setFieldsValue({ ...record });
@@ -57,7 +57,6 @@ const AddEditDocument: FC<IProps> = (props) => {
           creatorSid: params.sourceSid,
           createdTime: +new Date(),
           title: type,
-          jcdName: params.name,
         };
         let res = {};
         if (mode === 'add') {
@@ -76,17 +75,18 @@ const AddEditDocument: FC<IProps> = (props) => {
             ...params,
           });
         }
+        console.log('393993', res);
         event.emit('refershMenu', {
-          id: res.meta.id,
+          id: res?.meta?.id || record?.id,
           jcdName: params.jcdName,
           title: type,
           ...params,
         });
       }
-      message.success('添加成功');
+      message.success('保存成功');
       setshowModal(false);
     } catch (err: any) {
-      message.error(err?.result || '添加失败');
+      message.error(err?.result || '保存失败');
     }
   };
   const layout = {
@@ -100,7 +100,7 @@ const AddEditDocument: FC<IProps> = (props) => {
     <div>
       <span onClick={() => setshowModal(true)}>{children}</span>
       <DragModal
-        title="添加"
+        title={mode === 'add' ? '添加' : '编辑'}
         footer={null}
         width={600}
         visible={showModal}
@@ -138,7 +138,7 @@ const AddEditDocument: FC<IProps> = (props) => {
               <>
                 <Form.Item
                   label={`${documentType[type]}名称`}
-                  name="name"
+                  name="jcdName"
                   rules={[{ required: true, message: `请输入${documentType[type]}名称!` }]}
                 >
                   <Input placeholder={`请输入${documentType[type]}名称`} />

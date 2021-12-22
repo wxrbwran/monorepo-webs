@@ -31,10 +31,16 @@ export const handleQuestions = async ({
   }
 };
 
-export const handleQuestionAnswer = (q: TIndexItem): TIndexItem => {
+export const handleQuestionAnswer = (q: TIndexItem, createdTime: number, inx): TIndexItem => {
   if (!Array.isArray(q.answer)) {
-    q.answer = (q.answer as string | undefined) ? [q.answer as string] : [];
+    // q.answer = (q.answer as string | undefined) ? [q.answer as string] : [];
+    // 指标库创建问题模板，不保存答案
+    q.answer = [];
   }
+  if (createdTime && !q.createdTime) {
+    q.createdTime = createdTime;
+  }
+  q.group = `1-1-${inx}`;
   return q;
 };
 

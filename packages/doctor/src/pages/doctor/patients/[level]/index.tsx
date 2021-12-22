@@ -10,7 +10,7 @@ import {
 import Organization from '@/components/Selects/PatientOrgs';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/dist/utils/conditions';
-
+import { doctorRoles, IRoleItem } from '@/utils/tools';
 import {
   name,
   org,
@@ -52,10 +52,8 @@ function Patients() {
 
   const [depOptions, setOptions] = useState({ ...getInitOptions() });
   const [pageAt, setPageAt] = useState<number>(1);
-
   // 慢病医生角色
-  const isDoctor = ['alone_doctor', 'upper_doctor', 'lower_doctor', 'dietitian'].includes(level);
-
+  const isDoctor = (Object.values(doctorRoles) as IRoleItem[]).map(item => item.url).includes(level);
   // 切换左侧菜单or刷新页面or从患者详情返回列表页面保留筛选搜索分页条件
   useEffect(() => {
     const newOptions = getInitOptions();

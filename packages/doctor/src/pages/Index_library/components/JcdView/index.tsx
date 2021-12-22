@@ -1,13 +1,14 @@
 import React, { FC, useState, useEffect } from 'react';
-import { useSelector /*, useLocation */ } from 'umi';
+import { useSelector, useLocation } from 'umi';
 import { Space, Button } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
-import { documentMap } from 'xzl-web-shared/dist/utils/consts';
+import { documentMap, documentTypeSource } from 'xzl-web-shared/dist/utils/consts';
 import CopyDocument from '../../components/CopyDocument';
 import CompletionTemplate from './Completion/CompletionTemplate';
 import RadioTemplate from './Radio/RadioTemplate';
 import TextTemplate from './Text/TextTemplate';
+import styles from './index.scss';
 
 interface IProps {
   id: string;
@@ -16,7 +17,9 @@ interface IProps {
 
 const JcdView: FC<IProps> = (props) => {
   const { id, type } = props;
-  // const location = useLocation();
+  const { query: { src } } = useLocation();
+  console.log('fdfdfdsss', location);
+
   const curDocument = useSelector((state: IState) => state.document.curDocument);
   const [completions, setCompletions] = useState<TIndexItem[]>([]);
   const [radioAndCheckboxs, setRadioAndCheckboxs] = useState<TIndexItem[]>([]);
@@ -41,11 +44,19 @@ const JcdView: FC<IProps> = (props) => {
     getJcdTemplate();
   };
 
+  console.log('curDocument', curDocument);
+  console.log('======32', src);
+  const templateProps = {
+    id,
+    type,
+    onSuccess,
+    isShowEdit: src === 'ONESELF',
+  };
   return (
-    <div className="w-full">
+    <div className={`w-full ${styles.topic_list}`}>
       <h2 className="font-bold text-base mr-20 mt-10 p-20">
         {curDocument.type && (
-          <span className="inline-block mr-10">{`${documentMap[curDocument.type]}-系统添加-${
+          <span className="inline-block mr-10">{`${documentMap[curDocument.type]}-${documentTypeSource[src]}-${
             curDocument.name
           }`}</span>
         )}
@@ -56,9 +67,9 @@ const JcdView: FC<IProps> = (props) => {
         </CopyDocument>
       </h2>
       <Space direction="vertical" className="w-full px-20">
-        <CompletionTemplate id={id} type={type} onSuccess={onSuccess} questions={completions} />
-        <RadioTemplate id={id} type={type} onSuccess={onSuccess} questions={radioAndCheckboxs} />
-        <TextTemplate id={id} type={type} onSuccess={onSuccess} questions={texts} />
+        <CompletionTemplate { ...templateProps } questions={completions} />
+        <RadioTemplate { ...templateProps } questions={radioAndCheckboxs} />
+        <TextTemplate { ...templateProps } questions={texts} />
       </Space>
     </div>
   );

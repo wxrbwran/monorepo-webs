@@ -6,25 +6,31 @@ import { useDispatch } from 'react-redux';
 import * as api from '@/services/api';
 import StructuredDetailHydPanel from '../StructuredDetailHydPanel';
 import StructuredDetailJcdPanel from '../StructuredDetailJcdPanel';
-import { outTypes } from '../utils';
+import { outTypes, formatJcdSubmitData } from '../utils';
 import styles from './index.scss';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
 import { CloseOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
-  const { hydData, jcdData, imageId, handleRefresh, handleClose, // jcdOriginIds,
+  const { hydData, jcdData, imageId, handleRefresh, handleClose, jcdOriginIds,
   } = props;
-  // console.log('hydData232', hydData);
-  // console.log('jcdData', jcdData);
+  console.log('hydData232', hydData);
+  console.log('jcdData', jcdData);
   const initTypeTabs = () => {
-    const jcdTabs = jcdData.map((jctItem: ITopicItemApi) => {
-      return {  ...jctItem, outType: jctItem.meta.title };
-    });
+    let jctAndOther = [];
+    const jcdD = jcdData.filter(item => item.meta.title === 'JCD');
+    const otherD = jcdData.filter(item => item.meta.title === 'OTHER');
+    if (!isEmpty(jcdD)) {
+      jctAndOther.push({ outType: 'JCD', initData: jcdD });
+    }
+    if (!isEmpty(otherD)) {
+      jctAndOther.push({ outType: 'OTHER', initData: otherD });
+    }
     const hydTab = hydData.map((hydItem: IApiDocumentList) => {
       return { ...hydItem, outType: hydItem.outType };
     });
-    const datas = [...hydTab, ...jcdTabs];
+    const datas = [...hydTab, ...jctAndOther];
     return isEmpty(datas) ? [{ outType: 'JCD' }] : datas;
   };
   const sid = window.$storage.getItem('sid');
@@ -40,9 +46,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const [saveSuccess, setSaveSuccess] = useState(0);
 
   useEffect(() => {
-    const tabs = initTypeTabs();
+    const tabs: any[] = initTypeTabs();
     setTypeTabs(tabs);
-    setActiveType(tabs[0].outType);
+    setActiveType(tabs.filter(item => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(item.outType))?.[0]?.outType);
     setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
   }, [hydData, jcdData]);
 
@@ -79,7 +85,20 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       message.error(err?.result || '保存失败');
     });
   };
-
+  const saveJcdData = (params) => {
+    // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
+    if (!isEmpty(jcdOriginIds) || !isEmpty(params.list)) {
+      params.originIds = jcdOriginIds;
+      api.image.putImageJcdAndOther(params).then(() => {
+        console.log('添加检查单成功');
+        setSaveSuccess(prev => prev + 1);
+      }).catch((err: any) => {
+        console.log('添加检查单失败', err);
+      });
+    } else {
+      setSaveSuccess(prev => prev + 1);
+    }
+  };
   const handleSaveClick = async () => {
     if (isViewOnly) {
       setisViewOnly(false);
@@ -110,8 +129,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           .map((fn) => fn(clickSaveTime)))
           .then((list) => {
             console.log('=====jcdlist', list.flat(5));
-            // const { tempList, jcdList } = formatJcdSubmitData(list, clickSaveTime);
-            // saveJcdData(jcdList);
+            const { jcdList } = formatJcdSubmitData(list, clickSaveTime);
+            console.log('jcdList', jcdList);
+            saveJcdData(jcdList);
           }).catch((err) => {
             console.log('请完善检查单后提交！err', err);
             message.error('请完善检查单后提交！');
@@ -145,12 +165,15 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     setTypeTabs(newTabs);
   };
 
+  const showTypeTabs = typeTabs.filter(typeItem => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(typeItem.outType));
   const fetInitData = (inx: number) => {
     console.log(34333, inx);
     console.log('typeTabs', typeTabs);
-    // 化验单是 documentList， 检查单是data
-    if (typeTabs[inx]?.documentList || typeTabs[inx]?.data) {
-      return typeTabs?.[inx];
+    // 化验单是 documentList， 检查单是initData
+    if (showTypeTabs[inx]?.documentList) {
+      return showTypeTabs?.[inx];
+    } else if (showTypeTabs[inx]?.initData) {
+      return showTypeTabs[inx]?.initData;
     }
     return [];
   };
@@ -188,6 +211,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       return dom;
     };
   }, [isViewOnly, typeTabs]);
+  console.log('typeTabs909', typeTabs);
   const typeTabsText = typeTabs.map(typeItem => typeItem.outType);
   return (
     <div className={`flex-1 mx-20 mt-10 ${styles.structrued} ${isViewOnly ? styles.disabled : ''}`}>
@@ -227,7 +251,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
                 onChange={(tab: string) => setActiveType(tab)}
               >
                 {
-                  typeTabs.filter(typeItem => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(typeItem.outType))
+                  showTypeTabs
                     .map((itemTab: any, inx) => (
                     <TabPane
                       tab={outTypes?.[itemTab.outType]}

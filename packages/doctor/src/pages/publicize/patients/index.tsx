@@ -121,6 +121,8 @@ function Patients() {
     window.$storage.setItem('keyWord', '');
     return () => {
       window.$storage.setItem('keyWord', '');
+      clearTimeout(timer);
+      setLoading(false);
       // dispatch({
       //   type: 'education/setCurrentOrgInfo',
       //   payload: {},

@@ -50,15 +50,10 @@ const CopyDocument: FC<IProps> = (props) => {
         // console.log("copy hyd", res);
         event.emit('refershMenu', res);
       } else if (['JCD', 'OTHER'].includes(type)) {
-        params = {
-          ...params,
-          sid: params.sourceSid,
-          createdTime: +new Date(),
-          title: type,
-        };
         const res = await api.indexLibrary.copyImageTemplate({
           id: document?.id,
-          ...params,
+          source: 'DOCTOR',
+          ...values,
         });
         event.emit('refershMenu', {
           id: res.meta.id,

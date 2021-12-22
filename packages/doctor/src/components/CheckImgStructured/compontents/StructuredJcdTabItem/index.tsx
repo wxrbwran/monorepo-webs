@@ -8,6 +8,7 @@ import styles from './index.scss';
 import { IJcdTabItem, IQaItem } from '../type';
 import { cloneDeep } from 'lodash';
 import * as api from '@/services/api';
+import { Spin } from 'antd';
 
 interface IProps {
   jcdCallbackFns: any; // 保存时候的回调
@@ -16,19 +17,22 @@ interface IProps {
   initData: IJcdTabItem;
   isViewOnly: boolean;
   outType: string; //JCT  OTHER
+  refreshTabInx: number | null;
+  tabInx: number;
 }
 
 const StructuredJcdTabItem: FC<IProps> = (props) => {
   console.log('gggprops', props);
-  const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, imageId, outType } = props;
+  const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, imageId, outType, refreshTabInx, tabInx } = props;
   const { tabKey } = initData.meta;
-  const initEmptyData: { [key: string]: IQaItem[] } = { COMPLETION: [], CHOICE: [], TEXT: [], BASE: [] };
+  const initEmptyData: { [key: string]: IQaItem[] } = { COMPLETION: [], CHOICE: [], TEXT: [], BASIC: [] };
+  const doctorSid =  window.$storage.getItem('sid');
   const fetchInitData = (data: IQaItem[]) => {
     let initD: { [key: string]: IQaItem[] } = cloneDeep(initEmptyData);
     data.forEach(item => {
       switch (item.question_type) {
         case 'TEXT':
-        case 'BASE':
+        case 'BASIC':
         case 'COMPLETION':
           initD[item.question_type].push(item);
           break;
@@ -45,30 +49,41 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
   };
   const [initTopic, setinitTopic] = useState(initData.data ? fetchInitData(initData.data) : cloneDeep(initEmptyData));
   const topicCallbackFns = useRef({});
+  const fetchData = () => {
+    api.image.fetchImageTopicTemplate({ id: initData.meta.id }).then((res: any) => {
+      // 接口原来数据格式没变，返回list数组，目前只取第一个即可 11.18 琳巍
+      setinitTopic(res?.list?.[0] ? fetchInitData(res?.list?.[0]?.data) : cloneDeep(initEmptyData));
+    });
+  };
   useEffect(() => {
     if (initData.data) {
       setinitTopic(fetchInitData(initData.data));
     } else {
-      api.image.fetchImageTopicTemplate({ id: initData.meta.id }).then((res: any) => {
-        // 接口原来数据格式没变，返回list数组，目前只取第一个即可 11.18 琳巍
-        setinitTopic(res?.list?.[0] ? fetchInitData(res?.list?.[0]?.data) : cloneDeep(initEmptyData));
-      });
+      fetchData();
     }
   }, [initData]);
-
+  useEffect(() => {
+    if (refreshTabInx === tabInx) {
+      fetchData();
+    }
+  }, [refreshTabInx]);
   useEffect(() => {
     jcdCallbackFns[tabKey] = (clickSaveTime: number) => new Promise((resolve) => {
       Promise.all(Object.values(topicCallbackFns.current)
         .map((fn) => fn())).then((topicList) => {
         console.log('=======883883', topicList);
+        const meta = initData.meta;
+        if (meta.id) {
+          delete meta.id; // 结构化时不要回传id
+        }
         resolve({
           data: topicList,
           meta: {
             imageId,
-            sid: window.$storage.getItem('patientSid'),
             createdTime: clickSaveTime,
             title: outType,
-            ...initData.meta,
+            ...meta,
+            sid: window.$storage.getItem('patientSid'),
           },
         });
       });
@@ -90,18 +105,32 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
     isViewOnly,
     templateId: initData.meta.id,
     meta: initData.meta,
-    isFirstEdit: !initData.data, // 是否是修改化验单
+    // 是否显示编辑按钮  1.如果有没有initData.data（首次编辑）并且模板创建人是自己
+    isShowEdit: !initData.data && initData.meta.sid === doctorSid,
   };
+  console.log('initTopic', initTopic);
   return (
     <div className={`${styles.topic_list}`}>
-      <TopicBaseInfo
-        outType={outType}
-        initData={initTopic.BASE}
-        {...subProps}
-      />
-      <TopicDdtk initData={initTopic.COMPLETION} {...subProps} />
-      <TopicChoice initData={initTopic.CHOICE} {...subProps} />
-      <TopicProblem initData={initTopic.TEXT} {...subProps} />
+
+      {
+        refreshTabInx !== tabInx ? (
+          <>
+            <TopicBaseInfo
+              outType={outType}
+              initData={initTopic.BASIC}
+              {...subProps}
+            />
+            <TopicDdtk initData={initTopic.COMPLETION} {...subProps} />
+            <TopicChoice initData={initTopic.CHOICE} {...subProps} />
+            <TopicProblem initData={initTopic.TEXT} {...subProps} />
+          </>
+        ) : (
+          <div className="flex justify-center items-center">
+            <Spin size="large" />
+          </div>
+        )
+      }
+
     </div>
   );
 };

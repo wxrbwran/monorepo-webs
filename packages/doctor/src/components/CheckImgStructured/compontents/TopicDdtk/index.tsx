@@ -11,11 +11,11 @@ interface IProps {
   isViewOnly: boolean;
   templateId: string; // 检查单模板id（单据id)
   meta: IMeta;
-  isFirstEdit: boolean; // 是否首次结构化
+  isShowEdit: boolean; // 是否首次结构化
 }
 function Ddtk(props: IProps) {
   console.log('ddtkprops', props);
-  const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
   const [qasGroups, setQasGroups] = useState<IQaItem[][]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[][]>([]);
   const handleSave = () => new Promise((resolve) => {
@@ -35,7 +35,7 @@ function Ddtk(props: IProps) {
         // 问题组中，多个问答，过滤掉没答案的item
         const qas: IQaItem[][] = [];
         hasValWt.map(item =>{
-          qas.push(item.filter((qa, inx) => !isEmpty(qa.answer || inx === 0)));
+          qas.push(item.filter((qa, inx) => !isEmpty(qa.answer) || inx === 0));
         });
         setValuableQas(cloneDeep(qas));
       }
@@ -74,11 +74,12 @@ function Ddtk(props: IProps) {
   };
   console.log('------最新questionsddtk', qasGroups);
   console.log('isViewOnly', isViewOnly);
+  console.log('valuableQas ddtk', valuableQas);
   const editProps = {
     templateId,
     handleDelQuestion,
     handleSaveQuestion,
-    isFirstEdit,
+    isShowEdit,
     topicType: 'COMPLETION',
   };
   return (
@@ -108,7 +109,7 @@ function Ddtk(props: IProps) {
                       </span>
                       {
                         <span
-                          className={styles.edit_span}
+                          className={isViewOnly ? `${styles.edit_span} ${styles.no_border}` : styles.edit_span}
                           contentEditable={!isViewOnly}
                           suppressContentEditableWarning
                           onBlur={(e) => handleChangeAnswer(e, quesIndex, qaInx)}

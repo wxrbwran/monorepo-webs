@@ -12,7 +12,7 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
   const { actionType, handleDelQuestion, closeModal, templateId, handleSaveQuestion,
     initData, editGroupInx } = props;
   console.log('====editDdtk', props);
-  const curUuid = useRef(uuid());
+  const curUuid = useRef(initData ? initData[0].uuid : uuid());
   let initQas = [];
   for (let i = 0; i < 4; i++) {
     initQas.push(ddtkData(curUuid.current));
@@ -44,8 +44,10 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
         const qa = {
           ...qaItem,
           group: inx === 0 ?  '1-1' : `1-1-${inx - 1}`,
-          action: actionType === 'add' ? 'ADD' : 'ALTER',
           answer: [],
+          ...actionType === 'add' ?
+            { action: 'ADD' }
+            : { action: 'ALTER', createdTime: initData?.[0]?.createdTime },
         };
         if (initData) {
           qa.createdTime = initData[0].createdTime;
@@ -65,7 +67,7 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
 
   };
   const handleDelete = () => {
-    if (actionType === 'edit' && editGroupInx && initData) {
+    if (actionType === 'edit' && editGroupInx !== undefined && initData) {
       const qasData = initData.map((qaItem) => {
         return { ...qaItem, action: 'DELETE' };
       });
@@ -81,7 +83,7 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
     closeModal();
   };
   return (
-    <div className="pr-15">
+    <div className={`pr-15 ${styles.add_ddtk}`}>
       <div className={styles.demo}>
         <span>示例 肝脏描述</span>
         {

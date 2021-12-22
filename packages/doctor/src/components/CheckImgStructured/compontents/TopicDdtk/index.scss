@@ -60,6 +60,9 @@
       overflow-x: auto;
       margin-left: 5px;
       padding: 0 5px;
+      &.no_border {
+        border: none;
+      }
       &:empty {
         &:before {
           content: '请输入答案';

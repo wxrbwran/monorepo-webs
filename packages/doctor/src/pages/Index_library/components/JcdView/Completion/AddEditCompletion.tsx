@@ -1,16 +1,16 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 import { Form, Input, Button, Space, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { createFormListProps } from 'xzl-web-shared/dist/utils/consts';
 import { handleQuestions, handleQuestionAnswer, filterNotNew, setDelete } from '../utils';
+import uuid from 'react-uuid';
 interface IProps {
   id: string;
   type: string;
   mode: string;
   onSuccess: () => void;
   questions?: TIndexItem[];
-  position: number;
   title?: TIndexItem;
 }
 
@@ -21,20 +21,22 @@ interface IForm {
 
 const AddEditCompletion: FC<IProps> = (props) => {
   const { id, onSuccess, title, questions, mode, children } = props;
+  console.log('=====1101props', props);
   // console.log('record', record);
   const [showModal, setShowModal] = useState(false);
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const curUuid = useRef(title?.uuid || uuid());
   // const curDocument = useSelector((state: IState) => state.document.curDocument);
   const sid = window.$storage.getItem('sid');
   const samples = ['形态', '大小'];
-  const position = mode === 'ADD' ? props.position : props?.title?.group?.split('-')[1];
+  const position = 1;
   const fixedData = {
     question_type: 'COMPLETION',
     isAdd: false,
     sid,
-    action: 'ADD',
+    action: mode,
     creatorSid: sid,
   };
 
@@ -66,7 +68,7 @@ const AddEditCompletion: FC<IProps> = (props) => {
           question: values.title,
           answer: [],
           group: `1-${position}`,
-          uuid: +new Date() + Math.random(),
+          uuid: curUuid.current,
         }
         : {
           ...title,
@@ -76,7 +78,9 @@ const AddEditCompletion: FC<IProps> = (props) => {
         };
     const params = {
       meta: { id },
-      data: [{ ...titlePart }, ...values.questions.filter(filterNotNew).map(handleQuestionAnswer)],
+      data: [{ ...titlePart }, ...values.questions.filter(filterNotNew).map(
+        (item, inx) => handleQuestionAnswer(item, title?.createdTime, inx),
+      )],
     };
     handleQuestions({
       params,
@@ -143,7 +147,7 @@ const AddEditCompletion: FC<IProps> = (props) => {
             ))}
           </div>
           <Form form={form} onFinish={handleSave}>
-            <Form.Item label="题目" name="title" rules={[{ required: true }]}>
+            <Form.Item  noStyle name="title" rules={[{ required: true }]}>
               <Input placeholder="请输入题目" />
             </Form.Item>
             <Form.List name="questions">
@@ -157,7 +161,7 @@ const AddEditCompletion: FC<IProps> = (props) => {
                       return values.questions?.[index]?.action !== 'DELETE';
                     })
                     .map((field, index) => (
-                      <Space align="baseline" className="mb-10" key={field.key}>
+                      <Space align="baseline" className="mt-10" key={field.key}>
                         <div>{index + 1}.</div>
                         <Form.Item
                           {...field}
@@ -179,7 +183,7 @@ const AddEditCompletion: FC<IProps> = (props) => {
                         <DeleteOutlined onClick={() => handleDeleteQuestion(index)} />
                         <Form.Item
                           {...createFormListProps(field, 'uuid')}
-                          initialValue={+new Date() + Math.random()}
+                          initialValue={curUuid.current}
                           className="hidden"
                         >
                           <Input type="hidden" />
@@ -209,7 +213,7 @@ const AddEditCompletion: FC<IProps> = (props) => {
                         ))}
                       </Space>
                     ))}
-                  <Button onClick={() => add()}>添加问题</Button>
+                  <Button type="link" onClick={() => add()}>+ 添加问题</Button>
                 </>
               )}
             </Form.List>

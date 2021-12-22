@@ -11,7 +11,7 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   // 签约患者下，当前选中菜单的role
   const currentMenuRole = window.$storage.getItem('role');
   console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
-  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'DEP_HEAD'];
+  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'PHARAMCIST', 'KANGFUSHI', 'PSYCHOLOGIST', 'TEAMNURSE', 'DEP_HEAD'];
   data.forEach((team: Store) => {
     newObj = {};
     team.members.forEach((member: any) => {
