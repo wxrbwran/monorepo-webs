@@ -48,11 +48,6 @@ function CheckImages() {
       data: insImg,
     },
   ];
-  useEffect(() => {
-    setTimeout(() => {
-      handleShowImages(otherImg[0]);
-    }, 1000);
-  }, []);
   const renderItem = useMemo(() => (data: IImageItem[], hideDate?: boolean) => (
     data.map((item:IImageItem) => {
       return (

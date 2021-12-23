@@ -261,7 +261,6 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
               disabled={getFieldValue('drinking') === 'WELL' || !getFieldValue('drinking')}
               style={{ width: 151 }}
             >
-              <Option value="LEVEL_ZERO">不喝酒</Option>
               <Option value="LEVEL_ONE">少量</Option>
               <Option value="LEVEL_TWO">多量</Option>
               <Option value="LEVEL_THREE">超量</Option>

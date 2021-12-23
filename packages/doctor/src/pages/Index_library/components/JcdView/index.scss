@@ -1,0 +1,24 @@
+
+.topic_list {
+  :global {
+    .topic_title {
+      display: flex;
+      font-weight: 600;
+      align-items: center;
+      .edit_btn {
+        display: none;
+      }
+      &:hover {
+        .edit_btn {
+          display: block;
+          color: #3296FA;
+          cursor: pointer;
+          span {
+            color: #3296FA;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -81,3 +81,16 @@
   }
 }
 
+.jcd_panel_item {
+  position: relative;
+  .copy_temp {
+    color: #218CE9;
+    cursor: pointer;
+    font-size: 14px;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    z-index: 2;
+  }
+}
+

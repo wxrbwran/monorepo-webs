@@ -45,7 +45,9 @@ function ItemDate(props: IProps) {
   // 点击时间不详
   const handleTimeUnkown = () => {
     setUnknownTime(!unknownTime);
-    setUnknow!(!unknownTime);
+    if (setUnknow ) {
+      setUnknow!(!unknownTime);
+    }
   };
   const dateFormat = 'YYYY/MM/DD';
   const disabledDate = (current: any) => current && current > moment().endOf('day');

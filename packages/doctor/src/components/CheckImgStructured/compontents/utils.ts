@@ -70,6 +70,8 @@ export const fetchSubmitData = (questions: IQuestions[], startInx: number | stri
     // delete newItem.isAdd;
     const returnData: CommonData = {
       ...newItem,
+      // 例： 1-1（题目）  1-1-0（题目下每一个问答内容） 1-1-1(第二个问答)依次类推
+      // group: inx === 0 ? startInx : `${startInx}-${inx - 1}`,
       group: `${startInx}-${inx}`,
       sid: window.$storage.getItem('sid'),
       createdTime: clickSaveTime,
@@ -208,7 +210,7 @@ export const fetchInitData = (initData: IJcdTabItem) => {
 };
 // 处理检查单类型数据回显---e
 
-// 回显时：单独处理多段填空，需要把模板格式转成ui需要的多维数组格式(先根据uuid分组，然后组内排序)   模板--->ui
+// 回显时：单独处理多段填空，需要把平铺格式转成ui需要的多维数组格式(先根据uuid分组，然后组内排序)   模板--->ui
 export const formatTempDdtk = (tkTmpList: any[]) => {
   console.log(399939392832, tkTmpList);
   const groupDdtk: CommonData = {};
@@ -233,7 +235,7 @@ export const formatTempDdtk = (tkTmpList: any[]) => {
       console.log('inx', inx);
       groupList[inx] = {
         ...qaItem,
-        answer: qaItem?.answer!?.map(() => null),
+        answer: qaItem.answer.filter((ansItem: null | string) => !!ansItem),
       };
     });
     ddtk.push(groupList.filter(item => !!item));

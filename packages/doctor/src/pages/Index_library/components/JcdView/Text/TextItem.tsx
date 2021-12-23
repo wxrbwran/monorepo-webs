@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Input, Space } from 'antd';
-const TextItem: FC<{ item: TIndexItem; index: number }> = ({ item, children }) => {
+const TextItem: FC<{ item: TIndexItem; index: number }> = ({ item, children, index }) => {
   return (
     <div>
-      <Space className="mb-10">
-        <h2 className="font-bold text-base">{item.question}</h2>
+      <Space className="mb-10 flex items-center topic_title">
+        <div className="font-bold text-base">{index + 1}.{item.question}</div>
         {children}
       </Space>
       <div className="pl-10">

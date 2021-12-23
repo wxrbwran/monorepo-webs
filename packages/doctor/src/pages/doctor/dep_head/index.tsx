@@ -3,12 +3,9 @@ import DepHeadDoctors from '../components/DepHeadDoctors';
 import { Tabs, Empty } from 'antd';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { name, org,  patientLevel, sex, age, address } from '../patients/[level]/columns';
-import { Role } from 'xzl-web-shared/dist/utils/role';
+import { doctorRoles } from '@/utils/tools';
 import styles from './index.scss';
 
-interface Imenu {
-  desc: string;
-}
 interface IOption {
   pageAt: number;
   sRole?: string;
@@ -22,17 +19,6 @@ const DepHead: FC = ({ location }) => {
   const [curDocRoles, setCurDocRoles] = useState([]);
   const [curTabRole, setTabRole] = useState<string>('');
   const [noDoctor, setNoDoctor] = useState(false);
-  const roleObj: { [key: string]: Imenu } = {
-    [Role.ALONE_DOCTOR.id]: { desc: '我独立管理' },
-    [Role.UPPER_DOCTOR.id]: { desc: '我是主管医生'  },
-    [Role.LOWER_DOCTOR.id]: { desc: '我是医生助手' },
-    [Role.DIETITIAN.id]: { desc: '我是营养师' },
-    // [Role.CRO_PM.id]: { desc: '我是PM', url: 'cro_pm' },
-    // [Role.CRO_CRA.id]: { desc: '我是CRA', url: 'cro_cra' },
-    // [Role.CRO_CRC.id]: { desc: '我是CRC', url: 'cro_crc' },
-    // [Role.RESEARCH_PROJECT_DOCTOR.id]: { desc: '我是研究者', url: 'research_project_doctor' },
-  };
-
   const handleChangeTabRole = (sRole: string) => {
     setOptions({ ...depOptions, sRole });
     setTabRole(sRole);
@@ -42,11 +28,16 @@ const DepHead: FC = ({ location }) => {
     window.$api.doctor.getDoctorHeadingDoctorRoles(sid).then(res => {
       console.log('====doc', res);
       // res.teams[0] 目前只取teams[0]就可以，后面有别的业务再做区分
-      const docRoles = res.teams[0].members.filter((item: ISubject) => !!roleObj[item.role!]);
+      const docRoles = res.teams[0].members.filter((item: ISubject) => !!doctorRoles[item.role!]);
       setCurDocRoles(docRoles);
       setTabRole(docRoles[0].role);
       setNoDoctor(false);
-      setOptions({ ...depOptions, targetSId: sid, sRole: docRoles[0].role });
+      setOptions({
+        ...depOptions,
+        targetSId: sid,
+        sRole: docRoles[0].role,
+        targetNSId: location.query.depHeadNsId,
+      });
     });
   };
 
@@ -60,7 +51,7 @@ const DepHead: FC = ({ location }) => {
         !noDoctor ? (
           <div className={styles.patient_panel}>
             <Tabs activeKey={curTabRole} onChange={handleChangeTabRole} size="large">
-              { curDocRoles.map((item: ISubject) => <TabPane tab={roleObj[item.role!].desc} key={item.role!} />)}
+              { curDocRoles.map((item: ISubject) => <TabPane tab={doctorRoles[item.role!].desc} key={item.role!} />)}
             </Tabs>
             <div className="p-20">
               {

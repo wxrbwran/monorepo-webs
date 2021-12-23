@@ -4,7 +4,7 @@ export interface IAddTopicProps {
   templateId: string; // 单据模板id
   handleDelQuestion: (editGroupId: number) => void;
   handleSaveQuestion: (data: any, actionType: string, editInx?: number) => void;
-  isFirstEdit: boolean;
+  isShowEdit: boolean;
   initData?: IQaItem[] | IQaItem; // 编辑数据  填空填是数组，其余是{}
   editGroupInx?: number; // 编辑的groupInx
 }

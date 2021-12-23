@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Checkbox, Radio } from 'antd';
+import { Checkbox, Radio, Divider } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
 import { IQaItem } from '../type';
@@ -10,13 +10,13 @@ interface IProps {
   initData: IQaItem[] | undefined;
   isViewOnly: boolean;
   templateId: string;
-  isFirstEdit: boolean; // 是否首次结构化
+  isShowEdit: boolean; // 是否首次结构化
 }
 // saveAddQa
 function TopicChoice(props: IProps) {
   console.log('choiceProps', props);
-  const { changeCallbackFns, initData, isViewOnly, templateId, isFirstEdit } = props;
-  const [questions, setQuestions] = useState<IQaItem[]>(initData ? initData : []);
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
+  const [questions, setQuestions] = useState<IQaItem[]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
   const handleSave = (a) => new Promise((resolve) => {
     console.log(a);
@@ -69,11 +69,12 @@ function TopicChoice(props: IProps) {
     templateId,
     handleDelQuestion,
     handleSaveQuestion,
-    isFirstEdit,
+    isShowEdit,
     topicType: 'RADIO',
   };
   return (
     <div className={styles.choice}>
+      {(isViewOnly || !isShowEdit) && <Divider dashed />}
       <div className="qa-wrap">
       {
         (isViewOnly ? valuableQas : questions).map((item: IQaItem, quesIndex: number) => (
@@ -92,7 +93,7 @@ function TopicChoice(props: IProps) {
               item.question_type === 'RADIO' ? (
                 <Radio.Group
                   onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
-                  value={item.answer[0]}
+                  value={item.answer?.[0]}
                 >
                   {
                     item.options!.map((option, optionInx) => (
@@ -117,6 +118,7 @@ function TopicChoice(props: IProps) {
         {...editProps}
         actionType="add"
       />
+     {(isViewOnly || !isShowEdit) && <Divider dashed />}
     </div>
   );
 }

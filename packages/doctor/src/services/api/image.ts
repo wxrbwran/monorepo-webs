@@ -1,4 +1,5 @@
 import http from '@/services/http';
+import { CommonData } from 'packages/doctor/typings/global';
 
 export default {
   // 获取化验单检查单统计数据接口new
@@ -82,6 +83,10 @@ export default {
   // 新增/修改/删除检查单问题
   postImageTemplate(data: CommonData): Promise<any> {
     return http.post('image/template', { data });
+  },
+  // 修改检查单模板名称
+  patchImageTemplateName(data: CommonData): Promise<any> {
+    return http.patch('image/template', { data });
   },
   // 获取检查单检查部位或检查方法
   fetchImageTemplatePart(): Promise<any> {

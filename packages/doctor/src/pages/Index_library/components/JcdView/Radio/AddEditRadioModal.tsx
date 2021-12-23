@@ -21,6 +21,7 @@ interface IForm {
 const AddEditRadio: FC<IProps> = (props) => {
   const { id, onSuccess, title, questions, mode, children } = props;
   // console.log('record', record);
+  console.log('=====radio', props);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<string>('RADIO');
@@ -33,7 +34,7 @@ const AddEditRadio: FC<IProps> = (props) => {
   const fixedData = {
     // isAdd: false,
     sid,
-    action: 'ADD',
+    action: mode,
     creatorSid: sid,
   };
 

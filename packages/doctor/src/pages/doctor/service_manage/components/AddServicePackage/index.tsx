@@ -11,6 +11,7 @@ import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 import { isEmpty, debounce } from 'lodash';
 import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/dist/components/XzlTable/util';
+import { doctorRoles } from '@/utils/tools';
 interface IProps {
   initData?: {
     innerTeams: {
@@ -20,10 +21,6 @@ interface IProps {
     teamNSId: string; // 套餐nsid
   };
   onSuccess: () => void;
-}
-interface IRoleMember {
-  title: string;
-  role: string;
 }
 const AddServicePackage: FC<IProps> = (props) => {
   const { children, initData, onSuccess } = props;
@@ -57,24 +54,17 @@ const AddServicePackage: FC<IProps> = (props) => {
         let itemInfo: IMember = {};
         const roles: string[] = [];
         teamItem.members.forEach(member => {
-          switch (member.role) {
-            case Role.ORG.id:
-              itemInfo.orgName = member.name!;
-              itemInfo.sourceNSId = member.nsId!;
-              break;
-            case Role.UPPER_DOCTOR.id:
-            case Role.LOWER_DOCTOR.id:
-            case Role.DIETITIAN.id:
-              itemInfo = {
-                ...itemInfo,
-                avatarUrl: member.avatarUrl || defaultAvatar,
-                name: member.name!,
-                sid: member.sid!,
-              };
-              roles.push(member.role);
-              break;
-            default:
-              break;
+          if (member.role === Role.ORG.id) {
+            itemInfo.orgName = member.name!;
+            itemInfo.sourceNSId = member.nsId!;
+          } else if (member.role && Object.keys(doctorRoles).includes(member.role)) {
+            itemInfo = {
+              ...itemInfo,
+              avatarUrl: member.avatarUrl || defaultAvatar,
+              name: member.name!,
+              sid: member.sid!,
+            };
+            roles.push(member.role);
           }
         });
         roles.forEach(roleItem => {
@@ -123,18 +113,14 @@ const AddServicePackage: FC<IProps> = (props) => {
     setMembers([...members, ...choickMembers]);
   };
   const checkUpperLower = () => {
-    const lower = members.filter(member => member.role === Role.LOWER_DOCTOR.id);
-    // 如果有医生助手就必须有主管医生
-    console.log('lower', lower);
-    if (lower.length > 0){
-      return !!(members.filter(member => member.role === Role.UPPER_DOCTOR.id).length === 0);
-    } else {
-      return false;
-    }
+    // 必须有主管医生
+    return !!(members.filter(member => member.role === Role.UPPER_DOCTOR.id).length === 0);
   };
   const handleSubmit = () => {
     if (!packageName) {
       message.error('请输入服务小组名称');
+    } else if (members.length > 10) {
+      message.error('服务小组内全部成员不能超过十人，请重试');
     } else if (isEmpty(members.filter(member => member.sid === doctorSid))) {
       message.error('请选择你在服务小组中的位置');
     } else if (checkUpperLower()){
@@ -162,34 +148,29 @@ const AddServicePackage: FC<IProps> = (props) => {
       });
     }
   };
-  const roleMembers: IRoleMember[] = [
-    { title: '主管医生', role: Role.UPPER_DOCTOR.id },
-    { title: '医生助手', role: Role.LOWER_DOCTOR.id },
-    { title: '营养师', role: Role.DIETITIAN.id },
-    { title: '药师', role: Role.PHARAMCIST.id },
-    { title: '康复师', role: Role.KANGFUSHI.id },
-    { title: '心理医生', role: Role.PSYCHOLOGIST.id },
-    { title: '护士', role: Role.TEAMNURSE.id },
-  ];
+
   const handleDel = (sid: string, role: string) => {
     // 过滤掉，sid一致且角色与当前删除角色一致的
     setMembers([...members.filter(member => !(member.sid === sid && member.role === role))]);
   };
-  const renderDom = useMemo(() => (roleInfo: IRoleMember) => {
-    const curRoleMembers = members.filter(member => member.role === roleInfo.role);
+  const renderDom = useMemo(() => (roleId: string) => {
+    const curRoleMembers = members.filter(member => member.role === roleId);
     const selectedDoctorSid = curRoleMembers.map(doctor => doctor.sid);
     const initWordOrgs = {};
     members.forEach(member => initWordOrgs[member.sid!] = member.sourceNSId);
     return (
-      <div className={styles.item_panel} key={roleInfo.role}>
-        <div className="text-base font-bold mb-10">{roleInfo.title}</div>
+      <div className={styles.item_panel} key={roleId}>
+        <div className="text-base font-bold mb-10 flex">
+          {roleId === Role.UPPER_DOCTOR.id && <div style={{ color: '#F74F28' }}>*</div>}
+          {doctorRoles[roleId].desc}
+        </div>
         <div className="flex flex-wrap">
           {
             curRoleMembers.map(doctor => (
               <div className="box-shadow relative w-150 h-80 text-center rounded-md mr-20 flex items-center" key={doctor.role + doctor.sid}>
                 {
                   doctor.sid !== doctorSid && (
-                    <img className="absolute right-10 top-10 w-14" src={iconClose} alt="" onClick={() => handleDel(doctor.sid, roleInfo.role)} />
+                    <img className="absolute right-10 top-10 w-14" src={iconClose} alt="" onClick={() => handleDel(doctor.sid, roleId)} />
                   )
                 }
                 <img className="w-50 h-50 rounded m-12 mr-6" src={doctor.avatarUrl || defaultAvatar} alt="" />
@@ -201,12 +182,12 @@ const AddServicePackage: FC<IProps> = (props) => {
             ))
           }
           {
-            !(roleInfo.role === Role.UPPER_DOCTOR.id && curRoleMembers.length > 0)
+            !(roleId === Role.UPPER_DOCTOR.id && curRoleMembers.length > 0)
               && friends.length > selectedDoctorSid.length && (
               <ChoiceDoctor
-                role={roleInfo.role}
+                role={roleId}
                 callbackSelectDoctor={handleChoice}
-                title={roleInfo.title}
+                title={doctorRoles[roleId].desc}
                 selectedDoctorSid={selectedDoctorSid}
                 friends={friends}
                 members={members}
@@ -244,7 +225,9 @@ const AddServicePackage: FC<IProps> = (props) => {
           />
           <ChoiceSelfRole callback={handleSelfRole} initData={initSelfInfo} />
           <div className="flex flex-wrap">
-            { roleMembers.map(item => renderDom(item)) }
+            { Object.keys(doctorRoles)
+              .filter(roleKey => roleKey !== Role.ALONE_DOCTOR.id)
+              .map(item => renderDom(item)) }
           </div>
           <Button className="w-98 mt-20 mb-0 mx-auto block" type="primary" onClick={debounce(handleSubmit, 500)}>完成</Button>
         </div>
