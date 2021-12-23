@@ -9,8 +9,8 @@ module.exports = {
     PREFIX: 'test',
   },
   test: {
-    // BASEURL: 'http://localhost:8001/api/',
-    BASEURL: 'https://testapi.xinzhili.cn/',
+    BASEURL: 'http://localhost:8001/api/',
+    // BASEURL: 'https://testapi.xinzhili.cn/',
     APP_ENV: 'test',
     PREFIX: 'test',
   },

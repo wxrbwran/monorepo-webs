@@ -114,6 +114,7 @@ const AddEditDocument: FC<IProps> = (props) => {
             form={form}
             name="basic"
             onFinish={debounce(handleSave, 300)}
+            preserve={false}
             id="height42"
           >
             {type === 'HYD' && (

@@ -22,7 +22,7 @@ const TextTemplate: FC<IProps> = (props) => {
   // console.log("radio&checkbox questions", questions);
   return (
       <div>
-        <div className="shadow p-10">
+        <div className={questions?.length > 0 ? 'shadow p-10' : ''}>
           {questions.map((q: TIndexItem, index: number) => (
             <div key={index} className="mb-10">
               <TextItem item={q} index={index}>

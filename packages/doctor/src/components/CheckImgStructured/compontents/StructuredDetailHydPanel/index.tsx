@@ -213,12 +213,12 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const renderTabPane = useMemo(() => () => checkTypes.map(
     (item: ICheckTypesItem | ISearchDocumentItem) => {
       console.log('item', item);
-      let prefix = '[系统]';
+      let prefix = '[官方]';
       const sid = window.$storage.getItem('sid');
       if (item.sourceSid === sid) {
         prefix = '[自己]';
-      } else if (item.sourceSid === sid && item.source === 'DOCTOR') {
-        prefix = '[他人]';
+      } else if (item.sourceSid !== sid && item.source === 'DOCTOR') {
+        prefix = '[医生]';
       }
       return (
         <TabPane
