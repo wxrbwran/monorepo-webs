@@ -187,7 +187,6 @@ const IndexList: FC = () => {
             <EditIndex
               onSuccess={onSuccess}
               documentId={documentId}
-              level1Type={documentType}
               source="libraryAdd"
             >
               <Button type="primary" className="create-btn">

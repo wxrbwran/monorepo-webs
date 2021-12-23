@@ -1,5 +1,3 @@
-import { IIndexItem } from 'typings/imgStructured';
-
 type IIndexItemCustom = {
   formIndex: number; // 自己补充的必要属性，每个指标的固定key值
 } & IIndexItem;
@@ -15,15 +13,28 @@ export const formatSubmitItems = (data: CommonData, length: number) => {
     const newItem: CommonData = {
       indexId: data[`${i}_indexId`],
       name: data[`${i}_name`],
+      referenceList: [],
     };
-    if (data[`${i}_unit`]) {
-      newItem.unit = data[`${i}_unit`];
-    }
-    if (data[`${i}_value`]) {
-      newItem.value = data[`${i}_value`];
-    }
+    // if (data[`${i}_value`]) {
+    //   newItem.value = data[`${i}_value`];
+    // }
     if (data[`${i}_minValue`] || data[`${i}_maxValue`]) {
       newItem.advices = [data[`${i}_minValue`] ?? 'empty', data[`${i}_maxValue`] ?? 'empty'];
+    }
+    // 处理参考值
+    const count = data[`${i}_valueCount`];
+    for (let j = 0; j < count; j++) {
+      let tmp: Partial<TReference> | null = {};
+      if (data[`${i}_${j}_indexValue`]) {
+        tmp.indexValue = data[`${i}_${j}_indexValue`];
+      }
+      if (data[`${i}_${j}_reference`] && data[`${i}_referenceList`].length > 0) {
+        const curReference: TReference = data[`${i}_referenceList`]
+          .filter((r: TReference) => r.id === data[`${i}_${j}_reference`])[0] || [];
+        tmp = { ...tmp, ...curReference };
+      }
+      newItem.referenceList.push({ ...tmp });
+      tmp = null;
     }
     // 如果指标来源是DOCTOR，并且指标的sourceSid不是当前医生的sid，需要把当前医生的sid传过去
     if (data[`${i}_source`] === 'DOCTOR' && (data[`${i}_sourceSid`] !== window.$storage.getItem('sid'))) {

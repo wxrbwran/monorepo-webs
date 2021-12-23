@@ -13,7 +13,7 @@ function Operation() {
   const [isTumour, setIsTumour] = useState(false); // 是否是肿瘤科
   const department = useSelector((state: IState) => state.currentPatient.department);
   useEffect(() => {
-    console.log('depheiilo', department);
+    // console.log('depheiilo', department);
     // 心血管科室
     const departments = [
       NSLabelType.CARDIOVASCULAR_DEPARTMENT_TYPE.code,

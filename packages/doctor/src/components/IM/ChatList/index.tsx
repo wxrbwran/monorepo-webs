@@ -230,7 +230,7 @@ const ChatList: FC = () => {
     console.log(activeImage);
     dispatch({ type: 'im/TOGGLE_VIEWER_ACTIVE_INDEX', payload: { index } });
   };
-  console.log('===========**********历史msg', reCalcAllMessageTime(currSessionMsgs));
+  // console.log('===========**********历史msg', reCalcAllMessageTime(currSessionMsgs));
   return (
     <>
       <ul id="CHAT_LIST" ref={chatList} className={styles.chat_list}>

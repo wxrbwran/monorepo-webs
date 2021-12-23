@@ -36,7 +36,7 @@ const ChatPersonItem: FC<IProps> = (props) => {
   const compare = (obj1: IInfos, obj2: IInfos) => (
     imRoleOrder.indexOf(obj1.role) - imRoleOrder.indexOf(obj2.role)
   );
-  console.log('perso3232n', person);
+  // console.log('perso3232n', person);
 
   const personList = useMemo(() => (
     person.sort(compare).map((item) => (

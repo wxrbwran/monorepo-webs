@@ -21,7 +21,6 @@ interface IProps {
   onSuccess: (params?: any) => void;
   documentId?: string; // 图片大分类id,例如生化全项的类型id,如果是结构化入口时(source:imgAddTypeIndex时)，此值不会传过来
   sampleFrom?: string; // 样本来源，同上
-  level1Type: string; // 一级分类： HYD  或者   JCD
   // source: imgAddIndex结构化添加指标 imgAddTypeIndex结构化添加大分类+指标  libraryAdd指标库添加  libraryEdit指标库编辑
   source: string;
 }
@@ -74,7 +73,7 @@ const EditIndex: FC<IProps> = (props) => {
     console.log('handleRequest', params);
     request(params).then((res: any) => {
       message.success('保存成功');
-      if (['imgAddIndex'].includes(source)) { // 编辑时没有此参数
+      if (['imgAddIndex', 'imgAddTypeIndex'].includes(source)) { // 编辑时没有此参数
         const returnData = res;
         onSuccess(returnData); // 指标库不需要params,结构化需要Params回显到指标列表
       } else {
@@ -207,7 +206,7 @@ const EditIndex: FC<IProps> = (props) => {
                   </Form.Item>
                   <Row>
                     <Col span={21}>
-                      {fields.map((field, index) => (
+                      {fields?.length > 0 && fields.map((field, index) => (
                         <Form.Item key={field.key} label={referenceMap[references[index]]}>
                           <Space align="baseline">
                             {['RANGE', 'GT', 'LT', 'AROUND', 'RADIO'].includes(

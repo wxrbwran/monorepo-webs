@@ -7,8 +7,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
-import SearchHospital from '@/components/SearchHospital';
-import ItemDate from '../ItemDate';
+
 import { isEmpty } from 'lodash';
 import styles from './index.scss';
 // 此组件具体到，化验单或检查单panel
@@ -55,23 +54,18 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
     initSubType = [...new Set(initSubType)];
   } else {
-    initSubType = ['血液'];
+    initSubType = ['血液', '其他', '1', '阿斯顿'];
   }
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
   const [activeType, setActiveType] = useState<string>();
   const [sampleFroms, setSampleFroms] = useState<string[]>(initSubType);
   const documentsCallbackFns = useRef({});
-  const timeAndOrg = useRef({
-    measuredAt: initData?.measuredAt || new Date().getTime(),
-    unknownReport: initData?.unknownReport,
-    orgId: initData?.orgId,
-    orgName: initData?.orgName,
-  });
+
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
   const handleSelectTypeIndex = (params: ISearchDocumentItem, type?: string) => {
-    console.log(type);
+    console.log('handleSelectTypeIndex', params, type);
     let newCheckTypes: ICheckTypes = [];
     let isNew = true;
     // 唯一性根据这两个指标确定： 图片大分类+子分类
@@ -79,19 +73,22 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       if ((item.documentName === params.documentName) && (item.sampleFrom === params.sampleFrom)) {
         isNew = false;
         newCheckTypes = [...checkTypes];
-        // 如果此分类已经存在，那修改下首行指标id
-        newCheckTypes[index] = {
-          ...item,
-          firstIndex: params.id,
-          // 新勾选的指标数据，传递到指标列表组件，有则移位，无则视为添加
-          // 添加情况1：新添加的大分类+指标
-          // 添加情况2：此图片结构化保存后，又在这个分类下加了新指标，这会获取回显是没有新加的指标的，搜索到新指标并点击时的情况
-          // @ts-ignore
-          selectIndex: {
-            ...params,
-            indexId: params.id,
-          },
-        };
+        if (params.type !== 'DOCUMENT') {
+          // 如果此分类已经存在，那修改下首行指标id
+          newCheckTypes[index] = {
+            ...item,
+            firstIndex: params.id,
+            // 新勾选的指标数据，传递到指标列表组件，有则移位，无则视为添加
+            // 添加情况1：新添加的大分类+指标
+            // 添加情况2：此图片结构化保存后，又在这个分类下加了新指标，这会获取回显是没有新加的指标的，搜索到新指标并点击时的情况
+            // @ts-ignore
+            selectIndex: {
+              ...params,
+              indexId: params.id,
+            },
+          };
+        }
+
       }
     });
     // 如果是新添加的大分类，则直接push进去
@@ -109,7 +106,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     setCheckTypes([...newCheckTypes]);
   };
   useEffect(() => {
-    console.log('level1Type', tabKey);
+    // console.log('level1Type', tabKey);
     hydCallbackFns[tabKey] = () => new Promise((resolve) => {
       Promise.all(Object.values(documentsCallbackFns.current)
         .map((fn) => fn())).then((documentList) => {
@@ -117,7 +114,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         resolve({
           documentList,
           imageId,
-          ...timeAndOrg.current,
           outType,
           operatorId: window.$storage.getItem('sid'),
           sid: window.$storage.getItem('patientSid'),
@@ -220,53 +216,10 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     activeType1.current = tab;
     setActiveType(tab);
   };
-  const handleSetTimeAndOrg = (newItem: any) => {
-    timeAndOrg.current = {
-      ...timeAndOrg.current,
-      ...newItem,
-    };
-  };
-  const handleSetHospital = (_key: string, val: any) => {
-    // setHospital({ ...val });
-    handleSetTimeAndOrg({
-      orgId: val.hospitalId,
-      orgName: val.hospitalName,
-    });
-  };
-  const handleUnknownReport = (unknownReport: boolean) => {
-    const params: CommonData = { unknownReport };
-    if (unknownReport) {
-      params.measuredAt = null;
-    }
-    handleSetTimeAndOrg(params);
-  };
+
   return (
     <div className={styles.structure_detail_item}>
-      <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
-        <div className="flex" style={{ flex: '0 0 47%' }}>
-          <div className="font-medium mr-5" style={{ flex: '0 0 63px' }}>
-            检查机构:
-          </div>
-          <SearchHospital
-            placeholder="请输入检查机构"
-            callback={handleSetHospital}
-            fieldName="hospital"
-            style={{ flex: 1, maxWidth: '78%' }}
-            defaultValue={{
-              hospitalId: initData?.orgId,
-              hospitalName: initData?.orgName,
-            }}
-          />
-        </div>
-        <ItemDate
-          setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
-          setUnknow={(unknownReport: boolean) => handleUnknownReport(unknownReport)}
-          // 如果是回显，就直接取回显的时间，没有就设置当前时间
-          initReportTime={initData?.measuredAt || new Date().getTime()}
-          isUnknownTime={initData?.unknownReport}
-          type="HYD"
-        />
-      </div>
+      {/*  */}
       <div className="structured-edit-wrap">
         <SubType
           leve1Type={outType}

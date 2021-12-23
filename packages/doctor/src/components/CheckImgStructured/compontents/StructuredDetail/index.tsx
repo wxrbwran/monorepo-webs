@@ -167,8 +167,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
 
   const showTypeTabs = typeTabs.filter(typeItem => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(typeItem.outType));
   const fetInitData = (inx: number) => {
-    console.log(34333, inx);
-    console.log('typeTabs', typeTabs);
     // 化验单是 documentList， 检查单是initData
     if (showTypeTabs[inx]?.documentList) {
       return showTypeTabs?.[inx];

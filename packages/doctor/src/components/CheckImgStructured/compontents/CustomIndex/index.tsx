@@ -1,5 +1,5 @@
 import React, {
-  FC, useEffect, useState, useMemo,
+  FC, useEffect, useState, useMemo, useRef,
 } from 'react';
 import {
   Form, Button,
@@ -7,6 +7,8 @@ import {
 import { isEmpty } from 'lodash';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
+import SearchHospital from '@/components/SearchHospital';
+import ItemDate from '../ItemDate';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
 import IndexTable from '../IndexTable';
 import styles from './index.scss';
@@ -45,7 +47,13 @@ interface IProps {
 
 const CustomIndex: FC<IProps> = (props) => {
   const {
-    handleDocumentsCallbackFns, formKey, initList, level1Type, firstIndex, apiParams, selectIndex, isViewOnly,
+    handleDocumentsCallbackFns,
+    formKey,
+    initList,
+    firstIndex,
+    apiParams,
+    selectIndex,
+    isViewOnly,
   } = props;
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue, getFieldsValue } = form;
@@ -56,9 +64,22 @@ const CustomIndex: FC<IProps> = (props) => {
   const [apiData, setApiData] = useState<IApiData>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
   const [formInit, setFormInit] = useState({});
+  // const timeAndOrg = useRef({
+  //   measuredAt: initData?.measuredAt || new Date().getTime(),
+  //   unknownReport: initData?.unknownReport,
+  //   orgId: initData?.orgId,
+  //   orgName: initData?.orgName,
+  // });
+  const timeAndOrg = useRef({
+    measuredAt: new Date().getTime(),
+    unknownReport: false,
+    orgId: '',
+    orgName: '',
+  });
   const sid = window.$storage.getItem('sid');
+
   // 把点击的指标移到第一行
-  const formatFirshIndex = (commonItems: IIndexItemCustom[], noCommonItems:IIndexItemCustom[]) => {
+  const formatFirshIndex = (commonItems: IIndexItemCustom[], noCommonItems: IIndexItemCustom[]) => {
     commonItems.forEach((item: IIndexItemCustom, index: number) => {
       if (firstIndex === item.id || firstIndex === item.indexId) {
         commonItems.splice(index, 1);
@@ -77,32 +98,36 @@ const CustomIndex: FC<IProps> = (props) => {
     };
   };
   useEffect(() => {
+    console.log('curtomIndex1');
     // 首次渲染
     if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
+      console.log('curtomIndex2');
       if (initList) {
         console.log('=====+1,initList有数据时');
         setApiData(formatDataAddIndex(initList, addIndexNum));
       } else {
+        console.log('curtomIndex3');
         const params = {
           documentId: apiParams.documentId,
-          sampleFroms: [apiParams.sampleFrom],
+          // sampleFroms: [apiParams.sampleFrom],
           sourceSid: sid,
           sid,
         };
-        api.indexLibrary.fetchIndexDocumentIndex(params).then(
-          ({ list }: { list: IIndexItemCustom[] }) => {
+        api.indexLibrary
+          .fetchIndexDocumentIndex(params)
+          .then(({ list }: { list: IIndexItemCustom[] }) => {
             const commonItems = list.filter((item) => item.common);
             const noCommonItems = list.filter((item) => !item.common);
             // 如果有指定首行展示哪个指标，这里移动到第一个
             const data: IApiData = firstIndex
-              ? formatFirshIndex(commonItems, noCommonItems) : {
+              ? formatFirshIndex(commonItems, noCommonItems)
+              : {
                 commonItems,
                 noCommonItems,
               };
             console.log('=====+2,initList没数据，请求接口时');
             setApiData({ ...formatDataAddIndex(data, addIndexNum) });
-          },
-        );
+          });
       }
     }
   }, [initList]);
@@ -126,26 +151,30 @@ const CustomIndex: FC<IProps> = (props) => {
       }, 300);
     }
   }, [firstIndex]);
-  const handleSave = () => new Promise((resolve, reject) => {
-    const itemsLength = (apiData?.commonItems?.length || 0) + (apiData?.noCommonItems?.length || 0);
-    validateFields().then((values) => {
-      // apiParams
-      const {
-        documentId, documentName, sampleFrom,
-      } = apiParams;
-      const params: CommonData = {
-        documentId,
-        documentName,
-        documentType: level1Type,
-        sampleFroms: [sampleFrom],
-        indexList: formatSubmitItems(values, itemsLength),
-      };
-      console.log('params22221', params);
-      resolve(params);
-    }).catch((err) => {
-      reject(err);
+  const handleSave = () =>
+    new Promise((resolve, reject) => {
+      const itemsLength =
+        (apiData?.commonItems?.length || 0) + (apiData?.noCommonItems?.length || 0);
+      validateFields()
+        .then((values) => {
+          console.log('validateFields', values);
+          // apiParams
+          const { documentId, documentName, sampleFrom } = apiParams;
+          const params: CommonData = {
+            documentId,
+            documentName,
+            documentType: 'HYD',
+            sampleFroms: [sampleFrom],
+            ...timeAndOrg.current,
+            indexList: formatSubmitItems(values, itemsLength),
+          };
+          console.log('params22221', params);
+          resolve(params);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
-  });
   const handleInitForm = () => {
     let initForm = {};
     // 所有指标：常用指标和非常用指标
@@ -154,9 +183,7 @@ const CustomIndex: FC<IProps> = (props) => {
       ...(apiData.noCommonItems || []),
     ];
     all.forEach((item: IIndexItemCustom) => {
-      const {
-        id, name, value, units, unit, formIndex, advices, indexId, sourceSid, source,
-      } = item;
+      const { id, name, value, units, unit, formIndex, advices, indexId, sourceSid, source } = item;
       initForm = {
         ...initForm,
         [`${formIndex}_indexId`]: id || indexId, // 首次根据勾选的内容获取指标列表返回的是id，回显后端返回的是indexId
@@ -196,8 +223,9 @@ const CustomIndex: FC<IProps> = (props) => {
   }, [apiData]);
   const addIndexSuccess = (newItemData: any) => {
     // 保存一下用户已经输入的form表单值，在apiData渲染完之后，这里重新设置回去。解决添加新指标后丢失用户输入数据问题
-    // 备注：由于上面监听了apiData的改变，只要此状态更新，就会走initForm方法（这里是为了把新添加的指标，也set一下，主
-    // 要是设置一下隐藏域indexIdNew的值。由于handleInitForm里的apiData是最原始的数据，所以会丢失用记输入的数据。所以这里需要重新设置回去）
+    // 备注：由于上面监听了apiData的改变，只要此状态更新，就会走initForm方法（这里是为了把新添加的指标，也set一下，
+    // 主要是设置一下隐藏域indexIdNew的值。由于handleInitForm里的apiData是最原始的数据，所以会丢失用记输入的数据。
+    // 所以这里需要重新设置回去）
     const curFormData = getFieldsValue(true);
     const newApiData = {
       ...apiData,
@@ -217,31 +245,99 @@ const CustomIndex: FC<IProps> = (props) => {
   useEffect(() => {
     // 点击搜索的， 如果当前指标列表中不存在此指标数据，则添加进来，否则这里不做处理
     if (selectIndex) {
-      const isHasIndex = [...apiData.commonItems, ...apiData.noCommonItems]
-        .filter((item) => item.id === selectIndex.id || item.indexId === selectIndex.indexId);
+      const isHasIndex = [...apiData.commonItems, ...apiData.noCommonItems].filter(
+        (item) => item.id === selectIndex.id || item.indexId === selectIndex.indexId,
+      );
       if (isHasIndex.length === 0) {
         addIndexSuccess(selectIndex);
       }
     }
   }, [selectIndex]);
-  const renderItem = useMemo(() => (subName?: string) => {
-    const param: any = { apiData, isViewOnly, getFieldsValue, formInit };
-    if (subName) { param.subName = subName; }
-    return <IndexTable {...param} />;
-  }, [apiData, formInit, isViewOnly]);
+  const renderItem = useMemo(
+    () => (subName?: string) => {
+      const param: any = { apiData, isViewOnly, getFieldsValue, formInit };
+      if (subName) {
+        param.subName = subName;
+      }
+      return <IndexTable {...param} form={form} />;
+    },
+    [apiData, formInit, isViewOnly],
+  );
+
+  const handleSetTimeAndOrg = (newItem: any) => {
+    const params = {
+      ...timeAndOrg.current,
+      ...newItem,
+    };
+    timeAndOrg.current = params;
+  };
+  const handleSetHospital = (_key: string, val: any) => {
+    // setHospital({ ...val });
+    handleSetTimeAndOrg({
+      orgId: val.hospitalId,
+      orgName: val.hospitalName,
+    });
+  };
+  const handleUnknownReport = (unknownReport: boolean) => {
+    const params: CommonData = { unknownReport };
+    if (unknownReport) {
+      params.measuredAt = null;
+    }
+    handleSetTimeAndOrg(params);
+  };
 
   return (
     <div className={`${styles.biochemistry} relative`}>
       <div className="flex justify-end absolute -top-52 -right-10 ">
         <EditIndex
           onSuccess={addIndexSuccess}
-          level1Type={level1Type}
           source="imgAddTypeIndex"
           documentId={apiParams.documentId}
           sampleFrom={apiParams.sampleFrom}
         >
           <Button type="link" className="text-sm">
             +添加新化验单
+          </Button>
+        </EditIndex>
+      </div>
+      <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
+        <div className="flex" style={{ flex: '0 0 47%' }}>
+          <div className="font-medium mr-5" style={{ flex: '0 0 63px' }}>
+            检查机构:
+          </div>
+          <SearchHospital
+            placeholder="请输入检查机构"
+            callback={handleSetHospital}
+            fieldName="hospital"
+            style={{ flex: 1, maxWidth: '78%' }}
+            defaultValue={
+              {
+                // hospitalId: initData?.orgId,
+                // hospitalName: initData?.orgName,
+              }
+            }
+          />
+        </div>
+        <ItemDate
+          setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
+          setUnknow={(unknownReport: boolean) => handleUnknownReport(unknownReport)}
+          // 如果是回显，就直接取回显的时间，没有就设置当前时间
+          // initReportTime={initData?.measuredAt || new Date().getTime()}
+          // isUnknownTime={initData?.unknownReport}
+          initReportTime={new Date().getTime()}
+          isUnknownTime={false}
+          type="HYD"
+        />
+      </div>
+      <div>
+        <EditIndex
+          onSuccess={addIndexSuccess}
+          source="imgAddIndex"
+          documentId={apiParams.documentId}
+          sampleFrom={apiParams.sampleFrom}
+        >
+          <Button type="link" className="text-sm">
+            +添加新指标
           </Button>
         </EditIndex>
       </div>

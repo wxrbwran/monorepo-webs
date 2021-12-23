@@ -235,3 +235,13 @@ interface ICallbackFn {
   type: string;
   fn?: () => void;
 }
+
+declare type TReference = {
+  id: string;
+  type: string;
+  value: string | null;
+  secondValue: string | null;
+  unit: string | null;
+  note: string | null;
+  isDefault: boolean;
+};

@@ -38,7 +38,7 @@ const SubType: FC<IProps> = (props) => {
         onValuesChange={handleValueChange}
         initialValues={{
           checkbox: [...initSampleFrom],
-          selects: [...initSampleFrom],
+          selects: [...initSampleFrom.filter((s) => s !== '血液')],
         }}
       >
         <Form.Item name="checkbox" noStyle>
@@ -59,11 +59,13 @@ const SubType: FC<IProps> = (props) => {
                     placeholder="请选择"
                     // onChange={handleChange}
                   >
-                    {subTypeList.map((item) => (
-                      <Option key={item} value={item}>
-                        {item}
-                      </Option>
-                    ))}
+                    {subTypeList
+                      .filter((s) => s !== '血液')
+                      .map((item) => (
+                        <Option key={item} value={item}>
+                          {item}
+                        </Option>
+                      ))}
                   </Select>
                 </Form.Item>
               );

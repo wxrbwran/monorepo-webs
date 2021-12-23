@@ -55,6 +55,7 @@ declare interface IStructuredDetailProps {
 
 // 搜索指标或者单据名称时，返回的item
 declare interface ISearchDocumentItem {
+  type: 'DOCUMENT' | 'INDEX';
   firstIndex?: string; // 自己添加的
   sampleFrom: string; // 来源
   documentName: string; // 单据（大分类）name
