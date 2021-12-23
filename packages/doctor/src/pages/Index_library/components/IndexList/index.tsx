@@ -110,32 +110,34 @@ const IndexList: FC = () => {
     dataIndex: 'id',
     render: (text: string, record: any) => (
       <div>
-        {record.source === 'DOCTOR' && record.sourceSid === sid && (
-          <Space>
-            <ViewIndex record={record} curDocument={curDocument}>
-              <Button type="link">查看</Button>
-            </ViewIndex>
-            <Popconfirm
-              title="确定删除此指标吗?"
-              onConfirm={() => handleDel(text)}
-              okText="是"
-              cancelText="否"
-            >
-              <Button type="link">删除</Button>
-            </Popconfirm>
-            {!record.used && (
-              <EditIndex
-                onSuccess={onSuccess}
-                initFormVal={record}
-                documentId={documentId}
-                level1Type={documentType}
-                source="libraryEdit"
+        <Space>
+          <ViewIndex record={record} curDocument={curDocument}>
+            <Button type="link">查看</Button>
+          </ViewIndex>
+          {record.source === 'DOCTOR' && src === 'ONESELF' && (
+            <>
+              <Popconfirm
+                title="确定删除此指标吗?"
+                onConfirm={() => handleDel(text)}
+                okText="是"
+                cancelText="否"
               >
-                <Button type="link">编辑</Button>
-              </EditIndex>
-            )}
-          </Space>
-        )}
+                <Button type="link">删除</Button>
+              </Popconfirm>
+              {!record.used && (
+                <EditIndex
+                  onSuccess={onSuccess}
+                  initFormVal={record}
+                  documentId={documentId}
+                  level1Type={documentType}
+                  source="libraryEdit"
+                >
+                  <Button type="link">编辑</Button>
+                </EditIndex>
+              )}
+            </>
+          )}
+        </Space>
       </div>
     ),
   };

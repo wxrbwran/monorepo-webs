@@ -104,7 +104,7 @@ const SearchHYD: FC<IProps> = (props) => {
         ))}
         {listEmpty && (
           <Option key="add" value="add">
-            <div className="text-center text-blue-500">暂无结果，点击+添加新指标</div>
+            <div className="text-center text-blue-500">暂无结果，点击+添加新化验单</div>
           </Option>
         )}
       </Select>
