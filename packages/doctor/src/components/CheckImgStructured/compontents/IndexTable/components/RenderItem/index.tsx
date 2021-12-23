@@ -20,7 +20,7 @@ const RenderItem: FC<IProps> = (props) => {
   const sid = window.$storage.getItem('sid');
   useEffect(() => {
     // const
-    console.log('RenderItem', indexItem);
+    // console.log('RenderItem', indexItem);
     if (indexItem.referenceList) {
       setList(indexItem.referenceList);
     } else {
@@ -60,7 +60,7 @@ const RenderItem: FC<IProps> = (props) => {
             <Space align="baseline" style={{ display: 'flex' }}>
               <ProFormDependency name={[`${indexItem.formIndex}_${index}_reference`]}>
                 {(deps: any) => {
-                  console.log('deps', deps);
+                  // console.log('deps', deps);
                   const referenceId = deps[`${indexItem.formIndex}_${index}_reference`];
                   let disabled = true;
                   if (!indexItem?.references || indexItem?.references?.length === 0) {
