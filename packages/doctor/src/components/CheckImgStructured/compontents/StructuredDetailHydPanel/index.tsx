@@ -2,8 +2,9 @@ import React, {
   FC, useState, useMemo, useRef, useEffect,
 } from 'react';
 import { Tabs, Popconfirm } from 'antd';
-// import { IDocmentItem, IDocmentItemApi } from 'typings/checkimg';
-import { CloseOutlined } from '@ant-design/icons';
+import { useDispatch } from 'umi';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
+import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
@@ -33,6 +34,10 @@ interface IProps {
 interface ICheckTypesItem extends IApiDocumentItem {
   sampleFrom: string;
   firstIndex: string;
+  orgId?: string;
+  orgName?: string;
+  measuredAt?: number;
+  unknownReport?: boolean;
 }
 // ICheckTypesItem保存过后init数据，接口返回的格式。ISearchDocumentItem是搜索时候接口返回的数据格式
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
@@ -45,6 +50,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const initCheckTypes: ICheckTypesItem[] = [];
   if (!isEmpty(initData)) {
     initData.documentList.forEach((item) => {
+      initSubType.push('其他');
       initSubType.push(item.sampleFroms?.[0] as string);
       initCheckTypes.push({
         ...item,
@@ -54,24 +60,38 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
     initSubType = [...new Set(initSubType)];
   } else {
-    initSubType = ['血液', '其他', '1', '阿斯顿'];
+    initSubType = ['血液'];
   }
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
   const [activeType, setActiveType] = useState<string>();
   const [sampleFroms, setSampleFroms] = useState<string[]>(initSubType);
   const documentsCallbackFns = useRef({});
+  const dispatch = useDispatch();
 
+  const handleCurDocument = (doc: TDocument) => {
+    dispatch({
+      type: 'document/setCurDocument',
+      payload: doc,
+    });
+  };
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
-  const handleSelectTypeIndex = (params: ISearchDocumentItem, type?: string) => {
-    console.log('handleSelectTypeIndex', params, type);
+  const handleSelectTypeIndex = (params: ISearchDocumentItem, _type?: string) => {
+    // console.log('handleSelectTypeIndex', params, _type);
+    // console.log('checkTypes', checkTypes);
     let newCheckTypes: ICheckTypes = [];
     let isNew = true;
     // 唯一性根据这两个指标确定： 图片大分类+子分类
     checkTypes.forEach((item: ICheckTypesItem | ISearchDocumentItem, index) => {
-      if ((item.documentName === params.documentName) && (item.sampleFrom === params.sampleFrom)) {
+      if (item.documentId === params.documentId) {
+        // console.log(item);
         isNew = false;
+        handleCurDocument({
+          id: item.documentId,
+          name: item.documentName,
+          sampleFrom: item.sampleFrom,
+        });
         newCheckTypes = [...checkTypes];
         if (params.type !== 'DOCUMENT') {
           // 如果此分类已经存在，那修改下首行指标id
@@ -88,11 +108,10 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
             },
           };
         }
-
       }
     });
     // 如果是新添加的大分类，则直接push进去
-    if (isNew) {
+    if (isNew && _type !== 'copy') {
       newCheckTypes = [
         ...checkTypes,
         {
@@ -100,6 +119,8 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           firstIndex: params.id,
         },
       ];
+    } else if (isNew && _type === 'copy') {
+      newCheckTypes = [...checkTypes, { ...params }];
     }
     activeType1.current = params.documentId + params.sampleFrom;
     setActiveType(params.documentId + params.sampleFrom);
@@ -146,6 +167,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   }
   const getInitList = (item: ICheckTypesItem | ISearchDocumentItem) => {
     // 有indexList表示是回显数据
+    console.log('getInitList', item);
     if (isMedicalIndexList(item)) {
       const { documentId, documentName } = item;
       const list: IIndexItem[] = [];
@@ -161,6 +183,12 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       const commonList = list.filter((indexItem) => indexItem.common);
       const noCommonList = list.filter((indexItem) => !indexItem.common);
       return {
+        orgAndTime: {
+          orgId: item.orgId,
+          orgName: item.orgName,
+          measuredAt: item.measuredAt,
+          unknownReport: item.unknownReport,
+        },
         commonItems: commonList,
         noCommonItems: noCommonList,
       };
@@ -177,52 +205,85 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       setActiveType(newCheckTypes[0].documentId + newCheckTypes[0].sampleFrom);
     }
   };
+  const handleRefershDocument = (e: React.MouseEvent, id: string): void => {
+    e.stopPropagation();
+    console.log(id);
+    event.emit('REFERSH_DOCUMENT_BY_ID', id);
+  };
   const renderTabPane = useMemo(() => () => checkTypes.map(
-    (item: ICheckTypesItem | ISearchDocumentItem) => (
-      <TabPane
-        tab={`${item.documentName}`}
-        key={`${item.documentId}${item.sampleFrom}`}
-        forceRender
-        closeIcon={
-          <Popconfirm
-            title="关闭后，标签内全部指标数据将清空，请确认?"
-            onConfirm={() => handleRemoveType(item)}
-            okText="确认"
-            cancelText="取消"
-          >
-            <CloseOutlined />
-          </Popconfirm>
-        }
-      >
-        <CustomIndex
-          handleDocumentsCallbackFns={handleDocumentsCallbackFns}
-          formKey={`${item.documentId}${item.sampleFrom}`}
-          level1Type={outType}
-          firstIndex={item.firstIndex as string}
-          initList={getInitList(item)}
-          selectIndex={item?.selectIndex}
-        // 单据和来源等信息,加显时，接口返回的数组格式，需要处理取第一个元素即可，也只有一个元素
-          apiParams={{
-            ...item,
-            sampleFrom: isMedicalIndexList(item)
-              ? item.sampleFroms[0] : item.sampleFrom,
-          }}
-          isViewOnly={isViewOnly}
-        />
-      </TabPane>
-    ),
+    (item: ICheckTypesItem | ISearchDocumentItem) => {
+      console.log('item', item);
+      let prefix = '[系统]';
+      const sid = window.$storage.getItem('sid');
+      if (item.sourceSid === sid) {
+        prefix = '[自己]';
+      } else if (item.sourceSid === sid && item.source === 'DOCTOR') {
+        prefix = '[他人]';
+      }
+      return (
+        <TabPane
+          tab={
+            <span>
+              {!isViewOnly && (
+                <SyncOutlined
+                  className="relative top-2"
+                  onClick={(e: React.MouseEvent) => handleRefershDocument(e, item.documentId)}
+                />
+              )}
+              {prefix}
+              {item.documentName}
+            </span>
+          }
+          key={`${item.documentId}${item.sampleFrom}`}
+          forceRender
+          closeIcon={
+            <Popconfirm
+              title="关闭后，标签内全部指标数据将清空，请确认?"
+              onConfirm={() => handleRemoveType(item)}
+              okText="确认"
+              cancelText="取消"
+            >
+              <CloseOutlined />
+            </Popconfirm>
+          }
+        >
+          <CustomIndex
+            handleDocumentsCallbackFns={handleDocumentsCallbackFns}
+            formKey={`${item.documentId}${item.sampleFrom}`}
+            level1Type={'HYD'}
+            firstIndex={item.firstIndex as string}
+            initList={getInitList(item)}
+            onCopySuccess={handleSelectTypeIndex}
+            selectIndex={item?.selectIndex}
+            // 单据和来源等信息,加显时，接口返回的数组格式，需要处理取第一个元素即可，也只有一个元素
+            apiParams={{
+              ...item,
+              sampleFrom: isMedicalIndexList(item) ? item.sampleFroms[0] : item.sampleFrom,
+            }}
+            isViewOnly={isViewOnly}
+          />
+        </TabPane>
+      );
+    },
   ), [checkTypes, isViewOnly, initData]);
   const handleActiveTab = (tab: string) => {
+    // console.log('checkTypes', checkTypes);
+    // console.log('tab', tab);
     activeType1.current = tab;
     setActiveType(tab);
+    const doc = checkTypes.filter(c => tab.includes(c.documentId))[0];
+    handleCurDocument({
+      id: doc.documentId,
+      name: doc.documentName,
+      sampleFrom: doc.sampleFrom,
+    });
   };
 
   return (
     <div className={styles.structure_detail_item}>
-      {/*  */}
       <div className="structured-edit-wrap">
         <SubType
-          leve1Type={outType}
+          leve1Type={'HYD'}
           handleChangeSubType={setSampleFroms}
           initSampleFrom={initSubType}
         />

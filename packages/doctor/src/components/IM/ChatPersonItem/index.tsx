@@ -38,17 +38,24 @@ const ChatPersonItem: FC<IProps> = (props) => {
   );
   // console.log('perso3232n', person);
 
-  const personList = useMemo(() => (
-    person.sort(compare).map((item) => (
-      <div key={item.role} className="flex justify-start items-center">
-        <img className="w-40 h-40 my-8" src={item.avatarUrl || defaultAvatar} alt="" key={item.wcId} />
-        <div key={item.wcId} className={styles.name}>
-          <div className={styles.role}>{getRole(item.role)}</div>
-          <div>{item.name}</div>
+  const personList = useMemo(
+    () =>
+      person.sort(compare).map((item: any, index: number) => (
+        <div key={item.role + index} className="flex justify-start items-center">
+          <img
+            className="w-40 h-40 my-8"
+            src={item.avatarUrl || defaultAvatar}
+            alt=""
+            key={item.wcId}
+          />
+          <div key={item.wcId} className={styles.name}>
+            <div className={styles.role}>{getRole(item.role)}</div>
+            <div>{item.name}</div>
+          </div>
         </div>
-      </div>
-    ))
-  ), [person]);
+      )),
+    [person],
+  );
   return (
     <li
       className={`${styles.item} ${im.currSessionId === `p2p-${person.sessionId}` ? styles.active : ''}`}

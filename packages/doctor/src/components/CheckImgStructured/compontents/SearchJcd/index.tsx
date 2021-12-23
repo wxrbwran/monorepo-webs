@@ -40,7 +40,6 @@ const SearchJcd: FC<IProps> = (props) => {
   const [nameList, setNameList] = useState<INameItem[]>([]); // 检查单名称列表
   const [otherNames, setOtherNames] = useState<IOtherName[]>([]); // 其它单据-单据名称
   const [selectName, setSelectName] = useState<string | undefined>();
-
   const handleBlur = () => {
     changePartMethod(partMethod.current);
     const { part, method } = partMethod.current;
@@ -52,6 +51,7 @@ const SearchJcd: FC<IProps> = (props) => {
       });
     }
   };
+  const sid = window.$storage.getItem('sid');
   useEffect(() => {
     api.image.fetchImageTemplatePart().then(res => {
       setPartsMethods(res);
@@ -148,26 +148,28 @@ const SearchJcd: FC<IProps> = (props) => {
           )
         }
       </Row>
-      {
-        !isEmpty(nameList) && (
-          <div className="mt-10 flex items-center">
-            <span className={styles.tit}>检查名称：</span>
-            <Select style={{ flex: 1 }} onChange={handleSelectJcd} placeholder="请选择检查单">
-              {
-                nameList.map(item => (
-                  <Option value={item.jcdName} key={item.jcdName}>
-                    {
-                      item.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} />
-                    }
-                    <span>{ item.source === 'SYSTEM' && '【官方】'}{item.jcdName}</span>
-                  </Option>
-                ))
-              }
-            </Select>
-            <Button className={styles.add_btn} onClick={handleAddJcd}>添加</Button>
-          </div>
-        )
-      }
+      {!isEmpty(nameList) && (
+        <div className="mt-10 flex items-center">
+          <span className={styles.tit}>检查名称：</span>
+          <Select style={{ flex: 1 }} onChange={handleSelectJcd} placeholder="请选择检查单">
+            {nameList.map((item) => (
+              <Option value={item.jcdName} key={item.jcdName}>
+                {item.source === 'SYSTEM' && <img className="w-16 h-16" src={iconGf} />}
+                {item.source === 'SYSTEM' && <span>{`'[官方]'${item.jcdName}`}</span>}
+                {item.source === 'DOCTOR' && item.sourceSid === sid && (
+                  <span>{`'[自己]'${item.jcdName}`}</span>
+                )}
+                {item.source === 'DOCTOR' && item.sourceSid !== sid && (
+                  <span>{`'[他人]'${item.jcdName}`}</span>
+                )}
+              </Option>
+            ))}
+          </Select>
+          <Button className={styles.add_btn} onClick={handleAddJcd}>
+            添加
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

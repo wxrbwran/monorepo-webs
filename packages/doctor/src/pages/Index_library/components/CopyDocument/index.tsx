@@ -15,7 +15,7 @@ interface IProps {
   document: TIndexItem
 }
 const CopyDocument: FC<IProps> = (props) => {
-  const { type, document, children } = props;
+  const { type, document, children, onSuccess } = props;
   // console.log('record', record);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,6 +49,10 @@ const CopyDocument: FC<IProps> = (props) => {
         const res = await api.indexLibrary.copyIndexDocument(params);
         // console.log("copy hyd", res);
         event.emit('refershMenu', res);
+        if (onSuccess) {
+          // 结构化时复制单据回传
+          onSuccess(res);
+        }
       } else if (['JCD', 'OTHER'].includes(type)) {
         const res = await api.indexLibrary.copyImageTemplate({
           id: document?.id,
