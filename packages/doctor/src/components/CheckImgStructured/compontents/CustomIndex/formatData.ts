@@ -13,18 +13,18 @@ export const formatSubmitItems = (data: CommonData, length: number) => {
     const newItem: CommonData = {
       indexId: data[`${i}_indexId`],
       name: data[`${i}_name`],
+      abbreviation: data[`${i}_abbreviation`],
       referenceList: [],
+      originReferences: data[`${i}_referenceList`].map((r: any) => {
+        r.referenceId = r.id;
+        return r;
+      }),
     };
-    // if (data[`${i}_value`]) {
-    //   newItem.value = data[`${i}_value`];
-    // }
-    if (data[`${i}_minValue`] || data[`${i}_maxValue`]) {
-      newItem.advices = [data[`${i}_minValue`] ?? 'empty', data[`${i}_maxValue`] ?? 'empty'];
-    }
+
     // 处理参考值
     const count = data[`${i}_valueCount`];
     for (let j = 0; j < count; j++) {
-      let tmp: Partial<TReference> | null = {};
+      let tmp: any = {};
       if (data[`${i}_${j}_indexValue`]) {
         tmp.indexValue = data[`${i}_${j}_indexValue`];
       }

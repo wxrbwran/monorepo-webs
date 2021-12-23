@@ -85,23 +85,23 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
     (item: IJcdTabItem, inx: number) => (
       <TabPane
         tab={<span>
-              {
-                !item.data && <span onDoubleClick={() => handleRefresh(inx)}><SyncOutlined /></span>
-              }
-              <CreateJcd
-                actionType="edit"
-                initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
-                templateId={item.meta.id}
-                onSuccess={handleEditJcdNameSuccess}
-                updateCreateJcdNum={updateCreateJcdNum}
-                outType={outType}
-              >
-                <span>
-                  {item.meta.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} /> }
-                  {item.meta.jcdName}
-                </span>
-              </CreateJcd>
-            </span> }
+          {
+            !item.data && <span onDoubleClick={() => handleRefresh(inx)}><SyncOutlined /></span>
+          }
+          <CreateJcd
+            actionType="edit"
+            initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
+            templateId={item.meta.id}
+            onSuccess={handleEditJcdNameSuccess}
+            updateCreateJcdNum={updateCreateJcdNum}
+            outType={outType}
+          >
+            <span>
+              {item.meta.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} /> }
+              {item.meta.jcdName}
+            </span>
+          </CreateJcd>
+        </span> }
         key={`${item.meta.tabKey}`}
         forceRender
         closeIcon={

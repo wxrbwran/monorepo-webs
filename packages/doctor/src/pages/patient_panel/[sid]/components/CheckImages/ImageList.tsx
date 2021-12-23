@@ -60,7 +60,7 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
         }
       });
       setImgList(imgs);
-      console.log('434321', imgs);
+      // console.log('434321', imgs);
       // setImgList
       setImgToReview(toReview);
       setImgReview(review);

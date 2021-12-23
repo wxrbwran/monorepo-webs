@@ -252,9 +252,9 @@ const ChatList: FC = () => {
             )}
           </li>
         )}
-        {reCalcAllMessageTime(currSessionMsgs).filter(item => item.type).map((msg: Store) => (
+        {reCalcAllMessageTime(currSessionMsgs).filter(item => item.type).map((msg: Store, index) => (
           <ChatItem
-            key={msg.time}
+            key={msg.time + index}
             myInfo={myInfo}
             rawMsg={msg}
             avatarArr={avatarArr}
