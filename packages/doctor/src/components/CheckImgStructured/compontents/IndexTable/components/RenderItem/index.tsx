@@ -88,7 +88,7 @@ const RenderItem: FC<IProps> = (props) => {
                   return (
                     <Form.Item
                       name={`${indexItem.formIndex}_${index}_indexValue`}
-                      rules={[{ required: true, message: '请输入参考值' }]}
+                      // rules={[{ required: true, message: '请输入参考值' }]}
                     >
                       <Input placeholder="请输入参考值" disabled={disabled} />
                     </Form.Item>
