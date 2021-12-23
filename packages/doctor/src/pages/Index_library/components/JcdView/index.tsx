@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useLocation } from 'umi';
-import { Space, Button } from 'antd';
+import { Space, Button, Empty } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
 import { documentMap, documentTypeSource } from 'xzl-web-shared/dist/utils/consts';
@@ -8,6 +8,7 @@ import CopyDocument from '../../components/CopyDocument';
 import CompletionTemplate from './Completion/CompletionTemplate';
 import RadioTemplate from './Radio/RadioTemplate';
 import TextTemplate from './Text/TextTemplate';
+import { isEmpty } from 'lodash';
 import styles from './index.scss';
 
 interface IProps {
@@ -67,6 +68,9 @@ const JcdView: FC<IProps> = (props) => {
         </CopyDocument>
       </h2>
       <Space direction="vertical" className="w-full px-20">
+        {
+          isEmpty(completions) && isEmpty(radioAndCheckboxs) && isEmpty(texts) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        }
         <CompletionTemplate { ...templateProps } questions={completions} />
         <RadioTemplate { ...templateProps } questions={radioAndCheckboxs} />
         <TextTemplate { ...templateProps } questions={texts} />
