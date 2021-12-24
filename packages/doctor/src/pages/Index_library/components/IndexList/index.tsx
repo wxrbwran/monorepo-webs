@@ -44,7 +44,7 @@ const IndexList: FC = () => {
   const { getFieldValue } = form;
   // @ts-ignore
   const {
-    query: { documentId, documentType, src },
+    query: { documentId, src },
   } = useLocation<Location & ILocation>();
   const [total, setTotal] = useState(0);
   const initDepOptions: IParams = {
@@ -129,7 +129,6 @@ const IndexList: FC = () => {
                   onSuccess={onSuccess}
                   initFormVal={record}
                   documentId={documentId}
-                  level1Type={documentType}
                   source="libraryEdit"
                 >
                   <Button type="link">编辑</Button>
