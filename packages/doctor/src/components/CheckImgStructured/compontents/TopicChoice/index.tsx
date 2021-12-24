@@ -75,7 +75,8 @@ function TopicChoice(props: IProps) {
   return (
     <div className={styles.choice}>
       {(isViewOnly || !isShowEdit) && <Divider dashed />}
-      <div className="qa-wrap">
+      <div className="qa-wrap relative">
+      {isViewOnly && <div className={styles.mask}></div>}
       {
         (isViewOnly ? valuableQas : questions).map((item: IQaItem, quesIndex: number) => (
           <div key={item.question} className="relative ">
@@ -97,7 +98,7 @@ function TopicChoice(props: IProps) {
                 >
                   {
                     item.options!.map((option, optionInx) => (
-                      <Radio key={optionInx} value={option} disabled={isViewOnly}>{option}</Radio>
+                      <Radio key={optionInx} value={option}>{option}</Radio>
                     ))
                   }
                 </Radio.Group>
@@ -106,7 +107,6 @@ function TopicChoice(props: IProps) {
                   options={item.options}
                   onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
                   value={item.answer}
-                  disabled={isViewOnly}
                 />
               )
             }

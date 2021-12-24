@@ -3,12 +3,12 @@ import { Tabs, Popconfirm } from 'antd';
 import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
 import uuid from 'react-uuid';
 import { isEmpty, cloneDeep } from 'lodash';
-import iconGf from '@/assets/img/icon_official.png';
 import StructuredJcdTabItem from '../StructuredJcdTabItem';
 import SearchJcd from '../SearchJcd';
 import CreateJcd from '../CreateJcd';
 import { IAddJcdItem, IJcdTabItem } from '../type';
 // import * as api from '@/services/api';
+import { getSource } from '../utils';
 import styles from './index.scss';
 
 interface IProps {
@@ -88,19 +88,29 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
           {
             !item.data && <span onDoubleClick={() => handleRefresh(inx)}><SyncOutlined /></span>
           }
-          <CreateJcd
-            actionType="edit"
-            initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
-            templateId={item.meta.id}
-            onSuccess={handleEditJcdNameSuccess}
-            updateCreateJcdNum={updateCreateJcdNum}
-            outType={outType}
-          >
-            <span>
-              {item.meta.source === 'SYSTEM' &&  <img className="w-16 h-16" src={iconGf} /> }
-              {item.meta.jcdName}
-            </span>
-          </CreateJcd>
+          {
+            item.meta.sid === doctorSid ? (
+              <CreateJcd
+                actionType="edit"
+                initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
+                templateId={item.meta.id}
+                onSuccess={handleEditJcdNameSuccess}
+                updateCreateJcdNum={updateCreateJcdNum}
+                outType={outType}
+              >
+                <span>
+                  <span className="relative -top-1" dangerouslySetInnerHTML={{ __html: getSource(item.meta.source, item.meta.sid) }}></span>
+                  {item.meta.jcdName}
+                </span>
+              </CreateJcd>
+            ) : (
+              <span className="relative -top-2">
+                <span dangerouslySetInnerHTML={{ __html: getSource(item.meta.source, item.meta.sid) }}></span>
+                {item.meta.jcdName}
+              </span>
+            )
+          }
+
         </span> }
         key={`${item.meta.tabKey}`}
         forceRender

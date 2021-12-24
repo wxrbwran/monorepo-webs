@@ -18,9 +18,10 @@ const CompletionItem: FC<IProps> = (props) => {
               {children}
             </Space>
           ) : (
-            <div className="mb-20 flex" key={item.uuid! + item.question!}>
-              <span>{`${index}. ${item.question}`}</span>
-              <div className="w-300 ml-10"><Input placeholder="请输入答案" /></div>
+            <div className="mb-20 flex pl-30" key={item.uuid! + item.question!}>
+              <span className="border rounded-lg border-gray-600 h-16 px-2 inline-block mt-3" style={{ lineHeight: '14px' }}>{index}</span>
+              <span>{`. ${item.question}`}</span>
+              <div className="w-106 ml-10 rounded-md"><Input style={{ height: '32px' }} placeholder="请输入答案" /></div>
             </div>
           );
         })

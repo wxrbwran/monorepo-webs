@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useLocation } from 'umi';
 import { Space, Button, Empty } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
 import * as api from '@/services/api';
 import { documentMap, documentTypeSource } from 'xzl-web-shared/dist/utils/consts';
 import CopyDocument from '../../components/CopyDocument';
@@ -9,6 +8,7 @@ import CompletionTemplate from './Completion/CompletionTemplate';
 import RadioTemplate from './Radio/RadioTemplate';
 import TextTemplate from './Text/TextTemplate';
 import { isEmpty } from 'lodash';
+import copyIcon from '@/assets/img/icon_copy_img.png';
 import styles from './index.scss';
 
 interface IProps {
@@ -62,7 +62,7 @@ const JcdView: FC<IProps> = (props) => {
           }`}</span>
         )}
         <CopyDocument type={type} onSuccess={onSuccess} document={curDocument}>
-          <Button icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}>
+          <Button className={styles.copy_btn} icon={<img src={copyIcon} />}>
             复制{documentMap[curDocument.type]}
           </Button>
         </CopyDocument>

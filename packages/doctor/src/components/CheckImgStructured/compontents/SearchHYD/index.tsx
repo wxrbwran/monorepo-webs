@@ -5,8 +5,8 @@ import { Select, Space } from 'antd';
 import { debounce } from 'lodash';
 import { useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
-import iconGf from '@/assets/img/icon_official.png';
 import * as api from '@/services/api';
+import { getSource } from '../utils';
 // 搜索大分类或者指标
 const { Option } = Select;
 interface IProps {
@@ -27,7 +27,6 @@ const SearchHYD: FC<IProps> = (props) => {
   const [selectVal, setselectVal] = useState<string>();
   // const [listEmpty, setlistEmpty] = useState(false);
   const dispatch = useDispatch();
-  const sid = window.$storage.getItem('sid');
   const handleSearch = (e: React.ChangeEvent<ReactElement>) => {
     console.log(3232, e);
     if (e) {
@@ -88,12 +87,7 @@ const SearchHYD: FC<IProps> = (props) => {
         {typeList.map((item, index) => (
           <Option key={item.type + item?.id} value={index}>
             <Space>
-              {item.source === 'SYSTEM' && (
-                <img className="w-16 h-16 relative -top-3" src={iconGf} />
-              )}
-              {item.source === 'SYSTEM' && <span>[官方]</span>}
-              {item.source === 'DOCTOR' && item.sourceSid === sid && <span>[自己]</span>}
-              {item.source === 'DOCTOR' && item.sourceSid !== sid && <span>[医生]</span>}
+              <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
               <span>
                 {`${item?.sampleFrom} - ${
                   item?.type === 'DOCUMENT' ? item?.name : `${item.documentName}-${item.name}`
