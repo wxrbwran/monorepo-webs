@@ -37,10 +37,15 @@ export default {
     return http.get('index/document/allIndex', { data });
   },
 
-  // 获取指标列表
+  // 获取指标列表 附带参考值
   fetchIndexDocumentIndex(data: any): Promise<any> {
     return http.get('index/document/index', { data });
   },
+  // 添加指标时，获取指标列表
+  fetchAllIndexDocumentIndex(data: any): Promise<any> {
+    return http.get('index/document/allIndex', { data });
+  },
+  // /index/document/allIndex
   // 新增指标
   putIndexDocumentIndex(data: CommonData): Promise<any> {
     return http.put('index/document/index', { data });
