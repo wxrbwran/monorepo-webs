@@ -36,3 +36,9 @@
     }
   }
 }
+.lib_add_index{
+  .ant-select-item-option:first-child {
+    // 隐藏tag模式下select option第一行,不是搜索出来的
+    display: none;
+  }
+}

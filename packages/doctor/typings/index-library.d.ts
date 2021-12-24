@@ -8,7 +8,7 @@ declare type TDocument = {
 };
 
 declare type TIndexItem = {
-  id: string;
+  id?: string;
   type: string;
   name?: string;
   abbreviation?: string;
