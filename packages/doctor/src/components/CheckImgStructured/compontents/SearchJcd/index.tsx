@@ -1,9 +1,9 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
 import { AutoComplete, Select, Button, Row, Col, message } from 'antd';
-import iconGf from '@/assets/img/icon_official.png';
 import * as api from '@/services/api';
 import { IAddJcdItem } from '../type';
 import { isEmpty, debounce } from 'lodash';
+import { getSource } from '../utils';
 import styles from './index.scss';
 
 const { Option } = Select;
@@ -51,7 +51,6 @@ const SearchJcd: FC<IProps> = (props) => {
       });
     }
   };
-  const sid = window.$storage.getItem('sid');
   useEffect(() => {
     api.image.fetchImageTemplatePart().then(res => {
       setPartsMethods(res);
@@ -153,18 +152,15 @@ const SearchJcd: FC<IProps> = (props) => {
         <div className="mt-10 flex items-center">
           <span className={styles.tit}>检查名称：</span>
           <Select style={{ flex: 1 }} onChange={handleSelectJcd} placeholder="请选择检查单">
-            {nameList.map((item) => (
-              <Option value={item.id} key={item.id}>
-                {item.source === 'SYSTEM' && <img className="w-16 h-16" src={iconGf} />}
-                {item.source === 'SYSTEM' && <span>{`【官方】${item.jcdName}`}</span>}
-                {item.source === 'DOCTOR' && item.sid === sid && (
-                  <span>{`【自己】${item.jcdName}`}</span>
-                )}
-                {item.source === 'DOCTOR' && item.sid !== sid && (
-                  <span>{`【他人】${item.jcdName}`}</span>
-                )}
-              </Option>
-            ))}
+            {nameList.map((item) => {
+              // const { cName, title } = getSource(item.source, item.sid);
+              return (
+                <Option value={item.id} key={item.id}>
+                  <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
+                  <span>{item.jcdName}</span>
+                </Option>
+              );
+            })}
           </Select>
           <Button className={styles.add_btn} onClick={handleAddJcd}>
             添加

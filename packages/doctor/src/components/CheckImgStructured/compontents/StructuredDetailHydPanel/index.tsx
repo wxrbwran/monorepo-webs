@@ -9,6 +9,7 @@ import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
 import EditIndex from '@/components/EditIndex';
+import { getSource } from '../utils';
 
 import { isEmpty } from 'lodash';
 import styles from './index.scss';
@@ -214,13 +215,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const renderTabPane = useMemo(() => () => checkTypes.map(
     (item: ICheckTypesItem | ISearchDocumentItem) => {
       console.log('item', item);
-      let prefix = '[官方]';
-      const sid = window.$storage.getItem('sid');
-      if (item.sourceSid === sid) {
-        prefix = '[自己]';
-      } else if (item.sourceSid !== sid && item.source === 'DOCTOR') {
-        prefix = '[医生]';
-      }
       return (
         <TabPane
           tab={
@@ -231,7 +225,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
                   onClick={(e: React.MouseEvent) => handleRefershDocument(e, item.documentId)}
                 />
               )}
-              {prefix}
+              <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
               {item.documentName}
             </span>
           }
@@ -286,35 +280,47 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
 
   return (
     <div className={styles.structure_detail_item}>
-      <div className="structured-edit-wrap">
-        <SubType
-          leve1Type={'HYD'}
-          handleChangeSubType={setSampleFroms}
-          initSampleFrom={initSubType}
-        />
-      </div>
-      {sampleFroms.length > 0 && (
-        <>
+      {
+        !isViewOnly && (
           <div className="structured-edit-wrap">
-            <SearchHYD
-              sampleFroms={sampleFroms}
-              handleSelectTypeIndex={handleSelectTypeIndex}
-              // imageId={imageId}
-              documentType={outType}
+            <SubType
+              leve1Type={'HYD'}
+              handleChangeSubType={setSampleFroms}
+              initSampleFrom={initSubType}
             />
           </div>
+        )
+      }
+      {sampleFroms.length > 0 && (
+        <>
+          {
+            !isViewOnly && (
+              <div className="structured-edit-wrap">
+                <SearchHYD
+                  sampleFroms={sampleFroms}
+                  handleSelectTypeIndex={handleSelectTypeIndex}
+                  // imageId={imageId}
+                  documentType={outType}
+                />
+              </div>
+            )
+          }
           <div className={styles.hyd_tab_wrap}>
-            <div className="flex justify-end absolute top-5 -right-10 ">
-              <EditIndex
-                onSuccess={addIndexSuccess}
-                source="imgAddTypeIndex"
-                sampleFrom={sampleFroms}
-              >
-                <Button type="link" className="text-sm">
-                  +添加新化验单
-                </Button>
-              </EditIndex>
-            </div>
+            {
+              !isViewOnly && (
+                <div className="flex justify-end absolute top-5 -right-10 ">
+                  <EditIndex
+                    onSuccess={addIndexSuccess}
+                    source="imgAddTypeIndex"
+                    sampleFrom={sampleFroms}
+                  >
+                    <Button type="link" className="text-sm">
+                      +添加新化验单
+                    </Button>
+                  </EditIndex>
+                </div>
+              )
+            }
             {checkTypes.length > 0 && (
               <Tabs
                 activeKey={activeType}
