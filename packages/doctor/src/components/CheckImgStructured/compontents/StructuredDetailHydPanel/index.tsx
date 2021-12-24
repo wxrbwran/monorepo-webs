@@ -5,10 +5,10 @@ import { Tabs, Popconfirm, Button } from 'antd';
 import { useDispatch } from 'umi';
 import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
+import AddEditDocument from '@/pages/Index_library/components/AddEditDocument';
 import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
-import EditIndex from '@/components/EditIndex';
 
 import { isEmpty } from 'lodash';
 import styles from './index.scss';
@@ -79,7 +79,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
 
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
   const handleSelectTypeIndex = (params: ISearchDocumentItem, _type?: string) => {
-    // console.log('handleSelectTypeIndex', params, _type);
+    console.log('handleSelectTypeIndex', params, _type);
     // console.log('checkTypes', checkTypes);
     let newCheckTypes: ICheckTypes = [];
     let isNew = true;
@@ -120,6 +120,11 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           firstIndex: params.id,
         },
       ];
+      handleCurDocument({
+        id: params.documentId,
+        name: params.documentName,
+        sampleFrom: params.sampleFrom,
+      });
     } else if (isNew && _type === 'copy') {
       newCheckTypes = [...checkTypes, { ...params }];
     }
@@ -281,7 +286,13 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   };
   const addIndexSuccess = (newItemData) => {
     console.log('====gxxx', newItemData);
-    handleSelectTypeIndex(newItemData);
+    handleSelectTypeIndex({
+      ...newItemData,
+      documentId: newItemData.id,
+      documentName: newItemData.name,
+      type: 'DOCUMENT',
+      id: null,
+    });
   };
 
   return (
@@ -305,15 +316,11 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           </div>
           <div className={styles.hyd_tab_wrap}>
             <div className="flex justify-end absolute top-5 -right-10 ">
-              <EditIndex
-                onSuccess={addIndexSuccess}
-                source="imgAddTypeIndex"
-                sampleFrom={sampleFroms}
-              >
+              <AddEditDocument mode="add" type="HYD" onSuccess={addIndexSuccess}>
                 <Button type="link" className="text-sm">
                   +添加新化验单
                 </Button>
-              </EditIndex>
+              </AddEditDocument>
             </div>
             {checkTypes.length > 0 && (
               <Tabs

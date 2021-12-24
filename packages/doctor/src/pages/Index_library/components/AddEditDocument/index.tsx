@@ -15,7 +15,7 @@ interface IProps {
   record?: TIndexItem
 }
 const AddEditDocument: FC<IProps> = (props) => {
-  const { type, mode, record, children } = props;
+  const { type, mode, record, children, onSuccess } = props;
   // console.log('record', record);
   const [showModal, setshowModal] = useState(false);
   const [form] = Form.useForm();
@@ -31,7 +31,7 @@ const AddEditDocument: FC<IProps> = (props) => {
     setshowModal(false);
   };
   const handleSave = async (values: any) => {
-    console.log(values);
+    // console.log(values);
     let params = {
       ...values,
       type: type,
@@ -50,6 +50,9 @@ const AddEditDocument: FC<IProps> = (props) => {
           res = await api.indexLibrary.patchIndexDocument(params);
         }
         event.emit('refershMenu', { ...res, type: 'HYD' });
+        if (onSuccess) {
+          onSuccess(res);
+        }
       } else if (['JCD', 'OTHER'].includes(type)) {
         params = {
           ...params,
@@ -75,7 +78,6 @@ const AddEditDocument: FC<IProps> = (props) => {
             ...params,
           });
         }
-        console.log('393993', res);
         event.emit('refershMenu', {
           id: res?.meta?.id || record?.id,
           jcdName: params.jcdName,
