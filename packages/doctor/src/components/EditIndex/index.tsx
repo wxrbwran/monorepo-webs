@@ -238,35 +238,45 @@ const EditIndex: FC<IProps> = (props) => {
             >
               {source !== 'imgAddTypeIndex' && (
                 <Form.Item name="documentId" style={{ display: 'none' }}>
-                  <Input placeholder="化验单Id" disabled type="hidden" />
+                  <Input placeholder="化验单Id" readOnly type="hidden" />
                 </Form.Item>
               )}
               <Form.Item name="documentName" label="化验单名称">
-                <Input placeholder="化验单名称" disabled={source !== 'imgAddTypeIndex'} />
+                <Input placeholder="化验单名称" readOnly={source !== 'imgAddTypeIndex'} />
               </Form.Item>
               <Form.Item name="sampleFrom" label="样本来源">
-                <Input placeholder="样本来源" disabled={source !== 'imgAddTypeIndex'} />
+                <Input placeholder="样本来源" readOnly={source !== 'imgAddTypeIndex'} />
               </Form.Item>
               <Form.Item name="indexId" noStyle className="hidden">
                 <Input type="hidden" />
               </Form.Item>
-              <Form.Item className="hidden" noStyle name="name">
-                <Input type="hidden" />
-              </Form.Item>
-              <Form.Item label="指标名称" rules={rules}>
-                <DebounceSelect
-                  mode="tags"
-                  allowClear
-                  value={selectVal}
-                  dropdownClassName="lib_add_index"
-                  // optionFilterProp="label"
-                  fetchOptions={fetchIndexList}
-                  onChange={handleChangeName}
-                  onSelect={handleOnSelect}
-                  onClear={handleOnClear}
-                  style={{ width: '100%' }}
-                />
-              </Form.Item>
+              {/* 指标库添加指标/结构化添加指标 */}
+              {['imgAddIndex', 'libraryAdd'].includes(source) && (
+                <>
+                  <Form.Item className="hidden" noStyle name="name">
+                    <Input type="hidden" />
+                  </Form.Item>
+                  <Form.Item label="指标名称" rules={rules}>
+                    <DebounceSelect
+                      mode="tags"
+                      allowClear
+                      value={selectVal}
+                      dropdownClassName="lib_add_index"
+                      fetchOptions={fetchIndexList}
+                      onChange={handleChangeName}
+                      onSelect={handleOnSelect}
+                      onClear={handleOnClear}
+                      style={{ width: '100%' }}
+                    />
+                  </Form.Item>
+                </>
+              )}
+              {/* 同时添加单据指标/指标库编辑指标/结构化编辑指标 */}
+              {['imgAddTypeIndex', 'libraryEdit', 'imgEditIndex'].includes(source) && (
+                <Form.Item name="name" rules={rules} label="指标名称">
+                  <Input placeholder="请输入指标名称" />
+                </Form.Item>
+              )}
               <Form.Item name="abbreviation" label="缩写">
                 <Input placeholder="请输入指标缩写" />
               </Form.Item>
