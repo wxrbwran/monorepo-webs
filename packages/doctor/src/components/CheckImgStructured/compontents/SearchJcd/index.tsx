@@ -39,14 +39,14 @@ const SearchJcd: FC<IProps> = (props) => {
   const [methodList, setMethodList] = useState([]);
   const [nameList, setNameList] = useState<INameItem[]>([]); // 检查单名称列表
   const [otherNames, setOtherNames] = useState<IOtherName[]>([]); // 其它单据-单据名称
-  const [selectName, setSelectName] = useState<string | undefined>();
+  const [selectId, setSelectId] = useState<string | undefined>();
   const handleBlur = () => {
     changePartMethod(partMethod.current);
     const { part, method } = partMethod.current;
     if (part && method) {
       api.image.fetchImageTemplateName(partMethod.current).then(res => {
         setNameList(res.jcdTitleSet);
-        setSelectName(undefined);
+        setSelectId(undefined);
         handleShowAddJctBtn(!!isEmpty(res.jcdTitleSet));
       });
     }
@@ -77,13 +77,13 @@ const SearchJcd: FC<IProps> = (props) => {
   };
 
   const handleSelectJcd = (val: string) => {
-    setSelectName(val);
+    setSelectId(val);
   };
   const handleAddJcd = () => {
-    if (selectName) {
-      console.log('添加检查单', selectName, partMethod);
+    if (selectId) {
+      console.log('添加检查单', selectId, partMethod);
       // handleAddJcdTab
-      const baseInfo:INameItem = nameList.find(item => item.jcdName === selectName) as INameItem;
+      const baseInfo:INameItem = nameList.find(item => item.id === selectId) as INameItem;
       console.log('9992', { ...baseInfo, ...partMethod.current });
       handleAddJcdTab({ ...baseInfo, ...partMethod.current });
     } else {
@@ -96,9 +96,9 @@ const SearchJcd: FC<IProps> = (props) => {
   };
   const handleSearchOtherName = (val: string) => {
     console.log('ddddd', val);
-    changePartMethod({ 'jcdName': val });
+    changePartMethod({ 'jcdName': val  });
     if (val) {
-      api.image.fetchImageTemplateName({ jcdName: val }).then(res => {
+      api.image.fetchImageTemplateName({ jcdName: val, title: 'OTHER' }).then(res => {
         console.log('res23232', res);
         const names = res.jcdTitleSet.map((item: { jcdName: string }) => {
           return { ...item, value: item.jcdName };
@@ -108,6 +108,7 @@ const SearchJcd: FC<IProps> = (props) => {
       });
     }
   };
+  console.log('nameList', nameList);
   return (
     <div className={styles.search_jcd}>
       <Row>
@@ -153,14 +154,14 @@ const SearchJcd: FC<IProps> = (props) => {
           <span className={styles.tit}>检查名称：</span>
           <Select style={{ flex: 1 }} onChange={handleSelectJcd} placeholder="请选择检查单">
             {nameList.map((item) => (
-              <Option value={item.jcdName} key={item.jcdName}>
+              <Option value={item.id} key={item.id}>
                 {item.source === 'SYSTEM' && <img className="w-16 h-16" src={iconGf} />}
-                {item.source === 'SYSTEM' && <span>{`'[官方]'${item.jcdName}`}</span>}
-                {item.source === 'DOCTOR' && item.sourceSid === sid && (
-                  <span>{`'[自己]'${item.jcdName}`}</span>
+                {item.source === 'SYSTEM' && <span>{`【官方】${item.jcdName}`}</span>}
+                {item.source === 'DOCTOR' && item.sid === sid && (
+                  <span>{`【自己】${item.jcdName}`}</span>
                 )}
-                {item.source === 'DOCTOR' && item.sourceSid !== sid && (
-                  <span>{`'[他人]'${item.jcdName}`}</span>
+                {item.source === 'DOCTOR' && item.sid !== sid && (
+                  <span>{`【他人】${item.jcdName}`}</span>
                 )}
               </Option>
             ))}

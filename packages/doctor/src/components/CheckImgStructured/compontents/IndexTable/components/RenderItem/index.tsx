@@ -33,6 +33,7 @@ const RenderItem: FC<IProps> = (props) => {
     form.setFieldsValue({
       [`${indexItem.formIndex}_name`]: param.name,
       [`${indexItem.formIndex}_abbreviation`]: param.abbreviation,
+      [`${indexItem.formIndex}_referenceList`]: param.references,
     });
     onSuccess({ ...indexItem, ...param });
   };
@@ -88,7 +89,7 @@ const RenderItem: FC<IProps> = (props) => {
                   return (
                     <Form.Item
                       name={`${indexItem.formIndex}_${index}_indexValue`}
-                      rules={[{ required: true, message: '请输入参考值' }]}
+                      // rules={[{ required: true, message: '请输入参考值' }]}
                     >
                       <Input placeholder="请输入参考值" disabled={disabled} />
                     </Form.Item>
@@ -152,6 +153,9 @@ const RenderItem: FC<IProps> = (props) => {
                       danger
                       onClick={() => {
                         setList((prev) => prev.filter((p) => p.key !== _item.key));
+                        form.setFieldsValue({
+                          [`${indexItem.formIndex}_valueCount`]: list.length - 1,
+                        });
                       }}
                     >
                       删除

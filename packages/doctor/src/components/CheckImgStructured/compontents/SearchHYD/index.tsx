@@ -2,7 +2,7 @@ import React, {
   FC, ReactElement, useState, useRef,
 } from 'react';
 import { Select, Space } from 'antd';
-import { debounce, isEmpty } from 'lodash';
+import { debounce } from 'lodash';
 import { useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import iconGf from '@/assets/img/icon_official.png';
@@ -25,7 +25,7 @@ const SearchHYD: FC<IProps> = (props) => {
   const hiddenRef:any = useRef<HTMLInputElement>();
   const [typeList, settypeList] = useState<ISearchDocumentItem[]>([]);
   const [selectVal, setselectVal] = useState<string>();
-  const [listEmpty, setlistEmpty] = useState(false);
+  // const [listEmpty, setlistEmpty] = useState(false);
   const dispatch = useDispatch();
   const sid = window.$storage.getItem('sid');
   const handleSearch = (e: React.ChangeEvent<ReactElement>) => {
@@ -40,7 +40,7 @@ const SearchHYD: FC<IProps> = (props) => {
       api.indexLibrary.fetchIndexSearch(params).then((res) => {
         console.log('res32322', res);
         settypeList(res.list);
-        setlistEmpty(isEmpty(res.list));
+        // setlistEmpty(isEmpty(res.list));
       });
     }
   };
@@ -102,11 +102,11 @@ const SearchHYD: FC<IProps> = (props) => {
             </Space>
           </Option>
         ))}
-        {listEmpty && (
+        {/* {listEmpty && (
           <Option key="add" value="add">
             <div className="text-center text-blue-500">暂无结果，点击+添加新化验单</div>
           </Option>
-        )}
+        )} */}
       </Select>
       {/* 放到option里会影响select失去焦点无效，导致编辑弹框内容输入不了 */}
       <EditIndex onSuccess={addTypeSuccess} source="imgAddTypeIndex">

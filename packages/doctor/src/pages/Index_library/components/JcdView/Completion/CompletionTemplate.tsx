@@ -26,7 +26,7 @@ const CompletionTemplate:FC<IProps> = (props) => {
   };
   return (
     <div>
-      <div className="shadow p-10">
+      <div className={ques?.length > 0 ? 'shadow p-10' : ''}>
         {ques.map((q, index) => (
           <CompletionItem groupQas={q} inx={index} key={q?.[0]?.uuid!}>
             <TopicAddBtn

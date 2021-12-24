@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from 'react';
 import './style/index.less';
 import classnames from 'classnames';
@@ -51,7 +52,7 @@ export default (props: ViewerProps) => {
     onClose = noop,
     images = [],
     activeIndex = 0,
-    zIndex = 1000,
+    zIndex = 100,
     drag = true,
     attribute = true,
     zoomable = true,
@@ -723,3 +724,4 @@ export default (props: ViewerProps) => {
     </div>
   );
 };
+/* eslint-enable */

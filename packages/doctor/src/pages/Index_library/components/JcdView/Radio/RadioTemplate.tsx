@@ -21,7 +21,7 @@ const RadioTemplate: FC<IProps> = (props) => {
   };
   return (
     <div>
-      <div className="shadow p-10">
+      <div className={questions?.length > 0 ? 'shadow p-10' : ''}>
         {questions.map((c, index) => (
           <RadioItem item={c} index={index} key={index}>
             <TopicAddBtn

@@ -1,13 +1,14 @@
 import React, {
   FC, useState, useMemo, useRef, useEffect,
 } from 'react';
-import { Tabs, Popconfirm } from 'antd';
+import { Tabs, Popconfirm, Button } from 'antd';
 import { useDispatch } from 'umi';
 import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
 import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
+import EditIndex from '@/components/EditIndex';
 
 import { isEmpty } from 'lodash';
 import styles from './index.scss';
@@ -278,6 +279,10 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       sampleFrom: doc.sampleFrom,
     });
   };
+  const addIndexSuccess = (newItemData) => {
+    console.log('====gxxx', newItemData);
+    handleSelectTypeIndex(newItemData);
+  };
 
   return (
     <div className={styles.structure_detail_item}>
@@ -298,16 +303,29 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
               documentType={outType}
             />
           </div>
-          {checkTypes.length > 0 && (
-            <Tabs
-              activeKey={activeType}
-              onChange={(tab: string) => handleActiveTab(tab)}
-              type="editable-card"
-              hideAdd
-            >
-              {renderTabPane()}
-            </Tabs>
-          )}
+          <div className={styles.hyd_tab_wrap}>
+            <div className="flex justify-end absolute top-5 -right-10 ">
+              <EditIndex
+                onSuccess={addIndexSuccess}
+                source="imgAddTypeIndex"
+                sampleFrom={sampleFroms}
+              >
+                <Button type="link" className="text-sm">
+                  +添加新化验单
+                </Button>
+              </EditIndex>
+            </div>
+            {checkTypes.length > 0 && (
+              <Tabs
+                activeKey={activeType}
+                onChange={(tab: string) => handleActiveTab(tab)}
+                type="editable-card"
+                hideAdd
+              >
+                {renderTabPane()}
+              </Tabs>
+            )}
+          </div>
         </>
       )}
     </div>
