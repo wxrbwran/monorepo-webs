@@ -346,7 +346,7 @@ const CustomIndex: FC<IProps> = (props) => {
 
   return (
     <div className="relative">
-      <div className="flex justify-end absolute -top-52 -right-10 ">
+      {/* <div className="flex justify-end absolute -top-52 -right-10 ">
         <EditIndex
           onSuccess={addIndexSuccess}
           source="imgAddTypeIndex"
@@ -357,7 +357,7 @@ const CustomIndex: FC<IProps> = (props) => {
             +添加新化验单
           </Button>
         </EditIndex>
-      </div>
+      </div> */}
       <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
         <div className="flex" style={{ flex: '0 0 47%' }}>
           <div className="font-medium mr-5" style={{ flex: '0 0 63px' }}>

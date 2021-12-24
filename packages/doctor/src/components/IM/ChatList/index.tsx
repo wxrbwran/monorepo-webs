@@ -279,17 +279,19 @@ const ChatList: FC = () => {
             {
               key: 'customStructured',
               render: (
-                <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
-                  <span
-                    className="react-viewer-btn"
-                    key="structured"
-                  >
-                    <div>
-                      <img src={jgh} alt="" />
-                    </div>
-                    <span>结构化数据</span>
-                  </span>
-                </CheckImgStructured>
+                <div>
+                  <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
+                    <span
+                      className="react-viewer-btn"
+                      key="structured"
+                    >
+                      <div>
+                        <img src={jgh} alt="" />
+                      </div>
+                      <span>结构化数据</span>
+                    </span>
+                  </CheckImgStructured>
+                </div>
               ),
             },
           ]

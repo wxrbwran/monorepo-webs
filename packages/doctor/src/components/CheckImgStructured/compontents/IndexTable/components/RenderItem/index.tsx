@@ -33,6 +33,7 @@ const RenderItem: FC<IProps> = (props) => {
     form.setFieldsValue({
       [`${indexItem.formIndex}_name`]: param.name,
       [`${indexItem.formIndex}_abbreviation`]: param.abbreviation,
+      [`${indexItem.formIndex}_referenceList`]: param.references,
     });
     onSuccess({ ...indexItem, ...param });
   };
@@ -152,6 +153,9 @@ const RenderItem: FC<IProps> = (props) => {
                       danger
                       onClick={() => {
                         setList((prev) => prev.filter((p) => p.key !== _item.key));
+                        form.setFieldsValue({
+                          [`${indexItem.formIndex}_valueCount`]: list.length - 1,
+                        });
                       }}
                     >
                       删除

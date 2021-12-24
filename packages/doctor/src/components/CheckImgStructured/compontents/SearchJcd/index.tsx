@@ -96,9 +96,9 @@ const SearchJcd: FC<IProps> = (props) => {
   };
   const handleSearchOtherName = (val: string) => {
     console.log('ddddd', val);
-    changePartMethod({ 'jcdName': val });
+    changePartMethod({ 'jcdName': val  });
     if (val) {
-      api.image.fetchImageTemplateName({ jcdName: val }).then(res => {
+      api.image.fetchImageTemplateName({ jcdName: val, title: 'OTHER' }).then(res => {
         console.log('res23232', res);
         const names = res.jcdTitleSet.map((item: { jcdName: string }) => {
           return { ...item, value: item.jcdName };
