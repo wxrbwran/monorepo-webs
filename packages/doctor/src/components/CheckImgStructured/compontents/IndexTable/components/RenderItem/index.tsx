@@ -44,7 +44,7 @@ const RenderItem: FC<IProps> = (props) => {
         name={`${indexItem.formIndex}_name`}
         style={{ width: 100 }}
       >
-        <Input disabled readOnly />
+        <Input readOnly />
       </Form.Item>
       <div className="mx-10">
         <Form.Item
@@ -52,7 +52,7 @@ const RenderItem: FC<IProps> = (props) => {
           name={`${indexItem.formIndex}_abbreviation`}
           style={{ width: 75 }}
         >
-          <Input disabled readOnly />
+          <Input readOnly />
         </Form.Item>
       </div>
       <div>
@@ -76,7 +76,7 @@ const RenderItem: FC<IProps> = (props) => {
                   if (curReference?.type === 'RADIO') {
                     return (
                       <Form.Item name={`${indexItem.formIndex}_${index}_indexValue`} noStyle>
-                        <Select placeholder="请选择" disabled={disabled}>
+                        <Select  style={{ width: 150 }} placeholder="请选择" disabled={disabled}>
                           {yinYang.map((yy: Record<string, string>) => (
                             <Option key={yy.value} value={yy.value}>
                               {yy.label}
@@ -106,7 +106,7 @@ const RenderItem: FC<IProps> = (props) => {
                             `${reference.note || ''} ${getReferenceTitle(reference)} ${
                               reference.unit || ''
                             }`}
-                          {reference.type === 'RADIO' && '阴阳'}
+                          {reference.type === 'RADIO' && `${reference.note || ''} 阴阳`}
                         </Option>
                       ))}
                     </Select>

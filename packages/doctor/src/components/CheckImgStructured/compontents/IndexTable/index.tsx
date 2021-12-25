@@ -4,6 +4,8 @@ import openIcon from '@/assets/img/showNocommon.png';
 import closeIcon from '@/assets/img/closeNocommon.png';
 import HiddenItems from '../HiddenItems';
 import RenderItem from './components/RenderItem';
+import styles from './index.scss';
+
 interface IProps {
   apiData: any;
   subName?: string;
@@ -79,7 +81,7 @@ const IndexTable: FC<IProps> = (props) => {
   };
 
   return (
-    <div className="structured-edit-wrap">
+    <div className={`structured-edit-wrap ${styles.hyd_form}`}>
       {renderItem('commonItems')}
       <div style={{ display: showAll ? 'block' : 'none' }}>{renderItem('noCommonItems')}</div>
       {!isViewOnly && (
