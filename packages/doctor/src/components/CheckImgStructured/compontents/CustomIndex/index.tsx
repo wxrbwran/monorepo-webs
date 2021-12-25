@@ -179,12 +179,6 @@ const CustomIndex: FC<IProps> = (props) => {
         (apiData?.commonItems?.length || 0) + (apiData?.noCommonItems?.length || 0);
       validateFields()
         .then((values) => {
-          // console.log('validateFields', values);
-          // console.log('apiParams', apiParams);
-
-          // apiParams
-          console.log('values--=======', values);
-          console.log('====333', formatSubmitItems(values, itemsLength));
           const { documentId, documentName, sampleFrom } = apiParams;
           const params: CommonData = {
             documentId,

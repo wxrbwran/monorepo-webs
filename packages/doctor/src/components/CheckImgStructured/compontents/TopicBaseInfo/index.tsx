@@ -19,7 +19,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
   const { validateFields, setFieldsValue } = form;
   let timeRef = useRef<null | number>(null); // 存一下日期上的时间，当点击时间不详时，存起来，取消时间不详时，恢复此值到measure_at
   const fetchInit = () => {
-    const initObj: CommonData = {};
+    const initObj: CommonData = { measured_at: new Date().getTime() };
     initData.forEach(item => {
       const ans = item.answer[0];
       switch (item.question) {
@@ -27,8 +27,8 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           initObj.orgName = ans;
           break;
         case '时间':
-          timeRef.current = ans === null ? null : Number(ans);
-          initObj.measured_at = ans === null ? null : Number(ans);
+          timeRef.current = ans === null ? new Date().getTime() : Number(ans);
+          initObj.measured_at = ans === null ? new Date().getTime() : Number(ans);
           break;
         default:
           break;
@@ -127,7 +127,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
               </Form.Item>
               <ItemDate
                 // 如果是回显，就直接取回显的时间，没有就设置当前时间
-                initReportTime={initialValues?.measured_at}
+                initReportTime={initialValues?.measured_at || new Date().getTime()}
                 setReporttime={(time: number | null) => handleChangeTime(time)}
                 setUnknow={handleChangeUnKonwTime}
                 isUnknownTime={!!(initialValues?.measured_at === null)}
