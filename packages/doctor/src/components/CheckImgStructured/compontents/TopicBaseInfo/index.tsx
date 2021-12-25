@@ -9,11 +9,12 @@ import { IQuestions } from 'typings/imgStructured';
 interface IProps {
   initData: IQuestions[];
   outType: string; // JCD  OTHER
-  changeCallbackFns: (params: ICallbackFn) => void
+  changeCallbackFns: (params: ICallbackFn) => void;
+  isViewOnly: boolean;
 }
 
 const TopicBaseInfo: FC<IProps> = (props) => {
-  const { initData, changeCallbackFns } = props;
+  const { initData, changeCallbackFns, isViewOnly } = props;
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue } = form;
   let timeRef = useRef<null | number>(null); // 存一下日期上的时间，当点击时间不详时，存起来，取消时间不详时，恢复此值到measure_at
@@ -89,6 +90,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
     console.log('isUnKonw', isUnKonw);
     setFieldsValue({ measured_at: isUnKonw ? null : timeRef.current });
   };
+
   return (
     <div className={`${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
@@ -99,32 +101,42 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       >
         <Row>
           <Col span={11} className="flex">
-            <Form.Item name="orgName" noStyle>
-              <Input type="hidden" />
-            </Form.Item>
-            <span className="text-sm font-medium mr-8 w-72 inline-block">检查机构: </span>
-            <SearchHospital
-              placeholder="请输入检查机构"
-              callback={handleSetHospital}
-              fieldName="hospital"
-              style={{ width: 'calc(100% - 80px)' }}
-              defaultValue={{ hospitalName: initialValues?.orgName }}
-            />
-          </Col>
-          <Col span={13}>
-            <Form.Item name="measured_at" noStyle>
-              <Input type="hidden" />
-            </Form.Item>
-            <ItemDate
-              // 如果是回显，就直接取回显的时间，没有就设置当前时间
-              initReportTime={initialValues?.measured_at}
-              setReporttime={(time: number | null) => handleChangeTime(time)}
-              setUnknow={handleChangeUnKonwTime}
-              isUnknownTime={!!(initialValues?.measured_at === null)}
-              style={{ width: 'calc(100% - 168px)' }}
-              label="检查时间"
-            />
-          </Col>
+            {
+              !(isViewOnly && !initialValues?.orgName) && (
+                <>
+                  <Form.Item name="orgName" noStyle>
+                    <Input type="hidden" />
+                  </Form.Item>
+                  <span className="text-sm font-medium mr-8 w-72 inline-block">检查机构: </span>
+                  <SearchHospital
+                    placeholder="请输入检查机构"
+                    callback={handleSetHospital}
+                    fieldName="hospital"
+                    style={{ width: 'calc(100% - 80px)' }}
+                    defaultValue={{ hospitalName: initialValues?.orgName }}
+                  />
+                </>
+              )
+            }
+           </Col>
+          {
+           !(isViewOnly && !initialValues?.measured_at) && (
+            <Col span={13}>
+              <Form.Item name="measured_at" noStyle>
+                <Input type="hidden" />
+              </Form.Item>
+              <ItemDate
+                // 如果是回显，就直接取回显的时间，没有就设置当前时间
+                initReportTime={initialValues?.measured_at}
+                setReporttime={(time: number | null) => handleChangeTime(time)}
+                setUnknow={handleChangeUnKonwTime}
+                isUnknownTime={!!(initialValues?.measured_at === null)}
+                style={{ width: 'calc(100% - 168px)' }}
+                label="检查时间"
+              />
+            </Col>
+           )
+          }
         </Row>
       </Form>
     </div>

@@ -3,8 +3,8 @@ import {
   Form, Input, Button, message, Select, Space, InputNumber,
   Radio, Row, Col,
 } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
 import DebounceSelect from '@/components/DebounceSelect';
+import { DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import {
   referenceList,
@@ -242,10 +242,10 @@ const EditIndex: FC<IProps> = (props) => {
                 </Form.Item>
               )}
               <Form.Item name="documentName" label="化验单名称">
-                <Input placeholder="化验单名称" readOnly={source !== 'imgAddTypeIndex'} />
+                <Input placeholder="化验单名称" disabled={source !== 'imgAddTypeIndex'}  />
               </Form.Item>
               <Form.Item name="sampleFrom" label="样本来源">
-                <Input placeholder="样本来源" readOnly={source !== 'imgAddTypeIndex'} />
+                <Input placeholder="样本来源" disabled={source !== 'imgAddTypeIndex'} />
               </Form.Item>
               <Form.Item name="indexId" noStyle className="hidden">
                 <Input type="hidden" />
@@ -291,13 +291,13 @@ const EditIndex: FC<IProps> = (props) => {
                           <Select
                             onSelect={setSelectReference}
                             style={{ width: 260 }}
-                            placeholder="请选择参考值"
+                            placeholder="请选择参考值类型"
                           >
                             {referenceList.map((reference) => (
                               <Option value={reference.value}>{reference.label}</Option>
                             ))}
                           </Select>
-                          <Button onClick={() => handleAddReference(add)} type="primary" ghost>
+                          <Button onClick={() => handleAddReference(add)} type="link" icon={<PlusSquareOutlined />}>
                             添加
                           </Button>
                         </Space>
