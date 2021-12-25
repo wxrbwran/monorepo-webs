@@ -12,10 +12,11 @@ interface IProps {
   type: string;
   mode: 'add' | 'edit';
   onSuccess?: (params: Record<string, string>) => void;
-  record?: TIndexItem
+  record?: TIndexItem;
+  clickEvent?: string;
 }
 const AddEditDocument: FC<IProps> = (props) => {
-  const { type, mode, record, children, onSuccess } = props;
+  const { type, mode, record, children, onSuccess, clickEvent } = props;
   // console.log('record', record);
   const [showModal, setshowModal] = useState(false);
   const [form] = Form.useForm();
@@ -99,9 +100,12 @@ const AddEditDocument: FC<IProps> = (props) => {
   const submitLayout = {
     wrapperCol: { span: 24 },
   };
+  const handleShow = () => {
+    setshowModal(true);
+  };
   return (
     <div>
-      <span onClick={() => setshowModal(true)}>{children}</span>
+      <span  { ...{ [clickEvent || 'onClick']: handleShow } } >{children}</span>
       <DragModal
         title={mode === 'add' ? '添加' : '编辑'}
         footer={null}
