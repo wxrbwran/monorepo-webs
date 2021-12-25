@@ -91,6 +91,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         // console.log(item);
         isNew = false;
         handleCurDocument({
+          ...item,
           id: item.documentId,
           name: item.documentName,
           sampleFrom: item.sampleFrom,
@@ -123,6 +124,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         },
       ];
       handleCurDocument({
+        ...params,
         id: params.documentId,
         name: params.documentName,
         sampleFrom: params.sampleFrom,
@@ -298,6 +300,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     setActiveType(tab);
     const doc = checkTypes.filter(c => tab.includes(c.documentId))[0];
     handleCurDocument({
+      ...doc,
       id: doc.documentId,
       name: doc.documentName,
       sampleFrom: doc.sampleFrom,

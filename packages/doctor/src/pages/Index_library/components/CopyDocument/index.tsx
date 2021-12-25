@@ -33,7 +33,7 @@ const CopyDocument: FC<IProps> = (props) => {
     setShowModal(false);
   };
   const handleSave = async (values: any) => {
-    console.log(values);
+    // console.log(values);
     setLoading(true);
     let params = {
       ...values,
