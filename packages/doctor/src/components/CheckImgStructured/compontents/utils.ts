@@ -384,3 +384,13 @@ export const watchUserTopicChange = (
 };
 // 处理用户新加问题多tab共享-e
 
+export const getSource = (source: string, sid: string) => {
+  if (source === 'SYSTEM') {
+    return '<span class="SYSTEM">官方</span>';
+  } else if (source === 'DOCTOR' && sid === window.$storage.getItem('sid')) {
+    return '<span class="ONESELF">自己</span>';
+  } else {
+    return '<span class="OTHERS">他人</span>';
+  }
+};
+

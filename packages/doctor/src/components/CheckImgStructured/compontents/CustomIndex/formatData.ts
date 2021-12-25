@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash';
+
 type IIndexItemCustom = {
   formIndex: number; // 自己补充的必要属性，每个指标的固定key值
 } & IIndexItem;
@@ -33,7 +35,9 @@ export const formatSubmitItems = (data: CommonData, length: number) => {
           .filter((r: TReference) => r.id === data[`${i}_${j}_reference`])[0] || [];
         tmp = { ...tmp, ...curReference };
       }
-      newItem.referenceList.push({ ...tmp });
+      if (!isEmpty(tmp) && tmp?.indexValue !== undefined) {
+        newItem.referenceList.push({ ...tmp });
+      }
       tmp = null;
     }
     // 如果指标来源是DOCTOR，并且指标的sourceSid不是当前医生的sid，需要把当前医生的sid传过去
@@ -41,7 +45,9 @@ export const formatSubmitItems = (data: CommonData, length: number) => {
       newItem.sourceSid = window.$storage.getItem('sid');
       newItem.source = 'DOCTOR';
     }
-    inspections.push(newItem);
+    if (!isEmpty(newItem?.referenceList)){
+      inspections.push(newItem);
+    }
   }
   return inspections;
 };

@@ -9,6 +9,7 @@ import StructuredDetailJcdPanel from '../StructuredDetailJcdPanel';
 import { outTypes, formatJcdSubmitData } from '../utils';
 import styles from './index.scss';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
+import EmptyIcon from '@/assets/img/jgh_empty.png';
 import { CloseOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
@@ -31,7 +32,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       return { ...hydItem, outType: hydItem.outType };
     });
     const datas = [...hydTab, ...jctAndOther];
-    return isEmpty(datas) ? [{ outType: 'JCD' }] : datas;
+    return isEmpty(datas) ? [] : datas;
   };
   const sid = window.$storage.getItem('sid');
   const dispatch = useDispatch();
@@ -263,6 +264,14 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
               </Tabs>
             </div>
           </>
+        )
+      }
+      {
+        isEmpty(typeTabs) && (
+          <div className={styles.no_tab}>
+            <img className="w-100 h-66" src={EmptyIcon} alt="请选择图片类型" />
+            <div className="mt-10">请选择图片类型</div>
+          </div>
         )
       }
     </div>

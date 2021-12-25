@@ -85,13 +85,18 @@ function TopicProblem(props: IProps) {
               />
             </div>
             <div className="answer-wrap">
-              <TextArea
-                style={{ border: isViewOnly ? 'none' : '1px solid #DFDFDF' }}
-                placeholder="请输入"
-                onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
-                value={item.answer?.[0]}
-                disabled={isViewOnly}
-              />
+              {
+                isViewOnly ? (
+                  <span>{item.answer?.[0]}</span>
+                ) : (
+                  <TextArea
+                    style={{ border:  '1px solid #DFDFDF' }}
+                    placeholder="请输入"
+                    onChange={(ev: any) => handleSaveAnswer(ev, quesIndex)}
+                    value={item.answer?.[0]}
+                  />
+                )
+              }
             </div>
           </div>
         ))
