@@ -85,7 +85,7 @@ const SearchHYD: FC<IProps> = (props) => {
         ref={selectRef}
       >
         {typeList.map((item, index) => (
-          <Option key={item.type + item?.id} value={index}>
+          <Option key={index} value={index}>
             <Space>
               <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
               <span>
