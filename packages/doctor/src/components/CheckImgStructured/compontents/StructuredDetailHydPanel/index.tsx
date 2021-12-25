@@ -238,7 +238,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
               {!isViewOnly && (
                 <SyncOutlined
                   className="relative top-2"
-                  onClick={(e: React.MouseEvent) => handleRefershDocument(e, item.documentId)}
+                  onDoubleClick={(e: React.MouseEvent) => handleRefershDocument(e, item.documentId)}
                 />
               )}
               {
@@ -247,6 +247,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
                     mode="edit"
                     record={item}
                     type='HYD'
+                    clickEvent="onDoubleClick"
                     onSuccess={handleEditName}>
                       <>
                         <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>

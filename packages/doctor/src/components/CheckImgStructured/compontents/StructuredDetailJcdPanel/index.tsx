@@ -86,7 +86,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
       <TabPane
         tab={<span>
           {
-            !item.data && <span onDoubleClick={() => handleRefresh(inx)}><SyncOutlined /></span>
+            !item.data && <span className="mr-5" onDoubleClick={() => handleRefresh(inx)}><SyncOutlined /></span>
           }
           {
             item.meta.sid === doctorSid ? (
