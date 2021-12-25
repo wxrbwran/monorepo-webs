@@ -79,6 +79,12 @@ const EditIndex: FC<IProps> = (props) => {
   const handleShowModal = () => {
     setShowModal(true);
   };
+  const handleCloseModal = () => {
+    setSelectReference('');
+    setReferences([]);
+    setShowModal(false);
+    form.resetFields();
+  };
   const handleRequest = (params: any, request: any) => {
     console.log('handleRequest', params);
     request(params).then((res: any) => {
@@ -88,7 +94,7 @@ const EditIndex: FC<IProps> = (props) => {
       } else {
         onSuccess();
       }
-      setShowModal(false);
+      handleCloseModal();
     }).catch((err: { result: string }) => {
       message.error(err.result || '操作失败');
     });
@@ -153,12 +159,7 @@ const EditIndex: FC<IProps> = (props) => {
     setReferences([...tmp]);
   };
 
-  const handleCloseModal = () => {
-    setSelectReference('');
-    setReferences([]);
-    setShowModal(false);
-    form.resetFields();
-  };
+
   const handleOnClear = () => {
     // console.log('handleOnClear');
     setSelectVal([]);
