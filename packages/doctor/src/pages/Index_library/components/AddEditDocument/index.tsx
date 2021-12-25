@@ -49,9 +49,10 @@ const AddEditDocument: FC<IProps> = (props) => {
           params.id = record?.id;
           res = await api.indexLibrary.patchIndexDocument(params);
         }
-        event.emit('refershMenu', { ...res, type: 'HYD' });
         if (onSuccess) {
           onSuccess(res);
+        } else {
+          event.emit('refershMenu', { ...res, type: 'HYD' });
         }
       } else if (['JCD', 'OTHER'].includes(type)) {
         params = {

@@ -34,8 +34,8 @@ const SideMenu: FC = () => {
 
   const curSid = window.$storage.getItem('sid');
   const handleClickMenu = async (item: TIndexItem, src: string) => {
+    console.log('handleClickMenu', item, src);
     if (item) {
-      console.log('handleClickMenu', item, src);
       const document = { ...item };
       if (item.title) {
         document.name = item.jcdName;
@@ -196,7 +196,9 @@ const SideMenu: FC = () => {
       // 如果删除的是当前展示的页面单据，刷新
       if (location.query.documentId === item.id) {
         console.log('刷新');
-        window.location.href = `${window.location.origin}/#/index_library`;
+        history.push({
+          pathname: '/index_library',
+        });
         window.location.reload();
       } else {
         // 如果删除的不是当前展示的页面单据
@@ -231,7 +233,9 @@ const SideMenu: FC = () => {
         <div key={docType}>
           <div className={styles.title}>
             <span>{documentTypeText[docType]}</span>
-            <AddEditDocument mode="add" type={docType} onSuccess={fetchImageType}>
+            <AddEditDocument mode="add" type={docType} onSuccess={(res) => {
+              event.emit('refershMenu', { ...res, type: 'HYD' });
+            }}>
               <PlusOutlined />
             </AddEditDocument>
           </div>
