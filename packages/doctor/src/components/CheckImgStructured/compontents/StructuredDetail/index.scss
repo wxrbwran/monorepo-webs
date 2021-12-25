@@ -26,6 +26,9 @@
       input, .ant-picker, .ant-select-selector {
         border: none!important;
       }
+      .ant-select-arrow {
+        display: none;
+      }
     }
   }
 
@@ -137,6 +140,29 @@
         border: 1px solid #d8d8d8;
         border-top: none;
         padding: 20px;
+      }
+    }
+    :global {
+      .ant-tabs-editable-card {
+        height: 100%;
+        .ant-tabs-content-holder {
+          border: 1px solid #E0E0E0;
+          border-top: none;
+          padding: 20px;
+        }
+        .ant-tabs-nav {
+          margin-bottom: 0;
+        }
+        .ant-tabs-tab {
+          border: none;
+          border-bottom: 1px solid #E0E0E0;
+          background: #fff;
+        }
+        .ant-tabs-tab-active {
+          border: 1px solid #E0E0E0;
+          border-top: 2px solid #218CE9;
+          border-bottom: none;
+        }
       }
     }
 }

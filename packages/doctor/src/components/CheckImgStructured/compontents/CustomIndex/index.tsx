@@ -143,6 +143,7 @@ const CustomIndex: FC<IProps> = (props) => {
       console.log('apiParams.id', apiParams.documentId);
       console.log('id', id);
       if (apiParams.documentId === id) {
+        form.resetFields();
         await fetchIndexDocumentIndex();
         message.success('已刷新单据');
       }
@@ -182,6 +183,8 @@ const CustomIndex: FC<IProps> = (props) => {
           // console.log('apiParams', apiParams);
 
           // apiParams
+          console.log('values--=======', values);
+          console.log('====333', formatSubmitItems(values, itemsLength));
           const { documentId, documentName, sampleFrom } = apiParams;
           const params: CommonData = {
             documentId,
@@ -262,7 +265,7 @@ const CustomIndex: FC<IProps> = (props) => {
         });
       }
     };
-  }, [apiData]);
+  }, [apiData, apiParams]);
   const addIndexSuccess = (newItemData: any) => {
     // 保存一下用户已经输入的form表单值，在apiData渲染完之后，这里重新设置回去。解决添加新指标后丢失用户输入数据问题
     // 备注：由于上面监听了apiData的改变，只要此状态更新，就会走initForm方法（这里是为了把新添加的指标，也set一下，
@@ -383,7 +386,8 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && (
+      {/* 自己的单据，并且不是修改 */}
+      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && !initList && (
         <div className="mb-10">
           <EditIndex
             onSuccess={addIndexSuccess}

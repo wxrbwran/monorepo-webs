@@ -26,11 +26,6 @@ interface IProps {
   outType: string;
 }
 
-interface IOtherName {
-  value: string;
-  id: string;
-}
-
 const SearchJcd: FC<IProps> = (props) => {
   const { changePartMethod, handleAddJcdTab, handleShowAddJctBtn, createJcdNum, outType } = props;
   const partMethod = useRef({ part: '', method: '' });
@@ -38,7 +33,7 @@ const SearchJcd: FC<IProps> = (props) => {
   const [partList, setPartList] = useState([]);
   const [methodList, setMethodList] = useState([]);
   const [nameList, setNameList] = useState<INameItem[]>([]); // 检查单名称列表
-  const [otherNames, setOtherNames] = useState<IOtherName[]>([]); // 其它单据-单据名称
+  const [otherNames, setOtherNames] = useState<INameItem[]>([]); // 其它单据-单据名称
   const [selectId, setSelectId] = useState<string | undefined>();
   const handleBlur = () => {
     changePartMethod(partMethod.current);
@@ -90,24 +85,20 @@ const SearchJcd: FC<IProps> = (props) => {
     }
   };
   const handleAddOther = (val: string) => {
-    const curInfo = otherNames.find(item => item.value === val);
+    const curInfo = otherNames.find(item => item.jcdName === val);
     handleAddJcdTab({ ...curInfo });
   };
   const handleSearchOtherName = (val: string) => {
-    console.log('ddddd', val);
     changePartMethod({ 'jcdName': val  });
     if (val) {
       api.image.fetchImageTemplateName({ jcdName: val, title: 'OTHER' }).then(res => {
-        console.log('res23232', res);
-        const names = res.jcdTitleSet.map((item: { jcdName: string }) => {
-          return { ...item, value: item.jcdName };
-        });
-        setOtherNames(names);
+        setOtherNames(res.jcdTitleSet);
         handleShowAddJctBtn(!!isEmpty(res.jcdTitleSet));
       });
     }
   };
   console.log('nameList', nameList);
+  console.log('otherNames', otherNames);
   return (
     <div className={styles.search_jcd}>
       <Row>
@@ -139,11 +130,19 @@ const SearchJcd: FC<IProps> = (props) => {
             <Col span={24} className='my-10 flex pl-28'>
               <span className={styles.tit}>单据名称：</span>
               <AutoComplete
-                options={otherNames}
                 placeholder="请输入单据名称"
                 onSearch={debounce(handleSearchOtherName, 500)}
                 onSelect={handleAddOther}
-              />
+              >
+                {
+                  otherNames.map(item => (
+                    <AutoComplete.Option key={item.id} value={item.jcdName}>
+                      <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
+                      <span>{item.jcdName}</span>
+                    </AutoComplete.Option>
+                  ))
+                }
+              </AutoComplete>
             </Col>
           )
         }

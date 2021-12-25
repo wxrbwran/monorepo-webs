@@ -11,7 +11,7 @@ import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
 import { getSource } from '../utils';
 
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 import styles from './index.scss';
 // 此组件具体到，化验单或检查单panel
 const { TabPane } = Tabs;
@@ -70,6 +70,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const [sampleFroms, setSampleFroms] = useState<string[]>(initSubType);
   const documentsCallbackFns = useRef({});
   const dispatch = useDispatch();
+  const doctorSid = window.$storage.getItem('sid');
 
   const handleCurDocument = (doc: TDocument) => {
     dispatch({
@@ -217,21 +218,45 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     console.log(id);
     event.emit('REFERSH_DOCUMENT_BY_ID', id);
   };
+  const handleEditName = (hydInfo: { id: string; name: string }) => {
+    checkTypes.forEach(item => {
+      if (item.documentId === hydInfo.id) {
+        item.documentName = hydInfo.name;
+      }
+    });
+    setCheckTypes(cloneDeep(checkTypes));
+  };
   const renderTabPane = useMemo(() => () => checkTypes.map(
     (item: ICheckTypesItem | ISearchDocumentItem) => {
-      console.log('item', item);
+      console.log('item888', item);
       return (
         <TabPane
           tab={
-            <span>
+            <span className="flex items-center">
               {!isViewOnly && (
                 <SyncOutlined
                   className="relative top-2"
                   onClick={(e: React.MouseEvent) => handleRefershDocument(e, item.documentId)}
                 />
               )}
-              <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
-              {item.documentName}
+              {
+                item.sourceSid === doctorSid && !item.indexList ? (
+                  <AddEditDocument
+                    mode="edit"
+                    record={item}
+                    type='HYD'
+                    onSuccess={handleEditName}>
+                      <>
+                        <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
+                        {item.documentName}
+                      </>
+                  </AddEditDocument>
+                ) : <>
+                   <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
+                    {item.documentName}
+                </>
+              }
+
             </span>
           }
           key={`${item.documentId}${item.sampleFrom}`}
@@ -289,6 +314,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
   };
 
+  console.log('checkTypes', checkTypes);
   return (
     <div className={styles.structure_detail_item}>
       {

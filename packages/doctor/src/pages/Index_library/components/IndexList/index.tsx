@@ -1,9 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
-import { PlusOutlined, CopyOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { Form, Button, Popconfirm, message, Space } from 'antd';
 import { useLocation, Location, useSelector } from 'umi';
 import { Common, Search } from 'xzl-web-shared/dist/components/Selects';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
+import copyIcon from '@/assets/img/icon_copy_img.png';
 import {
   indexName,
   indexAbbr,
@@ -164,7 +165,9 @@ const IndexList: FC = () => {
           </h2>
           <CopyDocument type="HYD" onSuccess={onSuccess} document={curDocument}>
             <Button
-              icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
+              className="flex items-center px-5 py-3"
+              style={{ borderRadius: '3px' }}
+              icon={<img src={copyIcon} />}
             >
               复制化验单
             </Button>
