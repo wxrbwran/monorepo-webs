@@ -83,6 +83,7 @@ const EditIndex: FC<IProps> = (props) => {
     setSelectReference('');
     setReferences([]);
     setShowModal(false);
+    setSelectVal([]);
     form.resetFields();
   };
   const handleRequest = (params: any, request: any) => {
@@ -157,6 +158,9 @@ const EditIndex: FC<IProps> = (props) => {
     const tmp = [...references];
     tmp.splice(index, 1);
     setReferences([...tmp]);
+    if (index === defaultReference) {
+      setDefaultReference(0);
+    }
   };
 
 

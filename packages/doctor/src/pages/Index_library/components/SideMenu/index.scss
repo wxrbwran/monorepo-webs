@@ -62,7 +62,9 @@
       font-size: 14px;
       width: 240px;
     }
-    &.active, &:hover {
+    &.active {
+      color: #4BA3FB;
+      font-weight: bold;
       background: #F6F7F9;
       border-radius: 3px;
     }
