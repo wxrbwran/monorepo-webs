@@ -4,8 +4,8 @@ import DoctorData from './components/doctor-data';
 import PatientData from './components/patient-data';
 import styles from './index.scss';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/dist/utils/role';
-
+import { Role } from 'xzl-web-shared/src/utils/role';
+import { isOpenSub as getIsOpenSub } from '@/utils/tools';
 interface IDocItem {
   depName: string;
   depNsId: string;
@@ -41,6 +41,7 @@ const DataStatistics: FC = () => {
       setPersonCount(res);
     });
     fetchDepDoctor();
+    const isOpenSub = getIsOpenSub();
     api.org.getOrgInfo({
       sid: window.$storage.getItem('sid'),
       sRole: Role.ORG_ADMIN.id,
@@ -48,6 +49,12 @@ const DataStatistics: FC = () => {
 
       window.$storage.setItem('orgSid', res.orgSid);
       window.$storage.setItem('orgRole', res.orgRole);
+      if (isOpenSub) {
+        sessionStorage.setItem('upperOrgName', res.orgName); // 树状图使用
+      } else {
+        window.$storage.setItem('orgName', res.orgName); // 树状图使用
+      }
+
     });
   }, []);
   const counts = [

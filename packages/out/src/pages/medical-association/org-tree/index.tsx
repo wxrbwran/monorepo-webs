@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useEffect, useState, useRef } from 'react';
 import Tree from '@/utils/tree';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
@@ -20,42 +20,42 @@ const OrgTree: FC = () => {
         downward: {
           direction: 'downward',
           name: 'origin',
-          children: res.lower.map((item: IOrg) => ({ name: item.orgName }))
+          children: res.lower.map((item: IOrg) => ({ name: item.orgName })),
         },
         upward: {
           direction: 'upward',
           name: 'origin',
-          children: res.upper.map((item: IOrg) => ({ name: item.orgName }))
-        }
-      }
+          children: res.upper.map((item: IOrg) => ({ name: item.orgName })),
+        },
+      };
       // @ts-ignore
       const chart = new Tree({
         data: rootData,
         directions: ['downward', 'upward'],
         borderColor: {
           upward: '#81D3F8',
-          downward: '#F59A23'
-        }
+          downward: '#F59A23',
+        },
       });
       chart.drawChart();
-    })
+    });
   };
   const escFunction = () => {
     setFull((prevFill) => !prevFill);
-  }
+  };
   useEffect(() => {
     drawTree();
-     // 监听退出全屏事件 --- chrome 用 esc 退出全屏并不会触发 keyup 事件
-    document.addEventListener("webkitfullscreenchange", escFunction); /* Chrome, Safari and Opera */
-    document.addEventListener("mozfullscreenchange", escFunction); /* Firefox */
-    document.addEventListener("fullscreenchange", escFunction); /* Standard syntax */
-    document.addEventListener("msfullscreenchange", escFunction); /* IE / Edge */
+    // 监听退出全屏事件 --- chrome 用 esc 退出全屏并不会触发 keyup 事件
+    document.addEventListener('webkitfullscreenchange', escFunction); /* Chrome, Safari and Opera */
+    document.addEventListener('mozfullscreenchange', escFunction); /* Firefox */
+    document.addEventListener('fullscreenchange', escFunction); /* Standard syntax */
+    document.addEventListener('msfullscreenchange', escFunction); /* IE / Edge */
     return () => {
-      document.removeEventListener("webkitfullscreenchange", escFunction);
-      document.removeEventListener("mozfullscreenchange", escFunction);
-      document.removeEventListener("fullscreenchange", escFunction);
-      document.removeEventListener("MSFullscreenChange", escFunction);
-    }
+      document.removeEventListener('webkitfullscreenchange', escFunction);
+      document.removeEventListener('mozfullscreenchange', escFunction);
+      document.removeEventListener('fullscreenchange', escFunction);
+      document.removeEventListener('MSFullscreenChange', escFunction);
+    };
   }, []);
   const handleFullScreen = () => {
     if (isFull) {
@@ -81,11 +81,11 @@ const OrgTree: FC = () => {
       </div>
       <div className="absolute right-50">
         <div className="flex justify-end mb-20 mt-20 ">
-          <div className="border border-solid w-60 h-25 " style={{borderColor: '#81D3F8'}}></div>
+          <div className="border border-solid w-60 h-25 " style={{ borderColor: '#81D3F8' }}></div>
           <div className="text-sm">：上级医院</div>
         </div>
         <div className="flex justify-end">
-          <div className="border border-solid w-60 h-25 " style={{borderColor: '#F59A23'}}></div>
+          <div className="border border-solid w-60 h-25 " style={{ borderColor: '#F59A23' }}></div>
           <div className="text-sm">：下级医院</div>
         </div>
       </div>
