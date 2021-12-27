@@ -182,7 +182,6 @@ const SideMenu: FC = () => {
     setShowSubMenu(true);
   };
 
-
   const handleDeleteDocument = async (item: TIndexItem, ev?: MouseEvent) => {
     ev?.stopPropagation();
     const type = item.type || item.title;
@@ -211,8 +210,6 @@ const SideMenu: FC = () => {
     }
   };
 
-
-
   return (
     <div
       className={styles.menu}
@@ -233,9 +230,13 @@ const SideMenu: FC = () => {
         <div key={docType}>
           <div className={styles.title}>
             <span>{documentTypeText[docType]}</span>
-            <AddEditDocument mode="add" type={docType} onSuccess={(res) => {
-              event.emit('refershMenu', { ...res, type: 'HYD' });
-            }}>
+            <AddEditDocument
+              mode="add"
+              type={docType}
+              onSuccess={(res) => {
+                event.emit('refershMenu', { ...res, type: 'HYD' });
+              }}
+            >
               <PlusOutlined />
             </AddEditDocument>
           </div>
@@ -275,13 +276,17 @@ const SideMenu: FC = () => {
                       mode="edit"
                       record={item}
                       type={item.title || item.type}
-                      onSuccess={fetchImageType}
+                      onSuccess={(res) => {
+                        event.emit('refershMenu', { ...res, type: 'HYD' });
+                      }}
                     >
                       <EditOutlined title="编辑" />
                     </AddEditDocument>
                     <Popconfirm
                       title="确认删除吗?"
-                      onConfirm={(e?: React.MouseEvent<HTMLElement>) => handleDeleteDocument(item, e)}
+                      onConfirm={(e?: React.MouseEvent<HTMLElement>) =>
+                        handleDeleteDocument(item, e)
+                      }
                       okText="确认"
                       cancelText="取消"
                     >
