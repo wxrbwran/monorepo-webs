@@ -80,32 +80,58 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   }, [saveSuccess]);
 
   const saveHydData = (params: any) => {
-    api.image.putImageImageIndexes(params).then(() => {
-      setSaveSuccess(prev => prev + 1);
-    }).catch((err: any) => {
-      message.error(err?.result || '保存失败');
-    });
-  };
-  const saveJcdData = (params) => {
-    // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
-    if (!isEmpty(jcdOriginIds) || !isEmpty(params.list)) {
-      params.originIds = jcdOriginIds;
-      api.image.putImageJcdAndOther(params).then(() => {
-        console.log('添加检查单成功');
-        setSaveSuccess(prev => prev + 1);
-      }).catch((err: any) => {
-        console.log('添加检查单失败', err);
-      });
+    if (params?.imageJCD && isEmpty(params?.imageJCD?.list) && isEmpty(params.list)) {
+      message.error('单据内容为空！');
     } else {
-      setSaveSuccess(prev => prev + 1);
+      api.image.putImageImageIndexes(params).then(() => {
+        setSaveSuccess(prev => prev + 2);
+      }).catch((err: any) => {
+        message.error(err?.result || '保存失败');
+      });
     }
+  };
+  // const saveJcdData = (params) => {
+  //   // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
+  //   if (!isEmpty(jcdOriginIds) || !isEmpty(params.list)) {
+  //     params.originIds = jcdOriginIds;
+  //     api.image.putImageJcdAndOther(params).then(() => {
+  //       console.log('添加检查单成功');
+  //       setSaveSuccess(prev => prev + 1);
+  //     }).catch((err: any) => {
+  //       console.log('添加检查单失败', err);
+  //     });
+  //   } else {
+  //     setSaveSuccess(prev => prev + 1);
+  //   }
+  // };
+  // 把准备好的化验单数据，传给检查单，当检查单查验自己也无误后，再统一调用接口
+  const handleSaveJcd = (hydDataParams) => {
+    const clickSaveTime = new Date().getTime();
+    // 检查单、其它单据
+    Promise.all(Object.values(jcdCallbackFns)
+      .map((fn) => fn(clickSaveTime)))
+      .then((list) => {
+        console.log('=====jcdlist', list.flat(5));
+        const { jcdList } = formatJcdSubmitData(list, clickSaveTime);
+        console.log('jcdList', jcdList);
+        saveHydData({
+          ...hydDataParams,
+          imageJCD: {
+            ...jcdList,
+            originIds: jcdOriginIds,
+          },
+        });
+        // saveJcdData(jcdList);
+      }).catch((err) => {
+        console.log('请完善检查单后提交！err', err);
+        message.error('请完善检查单后提交！');
+      });
   };
   const handleSaveClick = async () => {
     if (isViewOnly) {
       setisViewOnly(false);
     } else {
       setSaveSuccess(0);
-      const clickSaveTime = new Date().getTime();
       if (!isEmpty(typeTabs)) {
         const apiParams: CommonData = {
           imageId,
@@ -123,7 +149,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             console.log('documentList', documentData);
             // tab没有选择化验单类型
             if (isEmpty(documentData)) {
-              saveHydData(apiParams);
+              handleSaveJcd(apiParams);
             } else {
               // 选择了化验单tab，但没有选择任何单据
               if (isEmpty(documentData[0].documentList)) {
@@ -132,7 +158,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
                 const errDocument = documentData[0].documentList.filter(item => isEmpty(item.indexList));
                 // 选择的化验单据，没有填写任何指标（有且仅有一个化验单据，且没填写任何指标数值，直接保存会导致图片丢失，这里拦截一下）
                 if (isEmpty(errDocument)) {
-                  saveHydData(apiParams);
+                  handleSaveJcd(apiParams);
                 } else {
                   message.error(`【${errDocument[0].documentName}】单据未填写内容！`);
                 }
@@ -141,18 +167,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           }).catch((err) => {
             console.log('请完善化验单后提交！err', err);
             message.error('请完善化验单后提交！');
-          });
-        // 检查单、其它单据
-        Promise.all(Object.values(jcdCallbackFns)
-          .map((fn) => fn(clickSaveTime)))
-          .then((list) => {
-            console.log('=====jcdlist', list.flat(5));
-            const { jcdList } = formatJcdSubmitData(list, clickSaveTime);
-            console.log('jcdList', jcdList);
-            saveJcdData(jcdList);
-          }).catch((err) => {
-            console.log('请完善检查单后提交！err', err);
-            message.error('请完善检查单后提交！');
           });
       } else {
         message.error('请选择图片类型');
