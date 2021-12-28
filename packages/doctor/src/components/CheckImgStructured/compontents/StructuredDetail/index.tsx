@@ -118,9 +118,15 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         // 化验单
         Promise.all(Object.values(hydCallbackFns)
           .map((fn) => fn()))
-          .then((documentList) => {
-            apiParams.list = [...documentList];
-            saveHydData(apiParams);
+          .then((documentData: any) => {
+            apiParams.list = [...documentData];
+            console.log('documentList', documentData);
+            if (!isEmpty(documentData) && isEmpty(documentData[0].documentList)) {
+              message.error('化验单内容为空，请填写!');
+            } else {
+              saveHydData(apiParams);
+            }
+
           }).catch((err) => {
             console.log('请完善化验单后提交！err', err);
             message.error('请完善化验单后提交！');

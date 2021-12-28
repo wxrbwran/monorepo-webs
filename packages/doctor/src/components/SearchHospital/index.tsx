@@ -125,6 +125,7 @@ function SearchHospital({
         virtual={false}
         allowClear={allowClear || false}
         onClear={handleClear}
+        className="searchHospital"
       >
         {hospitals.map((medicine) => (
           <Option key={medicine.id} value={medicine.id}>

@@ -41,6 +41,7 @@ const SearchJcd: FC<IProps> = (props) => {
     if (part && method) {
       api.image.fetchImageTemplateName(partMethod.current).then(res => {
         setNameList(res.jcdTitleSet);
+        console.log('999999', res.jcdTitleSet);
         setSelectId(undefined);
         handleShowAddJctBtn(!!isEmpty(res.jcdTitleSet));
       });
@@ -78,8 +79,8 @@ const SearchJcd: FC<IProps> = (props) => {
       console.log('添加检查单', selectId, partMethod);
       // handleAddJcdTab
       const baseInfo:INameItem = nameList.find(item => item.id === selectId) as INameItem;
-      console.log('9992', { ...baseInfo, ...partMethod.current });
-      handleAddJcdTab({ ...baseInfo, ...partMethod.current });
+      console.log('9992', { ...baseInfo, ...partMethod.current, creatorSid: baseInfo.sid });
+      handleAddJcdTab({ ...baseInfo, ...partMethod.current, creatorSid: baseInfo.sid });
     } else {
       message.warn('请选择检查单');
     }

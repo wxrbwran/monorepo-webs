@@ -368,6 +368,13 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
                 {renderTabPane()}
               </Tabs>
             )}
+            {
+            isEmpty(checkTypes) && (
+              <div className={styles.empty_wrap}>
+                暂无化验单，请添加
+              </div>
+            )
+        }
           </div>
         </>
       )}

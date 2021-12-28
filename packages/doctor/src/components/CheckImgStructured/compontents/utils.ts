@@ -60,7 +60,7 @@ export const baseFieldReverse: CommonData = {
   '单据名称': 'djName',
 };
 export const msg = (content:string, type: string = 'success') => {
-  message[type]({ content, style: { zIndex: 1111 } });
+  message[type]({ content });
 };
 // 提交时3，把问题转成api接口参数格式  ui->api
 export const fetchSubmitData = (questions: IQuestions[], startInx: number | string, clickSaveTime: number, gid?: string) => {

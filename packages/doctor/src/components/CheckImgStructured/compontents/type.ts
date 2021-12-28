@@ -15,6 +15,7 @@ export interface IAddJcdItem {
   sid: string;
   source: string;
   id: string;
+  creatorSid: string;
 }
 
 export interface IMeta {
@@ -25,6 +26,7 @@ export interface IMeta {
   part: string;
   method: string;
   id: string;
+  creatorSid: string;
 }
 
 // 检查单每个tab的初始数据init使用
