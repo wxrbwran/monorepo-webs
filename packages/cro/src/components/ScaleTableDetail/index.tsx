@@ -51,6 +51,7 @@ function ScaleTableDetail({ scaleType }: IProps) {
           groupId={location.query.id}
           subTit={subTit}
           scaleId={scaleId}
+          ruleDoc={ruleDoc}
         />
       </div>
       <div className="right table-plan">
