@@ -46,6 +46,15 @@
       }
     }
   }
+  .empty_wrap {
+    border-top: 1px solid #EFEFEF;position: absolute;
+    top: 42px;
+    width: 100%;
+    text-align: center;
+    padding-top: 20%;
+    font-size: 14px;
+    color: #999999;
+  }
 }
 
 .hyd_tab_wrap {

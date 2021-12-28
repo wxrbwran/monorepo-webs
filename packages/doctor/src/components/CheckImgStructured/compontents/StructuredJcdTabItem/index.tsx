@@ -84,6 +84,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
             title: outType,
             ...meta,
             sid: window.$storage.getItem('patientSid'),
+            creatorSid: initData.meta.creatorSid, // 模板创建者的sid
           },
         });
       });
