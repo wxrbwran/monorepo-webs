@@ -190,8 +190,8 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           id: indexItem.indexId,
         })
       ));
-      const commonList = list.filter((indexItem) => indexItem.common);
-      const noCommonList = list.filter((indexItem) => !indexItem.common);
+      const commonList = list; //.filter((indexItem) => indexItem.common);
+      // const noCommonList = list.filter((indexItem) => !indexItem.common);
       return {
         orgAndTime: {
           orgId: item.orgId,
@@ -200,7 +200,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           unknownReport: item.unknownReport,
         },
         commonItems: commonList,
-        noCommonItems: noCommonList,
+        noCommonItems: [],
       };
     }
     return null;

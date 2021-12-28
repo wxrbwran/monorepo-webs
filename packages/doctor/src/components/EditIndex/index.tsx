@@ -65,9 +65,10 @@ const EditIndex: FC<IProps> = (props) => {
         });
         setDefaultReference(index);
       }
-    } else {
-      setFieldsValue({ common: true });
     }
+    // else {
+    //   setFieldsValue({ common: true });
+    // }
     if (curDocument && source !== 'imgAddTypeIndex') {
       form.setFieldsValue({
         documentId: curDocument.id,
@@ -127,6 +128,7 @@ const EditIndex: FC<IProps> = (props) => {
       // 添加
       params = {
         ...params,
+        common: true,
         source: 'DOCTOR', // 医生添加DOCTOR，系统添加SYSTEM
         sourceSid: sid,
         wcId: window.$storage.getItem('wcId'),
@@ -408,12 +410,12 @@ const EditIndex: FC<IProps> = (props) => {
                 }}
               </Form.List>
 
-              <Form.Item name="common" rules={rules} label="是否常用：" className="common">
+              {/* <Form.Item name="common" rules={rules} label="是否常用：" className="common">
                 <Radio.Group>
                   <Radio value>是</Radio>
                   <Radio value={false}>否</Radio>
                 </Radio.Group>
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item>
                 <div className="common__btn">
                   <Button onClick={handleCloseModal}>取消</Button>
