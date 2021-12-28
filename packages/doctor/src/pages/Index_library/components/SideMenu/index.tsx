@@ -30,6 +30,9 @@ const SideMenu: FC = () => {
   const [menu, setMenu] = useState<TIndexItem[]>([]);
   const [source, setSource] = useState<string>(query?.src || 'SYSTEM');
   const [showSubMenu, setShowSubMenu] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchMenu, setSearchMenu] = useState<TIndexItem[]>([]);
+
   const curDocument = useSelector((state: IState) => state.document.curDocument);
 
   const curSid = window.$storage.getItem('sid');
@@ -108,18 +111,21 @@ const SideMenu: FC = () => {
     } = location;
     const firstDoc = hyds.filter(d => d.sourceSid === curSid)[0] || hyds[0]
       || jcds[0] || others[0];
-    firstDoc.sourceSid = firstDoc.sourceSid || firstDoc.sid;
-    if (!(documentId && documentType && src)) {
-      let to = 'SYSTEM';
-      if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid === curSid) {
-        to = 'ONESELF';
-      } else if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid !== curSid) {
-        to = 'OTHERS';
+    console.log('firstDoc', firstDoc);
+    if (firstDoc) {
+      firstDoc.sourceSid = firstDoc.sourceSid || firstDoc.sid;
+      if (!(documentId && documentType && src)) {
+        let to = 'SYSTEM';
+        if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid === curSid) {
+          to = 'ONESELF';
+        } else if (firstDoc.source === 'DOCTOR' && firstDoc.sourceSid !== curSid) {
+          to = 'OTHERS';
+        }
+        // console.log('fetchImageType', firstDoc, to);
+        handleClickMenu(firstDoc, to);
+      } else {
+        handleClickMenu(curDocument, src);
       }
-      // console.log('fetchImageType', firstDoc, to);
-      handleClickMenu(firstDoc, to);
-    } else {
-      handleClickMenu(curDocument, src);
     }
   };
 
@@ -127,6 +133,7 @@ const SideMenu: FC = () => {
     fetchImageType({});
   }, []);
   const handleMouseOverMenu = (docType: string, src: string) => {
+    setShowSearch(false);
     // console.log(docType, src);
     let tmp: TIndexItem[] = [];
     let handledList = HYD;
@@ -178,9 +185,12 @@ const SideMenu: FC = () => {
 
   }, []);
 
-  const handleSearch = (value: string) => {
-    fetchImageType({ name: value });
-    setShowSubMenu(true);
+  const handleSearch = async (value: string) => {
+    const params = { name: value };
+    const hyds = await fetchHYD(params);
+    const { jcds, others } = await fetchJcdAndOther(params);
+    setSearchMenu([...hyds, ...jcds, ...others]);
+    setShowSearch(true);
   };
 
   const handleDeleteDocument = async (item: TIndexItem, ev?: MouseEvent) => {
@@ -216,6 +226,7 @@ const SideMenu: FC = () => {
       className={styles.menu}
       onMouseLeave={() => {
         setShowSubMenu(false);
+        setShowSearch(false);
       }}
     >
       <Search
@@ -295,6 +306,33 @@ const SideMenu: FC = () => {
                     </Popconfirm>
                   </>
                 )}
+              </Space>
+            </List.Item>
+          )}
+        />
+      </div>
+      <div className={`${styles.index_list} ${showSearch ? 'visible' : 'invisible'}`}>
+        <List
+          size="default"
+          dataSource={searchMenu}
+          className="cursor-pointer"
+          renderItem={(item: TIndexItem) => (
+            <List.Item className={activeSubMenu === item.id ? 'font-bold' : ''}>
+              <Space>
+                <span onClick={() => handleClickMenu(item, source)}>
+                  {item.title === 'JCD'
+                    ? '检查单'
+                    : item.title === 'OTHER'
+                      ? '其他医学单据'
+                      : '化验单'}
+                  -
+                  {item.source === 'SYSTEM'
+                    ? '系统'
+                    : item.sourceSid === curSid
+                      ? '自己'
+                      : '他人'}
+                  -{item.name || item.jcdName}
+                </span>
               </Space>
             </List.Item>
           )}
