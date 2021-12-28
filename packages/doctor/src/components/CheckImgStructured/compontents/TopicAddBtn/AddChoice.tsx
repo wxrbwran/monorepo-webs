@@ -79,10 +79,15 @@ const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) 
         meta: { id: templateId },
         data: [ paramsQa ],
       };
-      window.$api.image.postImageTemplate(params).then(() => {
+      window.$api.image.postImageTemplate(params).then((res) => {
         msg('保存成功', 'success');
-        handleSaveQuestion(qa, actionType, editGroupInx);
+        handleSaveQuestion({
+          ...qa,
+          createdTime: res?.list?.[0]?.data?.[0]?.createdTime,
+        }, actionType, editGroupInx);
         closeModal();
+      }).catch(err => {
+        msg(err?.result || '保存失败', 'error');
       });
     }
   };

@@ -60,13 +60,16 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
         meta: { id: templateId },
         data: qasData,
       };
-      api.image.postImageTemplate(params).then(() => {
+      api.image.postImageTemplate(params).then((res) => {
         msg('保存成功', 'success');
-        handleSaveQuestion(qas, actionType, editGroupInx);
+        const createdTime = res?.list?.[0]?.data?.[0]?.createdTime;
+        const qasParams = qas.map(item => ({ ...item, createdTime  }));
+        handleSaveQuestion(qasParams, actionType, editGroupInx);
         closeModal();
         setLoading(false);
       }).catch(err => {
         msg(err?.result || '保存失败', 'error');
+        setLoading(false);
       });
     }
 

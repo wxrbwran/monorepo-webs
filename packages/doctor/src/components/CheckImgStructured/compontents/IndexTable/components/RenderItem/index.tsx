@@ -37,12 +37,19 @@ const RenderItem: FC<IProps> = (props) => {
     });
     onSuccess({ ...indexItem, ...param });
   };
+  const formatOption = (reference: TReference) => {
+    if (reference.type === 'RADIO') {
+      return `${reference.note || ''} 阴阳`;
+    } else {
+      return `${reference.note || ''} ${getReferenceTitle(reference)} ${reference.unit || ''}`;
+    }
+  };
   return (
     <div className="flex w-full">
       <Form.Item
         initialValue={indexItem.name}
         name={`${indexItem.formIndex}_name`}
-        style={{ width: 100 }}
+        style={{ width: 220 }}
       >
         <Input readOnly />
       </Form.Item>
@@ -89,9 +96,10 @@ const RenderItem: FC<IProps> = (props) => {
                   return (
                     <Form.Item
                       name={`${indexItem.formIndex}_${index}_indexValue`}
+                      style={{ width: 90 }}
                       // rules={[{ required: true, message: '请输入参考值' }]}
                     >
-                      <Input placeholder="请输入参考值" disabled={disabled} />
+                      <Input placeholder="请输入数值" disabled={disabled} />
                     </Form.Item>
                   );
                 }}
@@ -99,14 +107,12 @@ const RenderItem: FC<IProps> = (props) => {
               {indexItem?.references?.length > 0 && (
                 <>
                   <Form.Item name={`${indexItem.formIndex}_${index}_reference`}>
-                    <Select style={{ width: 200 }} placeholder="请选择参考值类型">
+                    <Select style={{ width: 203 }} placeholder="请选择参考值类型">
                       {indexItem.references?.map((reference: TReference) => (
-                        <Option key={`${indexItem.formIndex}_${reference.id}`} value={reference.id}>
-                          {reference.type !== 'RADIO' &&
-                            `${reference.note || ''} ${getReferenceTitle(reference)} ${
-                              reference.unit || ''
-                            }`}
-                          {reference.type === 'RADIO' && `${reference.note || ''} 阴阳`}
+                        <Option key={`${indexItem.formIndex}_${reference.id}`} value={reference.id}
+                          title={formatOption(reference)}
+                        >
+                          {formatOption(reference)}
                         </Option>
                       ))}
                     </Select>
