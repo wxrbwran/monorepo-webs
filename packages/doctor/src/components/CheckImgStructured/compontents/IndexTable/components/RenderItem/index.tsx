@@ -49,10 +49,10 @@ const RenderItem: FC<IProps> = (props) => {
       <Form.Item
         initialValue={indexItem.name}
         name={`${indexItem.formIndex}_name`}
-        style={{ width: 220 }}
       >
-        <Input readOnly />
+        <Input readOnly type="hidden" />
       </Form.Item>
+      <span style={{ flex:'1 0 100px', maxWidth: '300px' }} className="truncate">{item.name}</span>
       <div className="mx-10">
         <Form.Item
           initialValue={indexItem.abbreviation}
@@ -119,12 +119,6 @@ const RenderItem: FC<IProps> = (props) => {
                   </Form.Item>
                 </>
               )}
-              <Form.Item name={`${indexItem.formIndex}_valueCount`}>
-                <Input type="hidden" />
-              </Form.Item>
-              <Form.Item name={`${indexItem.formIndex}_referenceList`}>
-                <Input type="hidden" />
-              </Form.Item>
               {!indexItem.referenceList && (
                 <Form.Item>
                   {index === 0 && (
@@ -169,6 +163,14 @@ const RenderItem: FC<IProps> = (props) => {
                   )}
                 </Form.Item>
               )}
+              <div className="w-0 h-0">
+                <Form.Item name={`${indexItem.formIndex}_valueCount`} >
+                  <Input type="hidden" />
+                </Form.Item>
+                <Form.Item name={`${indexItem.formIndex}_referenceList`}>
+                  <Input type="hidden" />
+                </Form.Item>
+              </div>
             </Space>
           </Form.Item>
         ))}
