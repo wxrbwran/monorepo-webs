@@ -89,7 +89,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
             !item.data && <span className="mr-5" onDoubleClick={() => handleRefresh(inx)}><SyncOutlined /></span>
           }
           {
-            item.meta.sid === doctorSid ? (
+            item.meta.creatorSid === doctorSid ? (
               <CreateJcd
                 actionType="edit"
                 initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
@@ -99,13 +99,13 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
                 outType={outType}
               >
                 <span>
-                  <span className="relative -top-1" dangerouslySetInnerHTML={{ __html: getSource(item.meta.source, item.meta.sid) }}></span>
+                  <span className="relative -top-1" dangerouslySetInnerHTML={{ __html: getSource(item.meta.source, item.meta.creatorSid) }}></span>
                   {item.meta.jcdName}
                 </span>
               </CreateJcd>
             ) : (
               <span className="relative -top-2">
-                <span dangerouslySetInnerHTML={{ __html: getSource(item.meta.source, item.meta.sid) }}></span>
+                <span dangerouslySetInnerHTML={{ __html: getSource(item.meta.source, item.meta.creatorSid) }}></span>
                 {item.meta.jcdName}
               </span>
             )
@@ -126,7 +126,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
         }
       >
         <div className={styles.jcd_panel_item}>
-         {!item.data && item.meta.sid !== doctorSid && <div className={styles.copy_temp}>
+         {!item.data && item.meta.creatorSid !== doctorSid && <div className={styles.copy_temp}>
           <CreateJcd
             actionType="copy"
             initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
@@ -198,7 +198,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
           )
         }
         {
-          showAddJctBtn && isEmpty(jcdList) && (
+          isEmpty(jcdList) && (
             <div className={styles.empty_wrap}>
               暂无检查单，请添加
             </div>

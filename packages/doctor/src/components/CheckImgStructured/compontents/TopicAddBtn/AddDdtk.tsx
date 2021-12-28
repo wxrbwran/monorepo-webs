@@ -13,6 +13,7 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
     initData, editGroupInx } = props;
   console.log('====editDdtk', props);
   const curUuid = useRef(initData ? initData[0].uuid : uuid());
+  const [loading, setLoading] = useState(false);
   let initQas = [];
   for (let i = 0; i < 4; i++) {
     initQas.push(ddtkData(curUuid.current));
@@ -40,6 +41,7 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
     } else if (qas.find(qaItem => qaItem.question === '')) {
       msg('请输入问题', 'error');
     } else {
+      setLoading(true);
       const qasData = qas.map((qaItem, inx) => {
         const qa = {
           ...qaItem,
@@ -62,6 +64,9 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
         msg('保存成功', 'success');
         handleSaveQuestion(qas, actionType, editGroupInx);
         closeModal();
+        setLoading(false);
+      }).catch(err => {
+        msg(err?.result || '保存失败', 'error');
       });
     }
 
@@ -128,7 +133,7 @@ const TopicAddDdtk: FC<IAddTopicProps & { closeModal: () => void }> = (props) =>
         <Button type="primary" ghost icon={<DeleteOutlined />}  onClick={handleDelete}>
           { actionType === 'add' ? '取消' : '删除' }
         </Button>
-        <Button type="primary" ghost icon={<CheckCircleOutlined />} onClick={handleSave}>确认</Button>
+        <Button type="primary" ghost icon={<CheckCircleOutlined />} onClick={handleSave} loading={loading}>确认</Button>
       </div>
     </div>
   );

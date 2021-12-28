@@ -83,6 +83,14 @@
     justify-content: center;
     color: #666666;
   }
+  :global {
+    .searchHospital {
+      .ant-select-selector, .ant-select-selection-placeholder {
+        height: 32px;
+        line-height: 32px;
+      }
+    }
+  }
 }
 .structured_content {
   flex: 1;
