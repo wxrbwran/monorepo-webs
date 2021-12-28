@@ -70,6 +70,7 @@ const CreateJcd: FC<IProps> = (props) => {
         msg('保存成功');
         onSuccess({
           sid: doctorSid,
+          creatorSid: doctorSid,
           source: 'DOCTOR',
           id: res.meta.id,
           ...values,

@@ -87,7 +87,8 @@ const SearchJcd: FC<IProps> = (props) => {
   };
   const handleAddOther = (val: string) => {
     const curInfo = otherNames.find(item => item.jcdName === val);
-    handleAddJcdTab({ ...curInfo });
+    console.log('curInfo', curInfo);
+    handleAddJcdTab({ ...curInfo, creatorSid: curInfo.sid });
   };
   const handleSearchOtherName = (val: string) => {
     changePartMethod({ 'jcdName': val  });
