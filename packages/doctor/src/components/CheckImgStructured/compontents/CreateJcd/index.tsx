@@ -83,6 +83,8 @@ const CreateJcd: FC<IProps> = (props) => {
       const params = {
         id: templateId,
         ...values,
+        sid: doctorSid,
+        title: outType,
       };
       api.image.patchImageTemplateName(params).then(() => {
         msg('编辑成功');

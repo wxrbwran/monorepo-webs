@@ -2,7 +2,6 @@ import React, {
   FC, useEffect, useState, useMemo, useRef,
 } from 'react';
 import { Form, Button, message } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
@@ -12,6 +11,7 @@ import * as api from '@/services/api';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
+import iconCopy from '@/assets/img/icon_copy_dj.png';
 import IndexTable from '../IndexTable';
 
 // 获取图片详情接口返回的格式 | 搜索单据或指标时返回的item格式
@@ -359,22 +359,27 @@ const CustomIndex: FC<IProps> = (props) => {
         </EditIndex>
       </div> */}
       <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
-        <div className="flex" style={{ flex: '0 0 47%' }}>
-          <div className="font-medium mr-5" style={{ flex: '0 0 63px' }}>
-            检查机构:
-          </div>
-          <SearchHospital
-            placeholder="请输入检查机构"
-            callback={handleSetHospital}
-            fieldName="hospital"
-            style={{ flex: 1, maxWidth: '78%' }}
-            defaultValue={{
-              hospitalId: initList?.orgAndTime?.orgId,
-              hospitalName: initList?.orgAndTime?.orgName,
-            }}
-          />
-        </div>
+        {
+          !(isViewOnly && !initList?.orgAndTime?.orgName) ? (
+            <div className="flex" style={{ flex: '0 0 47%' }}>
+              <div className="font-medium mr-5" style={{ flex: '0 0 63px', lineHeight: '25px' }}>
+                检查机构:
+              </div>
+              <SearchHospital
+                placeholder="请输入检查机构"
+                callback={handleSetHospital}
+                fieldName="hospital"
+                style={{ flex: 1, maxWidth: '78%' }}
+                defaultValue={{
+                  hospitalId: initList?.orgAndTime?.orgId,
+                  hospitalName: initList?.orgAndTime?.orgName,
+                }}
+              />
+            </div>
+          ) : <div></div>
+        }
         <ItemDate
+          isViewOnly={isViewOnly}
           setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
           setUnknow={(unknownReport: boolean) => handleUnknownReport(unknownReport)}
           // 如果是回显，就直接取回显的时间，没有就设置当前时间
@@ -403,9 +408,10 @@ const CustomIndex: FC<IProps> = (props) => {
           <div className="mb-10">
             <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
               <Button
-                icon={<CopyOutlined className="relative top-1" style={{ fontSize: '16px' }} />}
+                className="flex items-center text-sm"
+                icon={<img src={iconCopy} className="w-16 mr-2" />}
               >
-                复制化验单
+                复制并修改单据
               </Button>
             </CopyDocument>
           </div>
