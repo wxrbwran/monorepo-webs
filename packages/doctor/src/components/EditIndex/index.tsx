@@ -161,6 +161,9 @@ const EditIndex: FC<IProps> = (props) => {
     if (index === defaultReference) {
       setDefaultReference(0);
     }
+    if (index < defaultReference) {
+      setDefaultReference(prev => prev - 1);
+    }
   };
 
 

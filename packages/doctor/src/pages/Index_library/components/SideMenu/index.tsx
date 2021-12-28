@@ -106,7 +106,8 @@ const SideMenu: FC = () => {
     const {
       query: { documentId, documentType, src },
     } = location;
-    const firstDoc = hyds[0] || jcds[0] || others[0];
+    const firstDoc = hyds.filter(d => d.sourceSid === curSid)[0] || hyds[0]
+      || jcds[0] || others[0];
     firstDoc.sourceSid = firstDoc.sourceSid || firstDoc.sid;
     if (!(documentId && documentType && src)) {
       let to = 'SYSTEM';
