@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Form, Input } from 'antd';
-import openIcon from '@/assets/img/showNocommon.png';
-import closeIcon from '@/assets/img/closeNocommon.png';
+// import openIcon from '@/assets/img/showNocommon.png';
+// import closeIcon from '@/assets/img/closeNocommon.png';
 import HiddenItems from '../HiddenItems';
 import RenderItem from './components/RenderItem';
 import styles from './index.scss';
@@ -83,13 +83,13 @@ const IndexTable: FC<IProps> = (props) => {
   return (
     <div className={`structured-edit-wrap ${styles.hyd_form}`}>
       {renderItem('commonItems')}
-      <div style={{ display: showAll ? 'block' : 'none' }}>{renderItem('noCommonItems')}</div>
-      {!isViewOnly && (
+      <div style={{ display: showAll ? 'none' : 'none' }}>{renderItem('noCommonItems')}</div>
+      {/* {!isViewOnly && (
         <div className="flex justify-center" onClick={() => setshowAll(!showAll)}>
           {`点击${showAll ? '收起' : '展开'}不常用指标`}
           <img className="w-14 h-14 relative top-2" src={showAll ? closeIcon : openIcon} alt="" />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

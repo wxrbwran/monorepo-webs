@@ -113,8 +113,8 @@ const CustomIndex: FC<IProps> = (props) => {
     };
     const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary
       .fetchIndexDocumentIndex(params);
-    const commonItems = list.filter((item) => item.common);
-    const noCommonItems = list.filter((item) => !item.common);
+    const commonItems = list;//.filter((item) => item.common);
+    const noCommonItems = []; //list.filter((item) => !item.common);
     // 如果有指定首行展示哪个指标，这里移动到第一个
     const data: IApiData = firstIndex
       ? formatFirshIndex(commonItems, noCommonItems)
@@ -143,7 +143,6 @@ const CustomIndex: FC<IProps> = (props) => {
       console.log('apiParams.id', apiParams.documentId);
       console.log('id', id);
       if (apiParams.documentId === id) {
-        form.resetFields();
         await fetchIndexDocumentIndex();
         message.success('已刷新单据');
       }
@@ -179,6 +178,10 @@ const CustomIndex: FC<IProps> = (props) => {
         (apiData?.commonItems?.length || 0) + (apiData?.noCommonItems?.length || 0);
       validateFields()
         .then((values) => {
+          // console.log('validateFields', values);
+          // console.log('apiParams', apiParams);
+
+          // apiParams
           const { documentId, documentName, sampleFrom } = apiParams;
           const params: CommonData = {
             documentId,
@@ -259,7 +262,7 @@ const CustomIndex: FC<IProps> = (props) => {
         });
       }
     };
-  }, [apiData, apiParams]);
+  }, [apiData]);
   const addIndexSuccess = (newItemData: any) => {
     // 保存一下用户已经输入的form表单值，在apiData渲染完之后，这里重新设置回去。解决添加新指标后丢失用户输入数据问题
     // 备注：由于上面监听了apiData的改变，只要此状态更新，就会走initForm方法（这里是为了把新添加的指标，也set一下，
@@ -380,8 +383,7 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      {/* 自己的单据，并且不是修改 */}
-      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && !initList && (
+      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && (
         <div className="mb-10">
           <EditIndex
             onSuccess={addIndexSuccess}
