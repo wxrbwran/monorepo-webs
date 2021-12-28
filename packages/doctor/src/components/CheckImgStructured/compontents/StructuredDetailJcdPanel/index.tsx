@@ -1,5 +1,5 @@
 import React, { FC, useState, useMemo, useRef, useEffect } from 'react';
-import { Tabs, Popconfirm } from 'antd';
+import { Tabs, Popconfirm, Button } from 'antd';
 import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
 import uuid from 'react-uuid';
 import { isEmpty, cloneDeep } from 'lodash';
@@ -9,6 +9,7 @@ import CreateJcd from '../CreateJcd';
 import { IAddJcdItem, IJcdTabItem } from '../type';
 // import * as api from '@/services/api';
 import { getSource } from '../utils';
+import iconCopy from '@/assets/img/icon_copy_dj.png';
 import styles from './index.scss';
 
 interface IProps {
@@ -135,9 +136,12 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
             updateCreateJcdNum={updateCreateJcdNum}
             outType={outType}
           >
-            <span>
+            <Button
+              className="flex items-center text-sm mb-15"
+              icon={<img src={iconCopy} className="w-16 mr-2" />}
+            >
               复制并修改单据
-            </span>
+            </Button>
           </CreateJcd>
           </div>}
           <StructuredJcdTabItem

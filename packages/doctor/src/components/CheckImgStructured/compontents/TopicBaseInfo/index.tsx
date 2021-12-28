@@ -28,7 +28,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           break;
         case '时间':
           timeRef.current = ans === null ? new Date().getTime() : Number(ans);
-          initObj.measured_at = ans === null ? new Date().getTime() : Number(ans);
+          initObj.measured_at = ans === null ? null : Number(ans);
           break;
         default:
           break;
@@ -90,7 +90,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
     console.log('isUnKonw', isUnKonw);
     setFieldsValue({ measured_at: isUnKonw ? null : timeRef.current });
   };
-
+  console.log('initialValues', initialValues);
   return (
     <div className={`${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
@@ -107,7 +107,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
                   <Form.Item name="orgName" noStyle>
                     <Input type="hidden" />
                   </Form.Item>
-                  <span className="text-sm font-medium mr-8 w-72 inline-block">检查机构: </span>
+                  <span className="text-sm font-medium mr-2 w-65 inline-block">检查机构: </span>
                   <SearchHospital
                     placeholder="请输入检查机构"
                     callback={handleSetHospital}
@@ -120,12 +120,12 @@ const TopicBaseInfo: FC<IProps> = (props) => {
             }
            </Col>
           {
-           !(isViewOnly && !initialValues?.measured_at) && (
             <Col span={13}>
               <Form.Item name="measured_at" noStyle>
                 <Input type="hidden" />
               </Form.Item>
               <ItemDate
+                isViewOnly={isViewOnly}
                 // 如果是回显，就直接取回显的时间，没有就设置当前时间
                 initReportTime={initialValues?.measured_at || new Date().getTime()}
                 setReporttime={(time: number | null) => handleChangeTime(time)}
@@ -135,7 +135,6 @@ const TopicBaseInfo: FC<IProps> = (props) => {
                 label="检查时间"
               />
             </Col>
-           )
           }
         </Row>
       </Form>

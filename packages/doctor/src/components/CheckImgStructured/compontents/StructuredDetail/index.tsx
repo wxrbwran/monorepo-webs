@@ -121,12 +121,23 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
           .then((documentData: any) => {
             apiParams.list = [...documentData];
             console.log('documentList', documentData);
-            if (!isEmpty(documentData) && isEmpty(documentData[0].documentList)) {
-              message.error('化验单内容为空，请填写!');
-            } else {
+            // tab没有选择化验单类型
+            if (isEmpty(documentData)) {
               saveHydData(apiParams);
+            } else {
+              // 选择了化验单tab，但没有选择任何单据
+              if (isEmpty(documentData[0].documentList)) {
+                message.error('化验单内容为空，请填写!');
+              } else {
+                const errDocument = documentData[0].documentList.filter(item => isEmpty(item.indexList));
+                // 选择的化验单据，没有填写任何指标（有且仅有一个化验单据，且没填写任何指标数值，直接保存会导致图片丢失，这里拦截一下）
+                if (isEmpty(errDocument)) {
+                  saveHydData(apiParams);
+                } else {
+                  message.error(`【${errDocument[0].documentName}】单据未填写内容！`);
+                }
+              }
             }
-
           }).catch((err) => {
             console.log('请完善化验单后提交！err', err);
             message.error('请完善化验单后提交！');
