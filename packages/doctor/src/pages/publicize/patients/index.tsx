@@ -105,6 +105,7 @@ function Patients() {
 
   useEffect(() => {
     if (!isEmpty(currentOrgInfo)) {
+      setDataSource([]);
       changeTableOption(window.$storage.getItem('keyWord'), 'changeOrg');
       retryTimes.current = 1;
       setLoading(true);
@@ -136,6 +137,9 @@ function Patients() {
   };
 
   const handleSelectChange = (_changedValues: string[], allValues: { keyword: string }) => {
+    setDataSource([]);
+    retryTimes.current = 1;
+    setLoading(true);
     changeTableOption(allValues.keyword);
     window.$storage.setItem('keyWord', allValues.keyword);
     // setOptions({ ...tableOptions, keyword: allValues.keyword });
