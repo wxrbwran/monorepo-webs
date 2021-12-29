@@ -62,7 +62,10 @@ const JcdView: FC<IProps> = (props) => {
           }`}</span>
         )}
         <CopyDocument type={type} onSuccess={onSuccess} document={curDocument}>
-          <Button className={styles.copy_btn} icon={<img src={copyIcon} />}>
+          <Button
+            className="flex items-center px-5 py-3"
+            style={{ borderRadius: '3px' }}
+            icon={<img src={copyIcon} />}>
             复制{documentMap[curDocument.type]}
           </Button>
         </CopyDocument>
