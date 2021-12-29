@@ -16,10 +16,13 @@ interface IProps {
   groupId: string;
   scaleId: string;
   subTit: string;
+  ruleDoc: {
+    id: string;
+  }
 }
 function ScaleTableDetailEcho(props: IProps) {
   const location = useLocation();
-  const { source, groupId } = props;
+  const { source, groupId, ruleDoc } = props;
   const [scaleType, setScaleType] = useState('');
   const [scaleName, setScaleName] = useState('');
   const [questions, setQuestions] = useState<IQuestions[]>([]);
@@ -57,6 +60,7 @@ function ScaleTableDetailEcho(props: IProps) {
       scaleGroupId: groupId,
       projectSid: window.$storage.getItem('projectSid'),
       scaleType: props.scaleType,
+      ruleId: ruleDoc?.id,
     }).then(() => {
       message.success('删除成功');
       history.push(`${location.pathname}?name=${scaleGroupInfos[0].name}`);
