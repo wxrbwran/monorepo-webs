@@ -80,7 +80,13 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   }, [saveSuccess]);
 
   const saveHydData = (params: any) => {
-    if (params?.imageJCD && isEmpty(params?.imageJCD?.list) && isEmpty(params.list)) {
+    console.log('params111', params);
+    if (
+      isEmpty(params?.imageJCD?.list) &&
+      isEmpty(params.list) &&
+      !params.allTypes.includes('NOT_CLEAR') &&
+      !params.allTypes.includes('NOT_HYD_JCD') ) {
+      // 1检查单数据为空，2并且化验单数据为空，3并且类型不包括不清晰、4非化验单检查单时，要提示内容为空
       message.error('单据内容为空！');
     } else {
       api.image.putImageImageIndexes(params).then(() => {
@@ -90,20 +96,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       });
     }
   };
-  // const saveJcdData = (params) => {
-  //   // 1.原ids不为空，表示有修改。2.list不为空，表示有修改（ids存在）/新添加(ids为空)
-  //   if (!isEmpty(jcdOriginIds) || !isEmpty(params.list)) {
-  //     params.originIds = jcdOriginIds;
-  //     api.image.putImageJcdAndOther(params).then(() => {
-  //       console.log('添加检查单成功');
-  //       setSaveSuccess(prev => prev + 1);
-  //     }).catch((err: any) => {
-  //       console.log('添加检查单失败', err);
-  //     });
-  //   } else {
-  //     setSaveSuccess(prev => prev + 1);
-  //   }
-  // };
+
   // 把准备好的化验单数据，传给检查单，当检查单查验自己也无误后，再统一调用接口
   const handleSaveJcd = (hydDataParams) => {
     const clickSaveTime = new Date().getTime();
