@@ -1,13 +1,15 @@
-h2 {
-  font-size: 15px;
-  margin: 30px 0 15px;
-  &:first-child {
-    margin-top: 0;
-    margin-top: 30px;
-  }
-  .start {
-    color: red;
-    margin-right: 3px;
+.template_rule {
+  h2 {
+    font-size: 15px;
+    margin: 30px 0 15px;
+    &:first-child {
+      margin-top: 0;
+      margin-top: 30px;
+    }
+    .start {
+      color: red;
+      margin-right: 3px;
+    }
   }
 }
 

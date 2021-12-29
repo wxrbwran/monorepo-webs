@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
 import { Form, Input, Row, Col, message } from 'antd';
@@ -9,16 +9,17 @@ import { IQuestions } from 'typings/imgStructured';
 interface IProps {
   initData: IQuestions[];
   outType: string; // JCD  OTHER
-  changeCallbackFns: (params: ICallbackFn) => void
-  changeJcdBaseInfo: (params: object) => void;
+  changeCallbackFns: (params: ICallbackFn) => void;
+  isViewOnly: boolean;
 }
 
 const TopicBaseInfo: FC<IProps> = (props) => {
-  const { initData, changeCallbackFns, outType, changeJcdBaseInfo } = props;
+  const { initData, changeCallbackFns, isViewOnly } = props;
   const [form] = Form.useForm();
-  const { validateFields, setFieldsValue, getFieldsValue } = form;
+  const { validateFields, setFieldsValue } = form;
+  let timeRef = useRef<null | number>(null); // 存一下日期上的时间，当点击时间不详时，存起来，取消时间不详时，恢复此值到measure_at
   const fetchInit = () => {
-    const initObj: CommonData = {};
+    const initObj: CommonData = { measured_at: new Date().getTime() };
     initData.forEach(item => {
       const ans = item.answer[0];
       switch (item.question) {
@@ -26,19 +27,8 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           initObj.orgName = ans;
           break;
         case '时间':
-          initObj.measured_at = Number(ans);
-          break;
-        case '检查部位':
-          initObj.part = ans;
-          break;
-        case '检查方法':
-          initObj.method = ans;
-          break;
-        case '检查名称':
-          initObj.name = ans;
-          break;
-        case '单据名称':
-          initObj.djName = ans;
+          timeRef.current = ans === null ? new Date().getTime() : Number(ans);
+          initObj.measured_at = ans === null ? null : Number(ans);
           break;
         default:
           break;
@@ -54,7 +44,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       Object.keys(values).forEach((item: string) => {
         questions.push({
           question: baseField[item].text,
-          answer: [values[item]],
+          answer: values[item] !== undefined ? [values[item]] : [],
           question_type: 'BASIC',
           group: `0-${baseField[item].inx}`,
           sid: window.$storage.getItem('sid'),
@@ -77,7 +67,6 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       reject(err);
     });
   });
-  console.log('initData121112,', initData);
   useEffect(() => {
     setInitVals(fetchInit());
   }, [initData]);
@@ -95,15 +84,15 @@ const TopicBaseInfo: FC<IProps> = (props) => {
   };
   const handleChangeTime = (time: number | null) => {
     setFieldsValue({ measured_at: time });
+    timeRef.current = time;
   };
-  const handleChangeName = () => {
-    const coreField = outType === 'JCD' ? ['part', 'method'] : ['djName'];
-    console.log('核心字段：', getFieldsValue(coreField));
-    changeJcdBaseInfo(getFieldsValue(coreField));
+  const handleChangeUnKonwTime = (isUnKonw) => {
+    console.log('isUnKonw', isUnKonw);
+    setFieldsValue({ measured_at: isUnKonw ? null : timeRef.current });
   };
-  const rules = [{ required: true, message: '请输入' }];
+  console.log('initialValues', initialValues);
   return (
-    <div className={`border p-15 ${styles.topic_base} structured-edit-wrap`}>
+    <div className={`${styles.topic_base} structured-edit-wrap`}>
       {/* <div onClick={handleFetch}>获取数据</div> */}
       <Form
         name="topicBaseInfo"
@@ -111,56 +100,41 @@ const TopicBaseInfo: FC<IProps> = (props) => {
         initialValues={initialValues}
       >
         <Row>
-          <Col span={12} className="flex">
-            <Form.Item name="orgName" noStyle>
-              <Input type="hidden" />
-            </Form.Item>
-            <span className="text-sm font-medium mr-8">检查机构: </span>
-            <SearchHospital
-              placeholder="请输入检查机构"
-              callback={handleSetHospital}
-              fieldName="hospital"
-              style={{ width: 'calc(100% - 72px)' }}
-              defaultValue={{ hospitalName: initialValues?.orgName }}
-            />
-          </Col>
-          <Col span={12}>
-            <Form.Item name="measured_at" noStyle>
-              <Input type="hidden" />
-            </Form.Item>
-            <ItemDate
-              // 如果是回显，就直接取回显的时间，没有就设置当前时间
-              initReportTime={initialValues?.measured_at}
-              setReporttime={(time: number | null) => handleChangeTime(time)}
-              style={{ width: 'calc(100% - 70px)' }}
-            />
-          </Col>
+          <Col span={11} className="flex">
+            {
+              !(isViewOnly && !initialValues?.orgName) && (
+                <>
+                  <Form.Item name="orgName" noStyle>
+                    <Input type="hidden" />
+                  </Form.Item>
+                  <span className="text-sm font-medium mr-2 w-65 inline-block">检查机构: </span>
+                  <SearchHospital
+                    placeholder="请输入检查机构"
+                    callback={handleSetHospital}
+                    fieldName="hospital"
+                    style={{ width: 'calc(100% - 80px)' }}
+                    defaultValue={{ hospitalName: initialValues?.orgName }}
+                  />
+                </>
+              )
+            }
+           </Col>
           {
-            outType === 'JCD' ? (
-              <>
-                <Col span={12}>
-                <Form.Item name="part" label="检查部位" rules={rules}>
-                  <Input onBlur={handleChangeName}  />
-                </Form.Item>
-              </Col>
-              <Col span={12} className="pl-17">
-                <Form.Item name="method" label="检查方法" rules={rules}>
-                  <Input onBlur={handleChangeName}  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item name="name" label="检查名称">
-                  <Input />
-                </Form.Item>
-              </Col>
-              </>
-            ) : (
-              <Col span={12}>
-                <Form.Item name="djName" label="单据名称">
-                  <Input />
-                </Form.Item>
-              </Col>
-            )
+            <Col span={13}>
+              <Form.Item name="measured_at" noStyle>
+                <Input type="hidden" />
+              </Form.Item>
+              <ItemDate
+                isViewOnly={isViewOnly}
+                // 如果是回显，就直接取回显的时间，没有就设置当前时间
+                initReportTime={initialValues?.measured_at || new Date().getTime()}
+                setReporttime={(time: number | null) => handleChangeTime(time)}
+                setUnknow={handleChangeUnKonwTime}
+                isUnknownTime={!!(initialValues?.measured_at === null)}
+                style={{ width: 'calc(100% - 168px)' }}
+                label="检查时间"
+              />
+            </Col>
           }
         </Row>
       </Form>

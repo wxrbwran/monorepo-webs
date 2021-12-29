@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Input } from 'antd';
 import * as api from '@/services/api';
-import { useDispatch } from 'umi';
 import Viewer from 'react-viewer';
 import styles from './index.scss';
 
@@ -31,34 +30,34 @@ function Reply({ children, scaleId }: IProps) {
     setIsShowViewer(false);
     setShowModal(true);
     setActiveIndex(idx);
-  }
+  };
   const fetchScaleDetail = () => {
-    const params: { scaleId: string, patientName?: string} = {
+    const params: { scaleId: string, patientName?: string } = {
       scaleId,
-    }
+    };
     if (wordKey) {
-      params.patientName = wordKey
+      params.patientName = wordKey;
     }
     api.subjective.getReplyDetail(params).then((res) => {
       setInfoList(res.replyInfoList);
       let imgArr: string[] = [];
-      res.replyInfoList.forEach((item: {imageList: string[]}) => {
-        imgArr = [...imgArr, ...item.imageList]
-      })
+      res.replyInfoList.forEach((item: { imageList: string[] }) => {
+        imgArr = [...imgArr, ...item.imageList];
+      });
       setImages([...imgArr]);
-    })
-  }
+    });
+  };
   const handleShowImgModal = () => {
     fetchScaleDetail();
     setShowModal(true);
-  }
+  };
   const handleShowViewer = (img: string) => {
     setActiveIndex(images.indexOf(img));
     setShowModal(false);
     setIsShowViewer(true);
-  }
+  };
 
-  const handleSearchKey = (word: string) => {
+  const handleSearchKey = (_word: string) => {
     fetchScaleDetail();
   };
 
@@ -90,7 +89,7 @@ function Reply({ children, scaleId }: IProps) {
             />
           </div>
           {
-            infoList.length > 0 ? infoList.map((item, index) => {
+            infoList.length > 0 ? infoList.map((item) => {
               return (
                  <>
                     <div className={styles.img_title}>
@@ -100,19 +99,19 @@ function Reply({ children, scaleId }: IProps) {
                     </div>
                     <div className={styles.img_list}>
                     {
-                      item.imageList && item.imageList.map((img, index) => {
+                      item.imageList && item.imageList.map((img) => {
                         return (
                           <img src={img} key={img} onClick={() => handleShowViewer(img)}/>
-                        )
+                        );
                       })
                     }
                   </div>
                  </>
-              )
+              );
             }) : <div className={styles.empty}>暂无数据</div>
           }
         </DragModal>
-      ) }
+			) }
       {
         images && (
           <Viewer
@@ -121,13 +120,13 @@ function Reply({ children, scaleId }: IProps) {
             activeIndex={activeIndex}
             images={images.map(url => ({
               src: url,
-              alt: "",
+              alt: '',
             }))}
           />
         )
       }
     </>
-  )
+  );
 }
 
 export default Reply;

@@ -9,7 +9,7 @@ import confirmsOrange from '@/assets/img/doctor_patients/confirms_orange.svg';
 import confirmsGreen from '@/assets/img/doctor_patients/confirms_green.svg';
 import confirmsRed from '@/assets/img/doctor_patients/confirms_red.svg';
 import patientIcon from '@/assets/img/patient.png';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 import Note from './components/Note';
 // import ChangeServicePackage from './components/ChangeServicePackage';
@@ -48,7 +48,7 @@ const patientPage = (props: { record: IRecord, actionType?: string }) => {
   const { record, actionType } = props;
   console.log('跳转', record, actionType);
   const {
-    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, currLoginDoctorInfo,
+    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, currLoginDoctorInfo, role,
   } = record;
   let imDocInfo = currLoginDoctorInfo;
   // 如果是从左侧科室管理(科主任)，看其他医生患者的详情，那这个currLoginDoctorInfo的wcId要使用科主任角色的wcID
@@ -59,6 +59,7 @@ const patientPage = (props: { record: IRecord, actionType?: string }) => {
   }
   window.$storage.setItem('patientWcId', wcId);
   window.$storage.setItem('patientSid', sid);
+  window.$storage.setItem('patientRoleId', role);
   window.$storage.setItem('patientName', name);
   // eslint-disable-next-line no-underscore-dangle
   getDvaApp()._store.dispatch({
@@ -262,8 +263,10 @@ export const patientLevel = (refreshList: () => void) => (
   {
     title: '级别',
     dataIndex: 'serviceLevel',
-    render: (_text: string, record: IRecord) => (
-      <div className="table-operating">
+    render: (_text: string, record: IRecord) => {
+      console.log('xxxfe');
+      return (
+        <div className="table-operating">
         <Switch
           checkedChildren="VIP"
           unCheckedChildren="普通"
@@ -272,7 +275,8 @@ export const patientLevel = (refreshList: () => void) => (
         />
         {/* PATIENT_VIP */}
       </div>
-    ),
+      );
+    },
   }
 );
 

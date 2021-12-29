@@ -11,11 +11,10 @@ import Edit from '@/assets/edit.svg';
 import Delete from '@/assets/delete.svg';
 import { useSelector } from 'react-redux';
 import PlanModal from '@/components/PlanModal';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import Reply from '../reply';
 import { message } from 'antd';
 import * as api from '@/services/api';
-import { IState } from 'typings/global';
 import SendRecord from '../send_record';
 import styles from './index.scss';
 import { getConditionDescriptionFromConditionss, IChooseValues, IRuleDoc } from '../../../subjective_table/util';
@@ -63,7 +62,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
   const updatePlan = (params: { plans: [], questions: string }) => {
 
     console.log('===================== updatePlan ====== ', JSON.stringify(params));
-    // ======== 
+    // ========
 
     // api.subjective.deleteScaleRule(params.ruleDoc.id).then(() => {
 

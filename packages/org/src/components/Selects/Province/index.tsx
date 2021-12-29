@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Select, Form } from 'antd';
-import { provinces } from 'xzl-web-shared/src/utils/consts';
+import { provinces } from 'xzl-web-shared/dist/utils/consts';
 
 const { Option } = Select;
 const { Item } = Form;

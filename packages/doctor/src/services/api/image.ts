@@ -1,4 +1,5 @@
 import http from '@/services/http';
+import { CommonData } from 'packages/doctor/typings/global';
 
 export default {
   // 获取化验单检查单统计数据接口new
@@ -75,9 +76,25 @@ export default {
   fetchImageTopicTemplate(data: CommonData): Promise<any> {
     return http.get('image/template', { data });
   },
-  // 新增检查单问题模板
+  // 新增检查单问题模板   11.18新增系统/医生检查单
   putImageTopicTemplate(data: CommonData): Promise<any> {
     return http.put('image/template', { data });
+  },
+  // 新增/修改/删除检查单问题
+  postImageTemplate(data: CommonData): Promise<any> {
+    return http.post('image/template', { data });
+  },
+  // 修改检查单模板名称
+  patchImageTemplateName(data: CommonData): Promise<any> {
+    return http.patch('image/template', { data });
+  },
+  // 获取检查单检查部位或检查方法
+  fetchImageTemplatePart(): Promise<any> {
+    return http.get('image/template/part');
+  },
+  // 根据检查部位或检查方法获取检查名称
+  fetchImageTemplateName(data: CommonData): Promise<any> {
+    return http.get('image/template/name', { data });
   },
   // 结构化
 };

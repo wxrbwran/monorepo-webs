@@ -1,12 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Form, Button, message } from 'antd';
 import QueryItem from '../QueryItem';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { handleSelection } from 'xzl-web-shared/src/utils/conditions';
+import { handleSelection } from 'xzl-web-shared/dist/utils/conditions';
 import styles from './index.scss';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { cloneDeep, isEmpty } from 'lodash';
 interface IProps {
   handleRefresh: () => void;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Checkbox, Input } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
-import styles from './index.scss'
-import type { IQuestions } from 'xzl-web-shared/src/utils/consts';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
+import styles from './index.scss';
+import type { IQuestions } from 'xzl-web-shared/dist/utils/consts';
 
-const {TextArea} = Input;
+const { TextArea } = Input;
 interface IProps {
   children: React.ReactElement;
   name: string;
@@ -65,13 +65,13 @@ function QuestionDetail(props: IProps) {
                     }
                   </div>
                 </div>
-              )
+              );
             })
           }
         </div>
       </DragModal>
     </>
-  )
+  );
 }
 
 export default QuestionDetail;

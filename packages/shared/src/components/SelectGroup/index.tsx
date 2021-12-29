@@ -63,7 +63,7 @@ function SelectGroup(props: IProps) {
           <span className="tit">小组名称</span>
           <Select defaultValue="下拉选择小组" style={{ width: 300 }} onChange={handleSelectGroup}>
             {
-              props.groupList.map((item: IGroupList) => {
+              props.groupList.map((item: Record<string, string>) => {
                 return (
                   <Option key={item.id} value={item.id}>{item.name}</Option>
                 );

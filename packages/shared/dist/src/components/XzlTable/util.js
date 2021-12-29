@@ -19,7 +19,7 @@ var handlePatientsTeamDataSource = function (data) {
     // 签约患者下，当前选中菜单的role
     var currentMenuRole = window.$storage.getItem('role');
     console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
-    var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'DEP_HEAD'];
+    var doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'PHARAMCIST', 'KANGFUSHI', 'PSYCHOLOGIST', 'TEAMNURSE', 'DEP_HEAD'];
     data.forEach(function (team) {
         newObj = {};
         team.members.forEach(function (member) {

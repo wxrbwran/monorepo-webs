@@ -3,8 +3,8 @@ import { Table } from 'antd';
 import * as api from '@/services/api';
 import ReplyTable from '../reply_table';
 import styles from './index.scss';
-import { pageSize } from 'xzl-web-shared/src/utils/consts';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import { pageSize } from 'xzl-web-shared/dist/utils/consts';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 
 interface IProps {
   id: string;
@@ -18,32 +18,32 @@ function Reply({ id, children }: IProps) {
   const [current, setCurrent] = useState(1);
   const [totals, setTotals] = useState(0);
   useEffect(() => {
-    if(showModal){
+    if (showModal){
       api.education.getScaleReplyList({
         planRuleId: id,
         pageAt: current,
         pageSize,
       }).then((res: any) => {
-        if(res.list.length>0){
+        if (res.list.length > 0){
           const { list, total, sum, replySum } = res;
           setDataSource(list);
           setSendNumber(sum);
           setReplyNumber(replySum);
           setTotals(total);
         }
-      })
+      });
     }
   }, [showModal, current]);
 
   useEffect(() => {
-    if(!showModal){
+    if (!showModal){
       setCurrent(1);
     }
-  }, [showModal])
+  }, [showModal]);
 
   const handlePagerChange = (pagination: number) => {
     setCurrent(pagination);
-  }
+  };
 
   const columns: any = [
     {
@@ -70,7 +70,7 @@ function Reply({ id, children }: IProps) {
           <span className={styles.number}>
             {text}
           </span>
-        </ReplyTable>
+        </ReplyTable>,
     },
     {
       title: '未回复量表数量',
@@ -86,8 +86,8 @@ function Reply({ id, children }: IProps) {
           <span className={styles.number}>
             {text}
           </span>
-        </ReplyTable>
-    }
+        </ReplyTable>,
+    },
   ];
   return (
     <>
@@ -106,7 +106,7 @@ function Reply({ id, children }: IProps) {
             <div className={styles.count}>
               <span>已发出: {sendNumber}张</span>
               <span>已回复: {replyNumber}张</span>
-              <span>回复率: {sendNumber>0 ? Math.round((replyNumber/sendNumber)*100*100)/100 : 0}%</span>
+              <span>回复率: {sendNumber > 0 ? Math.round((replyNumber / sendNumber) * 100 * 100) / 100 : 0}%</span>
             </div>
             <div className='mt-8'>
               <Table
@@ -126,6 +126,6 @@ function Reply({ id, children }: IProps) {
         </DragModal>
       ) }
     </>
-  )
+  );
 }
 export default Reply;

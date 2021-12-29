@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import iconClose from '@/assets/img/icon_close.png';
 import iconAdd from '@/assets/img/icon_add_large.png';
 import ChoiceDoctor, { DoctorOrgsProp } from '../ChoiceDoctor';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
 import avatar from '@/assets/img/default_project.png';
 interface IMemberProps {

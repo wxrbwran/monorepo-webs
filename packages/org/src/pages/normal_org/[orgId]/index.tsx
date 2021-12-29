@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Row, Col, Space, Button } from 'antd';
 import { useSelector } from 'umi';
 import { UploadOutlined } from '@ant-design/icons';
-import { topInfos, isInternet } from 'xzl-web-shared/src/utils/consts';
+import { topInfos, isInternet } from 'xzl-web-shared/dist/utils/consts';
 // import Management from '../components/Management';
 import UploadInfo from '../components/UploadInfo';
 import styles from './index.scss';

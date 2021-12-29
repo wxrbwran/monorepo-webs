@@ -1,6 +1,8 @@
+import dayjs from 'dayjs';
+//@ts-ignore
+import { getDvaApp } from 'umi';
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
-import dayjs from 'dayjs';
 
 // 获取患者列表（做为独立、上级、下级医生的患者列表）
 const handlePatientsTeamDataSource = (data: Store[]) => {
@@ -9,19 +11,22 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
   // 签约患者下，当前选中菜单的role
   const currentMenuRole = window.$storage.getItem('role');
   console.log('============== currentMenuRole currentMenuRole', currentMenuRole);
-  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'DEP_HEAD'];
+  const doctorRole = ['ALONE_DOCTOR', 'UPPER_DOCTOR', 'LOWER_DOCTOR', 'DIETITIAN', 'PHARAMCIST', 'KANGFUSHI', 'PSYCHOLOGIST', 'TEAMNURSE', 'DEP_HEAD'];
   data.forEach((team: Store) => {
     newObj = {};
-    team.members.forEach((member: ISubject) => {
+    team.members.forEach((member: any) => {
       // 下级、上级、科研医生、营养师、独立
       if (Role.NS_OWNER.id === member.role) {
         newObj.nsOwner = {
-          wcId: member.wcId,  //创建者的wcid - 患者详情获取会话成员使用
-          sid: member.sid,  //创建者的sid -  患者列表是否展示更换服务按钮使用
+          wcId: member.wcId, //创建者的wcid - 患者详情获取会话成员使用
+          sid: member.sid, //创建者的sid -  患者列表是否展示更换服务按钮使用
         };
       }
       // 在members里过滤出sid与当前登录者sid相同,并且与侧边栏医生角色一致的医生信息，取出wcId，im聊天会话需要此参数
-      if (member.sid === window.$storage.getItem('sid') && member.role === window.$storage.getItem('currRoleId')) {
+      if (
+        member.sid === window.$storage.getItem('sid') &&
+        member.role === window.$storage.getItem('currRoleId')
+      ) {
         newObj.currLoginDoctorInfo = {
           wcId: member.wcId,
           sid: member.sid,
@@ -73,9 +78,18 @@ const handlePatientsTeamDataSource = (data: Store[]) => {
 
 // 获取成员列表、邀请成员列表、架构里的表格数据均使用此方法
 export const handleInviteMemberList = (dataSource: Store[]) => {
-  const newData: Array<ISubject> = [];
+  const newData: Array<any> = [];
   dataSource.forEach((item: any) => {
-    const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
+    const {
+      title,
+      avatarUrl,
+      firstProfessionCompany,
+      firstPracticeDepartment,
+      name,
+      tel,
+      provinceName,
+      sex,
+    } = item.subjectDetail || {};
     newData.push({
       ...item,
       title,
@@ -98,11 +112,11 @@ export const handleInviteMemberList = (dataSource: Store[]) => {
 
 // cro邀请研究者参与管理数据处理使用此方法
 export const handleTeamInviteMemberList = (dataSource: Store[]) => {
-  const newData: Array<ISubject> = [];
-  console.log('handleTeamInviteMemberList dataSource', dataSource);
+  const newData: Array<any> = [];
+  // console.log('handleTeamInviteMemberList dataSource', dataSource);
   dataSource.forEach((team: any) => {
     let doctor: any = {};
-    team.members.forEach(item => {
+    team.members.forEach((item) => {
       if (item.role === Role.DOCTOR.id) {
         doctor = {
           orgs: doctor?.orgs || [],
@@ -124,29 +138,10 @@ export const handleTeamInviteMemberList = (dataSource: Store[]) => {
       }
     });
     newData.push(doctor);
-
-    // const { title, avatarUrl, firstProfessionCompany, firstPracticeDepartment, name, tel, provinceName, sex } = item.subjectDetail || {};
-    // newData.push({
-    //   ...item,
-    //   title,
-    //   avatarUrl,
-    //   name,
-    //   joinTime: item?.interval?.start ? dayjs(item.interval.start).format('YYYY-MM-DD') : null,
-    //   status: projectInviteStatus[item.status],
-    //   tel,
-    //   provinceName,
-    //   sex: sexList[sex],
-    //   firstProfessionCompany,
-    //   firstPracticeDepartment,
-    //   role: fetchRolePropValue(item.role, 'desc'),
-    //   roleId: item.role,
-    // });
   });
-  console.log('handleTeamInviteMemberList newData', newData);
+  // console.log('handleTeamInviteMemberList newData', newData);
   return newData;
 };
-
-
 
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
@@ -203,7 +198,7 @@ export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
   const doctors: any[] = [];
   dataSource.forEach((dataItem) => {
     let doctor: any = {};
-    dataItem.members.forEach(item => {
+    dataItem.members.forEach((item) => {
       if (item.role === Role.DOCTOR.id) {
         doctor = {
           orgs: doctor?.orgs || [],
@@ -226,13 +221,12 @@ export const handleRelatedDoctorsDataSource = (dataSource: Store[]) => {
   return doctors;
 };
 export const handleTableDataSource = (dataKey: string, dataSource: Store[], category?: string) => {
-  console.log('dataSource', dataSource);
-  console.log('dataKey', dataKey);
-  console.log('category', category);
-  console.log('Role.DOCTOR.id', Role.DOCTOR.id);
-  console.log('Role.PATIENT_VIP.id', Role.PATIENT_VIP.id);
-  console.log('Role.PATIENT.id', Role.PATIENT.id);
-
+  // console.log('dataSource', dataSource);
+  // console.log('dataKey', dataKey);
+  // console.log('category', category);
+  // console.log('Role.DOCTOR.id', Role.DOCTOR.id);
+  // console.log('Role.PATIENT_VIP.id', Role.PATIENT_VIP.id);
+  // console.log('Role.PATIENT.id', Role.PATIENT.id);
   switch (dataKey) {
     case 'teams':
       if (category === 'patientList') {
@@ -258,6 +252,8 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
       return dataSource;
     case 'infos':
       return handleInviteMemberList(dataSource);
+    case 'indexTable':
+      return dataSource;
     default:
       return dataSource;
   }

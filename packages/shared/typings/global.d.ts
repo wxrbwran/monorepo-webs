@@ -31,7 +31,7 @@ declare interface Store {
 declare interface Window {
   NIM: Store; // SDK
   nim: Store; // NIM 实例
-  readonly $dva: Store;
+  $dva: Store;
   readonly $store: Store;
   $api: Store;
   reloadAuthorized: Store;
@@ -235,3 +235,13 @@ interface ICallbackFn {
   type: string;
   fn?: () => void;
 }
+
+declare type TReference = {
+  id: string;
+  type: string;
+  value: string | null;
+  secondValue: string | null;
+  unit: string | null;
+  note: string | null;
+  isDefault: boolean;
+};

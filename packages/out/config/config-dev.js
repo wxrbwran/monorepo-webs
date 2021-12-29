@@ -16,7 +16,7 @@ Object.keys(oriEnv).forEach((key) => {
 });
 
 export default defineConfig({
-  mfsu: {},
+  // mfsu: {},
   define: defineEnv,
   hash: true,
   favicon: '/out-hospital-patient/assets/favicon.ico',

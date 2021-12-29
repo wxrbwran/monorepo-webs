@@ -3,7 +3,7 @@
 import React, { FC } from 'react';
 import dayjs from 'dayjs';
 import scale from '@/assets/img/scale.png';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { getRoles } from '@/utils/utils';
 import '../Project/index.scss';
 

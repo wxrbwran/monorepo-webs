@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import * as api from '@/services/api';
 import styles from './index.scss';
 import { Checkbox, Input, message, Divider } from 'antd';

@@ -1,11 +1,32 @@
 {
-  "extends": "../../tsconfig",
-
   "compilerOptions": {
+    "outDir": "build/dist",
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+
+    "importHelpers": true,
+    "esModuleInterop": true,
     "paths": {
       "@/*": ["src/*"],
-      "xzl-web-shared/src/*": ["src/*"]
+      "xzl-web-shared/dist/*": ["src/*"]
     },
     "typeRoots": ["node", "node_modules/@types", "./typings"]
   }
+
 }

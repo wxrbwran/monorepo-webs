@@ -8,6 +8,10 @@ declare interface UserModelState {
   user: any;
 }
 
+declare interface DocumentModelState {
+  curDocument: TIndexItem;
+}
+
 declare interface IMModelState {
   // 是否已连接
   connected: boolean;
@@ -61,10 +65,11 @@ declare interface IMModelState {
   };
 }
 
-// declare interface IState {
-//   user: UserModelState;
-//   auth: AuthModelState;
-//   im: IMModelState;
-// }
+declare interface IState {
+  user: UserModelState;
+  auth: AuthModelState;
+  im: IMModelState;
+  document: DocumentModelState;
+}
 
 // state end

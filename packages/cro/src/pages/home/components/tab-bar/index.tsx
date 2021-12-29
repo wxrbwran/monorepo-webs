@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import { useSelector, Link } from 'umi';
-import {projectDefaultImg} from '@/utils/consts';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { projectDefaultImg } from '@/utils/consts';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
 import { IProjectList, IState } from 'typings/global';
 import ProjectItem from '../ProjectItem';
@@ -11,7 +11,7 @@ import { isEmpty } from 'lodash';
 interface IItem {
   title: string;
   data: IProjectList[]
-};
+}
 const { TabPane } = Tabs;
 interface IFormatData {
   [key: string]: IItem
@@ -26,12 +26,12 @@ function Home() {
       mainPi: { title: '总PI', data: [] },
       subPi: { title: '分PI', data: [] },
       pi: { title: 'PI', data: [] },
-      researcher: { title: '研究者', data: []},
-      multiMember: { title: '暂未分配', data: []},
+      researcher: { title: '研究者', data: [] },
+      multiMember: { title: '暂未分配', data: [] },
 
       projectLeader: { title: '项目组长', data: [] },
       psingleMember: { title: '组员', data: [] },
-    }
+    };
     projectList.forEach((item: IProjectList) => {
       switch (item.roleType) {
         case Role.MAIN_PI.id:
@@ -53,26 +53,27 @@ function Home() {
           formatData.psingleMember.data.push(item);
           break;
         default:
-          item.label === 'single_project' ?
-            formatData.psingleMember.data.push(item)
-           : formatData.multiMember.data.push(item);
-
+          if (item.label === 'single_project') {
+            formatData.psingleMember.data.push(item);
+          } else {
+            formatData.multiMember.data.push(item);
+          }
       }
-    })
+    });
     const multiList: IItem[] = [];
     const singleList:IItem[] = [];
     Object.keys(formatData).forEach(item => {
-      if(!isEmpty(formatData[item].data)) {
+      if (!isEmpty(formatData[item].data)) {
         if ([ 'projectLeader', 'psingleMember' ].includes(item)) {
           singleList.push(formatData[item]);// 单中心
         } else {
           multiList.push(formatData[item]); // 多中心
         }
       }
-    })
+    });
     setMultiProject(multiList);
-    setSingleProject(singleList)
-  }, [projectList])
+    setSingleProject(singleList);
+  }, [projectList]);
   return (
     <div className={styles.tab}>
       <Tabs

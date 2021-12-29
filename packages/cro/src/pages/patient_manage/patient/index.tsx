@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Form, Button, message } from 'antd';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { Search } from 'xzl-web-shared/src/components/Selects';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
+import { Search } from 'xzl-web-shared/dist/components/Selects';
 import DoctorRelatedOrg from '@/components/Selects/DoctorRelatedOrg';
 import GroupStandard from '../components/group_standard';
 import SendFile from '../components/send_file';
@@ -14,7 +14,7 @@ import '../index.scss';
 import { IState } from 'typings/global';
 import { SearchOutlined } from '@ant-design/icons';
 import { debounce } from 'lodash';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 const { TabPane } = Tabs;
 

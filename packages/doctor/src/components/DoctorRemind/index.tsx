@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { useDispatch, useParams } from 'umi';
 import { debounce } from 'lodash';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { getIssueParams } from '@/utils/utils';
 import styles from './index.scss';
 
@@ -13,7 +13,7 @@ interface IProps {
 }
 export default ({ children }: IProps) => {
   const [showModal, setShowModal] = useState(false);
-  const { sid } = useParams<{sid: string}>();
+  const { sid } = useParams<{ sid: string }>();
   const dispatch = useDispatch();
   const handleShowModal = () => {
     setShowModal(true);

@@ -80,13 +80,6 @@ function PlansDetail() {
       isContainsCurrent: true,
       aggregationType: 0,
     });
-    // api.medicine.getPlans(Base64.encode(params)).then((res) => {
-    // 	const newAllPlans = formatAllPlans(res.allPlans);
-    // 	setAllPlans(newAllPlans);
-    // })
-    // 	.catch((err) => {
-    // 		message.error(err);
-    // 	});
     dispatch({
       type: 'medicines/fetchMedicineDetail',
       payload: params,

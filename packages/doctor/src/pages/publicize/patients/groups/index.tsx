@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
-import { name, bindAt } from 'xzl-web-shared/src/utils/columns';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
+import { name, bindAt } from 'xzl-web-shared/dist/utils/columns';
 import DiagnosisDetail from '../../components/DiagnosisDetail';
 // import { groupDetailColumns } from '@/utils/columns';
 // import { useSelector } from 'umi';

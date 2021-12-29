@@ -33,6 +33,7 @@
     "dev-shared:out": "pnpm dev-shared --filter 'out-hospital-patient'",
     "dev-shared:cro": "pnpm dev-shared --filter 'clinical-cro'",
     "debug:doctor": "pnpm debug --filter 'xzl-web-doctor'",
+    "debug-shared:doctor": "pnpm debug-shared --filter 'xzl-web-doctor'",
     "debug:nurse": "pnpm debug --filter 'xzl-web-nurse'",
     "debug:org": "pnpm debug --filter 'xzl-web-org'",
     "debug:out": "pnpm debug --filter 'out-hospital-patient'",

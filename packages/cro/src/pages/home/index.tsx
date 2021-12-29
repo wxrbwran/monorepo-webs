@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SideBar from './components/side-bar';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 // import ProjectInvite from '@/components/ProjectInvite';
 import CreateProject from './components/create-project';
 import { useSelector, useDispatch } from 'react-redux';

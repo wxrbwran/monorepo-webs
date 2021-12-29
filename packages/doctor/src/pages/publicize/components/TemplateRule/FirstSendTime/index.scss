@@ -133,8 +133,8 @@
   padding: 0;
   box-shadow: none;
 }
-
-h2 {
+.send {
+  h2 {
   font-size: 15px;
   margin: 30px 0 15px;
   &:first-child {
@@ -145,6 +145,8 @@ h2 {
     margin-right: 3px;
   }
 }
+}
+
 
 .send_time {
   @include flex-lay(row, nowrap, flex-start, flex-start);

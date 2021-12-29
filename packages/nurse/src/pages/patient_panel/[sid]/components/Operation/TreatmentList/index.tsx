@@ -25,7 +25,7 @@ function TreatmentList({ isTumour }: IProps) {
   const fetchTreatments = () => {
     api.diagnosis.fetchTreatmentList({ sid }).then((res) => {
       setTreatmentInfoList(res.treatmentInfoList);
-      console.log('treatmentList', res.treatmentInfoList);
+      // console.log('treatmentList', res.treatmentInfoList);
     });
   };
   useEffect(() => {

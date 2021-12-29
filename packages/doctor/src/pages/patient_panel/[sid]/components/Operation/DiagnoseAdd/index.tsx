@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import Calendar from '@/components/Calendar';
 import SearchHospital from '@/components/SearchHospital';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import * as api from '@/services/api';
 import styles from './index.scss';
 
@@ -178,7 +178,7 @@ function AddDiagnose({
       fetchDisease(keyWord, nextPageAt);
     }
   };
-  console.log('diseaseList11', diseaseList);
+  // console.log('diseaseList11', diseaseList);
   return (
     <span>
       <span onClick={handleShowModal}>{children}</span>

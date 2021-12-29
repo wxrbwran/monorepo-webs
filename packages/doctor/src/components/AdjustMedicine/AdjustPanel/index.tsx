@@ -5,7 +5,7 @@ import { Form, Input, Button } from 'antd';
 import medicineManual from '@/assets/img/icon_medicineManual.svg';
 import SearchMedicine from '@/components/SearchMedicine';
 import MedicineManual from '@/components/MedicineManual';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { AdviceTitle } from '@/utils/tools';
 import { getInitMedicines, formatSubmitData } from '../formatData';
 import Plans from '../Plans';

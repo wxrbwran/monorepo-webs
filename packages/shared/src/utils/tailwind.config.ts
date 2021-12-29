@@ -1,9 +1,9 @@
-/* eslint-disable global-require */
-const colors = require('./colors');
+// @ts-nocheck
 
+const colors = require('./colors');
 // console.log('tailwind', process.env.NODE_ENV);
-const spacing: any = {};
-const liteSpacing: any = {};
+const spacing = {};
+const liteSpacing = {};
 for (let i = 0; i <= 300; i++) {
   spacing[i] = `${i}px`;
   if (i <= 100) {
@@ -28,7 +28,7 @@ const split12 = {
   '7/12': '58.333333%',
   '11/12': '91.666667%',
 };
-const config: any = {
+const config = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     screen: {},
@@ -85,15 +85,6 @@ const config: any = {
   },
   variants: {},
   plugins: [],
-  // corePlugins: {
-  //   borderWidth: false,
-  //   borderStyle: false,
-  //   divideColor: false,
-  //   divideStyle: false,
-  //   divideWidth: false,
-  //   divideOpacity: false,
-  //   transform: false,
-  // },
 };
 
 if (process.env.NODE_ENV === 'production') {

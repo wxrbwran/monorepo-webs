@@ -5,7 +5,7 @@ import ScaleListItem from './ListItem';
 import styles from './index.scss';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { ICondition } from '../../pages/subjective_table/util';
 
 const { Option } = Select;

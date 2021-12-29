@@ -3,7 +3,7 @@ import {
   Form, Input, Radio, InputNumber, Button, message,
 } from 'antd';
 import { debounce } from 'lodash';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import Calendar from '@/components/Calendar';
 import Region, { IRegion } from '@/components/Region';
 import * as api from '@/services/api';

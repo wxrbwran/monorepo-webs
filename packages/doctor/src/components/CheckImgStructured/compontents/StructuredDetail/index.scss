@@ -18,9 +18,16 @@
           z-index: 99;
         }
       }
-      .qa-wrap {
-        max-height: 168px;
-        overflow-y: auto;
+      .ant-tabs-nav-list {
+        .anticon-close {
+          display: none;
+        }
+      }
+      input, .ant-picker, .ant-select-selector {
+        border: none!important;
+      }
+      .ant-select-arrow, .ant-picker-suffix {
+        display: none;
       }
     }
   }
@@ -31,6 +38,12 @@
     font-size: 16px;
     height: 34px;
     z-index: 999;
+  }
+  .active_btn {
+    background: #EAF4FC;
+    border-radius: 3px;
+    color: #218CE9;
+    border: none;
   }
   .checkbox_group {
     :global {
@@ -62,47 +75,25 @@
       }
     }
   }
+  .no_tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
+  }
+  :global {
+    .searchHospital {
+      .ant-select-selector, .ant-select-selection-placeholder {
+        height: 32px;
+        line-height: 32px;
+      }
+    }
+  }
 }
 .structured_content {
   flex: 1;
-  :global {
-    // 多段填空禁止编辑时，ui不要显示灰色处理-s
-    .ant-input[disabled] {
-      color: #000;
-      background-color: #fff;
-    }
-    .ant-checkbox-disabled + span, .ant-radio-disabled + span {
-      color: #000;
-    }
-    .ant-checkbox-disabled  {
-      .ant-checkbox-inner {
-        background-color: #fff;
-        border: 1px solid #d9d9d9;
-      }
-      &.ant-checkbox-checked {
-        .ant-checkbox-inner {
-          background-color: #1890ff;
-          border-color: #1890ff;
-          &::after {
-            border-color: #fff;
-          }
-        }
-      }
-    }
-    .ant-radio-disabled  {
-      .ant-radio-inner {
-        background-color: #fff;
-        border: 1px solid #d9d9d9;
-      }
-      &.ant-radio-checked {
-        .ant-radio-inner {
-          border-color: #1890ff!important;
-          &::after {
-            background-color: #1890ff;
-          }
-        }
-      }
-    }
     // 多段填空禁止编辑时，ui不要显示灰色处理-s
     .ant-checkbox-wrapper, .ant-radio-wrapper {
       font-size: 14px;
@@ -154,14 +145,54 @@
         }
       }
       .ant-tabs-content-holder {
-        // height: calc(100vh - 196px);
-        // overflow-y: auto;
-      }
-      .ant-tabs-content-holder {
         border: 1px solid #d8d8d8;
         border-top: none;
         padding: 20px;
       }
     }
+    :global {
+      .ant-tabs-editable-card {
+        height: 100%;
+        .ant-tabs-content-holder {
+          border: 1px solid #E0E0E0;
+          border-top: none;
+          padding: 20px;
+        }
+        .ant-tabs-nav {
+          margin-bottom: 0;
+        }
+        .ant-tabs-tab {
+          border: none;
+          border-bottom: 1px solid #E0E0E0;
+          background: #fff;
+        }
+        .ant-tabs-tab-active {
+          border: 1px solid #E0E0E0;
+          border-top: 2px solid #218CE9;
+          border-bottom: none;
+        }
+      }
+    }
+}
+
+
+:global {
+  .OTHERS, .ONESELF, .SYSTEM {
+    width: 28px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    font-size: 10px;
+    background: #7596E9;
+    border-radius: 1px;
+    color: #fff;
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .ONESELF {
+    background: #8DD2C6;
+  }
+  .SYSTEM {
+    background: #E5BF76;
   }
 }

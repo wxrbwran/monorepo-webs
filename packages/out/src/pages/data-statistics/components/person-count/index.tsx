@@ -106,7 +106,7 @@ const PersonCount: FC = () => {
         <div className="text-center mb-10">
         <DatePicker
           onChange={handleChangeDate}
-          style={{ width: 125 }}
+          style={{ width: 130 }}
           defaultValue={moment(yesterday)}
           disabledDate={disabledDate}
           allowClear={false}

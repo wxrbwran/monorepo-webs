@@ -4,7 +4,7 @@ import { UserOutlined } from '@ant-design/icons';
 // import Ewm from '../compontent/Ewm';
 import styles from './index.scss';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { useLocation, useSelector } from 'umi';
 import { isOpenSub as getIsOpenSub, upperOrgNsId } from '@/utils/tools';
 

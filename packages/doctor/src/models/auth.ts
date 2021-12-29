@@ -8,7 +8,7 @@ import { history } from 'umi';
 import { message } from 'antd';
 import { setAuthorizationToken } from '@/services/http';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import config from '@/config';
 
 export interface AuthModelType {

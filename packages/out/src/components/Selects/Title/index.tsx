@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
-import { titleList } from 'xzl-web-shared/src/utils/consts';
+import { titleList } from 'xzl-web-shared/dist/utils/consts';
 import { Select, Form } from 'antd';
 
 const { Option } = Select;

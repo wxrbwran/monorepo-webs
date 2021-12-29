@@ -7,7 +7,7 @@ import moment from 'moment';
 import { IState } from 'typings/model';
 import UploadAvatar from '@/components/UploadAvatar';
 import { titleList, banksName } from '@/utils/tools';
-import { roleTags } from 'xzl-web-shared/src/utils/consts';
+import { roleTags } from 'xzl-web-shared/dist/utils/consts';
 import config from '@/config';
 import EditTextArea from '../EditTextArea';
 import CertificateEdit from '../CertificateEdit';

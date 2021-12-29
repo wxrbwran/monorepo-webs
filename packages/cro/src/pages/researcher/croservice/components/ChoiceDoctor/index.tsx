@@ -1,5 +1,5 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import MemberItem from '../MemberItem';
 import { Checkbox, Row, Col, Radio } from 'antd';
 import styles from './index.scss';

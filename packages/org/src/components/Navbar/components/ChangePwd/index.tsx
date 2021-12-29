@@ -3,7 +3,7 @@ import { message, Form, Button } from 'antd';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import BindPhone from '@/components/BindPhone';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
+import { formItemLayout } from 'xzl-web-shared/dist/utils/consts';
 
 // import { useDispatch } from 'umi';
 // import styles from './index.scss';

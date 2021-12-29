@@ -1,4 +1,4 @@
-export interface ITreePure {
+declare interface ITreePure {
   groupName: string;
   name: string;
   role: string;
@@ -6,12 +6,12 @@ export interface ITreePure {
   subjectDetail: ISubject;
   subjectId: string;
 }
-export type ITree = ITreePure & {
+declare type ITree = ITreePure & {
   subWC: ITreePure[];
   nsId: string;
 };
 
-export type ITreeChartPure = {
+declare type ITreeChartPure = {
   level: string;
   name: string;
   firstProfessionCompany: string;
@@ -20,7 +20,7 @@ export type ITreeChartPure = {
   hasChildren: boolean;
   amount: string;
   ratio: string;
-}
-export type ITreeChart = ITreeChartPure & {
-  children: ITreeChartPure[]
-}
+};
+declare type ITreeChart = ITreeChartPure & {
+  children: ITreeChartPure[];
+};

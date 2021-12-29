@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { btnRender } from '@/utils/button';
 import CustomChoice from '../custom_choice';
 import { Table, Select, Checkbox, message } from 'antd';
