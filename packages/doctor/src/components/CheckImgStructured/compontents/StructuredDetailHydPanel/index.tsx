@@ -235,31 +235,38 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         <TabPane
           tab={
             <span className="flex items-center">
-              {!isViewOnly && (
-                <SyncOutlined
-                  className="relative top-2"
-                  onDoubleClick={(e: React.MouseEvent) => handleRefershDocument(e, item.documentId)}
-                />
+              {!isViewOnly &&
+                !getInitList(item) && (
+                  <SyncOutlined
+                    className="relative top-2"
+                    onDoubleClick={(e: React.MouseEvent) =>
+                      handleRefershDocument(e, item.documentId)
+                    }
+                  />
               )}
-              {
-                item.sourceSid === doctorSid && !item.indexList ? (
-                  <AddEditDocument
-                    mode="edit"
-                    record={item}
-                    type='HYD'
-                    clickEvent="onDoubleClick"
-                    onSuccess={handleEditName}>
-                      <>
-                        <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
-                        {item.documentName}
-                      </>
-                  </AddEditDocument>
-                ) : <>
-                   <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
+              {item.sourceSid === doctorSid && !item.indexList ? (
+                <AddEditDocument
+                  mode="edit"
+                  record={item}
+                  type="HYD"
+                  clickEvent="onDoubleClick"
+                  onSuccess={handleEditName}
+                >
+                  <>
+                    <span
+                      dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}
+                    ></span>
                     {item.documentName}
+                  </>
+                </AddEditDocument>
+              ) : (
+                <>
+                  <span
+                    dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}
+                  ></span>
+                  {item.documentName}
                 </>
-              }
-
+              )}
             </span>
           }
           key={`${item.documentId}${item.sampleFrom}`}

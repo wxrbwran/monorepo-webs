@@ -359,25 +359,25 @@ const CustomIndex: FC<IProps> = (props) => {
         </EditIndex>
       </div> */}
       <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
-        {
-          !(isViewOnly && !initList?.orgAndTime?.orgName) ? (
-            <div className="flex" style={{ flex: '0 0 47%' }}>
-              <div className="font-medium mr-5" style={{ flex: '0 0 63px', lineHeight: '25px' }}>
-                检查机构:
-              </div>
-              <SearchHospital
-                placeholder="请输入检查机构"
-                callback={handleSetHospital}
-                fieldName="hospital"
-                style={{ flex: 1, maxWidth: '78%' }}
-                defaultValue={{
-                  hospitalId: initList?.orgAndTime?.orgId,
-                  hospitalName: initList?.orgAndTime?.orgName,
-                }}
-              />
+        {!(isViewOnly && !initList?.orgAndTime?.orgName) ? (
+          <div className="flex" style={{ flex: '0 0 47%' }}>
+            <div className="font-medium mr-5" style={{ flex: '0 0 63px', lineHeight: '25px' }}>
+              检查机构:
             </div>
-          ) : <div></div>
-        }
+            <SearchHospital
+              placeholder="请输入检查机构"
+              callback={handleSetHospital}
+              fieldName="hospital"
+              style={{ flex: 1, maxWidth: '78%' }}
+              defaultValue={{
+                hospitalId: initList?.orgAndTime?.orgId,
+                hospitalName: initList?.orgAndTime?.orgName,
+              }}
+            />
+          </div>
+        ) : (
+          <div></div>
+        )}
         <ItemDate
           isViewOnly={isViewOnly}
           setReporttime={(time: number | null) => handleSetTimeAndOrg({ measuredAt: time })}
@@ -388,19 +388,21 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && (
-        <div className="mb-10">
-          <EditIndex
-            onSuccess={addIndexSuccess}
-            source="imgAddIndex"
-            documentId={apiParams.documentId}
-            sampleFrom={apiParams.sampleFrom}
-          >
-            <Button type="link" className="text-sm">
-              +添加新指标
-            </Button>
-          </EditIndex>
-        </div>
+      {apiParams.source === 'DOCTOR' &&
+        apiParams.sourceSid === sid &&
+        !isViewOnly && (
+          <div className="mb-10">
+            <EditIndex
+              onSuccess={addIndexSuccess}
+              source="imgAddIndex"
+              documentId={apiParams.documentId}
+              sampleFrom={apiParams.sampleFrom}
+            >
+              <Button type="link" className="text-sm">
+                +添加新指标
+              </Button>
+            </EditIndex>
+          </div>
       )}
       {!initList &&
         (apiParams.source === 'SYSTEM' ||
