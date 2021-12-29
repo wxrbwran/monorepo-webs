@@ -83,7 +83,7 @@ const RenderItem: FC<IProps> = (props) => {
                   if (curReference?.type === 'RADIO') {
                     return (
                       <Form.Item name={`${indexItem.formIndex}_${index}_indexValue`} noStyle>
-                        <Select  style={{ width: 150 }} placeholder="请选择" disabled={disabled}>
+                        <Select  style={{ width: 90 }} placeholder="请选择" disabled={disabled}>
                           {yinYang.map((yy: Record<string, string>) => (
                             <Option key={yy.value} value={yy.value}>
                               {yy.label}

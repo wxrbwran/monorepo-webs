@@ -16,6 +16,7 @@ interface IProps {
 interface IImg {
   imageId: string;
   uploadTime: number;
+  lastReportAt?: number;
   url: string;
   status: number; // 0是异常 1是正常
   degree: number;
@@ -48,9 +49,9 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
           review.push(item);
         }
       });
-
       res.imageInfos.forEach(item => {
-        const date = dayjs(item.uploadTime).format('YYYY.MM.DD');
+        const time = data.category === 2 && data.name === '待审核图片' ? item.uploadTime : item.lastReportAt;
+        const date = dayjs(time).format('YYYY.MM.DD');
         if (imgs[date]) {
           imgs[date].push(item);
         } else {
