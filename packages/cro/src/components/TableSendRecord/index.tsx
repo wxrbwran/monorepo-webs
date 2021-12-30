@@ -188,13 +188,13 @@ const TableSendRecord: FC<IProps> = (props) => {
       <Tabs defaultActiveKey={initActiveTab} onChange={handleTab} size="large">
         <TabPane tab="待发送" key="0">
 
-          {
-            tableOptions.ruleId ?
+          {/* {
+            tableOptions0.ruleId ?
               (
                 <div>
                   <XzlTable
                     request={apiRequest[source]}
-                    depOptions={tableOptions}
+                    depOptions={tableOptions0}
                     // noPagination={true}
                     columns={col}
                     dataKey="sendList"
@@ -205,17 +205,17 @@ const TableSendRecord: FC<IProps> = (props) => {
                   />
                 </div>
               ) : <div></div>
-          }
+          } */}
         </TabPane>
 
         {source !== 'objective' && <TabPane tab="已发送/已填写" key="2">
-          {
-            tableOptions.ruleId ?
+          {/* {
+            tableOptions1.ruleId ?
               (
                 <div>
                   <XzlTable
                     request={apiRequest[source]}
-                    depOptions={tableOptions}
+                    depOptions={tableOptions1}
                     // noPagination={true}
                     columns={col}
                     dataKey="sendList"
@@ -226,16 +226,16 @@ const TableSendRecord: FC<IProps> = (props) => {
                   />
                 </div>
               ) : <div></div>
-          }
+          } */}
         </TabPane>}
         <TabPane tab={source === 'objective' ? '已发送' : '已发送/未填写'} key="1">
-          {
-            tableOptions.ruleId ?
+          {/* {
+            tableOptions2.ruleId ?
               (
                 <div>
                   <XzlTable
                     request={apiRequest[source]}
-                    depOptions={tableOptions}
+                    depOptions={tableOptions2}
                     // noPagination={true}
                     columns={col}
                     dataKey="sendList"
@@ -246,11 +246,27 @@ const TableSendRecord: FC<IProps> = (props) => {
                   />
                 </div>
               ) : <div></div>
-          }
+          } */}
         </TabPane>
       </Tabs>
-
-
+      {
+        tableOptions.ruleId ?
+          (
+            <div>
+              <XzlTable
+                request={apiRequest[source]}
+                depOptions={tableOptions}
+                // noPagination={true}
+                columns={col}
+                dataKey="sendList"
+                tableOptions={{
+                  rowSelection: false,
+                  // pagination: false,
+                }}
+              />
+            </div>
+          ) : <div></div>
+      }
       {/* {renderTable()} */}
     </div>
   );
