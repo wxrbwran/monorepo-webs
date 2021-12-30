@@ -10,6 +10,7 @@ import { useForm } from 'antd/lib/form/Form';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';
+import { debounce } from 'lodash';
 import { CrfScaleSourceType, ObjectiveSourceType, SubectiveScaleSourceType } from '../../pages/query/util';
 
 const { TabPane } = Tabs;
@@ -184,7 +185,7 @@ const TableSendRecord: FC<IProps> = (props) => {
       <Form form={form} onValuesChange={handleSelectChange}>
         <Search form={form} searchKey="receiver" placeholder="输入受试者姓名" />
       </Form>
-      <Tabs defaultActiveKey={initActiveTab} onChange={handleTab} size="large">
+      <Tabs defaultActiveKey={initActiveTab} onChange={debounce(handleTab, 500)} size="large">
         <TabPane tab="待发送" key="0" />
         {source !== 'objective' && <TabPane tab="已发送/已填写" key="2" />}
         <TabPane tab={source === 'objective' ? '已发送' : '已发送/未填写'} key="1" />
