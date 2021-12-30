@@ -85,6 +85,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const renderTabPane = useMemo(() => () => jcdList.map(
     (item: IJcdTabItem, inx: number) => (
       <TabPane
+        closable={!isViewOnly}
         tab={<span>
           {
             !item.data && <span className="mr-5" onDoubleClick={() => handleRefresh(inx)}><SyncOutlined /></span>
