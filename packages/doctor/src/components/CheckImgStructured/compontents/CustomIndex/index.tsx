@@ -143,6 +143,7 @@ const CustomIndex: FC<IProps> = (props) => {
       console.log('apiParams.id', apiParams.documentId);
       console.log('id', id);
       if (apiParams.documentId === id) {
+        form.resetFields();
         await fetchIndexDocumentIndex();
         message.success('已刷新单据');
       }
