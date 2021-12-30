@@ -149,7 +149,7 @@ var XzlTable = function (props) {
         fetchTableDataSource({});
     }, [depOptions]);
     var handlePagerChange = function (page, changedSize) {
-        // console.log('handlePagerChange', page);
+        console.log('handlePagerChange', page);
         // console.log('handlePagerChange', changedSize);
         var params = { pageAt: page };
         if (changedSize) {

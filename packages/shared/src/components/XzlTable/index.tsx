@@ -110,7 +110,7 @@ const XzlTable: FC<IProps> = (props) => {
   }, [depOptions]);
 
   const handlePagerChange = (page: number, changedSize: number | undefined) => {
-    // console.log('handlePagerChange', page);
+    console.log('handlePagerChange', page);
     // console.log('handlePagerChange', changedSize);
     const params: Store = { pageAt: page };
     if (changedSize) {
