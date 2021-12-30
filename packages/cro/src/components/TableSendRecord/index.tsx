@@ -1,5 +1,5 @@
-// import React, { FC, useState, useMemo, useEffect } from 'react';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useMemo, useEffect } from 'react';
+// import React, { FC, useState, useEffect } from 'react';
 
 import { Tabs, Form } from 'antd';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
@@ -145,34 +145,34 @@ const TableSendRecord: FC<IProps> = (props) => {
       });
     }
   };
-  // const renderTable = useMemo(() => () => {
+  const renderTable = useMemo(() => () => {
 
-  //   console.log(' renderTable useMemo', renderTable);
-  //   let col = [...columns];
-  //   if (source === 'crf') {
-  //     col = [sendAt, Receiver];
-  //   }
-  //   if (tableOptions.status === 2 && source !== 'objective') { col.push(replyAt); }
+    console.log(' renderTable useMemo', renderTable);
+    let col = [...columns];
+    if (source === 'crf') {
+      col = [sendAt, Receiver];
+    }
+    if (tableOptions.status === 2 && source !== 'objective') { col.push(replyAt); }
 
-  //   return (
-  //     tableOptions.ruleId ?
-  //       (
-  //         <div>
-  //           <XzlTable
-  //             request={apiRequest[source]}
-  //             depOptions={tableOptions}
-  //             // noPagination={true}
-  //             columns={col}
-  //             dataKey="sendList"
-  //             tableOptions={{
-  //               rowSelection: false,
-  //               // pagination: false,
-  //             }}
-  //           />
-  //         </div>
-  //       ) : <div></div>
-  //   );
-  // }, [tableOptions]);
+    return (
+      tableOptions.ruleId ?
+        (
+          <div>
+            <XzlTable
+              request={apiRequest[source]}
+              depOptions={tableOptions}
+              // noPagination={true}
+              columns={col}
+              dataKey="sendList"
+              tableOptions={{
+                rowSelection: false,
+                // pagination: false,
+              }}
+            />
+          </div>
+        ) : <div></div>
+    );
+  }, [tableOptions]);
 
   let col = [...columns];
   if (source === 'crf') {
@@ -249,7 +249,7 @@ const TableSendRecord: FC<IProps> = (props) => {
           } */}
         </TabPane>
       </Tabs>
-      {
+      {/* {
         tableOptions.ruleId ?
           (
             <div>
@@ -266,8 +266,8 @@ const TableSendRecord: FC<IProps> = (props) => {
               />
             </div>
           ) : <div></div>
-      }
-      {/* {renderTable()} */}
+      } */}
+      {renderTable()}
     </div>
   );
 };
