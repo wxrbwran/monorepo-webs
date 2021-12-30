@@ -250,28 +250,7 @@ const TableSendRecord: FC<IProps> = (props) => {
         </TabPane>
       </Tabs>
 
-      {
 
-      }
-      {
-        tableOptions2.ruleId ?
-          (
-            <div>
-              <XzlTable
-                request={apiRequest[source]}
-                depOptions={tableOptions2}
-                // noPagination={true}
-                columns={col}
-                dataKey="sendList"
-                tableOptions={{
-                  rowSelection: false,
-                  // pagination: false,
-                }}
-              />
-            </div>
-          ) : <div></div>
-
-      }
       {/* {renderTable()} */}
     </div>
   );
