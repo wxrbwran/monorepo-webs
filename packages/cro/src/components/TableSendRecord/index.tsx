@@ -235,7 +235,7 @@ const TableSendRecord: FC<IProps> = (props) => {
                 <div>
                   <XzlTable
                     request={apiRequest[source]}
-                    depOptions={tableOptions1}
+                    depOptions={tableOptions2}
                     // noPagination={true}
                     columns={col}
                     dataKey="sendList"
@@ -259,7 +259,7 @@ const TableSendRecord: FC<IProps> = (props) => {
             <div>
               <XzlTable
                 request={apiRequest[source]}
-                depOptions={activeTab == '0' ? tableOptions0 : activeTab == '1' ? tableOptions1 : tableOptions2}
+                depOptions={tableOptions2}
                 // noPagination={true}
                 columns={col}
                 dataKey="sendList"
