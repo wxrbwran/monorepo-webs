@@ -30,7 +30,7 @@ const Model: MedicineModelType = {
     *fetchMedicineDetail({ payload }, { call, put }) {
       const response = yield call(medicine.getPlans, payload);
       yield put({
-        type: 'setMedicineMedicine',
+        type: 'setMedicineDetail',
         payload: response,
       });
     },
