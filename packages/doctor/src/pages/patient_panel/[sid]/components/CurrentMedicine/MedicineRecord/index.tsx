@@ -188,7 +188,7 @@ function MedicineRecord() {
     const currentDay = dayStates.filter(
       (item) => moment(item.date).format('YYYY/MM/DD') === moment(value).format('YYYY/MM/DD'),
     )[0];
-    const className = currentDay ? getClassname(currentDay.state) : 'noPlan';
+    const className = currentDay && currentDay.date < new Date().getTime() ? getClassname(currentDay.state) : 'noPlan';
     return (
       <>
         <div className={styles[className]} />
