@@ -10,7 +10,7 @@ import { useForm } from 'antd/lib/form/Form';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';
-import { debounce } from 'lodash';
+// import { debounce } from 'lodash';
 import { CrfScaleSourceType, ObjectiveSourceType, SubectiveScaleSourceType } from '../../pages/query/util';
 
 const { TabPane } = Tabs;
@@ -185,12 +185,74 @@ const TableSendRecord: FC<IProps> = (props) => {
       <Form form={form} onValuesChange={handleSelectChange}>
         <Search form={form} searchKey="receiver" placeholder="输入受试者姓名" />
       </Form>
-      <Tabs defaultActiveKey={initActiveTab} onChange={debounce(handleTab, 500)} size="large">
-        <TabPane tab="待发送" key="0" />
-        {source !== 'objective' && <TabPane tab="已发送/已填写" key="2" />}
-        <TabPane tab={source === 'objective' ? '已发送' : '已发送/未填写'} key="1" />
+      <Tabs defaultActiveKey={initActiveTab} onChange={handleTab} size="large">
+        <TabPane tab="待发送" key="0">
+
+          {
+            tableOptions0.ruleId ?
+              (
+                <div>
+                  <XzlTable
+                    request={apiRequest[source]}
+                    depOptions={tableOptions0}
+                    // noPagination={true}
+                    columns={col}
+                    dataKey="sendList"
+                    tableOptions={{
+                      rowSelection: false,
+                      // pagination: false,
+                    }}
+                  />
+                </div>
+              ) : <div></div>
+          }
+        </TabPane>
+
+        {source !== 'objective' && <TabPane tab="已发送/已填写" key="2">
+          {
+            tableOptions1.ruleId ?
+              (
+                <div>
+                  <XzlTable
+                    request={apiRequest[source]}
+                    depOptions={tableOptions1}
+                    // noPagination={true}
+                    columns={col}
+                    dataKey="sendList"
+                    tableOptions={{
+                      rowSelection: false,
+                      // pagination: false,
+                    }}
+                  />
+                </div>
+              ) : <div></div>
+          }
+        </TabPane>}
+        <TabPane tab={source === 'objective' ? '已发送' : '已发送/未填写'} key="1">
+          {
+            tableOptions2.ruleId ?
+              (
+                <div>
+                  <XzlTable
+                    request={apiRequest[source]}
+                    depOptions={tableOptions1}
+                    // noPagination={true}
+                    columns={col}
+                    dataKey="sendList"
+                    tableOptions={{
+                      rowSelection: false,
+                      // pagination: false,
+                    }}
+                  />
+                </div>
+              ) : <div></div>
+          }
+        </TabPane>
       </Tabs>
 
+      {
+
+      }
       {
         (tableOptions0.ruleId && tableOptions1.ruleId && tableOptions2.ruleId) ?
           (
