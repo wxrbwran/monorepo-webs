@@ -1,5 +1,5 @@
-import React, { FC, useState, useMemo, useEffect } from 'react';
-// import React, { FC, useState, useEffect } from 'react';
+// import React, { FC, useState, useMemo, useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 
 import { Tabs, Form } from 'antd';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
@@ -45,7 +45,7 @@ const TableSendRecord: FC<IProps> = (props) => {
 
   const [activeTab, setactiveTab] = useState(initActiveTab);
 
-  const [tableOptions, settableOptions] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
+  // const [tableOptions, settableOptions] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
   const [tableOptions0, settableOptions0] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
   const [tableOptions1, settableOptions1] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
   const [tableOptions2, settableOptions2] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
@@ -60,10 +60,10 @@ const TableSendRecord: FC<IProps> = (props) => {
     if (source !== 'objective' && !ruleId) { // 主观量表和crf量表才需要再获取ruleId
       api.subjective.getSubjectiveScaleDetail(scaleGroupId).then((res) => {
 
-        settableOptions({
-          ...tableOptions,
-          ruleId: res?.ruleDoc?.id,
-        });
+        // settableOptions({
+        //   ...tableOptions,
+        //   ruleId: res?.ruleDoc?.id,
+        // });
 
         settableOptions0({
           ...tableOptions0,
@@ -93,10 +93,10 @@ const TableSendRecord: FC<IProps> = (props) => {
     console.log(' handleTab key', key);
 
 
-    settableOptions({
-      ...tableOptions,
-      status: Number(key),
-    });
+    // settableOptions({
+    //   ...tableOptions,
+    //   status: Number(key),
+    // });
   };
 
   const handleSelectChange = (allValues: { receiver: string }) => {
@@ -104,10 +104,10 @@ const TableSendRecord: FC<IProps> = (props) => {
     // settableOptions({ ...tableOptions });
     if (allValues.receiver) {
 
-      settableOptions({
-        ...tableOptions,
-        receiver: allValues.receiver,
-      });
+      // settableOptions({
+      //   ...tableOptions,
+      //   receiver: allValues.receiver,
+      // });
       settableOptions0({
         ...tableOptions0,
         receiver: allValues.receiver,
@@ -121,11 +121,11 @@ const TableSendRecord: FC<IProps> = (props) => {
         receiver: allValues.receiver,
       });
     } else {
-      const newParams = { ...tableOptions };
-      delete newParams.receiver;
-      settableOptions({
-        ...newParams,
-      });
+      // const newParams = { ...tableOptions };
+      // delete newParams.receiver;
+      // settableOptions({
+      //   ...newParams,
+      // });
       const newParams0 = { ...tableOptions0 };
       delete newParams0.receiver;
       settableOptions0({
@@ -145,34 +145,34 @@ const TableSendRecord: FC<IProps> = (props) => {
       });
     }
   };
-  const renderTable = useMemo(() => () => {
+  // const renderTable = useMemo(() => () => {
 
-    console.log(' renderTable useMemo', renderTable);
-    let col = [...columns];
-    if (source === 'crf') {
-      col = [sendAt, Receiver];
-    }
-    if (tableOptions.status === 2 && source !== 'objective') { col.push(replyAt); }
+  //   console.log(' renderTable useMemo', renderTable);
+  //   let col = [...columns];
+  //   if (source === 'crf') {
+  //     col = [sendAt, Receiver];
+  //   }
+  //   if (tableOptions.status === 2 && source !== 'objective') { col.push(replyAt); }
 
-    return (
-      tableOptions.ruleId ?
-        (
-          <div>
-            <XzlTable
-              request={apiRequest[source]}
-              depOptions={tableOptions}
-              // noPagination={true}
-              columns={col}
-              dataKey="sendList"
-              tableOptions={{
-                rowSelection: false,
-                // pagination: false,
-              }}
-            />
-          </div>
-        ) : <div></div>
-    );
-  }, [tableOptions]);
+  //   return (
+  //     tableOptions.ruleId ?
+  //       (
+  //         <div>
+  //           <XzlTable
+  //             request={apiRequest[source]}
+  //             depOptions={tableOptions}
+  //             // noPagination={true}
+  //             columns={col}
+  //             dataKey="sendList"
+  //             tableOptions={{
+  //               rowSelection: false,
+  //               // pagination: false,
+  //             }}
+  //           />
+  //         </div>
+  //       ) : <div></div>
+  //   );
+  // }, [tableOptions]);
 
   let col = [...columns];
   if (source === 'crf') {
@@ -188,7 +188,7 @@ const TableSendRecord: FC<IProps> = (props) => {
       <Tabs defaultActiveKey={initActiveTab} onChange={handleTab} size="large">
         <TabPane tab="待发送" key="0">
 
-          {/* {
+          {
             tableOptions0.ruleId ?
               (
                 <div>
@@ -205,11 +205,11 @@ const TableSendRecord: FC<IProps> = (props) => {
                   />
                 </div>
               ) : <div></div>
-          } */}
+          }
         </TabPane>
 
         {source !== 'objective' && <TabPane tab="已发送/已填写" key="2">
-          {/* {
+          {
             tableOptions1.ruleId ?
               (
                 <div>
@@ -226,10 +226,10 @@ const TableSendRecord: FC<IProps> = (props) => {
                   />
                 </div>
               ) : <div></div>
-          } */}
+          }
         </TabPane>}
         <TabPane tab={source === 'objective' ? '已发送' : '已发送/未填写'} key="1">
-          {/* {
+          {
             tableOptions2.ruleId ?
               (
                 <div>
@@ -246,28 +246,10 @@ const TableSendRecord: FC<IProps> = (props) => {
                   />
                 </div>
               ) : <div></div>
-          } */}
+          }
         </TabPane>
       </Tabs>
-      {/* {
-        tableOptions.ruleId ?
-          (
-            <div>
-              <XzlTable
-                request={apiRequest[source]}
-                depOptions={tableOptions}
-                // noPagination={true}
-                columns={col}
-                dataKey="sendList"
-                tableOptions={{
-                  rowSelection: false,
-                  // pagination: false,
-                }}
-              />
-            </div>
-          ) : <div></div>
-      } */}
-      {renderTable()}
+      {/* {renderTable()} */}
     </div>
   );
 };
