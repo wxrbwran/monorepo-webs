@@ -254,7 +254,7 @@ const TableSendRecord: FC<IProps> = (props) => {
 
       }
       {
-        (tableOptions0.ruleId && tableOptions1.ruleId && tableOptions2.ruleId) ?
+        tableOptions2.ruleId ?
           (
             <div>
               <XzlTable
