@@ -134,7 +134,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
             <div className="pl-18 flex">
               <ExclamationCircleFilled style={{ color: '#FFCA4D', paddingTop: '4px' }} />
               <div className="ml-3">
-                <p>1.如果图片内含多张单据，点击顶部选择图片类型</p>
+                <p>1.如果图片内含多张单据，可通过搜索单据名称进行添加</p>
                 <p>2.添加新的单据,每一张单据结构化后，一并保存</p>
               </div>
             </div>
