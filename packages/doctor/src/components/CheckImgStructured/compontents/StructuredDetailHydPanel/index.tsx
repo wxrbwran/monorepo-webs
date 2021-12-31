@@ -233,6 +233,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       console.log('item888', item);
       return (
         <TabPane
+          closable={!isViewOnly}
           tab={
             <span className="flex items-center">
               {!isViewOnly &&
