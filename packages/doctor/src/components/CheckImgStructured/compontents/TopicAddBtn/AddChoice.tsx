@@ -127,7 +127,7 @@ const TopicAddChoice: FC<IAddTopicProps & { closeModal: () => void }> = (props) 
           return (
             <div className="flex items-center border-b h-37 mb-10" key={oIndex}>
               <span onClick={() => handleChangeChecked(option)}>
-                { option && qa.answer.includes(option) ? <CheckSquareFilled /> : <BorderOutlined />}
+                { option && qa?.answer?.includes(option) ? <CheckSquareFilled /> : <BorderOutlined />}
               </span>
               <Input
                 placeholder={`请输入选项${oIndex + 1}`}
