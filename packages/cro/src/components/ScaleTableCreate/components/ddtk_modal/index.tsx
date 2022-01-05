@@ -251,7 +251,6 @@ const AddPatient = (props: IProps) => {
       ),
     },
   ];
-
   return (
     <>
       <span onClick={() => setShowModal(true)}>{children}</span>
@@ -266,7 +265,10 @@ const AddPatient = (props: IProps) => {
         destroyOnClose
       >
         <p className="text-base mb-10">
-          当前题目: {currentStem}
+          <span>当前题目: </span>
+          {
+            currentStem.split('「」').map((qa, inx) => <span>{qa}{inx !== currentStem.split('「」').length - 1 && `「填空${inx + 1}」`}</span>)
+          }
         </p>
         <Table dataSource={dataSource} columns={columns} bordered pagination={false} className="mb-20" />
         {btnRender({

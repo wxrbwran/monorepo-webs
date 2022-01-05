@@ -63,6 +63,7 @@ function questionGapFilling(props: IProps) {
     handleSaveStem(ev, quesIndex);
   };
   const showInx = scaleType !== 'CRF';
+  console.log('item2222', item);
   return (
     <div
       className={`topic-item ${styles.ddtk} ${(editIndex === quesIndex) ? 'edit' : ''}`}

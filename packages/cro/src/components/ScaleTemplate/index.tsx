@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Input, Button, Checkbox, Select, message, InputNumber, Spin } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, Checkbox, Select, message, InputNumber, Spin } from 'antd';
 import * as api from '@/services/api';
 import { sendType, IPlanItem } from '@/utils/consts';
 import { useSelector } from 'umi';
 import ScaleCondition from '@/components/ScaleCondition';
+import RichText from '@/components/RichText';
 import styles from './index.scss';
 import { CrfScaleSourceType, SubectiveScaleSourceType, transformDynamicToStatic, ObjectiveSourceType } from '../../pages/query/util';
 import { isEmpty, cloneDeep } from 'lodash';
 import { IChooseValues, ICondition, IItem, IRuleDoc } from '../../pages/subjective_table/util';
 
 
-const { TextArea } = Input;
 const CheckboxGroup = Checkbox.Group;
 const { Option } = Select;
 let timer: any = null;
@@ -295,7 +295,6 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
   return arrary;
 };
 
-
 function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   chooseValues, scaleType, question }: IProps) {
   //起始发送时间默认值
@@ -325,7 +324,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const { projectSid, projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
 
-  const [remind, setRemind] = useState(''); //问题
+  // const [remind, setRemind] = useState(''); //问题
+  const remind = useRef('');
+  const richTextCont = useRef('');
 
   const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
   const [chooseStartTime, setChooseStartTime] = useState<IItem>({}); //选中的起始发送时间子item
@@ -400,7 +401,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   useEffect(() => {
 
-    setRemind(question);
+    remind.current = question;
   }, [question]);
 
 
@@ -424,8 +425,14 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   };
 
   //问题
-  const handleChangeRemind = (e: { target: { value: string } }) => {
-    setRemind(e.target.value);
+  // const handleChangeRemind = (e: { target: { value: string } }) => {
+  //   setRemind(e.target.value);
+  // };
+  const handleChangeRemind = (value: any, text: string) => {
+    console.log('valueeeeee', value);
+    console.log('textttt', text);
+    richTextCont.current = value;
+    remind.current = text;
   };
 
   //更改 患者做处理的时间-->处理方式
@@ -465,6 +472,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   //确定，回传拼好的数据格式
   const handleSubmit = () => {
+    console.log('richTextCont', richTextCont.current);
     setLoading(true);
 
     // console.log('callBackPlans', callBackPlans);
@@ -547,9 +555,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     if (originRuleDoc) {
       params.id = originRuleDoc.id;
     }
+    console.log('richTextCont', richTextCont.current);
     addPlan({
       ruleDoc: params,
-      questions: remind,
+      questions: richTextCont.current,
       chooseValues: {
         chooseStartTime: chooseStartTime,
         choseConditions: hasValConditions,
@@ -592,24 +601,27 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const isShowTextArea = scaleType === 'OBJECTIVE';
   const disabled =
-    isShowTextArea ? !remind || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
+    isShowTextArea ? !remind.current.trim() || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
 
   const options = isEmpty(scopeKey) ? [] : scopeKey.items.map((item: IItem) => ({
     label: item.description,
     value: item.description,
   }));
-
   const des = choseScope.map(item => item.description);
+  console.log('isDisabled', isDisabled);
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
       {isShowTextArea && (
-        <TextArea
-          placeholder={'请输入提醒内容'}
-          className={styles.question}
-          onChange={(ev) => handleChangeRemind(ev)}
-          value={remind}
-          disabled={!!isDisabled}
-        />
+        // <TextArea
+        //   placeholder={'请输入提醒内容11'}
+        //   className={styles.question}
+        //   onChange={(ev) => handleChangeRemind(ev)}
+        //   value={remind}
+        //   disabled={!!isDisabled}
+        // />
+        <div className="h-160">
+          <RichText handleChange={handleChangeRemind} value={richTextCont?.content?.text?.ops} style={{ height: '135px' }} />
+        </div>
       )}
       <h2>
         <span className={styles.start}>*</span>起始发送时间：

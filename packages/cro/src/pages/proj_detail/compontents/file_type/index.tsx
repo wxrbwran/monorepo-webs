@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '@/services/api';
 import { Button, message, Upload } from 'antd';
-import { UploadOutlined, DownloadOutlined, DeleteOutlined, FileSearchOutlined } from '@ant-design/icons';
+import { UploadOutlined, DownloadOutlined, DeleteOutlined, FileSearchOutlined, EditOutlined } from '@ant-design/icons';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import request from 'umi-request';
 import { useSelector } from 'umi';
+import CreateFile from '../create_file';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 
@@ -141,36 +142,46 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
   };
   const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType);
   const isEdit = isLeader && projDetail.status !== 1001;
+  const uploadProps = {
+    multiple: false,
+    listType: 'text',
+    beforeUpload: fetchUrlThenUpload,
+    showUploadList: false,
+    accept: type === 'INVITER_FILE' ? '.doc,.docx,.xlsx,.xls,.pdf' : '',
+    onClick: stopPropagation,
+  };
+  const createFileProps = {
+    projectSid,
+    type,
+    fetchFileList,
+  };
   return (
     <>
       <div
         className={styles.box}
-        onClick={toogleUpload}
         data-testid="toogleUpload"
       >
         <div className={styles.upload}>
           {
             isEdit && (
-              <Upload
-                multiple={false}
-                listType="text"
-                beforeUpload={fetchUrlThenUpload}
-                showUploadList={false}
-                accept={type === 'INVITER_FILE' ? '.doc,.docx,.xlsx,.xls,.pdf' : ''}
-                onClick={stopPropagation}
-              // disabled={[Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(window.$storage.getItem('croRoleType'))}
-              // disabled={true}
-              >
-                <UploadOutlined />
-                <span>上传</span>
-              </Upload>
+              type === 'RISK_FILE' ? (
+                <CreateFile {...createFileProps}>
+                  <span className="text-gray-400 text-xs"> <EditOutlined />创建</span>
+                </CreateFile>
+              ) : (
+                <Upload {...uploadProps} >
+                  <UploadOutlined />
+                  <span>上传</span>
+                </Upload>
+              )
             )
           }
-
         </div>
-        <p className={styles.file}><img src={imgSrc} alt="" /></p>
-        <p>{name}</p>
-        <p>{name2}</p>
+        <div onClick={toogleUpload}>
+          <p className={styles.file}><img src={imgSrc} alt="" /></p>
+          <p>{name}</p>
+          <p>{name2}</p>
+        </div>
       </div>
       {isShowModal && (
         <DragModal
@@ -199,7 +210,14 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
                     <a id="upload" style={{ display: 'none' }} target="_blank"></a>
                     <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
                     {
-                      isEdit && <span onClick={() => handleRemove(item.id)}><DeleteOutlined /> 删除</span>
+                       type === 'RISK_FILE' && (
+                        <CreateFile {...createFileProps} initData={item}>
+                          <span><EditOutlined /> 编辑</span>
+                        </CreateFile>
+                       )
+                    }
+                    {
+                      isEdit && <span className="ml-20" onClick={() => handleRemove(item.id)}><DeleteOutlined /> 删除</span>
                     }
                   </p>
                 </li>
@@ -213,18 +231,19 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
           </ul>
           {
             isEdit && (
-              <Upload
-                multiple={false}
-                listType="text"
-                beforeUpload={fetchUrlThenUpload}
-                showUploadList={false}
-                accept={type === 'INVITER_FILE' ? '.doc,.docx,.xlsx,.xls,.pdf' : ''}
-                onClick={stopPropagation}
-              >
-                <Button type="primary" data-testid='uploadBtn' loading={loading}>
-                  {loading ? '上传中' : '上传'}
-                </Button>
-              </Upload>
+              type === 'RISK_FILE' ? (
+                <CreateFile {...createFileProps}>
+                    <Button type="primary" data-testid='uploadBtn' loading={loading}>
+                    {loading ? '创建中' : '创建'}
+                    </Button>
+                </CreateFile>
+              ) : (
+                <Upload  {...uploadProps}>
+                  <Button type="primary" data-testid='uploadBtn' loading={loading}>
+                    {loading ? '上传中' : '上传'}
+                  </Button>
+                </Upload>
+              )
             )
           }
         </DragModal>

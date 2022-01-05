@@ -1,3 +1,4 @@
+/// <reference types="react" />
 interface IPros {
     error: {
         message: string;

@@ -29,15 +29,18 @@ function Count() {
     {
       text: '主要终点事件',
       class: 'MAIN',
-    }, {
+    },  {
+      text: '不良事件',
+      class: 'BAD',
+    },  {
       text: '严重不良反应事件',
       class: 'SICK',
     }, {
       text: '次要终点事件',
       class: 'MINOR',
     }, {
-      text: '不良事件',
-      class: 'BAD',
+      text: '其他事件',
+      class: 'OTHER',
     },
   ];
 

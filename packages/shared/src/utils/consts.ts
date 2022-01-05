@@ -514,3 +514,27 @@ export const documentTypeSource: Record<string, string> = {
 };
 
 export const requiredRule = [{ required: true }];
+
+export const beforeEl =
+  '<!DOCTYPE html>' +
+  '<html lang="en">' +
+  '  <head>' +
+  '    <meta charset="UTF-8" />' +
+  '    <meta http-equiv="X-UA-Compatible" content="IE=edge" />' +
+  '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
+  '    <title>Document</title>' +
+  '    <style>' +
+  '      img, video {' +
+  '        width: 100%;' +
+  '      }' +
+  '    </style>' +
+  '    <script>' +
+  '      document.onclick = function (event) {' +
+  '        event = event || window.event;' +
+  "        console.log('event', event);" +
+  '        fetchJSPost.postMessage(JSON.stringify({ src: event.target.currentSrc }));' +
+  '      };' +
+  '    </script>' +
+  '  </head>' +
+  '  <body>';
+export const alfterEl = '  </body>' + '</html>';

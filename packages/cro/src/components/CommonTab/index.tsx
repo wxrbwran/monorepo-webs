@@ -113,7 +113,11 @@ function CommonTab(props: IProps) {
     // {
     //   statusName: '模板',
     //   status: 'template',
-    // }
+    // },
+    {
+      statusName: '计划外访视',
+      status: 'out_plan_visit',
+    },
   ];
   const handleShowModal = (type: string) => {
     setModalType(type);

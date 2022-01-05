@@ -9,7 +9,7 @@
     @include flex-lay(row, nowrap, flex-start, center)
   }
   .legend {
-    flex: 0 1 460px;
+    flex: 0 1 665px;
     .item {
       margin: 0 24px 10px 0;
       display: inline-block;
@@ -32,5 +32,8 @@
   }
   .BAD {
     background: #C07BFF
+  }
+  .OTHER {
+    background: #F49B22;
   }
 }

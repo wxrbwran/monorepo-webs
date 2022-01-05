@@ -394,6 +394,9 @@ const eventClass = (key: string) => {
   if (key.indexOf('forth_') > -1) {
     className = 'event_label SICK';
   }
+  if (key.indexOf('other_') > -1) {
+    className = 'event_label OTHER';
+  }
   return className;
 };
 
@@ -413,6 +416,7 @@ export const content = {
             })
           ))
         }
+        <span className={eventClass('other_')}>其他事件</span>
       </span>
     );
   },

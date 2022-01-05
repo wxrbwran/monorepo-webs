@@ -5,7 +5,7 @@ import invite from '@/assets/invite.png';
 import risk from '@/assets/img/risk.png';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Row, Col } from 'antd';
-import FileType from './file_type';
+import FileType from '../file_type';
 import styles from './index.scss';
 
 interface IProps{
