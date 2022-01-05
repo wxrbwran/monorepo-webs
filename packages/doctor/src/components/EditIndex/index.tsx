@@ -1,8 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import {
-  Form, Input, Button, message, Select, Space, InputNumber,
-  Radio, Row, Col,
-} from 'antd';
+import { Form, Input, Button, message, Select, Space, InputNumber, Radio, Row, Col } from 'antd';
 import DebounceSelect from '@/components/DebounceSelect';
 import { DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
@@ -20,11 +17,10 @@ const { Option } = Select;
 interface IProps {
   initFormVal?: any;
   onSuccess: (params?: any) => void;
-  documentId?: string; // 图片大分类id,例如生化全项的类型id,如果是结构化入口时(source:imgAddTypeIndex时)，此值不会传过来
+  documentId?: string; // 图片大分类id,例如生化全项的类型id
   sampleFrom?: string; // 样本来源，同上
   // source:
   // imgAddIndex结构化添加指标
-  // imgAddTypeIndex结构化添加大分类 + 指标
   // libraryAdd指标库添加
   // libraryEdit指标库编辑
   // imgEditIndex结构化添加指标
@@ -33,13 +29,11 @@ interface IProps {
 interface IData {
   common: string | boolean;
   documentName: string;
-  references?: TReference[]
+  references?: TReference[];
 }
 type TOpt = { label: string; value: string };
 const EditIndex: FC<IProps> = (props) => {
-  const {
-    children, initFormVal, onSuccess, source,
-  } = props;
+  const { children, initFormVal, onSuccess, source } = props;
   const [form] = Form.useForm();
   const { setFieldsValue } = form;
   const [showModal, setShowModal] = useState(false);
@@ -65,11 +59,10 @@ const EditIndex: FC<IProps> = (props) => {
         });
         setDefaultReference(index);
       }
+    } else {
+      setFieldsValue({ common: true });
     }
-    // else {
-    //   setFieldsValue({ common: true });
-    // }
-    if (curDocument && source !== 'imgAddTypeIndex') {
+    if (curDocument) {
       form.setFieldsValue({
         documentId: curDocument.id,
         documentName: curDocument.name,
@@ -89,17 +82,19 @@ const EditIndex: FC<IProps> = (props) => {
   };
   const handleRequest = (params: any, request: any) => {
     console.log('handleRequest', params);
-    request(params).then((res: any) => {
-      message.success('保存成功');
-      if (['imgAddIndex', 'imgAddTypeIndex', 'imgEditIndex'].includes(source)) {
-        onSuccess(res); // 指标库不需要params,结构化需要Params回显到指标列表
-      } else {
-        onSuccess();
-      }
-      handleCloseModal();
-    }).catch((err: { result: string }) => {
-      message.error(err.result || '操作失败');
-    });
+    request(params)
+      .then((res: any) => {
+        message.success('保存成功');
+        if (['imgAddIndex', 'imgEditIndex'].includes(source)) {
+          onSuccess(res); // 指标库不需要params,结构化需要Params回显到指标列表
+        } else {
+          onSuccess();
+        }
+        handleCloseModal();
+      })
+      .catch((err: { result: string }) => {
+        message.error(err.result || '操作失败');
+      });
   };
 
   const handleSubmit = async (values: IData) => {
@@ -128,20 +123,13 @@ const EditIndex: FC<IProps> = (props) => {
       // 添加
       params = {
         ...params,
-        common: true,
         source: 'DOCTOR', // 医生添加DOCTOR，系统添加SYSTEM
         sourceSid: sid,
         wcId: window.$storage.getItem('wcId'),
       };
-      if (source === 'imgAddTypeIndex') {
-        // 医生添加单据及指标
-        console.log('医生添加单据及指标 params', params);
-        handleRequest(params, api.indexLibrary.putIndexDocumentAndIndex);
-      } else {
-        // 指标库添加指标
-        params.documentId = documentId;
-        handleRequest(params, api.indexLibrary.putIndexDocumentIndex);
-      }
+      // 指标库添加指标
+      params.documentId = documentId;
+      handleRequest(params, api.indexLibrary.putIndexDocumentIndex);
     }
   };
   const handleAddReference = (cb: Function) => {
@@ -164,10 +152,9 @@ const EditIndex: FC<IProps> = (props) => {
       setDefaultReference(0);
     }
     if (index < defaultReference) {
-      setDefaultReference(prev => prev - 1);
+      setDefaultReference((prev) => prev - 1);
     }
   };
-
 
   const handleOnClear = () => {
     // console.log('handleOnClear');
@@ -190,7 +177,7 @@ const EditIndex: FC<IProps> = (props) => {
     const datum: Record<string, any> = {
       name: option.label,
     };
-    if (['dev.', 'test.', 'prod.'].some(d => option?.value?.startsWith(d))) {
+    if (['dev.', 'test.', 'prod.'].some((d) => option?.value?.startsWith(d))) {
       message.success('使用已有指标');
       const curIndex = indexs.filter((i) => i.id === option.value)[0];
       console.log('curIndex', curIndex);
@@ -201,7 +188,7 @@ const EditIndex: FC<IProps> = (props) => {
           delete r.id;
           return r;
         }) || [];
-      setReferences(curIndex.references?.map(r => r.type) || []);
+      setReferences(curIndex.references?.map((r) => r.type) || []);
     } else {
       message.success('添加新指标');
     }
@@ -212,14 +199,14 @@ const EditIndex: FC<IProps> = (props) => {
       .fetchAllIndexDocumentIndex({
         name: text,
         sid,
-      }).then((res) => {
+      })
+      .then((res) => {
         setIndexs(res.list);
         return res.list.map((index: TIndexItem) => ({
           label: index.name,
           value: index.id,
         }));
-      },
-      );
+      });
   };
   const rules = [{ required: true }];
   return (
@@ -246,16 +233,14 @@ const EditIndex: FC<IProps> = (props) => {
               size="large"
               labelCol={{ span: 4 }}
             >
-              {source !== 'imgAddTypeIndex' && (
-                <Form.Item name="documentId" style={{ display: 'none' }}>
-                  <Input placeholder="化验单Id" readOnly type="hidden" />
-                </Form.Item>
-              )}
+              <Form.Item name="documentId" style={{ display: 'none' }}>
+                <Input placeholder="化验单Id" readOnly type="hidden" />
+              </Form.Item>
               <Form.Item name="documentName" label="化验单名称">
-                <Input placeholder="化验单名称" disabled={source !== 'imgAddTypeIndex'}  />
+                <Input placeholder="化验单名称" />
               </Form.Item>
               <Form.Item name="sampleFrom" label="样本来源">
-                <Input placeholder="样本来源" disabled={source !== 'imgAddTypeIndex'} />
+                <Input placeholder="样本来源" />
               </Form.Item>
               <Form.Item name="indexId" noStyle className="hidden">
                 <Input type="hidden" />
@@ -282,7 +267,7 @@ const EditIndex: FC<IProps> = (props) => {
                 </>
               )}
               {/* 同时添加单据指标/指标库编辑指标/结构化编辑指标 */}
-              {['imgAddTypeIndex', 'libraryEdit', 'imgEditIndex'].includes(source) && (
+              {['libraryEdit', 'imgEditIndex'].includes(source) && (
                 <Form.Item name="name" rules={rules} label="指标名称">
                   <Input placeholder="请输入指标名称" />
                 </Form.Item>
@@ -307,7 +292,11 @@ const EditIndex: FC<IProps> = (props) => {
                               <Option value={reference.value}>{reference.label}</Option>
                             ))}
                           </Select>
-                          <Button onClick={() => handleAddReference(add)} type="link" icon={<PlusSquareOutlined />}>
+                          <Button
+                            onClick={() => handleAddReference(add)}
+                            type="link"
+                            icon={<PlusSquareOutlined />}
+                          >
                             添加
                           </Button>
                         </Space>
@@ -410,12 +399,12 @@ const EditIndex: FC<IProps> = (props) => {
                 }}
               </Form.List>
 
-              {/* <Form.Item name="common" rules={rules} label="是否常用：" className="common">
+              <Form.Item name="common" rules={rules} label="是否常用：" className="common">
                 <Radio.Group>
                   <Radio value>是</Radio>
                   <Radio value={false}>否</Radio>
                 </Radio.Group>
-              </Form.Item> */}
+              </Form.Item>
               <Form.Item>
                 <div className="common__btn">
                   <Button onClick={handleCloseModal}>取消</Button>

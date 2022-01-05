@@ -1,7 +1,7 @@
 **/node_modules
 node_modules
 .vscode
-
+.idea
 xzl-web-doctor
 xzl-web-nurse
 xzl-web-org
