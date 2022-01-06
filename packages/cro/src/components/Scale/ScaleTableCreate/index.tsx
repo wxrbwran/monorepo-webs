@@ -175,10 +175,10 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       message.error('请输入表单标题!');
       return false;
     }
-    if (!subTit?.trim()) {
-      message.error('请输入表单副标题!');
-      return false;
-    }
+    // if (!subTit?.trim()) {
+    //   message.error('请输入表单副标题!');
+    //   return false;
+    // }
     let isEmpty = false;
     for (let i = 0; i < questions.length; i++) {
       if (!(questions[i].detail.stem instanceof Array) && !questions[i].detail.stem?.trim()) {
