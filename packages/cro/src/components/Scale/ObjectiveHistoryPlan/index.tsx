@@ -12,12 +12,12 @@ import Delete from '@/assets/delete.svg';
 import { useSelector } from 'react-redux';
 import PlanModal from '@/components/PlanModal';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import Reply from '../reply';
+import Reply from '../ObjectiveReply';
 import { message } from 'antd';
 import * as api from '@/services/api';
-import SendRecord from '../send_record';
+import SendRecord from '../ObjectiveSendRecord';
 import styles from './index.scss';
-import { getConditionDescriptionFromConditionss, IChooseValues, IRuleDoc } from '../../../subjective_table/util';
+import { getConditionDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
 import { cloneDeep } from 'lodash';
 
 interface IProps {

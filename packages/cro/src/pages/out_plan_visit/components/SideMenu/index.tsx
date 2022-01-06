@@ -21,8 +21,9 @@ function SideMenu(props: IProps) {
   const { type } = props;
   const [currentId, setCurrentId] = useState('');
   const scaleData = {
-    CRF: {  title: 'CRF量表', urlName: 'crf' },
-    subjective: { title: '主观量表', urlName: 'subjective'  },
+    CRF: {  title: 'CRF量表', urlName: 'crf', createUrl: 'create' },
+    subjective: { title: '主观量表', urlName: 'subjective', createUrl: 'guide'  },
+    objective: { title: '客观检查', urlName: 'objective', createUrl: 'create'  },
   };
   useEffect(() => {
     const id = props.location.query.id;
@@ -52,7 +53,7 @@ function SideMenu(props: IProps) {
       {
         window.$storage.getItem('isLeader') && (
           <div className="create">
-            <Link to={`/out_plan_visit/${scaleData[type].urlName}/guide`}>
+            <Link to={`/out_plan_visit/${scaleData[type].urlName}/${scaleData[type].createUrl}`}>
               <PlusOutlined style={{ fontSize: 14 }} /> 创建{scaleData[type].title}
             </Link>
           </div>

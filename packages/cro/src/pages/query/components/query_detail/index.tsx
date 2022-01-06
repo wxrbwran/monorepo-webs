@@ -4,7 +4,7 @@ import * as api from '@/services/api';
 import moment from 'moment';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import ImgViewer from '@/pages/report/components/img_viewer';
-import QuestionDetail from '@/pages/subjective_table/components/question_detail';
+import QuestionDetail from '@/components/Scale/QuestionDetail';
 import styles from './index.scss';
 
 

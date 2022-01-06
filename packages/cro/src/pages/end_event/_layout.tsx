@@ -3,7 +3,7 @@ import './index.scss';
 import ToogleSide from '@/components/ToogleSide';
 import SideMenu from './components/side_menu';
 import * as api from '@/services/api';
-import ScaleTableTab from '@/components/ScaleTableTab';
+import ScaleTableTab from '@/components/Scale/ScaleTableTab';
 import { history, useDispatch } from 'umi';
 
 interface IProps {

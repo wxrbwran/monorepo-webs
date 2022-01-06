@@ -23,7 +23,7 @@ function ScaleTableTab({ location, id, scaleType, source }: IProps) {
   }, [location.pathname]);
   const tabList = [
     {
-      name: scaleType === 'crf' ? 'CRF量表' : '主观量表',
+      name: scaleType === 'CRF' ? 'CRF量表' : '主观量表',
       url: 'detail',
     },
     {
@@ -35,7 +35,7 @@ function ScaleTableTab({ location, id, scaleType, source }: IProps) {
       url: 'send_record',
     },
   ];
-  let urlPrefix = scaleType === 'crf' ? 'end_event' : 'subjective_table';
+  let urlPrefix = scaleType === 'CRF' ? 'end_event' : 'subjective_table';
   if (source === 'out_plan_visit') {
     urlPrefix = `out_plan_visit/${scaleType.toLocaleLowerCase()}`;
   }

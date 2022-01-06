@@ -26,7 +26,7 @@ function OutPlanVisitSubjective(props: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
     if (!props.location.query.isTemp) {
-      api.subjective.getScaleGroup({ projectSid, type: 'SUBJECTIVE' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: 'CRF' }).then((res) => {
         setTableList(res.scaleGroupInfos);
         if (res.scaleGroupInfos.length > 0) {
           history.replace(`/out_plan_visit/crf/detail?id=${res.scaleGroupInfos[0].id}`);
@@ -39,7 +39,7 @@ function OutPlanVisitSubjective(props: IProps) {
     const newUrlName = props.location.query.name;
     if (newUrlName && urlName !== newUrlName) {
       console.log('newUrlName', newUrlName);
-      api.subjective.getScaleGroup({ projectSid, type: 'SUBJECTIVE' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: 'CRF' }).then((res) => {
         setTableList(res.scaleGroupInfos);
         const scaleGroupInfos = res.scaleGroupInfos.filter(
           (item: { name: string }) => item.name === newUrlName,
@@ -54,7 +54,7 @@ function OutPlanVisitSubjective(props: IProps) {
     }
   }, [props]);
   const isShowSideMenu = ![
-    '/out_plan_visit/subjective/create',
+    '/out_plan_visit/crf/create',
   ].includes(props.location.pathname); // 创建页面不显示侧边栏
   return (
     <div>
@@ -66,7 +66,7 @@ function OutPlanVisitSubjective(props: IProps) {
               <ScaleTableTab
                 id={props.location.query.id}
                 location={props.location}
-                scaleType="SUBJECTIVE"
+                scaleType="CRF"
                 source="out_plan_visit"
               />
             )}
