@@ -237,10 +237,10 @@ const EditIndex: FC<IProps> = (props) => {
                 <Input placeholder="化验单Id" readOnly type="hidden" />
               </Form.Item>
               <Form.Item name="documentName" label="化验单名称">
-                <Input placeholder="化验单名称" />
+                <Input placeholder="化验单名称" disabled />
               </Form.Item>
               <Form.Item name="sampleFrom" label="样本来源">
-                <Input placeholder="样本来源" />
+                <Input placeholder="样本来源" disabled />
               </Form.Item>
               <Form.Item name="indexId" noStyle className="hidden">
                 <Input type="hidden" />
