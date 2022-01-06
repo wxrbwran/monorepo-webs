@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Space, Form, Input, Select, Button } from 'antd';
+import { useSelector } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import { ProFormDependency } from '@ant-design/pro-form';
 import { getReferenceTitle } from 'xzl-web-shared/dist/utils/tool';
@@ -17,6 +18,7 @@ const RenderItem: FC<IProps> = (props) => {
   const { item, form, onSuccess } = props;
   const [list, setList] = useState<any[]>([]);
   const [indexItem, setIndexItem] = useState<any>(item);
+  const curDocument = useSelector((state: IState) => state.document.curDocument);
   const sid = window.$storage.getItem('sid');
   useEffect(() => {
     // const
@@ -46,13 +48,12 @@ const RenderItem: FC<IProps> = (props) => {
   };
   return (
     <div className="flex w-full">
-      <Form.Item
-        initialValue={indexItem.name}
-        name={`${indexItem.formIndex}_name`}
-      >
+      <Form.Item initialValue={indexItem.name} name={`${indexItem.formIndex}_name`}>
         <Input readOnly type="hidden" />
       </Form.Item>
-      <span style={{ flex:'1 0 100px', maxWidth: '300px' }} className="truncate">{item.name}</span>
+      <span style={{ flex: '1 0 100px', maxWidth: '300px' }} className="truncate">
+        {item.name}
+      </span>
       <div className="mx-10">
         <Form.Item
           initialValue={indexItem.abbreviation}
@@ -83,7 +84,7 @@ const RenderItem: FC<IProps> = (props) => {
                   if (curReference?.type === 'RADIO') {
                     return (
                       <Form.Item name={`${indexItem.formIndex}_${index}_indexValue`} noStyle>
-                        <Select  style={{ width: 90 }} placeholder="请选择" disabled={disabled}>
+                        <Select style={{ width: 90 }} placeholder="请选择" disabled={disabled}>
                           {yinYang.map((yy: Record<string, string>) => (
                             <Option key={yy.value} value={yy.value}>
                               {yy.label}
@@ -109,7 +110,9 @@ const RenderItem: FC<IProps> = (props) => {
                   <Form.Item name={`${indexItem.formIndex}_${index}_reference`}>
                     <Select style={{ width: 203 }} placeholder="请选择参考值类型">
                       {indexItem.references?.map((reference: TReference) => (
-                        <Option key={`${indexItem.formIndex}_${reference.id}`} value={reference.id}
+                        <Option
+                          key={`${indexItem.formIndex}_${reference.id}`}
+                          value={reference.id}
                           title={formatOption(reference)}
                         >
                           {formatOption(reference)}
@@ -135,7 +138,7 @@ const RenderItem: FC<IProps> = (props) => {
                       >
                         添加更多
                       </Button>
-                      {item.source === 'DOCTOR' && item.sourceSid === sid && (
+                      {curDocument.source === 'DOCTOR' && curDocument.sourceSid === sid && (
                         <EditIndex
                           initFormVal={indexItem}
                           onSuccess={handleEditIndex}
@@ -164,7 +167,7 @@ const RenderItem: FC<IProps> = (props) => {
                 </Form.Item>
               )}
               <div className="w-0 h-0">
-                <Form.Item name={`${indexItem.formIndex}_valueCount`} >
+                <Form.Item name={`${indexItem.formIndex}_valueCount`}>
                   <Input type="hidden" />
                 </Form.Item>
                 <Form.Item name={`${indexItem.formIndex}_referenceList`}>

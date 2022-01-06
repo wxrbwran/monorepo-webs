@@ -12,11 +12,11 @@ module.exports = {
     PREFIX: 'test',
   },
   test: {
-    // BASEURL:
-    //   process.env.NODE_ENV === 'development'
-    //     ? 'http://localhost:8001/api/'
-    //     : 'https://testapi.xinzhili.cn/',
-    BASEURL: 'https://testapi.xinzhili.cn/',
+    BASEURL:
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8001/api/'
+        : 'https://testapi.xinzhili.cn/',
+    // BASEURL: 'https://testapi.xinzhili.cn/',
     APP_ENV: 'test',
     PREFIX: 'test',
   },
