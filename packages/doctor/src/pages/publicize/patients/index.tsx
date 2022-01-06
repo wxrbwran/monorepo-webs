@@ -87,7 +87,7 @@ function Patients() {
         .then((res) => {
           if (res) {
             fetchPatientList(res?.id);
-            if (!ruleId) {
+            if (!ruleId || source === 'changeOrg') {
               sessionStorage.setItem('ruleId', res?.id);
             }
           } else {
