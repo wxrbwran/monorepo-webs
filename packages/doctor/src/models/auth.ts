@@ -37,7 +37,7 @@ const Model: AuthModelType = {
   namespace: 'auth',
   state: authState,
   effects: {
-    * login({ payload }, { call, put }) {
+    *login({ payload }, { call, put }) {
       let data = null;
       if (payload?.accessToken) {
         data = { ...payload };
@@ -87,7 +87,7 @@ const Model: AuthModelType = {
         message.error(data.result);
       }
     },
-    * updateLoginOperationLog({ payload }, { call, put }) {
+    *updateLoginOperationLog({ payload }, { call, put }) {
       const { count } = yield call(api.auth.postUserOperationLog, payload);
       // 更新登录次数
       yield put({
@@ -95,7 +95,7 @@ const Model: AuthModelType = {
         payload: count,
       });
     },
-    * logout(_, { put }) {
+    *logout(_, { put }) {
       yield put({
         type: 'im/LOGUT_NIM',
       });
