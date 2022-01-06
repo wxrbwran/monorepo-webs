@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import TableSendRecord from '@/components/TableSendRecord';
+import TableSendRecord from '@/components/Scale/TableSendRecord';
 
 interface IProps {
   children: React.ReactElement;

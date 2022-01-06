@@ -8,7 +8,7 @@ import create from '@/assets/img/create.svg';
 import HistoryPlan from '../components/history_plan';
 import styles from '../index.scss';
 import { IState } from 'typings/global';
-import ScaleTemplate from '@/components/ScaleTemplate';
+import ScaleTemplate from '@/components/Scale/ScaleTemplate';
 import { cloneDeep } from 'lodash';
 
 interface IProps {

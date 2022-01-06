@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 
-const OutPlanVisit: FC = () => {
+const Subjective: FC = () => {
   return (
-    <div>demo</div>
+    <div>加载中...</div>
   );
 };
 
-export default OutPlanVisit;
+export default Subjective;

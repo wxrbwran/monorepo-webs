@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import TableSendRecord from '@/components/TableSendRecord';
+import TableSendRecord from '@/components/Scale/TableSendRecord';
 import { useLocation } from 'umi';
 import { useSelector } from 'react-redux';
 

@@ -8,7 +8,7 @@ import { Input, message } from 'antd';
 import { history } from 'umi';
 import * as api from '@/services/api';
 import styles from '../index.scss';
-import ScaleTemplate from '@/components/ScaleTemplate';
+import ScaleTemplate from '@/components/Scale/ScaleTemplate';
 import { IRuleDoc, IChooseValues } from '../../subjective_table/util';
 
 interface IProps {
@@ -211,16 +211,6 @@ function Detail({ location }: IProps) {
         if (editStatus[index] === 'open') {
           console.log('======================= item, item', JSON.stringify(item));
           return (
-            // <SendPlan
-            //   key={index}
-            //   mode="Add"
-            //   onCancel={() => handleCancel(index)}
-            //   infoIndex={index}
-            //   addPlan={addPlan}
-            //   plans={item.plans}
-            //   question={item.questions}
-            //   isDisabled={item.scaleId}
-            // />
             <ScaleTemplate
               key={index}
               mode="Add"

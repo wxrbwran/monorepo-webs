@@ -207,7 +207,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
           <div className={styles.item}>
             <div className={styles.tit}>
               <img src={iconGroup} alt="" />
-              <span>发送试验组</span>
+              <span>发送试验组11</span>
             </div>
             <div className={styles.text}>{des}</div>
           </div>

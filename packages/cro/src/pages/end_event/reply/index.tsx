@@ -7,7 +7,7 @@ import styles from './index.scss';
 import { IState } from 'typings/global';
 import moment from 'moment';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import ScaleTableDetailEcho from '@/components/ScaleTableDetailEcho';
+import ScaleTableDetailEcho from '@/components/Scale/ScaleTableDetailEcho';
 import { IQuestions } from '@/utils/consts';
 import { fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
 interface IProps {

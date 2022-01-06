@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './index.scss';
 import ToogleSide from '@/components/ToogleSide';
 import SideMenu from './components/side_menu';
-import ScaleTableTab from '@/components/ScaleTableTab';
+import ScaleTableTab from '@/components/Scale/ScaleTableTab';
 import { history, useDispatch } from 'umi';
 import * as api from '@/services/api';
 
