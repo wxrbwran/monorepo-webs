@@ -104,7 +104,7 @@ const RenderItem: FC<IProps> = (props) => {
                   );
                 }}
               </ProFormDependency>
-              {indexItem?.references?.length > 0 && (
+              {indexItem?.references?.length > 0 ? (
                 <>
                   <Form.Item name={`${indexItem.formIndex}_${index}_reference`}>
                     <Select style={{ width: 203 }} placeholder="请选择参考值类型">
@@ -118,7 +118,7 @@ const RenderItem: FC<IProps> = (props) => {
                     </Select>
                   </Form.Item>
                 </>
-              )}
+              ) : <div style={{ width: 203 }}></div>}
               {!indexItem.referenceList && (
                 <Form.Item>
                   {index === 0 && (

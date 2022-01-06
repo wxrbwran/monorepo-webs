@@ -391,7 +391,8 @@ const CustomIndex: FC<IProps> = (props) => {
       </div>
       {apiParams.source === 'DOCTOR' &&
         apiParams.sourceSid === sid &&
-        !isViewOnly && (
+        !isViewOnly &&
+        !initList && (
           <div className="mb-10">
             <EditIndex
               onSuccess={addIndexSuccess}
