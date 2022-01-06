@@ -160,7 +160,7 @@ function Patients() {
               form={form}
               searchKey="keyword"
               placeholder="搜索姓名或诊断名称"
-              focus={true}
+              focus={false}
               float='inherit'
               width={170}
               value={sessionStorage.getItem('keyWord') || ''}
