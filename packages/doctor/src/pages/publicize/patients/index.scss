@@ -4,3 +4,17 @@
   left: 50%;
   transform: translateX(-50%);
 }
+.publicize_patients {
+  :global {
+    .ant-form {
+      margin-bottom: 20px;
+    }
+    .ant-input {
+      height: 35px;
+    }
+    .ant-input-search-button {
+      margin-right: 10px;
+      height: 35px;
+    }
+  }
+}
