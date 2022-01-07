@@ -308,7 +308,7 @@ export const addedPatientColumns = () => [
   ethnicity,
 ];
 // 全部受试者列表
-export const patientCroColumns = (_params: Store) => [
+export const patientCroColumns = () => [
   name,
   patientGroup,
   inGroupAt,
