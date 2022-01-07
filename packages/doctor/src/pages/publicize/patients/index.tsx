@@ -5,7 +5,7 @@ import * as api from '@/services/api';
 import { pname, groupName, initAt } from 'xzl-web-shared/dist/utils/columns';
 import SelectGroup from 'xzl-web-shared/dist/components/SelectGroup';
 import { Search } from 'xzl-web-shared/dist/components/Selects';
-import { SearchOutlined } from '@ant-design/icons';
+// import { SearchOutlined } from '@ant-design/icons';
 import DiagnosisDetail from '../components/DiagnosisDetail';
 import { isEmpty } from 'lodash';
 import styles from './index.scss';
@@ -15,12 +15,14 @@ interface IOnSelectChange {
   (selectedRowKeys: React.ReactText[], selectedRows?: Store[]): void;
 }
 let timer: any = null;
+// 更新ruleId: 1.点击搜索时 2.切换机构时
+// 不更新ruleId: 1.轮询加载列表时 2.切出患者列表tab页时（再切回来要用之前的ruleId）
 function Patients() {
   const location = useLocation();
   const [form] = Form.useForm();
   const retryTimes = useRef<number>(1);
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
-  const [showSearch, setShowSearch] = useState(false);
+  // const [showSearch, setShowSearch] = useState(false);
   const currentOrgInfo = useSelector((state: IState) => state.user.currentOrgInfo);
   const groupList = useSelector((state: IState) => state.education.groupList);
   const columns = [pname, groupName, initAt];
@@ -36,7 +38,7 @@ function Patients() {
   };
   // 返回条数大于0，继续请求
   // 返回条数为0并且请求次数小于3，则继续请求，否则结束请求
-  const fetchPatientList = (actionLogId: string, initTime?: number) => {
+  const fetchPatientList = (actionLogId: number, initTime?: number) => {
     console.log('dataSource.reverse', dataSource.reverse());
     const params = { actionLogId, initTime };
     if (initTime) {
@@ -74,41 +76,38 @@ function Patients() {
       });
   };
 
-  const changeTableOption = (keyword: string, source?: string) => {
-    // 首次初始化init id并存起来，
-    // 输入关键字会重新请求与关键字相关的id，清空关键字，还用之前存储的init id。
-    // 切换机构需要更新存储的init id
-    const ruleId = sessionStorage.getItem('ruleId');
-    if (ruleId && keyword === '' && source !== 'changeOrg') {
-      fetchPatientList(ruleId);
-    } else {
-      api.education
-        .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
-        .then((res) => {
-          if (res) {
-            fetchPatientList(res?.id);
-            if (!ruleId || source === 'changeOrg') {
-              sessionStorage.setItem('ruleId', res?.id);
-            }
-          } else {
-            clearInterval(timer);
-            setDataSource([]);
-            setLoading(false);
-          }
-        })
-        .catch((err: string) => {
-          console.log('err', err);
-        });
-    }
-
+  const fetchRuleId = (keyword?: string) => {
+    api.education
+      .getLogId({ orgNsId: currentOrgInfo.nsId, keyword })
+      .then((res) => {
+        if (res) {
+          fetchPatientList(res?.id);
+          sessionStorage.setItem('ruleId', res?.id);
+        } else {
+          clearInterval(timer);
+          setDataSource([]);
+          setLoading(false);
+        }
+      })
+      .catch((err: string) => {
+        console.log('err', err);
+      });
   };
 
   useEffect(() => {
     if (!isEmpty(currentOrgInfo)) {
       setDataSource([]);
-      changeTableOption(window.$storage.getItem('keyWord'), 'changeOrg');
+      const prevOrgNsId = sessionStorage.getItem('orgNsId');
+      const prevRuleId = sessionStorage.getItem('ruleId');
+      // 如果orgNsId与之前存储的相等，并且存在ruleId,那直接请求，（此处是切换tab页面，又切回来 的情况,要用之前的id）
+      if (prevOrgNsId ===  currentOrgInfo.nsId && prevRuleId) {
+        fetchPatientList(Number(prevRuleId));
+      } else {
+        fetchRuleId(sessionStorage.getItem('keyWord') || '');
+      }
       retryTimes.current = 1;
       setLoading(true);
+      sessionStorage.setItem('orgNsId', currentOrgInfo.nsId);
     }
   }, [currentOrgInfo]);
 
@@ -119,29 +118,24 @@ function Patients() {
   }, [location]);
 
   useEffect(() => {
-    window.$storage.setItem('keyWord', '');
+
     return () => {
-      window.$storage.setItem('keyWord', '');
       clearTimeout(timer);
       setLoading(false);
-      // dispatch({
-      //   type: 'education/setCurrentOrgInfo',
-      //   payload: {},
-      // });
     };
   }, []);
 
   const refreshList = () => {
     retryTimes.current = 1;
-    changeTableOption(window.$storage.getItem('keyWord'));
+    fetchPatientList(Number(sessionStorage.getItem('ruleId')));
   };
 
   const handleSelectChange = (_changedValues: string[], allValues: { keyword: string }) => {
     setDataSource([]);
     retryTimes.current = 1;
     setLoading(true);
-    changeTableOption(allValues.keyword);
-    window.$storage.setItem('keyWord', allValues.keyword);
+    fetchRuleId(allValues.keyword);
+    sessionStorage.setItem('keyWord', allValues.keyword);
     // setOptions({ ...tableOptions, keyword: allValues.keyword });
   };
 
@@ -156,22 +150,22 @@ function Patients() {
       </DiagnosisDetail>
     ),
   };
-
   return (
-    <div>
+    <div className={styles.publicize_patients}>
       <Form form={form} className="text-right" onValuesChange={handleSelectChange}>
         {
-          showSearch
-            ?
+          // showSearch
+          //   ?
             <Search
               form={form}
               searchKey="keyword"
               placeholder="搜索姓名或诊断名称"
-              focus={true}
+              focus={false}
               float='inherit'
               width={170}
+              value={sessionStorage.getItem('keyWord') || ''}
             />
-            : <SearchOutlined onMouseEnter={() => setShowSearch(true)} className="mr-10" />
+            // : <SearchOutlined onMouseEnter={() => setShowSearch(true)} className="mr-10" />
         }
         <SelectGroup
           selectPatient={selectPatient}
