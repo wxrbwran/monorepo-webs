@@ -65,6 +65,12 @@ const IndexTable: FC<IProps> = (props) => {
           return r;
         });
       }
+      if (isViewOnly && item.referenceList.length === 0) {
+        return null;
+      }
+      if (item.referenceList.length === 0 && !isViewOnly) {
+        item.referenceList.push({ indexValue: '' });
+      }
       return (
         <div key={item.formIndex}>
           <RenderItem item={item} form={form} onSuccess={handleChangeRecord} />

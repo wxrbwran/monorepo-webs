@@ -180,6 +180,8 @@ const CustomIndex: FC<IProps> = (props) => {
       validateFields()
         .then((values) => {
           // console.log('validateFields', values);
+          // console.log('itemsLength', itemsLength);
+
           // console.log('apiParams', apiParams);
 
           // apiParams
