@@ -10,13 +10,13 @@ const { TextArea } = Input;
 interface IProps {
   title: string;
   subTitle: string;
-  question: IQuestions[];
+  questions: IQuestions[];
   source?: number,
   id?: string;
   isShowEdit?: boolean;
 }
 function ScaleDetail(props: IProps) {
-  const { title, subTitle, question, isShowEdit } = props;
+  const { title, subTitle, questions, isShowEdit } = props;
   console.log('props222', props);
   const dispatch = useDispatch();
   const handleEdit = () => {
@@ -26,6 +26,8 @@ function ScaleDetail(props: IProps) {
     });
     history.push('/education/accompany/create');
   };
+
+  console.log('============= questions', JSON.stringify(questions));
   return (
     <div className={styles.detail}>
       {
@@ -39,13 +41,14 @@ function ScaleDetail(props: IProps) {
       <p className={styles.first_title}>{title}</p>
       <p className={styles.second_title}>{subTitle}</p>
       {
-        question.map((item: IQuestions) => {
+        questions &&
+        questions.map((item: IQuestions) => {
           return (
             <div className={styles.item}>
               <div className={styles.item__issue}>
                 {item.type === 'END' && <span className={styles.end}>终点事件</span>}
                 {
-                  item.type !== 'COMPLETION' && (`${item.code  }、${  item.detail.stem}`)
+                  item.type !== 'COMPLETION' && (`${item.code}、${item.detail.stem}`)
                 }
               </div>
               <div>
@@ -70,13 +73,13 @@ function ScaleDetail(props: IProps) {
                 }
                 {
                   ['TEXT', 'END'].includes(item.type) && (
-                    <TextArea placeholder="请输入" value={item.detail.answer}/>
+                    <TextArea placeholder="请输入" value={item.detail.answer} />
                   )
                 }
                 {
                   item.type === 'COMPLETION' && (
                     <div className="flex">
-                      <span>{item.code  }、</span>
+                      <span>{item.code}、</span>
                       <pre style={{ color: '#000' }}>
                         {
                           (item.detail.stem as string[]).map((stemItem, index) => {
