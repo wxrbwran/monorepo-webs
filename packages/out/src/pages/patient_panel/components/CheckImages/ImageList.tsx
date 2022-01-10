@@ -93,6 +93,7 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
     setDegree(imgDegree);
   };
   const hideViewer = () => {
+    console.log('0000000');
     setShowViewer(false);
     setDegree(0);
     handleHideCont();
@@ -125,7 +126,7 @@ function ImageList({ data, handleHideCont, refresh }: IProps) {
         // alt="化验单检查单"
         src={item.url}
         style={{ transform: `rotate(${item.degree}deg)` }}
-        // onClick={() => toggleShowViewer(item.imageId, item.degree)}
+        onClick={() => toggleShowViewer(item.imageId, item.degree)}
       />
       <Button
         className="mt-10 border-blue-500 text-blue-400"

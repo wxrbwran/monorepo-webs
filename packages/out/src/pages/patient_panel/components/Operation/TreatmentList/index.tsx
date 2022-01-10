@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Popover, Popconfirm, message } from 'antd';
+import { Popover } from 'antd';
 import dayjs from 'dayjs';
 import { useLocation } from 'umi';
 import * as api from '@/services/api';
@@ -88,16 +88,16 @@ function TreatmentList({ isTumour }: IProps) {
       </Popover>
     </div>
   );
-  const handleDelete = (id: string) => {
-    const params = {
-      id,
-      sid,
-    };
-    api.diagnosis.deleteTreatment(params).then(() => {
-      message.success('删除成功');
-      fetchTreatments();
-    });
-  };
+  // const handleDelete = (id: string) => {
+  //   const params = {
+  //     id,
+  //     sid,
+  //   };
+  //   api.diagnosis.deleteTreatment(params).then(() => {
+  //     message.success('删除成功');
+  //     fetchTreatments();
+  //   });
+  // };
   return (
     <div className={styles.treatment}>
       <div className={styles.head}>
@@ -144,7 +144,7 @@ function TreatmentList({ isTumour }: IProps) {
                           ))
                         )
                       }
-                      <div className={styles.btn_wrap}>
+                      {/* <div className={styles.btn_wrap}>
                         <Popconfirm
                           placement="topLeft"
                           title="是否删除该诊断"
@@ -156,7 +156,7 @@ function TreatmentList({ isTumour }: IProps) {
                             删除
                           </span>
                         </Popconfirm>
-                      </div>
+                      </div> */}
                     </div>
                   </li>
                 ))

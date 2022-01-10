@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import {
-  Popover, message, Popconfirm,
+  Popover,
 } from 'antd';
 import { useLocation } from 'umi';
 import * as api from '@/services/api';
@@ -32,12 +32,12 @@ function DiagnoseList() {
     }
   }, []);
 
-  const handleDelete = (id: string) => {
-    api.diagnosis.deleteDisease({ id, sid }).then(() => {
-      message.success('删除成功');
-      fetchDiagnosis();
-    });
-  };
+  // const handleDelete = (id: string) => {
+  //   api.diagnosis.deleteDisease({ id, sid }).then(() => {
+  //     message.success('删除成功');
+  //     fetchDiagnosis();
+  //   });
+  // };
   const fetchHospitalDetail = (hosInfo: { hospitalId: string, hospitalName: string }) => {
     const params = {
       id: hosInfo.hospitalId,
@@ -112,7 +112,7 @@ function DiagnoseList() {
                   {/* <AddDiagnose type="edit" initData={item} refreshList={refreshList}>
                     <span>编辑</span>
                   </AddDiagnose> */}
-                  <Popconfirm
+                  {/* <Popconfirm
                     placement="topLeft"
                     title="是否删除该诊断"
                     onConfirm={() => handleDelete(item.id)}
@@ -122,7 +122,7 @@ function DiagnoseList() {
                     <span>
                       删除
                     </span>
-                  </Popconfirm>
+                  </Popconfirm> */}
                 </div>
               </div>
             </li>
