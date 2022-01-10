@@ -4,7 +4,8 @@
 	text-align: center;
 	background: #FFFFFF;
 	border-radius: 8px;
-	@include flex(column, nowrap, center, center);
+	@include flex(center, center);
+  flex-direction: column;
 	margin-top: 26px;
 	cursor: pointer;
 	position: relative;

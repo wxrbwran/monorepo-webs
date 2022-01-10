@@ -1,0 +1,96 @@
+.item {
+  border-bottom: 1px solid #d8d8d8;
+  cursor: pointer;
+  // padding: 5px 0 5px 10px;
+  overflow: hidden;
+  border-bottom: 1px solid #E0E0E0;
+  background-color: #F8F8F8;
+  padding: 0 20px;
+  &.active {
+    background: #F8F8F8;
+  }
+}
+.avatar {
+  align-self: center;
+  @include size(40px);
+  border-radius: 20px;
+  margin-left: 5px;
+}
+.info {
+  margin-left: 5px;
+  overflow: hidden;
+  padding: 5px 0;
+}
+.name,
+.last_msg {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+}
+.last_msg {
+  font-size: 12px;
+}
+
+.team{
+  text-align: center;
+  height: 56px;
+  display: flex;
+  padding-bottom: 3px;
+  .avatars{
+    background-color: #fff;
+    display: inline-block;
+    // width: 34px;
+    display: flex;
+    align-items: center;
+    img {
+      @include size(17px);
+      vertical-align: middle;
+    }
+  }
+  .names{
+    line-height: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .line {
+    width: 1px;
+    height: 12px;
+    background: #C5C5C5;
+    display: inline-block;
+    margin-left: 12px;
+    position: relative;
+    top: 2px;
+  }
+  .name {
+    // flex: 0 0 50%;
+    // width: 74px;
+    text-align: left;
+    margin: 0 30px 0px 7px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+    font-weight: 500;
+    overflow: hidden;
+    display: inline-block;
+    .role {
+      color: #666666;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+  }
+}
+
+.dropdown {
+  background-color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  width: 600px;
+  max-height: 270px;
+  overflow-y: auto;
+  height: auto!important;
+  padding: 10px 18px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}

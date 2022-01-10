@@ -12,3 +12,10 @@ export { default as education } from './education';
 export { default as base } from './base';
 export { default as count } from './count';
 export { default as management } from './management';
+
+export { default as medical } from './medical';
+export { default as research } from './research';
+export { default as diagnosis } from './diagnosis';
+export { default as image } from './image';
+export { default as medicine } from './medicine';
+export { default as im } from './im';

@@ -1,0 +1,65 @@
+.health {
+  padding: 5px 10px;
+}
+.item {
+  @include flex();
+  line-height: 28px;
+  font-size: 14px;
+  color: #000;
+  .name {
+    flex: 1 1 100px;
+    min-width: 100px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .actual {
+    @include flex(left, center);
+    // flex: 1 1 30%;
+    text-align: left;
+    font-size: 14px;
+    flex: 0 0 100px;
+    >span {
+      font-size: 16px;
+    }
+
+   :global {
+      .BLUE {
+        color: #3592de;
+      }
+      .GREEN {
+        color: #24b436;
+      }
+      .ORANGE {
+        color: #ed833b;
+      }
+      .RED {
+        color: #b91807;
+      }
+      .date {
+        display: inline-block;
+        color: #000;
+        font-weight: normal;
+        font-size: 12px;
+        cursor: pointer;
+      }
+   }
+  }
+  .standard,
+  .advice {
+    flex: 1 1 22%;
+    text-align: center;
+  }
+  .edit_btn {
+    width: 76px;
+    height: 24px;
+    color: #007ADA;
+    border: 1px solid #007ADA;
+    border-radius: 2px;
+    margin: 0 auto;
+    display: inline-block;
+    line-height: 21px;
+    cursor: pointer;
+  }
+}

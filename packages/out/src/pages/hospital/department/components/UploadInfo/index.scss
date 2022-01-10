@@ -1,5 +1,5 @@
 .item {
-  @include flex(row, nowrap, flex-start, flex-start);
+  @include flex(flex-start, flex-start);
   margin-bottom: 35px;
   position: relative;
   h3 {
@@ -49,7 +49,7 @@
 }
 .hover {
   opacity: 0;
-  @include flex(row, nowrap, flex-start, center);
+  @include flex(flex-start, center);
   position: absolute;
   top: 48px;
   left: 250px;
@@ -69,7 +69,7 @@
 .internet {
   position: absolute;
   left: 350px;
-  @include flex(row, nowrap, flex-start, flex-start);
+  @include flex(flex-start, flex-start);
   > div:first-child {
     margin-right: 10px;
   }

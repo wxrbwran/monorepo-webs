@@ -1,0 +1,29 @@
+.adjust_medicine {
+	@include flex-lay(row, wrap, space-between, flex-start);
+	font-size: 14px;
+  padding: 10px;
+  position: relative;
+	.btn {
+		margin-left: 23px;
+		color: #09205E;
+		font-size: 14px;
+		border: 1px solid #09205E;
+		border-radius: 2px;
+		padding: 3px 8px;
+		cursor: pointer;
+	}
+	.left_block {
+		flex: 0 1 80%;
+		.title_content {
+			font-size: 16px;
+			color: #09205D;
+		}
+	}
+	.right_block {
+    position: absolute;
+    right: 10px;
+		>div {
+			margin-bottom: 10px;
+		}
+	}
+}
