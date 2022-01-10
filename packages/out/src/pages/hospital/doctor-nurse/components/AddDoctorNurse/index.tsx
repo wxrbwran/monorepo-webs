@@ -24,37 +24,43 @@ const AddDoctorNurse: FC<IProps> = (props) => {
   const handleSave = (values) => {
     console.log(values);
     const { account, name } = values;
-    const roleType = role === 'doctor' ?  Role.DOCTOR.id : Role.NURSE.id;
-    const { getAdminDoctorInfo, getAdminNurseInfo } = api.org;
-    const getDetail = role === 'doctor' ? getAdminDoctorInfo(account) : getAdminNurseInfo(account);
-    return getDetail.then((res) => {
-      console.log('hhhhhdddd', res);
-      let params = {};
-      if (res?.sid) {
-        params = {
-          ...params,
-          sid: res.sid,
-          details: res.details,
-          roleType,
-          nsId: window.$storage.getItem('nsId'),
-        };
-      } else {
-        params = {
-          nsId: window.$storage.getItem('nsId'),
-          account,
-          roleType,
-          details: {
-            name,
-            tel: account,
-          },
-        };
-      }
-      return api.org.addOrgDoctor(params).then(() => {
-        message.success('添加成功');
-        refresh();
-        return true;
+    if (account.length === 11) {
+      const roleType = role === 'doctor' ?  Role.DOCTOR.id : Role.NURSE.id;
+      const { getAdminDoctorInfo, getAdminNurseInfo } = api.org;
+      const getDetail = role === 'doctor' ? getAdminDoctorInfo(account) : getAdminNurseInfo(account);
+      return getDetail.then((res) => {
+        console.log('hhhhhdddd', res);
+        let params = {};
+        if (res?.sid) {
+          params = {
+            ...params,
+            sid: res.sid,
+            details: res.details,
+            roleType,
+            nsId: window.$storage.getItem('nsId'),
+          };
+        } else {
+          params = {
+            nsId: window.$storage.getItem('nsId'),
+            account,
+            roleType,
+            details: {
+              name,
+              tel: account,
+            },
+          };
+        }
+        return api.org.addOrgDoctor(params).then(() => {
+          message.success('添加成功');
+          refresh();
+          form.resetFields();
+          return true;
+        });
       });
-    });
+    } else {
+      message.error('请输入正确手机号');
+    }
+
   };
   return (
     <ModalForm
