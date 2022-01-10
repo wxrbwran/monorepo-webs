@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState, useRef, useEffect } from 'react';
 import { Button, Input, message } from 'antd';
 import request from 'umi-request';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
@@ -17,7 +17,21 @@ const CreateFile: FC<IProps> = (props) => {
   console.log('initData', initData);
   const [showModal, setshowModal] = useState(false);
   const [fileName, setfileName] = useState('');
+
+
+
+
   const richTextCont = useRef('');
+
+  useEffect(() => {
+    if (initData) {
+      richTextCont.current = initData;
+      setfileName(initData.name);
+    }
+
+  }, [initData]);
+
+
   const pureText = useRef('');
   const handleShow = (e) => {
     e.stopPropagation();
@@ -98,14 +112,14 @@ const CreateFile: FC<IProps> = (props) => {
       >
         <div className="relative" style={{ height: 738 }}>
           <div className="mb-20">
-            <Input placeholder="请输入文件名" onChange={(e) => setfileName(e.target.value)} />
+            <Input placeholder="请输入文件名" onChange={(e) => setfileName(e.target.value)} value={fileName} />
           </div>
           <RichText
             handleChange={handleChangeRemind}
-            value={richTextCont?.content?.text?.ops} style={{ height: '600px' }}
+            value={richTextCont?.current?.content?.text?.ops} style={{ height: '600px' }}
           />
           <div className="absolute bottom-0 text-center w-full">
-          <Button type="primary" onClick={handleSave}>保存</Button>
+            <Button type="primary" onClick={handleSave}>保存</Button>
           </div>
         </div>
 

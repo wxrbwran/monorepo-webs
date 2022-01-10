@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import { history, useSelector } from 'umi';
-// import SendPlan from '@/components/SendPlan';
 import QuestionDetail from '@/components/Scale/QuestionDetail';
 import file from '@/assets/img/file.png';
 import * as api from '@/services/api';
@@ -58,7 +57,7 @@ function Template(props: IProps) {
       <div className={styles.main}>
         <p className={styles.tmp_title}>
           <img src={file} /><span style={{ fontWeight: 500 }}>{tempName}</span>
-          <QuestionDetail scaleName={name} questions={questions}  scaleType="subjective">
+          <QuestionDetail scaleName={name} questions={questions} scaleType="subjective">
             <span className={styles.look}>查看详情</span>
           </QuestionDetail>
         </p>

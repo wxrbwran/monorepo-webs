@@ -55,16 +55,6 @@ function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues, scaleTy
             question={question}
 
           />
-
-          {/* <SendPlan
-            mode='Edit'
-            onCancel={() => setShowModal(false)}
-            addPlan={addPlan}
-            infoIndex={infoIndex}
-            plans={plans}
-            question={question}
-            location={location}
-          /> */}
         </DragModal>
       )}
     </>

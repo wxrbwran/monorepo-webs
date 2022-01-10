@@ -137,15 +137,6 @@ function Create({ location }: IProps) {
       </div>
       {infos.map((item, index) =>
         status[index] === 'open' ? (
-          // <SendPlan
-          //   key={index}
-          //   mode="Add"
-          //   onCancel={() => handleCancel(index)}
-          //   infoIndex={index}
-          //   addPlan={addPlan}
-          //   plans={item.plans}
-          //   question={item.questions}
-          // />
           <ScaleTemplate
             key={index}
             mode="Add"
