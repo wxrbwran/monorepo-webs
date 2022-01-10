@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Checkbox, Select, message, InputNumber, Spin } from 'antd';
+import { Button, Checkbox } from 'antd';
 import * as api from '@/services/api';
-import { sendType, IPlanItem } from '@/utils/consts';
+import { IPlanItem } from '@/utils/consts';
 import { useSelector } from 'umi';
 import ScaleCondition from '@/components/Scale/ScaleCondition';
 import RichText from '@/components/RichText';
@@ -9,11 +9,13 @@ import styles from './index.scss';
 import { CrfScaleSourceType, SubectiveScaleSourceType, transformDynamicToStatic, ObjectiveSourceType } from '@/pages/query/util';
 import { isEmpty, cloneDeep } from 'lodash';
 import { IChooseValues, ICondition, IItem, IRuleDoc } from '@/pages/subjective_table/util';
-
+import FirstSendTime from 'xzl-web-shared/dist/components/Rule/FirstSendTime';
+import SendFrequency from 'xzl-web-shared/dist/components/Rule/SendFrequency';
+import { IModel } from 'xzl-web-shared/dist/components/Rule/util';
 
 const CheckboxGroup = Checkbox.Group;
-const { Option } = Select;
-let timer: any = null;
+// const { Option } = Select;
+// let timer: any = null;
 interface IProps {
   mode: string;
   onCancel: Function;
@@ -85,31 +87,31 @@ const fillValueInScopeKey = (scopeKey: IItem) => {
 };
 
 
-const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
+// const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
 
-  if (timeKey.name === 'diagnose.treatment') {
-    for (let j = 0; j < timeKey.items.length; j++) {
-      const subItem = timeKey.items[j];
-      if (subItem.name === 'diagnose.treatment.uid') {
-        subItem.value = treatmentId;
-        subItem.description = treatmentDes;
-      }
-    }
-  }
-};
+//   if (timeKey.name === 'diagnose.treatment') {
+//     for (let j = 0; j < timeKey.items.length; j++) {
+//       const subItem = timeKey.items[j];
+//       if (subItem.name === 'diagnose.treatment.uid') {
+//         subItem.value = treatmentId;
+//         subItem.description = treatmentDes;
+//       }
+//     }
+//   }
+// };
 
-const getTreatmentDesInStartTimeKey = (timeKey: IItem) => {
+// const getTreatmentDesInStartTimeKey = (timeKey: IItem) => {
 
-  if (timeKey.name === 'diagnose.treatment') {
-    for (let j = 0; j < timeKey.items.length; j++) {
-      const subItem = timeKey.items[j];
-      if (subItem.name === 'diagnose.treatment.uid') {
-        return subItem.description;
-      }
-    }
-  }
-  return '';
-};
+//   if (timeKey.name === 'diagnose.treatment') {
+//     for (let j = 0; j < timeKey.items.length; j++) {
+//       const subItem = timeKey.items[j];
+//       if (subItem.name === 'diagnose.treatment.uid') {
+//         return subItem.description;
+//       }
+//     }
+//   }
+//   return '';
+// };
 
 const tileChooseToArray = (item: IItem) => {
 
@@ -300,8 +302,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   //起始发送时间默认值
   //发送频率默认值
   const initFrequency = {
-    frequency: 'CUSTOM',
-    custom: [''],
+    frequency: 'NONE',
+    custom: [{ day: '', time: '', contents: [] }],
   };
 
   const initItems = {
@@ -314,9 +316,47 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     },
   };
 
+  const IntoGroupTime = '受试者入组的时间';
+  const GiveMedicTime = '受试者给药的时间';
+  const StopMedicTime = '受试者停止此项目用药的时间';
+  const HandelTime = '受试者做处理的时间 ';
 
-  const [fetching, setFetchStatus] = useState(false); //搜索是否显示loading
-  const [treatment, setTreatment] = useState([]); //获取处理方式
+  const DIY = '自定义';
+  const ImmediatelySend = '立即发送';
+
+  const childChoiceModel = (name: string): IModel => {
+
+    return {
+      childItemType: 'select',
+      description: name,
+      childItem: [
+        {
+          childItemType: 'diy',
+          description: DIY,
+        },
+        {
+          childItemType: 'none',
+          description: ImmediatelySend,
+        },
+      ],
+    };
+  };
+  const initFirstTimeChoiceMode: IModel = {
+
+    childItemType: 'select',
+    description: '首次发送时间',
+    childItem: [
+      childChoiceModel(IntoGroupTime),
+      childChoiceModel(GiveMedicTime),
+      childChoiceModel(StopMedicTime),
+      childChoiceModel(HandelTime),
+    ],
+  };
+
+
+
+  // const [fetching, setFetchStatus] = useState(false); //搜索是否显示loading
+  // const [treatment, setTreatment] = useState([]); //获取处理方式
 
   const [loading, setLoading] = useState(false);
 
@@ -328,9 +368,12 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const remind = useRef('');
   const richTextCont = useRef('');
 
-  const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
+  const [firstTime, setFirstTime] = useState<{ choiceModel: any }>({ choiceModel: initFirstTimeChoiceMode });
+
+  // const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
+
   const [chooseStartTime, setChooseStartTime] = useState<IItem>({}); //选中的起始发送时间子item
-  const [chooseTreatmentDes, setChooseTreatmentDes] = useState<string>(); //存储患者做处理的时间-->处理方式
+  // const [chooseTreatmentDes, setChooseTreatmentDes] = useState<string>(); //存储患者做处理的时间-->处理方式
 
   const [scopeKey, setScopeKey] = useState<IItem>({}); //选中的起始发送时间子item
   const [choseScope, setChoseScope] = useState<IItem[]>([]); //选中的起始发送时间子item
@@ -339,6 +382,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const [choseConditions, setChoseConditions] = useState<ICondition[]>([initItems]); //选中的起始发送时间子item
 
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
+
 
   const sourceType = scaleType === 'CRF' ? CrfScaleSourceType : (scaleType === 'OBJECTIVE' ? ObjectiveSourceType : SubectiveScaleSourceType);
 
@@ -349,7 +393,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       for (let i = 0; i < res.keys.length; i++) {
         if (res.keys[i].name == 'start') {
           fillValueInStartTimeKey(res.keys[i], projectSid, projectRoleType);
-          setStartTimeKey(res.keys[i]);
+          // setStartTimeKey(res.keys[i]);
 
           setChooseStartTime((preState) => {
             if (isEmpty(preState)) {
@@ -394,8 +438,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       setChoseConditions(chooseValues.choseConditions);
       setFrequency(chooseValues.frequency);
 
-      const des = getTreatmentDesInStartTimeKey(chooseValues.chooseStartTime);
-      setChooseTreatmentDes(des);
+      setFirstTime(firstTime);
+      // const des = getTreatmentDesInStartTimeKey(chooseValues.chooseStartTime);
+      // setChooseTreatmentDes(des);
     }
   }, [originRuleDoc]);
 
@@ -406,11 +451,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
 
   //改变起始发送时间类型-zhou
-  const handleChangeType = (value: string) => {
+  // const handleChangeType = (value: string) => {
 
-    const choseList = startTimeKey.items.filter(item => item.name === value);
-    setChooseStartTime(choseList[0]);
-  };
+  //   const choseList = startTimeKey.items.filter(item => item.name === value);
+  //   setChooseStartTime(choseList[0]);
+  // };
 
   //发送实验组-zhou
   const handleChangeGroup = (checkedValues: any[]) => {
@@ -436,73 +481,44 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   };
 
   //更改 患者做处理的时间-->处理方式
-  const changeStateByValue = (value: string) => {
+  // const changeStateByValue = (value: string) => {
 
-    const vals = String(value).split('_zsh_');
-    fillTreatmentInStartTimeKey(chooseStartTime, vals[0], vals[1]);
-    setChooseTreatmentDes(vals[1]);
-  };
+  //   const vals = String(value).split('_zsh_');
+  //   fillTreatmentInStartTimeKey(chooseStartTime, vals[0], vals[1]);
+  //   // setChooseTreatmentDes(vals[1]);
+  // };
   //改变发送频率类型
-  const handleGetType = (value: string) => {
-    frequency.frequency = value;
-    frequency.custom = [''];
-    setFrequency({ ...frequency });
-  };
+  // const handleGetType = (value: string) => {
+  //   frequency.frequency = value;
+  //   frequency.custom = [''];
+  //   setFrequency({ ...frequency });
+  // };
   //添加发送频率
-  const handleAddDayEdit = () => {
-    frequency.custom.push('');
-    setFrequency({ ...frequency });
-  };
+  // const handleAddDayEdit = () => {
+  //   frequency.custom.push('');
+  //   setFrequency({ ...frequency });
+  // };
   //修改发送频率
-  const handleChangeCustomCycleDay = (e: any, index: number) => {
-    frequency.custom[index] = e;
-    setFrequency({ ...frequency });
-  };
+  // const handleChangeCustomCycleDay = (e: any, index: number) => {
+  //   frequency.custom[index] = e;
+  //   setFrequency({ ...frequency });
+  // };
   //删除自定义发送频率
-  const handleDeleteDay = (index: number) => {
-    frequency.custom.splice(index, 1);
-    setFrequency({ ...frequency });
-  };
-  //循环下发天数
-  const handleChangeCycleDay = (day: number) => {
-    frequency.custom = [day];
-    setFrequency({ ...frequency });
-  };
+  // const handleDeleteDay = (index: number) => {
+  //   frequency.custom.splice(index, 1);
+  //   setFrequency({ ...frequency });
+  // };
+  // //循环下发天数
+  // const handleChangeCycleDay = (day: number) => {
+  //   frequency.custom = [day];
+  //   setFrequency({ ...frequency });
+  // };
   //格式化’发送试验组‘
 
   //确定，回传拼好的数据格式
   const handleSubmit = () => {
     console.log('richTextCont', richTextCont.current);
     setLoading(true);
-
-    // console.log('callBackPlans', callBackPlans);
-    // const conditionArr = formatConditions(callBackPlans);
-    // console.log('conditionArr', conditionArr);
-    // //去重、过滤空数据
-    // frequency.detail.custom = Array.from(new Set(frequency.detail.custom)).filter((item) => !!item);
-    // if (group.detail.projectGroups.includes('PROJECT_ALL')) {
-    //   group.detail.projectGroups = ['PROJECT_ALL'];
-    // }
-    // const params = {
-    //   // plans: [startTime, ...conditionArr, frequency, group],
-    //   // questions: remind,
-    //   // ruleDoc:
-    // };
-    //年龄限制
-    // const filterAgeObj = callBackPlans.filter((item) => item.detail.send === 'AGE')[0];
-    // if (filterAgeObj) {
-    //   const lowerAge = +filterAgeObj.detail.minAge;
-    //   const upperAge = +filterAgeObj.detail.maxAge;
-    //   if (!lowerAge || !upperAge) {
-    //     message.error('请完善年龄信息');
-    //     setLoading(false);
-    //     return;
-    //   } else if (lowerAge >= upperAge) {
-    //     message.error('请输入正确的年龄范围');
-    //     setLoading(false);
-    //     return;
-    //   }
-    // }
 
     const set = Array.from(new Set(frequency.custom));
     const filter = set.filter((item) => !!item);
@@ -571,29 +587,29 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const handCancel = () => {
     onCancel();
   };
-  //获取处理方式
-  const fetchTreatment = (value: string) => {
-    if (value !== '') {
-      setFetchStatus(true);
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        api.detail
-          .fetchTreatment({ name: value })
-          .then((res) => {
-            const { treatments } = res;
-            if (treatments.length > 0) {
-              setTreatment(treatments);
-            } else {
-              message.info('没有治疗方式信息!');
-            }
-          })
-          .catch((err) => {
-            message.error(err);
-          });
-        setFetchStatus(false);
-      }, 800);
-    }
-  };
+  // //获取处理方式
+  // const fetchTreatment = (value: string) => {
+  //   if (value !== '') {
+  //     setFetchStatus(true);
+  //     clearTimeout(timer);
+  //     timer = setTimeout(() => {
+  //       api.detail
+  //         .fetchTreatment({ name: value })
+  //         .then((res) => {
+  //           const { treatments } = res;
+  //           if (treatments.length > 0) {
+  //             setTreatment(treatments);
+  //           } else {
+  //             message.info('没有治疗方式信息!');
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           message.error(err);
+  //         });
+  //       setFetchStatus(false);
+  //     }, 800);
+  //   }
+  // };
   //存在空记录不可提交
   const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];
   const isEmptyGroup = choseScope.length == 0;
@@ -623,9 +639,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
           <RichText handleChange={handleChangeRemind} value={richTextCont?.content?.text?.ops} style={{ height: '135px' }} />
         </div>
       )}
-      <h2>
-        <span className={styles.start}>*</span>起始发送时间：
-      </h2>
+      <FirstSendTime choiceModelChange={() => { }} choiceModelSource={firstTime.choiceModel} popverContent={undefined} />
+      {/* 
       <div className={styles.send_time}>
         <Select style={{ width: 180 }} onChange={handleChangeType} value={chooseStartTime.description}>
           {startTimeKey.items &&
@@ -662,11 +677,22 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
             </div>
           )
         }
-      </div>
-      <h2>
+      </div> */}
+
+
+      {/* // 发送发送频率
+  const initFrequency = {
+    frequency: 'NONE',
+    custom: [{ day: '', time: '', contents: [] }],
+  }; */}
+
+
+      <SendFrequency onFrequencyChange={() => { }} initFrequency={frequency} ></SendFrequency>
+
+      {/* <h2>
         <span className={styles.start}>*</span>发送频率：
-      </h2>
-      <div className={styles.send_type}>
+      </h2> */}
+      {/* <div className={styles.send_type}>
         <Select style={{ width: 180 }} onChange={handleGetType} value={frequency.frequency}>
           {sendType.map((item) => (
             <Option value={item.key} key={item.key}>
@@ -718,7 +744,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
             天下发一次
           </div>
         )}
-      </div>
+      </div> */}
       <ScaleCondition
         conditions={conditionKey}
         updateChoseConditions={onUpdateChoseConditions}

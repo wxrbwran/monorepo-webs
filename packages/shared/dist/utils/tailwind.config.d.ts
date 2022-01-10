@@ -51,45 +51,19 @@ declare const config: {
             '11/12': string;
         };
         fontSize: {
-            xs: (string | {
-                lineHeight: string;
-            })[];
-            sm: (string | {
-                lineHeight: string;
-            })[];
-            base: (string | {
-                lineHeight: string;
-            })[];
-            lg: (string | {
-                lineHeight: string;
-            })[];
-            xl: (string | {
-                lineHeight: string;
-            })[];
-            '2xl': (string | {
-                lineHeight: string;
-            })[];
-            '3xl': (string | {
-                lineHeight: string;
-            })[];
-            '4xl': (string | {
-                lineHeight: string;
-            })[];
-            '5xl': (string | {
-                lineHeight: string;
-            })[];
-            '6xl': (string | {
-                lineHeight: string;
-            })[];
-            '7xl': (string | {
-                lineHeight: string;
-            })[];
-            '8xl': (string | {
-                lineHeight: string;
-            })[];
-            '9xl': (string | {
-                lineHeight: string;
-            })[];
+            xs: {};
+            sm: {};
+            base: {};
+            lg: {};
+            xl: {};
+            '2xl': {};
+            '3xl': {};
+            '4xl': {};
+            '5xl': {};
+            '6xl': {};
+            '7xl': {};
+            '8xl': {};
+            '9xl': {};
         };
         height: () => {
             full: string;
@@ -136,5 +110,5 @@ declare const config: {
         extend: {};
     };
     variants: {};
-    plugins: any[];
+    plugins: {};
 };

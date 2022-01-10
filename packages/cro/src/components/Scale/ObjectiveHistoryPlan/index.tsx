@@ -178,7 +178,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
           <div className={styles.item}>
             <div className={styles.tit}>
               <img src={iconTime} alt="" />
-              <span>起始发送时间</span>
+              <span>首次发送时间</span>
             </div>
             <div className={styles.text}>{chooseValues.chooseStartTime.description}</div>
           </div>

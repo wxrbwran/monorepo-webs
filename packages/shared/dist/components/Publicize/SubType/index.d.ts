@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import './index.css';
 interface IProps {
     name: string;

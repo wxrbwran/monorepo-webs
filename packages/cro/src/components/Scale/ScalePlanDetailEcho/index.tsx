@@ -154,7 +154,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
         <div className="item">
           <div className="tit">
             <img src={iconTime} alt="" />
-            <span>起始发送时间</span>
+            <span>首次发送时间</span>
           </div>
           <div className="text">{chooseValues.chooseStartTime.description}</div>
         </div>

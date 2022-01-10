@@ -1,21 +1,22 @@
 import React, { useState, useEffect, FC } from 'react';
 import { DatePicker, InputNumber, Select, TimePicker } from 'antd';
 // import * as api from '@/services/api';
-import styles from './index.scss';
+// import styles from './index.scss';
+import './index.css';
 import moment from 'moment';
-import { cloneDeep, isEmpty } from 'lodash';
-import { IModel, FirstTimeModel } from '../util';
+import { isEmpty } from 'lodash';
+import { IModel } from '../util';
 
 interface IProps {
   choiceModelChange: (choiceModel: IModel) => void;
   popverContent: React.ReactNode;
-  choiceModelSource?: any;
+  choiceModelSource: any;
 }
 const { Option } = Select;
 
 const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceModelSource }: IProps) => {
 
-  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' });
+  const [choiceModel, setChoiceModel] = useState<IModel>({ childItemType: 'select', choiceModel: choiceModelSource, description: 'first' });
   // const [contentList, setContentList] = useState<any[]>([]);
 
   const handleChangeType = (val: any, currentItem: IModel) => {
@@ -70,7 +71,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
           choiceItem.childItemType == 'diy' &&
           [
             <>
-              <div className={`mr-10 ${styles.diy}`}>
+              <div className={'mr-10 diy'}>
                 <InputNumber
                   addonBefore={'第'}
                   addonAfter={'天'}
@@ -83,7 +84,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
               </div>
             </>,
             <>
-              <div className={styles.hm}>
+              <div className='hm'>
                 <TimePicker className='mr-10' value={choiceItem?.inputHM ? moment(choiceItem.inputHM, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} />
               </div>
 
@@ -94,7 +95,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
       <>
         {
           choiceItem.childItemType == 'time' &&
-          <div className={styles.time}>
+          <div className='time'>
             <DatePicker showTime={{ format: 'HH:mm' }} value={choiceItem?.inputTime ? moment(choiceItem.inputTime, 'YYYY-MM-DD HH:mm') : null} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} format={'YYYY-MM-DD HH:mm'} />
           </div>
         }
@@ -113,15 +114,18 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
     choiceModelChange(choiceModel);
   }, [choiceModel]);
 
+
+  console.log('================= choiceModel , ', JSON.stringify(choiceModel));
+
   return (
-    <div className={styles.send}>
+    <div className='send'>
       <h2>
-        <span className={styles.start}>*</span>首次发送时间：
+        <span className='start'>*</span>首次发送时间：
       </h2>
-      <div className={styles.send_time}>
+      <div className='shard_rule_first_send_time'>
         {
-          choiceModel?.choiceModel &&
-          getReactEle(choiceModel.choiceModel)
+          choiceModel &&
+          getReactEle(choiceModel)
         }
         {
           popverContent
