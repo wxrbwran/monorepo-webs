@@ -1,4 +1,4 @@
-const config = require('xzl-web-shared/src/utils/tailwind.config');
+const config = require('xzl-web-shared/dist/utils/tailwind.config');
 
 module.exports = config;
 // /* eslint-disable global-require */

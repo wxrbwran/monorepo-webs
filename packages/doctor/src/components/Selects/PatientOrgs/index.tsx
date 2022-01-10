@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 import { Select, Form } from 'antd';
 import { IOrgTeams } from 'packages/doctor/typings/global';

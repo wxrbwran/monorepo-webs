@@ -12,12 +12,14 @@ interface IProps {
   isUnknownTime?: boolean;
   type?: string;
   style?: object;
+  label?: string;
+  isViewOnly: boolean;
 }
 function ItemDate(props: IProps) {
   const {
-    initReportTime, isUnknownTime, setReporttime, setUnknow, type, style,
+    initReportTime, isUnknownTime, setReporttime, setUnknow, type, style, label, isViewOnly,
   } = props;
-  console.log('initReportTime', initReportTime);
+  console.log('initReportTime', initReportTime, type);
   const [unknownTime, setUnknownTime] = useState(isUnknownTime);
   let year: string | number = '';
   let month: string | number = '';
@@ -44,25 +46,35 @@ function ItemDate(props: IProps) {
   // 点击时间不详
   const handleTimeUnkown = () => {
     setUnknownTime(!unknownTime);
-    setUnknow!(!unknownTime);
+    if (setUnknow ) {
+      setUnknow!(!unknownTime);
+    }
   };
   const dateFormat = 'YYYY/MM/DD';
   const disabledDate = (current: any) => current && current > moment().endOf('day');
   return (
-    <div className="flex items-center">
-      <div className="text-sm ml-17 font-medium w-70 text-right">{type === 'HYD' ? '采样' : ''}时间：</div>
-      <DatePicker
-        disabledDate={disabledDate}
-        onChange={(momentDate, dateString) => handleSetFieldsVal(dateString, momentDate)}
-        defaultValue={initReportTime ? moment(`${year}/${month}/${day}`, dateFormat) : null}
-        format={dateFormat}
-        size="large"
-        disabled={unknownTime}
-        allowClear={false}
-        style={style}
-      />
+    <div className="flex justify-end">
       {
-        type === 'HYD' && (
+        // 编辑时  ||  查看时且时间不详为false
+        (!isViewOnly || (isViewOnly && !unknownTime)) && (
+          <>
+            <div className="text-sm ml-17 font-medium w-70 text-right" style={{ lineHeight: '32px' }}>{label || '采样时间'}：</div>
+            <DatePicker
+              disabledDate={disabledDate}
+              onChange={(momentDate, dateString) => handleSetFieldsVal(dateString, momentDate)}
+              defaultValue={initReportTime ? moment(`${year}/${month}/${day}`, dateFormat) : null}
+              format={dateFormat}
+              size="large"
+              disabled={unknownTime}
+              allowClear={false}
+              style={style}
+            />
+          </>
+        )
+      }
+      {
+        // 编辑时  ||  查看时且时间不详为true
+        (!isViewOnly || (isViewOnly && unknownTime)) && (
           <div
             className={`ml-10 ${styles.date_button} ${unknownTime ? styles.selected : ''}`}
             onClick={handleTimeUnkown}

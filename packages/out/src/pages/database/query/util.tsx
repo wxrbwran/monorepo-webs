@@ -1,6 +1,6 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-case-declarations */
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import type { Store } from 'antd/lib/form/interface';
 
 export const handleTableDataSource = (dataSource: Store[]) => {
@@ -19,31 +19,31 @@ export const handleTableDataSource = (dataSource: Store[]) => {
       //   tmp = { ...tmp, orgName: member.name}
       // }
       if (member.shqx) {
-        tmp = { ...tmp, shqx: member.shqx}
+        tmp = { ...tmp, shqx: member.shqx };
       }
       if (member.xcg) {
-        tmp = { ...tmp, xcg: member.xcg}
+        tmp = { ...tmp, xcg: member.xcg };
       }
       if (member.bcg) {
-        tmp = { ...tmp, bcg: member.bcg}
+        tmp = { ...tmp, bcg: member.bcg };
       }
       if (member.xzcs) {
-        tmp = { ...tmp, xzcs: member.xzcs}
+        tmp = { ...tmp, xzcs: member.xzcs };
       }
       if (member.xdt) {
-        tmp = { ...tmp, xdt: member.xdt}
+        tmp = { ...tmp, xdt: member.xdt };
       }
       if (member.hypertension) {
-        tmp = { ...tmp, hypertension: member.hypertension}
+        tmp = { ...tmp, hypertension: member.hypertension };
       }
       if (member.hyperglycemin) {
-        tmp = { ...tmp, hyperglycemin: member.hyperglycemin}
+        tmp = { ...tmp, hyperglycemin: member.hyperglycemin };
       }
       if (member.hyperlipemia) {
-        tmp = { ...tmp, hyperlipemia: member.hyperlipemia}
+        tmp = { ...tmp, hyperlipemia: member.hyperlipemia };
       }
       if (member.hyperuricemia) {
-        tmp = { ...tmp, hyperuricemia: member.hyperuricemia}
+        tmp = { ...tmp, hyperuricemia: member.hyperuricemia };
       }
     });
     res.push(tmp);
@@ -55,17 +55,17 @@ export const handleBaseObj = (base: Store[]) => {
   base.forEach((item) => {
     switch (item.var) {
       case "(sj.details->>'age')::INTEGER":
-        const ageArr = item.value.match(/\(([^)]*)\)/)[1].split(',')
+        const ageArr = item.value.match(/\(([^)]*)\)/)[1].split(',');
         initObj.minAge = ageArr[0];
         initObj.maxAge = ageArr[1];
         break;
       case "(sj.details->>'height')::INTEGER":
-        const heightArr = item.value.match(/\(([^)]*)\)/)[1].split(',')
+        const heightArr = item.value.match(/\(([^)]*)\)/)[1].split(',');
         initObj.minHeight = heightArr[0];
         initObj.maxHeight = heightArr[1];
         break;
       case "(sj.details->>'weight')::INTEGER":
-        const weightArr = item.value.match(/\(([^)]*)\)/)[1].split(',')
+        const weightArr = item.value.match(/\(([^)]*)\)/)[1].split(',');
         initObj.minWeight = weightArr[0];
         initObj.maxWeight = weightArr[1];
         break;

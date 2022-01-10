@@ -155,13 +155,13 @@ function Detail({ location }: IProps) {
       });
   };
 
-  const handleDelPlan = (item: { scaleId: string; }) => {
+  const handleDelPlan = (item: { scaleId: string; ruleDoc: { id: string } }) => {
     api.subjective.delScale({
       scaleId: item.scaleId,
       scaleGroupId: groupId,
       projectSid: window.$storage.getItem('projectSid'),
       scaleType: 'OBJECTIVE',
-
+      ruleId: item?.ruleDoc?.id,
     }).then(() => {
       message.success('删除成功');
       dispatch({

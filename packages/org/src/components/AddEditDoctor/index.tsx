@@ -1,11 +1,11 @@
 import React, { FC, useState, useLayoutEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import UploadImageWithCrop from '@/components/UploadImageWithCrop';
 import { Form, Input, Button, Avatar, Radio, Select, DatePicker, message } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import moment from 'moment';
-import { titleList, doctorRelated, defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { titleList, doctorRelated, defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { formatCertificates2Server, formatCert2Local } from '@/utils/cert';
 import { banksName } from '@/utils/tools';
 import CertificateEdit from '../CertificateEdit';

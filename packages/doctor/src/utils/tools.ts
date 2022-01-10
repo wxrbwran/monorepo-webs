@@ -1,4 +1,4 @@
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 export const titleList: CommonData = ['主任医师', '副主任医师', '主治医师', '住院医师'];
 export const relatedOptions = [
@@ -247,3 +247,54 @@ export const accountStatus: CommonData = {
   119: '待审核',
   117: '待激活',
 };
+
+export interface IRoleItem {
+  desc: string;
+  url: string;
+}
+// ********************关于角色-s********************
+// 医生角色
+export const doctorRoles: { [key: string]: IRoleItem } = {
+  [Role.ALONE_DOCTOR.id]: { desc: '独立管理', url: 'alone_doctor' },
+  [Role.UPPER_DOCTOR.id]: { desc: '主管医生', url: 'upper_doctor' },
+  [Role.LOWER_DOCTOR.id]: { desc: '医生助手', url: 'lower_doctor' },
+  [Role.DIETITIAN.id]: { desc: '营养师', url: 'dietitian' },
+
+  [Role.PHARAMCIST.id]: { desc: '药师', url: 'pharamcist' },
+  [Role.KANGFUSHI.id]: { desc: '康复师', url: 'kangfushi' },
+  [Role.PSYCHOLOGIST.id]: { desc: '心理医生', url: 'psychologist' },
+  [Role.TEAMNURSE.id]: { desc: '护士', url: 'teamnurse' },
+};
+// 科研角色
+export const croRoles = {
+  [Role.CRO_PM.id]: { desc: 'PM', url: 'cro_pm' },
+  [Role.CRO_CRA.id]: { desc: 'CRA', url: 'cro_cra' },
+  [Role.CRO_CRC.id]: { desc: 'CRC', url: 'cro_crc' },
+  [Role.RESEARCH_PROJECT_DOCTOR.id]: { desc: '研究者', url: 'research_project_doctor' },
+};
+
+// 各角色排序优先级
+// 独立管理 > 主管医生 > 医生助手 > 营养师 > 药师 >  康复师  > 心理医生  > 护士 >  其他医生 > 研究者 > PM > CRA > CRC
+export const imRoleOrder: string[] = [
+  Role.PATIENT.id,
+  Role.PATIENT_VIP.id,
+
+  Role.DEP_HEAD.id,
+  Role.ALONE_DOCTOR.id,
+  Role.UPPER_DOCTOR.id,
+  Role.LOWER_DOCTOR.id,
+  Role.DIETITIAN.id,
+  Role.PHARAMCIST.id,
+  Role.KANGFUSHI.id,
+  Role.PSYCHOLOGIST.id,
+  Role.TEAMNURSE.id, // 服务包里的护士角色
+
+  Role.NURSE.id, // im聊天中应该不会出现此角色
+
+  Role.RESEARCH_PROJECT_DOCTOR.id, // 科研项目医生  31
+  // Role.PROJECT_RESEARCHER.id, // 研究者  36只有在组织架构里有存在，其余出现，均为31角色
+  Role.CRO_PM.id,
+  Role.CRO_CRA.id,
+  Role.CRO_CRC.id,
+];
+// ********************关于角色-e********************

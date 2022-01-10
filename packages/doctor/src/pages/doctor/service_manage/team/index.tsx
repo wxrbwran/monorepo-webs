@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddTeamMember from '../components/AddTeamMember';
 import MemberItem from '../components/MemberItem';
-import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/src/components/XzlTable/util';
+import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/dist/components/XzlTable/util';
 import * as api from '@/services/api';
 
 const Team: FC = () => {

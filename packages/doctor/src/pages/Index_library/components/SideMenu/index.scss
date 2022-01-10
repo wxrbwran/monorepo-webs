@@ -1,0 +1,111 @@
+.menu {
+  flex: 0 0 280px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-right: 1px solid #F1F2F4;
+  // overflow-y: auto;
+  height: 100%;
+  position: relative;
+    :global {
+      .anticon {
+        color: #ACADAD;
+        font-size: 14px;
+      }
+    }
+  .search_wrap {
+    margin-top: 20px;
+    span, input {
+      background: #F7F7F7;
+      border: none;
+    }
+    :global {
+      .ant-input-affix-wrapper {
+        height: 35px;
+        padding: 0 10px;
+      }
+      .ant-input-wrapper {
+        height: 32px;
+        line-height: 32px;
+        margin-bottom: 20px;
+      }
+      .ant-input-search-button {
+        display: none;
+      }
+      .anticon-search {
+        color: #B9B9B9;
+      }
+    }
+  }
+  .title {
+    color: #181818;
+    font-size: 16px;
+    border-bottom: 1px solid #F1F2F4;
+    padding: 0 10px 10px;
+    font-weight: 600;
+    margin-bottom: 7px;
+    @include flex();
+  }
+  .type_list {
+    margin-bottom: 30px;
+  }
+
+  .type_item {
+    @include flex();
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    padding: 0 10px;
+    cursor: pointer;
+    .edit_input {
+      height: 46px;
+      line-height: 46px;
+      font-size: 14px;
+      width: 240px;
+    }
+    &.active {
+      color: #4BA3FB;
+      font-weight: bold;
+      background: #F6F7F9;
+      border-radius: 3px;
+    }
+    &:hover {
+      color: #4BA3FB;
+    }
+    .anticon-form {
+      display: none;
+    }
+    &:hover {
+      .anticon-form {
+        display: inline-block;
+      }
+    }
+  }
+  .index_list {
+    position: absolute;
+    top: 0;
+    right: -188px;
+    bottom: 0;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    width: 188px;
+    height: auto;
+    max-height: calc(100vh - 100px);
+    background-color: #fff;
+    z-index: 5;
+    padding: 7px 15px;
+    overflow-y: auto;
+    :global {
+      .ant-space-item {
+        &:hover {
+          color: #4BA3FB;
+        }
+      }
+    }
+    .no_data {
+      position: absolute;
+      top: 49%;
+      width: 150px;
+      text-align: center;
+    }
+  }
+}

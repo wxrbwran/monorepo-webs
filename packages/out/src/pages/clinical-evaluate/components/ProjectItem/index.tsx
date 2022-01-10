@@ -1,5 +1,5 @@
 import React from 'react';
-import {projectDefaultImg} from 'xzl-web-shared/src/utils/consts';
+import { projectDefaultImg } from 'xzl-web-shared/dist/utils/consts';
 import { Tooltip } from 'antd';
 import styles from './index.scss';
 
@@ -25,6 +25,6 @@ function ProjectItem({ data }: IProps) {
         </Tooltip>
       </div>
     </div>
-  )
+  );
 }
 export default ProjectItem;

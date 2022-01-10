@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import React, { useState } from 'react';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import DoctorList, { Irecord } from '../doctor_list';
 import { Button, Input, message } from 'antd';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
-import { CommonData, IState } from 'typings/global';
 import { debounce } from 'lodash';
 import { useSelector } from 'umi';
 
@@ -14,8 +13,8 @@ interface Iprops {
   nsId: string;
   refresh: () => void;
 }
-function AddGroup({ children, refresh, role, nsId}: Iprops) {
-  const {projectNsId} = useSelector((state: IState) => state.project.projDetail)
+function AddGroup({ children, refresh, role, nsId }: Iprops) {
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const isMainPi = role === Role.MAIN_PI.id;
 
   const [isShowModal, setIsShowModal] = useState(false);
@@ -28,7 +27,7 @@ function AddGroup({ children, refresh, role, nsId}: Iprops) {
     setGroupName('');
     setSelectName('');
     setPatientId('');
-  }
+  };
   const addGroup = (later?: string) => {
     if (groupName) {
       const apiParams: CommonData = {
@@ -37,30 +36,30 @@ function AddGroup({ children, refresh, role, nsId}: Iprops) {
         upNsId: nsId, // 父级id
         label: isMainPi ? 'research_sub_pi' : 'research_pi', // 添加的角色
 
-      }
+      };
       if (selectPatientId && !later) {
         apiParams.doctorSId = selectPatientId;
         apiParams.role = isMainPi ?  Role.SUB_PI.id : Role.PI.id;
       }
       window.$api.research.postPiGroup(apiParams).then(() => {
-        message.success(`添加成功`);
+        message.success('添加成功');
         handleHideModal();
         refresh();
-      })
+      });
     } else {
       message.error('请输入组名');
     }
 
-  }
+  };
   const handleChangeSelect = (params: Irecord[]) => {
     setPatientId(params[0].subjectId);
-    setSelectName(params[0].name)
-  }
+    setSelectName(params[0].name);
+  };
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupName(e.target.value);
-  }
+  };
 
-  return(
+  return (
     <div>
       <div onClick={() => setIsShowModal(true)}>{children}</div>
       <DragModal
@@ -95,6 +94,6 @@ function AddGroup({ children, refresh, role, nsId}: Iprops) {
         </div>
       </DragModal>
     </div>
-  )
+  );
 }
 export default AddGroup;

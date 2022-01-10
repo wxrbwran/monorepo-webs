@@ -3,7 +3,8 @@ import { Menu } from 'antd';
 import Icon, { UserOutlined, BarChartOutlined, ProfileOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import config from '@/config';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
+import { doctorRoles, croRoles } from '@/utils/tools';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './index.scss';
 import { IState } from 'packages/doctor/typings/model';
@@ -32,19 +33,9 @@ function SideMenu({ location }: Iprops) {
   console.log('roleText', roleText);
   const [activeMenu, setActiveMenu] = useState(`${roleText}`);
   const { existedRoles, userInfo } = useSelector((state: IState) => state.user);
-  console.log('323existedRoles', existedRoles);
   const icon1 = () => <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" fill="currentColor" ><path d="M9.88832771,16.635081 C10.1237776,16.635081 10.3470638,16.5445347 10.5168671,16.3747314 L15.6237494,11.2678491 C17.0556718,9.83592673 17.0556718,7.51432181 15.6237494,6.08239941 C14.2939381,4.75258814 12.176455,4.64814772 10.7275746,5.82178234 L9.88832771,6.50159636 L9.04908081,5.82178234 C7.60020039,4.64814772 5.4827173,4.75258814 4.15290604,6.08239941 C2.72098363,7.51432181 2.72098363,9.83592673 4.15290604,11.2678491 L9.25978835,16.3747314 C9.42959159,16.5445347 9.65287784,16.635081 9.88832771,16.635081 Z M8.3169793,17.3175405 L3.210097,12.2106582 C1.25747554,10.2580367 1.25747554,7.09221182 3.210097,5.13959037 C5.03661492,3.31307245 7.9246949,3.19511288 9.88832771,4.78571168 C11.8519605,3.19511288 14.7400405,3.31307245 16.5665584,5.13959037 C18.5191799,7.09221182 18.5191799,10.2580367 16.5665584,12.2106582 L11.4596761,17.3175405 C11.0257602,17.7514564 10.457044,17.9684143 9.88832771,17.9684143 C9.31961145,17.9684143 8.75089518,17.7514564 8.3169793,17.3175405 Z M10.0061488,13.5582652 L12.5674467,10.9969673 C12.8017613,10.7626527 13.1816602,10.7626527 13.4159748,10.9969673 L13.5102557,11.0912482 C13.7445703,11.3255628 13.7445703,11.7054617 13.5102557,11.9397763 L10.5246938,14.9253383 L10.4304129,15.0196192 C10.1960983,15.2539338 9.81619929,15.2539338 9.58188472,15.0196192 L6.50204185,11.9397763 C6.26772727,11.7054617 6.26772727,11.3255628 6.50204185,11.0912482 L6.59632275,10.9969673 C6.83063733,10.7626527 7.21053631,10.7626527 7.44485089,10.9969673 L10.0061488,13.5582652 Z" id="合并形状"></path></svg>;
   const dispatch = useDispatch();
-  const sidebar: { [key: string]: Imenu } = {
-    [Role.ALONE_DOCTOR.id]: { desc: '我独立管理', url: 'alone_doctor' },
-    [Role.UPPER_DOCTOR.id]: { desc: '我是主管医生', url: 'upper_doctor' },
-    [Role.LOWER_DOCTOR.id]: { desc: '我是医生助手', url: 'lower_doctor' },
-    [Role.DIETITIAN.id]: { desc: '我是营养师', url: 'dietitian' },
-    [Role.CRO_PM.id]: { desc: '我是PM', url: 'cro_pm' },
-    [Role.CRO_CRA.id]: { desc: '我是CRA', url: 'cro_cra' },
-    [Role.CRO_CRC.id]: { desc: '我是CRC', url: 'cro_crc' },
-    [Role.RESEARCH_PROJECT_DOCTOR.id]: { desc: '我是研究者', url: 'research_project_doctor' },
-  };
+  const sidebar: { [key: string]: Imenu } = { ...doctorRoles, ...croRoles };
   const serviceMenu: CommonData = {
     TEAM: { value: '我的团队', url: 'team' },
     SERVICE_PACKAGE: { value: '医疗服务小组', url: 'service_package' },
@@ -120,13 +111,13 @@ function SideMenu({ location }: Iprops) {
       >
         <SubMenu key="sub1" icon={<UserOutlined />} title="签约患者">
           {
-            existedRoles?.[0]?.members.filter(item => !!sidebar[item.role]).map((item: IExistedRole) => {
+            existedRoles?.[0]?.members.filter(item => !!sidebar[item.role]).map((item: IExistedRole, inx: number) => {
               return (
                 <Menu.Item
                   key={sidebar[item.role].url.toUpperCase()}
                   onClick={() => handleToggleMenu(sidebar[item.role], item.role)}
                 >
-                  {sidebar[item.role]?.desc}
+                  {inx === 0 ? '我' : '我是'}{sidebar[item.role]?.desc}
                   {/* <Badge count={sidebar[item.role]?.badgeNum} overflowCount={999} className="left-side__badge" /> */}
                 </Menu.Item>
               );

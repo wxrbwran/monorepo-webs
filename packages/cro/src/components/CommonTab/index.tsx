@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { history, useSelector } from 'umi';
 import more from '@/assets/img/more.svg';
 import { Tabs, Dropdown, Menu, Input, Button, message, Divider } from 'antd';
 import { DeleteOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import * as api from '@/services/api';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import './index.scss';
 import { CommonData, IState } from 'typings/global';
 
@@ -107,7 +107,7 @@ function CommonTab(props: IProps) {
     //   status: 'report',
     // },
     {
-      statusName: '成员管理',
+      statusName: '研究者管理',
       status: 'researcher',
     },
     // {

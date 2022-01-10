@@ -2,8 +2,8 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { Form, message, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Search } from 'xzl-web-shared/src/components/Selects';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { Search } from 'xzl-web-shared/dist/components/Selects';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import {
   organizationNameOut,
   adminName,
@@ -12,9 +12,9 @@ import {
   doctorCount,
   nurseCount,
   patientCount,
-} from 'xzl-web-shared/src/utils/columns';
+} from 'xzl-web-shared/dist/utils/columns';
 import AddOrg from '../components/addOrg';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { debounce } from 'lodash';
 import * as api from '@/services/api';
 

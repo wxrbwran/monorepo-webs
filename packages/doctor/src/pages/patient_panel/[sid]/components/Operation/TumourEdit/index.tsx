@@ -5,7 +5,7 @@ import {
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useParams } from 'umi';
 import dayjs from 'dayjs';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import Calendar from '@/components/Calendar';
 import SearchHospital from '@/components/SearchHospital';
 import * as api from '@/services/api';

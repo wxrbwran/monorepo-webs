@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Button } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import AdjustPanel from '@/components/AdjustMedicine/AdjustPanel';
 import DiffShow from '@/components/AdjustMedicine/DiffShow';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import PlansDetail from '../../../CurrentMedicine/PlansDetail';
 import styles from '../index.scss';
 

@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Input, Button, Space, message } from 'antd';
-import { EditOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons';
 import { useDispatch, history, Link } from 'umi';
-import AddEditHospital from '@/components/AddEditHospital'
+import AddEditHospital from '@/components/AddEditHospital';
 import BatchUploadStaff from '@/components/BatchUploadStaff';
-import XzlTable, { XzlTableCallBackProps } from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable, { XzlTableCallBackProps } from 'xzl-web-shared/dist/components/XzlTable';
 import {
   organizationName,
   organizationCode,
@@ -15,7 +15,7 @@ import {
   doctorCount,
   nurseCount,
   patientCount,
- } from 'xzl-web-shared/src/utils/columns';
+} from 'xzl-web-shared/dist/utils/columns';
 import OrgStaffs from '../OrgStaffs';
 import styles from './index.scss';
 

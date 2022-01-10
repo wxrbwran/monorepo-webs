@@ -7,7 +7,7 @@ import {
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { SelectValue } from 'antd/lib/select';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { btnRender } from '@/utils/button';
 import { radioList, pRadioList, diaList } from '@/utils/tools';
 import * as api from '@/services/api';

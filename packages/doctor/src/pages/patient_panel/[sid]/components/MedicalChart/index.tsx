@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'umi';
 import dayjs from 'dayjs';
 import * as api from '@/services/api';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import './index.scss';
 
 interface Iprops {

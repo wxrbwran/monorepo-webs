@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Table, Modal } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-import { departmentOperatorColumns } from 'xzl-web-shared/src/utils/columns';
+import { departmentOperatorColumns } from 'xzl-web-shared/dist/utils/columns';
 import data from '../DepartmentDoctor/mock';
 import styles from '../DepartmentDoctor/index.scss';
 

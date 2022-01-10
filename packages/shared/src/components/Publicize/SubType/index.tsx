@@ -2,6 +2,7 @@ import React from 'react';
 import { Upload, message } from 'antd';
 // import { UploadOutlined, FormOutlined } from '@ant-design/icons';
 import request from 'umi-request';
+// @ts-ignore
 import { history } from 'umi';
 import { AcceptType, businessType } from '../const';
 import './index.css';
@@ -29,7 +30,7 @@ function SubType({ name, icon, type, uploadPublicizeRequest, filePrepareRequest 
   };
   // 上传
   const handleSubmit = (rawUrl: string, file: any) => {
-    const params = {
+    const params: any = {
       content: {
         address: rawUrl,
         cover: null,
@@ -48,13 +49,13 @@ function SubType({ name, icon, type, uploadPublicizeRequest, filePrepareRequest 
       // 获取录音时长
       const url = URL.createObjectURL(file);
       const audioElement = new Audio(url);
-      audioElement.addEventListener('loadedmetadata', (_event) => {
-        params.content.duration = parseInt(_event.path[0].duration * 1000, 10);
+      audioElement.addEventListener('loadedmetadata', (_event: Event) => {
+        params.content.duration = parseInt(`${_event.path[0].duration * 1000}`, 10);
         addPublicize({ ...params });
       });
     }
   };
-  const fetchUrlThenUpload = async (file: { name: string; type: string }) => {
+  const fetchUrlThenUpload = async (file: File) => {
     message.info({
       content: '正在上传',
     });
@@ -85,7 +86,7 @@ function SubType({ name, icon, type, uploadPublicizeRequest, filePrepareRequest 
     }
   };
 
-  const stopPropagation = (e: any) => {
+  const stopPropagation = (e: MouseEvent) => {
     e.stopPropagation();
   };
 
@@ -114,6 +115,7 @@ function SubType({ name, icon, type, uploadPublicizeRequest, filePrepareRequest 
               beforeUpload={fetchUrlThenUpload}
               showUploadList={false}
               accept={AcceptType[type]}
+              // @ts-ignore
               onClick={stopPropagation}
             >
               {/* <UploadOutlined /> */}

@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Form, Input, Radio, Checkbox, Row, Col } from 'antd';
 import { useSelector } from 'umi';
-import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
+import { formItemLayout } from 'xzl-web-shared/dist/utils/consts';
 // import styles from './index.scss';
 
 const FormItem = Form.Item;

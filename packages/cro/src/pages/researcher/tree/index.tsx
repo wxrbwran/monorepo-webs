@@ -6,7 +6,7 @@ import { useSelector } from 'umi';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 import { ITree } from 'typings/researcher';
-import { fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
 function Tree() {
   const tree = useRef();
   const [isFull, setFull] = useState(false);

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { message, Form } from 'antd';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import { ProFormText, ProFormCaptcha } from '@ant-design/pro-form';
-import { formItemLayout } from 'xzl-web-shared/src/utils/consts';
+import { formItemLayout } from 'xzl-web-shared/dist/utils/consts';
 
 // import { useDispatch } from 'umi';
 // import styles from './index.scss';

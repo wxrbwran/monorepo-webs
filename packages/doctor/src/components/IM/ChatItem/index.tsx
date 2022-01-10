@@ -4,8 +4,8 @@ import React, {
 import { Popover } from 'antd';
 import classnames from 'classnames';
 import { useDispatch } from 'umi';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 import AdjustMedicineCustom from '../AdjustMedicineCustom';
 import BloodCustom from '../BloodCustom';

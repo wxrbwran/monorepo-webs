@@ -1,12 +1,11 @@
 import React, { useState, FC, useEffect } from 'react';
 import { Spin, message } from 'antd';
-import { IApiDocumentList, IImgStructuredApiData, IMeta, ITmpList, ITopicItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import uuid from 'react-uuid';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import * as api from '@/services/api';
 import ImgWrap from './compontents/ImgWrap';
 import StructuredDetail from './compontents/StructuredDetail';
 import { ExclamationCircleFilled } from '@ant-design/icons';
-import uuid from 'react-uuid';
 
 interface IProps {
   handleRefresh?: () => void;
@@ -15,10 +14,10 @@ interface IProps {
     imageUrl?: string;
   }
 }
-interface ITempItem {
-  data: ITopicTemplateItemApi;
-  meta: IMeta;
-}
+// interface ITempItem {
+//   data: ITopicTemplateItemApi;
+//   meta: IMeta;
+// }
 const CheckImgStructured: FC<IProps> = (props) => {
   const { children, imageInfo, handleRefresh } = props;
   const [showViewer, setShowViewer] = useState(false);
@@ -27,30 +26,13 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const [imgData, setImgData] = useState<IImgStructuredApiData>();
   const [isLoaded, setIsLoaded] = useState(false);
   // 全部模板 from ： 0
-  const [tempAll, settempAll] = useState<ITmpList>({});
+  // const [tempAll, settempAll] = useState<ITmpList>({});
   const patientSid = window.$storage.getItem('patientSid');
   const handleStructured = () => {
     setShowViewer(true);
   };
   const hideViewer = () => {
     setShowViewer(false);
-  };
-  const formatTemplate = (res) => {
-    const tempData: ITmpList = {};
-    res.list.forEach((item: ITempItem) => {
-      const { method, part, title } = item.meta;
-      const type = title === 'JCD' ? JSON.stringify({ method, part }) : item.meta.title;
-      if (!tempData[type]) {
-        tempData[type] = [];
-      }
-      tempData[type] = tempData[type].concat(item.data);
-    });
-    settempAll(tempData);
-  };
-  const fetchTemplate = async (from: number, to: number) => {
-    const params = { from, to };
-    const data = api.image.fetchImageTopicTemplate(params);
-    return data;
   };
   const fetchImageJcds = async (imageId: string) => {
     const params = { meta: { imageId,  sid: patientSid } };
@@ -67,15 +49,17 @@ const CheckImgStructured: FC<IProps> = (props) => {
     const data = await api.image.fetchImageIndexes(params);
     return data;
   };
-  const fetchData = (id: string, oTime: number) => {
-    Promise.all([fetchTemplate(0, oTime), fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
-      const [tempData, hData, jData ] = res;
-      formatTemplate(tempData);
+  const fetchData = (id: string) => {
+    Promise.all([fetchImageIndexes(id), fetchImageJcds(id)]).then((res: any[]) => {
+      const [hData, jData ] = res;
       setHydData(hData.list.map(item => {
         return ({ ...item, key: uuid() });
       }));
       setJcdData(jData.list.map(item => {
-        return ({ ...item, key: uuid() });
+        return ({ ...item, meta: {
+          ...item.meta,
+          tabKey: uuid(),
+        } });
       }));
       setImgData({ ...hData, imageId: id });
       setIsLoaded(true);
@@ -108,10 +92,11 @@ const CheckImgStructured: FC<IProps> = (props) => {
   }, [showViewer]);
   return (
     <>
-      <span onClick={handleStructured}>{ children }</span>
+      <span onClick={handleStructured}>{children}</span>
       <DragModal
         wrapClassName="ant-modal-wrap-full"
-        zIndex={1010}
+        // zIndex={1010}
+        style={{ top: 0, height: '100vh' }}
         width="100%"
         visible={showViewer}
         title=""
@@ -120,44 +105,40 @@ const CheckImgStructured: FC<IProps> = (props) => {
         destroyOnClose
       >
         <div>
-          {
-            imgData ? (
-              <div className="flex justify-start items-start mt-10" style={{ minWidth: 1200 }}>
-                <ImgWrap
-                  imageUrl={imgData.url}
+          {imgData ? (
+            <div className="flex justify-start items-start mt-10" style={{ minWidth: 1400 }}>
+              <ImgWrap
+                imageUrl={imgData.url}
+                handleClose={() => setShowViewer(false)}
+                imageId={imgData.imageId}
+                degree={Number(imgData?.degree ?? 0)}
+              />
+              {isLoaded && (
+                <StructuredDetail
+                  hydData={hydData}
+                  jcdData={jcdData}
+                  jcdOriginIds={jcdData.map((item) => item.meta.id)}
+                  imageId={imgData?.imageId}
+                  handleRefresh={handleRefresh}
                   handleClose={() => setShowViewer(false)}
-                  imageId={imgData.imageId}
-                  degree={Number(imgData?.degree ?? 0)}
+                  tempAll={{}}
                 />
-                {
-                  isLoaded && (
-                    <StructuredDetail
-                      hydData={hydData}
-                      jcdData={jcdData}
-                      jcdOriginIds={jcdData.map(item => item.meta.id)}
-                      imageId={imgData?.imageId}
-                      handleRefresh={handleRefresh}
-                      handleClose={() => setShowViewer(false)}
-                      tempAll={tempAll}
-                    />
-                  )
-                }
+              )}
+            </div>
+          ) : (
+            <div className="h-500 w-full flex items-center justify-center">
+              <Spin size="large" />
+            </div>
+          )}
+          {imgData && (
+            <div className="pl-18 flex">
+              <ExclamationCircleFilled style={{ color: '#FFCA4D', paddingTop: '4px' }} />
+              <div className="ml-3">
+                <p>1.如果图片内含多张单据，可通过搜索单据名称进行添加</p>
+                <p>2.添加新的单据,每一张单据结构化后，一并保存</p>
               </div>
-            ) : (
-              <div className="h-500 w-full flex items-center justify-center"><Spin size="large" /></div>
-            )
-          }
-          {
-            imgData && (
-              <div className="pl-18 flex">
-                <ExclamationCircleFilled style={{ color: '#FFCA4D', paddingTop: '4px' }} />
-                <div className="ml-3">
-                  <p>1.如果图片内含多张单据，点击顶部选择图片类型</p>
-                  <p>2.添加新的单据,每一张单据结构化后，一并保存</p>
-                </div>
-              </div>
-            )
-          }
+            </div>
+          )}
         </div>
       </DragModal>
     </>

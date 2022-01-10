@@ -1,21 +1,31 @@
 import React, { FC, useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Form, Button, Popconfirm, message, Switch } from 'antd';
-import { useLocation, Location } from 'umi';
-import { Common, Source, Search } from 'xzl-web-shared/src/components/Selects';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import { Form, Button, Popconfirm, message, Space } from 'antd';
+import { useLocation, Location, useSelector } from 'umi';
+import { Common, Search } from 'xzl-web-shared/dist/components/Selects';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
+import copyIcon from '@/assets/img/icon_copy_img.png';
 import {
-  indexName, indexUnits, indexAbbr, indexSource, columnCreator,
-} from 'xzl-web-shared/src/utils/columns';
+  indexName,
+  indexAbbr,
+  columnCreator,
+  indexCommon,
+  note,
+  reference,
+  unit,
+} from 'xzl-web-shared/dist/utils/columns';
+import { documentMap, documentTypeSource } from 'xzl-web-shared/dist/utils/consts';
 import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
+import ViewIndex from '../ViewIndex';
+import CopyDocument from '../CopyDocument';
 import Initials from '../Initials';
 
 type ILocation = {
   query: {
     documentId: string;
     documentType: string;
-  }
+  };
 };
 interface IParams {
   documentId: string; // 单据id
@@ -23,47 +33,53 @@ interface IParams {
   common?: boolean;
   source?: string;
   character?: string; // 首字母
+  sourceSid?: string;
+  sid?: string;
   pageSize: number;
 }
 const IndexList: FC = () => {
   const [form] = Form.useForm();
+  const sid = window.$storage.getItem('sid');
+  const curDocument = useSelector((state: IState) => state.document.curDocument);
+
   const { getFieldValue } = form;
   // @ts-ignore
   const {
-    query: { documentId, documentType },
+    query: { documentId, src },
   } = useLocation<Location & ILocation>();
   const [total, setTotal] = useState(0);
-  const initDepOptions = {
+  const initDepOptions: IParams = {
     documentId,
     pageSize: 9999999,
-    sourceSid: window.$storage.getItem('sid'),
+    source: curDocument.source,
+    sourceSid: curDocument.sourceSid,
+    sid: sid,
   };
   const [depOptions, setOptions] = useState<IParams>(initDepOptions);
   // 刷新列表
   const onSuccess = () => {
     setOptions({ ...depOptions });
   };
-  console.log('documentId', documentId);
+
   useEffect(() => {
     form.resetFields();
     setOptions({ ...initDepOptions });
   }, [documentId]);
-  const handleSelectChange = (changedValues: string[], allValues: CommonData) => {
+
+  const handleSelectChange = (changedValues: string[], allValues: Record<string, string>) => {
     console.log('allValues', allValues, changedValues);
     const params: IParams = { ...depOptions };
-    Object.keys(allValues).forEach((key: string) => {
-      if (allValues[key]) {
-        if (key === 'common') {
-          params.common = !!(allValues.common === 'true');
-        } else {
-          // @ts-ignore
-          params[key] = allValues[key];
-        }
-      } else {
-        // @ts-ignore
-        delete params[key];
-      }
-    });
+    if (allValues.common?.length === 1) {
+      params.common = !!(allValues.common[0] === 'true');
+    } else if ([0, 2].includes(allValues.common?.length)) {
+      // @ts-ignore
+      delete params.common;
+    }
+    if (allValues.name) {
+      params.name = allValues.name;
+    } else {
+      delete params.name;
+    }
     setOptions({ ...params });
   };
   const initialCallback = (key: string) => {
@@ -78,7 +94,10 @@ const IndexList: FC = () => {
 
   const handleDel = (id: string) => {
     api.indexLibrary
-      .deleteIndexDocumentIndex(id)
+      .deleteIndexDocumentIndex({
+        documentId: curDocument.id,
+        indexId: id,
+      })
       .then(() => {
         message.success('删除成功');
         onSuccess();
@@ -91,114 +110,97 @@ const IndexList: FC = () => {
     title: '操作',
     dataIndex: 'id',
     render: (text: string, record: any) => (
-      <div className="operation-btn">
-        {record.source === 'DOCTOR' && (
-          <>
-            <Popconfirm
-              title="确定删除此指标吗?"
-              onConfirm={() => handleDel(text)}
-              okText="是"
-              cancelText="否"
-            >
-              <span>删除</span>
-            </Popconfirm>
-            {!record.used && (
-              <EditIndex
-                onSuccess={onSuccess}
-                initFormVal={record}
-                documentId={documentId}
-                level1Type={documentType}
-                source="libraryEdit"
+      <div>
+        <Space>
+          <ViewIndex record={record} curDocument={curDocument}>
+            <Button type="link">查看</Button>
+          </ViewIndex>
+          {record.source === 'DOCTOR' && src === 'ONESELF' && (
+            <>
+              <Popconfirm
+                title="确定删除此指标吗?"
+                onConfirm={() => handleDel(text)}
+                okText="是"
+                cancelText="否"
               >
-                <span>编辑</span>
-              </EditIndex>
-            )}
-          </>
-        )}
+                <Button type="link">删除</Button>
+              </Popconfirm>
+              {!record.used && (
+                <EditIndex
+                  onSuccess={onSuccess}
+                  initFormVal={record}
+                  documentId={documentId}
+                  source="libraryEdit"
+                >
+                  <Button type="link">编辑</Button>
+                </EditIndex>
+              )}
+            </>
+          )}
+        </Space>
       </div>
     ),
   };
-  const handleCallback = (data: object[]) => {
-    setTotal(data.length);
+  const handleCallback = ({ dataSource }: { dataSource: TIndexItem[] }) => {
+    setTotal(dataSource.length);
   };
 
-  const handleCommon = (common: boolean, editData: object, refreshList: () => void) => {
-    const params = {
-      ...editData,
-      common,
-    };
-    api.indexLibrary.patchIndexDocumentIndex(params).then(() => {
-      message.success('修改成功');
-      refreshList();
-    }).catch((err) => {
-      message.error(err?.result ?? '修改失败');
-    });
-  };
-  const indexCommon = (refreshList: () => void) => ({
-    title: () => (
-      <div>
-        <span>是否常用</span>
-      </div>
-    ),
-    dataIndex: 'common',
-    render: (_text: boolean, record: any) => (
-      <div className="table-operating">
-        <Switch
-          checkedChildren="是"
-          unCheckedChildren="否"
-          checked={_text}
-          disabled={record.source === 'SYSTEM' || !!record.used}
-          onChange={(e) => {
-            handleCommon(e, record, refreshList);
-          }}
-        />
-      </div>
-    ),
-  });
   const columns = [
     indexName,
-    indexUnits,
-    columnCreator(`${documentType === 'HYD' ? '样本来源' : '检查部位'}`, 'sampleFrom'),
     indexAbbr,
-    indexCommon(onSuccess),
-    indexSource,
+    columnCreator('样本来源', 'sampleFrom', () => <span>{curDocument.sampleFrom}</span>),
+    note,
+    reference,
+    unit,
+    indexCommon,
     operation,
   ];
   return (
     <div className="ui-index-library__index-list">
       <Initials initialCallback={initialCallback} indexId={documentId} />
-      <div className="operation-warp">
-        <div>
-          <span>指标数量：</span>
-          <span className="num">{total}</span>
-          <span>个</span>
-        </div>
+      <div className="flex justify-between py-10 px-20">
+        <Space>
+          <h2 className="font-bold text-base mr-20">
+            {`${documentMap[curDocument.type]}-${documentTypeSource[src]}添加-${curDocument.name}`}
+          </h2>
+          <CopyDocument type="HYD" onSuccess={onSuccess} document={curDocument}>
+            <Button
+              className="flex items-center px-5 py-3"
+              style={{ borderRadius: '3px' }}
+              icon={<img src={copyIcon} />}
+            >
+              复制化验单
+            </Button>
+          </CopyDocument>
+          <div>
+            <span>指标数量：</span>
+            <span className="num">{total}</span>
+            <span>个</span>
+          </div>
+        </Space>
         <div className="flex">
           <div>
-            <Form form={form} onValuesChange={handleSelectChange} id="height34">
-              <Common />
-              <Source />
-              <Search form={form} searchKey="name" value={getFieldValue('name')} />
+            <Form form={form} onValuesChange={handleSelectChange}>
+              <Space>
+                <Common />
+                <Search form={form} searchKey="name" value={getFieldValue('name')} />
+              </Space>
             </Form>
           </div>
-          <EditIndex
-            onSuccess={onSuccess}
-            documentId={documentId}
-            level1Type={documentType}
-            source="libraryAdd"
-          >
-            <Button type="primary" className="create-btn">
-              <PlusOutlined />
-              新建
-            </Button>
-          </EditIndex>
+          {src === 'ONESELF' && (
+            <EditIndex onSuccess={onSuccess} documentId={documentId} source="libraryAdd">
+              <Button type="primary" className="create-btn">
+                <PlusOutlined />
+                新建
+              </Button>
+            </EditIndex>
+          )}
         </div>
       </div>
       {documentId && (
         <XzlTable
           columns={columns}
-          dataKey="list"
-          category="list"
+          dataKey="indexTable"
           request={api.indexLibrary.fetchIndexDocumentIndex}
           depOptions={depOptions}
           handleCallback={handleCallback}

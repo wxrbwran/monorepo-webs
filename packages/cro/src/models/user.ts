@@ -3,7 +3,7 @@ import { Reducer } from 'redux';
 import { initialOrg } from '@/utils/consts';
 import user from '@/services/api/user';
 import { UserModelState } from 'typings/global';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 export interface UserModelType {
   namespace: 'user';
   state: UserModelState;

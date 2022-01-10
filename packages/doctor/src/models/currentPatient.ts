@@ -41,7 +41,7 @@ const currentPatient: MedicalModelType = {
           type: 'saveMedicalLast',
           payload: medicalIndexList,
         });
-      } catch (err) {
+      } catch (err: any) {
         console.log('接口请求失败', err);
       }
     },

@@ -4,7 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { history } from 'umi';
-import { Base64 } from 'xzl-web-shared/src/utils/base64';
+import { Base64 } from 'xzl-web-shared/dist/utils/base64';
 import dayjs from 'dayjs';
 import pkg from '../../package.json';
 
@@ -34,28 +34,36 @@ export const http = extend({
 const whiteList: string[] = ['user/avatar'];
 function formatUrl(url: string, data: Store) {
   let newUrl = url;
-  if (!whiteList.includes(url) && data) {
+  if (!whiteList.includes(url)) {
     newUrl = `${url}?data=${encodeURIComponent(Base64.encode(JSON.stringify(data)))}`;
   }
   return newUrl;
 }
 //  **********************非白名单get请求,参数base64处理 **********************
 http.interceptors.request.use((url, options) => {
-  console.log('url', url);
-  console.log('options.data', options.data);
-  if (options.method === 'get') {
-    console.log('get');
+  // console.log('url', url);
+  // console.log('options.data', options.data);
+  if (options.method === 'get'
+    && options.data
+    && Object.keys(options.data).length > 0
+    && !url.includes('?data=')) {
+    const { data, params, ...resOpts } = options;
+    const newUrl = formatUrl(url, data);
+    delete options.data;
+    delete options.params;
+    // console.log('resOpts', resOpts);
     return {
-      url: formatUrl(url, options.data),
+      url: newUrl,
       options: {
-        ...options,
+        ...resOpts,
       },
     };
+  } else {
+    return {
+      url,
+      options,
+    };
   }
-  return {
-    url,
-    options,
-  };
 });
 
 http.interceptors.response.use(

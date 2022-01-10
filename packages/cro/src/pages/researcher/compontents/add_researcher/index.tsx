@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import DoctorList, { Irecord } from '../doctor_list';
 import { Button, message } from 'antd';
-import { Role } from 'xzl-web-shared/src/utils/role';
-import styles from '../add_group/index.scss';
-import { CommonData, IState } from 'typings/global';
 import { useSelector } from 'umi';
+import styles from '../add_group/index.scss';
 
 interface Iprops {
   children: React.ReactElement;
@@ -13,9 +11,8 @@ interface Iprops {
   nsId: string;
   refresh: () => void;
 }
-function AddResearcher({ children, refresh, role, nsId}: Iprops) {
-  const {projectNsId} = useSelector((state: IState) => state.project.projDetail)
-  const isMainPi = role === Role.MAIN_PI.id;
+function AddResearcher({ children, refresh, nsId }: Iprops) {
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [selectName, setSelectName] = useState<string[]>([]);
@@ -25,33 +22,33 @@ function AddResearcher({ children, refresh, role, nsId}: Iprops) {
     setIsShowModal(false);
     setPatientId([]);
     setSelectName([]);
-  }
+  };
   const addGroup = (later?: string) => {
     const apiParams: CommonData = {
       projectNsId,
       groupId: nsId,
-    }
+    };
     if (selectPatientId && !later) {
       apiParams.doctorSIds = selectPatientId;
     }
     window.$api.research.postGroupDoctor(apiParams).then(() => {
-      message.success(`添加成功`);
+      message.success('添加成功');
       handleHideModal();
       refresh();
-    })
-  }
+    });
+  };
   const handleChangeSelect = (params: Irecord[]) => {
     const ids: string[] = [];
     const names: string[] = [];
     params.forEach((item: Irecord) => {
       ids.push(item.subjectId);
       names.push(item.name);
-    })
+    });
     setPatientId(ids);
-    setSelectName(names)
-  }
+    setSelectName(names);
+  };
 
-  return(
+  return (
     <div>
       <div onClick={() => setIsShowModal(true)}>{children}</div>
       <DragModal
@@ -59,7 +56,7 @@ function AddResearcher({ children, refresh, role, nsId}: Iprops) {
         className="select-group-modal"
         width="800px"
         visible={isShowModal}
-        title={`添加研究者`}
+        title={'添加研究者'}
         onCancel={handleHideModal}
         footer={null}
       >
@@ -79,6 +76,6 @@ function AddResearcher({ children, refresh, role, nsId}: Iprops) {
         </div>
       </DragModal>
     </div>
-  )
+  );
 }
 export default AddResearcher;

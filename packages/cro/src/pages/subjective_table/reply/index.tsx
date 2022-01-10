@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import * as api from '@/services/api';
 import AlreadyReplyTable from '../components/already_reply_table';
 import NotReplayTable from '../components/not_reply_table';
 import { useSelector } from 'umi';
 import styles from './index.scss';
 import { IState } from 'typings/global';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 
 interface IProps {
   location: {
@@ -16,40 +16,16 @@ interface IProps {
   scaleType: string;
 }
 function Reply({ location }: IProps) {
-  // const [dataSource, setDataSource] = useState([]);
   const [sendNumber, setSendNumber] = useState(0);
   const [replyNumber, setReplyNumber] = useState(0);
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [tableOptions] = useState({ projectNsId, scaleGroupId: location.query.id });
 
-
-  useEffect(() => {
-    // setOptions({ projectNsId, scaleGroupId: location.query.id });
-    api.subjective.getScaleReplyList({
-      scaleGroupId: location.query.id,
-      projectNsId,
-      pageAt: 1,
-      pageSize: 1,
-    }).then((res) => {
-
-      setSendNumber(res.sendNum);
-      setReplyNumber(res.replyNum);
-      // if (res.researchScaleList.length > 0) {
-      //   // setDataSource(res.researchScaleList);
-      //   let sendNum = 0;
-      //   let replyNum = 0;
-      //   res.researchScaleList.forEach((item: { sendNumber: number; replyNumber: number }) => {
-      //     sendNum += item.sendNumber;
-      //     replyNum += item.replyNumber;
-      //   });
-      //   setSendNumber(sendNum);
-      //   setReplyNumber(replyNum);
-      // }
-    });
-  }, []);
-
-  // const tableId = location.query.id;
-
+  const handleCallback = (d:any) => {
+    console.log('=====back', d);
+    setSendNumber(d.apiData.sendNum);
+    setReplyNumber(d.apiData.replyNum);
+  };
   const columns: any = [
     {
       title: '姓名',
@@ -102,6 +78,7 @@ function Reply({ location }: IProps) {
           : <span>{text}</span>,
     },
   ];
+
   return (
     <div className={styles.reply_wrap}>
       <div className={styles.count}>
@@ -119,6 +96,7 @@ function Reply({ location }: IProps) {
           // request={() => {}}
           request={api.subjective.getScaleReplyList}
           depOptions={tableOptions}
+          handleCallback={handleCallback}
           // noPagination={true}
           category="researchScaleList"
           dataKey="researchScaleList"

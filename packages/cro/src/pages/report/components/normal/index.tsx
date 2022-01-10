@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { normalColumns } from './columns';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { dataSource } from './mock';
 import styles from './index.scss';
 
@@ -10,7 +10,7 @@ interface IProps {
 }
 function Normal({ children }:IProps) {
   const projectSid =  window.$storage.getItem('projectSid');
-  const [tableOptions, setOptions] = useState({projectSid});
+  const [tableOptions, _setOptions] = useState({ projectSid });
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
@@ -46,6 +46,6 @@ function Normal({ children }:IProps) {
         )
       }
     </div>
-  )
+  );
 }
 export default Normal;

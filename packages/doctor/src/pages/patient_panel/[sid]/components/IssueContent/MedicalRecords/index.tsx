@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, message } from 'antd';
 import { useParams, useDispatch } from 'umi';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { getIssueParams } from '@/utils/utils';
 import NotAdjustBtn from '../NotAdjustBtn';
 import MrAdjustMedicine from './MrAdjustMedicine';

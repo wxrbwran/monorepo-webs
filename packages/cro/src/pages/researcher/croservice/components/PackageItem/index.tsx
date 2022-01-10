@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import iconDismiss from '@/assets/img/icon_dismiss.png';
 import iconEdit from '@/assets/img/icon_edit.png';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { Popconfirm } from 'antd';
 import styles from './index.scss';
 

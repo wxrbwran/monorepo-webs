@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 import * as api from '@/services/api';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import AddHospital from './AddHospital';
 
 interface IhospitalSubmit {
@@ -125,6 +125,7 @@ function SearchHospital({
         virtual={false}
         allowClear={allowClear || false}
         onClear={handleClear}
+        className="searchHospital"
       >
         {hospitals.map((medicine) => (
           <Option key={medicine.id} value={medicine.id}>

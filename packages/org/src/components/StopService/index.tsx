@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 // import { Button } from 'antd';
 
 const StopService: FC = (props) => {

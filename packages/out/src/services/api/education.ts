@@ -84,6 +84,10 @@ export default {
   },
   // 动态获取节点
   fetchNodeEl(url: string, data: any): Promise<any> {
+    url = url
+      .split('/')
+      .filter((a) => !!a)
+      .join('/');
     return http.get(`${url}`, { data });
   },
   // 查看随访回复详情

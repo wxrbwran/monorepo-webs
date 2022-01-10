@@ -106,7 +106,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
   };
 
   return (
-    <div className='mt-20'>
+    <div className={styles.send_frequency}>
       <h2>
         <span className={styles.start}></span>发送频率：
       </h2>
@@ -136,59 +136,62 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, type }: I
                     />
                   </div>
                   <div className={`ml-10 mr-10 ${styles.time}`}>
-                    <TimePicker value={item.time ? moment(item.time, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, index); }} />
+                    <TimePicker
+                      value={item.time ? moment(item.time, 'HH:mm') : null}
+                      format={'HH:mm'}
+                      onChange={(momentDate, dateString) => {
+                        dateChange(momentDate, dateString, index);
+                      }}
+                    />
                   </div>
                   发送一次
-                  <div className='ml-10'>
+                  <div className="ml-10">
                     {index === 0 ? (
                       <Button className={styles.addBtn} size="large" onClick={handleAddDayEdit}>
                         添加
                       </Button>
                     ) : (
-                      <Button className={styles.deleteBtn} size="large" type='default' onClick={() => handleDeleteDay(index)}>
+                      <Button
+                        className={styles.deleteBtn}
+                        size="large"
+                        type="default"
+                        onClick={() => handleDeleteDay(index)}
+                      >
                         删除
                       </Button>
                     )}
                   </div>
-                  <div className='ml-10'>
-                    {
-                      contentPopver(index)
-                    }
-                  </div>
+                  <div className="ml-10">{contentPopver(index)}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
-        {
-          frequency.frequency === 'LOOP' &&
-          (
-            <div className={styles.cycle}>
-              <div className='mr-10 ml-10'>
-                首次发送给患者后
-              </div>
-              <InputNumber
-                addonBefore={'每'}
-                addonAfter={'天'}
-                style={{ width: 120 }}
-                min={1}
-                max={9999}
-                value={frequency.custom[0].day}
-                onChange={handleChangeCycleDay}
+        {frequency.frequency === 'LOOP' && (
+          <div className={styles.cycle}>
+            <div className="mr-10 ml-10">首次发送给患者后</div>
+            <InputNumber
+              addonBefore={'每'}
+              addonAfter={'天'}
+              style={{ width: 120 }}
+              min={1}
+              max={9999}
+              value={frequency.custom[0].day}
+              onChange={handleChangeCycleDay}
+            />
+            <div className={`ml-10 mr-10 ${styles.time}`}>
+              <TimePicker
+                value={frequency.custom[0].time ? moment(frequency.custom[0].time, 'HH:mm') : null}
+                format={'HH:mm'}
+                onChange={(momentDate, dateString) => {
+                  dateChange(momentDate, dateString, 0);
+                }}
               />
-              <div className={`ml-10 mr-10 ${styles.time}`}>
-                <TimePicker value={frequency.custom[0].time ? moment(frequency.custom[0].time, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, 0); }} />
-              </div>
-              发送一次
-              <div className='ml-10'>
-                {
-                  contentPopver(0)
-                }
-              </div>
-
             </div>
-          )
-        }
+            发送一次
+            <div className="ml-10">{contentPopver(0)}</div>
+          </div>
+        )}
       </div>
     </div>
   );

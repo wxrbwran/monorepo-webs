@@ -7,7 +7,7 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import { IState } from 'typings/model';
 import Viewer from '@/components/Viewer';
 import * as api from '@/services/api';
-// import { Role } from 'xzl-web-shared/src/utils/role';
+// import { Role } from 'xzl-web-shared/dist/utils/role';
 import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
 import { imMsgType } from '@/utils/tools';
 import reCalcAllMessageTime from '@/utils/reCalcAllMessageTime';
@@ -230,7 +230,7 @@ const ChatList: FC = () => {
     console.log(activeImage);
     dispatch({ type: 'im/TOGGLE_VIEWER_ACTIVE_INDEX', payload: { index } });
   };
-  console.log('===========**********历史msg', reCalcAllMessageTime(currSessionMsgs));
+  // console.log('===========**********历史msg', reCalcAllMessageTime(currSessionMsgs));
   return (
     <>
       <ul id="CHAT_LIST" ref={chatList} className={styles.chat_list}>
@@ -252,9 +252,9 @@ const ChatList: FC = () => {
             )}
           </li>
         )}
-        {reCalcAllMessageTime(currSessionMsgs).filter(item => item.type).map((msg: Store) => (
+        {reCalcAllMessageTime(currSessionMsgs).filter(item => item.type).map((msg: Store, index) => (
           <ChatItem
-            key={msg.time}
+            key={msg.time + index}
             myInfo={myInfo}
             rawMsg={msg}
             avatarArr={avatarArr}
@@ -279,17 +279,19 @@ const ChatList: FC = () => {
             {
               key: 'customStructured',
               render: (
-                <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
-                  <span
-                    className="react-viewer-btn"
-                    key="structured"
-                  >
-                    <div>
-                      <img src={jgh} alt="" />
-                    </div>
-                    <span>结构化数据</span>
-                  </span>
-                </CheckImgStructured>
+                <div>
+                  <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
+                    <span
+                      className="react-viewer-btn"
+                      key="structured"
+                    >
+                      <div>
+                        <img src={jgh} alt="" />
+                      </div>
+                      <span>结构化数据</span>
+                    </span>
+                  </CheckImgStructured>
+                </div>
               ),
             },
           ]

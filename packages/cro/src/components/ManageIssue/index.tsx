@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { PlusSquareOutlined, DeleteOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import * as api from '@/services/api';
-import styles from './index.scss'
+import styles from './index.scss';
 import CommonIssue from '../CommonIssue';
 // import { InputNumberProps } from 'antd/lib/input-number';
 
@@ -13,20 +13,20 @@ interface IProps {
   updateInfo: Function
 }
 
-function ManageIssue({children, infos, updateInfo}: IProps) {
+function ManageIssue({ children, infos, updateInfo }: IProps) {
   const [isShowModal, setIsShowModal] = useState(false);
   const handleShowGroup = () => {
     setIsShowModal(true);
-  }
+  };
 
   const handleDel = (questionId: number) => {
-    api.subjective.delCommonQuestion(questionId).then((res) => {
-      message.success('删除成功')
+    api.subjective.delCommonQuestion(questionId).then(() => {
+      message.success('删除成功');
       //更新常用问题列表
-       updateInfo()
-    })
+      updateInfo();
+    });
 
-  }
+  };
 
   return (
     <>
@@ -47,7 +47,7 @@ function ManageIssue({children, infos, updateInfo}: IProps) {
             <CommonIssue updateInfo={updateInfo}><div><PlusSquareOutlined />添加新的常用题</div></CommonIssue>
           </li>
           {
-            infos.map((item:{title: string, id:number})=>(
+            infos.map((item:{ title: string, id:number })=>(
               <li key={item.id}>
                 <p>{item.title}</p>
                 <p className={styles.del} onClick={()=>handleDel(item.id)}><DeleteOutlined />删除</p>
@@ -57,7 +57,7 @@ function ManageIssue({children, infos, updateInfo}: IProps) {
         </ul>
       </DragModal>
     </>
-  )
+  );
 }
 
 export default ManageIssue;

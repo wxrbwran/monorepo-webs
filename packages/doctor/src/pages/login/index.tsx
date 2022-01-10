@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import {
   Form, Input, Button, message, Menu, Dropdown,
@@ -11,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import * as api from '@/services/api';
 import { setXzlClientId } from '@/services/http';
 // import config from '@/config';
-import { clientType } from 'xzl-web-shared/src/utils/consts';
+import { clientType } from 'xzl-web-shared/dist/utils/consts';
 import logo from '@/assets/img/logo.svg';
 import refresh from '@/assets/img/refresh.svg';
 import styles from './index.scss';

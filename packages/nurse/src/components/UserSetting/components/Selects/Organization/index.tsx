@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { getCondition } from '@/utils/utils';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import * as api from '@/services/api';
 
 const { Option } = Select;
@@ -33,7 +33,7 @@ function Organization(props: IProps) {
 
   useEffect(() => {
     setOrganization(orgNsId);
-    api.doctor.getDoctorAllOrgs().then((res: {teams: ITeam[]}) => {
+    api.doctor.getDoctorAllOrgs().then((res: { teams: ITeam[] }) => {
       const organizations: ISubject[] = [];
       res.teams.forEach((item) => {
         item.members.forEach((member:ISubject) => {

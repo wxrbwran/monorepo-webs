@@ -1,9 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import MemberItem from '../MemberItem';
 import { Checkbox, Row, Col, Radio, Button } from 'antd';
 import styles from './index.scss';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 export interface IMember {
   role: string;

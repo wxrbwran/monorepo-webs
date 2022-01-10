@@ -1,6 +1,7 @@
 // import dayjs from 'dayjs';
 import moment from 'moment';
-import { Role, fetchRolePropValue } from 'xzl-web-shared/src/utils/role';
+import { Role, fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
+import { imRoleOrder } from './tools';
 
 export function unique(arr: { id: string, content: string }[]) {
   const result: never[] = [];
@@ -93,9 +94,14 @@ export function getRole(role: string) {
   }
 }
 
+const roleCompare = (role1: string, role2: string) => (
+  imRoleOrder.indexOf(role1) - imRoleOrder.indexOf(role2)
+);
 export function getRoles(msgCustom: { fromUsers?: { role: string }[], fromUser: { role: string } }) {
   if (msgCustom?.fromUsers) {
-    return [...new Set(msgCustom?.fromUsers.map(item => item.role))].map(roleId => getRole(roleId)).join('、');
+    return [...new Set(msgCustom?.fromUsers.map(item => item.role))]
+      .sort(roleCompare)
+      .map(roleId => getRole(roleId)).filter(Boolean).join('、');
   } else {
     return getRole(msgCustom?.fromUser?.role) || '';
   }
@@ -155,5 +161,6 @@ export const formatDoctorTeams = (teams: any[]) => {
       packs.alone.push(teamItem);
     }
   });
+  console.log('======111', packs);
   return packs;
 };

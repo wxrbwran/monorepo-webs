@@ -1,0 +1,185 @@
+.topic_list {
+  font-size: 14px;
+  :global {
+    .topic_title {
+      display: flex;
+      font-weight: 600;
+      align-items: center;
+      .edit_btn {
+        display: none;
+      }
+      &:hover {
+        .edit_btn {
+          display: block;
+          color: #3296FA;
+          cursor: pointer;
+          span {
+            color: #3296FA;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    .topic-item {
+      width: 100%;
+      margin: 0 auto 5px;
+      padding: 8px;
+      .del-icon,
+      .anticon-close {
+        display: none;
+      }
+      &.edit {
+        box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.10);
+        border-radius: 3px;
+        .del-icon,
+        .anticon-close {
+          display: inline-block;
+        }
+        .choice-tx {
+          display: flex;
+        }
+        .issue__delete {
+          display: inline-block;
+        }
+      }
+
+    }
+    .topic-item-show {
+      position: relative;
+      .anticon-edit {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 6px;
+        // transform: translateY(-50%);
+        font-size: 12px;
+      }
+      &:hover {
+        .anticon-edit {
+          display: inline-block;
+        }
+      }
+
+    }
+    .issue {
+      color: #181818;
+      position: relative;
+      padding-left: 18px;
+      .ant-input {
+        border: none;
+        font-size: 14px;
+        margin-right: 5px;
+        color: #181818;
+        // width: 93%;
+        // margin-left: 16px;
+        width: 94%;
+      }
+
+      &.input-empty {
+        padding-left: 0;
+        .ant-input {
+          border-bottom: 1px solid #3296FA;
+        }
+      }
+      &.pl0 {
+        padding-left: 0;
+      }
+      &__index {
+        position: absolute;
+        left: 0px;
+        font-size: 16px;
+        top: 3px;
+      }
+      &__delete {
+        display: none;
+      }
+      .issue__end {
+        display: none;
+      }
+      &.end {
+        padding-left: 72px;
+        // 内容为空时，距离左侧要少一些（少掉序号的宽度）
+        &.input-empty {
+          padding-left: 55px;
+        }
+        .issue__index {
+          left: 56px;
+        }
+        .issue__end {
+          position: absolute;
+          left: 0;
+          top: 10px;
+          background: #F5A623;
+          border-radius: 7.5px;
+          width: 55px;
+          height: 18px;
+          color: #fff;
+          font-size: 10px;
+          text-align: center;
+          line-height: 18px;
+          transform: scale(0.85);
+          display: block;
+        }
+
+      }
+    }
+
+    .add-options {
+      color: #3296FA;
+      cursor: pointer;
+      // display: none;
+    }
+    .choice-tx {
+      @include flex();
+      margin-top: 10px;
+      display: none;
+      .ant-radio-wrapper {
+        font-size: 14px;
+      }
+    }
+    .options-list {
+      .item {
+        margin-top: 24px;
+        position: relative;
+
+        .anticon-border {
+          color: #C1C1C1;
+          margin-right: 10px;
+          position: absolute;
+          left: 0;
+          top: 7px;
+          z-index: 2;
+        }
+
+        .ant-input {
+          border: none;
+          font-size: 14px;
+          width: 95%;
+          margin-right: 5px;
+          padding-left: 26px;
+        }
+        .ant-checkbox-wrapper {
+          width:95%;
+          font-size: 14px;
+        }
+        &.input-empty {
+          .ant-input {
+            border-bottom: 1px solid #3296FA;
+          }
+        }
+
+        .anticon-close {
+          color: #C1C1C1;
+        }
+      }
+    }
+    .answer-wrap {
+      margin-top: 5px;
+      margin-left: 20px;
+      textarea.ant-input {
+        resize: none;
+        height: 80px;
+      }
+    }
+  }
+}

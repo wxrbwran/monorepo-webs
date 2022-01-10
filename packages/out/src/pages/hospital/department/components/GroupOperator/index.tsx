@@ -1,4 +1,4 @@
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Button, Table, Modal, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -6,13 +6,13 @@ import { useSelector, useDispatch } from 'umi';
 import AddEditNurse from '@/components/AddEditNurse';
 import AssignDepartment from '@/components/AssignDepartment';
 import { avatar,
-   navName,
-   sex,
-   role,
-   workload,
-   lastMonthWorkload,
-   monthWorkload,
-   status, } from 'xzl-web-shared/src/utils/columns';
+  navName,
+  sex,
+  role,
+  workload,
+  lastMonthWorkload,
+  monthWorkload,
+  status } from 'xzl-web-shared/dist/utils/columns';
 import { operators } from './mock';
 // import data from './mock';
 import styles from '../DepartmentDoctor/index.scss';
@@ -57,12 +57,12 @@ const DepartmentOperator: FC = () => {
       },
     });
   };
- const action = {
-   title: '操作',
-   dataIndex: 'operate',
-   width: 100,
-   className: 'action',
-   render: (text: string, record: any) => (
+  const action = {
+    title: '操作',
+    dataIndex: 'operate',
+    width: 100,
+    className: 'action',
+    render: (_text: string, record: any) => (
      <Popconfirm
        placement="topRight"
        overlayClassName="delete__pop-confirm"
@@ -78,21 +78,21 @@ const DepartmentOperator: FC = () => {
          删除
        </Button>
      </Popconfirm>
-   ),
- };
+    ),
+  };
 
- const columns = [
-   avatar,
-   navName(nav2RolePage),
-   sex,
-   role,
-   workload,
-   lastMonthWorkload,
-   monthWorkload,
-   department,
-   status,
-   action,
- ];
+  const columns = [
+    avatar,
+    navName(nav2RolePage),
+    sex,
+    role,
+    workload,
+    lastMonthWorkload,
+    monthWorkload,
+    department,
+    status,
+    action,
+  ];
 
   return (
     <div>

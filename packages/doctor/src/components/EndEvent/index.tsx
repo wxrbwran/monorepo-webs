@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import * as api from '@/services/api';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import EventForm from './EventForm';
 import styles from './index.scss';
 

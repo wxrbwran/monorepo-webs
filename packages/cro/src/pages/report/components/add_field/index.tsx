@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Checkbox, Button, message } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
-import {queryImage}  from '@/models/query';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
+import { queryImage }  from '@/models/query';
 import { baseOption, extOptions } from '@/utils/consts';
 interface IProps {
   children: React.ReactElement;
@@ -15,22 +15,22 @@ function AddField({ children, changeTitle, handleChangeTitle, handleSearchData }
 
   const options = [...baseOption, ...extOptions];
 
-  const fourHigh = ['HYPERTENSION', 'HYPERGLYCEMIA', 'HYPERLIPEMIA', 'HYPERURICEMIA']
+  const fourHigh = ['HYPERTENSION', 'HYPERGLYCEMIA', 'HYPERLIPEMIA', 'HYPERURICEMIA'];
 
   useEffect(() => {
     setCheckTitle(changeTitle);
     // handleChangeTitle(changeTitle)
-  }, [changeTitle])
+  }, [changeTitle]);
 
   const handleChangeField = () => {
     const addNewFields = checkTitle.filter(item => !changeTitle.includes(item));
-    if(addNewFields.length === 0) {
-      handleChangeTitle(checkTitle)
+    if (addNewFields.length === 0) {
+      handleChangeTitle(checkTitle);
     } else {
       // 新增加的字段，更新redux，调用查询接口
       const imgs:queryImage[] = [];
       const hourH:string[] = [];
-      const expandFields = checkTitle.filter(item => !["name", "orgName", "sex", "age", "province"].includes(item))
+      const expandFields = checkTitle.filter(item => !['name', 'orgName', 'sex', 'age', 'province'].includes(item));
       expandFields.forEach(item => {
         const fieldType = item.toUpperCase();
         if (fourHigh.includes(fieldType)) {
@@ -39,16 +39,19 @@ function AddField({ children, changeTitle, handleChangeTitle, handleSearchData }
           imgs.push({
             imageType: fieldType,
             startAt: null,
-            endAt: null
-          })
+            endAt: null,
+          });
         }
-      })
+      });
       let obj: CommonData = {};
       let newImages = [...imgs].reduce((cur, next) => {
-        obj[next.imageType] ? "" : obj[next.imageType] = true && cur.push(next);
+        if (!obj[next.imageType]) {
+          obj[next.imageType] = true;
+          cur.push(next);
+        }
         return cur;
-      }, [])
-      if(imgs.length>0){
+      }, []);
+      if (imgs.length > 0){
         // dispatch({
         //   type: 'query/setImages',
         //   payload: [...newImages]
@@ -65,7 +68,7 @@ function AddField({ children, changeTitle, handleChangeTitle, handleSearchData }
       // }
     }
     setIsShowModal(false);
-  }
+  };
 
   function onChange(checkedValues:any ) {
     if (checkedValues.length === 0) {
@@ -93,6 +96,6 @@ function AddField({ children, changeTitle, handleChangeTitle, handleSearchData }
         </div>
       </DragModal>
     </>
-  )
+  );
 }
 export default AddField;

@@ -2,7 +2,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { BloodType } from '@/utils/tools';
 import { getRoles } from '@/utils/utils';
 import './index.scss';
@@ -33,6 +33,7 @@ interface IContent {
     bgContent: {
       value: number;
       bgType: string;
+      measuredAt: number,
     }
   }
 }
@@ -81,7 +82,7 @@ const BloodCustom: FC<IMsg> = (props) => {
             <span>
               {content.type === 110
                 ? dayjs(bpContent?.measuredAt).format('YYYY-MM-DD HH:mm')
-                : dayjs(bpContent?.measuredAt).format('YYYY-MM-DD')}
+                : dayjs(bgContent?.measuredAt).format('YYYY-MM-DD')}
             </span>
           </div>
           {content.type === 110 ? (

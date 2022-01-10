@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Table, Popconfirm } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined } from '@ant-design/icons';
 import AddEditOperatorAdmin from '@/components/AddEditOperatorAdmin';
 import {
   avatar,
@@ -13,7 +13,7 @@ import {
   monthWorkload,
   adminDepartment,
   status,
-} from 'xzl-web-shared/src/utils/columns';
+} from 'xzl-web-shared/dist/utils/columns';
 import { operators } from '../GroupOperator/mock';
 // import data from './mock';
 import styles from '../DepartmentDoctor/index.scss';
@@ -64,7 +64,7 @@ const DepartmentOperatorAdmin: FC = () => {
     dataIndex: 'operate',
     width: 100,
     className: 'action',
-    render: (text, record) => (
+    render: (_, record) => (
       <Popconfirm
         placement="topRight"
         overlayClassName="delete__pop-confirm"

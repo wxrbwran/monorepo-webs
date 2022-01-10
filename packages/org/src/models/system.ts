@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi';
-import { fetchRolePropById } from 'xzl-web-shared/src/utils/role';
+import { fetchRolePropById } from 'xzl-web-shared/dist/utils/role';
 // import org from '@/services/api/org';
 
 export interface SystemModelType {
@@ -21,12 +21,11 @@ const OrgModel: SystemModelType = {
   namespace: 'system',
   state: SystemState,
   effects: {
-    *getCount(action, { put, call }) {
+    *getCount(_action, { put, call }) {
       const { results } = yield call(window.$api.system.getCount);
       const newRes: Store[] = [];
       results.forEach((res) => {
         const role = fetchRolePropById(res.role);
-        console.log(role);
         const tmp = { ...res, ...role };
         newRes.push(tmp);
       });

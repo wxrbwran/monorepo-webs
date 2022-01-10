@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'umi';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { findIndex } from '@/utils/tools';
 import { IStandard, sexList } from '@/utils/consts';
 import { isEmpty } from 'lodash';
@@ -9,21 +9,21 @@ import './index.scss';
 interface IProps {
   type: string;
 }
-function GroupStandard({type}: IProps) {
-  const projDetail = useSelector((state:{project: {projDetail: IProjDetail}})=>state.project.projDetail);
+function GroupStandard({ type }: IProps) {
+  const projDetail = useSelector((state:{ project: { projDetail: IProjDetail } })=>state.project.projDetail);
   const [isShowStandard, setIsShowStandard] = useState<boolean>(false);
   const [showStandard, setShowStandard] = useState<IStandard>({});
 
   const handleShowStandard = () => {
     setIsShowStandard(true);
-  }
+  };
   useEffect(() => {
-    if(type === 'join') {
-      setShowStandard(projDetail.detail?.joinStandard)
+    if (type === 'join') {
+      setShowStandard(projDetail.detail?.joinStandard);
     } else {
-      setShowStandard(projDetail.detail?.excludeStandard)
+      setShowStandard(projDetail.detail?.excludeStandard);
     }
-  }, [type])
+  }, [type]);
 
   return (
     <>
@@ -52,7 +52,7 @@ function GroupStandard({type}: IProps) {
                 )
               }
               {
-                [0,1].includes(showStandard.gender) && (
+                [0, 1].includes(showStandard.gender) && (
                   <div className="item">
                     <span className="tit">{findIndex(showStandard, 'gender')}. <b>性别:</b></span>
                     <span className="value">
@@ -83,8 +83,8 @@ function GroupStandard({type}: IProps) {
                     {
                       showStandard.customize.map((item:string, idx:number) => {
                         return (
-                          <p key={item} className="value">{findIndex(showStandard, 'customize')+idx}. {item}</p>
-                        )
+                          <p key={item} className="value">{findIndex(showStandard, 'customize') + idx}. {item}</p>
+                        );
                       })
                     }
                   </div>
@@ -95,7 +95,7 @@ function GroupStandard({type}: IProps) {
         }
       </DragModal>
     </>
-  )
+  );
 }
 
 export default GroupStandard;

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { Select, Form } from 'antd';
 
 const { Option } = Select;

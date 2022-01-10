@@ -5,7 +5,7 @@ import {
   DatePicker, Button, Spin, Tabs, message,
 } from 'antd';
 import moment from 'moment';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import * as api from '@/services/api';
 import config from '@/config';
 import LatestHealthHistoryTable from '../LatestHealthHistoryTable';
@@ -128,7 +128,7 @@ const LatestHealthHistory: FC = ({ children }) => {
   ];
 
   const renderTab = useMemo(() => (tab: string, key: string, col?: object[]) => {
-    console.log('col21', col);
+    // console.log('col21', col);
     let columns = [];
     if (col) {
       columns = col;

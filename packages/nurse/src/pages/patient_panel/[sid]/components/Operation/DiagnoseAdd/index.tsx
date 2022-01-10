@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import {
   Form, Select, Spin, Button, Input, message,
 } from 'antd';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import SearchHospital from '@/components/SearchHospital';
 import Calendar from '@/components/Calendar';
 import * as api from '@/services/api';
@@ -177,7 +177,7 @@ function AddDiagnose({
       fetchDisease(keyWord, nextPageAt);
     }
   };
-  console.log('diseaseList11', diseaseList);
+  // console.log('diseaseList11', diseaseList);
   return (
     <span>
       <span onClick={handleShowModal}>{children}</span>

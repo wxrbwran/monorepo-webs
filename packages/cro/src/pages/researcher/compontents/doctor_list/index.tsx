@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { addGroupDoctorListColumns } from '@/utils/columns';
 import { useSelector } from 'umi';
-import XzlTable from 'xzl-web-shared/src/components/XzlTable';
+import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { IState } from 'typings/global';
 
 export interface Irecord {
@@ -20,12 +20,12 @@ interface Iprops {
 }
 function DoctorList(props: Iprops) {
   const { handleChangeSelect, type } = props;
-  const {projectNsId} = useSelector((state: IState) => state.project.projDetail)
-  const [depOptions, setOptions] = useState({ projectNsId, status: 1002});
+  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const [depOptions, _setOptions] = useState({ projectNsId, status: 1002 });
   const rowSelection = {
     type: type || 'radio',
     onChange: (selectedRowKeys: string, selectedRows: Irecord[]) => {
-      console.log('selectedRowKeys', selectedRowKeys)
+      console.log('selectedRowKeys', selectedRowKeys);
       if (handleChangeSelect) {
         handleChangeSelect(selectedRows);
       }
@@ -46,12 +46,12 @@ function DoctorList(props: Iprops) {
         depOptions={depOptions}
         noPagination={true}
         tableOptions={{
-          rowSelection: {...rowSelection},
+          rowSelection: { ...rowSelection },
           pagination: false,
         }}
       />
     </div>
-  )
+  );
 }
 
 export default DoctorList;

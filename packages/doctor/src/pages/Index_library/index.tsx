@@ -4,16 +4,22 @@ import { Empty } from 'antd';
 import Header from './components/HeaderTit';
 import SideMenu from './components/SideMenu';
 import IndexList from './components/IndexList';
+import JcdView from './components/JcdView';
+
 import './index.scss';
 
 const IndexLibrary: FC = () => {
-  const { query: { documentId } } = useLocation<Location>();
+  const { query: { documentId, documentType } } = useLocation<Location>();
   return (
     <div>
       <Header />
       <div className="ui-index-library__main">
         <SideMenu />
-        { documentId ? <IndexList /> : <div className="w-full pt-100"><Empty /></div>}
+        {documentId && documentType === 'HYD' && <IndexList />}
+        {documentId && ['JCD', 'OTHER'].includes(documentType) && (
+          <JcdView id={documentId} type={documentType} />
+        )}
+        {!documentId && <Empty />}
       </div>
     </div>
   );

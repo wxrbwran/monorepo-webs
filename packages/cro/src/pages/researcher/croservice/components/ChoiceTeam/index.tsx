@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Button } from 'antd';
 import styles from './index.scss';
 import * as api from '@/services/api';
@@ -7,7 +7,7 @@ import { useSelector } from 'umi';
 import { TeamMember } from '../Member';
 import radioCheck from '@/assets/img/radio_check.png';
 import radioUnCheck from '@/assets/img/radio_uncheck.png';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 import { debounce } from 'lodash';
 interface IProps {
 

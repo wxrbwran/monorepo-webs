@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 
 interface IProps {
   level: string;
@@ -12,7 +12,7 @@ const DeleteDepOrg: FC<IProps> = (props) => {
   //   try {
   //     const values = await form.validateFields();
   //     console.log(values);
-  //   } catch (err) {
+  //   } catch (err: any) {
   //     console.log(err);
   //   }
   // };

@@ -3,8 +3,8 @@ import {
   Form, Select, Input, Button, Radio,
 } from 'antd';
 import { debounce } from 'lodash';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
-import { departmentType } from 'xzl-web-shared/src/utils/consts';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
+import { departmentType } from 'xzl-web-shared/dist/utils/consts';
 
 interface Iprops {
   setFieldsValue: (params: any) => void;

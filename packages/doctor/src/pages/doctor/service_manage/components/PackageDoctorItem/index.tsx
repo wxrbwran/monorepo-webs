@@ -1,18 +1,12 @@
 import React, { FC, useMemo } from 'react';
-import { defaultAvatar } from 'xzl-web-shared/src/utils/consts';
+import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import styles from '../PackageTeamItem/index.scss';
-import { Role } from 'xzl-web-shared/src/utils/role';
+import { Role, fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
 interface IProps {
   members:  ISubject[];
 }
 const PackageDoctorItem: FC<IProps> = (props) => {
   const { members } = props;
-  const showRoleText = {
-    [Role.UPPER_DOCTOR.id]: '主管医生',
-    [Role.ALONE_DOCTOR.id]: '独立管理',
-    [Role.LOWER_DOCTOR.id]: '医生助手',
-    [Role.DIETITIAN.id]: '营养师',
-  };
   const renderItem = useMemo(() => () => {
     console.log('members322', members);
     let isCreator = false;
@@ -28,15 +22,12 @@ const PackageDoctorItem: FC<IProps> = (props) => {
         case Role.ORG.id:
           orgName = member.name!;
           break;
-        case Role.UPPER_DOCTOR.id:
-        case Role.LOWER_DOCTOR.id:
-        case Role.ALONE_DOCTOR.id:
-        case Role.DIETITIAN.id:
+        default:
           doctorName = member.name!;
           avatarUrl = member.avatarUrl || defaultAvatar;
-          roles.push(showRoleText[member.role]);
-          break;
-        default:
+          if (member.role) {
+            roles.push(fetchRolePropValue(member.role, 'desc'));
+          }
           break;
       }
     });

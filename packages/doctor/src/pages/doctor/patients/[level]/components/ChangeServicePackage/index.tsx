@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import hand from '@/assets/img/change.svg';
-import DragModal from 'xzl-web-shared/src/components/DragModal';
+import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import PackageTeamItem from '../../../../service_manage/components/PackageTeamItem';
 // import PackageTeamItem, { IDataList } from '@/pages/doctor/service_manage/components/PackageTeamItem';
 import { Radio, message } from 'antd';
@@ -20,7 +20,6 @@ const ChangeServicePackage: FC<IProps> = (props) => {
   const [selectTeamNSId, setSelectTeamNSId] = useState(null);
   const [packages, setPackages] = useState<CommonData[]>([]);
   const { data, refresh } = props;
-  console.log('fdfdfd', data);
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setSelectTeamNSId(e.target.value);
@@ -69,7 +68,6 @@ const ChangeServicePackage: FC<IProps> = (props) => {
     setShowModal(false);
     setSelectTeamNSId(null);
   };
-  console.log('packages32', packages);
   return (
     <div>
       <img
