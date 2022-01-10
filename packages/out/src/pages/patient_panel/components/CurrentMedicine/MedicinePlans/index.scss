@@ -1,0 +1,45 @@
+.cycle_days {
+	flex: 0 0 85px;
+}
+.code {
+	flex: 0 0 58px;
+}
+.list_item {
+  flex: 1 1 auto;
+  flex-shrink: 0;
+  padding-right: 30px;
+	li {
+    @include flex-lay(row, nowrap, space-between, center);
+    margin-bottom: 10px;
+	}
+	.adjust__time {
+		// flex: 1 1 25%;
+	}
+	.count {
+		// flex: 1 1 25%;
+		margin: 0 60px;
+	}
+	.point {
+		font-weight: bold;
+	}
+	.total {
+	//  flex: 1 1 25%;
+	}
+	.icons {
+		// flex: 1 1 25%;
+		border: 1px solid #007ADA;
+		margin-left: 60px;
+		:global {
+			.anticon {
+				color: #007ADA;
+				padding: 10px;
+			}
+			.anticon-plus {
+				border-right: 1px solid #007ADA;
+			}
+		}
+  }
+  .hidden {
+    visibility: hidden;
+  }
+}

@@ -44,7 +44,7 @@
   }
   :global {
     .ant-tabs-tabpane {
-      // @include flex-lay(row, wrap, flex-start, center)
+      // @include flex-lay( flex-start, center)
       padding-top: 30px;
     }
     .ant-tabs-nav {
@@ -62,7 +62,7 @@
   }
   .desc {
     width: 240px;
-    @include flex(row, nowrap, flex-start, center);
+    @include flex(flex-start, center);
     margin-bottom: 10px;
     // font-weight: 200;
     // color: rgba(0, 0, 0, 0.65);

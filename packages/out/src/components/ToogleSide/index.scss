@@ -1,5 +1,5 @@
 .toogle-side {
-  @include flex(row, nowrap, flex-start, flex-start);
+  @include flex(flex-start, flex-start);
   width: 100%;
   &__left {
     transition: width .5s;

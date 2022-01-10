@@ -1,5 +1,5 @@
 .follow-table-create {
-  @include flex(row, nowrap, flex-start, flex-start);
+  @include flex(flex-start, flex-start);
   padding-top: 30px;
   .right {
     flex: 0 0 247px;
@@ -29,7 +29,7 @@
       cursor: pointer;
 
       .tit {
-        @include flex(row, nowrap, flex-start);
+        @include flex(flex-start);
         font-size: 16px;
 
         img {
@@ -49,7 +49,7 @@
     height: calc(100vh - 157px);
     overflow-y: auto;
     .title {
-      @include flex(row, nowrap, flex-start);
+      @include flex(flex-start);
       // padding-left: 156px;
       margin: 0 auto;
     }
@@ -193,7 +193,7 @@
       // display: none;
     }
     .choice-tx {
-      @include flex(row, nowrap, space-between);
+      @include flex(space-between);
       margin-top: 10px;
       display: none;
       .ant-checkbox-wrapper span, .ant-radio-wrapper {

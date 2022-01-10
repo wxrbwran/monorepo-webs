@@ -1,3 +1,4 @@
+/// <reference types="react" />
 export declare const columnCreator: (title: string, dataIndex: string, customRender?: any) => CommonData;
 export declare const clName: CommonData;
 export declare const clTitle: CommonData;

@@ -1,5 +1,5 @@
 .con_val {
-  @include flex(row, nowrap, center, baseline);
+  @include flex(center, baseline);
   color: #666;
   .label {
     margin-left: 40px;
