@@ -1,6 +1,4 @@
-import React, {
-  FC, useEffect, useState, useMemo, useRef,
-} from 'react';
+import React, { FC, useEffect, useState, useMemo, useRef } from 'react';
 import { Form, Button, message } from 'antd';
 import { isEmpty } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
@@ -18,7 +16,8 @@ import IndexTable from '../IndexTable';
 type ICheckTypes = IApiDocumentItem | ISearchDocumentItem;
 type IApiParams = {
   sampleFrom: string; // 自己补充的必要属性
-} & ICheckTypes & TIndexItem;
+} & ICheckTypes &
+TIndexItem;
 
 // 获取图片详情接口返回的指标item | 搜索点击获取的指标item
 type IIndexItemCustom = {
@@ -111,10 +110,11 @@ const CustomIndex: FC<IProps> = (props) => {
       sourceSid: apiParams.sourceSid,
       sid,
     };
-    const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary
-      .fetchIndexDocumentIndex(params);
-    const commonItems = list;//.filter((item) => item.common);
-    const noCommonItems = []; //list.filter((item) => !item.common);
+    const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary.fetchIndexDocumentIndex(
+      params,
+    );
+    const commonItems = list.filter((item) => item.common);
+    const noCommonItems = list.filter((item) => !item.common);
     // 如果有指定首行展示哪个指标，这里移动到第一个
     const data: IApiData = firstIndex
       ? formatFirshIndex(commonItems, noCommonItems)
@@ -180,6 +180,8 @@ const CustomIndex: FC<IProps> = (props) => {
       validateFields()
         .then((values) => {
           // console.log('validateFields', values);
+          // console.log('itemsLength', itemsLength);
+
           // console.log('apiParams', apiParams);
 
           // apiParams
@@ -210,8 +212,17 @@ const CustomIndex: FC<IProps> = (props) => {
     ];
     // console.log('handleInitForm', all);
     all.forEach((item: IIndexItemCustom) => {
-      const { id, name, formIndex, indexId, references,
-        sourceSid, source, referenceList, originReferences } = item;
+      const {
+        id,
+        name,
+        formIndex,
+        indexId,
+        references,
+        sourceSid,
+        source,
+        referenceList,
+        originReferences,
+      } = item;
       const referenceData: Record<string, any> = {};
       if (referenceList?.length > 0) {
         const keys: string[] = ['value', 'indexValue'];
@@ -347,18 +358,6 @@ const CustomIndex: FC<IProps> = (props) => {
 
   return (
     <div className="relative">
-      {/* <div className="flex justify-end absolute -top-52 -right-10 ">
-        <EditIndex
-          onSuccess={addIndexSuccess}
-          source="imgAddTypeIndex"
-          documentId={apiParams.documentId}
-          sampleFrom={apiParams.sampleFrom}
-        >
-          <Button type="link" className="text-sm">
-            +添加新化验单
-          </Button>
-        </EditIndex>
-      </div> */}
       <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
         {!(isViewOnly && !initList?.orgAndTime?.orgName) ? (
           <div className="flex" style={{ flex: '0 0 47%' }}>
@@ -389,21 +388,19 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      {apiParams.source === 'DOCTOR' &&
-        apiParams.sourceSid === sid &&
-        !isViewOnly && (
-          <div className="mb-10">
-            <EditIndex
-              onSuccess={addIndexSuccess}
-              source="imgAddIndex"
-              documentId={apiParams.documentId}
-              sampleFrom={apiParams.sampleFrom}
-            >
-              <Button type="link" className="text-sm">
-                +添加新指标
-              </Button>
-            </EditIndex>
-          </div>
+      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && !isViewOnly && !initList && (
+        <div className="mb-10">
+          <EditIndex
+            onSuccess={addIndexSuccess}
+            source="imgAddIndex"
+            documentId={apiParams.documentId}
+            sampleFrom={apiParams.sampleFrom}
+          >
+            <Button type="link" className="text-sm">
+              +添加新指标
+            </Button>
+          </EditIndex>
+        </div>
       )}
       {!initList &&
         (apiParams.source === 'SYSTEM' ||

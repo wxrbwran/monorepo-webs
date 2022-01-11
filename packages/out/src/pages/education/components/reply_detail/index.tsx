@@ -7,10 +7,11 @@ import { pageSize } from 'xzl-web-shared/dist/utils/consts';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 
 interface IProps {
+  scaleId: string;
   id: string;
   children: React.ReactElement;
 }
-function Reply({ id, children }: IProps) {
+function Reply({ id, children, scaleId }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [sendNumber, setSendNumber] = useState(0);
@@ -18,13 +19,14 @@ function Reply({ id, children }: IProps) {
   const [current, setCurrent] = useState(1);
   const [totals, setTotals] = useState(0);
   useEffect(() => {
-    if (showModal){
+    if (showModal) {
       api.education.getScaleReplyList({
         planRuleId: id,
         pageAt: current,
         pageSize,
+        scaleId: scaleId,
       }).then((res: any) => {
-        if (res.list.length > 0){
+        if (res.list.length > 0) {
           const { list, total, sum, replySum } = res;
           setDataSource(list);
           setSendNumber(sum);
@@ -36,7 +38,7 @@ function Reply({ id, children }: IProps) {
   }, [showModal, current]);
 
   useEffect(() => {
-    if (!showModal){
+    if (!showModal) {
       setCurrent(1);
     }
   }, [showModal]);
@@ -119,12 +121,12 @@ function Reply({ id, children }: IProps) {
                   onChange: handlePagerChange,
                   showSizeChanger: false,
                 }}
-                // onHeaderCell={()=>({style:{textAlign: 'center'}})}
+              // onHeaderCell={()=>({style:{textAlign: 'center'}})}
               />
             </div>
           </div>
         </DragModal>
-      ) }
+      )}
     </>
   );
 }

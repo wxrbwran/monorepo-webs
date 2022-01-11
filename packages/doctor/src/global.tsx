@@ -8,7 +8,7 @@ import 'regenerator-runtime/runtime';
 import { setAuthorizationToken } from '@/services/http';
 import pkg from '../package.json';
 import './global.scss';
-// import 'antd/lib/table/style/index.css';
+import 'antd/lib/table/style/index.css';
 
 window.$storage = storage(pkg.name);
 
