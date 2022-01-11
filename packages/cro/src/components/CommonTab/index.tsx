@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { history, useSelector } from 'umi';
 import more from '@/assets/img/more.svg';
-import { Tabs, Dropdown, Menu, Input, Button, message, Divider } from 'antd';
+import { Tabs, Dropdown, Menu, Form, Input, Button, message, Divider } from 'antd';
 import { DeleteOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import * as api from '@/services/api';
@@ -20,6 +20,8 @@ interface IProps {
     }
   };
 }
+
+let timer: NodeJS.Timeout | null = null;
 function CommonTab(props: IProps) {
   const dispatch = useDispatch();
   const [currTab, setCurrTab] = useState('');
@@ -27,9 +29,48 @@ function CommonTab(props: IProps) {
   const [modalType, setModalType] = useState('');
   const projectName = window.$storage.getItem('projectName');
   const { roleType, status } = useSelector((state: IState) => state.project.projDetail);
-  const [val, setVal] = useState('');
   const { projectSid } = props.location.query;
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
+
+
+  const [val, setVal] = useState('');
+  const [seconds, setSeconds] = useState(60);
+  const [isGetting, setIsGetting] = useState(false);
+
+
+  const [form] = Form.useForm();
+  const { getFieldValue } = form;
+
+  useEffect(() => {
+    if (seconds === 0) {
+      clearInterval(Number(timer));
+      setSeconds(60);
+      setIsGetting(false);
+    }
+  }, [seconds]);
+
+  const fetchVcode = () => {
+
+    timer = setInterval(() => {
+      setSeconds((preSeconds) => preSeconds - 1);
+      setIsGetting(true);
+    }, 1000);
+
+    // const tel = getFieldValue('tel');
+    // if (!!tel && !Number.isNaN(+tel)) {
+    //   // postSms
+    //   window.$api.user.postSms({ tel }).then(() => {
+    //     timer = setInterval(() => {
+    //       setSeconds((preSeconds) => preSeconds - 1);
+    //       setIsGetting(true);
+    //     }, 1000);
+    //   });
+    // } else {
+    //   message.error('请输入正确的手机号码！');
+    // }
+  };
+
+
   useEffect(() => {
     const urlName = props.location.pathname.split('/')[1];
     console.log(urlName);
@@ -48,6 +89,14 @@ function CommonTab(props: IProps) {
       });
     }
   };
+
+  const onFinish = (values: any) => {
+
+    console.log('============== values, ', values);
+
+  };
+
+
   const handleDel = () => {
     console.log('modalType', modalType);
     // 根据目前展示弹框 的类型判断调用 哪个接口
@@ -68,15 +117,17 @@ function CommonTab(props: IProps) {
         setShowModal(false);
         dispatch({
           type: 'project/fetchProjectDetail',
-          payload:  projectSid || window.$storage.getItem('projectSid'),
+          payload: projectSid || window.$storage.getItem('projectSid'),
         });
       })
         .catch((err) => {
           message.error(err);
         });
     }
-
   };
+
+
+
   const croNav = [
     {
       statusName: '项目管理',
@@ -120,6 +171,11 @@ function CommonTab(props: IProps) {
     },
   ];
   const handleShowModal = (type: string) => {
+
+    if (modalType != type) {
+      // 不一样，需要清空之前的计时等数据
+
+    }
     setModalType(type);
     setShowModal(true);
   };
@@ -132,9 +188,19 @@ function CommonTab(props: IProps) {
         status !== 1001 && (
           <>
             <Divider style={{ margin: 0 }} />
-              <Menu.Item onClick={() => handleShowModal('close')}>
-                <LockOutlined /> 封闭试验
-              </Menu.Item>
+            <Menu.Item onClick={() => handleShowModal('close')}>
+              <LockOutlined /> 封闭试验
+            </Menu.Item>
+          </>
+        )
+      }
+      {
+        status == 1001 && (
+          <>
+            <Divider style={{ margin: 0 }} />
+            <Menu.Item onClick={() => handleShowModal('reOpen')}>
+              <LockOutlined /> 解封试验
+            </Menu.Item>
           </>
         )
       }
@@ -157,6 +223,11 @@ function CommonTab(props: IProps) {
       title: '封闭试验',
       btnText: '确定',
       content: `一旦你封闭【${projectName}】，所有项目信息将不可修改。这是一个不可恢复的操作，请谨慎对待！`,
+    },
+    'reOpen': {
+      title: '解除封闭',
+      btnText: '确定',
+      content: '1. 解除封闭后，你可以修改项目内容\n2. 封闭之前将按原计划执行，封闭之后将按新的计划执行\n3. 请谨慎操作，尽快完成项目修改',
     },
   };
   return (
@@ -187,18 +258,46 @@ function CommonTab(props: IProps) {
           footer={null}
           className="del_proj"
         >
-          <p className="tip">
+          <p className={`tip ${modalType == 'reOpen' ? 'tip_color' : ''}`}>
             {modalText[modalType].content}
           </p>
-          <Input placeholder={`请输入：${modalText[modalType].title}`} onChange={(e) => setVal(e.target.value)} />
 
-          <div className="btn">
-            <Button onClick={() => setShowModal(!showModal)}> 取消 </Button>
-            <Button type="primary" onClick={handleDel} disabled={val !== modalText[modalType].title} danger>
-              {' '}
-              {modalText[modalType].btnText}{' '}
-            </Button>
-          </div>
+          <Form
+            name="findPwd"
+            initialValues={{ remember: true }}
+            onFinish={(value) => onFinish(value)}
+            id="height42"
+            form={form}
+          >
+            <div className={'code_wrap'}>
+              <Form.Item className='code' name="code" rules={[{ required: true, message: '请输入接收到的验证码!' }]}>
+                {/* <Input prefix={<LockOutlined />} placeholder="请输入收到的验证码" />
+                 */}
+                {/* <Input placeholder={`请输入验证码：${modalText[modalType].title}`} onChange={(e) => setVal(e.target.value)} /> */}
+                <Input placeholder={'请输入验证码：'} onChange={(e) => setVal(e.target.value)} />
+              </Form.Item>
+              <Button
+                className={`${'fetch_btn'} ${isGetting ? 'fetch_btn_getting' : ''}`}
+                type="text"
+                onClick={fetchVcode}
+                style={{ width: isGetting ? 140 : 160 }}
+              >
+                {isGetting ? `${seconds}s后重新获取` : '发送验证码到心之力APP'}
+              </Button>
+            </div>
+
+            <div className="btn">
+              <Form.Item>
+                <Button onClick={() => setShowModal(!showModal)}> 取消 </Button>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" disabled={!(val.length > 0)} danger>
+                  {' '}
+                  {modalText[modalType].btnText}{' '}
+                </Button>
+              </Form.Item>
+            </div>
+          </Form>
         </DragModal>
       )}
     </>

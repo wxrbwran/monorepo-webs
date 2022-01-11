@@ -1,4 +1,4 @@
-.project-cont-tab{
+.project-cont-tab {
   // height: 39px;
   border-bottom: 10px solid #f5f5f5;
   background: #fff;
@@ -15,7 +15,7 @@
     margin-right: 40px;
   }
   .ant-tabs-nav {
-    &::before{
+    &::before {
       display: none;
     }
   }
@@ -31,7 +31,7 @@
     color: #181818;
     padding: 15px;
     .anticon-delete {
-      font-size: 14px
+      font-size: 14px;
     }
   }
 }
@@ -39,10 +39,44 @@
   .tip {
     font-size: 14px;
     color: #181818;
-    margin-bottom:15px;
+    margin-bottom: 15px;
+    white-space: pre-line;
   }
+
+  .tip_color {
+    color: red;
+  }
+
   .ant-input {
     height: 40px;
     font-size: 14px;
+  }
+
+  .btn {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+  }
+  .code_wrap {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    position: relative;
+    .code {
+      flex-grow: 1;
+      background-color: yellow;
+    }
+    .fetch_btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 42px;
+      color: #1890ff;
+      background-color: transparent;
+      padding: 0;
+    }
+    .fetch_btn_getting {
+      color: #666;
+    }
   }
 }
