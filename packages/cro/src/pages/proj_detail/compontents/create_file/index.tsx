@@ -11,28 +11,27 @@ interface IProps {
   type: string;
   fetchFileList: () => void;
   initData?: any;
+  readonly?: boolean;
+  fileId?: string;
 }
 const CreateFile: FC<IProps> = (props) => {
-  const { children, type, projectSid, fetchFileList, initData } = props;
+  const { children, type, projectSid, fetchFileList, initData, readonly, fileId } = props;
   console.log('initData', initData);
   const [showModal, setshowModal] = useState(false);
   const [fileName, setfileName] = useState('');
 
+  const [richTextCont, setRichTextCont] = useState('');
 
-
-
-  const richTextCont = useRef('');
 
   useEffect(() => {
     if (initData) {
-      richTextCont.current = initData;
+      setRichTextCont(initData.content.ops);
       setfileName(initData.name);
     }
 
   }, [initData]);
 
 
-  const pureText = useRef('');
   const handleShow = (e) => {
     e.stopPropagation();
     setshowModal(true);
@@ -40,32 +39,53 @@ const CreateFile: FC<IProps> = (props) => {
   const handleChangeRemind = (value: any, text: string) => {
     console.log('valueeeeee', value);
     console.log('textttt', text);
-    richTextCont.current = value;
-    pureText.current = text;
+    setRichTextCont(value);
   };
   //上传
   const handleSubmit = (rawUrl: string) => {
-    api.detail.addProjectFile({
-      address: rawUrl,
-      name: fileName,
-      projectSid,
-      type,
-    }).then(() => {
-      if (showModal) {
-        setTimeout(() => {
-          // setLoading(false);
-          message.success('文件上传成功');
-          fetchFileList();
-          setshowModal(false);
-        }, 5000);
-      }
-    })
-      .catch((err) => {
-        message.error(err);
-      });
+
+    if (fileId) {
+
+      api.detail.patchProjectFileList({
+        address: rawUrl,
+        name: fileName,
+        projectSid,
+        type,
+        content: {
+          ops: richTextCont,
+        },
+        fileId,
+      }).then(() => {
+        setshowModal(false);
+        message.success('文件编辑成功');
+        fetchFileList();
+      })
+        .catch((err) => {
+          message.error(err);
+        });
+    } else {
+
+      api.detail.addProjectFile({
+        address: rawUrl,
+        name: fileName,
+        projectSid,
+        type,
+        content: {
+          ops: richTextCont,
+        },
+      }).then(() => {
+        setshowModal(false);
+        message.success('文件上传成功');
+        fetchFileList();
+      })
+        .catch((err) => {
+          message.error(err);
+        });
+    }
   };
+
   const handleSave = () => {
-    const formatHtmlTxt = richTextCont.current;
+    const formatHtmlTxt = richTextCont;
     const aFileParts: string[] = [`${beforeEl}${formatHtmlTxt}${alfterEl}`];
     console.log('aFileParts', aFileParts);
     const oMyBlob = new Blob(aFileParts, { type: 'text/html' });
@@ -105,22 +125,39 @@ const CreateFile: FC<IProps> = (props) => {
         visible={showModal}
         title='风险评估/风险对策'
         width={1000}
+        height={738}
         wrapClassName="ant-modal-wrap-center"
         onCancel={() => setshowModal(false)}
         maskClosable
         footer={null}
       >
-        <div className="relative" style={{ height: 738 }}>
+        <div className="relative overflow-hidden" style={readonly ? { height: 680 } : { height: 738 }}>
           <div className="mb-20">
             <Input placeholder="请输入文件名" onChange={(e) => setfileName(e.target.value)} value={fileName} />
           </div>
-          <RichText
-            handleChange={handleChangeRemind}
-            value={richTextCont?.current?.content?.text?.ops} style={{ height: '600px' }}
-          />
-          <div className="absolute bottom-0 text-center w-full">
-            <Button type="primary" onClick={handleSave}>保存</Button>
-          </div>
+          {
+            readonly == true ?
+              <div className="border-solid border border-neutral-200">
+                <RichText
+                  handleChange={handleChangeRemind}
+                  readonly={readonly}
+                  value={richTextCont}
+                  style={{ height: '600px' }}
+                />
+              </div>
+              : <RichText
+                handleChange={handleChangeRemind}
+                readonly={readonly}
+                value={richTextCont}
+                style={{ height: '600px' }}
+              />
+          }
+          {
+            readonly != true && <div className="absolute bottom-0 text-center w-full">
+              <Button type="primary" onClick={handleSave}>保存</Button>
+            </div>
+          }
+
         </div>
 
       </DragModal>

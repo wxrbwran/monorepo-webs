@@ -9,6 +9,7 @@ import { useSelector } from 'umi';
 import CreateFile from '../create_file';
 import styles from './index.scss';
 import { IState } from 'typings/global';
+import projectRiskSee from '@/assets/project_rish_see.png';
 
 interface IProps {
   name: string;
@@ -207,14 +208,26 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
                         </>
                       )
                     }
-                    <a id="upload" style={{ display: 'none' }} target="_blank"></a>
-                    <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
+                    <a id="upload" style={{ display: 'none' }} target="_blank" href={item.address}>11</a>
                     {
-                       type === 'RISK_FILE' && (
-                        <CreateFile {...createFileProps} initData={item}>
+                      type === 'RISK_FILE' ?
+                        // <span className={styles.download}>
+                        //   <a style={{ display: "table-cell" }} target="_blank" href={item.address}><img src={projectRiskSee} style={{ width: 20, height: 20 }} /> 查看</a>
+                        // </span>
+                        <span className={styles.download}>
+                          <CreateFile {...createFileProps} initData={item} readonly={true}>
+                            <span><FileSearchOutlined /> 查看</span>
+                          </CreateFile>
+                        </span>
+                        :
+                        <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
+                    }
+                    {
+                      type === 'RISK_FILE' && (
+                        <CreateFile {...createFileProps} initData={item} readonly={false} fileId={item.id}>
                           <span><EditOutlined /> 编辑</span>
                         </CreateFile>
-                       )
+                      )
                     }
                     {
                       isEdit && <span className="ml-20" onClick={() => handleRemove(item.id)}><DeleteOutlined /> 删除</span>
@@ -233,9 +246,9 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
             isEdit && (
               type === 'RISK_FILE' ? (
                 <CreateFile {...createFileProps}>
-                    <Button type="primary" data-testid='uploadBtn' loading={loading}>
+                  <Button type="primary" data-testid='uploadBtn' loading={loading}>
                     {loading ? '创建中' : '创建'}
-                    </Button>
+                  </Button>
                 </CreateFile>
               ) : (
                 <Upload  {...uploadProps}>

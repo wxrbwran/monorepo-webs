@@ -34,6 +34,10 @@ export default {
   getProjectFileList(data?: any): Promise<any> {
     return http.get(`research/project/file?data=${JSON.stringify(data)}`);
   },
+  patchProjectFileList(data?: any): Promise<any> {
+    return http.patch('research/project/file', { data });
+  },
+
   // 删除文件
   deleteProfileFile(fileId: string): Promise<any> {
     return http.delete(`research/project/file/${fileId}`);
