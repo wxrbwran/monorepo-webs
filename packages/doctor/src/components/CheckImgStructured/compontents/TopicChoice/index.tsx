@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Checkbox, Radio, Divider } from 'antd';
+import { Checkbox, Divider } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
 import { IQaItem } from '../type';
@@ -43,11 +43,12 @@ function TopicChoice(props: IProps) {
   }, [questions]);
 
   // 勾选操作---显示状态勾选
-  const handleChangeOptions = (e: any, item: IQaItem, quesInx: number) => {
+  const handleChangeOptions = (checkedValue: string[], item: IQaItem, quesInx: number) => {
     if (item.question_type === 'RADIO') {
-      questions[quesInx].answer = [e.target.value];
+      const curSelect = checkedValue.filter((v: string) => !questions[quesInx].answer.includes(v));
+      questions[quesInx].answer = isEmpty(checkedValue) ? [] : curSelect;
     } else {
-      questions[quesInx].answer = e;
+      questions[quesInx].answer = checkedValue;
     }
     setQuestions([...questions]);
   };
@@ -90,26 +91,14 @@ function TopicChoice(props: IProps) {
                 editGroupInx={quesIndex}
               />
             </div>
-            {
-              item.question_type === 'RADIO' ? (
-                <Radio.Group
-                  onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
-                  value={item.answer?.[0]}
-                >
-                  {
-                    item.options!.map((option, optionInx) => (
-                      <Radio key={optionInx} value={option}>{option}</Radio>
-                    ))
-                  }
-                </Radio.Group>
-              ) : (
-                <Checkbox.Group
-                  options={item.options}
-                  onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
-                  value={item.answer}
-                />
-              )
-            }
+            <div>
+              <Checkbox.Group
+                className={item.question_type}
+                options={item.options}
+                onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
+                value={item.answer}
+              />
+            </div>
           </div>
         ))
       }

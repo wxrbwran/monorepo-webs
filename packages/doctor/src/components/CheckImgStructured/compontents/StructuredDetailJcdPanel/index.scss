@@ -21,12 +21,25 @@
     color: #999999;
   }
   :global {
+    .ant-tabs-nav {
+      .ant-tabs-nav-add {
+        border: none;
+        background-color: #fff;
+        color: #999999;
+        height: 30px;
+        padding-top: 6px;
+        .anticon-plus {
+          font-size: 18px;
+        }
+      }
+    }
+
     .anticon-sync {
       font-size: 12px;
       margin-right: 3px;
     }
     .ant-tabs-nav {
-      width: calc(100% - 89px);
+      width: calc(100% - 120px);
       &::before {
         display: none!important;
       }
