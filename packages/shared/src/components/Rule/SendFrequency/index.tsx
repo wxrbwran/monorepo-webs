@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { Button, InputNumber, Select, TimePicker } from 'antd';
 // import * as api from '@/services/api';
 import './index.css';
-import { sendType } from '../util';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 
@@ -10,17 +9,20 @@ import { cloneDeep } from 'lodash';
 
 interface IFrequency {
 
-  frequency: 'NONE' | 'LOOP' | 'CUSTOM',
-  custom: { day: string, time: string, content: any[] },
+  frequency: 'NONE' | 'LOOP' | 'CUSTOM' | 'ADD',
+  custom: { day: string, time?: string, content: any[], hour?: string, min?: string },
+  // 对于'LOOP' | 'CUSTOM' 有day: string, time?: string
+  // 对于'ADD'， 有day: string,hour?: string, min?: string
 }
 interface IProps {
 
+  frequencySource: { key: 'NONE' | 'LOOP' | 'CUSTOM' | 'ADD', value: string }[];
   initFrequency: IFrequency;
   onFrequencyChange: (frequency: IFrequency) => void;
 }
 const { Option } = Select;
 
-const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps) => {
+const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency, frequencySource }: IProps) => {
 
 
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
@@ -46,22 +48,25 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
     frequency.custom.push({ day: '', time: '', content: [] });
     setFrequency(cloneDeep(frequency));
   };
-  //修改发送频率
-  const handleChangeCustomCycleDay = (e: any, index: number) => {
-
-    console.log('============== e e', JSON.stringify(e));
-    console.log('============== frequency', JSON.stringify(frequency));
-    frequency.custom[index].day = e;
-    setFrequency(cloneDeep(frequency));
-  };
-  //删除自定义发送频率
+  //删除发送频率
   const handleDeleteDay = (index: number) => {
     frequency.custom.splice(index, 1);
     setFrequency(cloneDeep(frequency));
   };
-  //循环下发天数
-  const handleChangeCycleDay = (day: number) => {
-    frequency.custom = [{ day: day, time: '', content: [] }];
+
+  //修改发送频率
+  const handleChangeDay = (e: any, index: number) => {
+    frequency.custom[index].day = e;
+    setFrequency(cloneDeep(frequency));
+  };
+
+  const handleChangeHour = (e: any, index: number) => {
+    frequency.custom[index].hour = e;
+    setFrequency(cloneDeep(frequency));
+  };
+
+  const handleChangeMin = (e: any, index: number) => {
+    frequency.custom[index].min = e;
     setFrequency(cloneDeep(frequency));
   };
 
@@ -71,24 +76,6 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
     setFrequency(cloneDeep(frequency));
   };
 
-  // const onContentListAdd = (choices: IList[], frequencyIndex: number) => {
-
-  //   console.log('============ frequency.custom ', !frequency.custom[frequencyIndex].contents);
-  //   if (!frequency.custom[frequencyIndex].contents) {
-  //     frequency.custom[frequencyIndex].contents = [];
-  //   }
-  //   frequency.custom[frequencyIndex].contents.push(...choices);
-  //   console.log('============ frequency.custom ', JSON.stringify(frequency.custom[frequencyIndex].contents));
-  //   setFrequency(cloneDeep(frequency));
-  // };
-
-  // const onContentsRemoveSuccess = (_item: any, _index: number, list: any[], frequencyIndex: number) => {
-  //   console.log('================= onRemoveSuccess choicesSid', JSON.stringify(list));
-  //   frequency.custom[frequencyIndex].contents = list;
-  //   setFrequency(cloneDeep(frequency));
-  // };
-
-
   return (
     <div className='shard_rule_send_frequency'>
       <h2>
@@ -96,7 +83,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
       </h2>
       <div className='send_type'>
         <Select style={{ width: 180 }} onChange={handleGetType} value={frequency.frequency}>
-          {sendType.map((item) => (
+          {frequencySource.map((item) => (
             <Option value={item.key} key={item.key}>
               {item.value}
             </Option>
@@ -104,7 +91,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
         </Select>
         {frequency.frequency === 'CUSTOM' && (
           <div className={'self'}>
-            首次发送给患者后
+            首次发送给受试者后
             <div className={'self_content'}>
               {frequency.custom.map((item: any, index) => (
                 <div className={'add_item'} key={index}>
@@ -116,7 +103,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
                       min={1}
                       max={9999}
                       value={item.day ?? null}
-                      onChange={(e) => handleChangeCustomCycleDay(e, index)}
+                      onChange={(e) => handleChangeDay(e, index)}
                     />
                   </div>
                   <div className={'ml-10 mr-10 time'}>
@@ -152,7 +139,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
         )}
         {frequency.frequency === 'LOOP' && (
           <div className='cycle'>
-            <div className="mr-10 ml-10">首次发送给患者后</div>
+            <div className="mr-10 ml-10">首次发送给受试者后</div>
             <InputNumber
               addonBefore={'每'}
               addonAfter={'天'}
@@ -160,7 +147,7 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
               min={1}
               max={9999}
               value={frequency.custom[0].day}
-              onChange={handleChangeCycleDay}
+              onChange={(e) => handleChangeDay(e, 0)}
             />
             <div className={'ml-10 mr-10 time'}>
               <TimePicker
@@ -174,6 +161,64 @@ const SendFrequency: FC<IProps> = ({ onFrequencyChange, initFrequency }: IProps)
             发送一次
           </div>
         )}
+        {frequency.frequency === 'ADD' && (
+
+          <div className={'self'}>
+            <div className={'self_content'}>
+              {frequency.custom.map((item: any, index) => (
+                <div className={'add_item'} key={index}>
+                  <InputNumber
+                    className={'ml-10'}
+                    addonAfter={'天'}
+                    style={{ width: 100 }}
+                    min={0}
+                    max={9999}
+                    value={item.day ?? null}
+                    onChange={(e) => handleChangeDay(e, index)}
+                  />
+                  <InputNumber
+                    className={'ml-10'}
+                    addonAfter={'小时'}
+                    style={{ width: 100 }}
+                    min={0}
+                    max={9999}
+                    value={item.hour ?? null}
+                    onChange={(e) => handleChangeHour(e, index)}
+                  />
+                  <InputNumber
+                    className={'ml-10 mr-10'}
+                    addonAfter={'分'}
+                    style={{ width: 100 }}
+                    min={0}
+                    max={9999}
+                    value={item.min ?? null}
+                    onChange={(e) => handleChangeMin(e, index)}
+                  />
+                  发送一次
+                  <div className="ml-10">
+                    {index === 0 ? (
+                      <Button className={'addBtn'} size="large" onClick={handleAddDayEdit}>
+                        添加
+                      </Button>
+                    ) : (
+                      <Button
+                        className={'deleteBtn'}
+                        size="large"
+                        type="default"
+                        onClick={() => handleDeleteDay(index)}
+                      >
+                        删除
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+        )}
+
       </div>
     </div>
   );

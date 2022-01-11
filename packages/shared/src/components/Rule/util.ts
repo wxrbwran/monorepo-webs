@@ -50,19 +50,6 @@ export interface IItem {
   operator: string;
 }
 
-export const sendType = [
-  {
-    key: 'CUSTOM',
-    value: '自定义',
-  }, {
-    key: 'LOOP',
-    value: '循环下发',
-  }, {
-    key: 'NONE',
-    value: '无',
-  },
-];
-
 export interface ICondition {
   chooseItem: IItem;
   chooseValue: {

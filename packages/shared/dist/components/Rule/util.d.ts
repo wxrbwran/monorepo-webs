@@ -9,7 +9,6 @@ export interface IItem {
     starting: boolean;
     operator: string;
 }
-export declare const sendType: {};
 export interface ICondition {
     chooseItem: IItem;
     chooseValue: {

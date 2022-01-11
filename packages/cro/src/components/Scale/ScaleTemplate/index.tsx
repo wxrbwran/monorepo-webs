@@ -316,6 +316,22 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     },
   };
 
+  const frequencySource = [
+    {
+      key: 'CUSTOM',
+      value: '自定义',
+    }, {
+      key: 'LOOP',
+      value: '循环下发',
+    }, {
+      key: 'NONE',
+      value: '无',
+    }, {
+      key: 'ADD',
+      value: '在首次发送时间的基础上累加',
+    },
+  ];
+
   const IntoGroupTime = '受试者入组的时间';
   const GiveMedicTime = '受试者给药的时间';
   const StopMedicTime = '受试者停止此项目用药的时间';
@@ -386,7 +402,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const sourceType = scaleType === 'CRF' ? CrfScaleSourceType : (scaleType === 'OBJECTIVE' ? ObjectiveSourceType : SubectiveScaleSourceType);
 
-  console.log('==================== sourceType', sourceType);
+
   useEffect(() => {
     api.query.fetchFields('SUBJECTIVE_SCALE').then((res) => {
       // 循环判断每个item是不是dynimic
@@ -425,6 +441,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
           }
         } else if (res.keys[i].name == 'condition') {
           setConditionKey(res.keys[i]);
+
+          console.log('==================== res.keys[i] condition', res.keys[i]);
         }
       }
     });
@@ -687,7 +705,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   }; */}
 
 
-      <SendFrequency onFrequencyChange={() => { }} initFrequency={frequency} ></SendFrequency>
+      <SendFrequency onFrequencyChange={() => { }} initFrequency={frequency} frequencySource={frequencySource}></SendFrequency>
 
       {/* <h2>
         <span className={styles.start}>*</span>发送频率：

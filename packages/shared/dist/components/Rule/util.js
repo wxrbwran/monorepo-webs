@@ -55,18 +55,6 @@ export var fileTypes = [
     },
     // type='accompany'
 ];
-export var sendType = [
-    {
-        key: 'CUSTOM',
-        value: '自定义',
-    }, {
-        key: 'LOOP',
-        value: '循环下发',
-    }, {
-        key: 'NONE',
-        value: '无',
-    },
-];
 export var AfterPatientBind = '患者与我绑定日期后';
 export var DIY = '自定义';
 export var ImmediatelySend = '立即发送';
