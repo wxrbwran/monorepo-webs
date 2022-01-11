@@ -30,12 +30,15 @@ const IMModel: any = {
   state: IMState,
   reducers: {
     initNIMSDK(state: IMModelState, action: Store) {
+      const localtoken = localStorage.getItem('xzl-web-out-org_token') || '';
+      const data = JSON.parse(localtoken);
+
       // console.log('action', action);
       const appKey = '1e82c88ea2c1d07f67ecfdabf23940e9';
       // const account = 'dev.14188';
       // const token = '43c23ec8a7ff546f7adac23af38d1f3a';
-      const account = window.$storage.getItem('uid');
-      const token = window.$storage.getItem('sdktoken');
+      const account = data?.yxRegister?.accid;
+      const token = data?.yxRegister?.token;
       if (window.nim) {
         window.nim.disconnect();
       }
