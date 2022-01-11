@@ -369,8 +369,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     ],
   };
 
-
-
   // const [fetching, setFetchStatus] = useState(false); //搜索是否显示loading
   // const [treatment, setTreatment] = useState([]); //获取处理方式
 
@@ -380,9 +378,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const { projectSid, projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
 
-  // const [remind, setRemind] = useState(''); //问题
-  const remind = useRef('');
-  const richTextCont = useRef('');
+  const [remind, setRemind] = useState(''); //问题
+  // const remind = useRef('');
+  // const richTextCont = useRef('');
 
   const [firstTime, setFirstTime] = useState<{ choiceModel: any }>({ choiceModel: initFirstTimeChoiceMode });
 
@@ -464,7 +462,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   useEffect(() => {
 
-    remind.current = question;
+    setRemind(question ?? '');
+    // remind.current = question;
   }, [question]);
 
 
@@ -494,8 +493,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const handleChangeRemind = (value: any, text: string) => {
     console.log('valueeeeee', value);
     console.log('textttt', text);
-    richTextCont.current = value;
-    remind.current = text;
+    setRemind(text);
   };
 
   //更改 患者做处理的时间-->处理方式
@@ -535,7 +533,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   //确定，回传拼好的数据格式
   const handleSubmit = () => {
-    console.log('richTextCont', richTextCont.current);
+
     setLoading(true);
 
     const set = Array.from(new Set(frequency.custom));
@@ -589,10 +587,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     if (originRuleDoc) {
       params.id = originRuleDoc.id;
     }
-    console.log('richTextCont', richTextCont.current);
+
     addPlan({
       ruleDoc: params,
-      questions: richTextCont.current,
+      questions: remind,
       chooseValues: {
         chooseStartTime: chooseStartTime,
         choseConditions: hasValConditions,
@@ -635,7 +633,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const isShowTextArea = scaleType === 'OBJECTIVE';
   const disabled =
-    isShowTextArea ? !remind.current.trim() || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
+    isShowTextArea ? !remind.trim() || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
 
   const options = isEmpty(scopeKey) ? [] : scopeKey.items.map((item: IItem) => ({
     label: item.description,
@@ -653,8 +651,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         //   value={remind}
         //   disabled={!!isDisabled}
         // />
-        <div className="h-160">
-          <RichText handleChange={handleChangeRemind} value={richTextCont?.content?.text?.ops} style={{ height: '135px' }} />
+        <div className="h-160 mb-40">
+          <RichText handleChange={handleChangeRemind} value={remind} style={{ height: '135px' }} />
         </div>
       )}
       <FirstSendTime choiceModelChange={() => { }} choiceModelSource={firstTime.choiceModel} popverContent={undefined} />

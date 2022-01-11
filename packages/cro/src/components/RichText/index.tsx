@@ -8,12 +8,13 @@ interface IProps {
   value: [];
   style?: {
     height: string;
-  }
+  };
+  readonly?: boolean;
 }
-function RichText({ handleChange, value, style }: IProps) {
+function RichText({ handleChange, value, style, readonly }: IProps) {
   const [quillRef, setQuillRef] = useState<any>();
   useEffect(() => {
-    if (quillRef){
+    if (quillRef) {
       // 修改反显
       const quillEditor = quillRef.getEditor();
       quillRef.setEditorContents(quillEditor, value);
@@ -37,11 +38,12 @@ function RichText({ handleChange, value, style }: IProps) {
     <>
       <ReactQuill
         ref={(ref) => setQuillRef(ref)}
-        theme="snow"
+        theme={readonly ? 'bubble' : 'snow'}
         onChange={onEditorChange}
+        readOnly={readonly}
         // modules={Editor.modules}
         // formats={Editor.formats}
-        placeholder= "请输入"
+        placeholder="请输入"
         style={style}
         modules={{
           toolbar: {

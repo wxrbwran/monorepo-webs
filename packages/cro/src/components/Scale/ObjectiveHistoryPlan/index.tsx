@@ -19,6 +19,7 @@ import SendRecord from '../ObjectiveSendRecord';
 import styles from './index.scss';
 import { getConditionDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
 import { cloneDeep } from 'lodash';
+import RichText from '@/components/RichText';
 
 interface IProps {
   infoItem: {
@@ -107,7 +108,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
         <h2>
           <div className={styles.remind}>
             <span>{itemIndex + 1}、</span>
-            <pre>{infoItem.questions}</pre>
+            <RichText value={infoItem.questions} style={{ height: '60px' }} handleChange={(content: any, text: string) => { }} readonly={true} />
           </div>
           <p className={styles.operate}>
             {location.pathname.includes('create') && (

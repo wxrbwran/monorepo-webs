@@ -167,7 +167,12 @@ function PatientCro({ }: IProps) {
   };
   const handleMedicineTime = (date, dateString, record) => {
     console.log('-------', date, dateString, record);
+
   };
+
+
+
+
   const medicineEndTime = {
     title: '停止此项目用药日期',
     dataIndex: 'qcIssuingDate',
@@ -175,9 +180,11 @@ function PatientCro({ }: IProps) {
     align: 'center',
     render: (_text: any, record: any) => (
       <div>
+        {/* <StopPatientMedicine><span>停止此患者试验</span></StopPatientMedicine> */}
         <DatePicker showTime={{ format: 'HH:mm' }} style={{ width: 140 }}
           onChange={(date, dateString) => handleMedicineTime(date, dateString, record)} />
       </div >
+
     ),
   };
   const medicineStartTime = {

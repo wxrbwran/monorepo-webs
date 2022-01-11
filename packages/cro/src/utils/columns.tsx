@@ -394,7 +394,7 @@ const eventClass = (key: string) => {
   if (key.indexOf('forth_') > -1) {
     className = 'event_label SICK';
   }
-  if (key.indexOf('other_') > -1) {
+  if (key.indexOf('fifth_') > -1) {
     className = 'event_label OTHER';
   }
   return className;
@@ -409,14 +409,15 @@ export const content = {
       <span>
         {
           text.map((item) => (
-            Object.keys(item.detail).map((det) => {
+            (Object.keys(item.detail).filter((key) => !key.includes('answer_'))).map((det) => {
+              const answerKey = 'answer_' + det.split('_')[1];
               return (
-                <span className={eventClass(det)}>{item.detail[det]}</span>
+                <span className={eventClass(det)}>{`${item.detail[det]}${item.detail[answerKey] ? `:${item.detail[answerKey]}` : ''}`}</span>
               );
             })
           ))
         }
-        <span className={eventClass('other_')}>其他事件</span>
+        {/* <span className={eventClass('other_')}>其他事件</span> */}
       </span>
     );
   },
