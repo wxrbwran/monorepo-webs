@@ -10,6 +10,7 @@ import { Role } from 'xzl-web-shared/dist/utils/role';
 import './index.scss';
 import { CommonData, IState } from 'typings/global';
 
+
 const { TabPane } = Tabs;
 interface IProps {
   activeTab: string;
@@ -37,9 +38,31 @@ function CommonTab(props: IProps) {
   const [seconds, setSeconds] = useState(60);
   const [isGetting, setIsGetting] = useState(false);
 
+  const modalText: CommonData = {
+    'del': {
+      title: '删除项目',
+      btnText: '删除',
+      content: `一旦你彻底删除项目「${projectName}」，所有与项目有关的信息将会被永久删除。这是一个不可恢复的操作，请谨慎对待！`,
+      type: 3,
+    },
+    'close': {
+      title: '封闭试验',
+      btnText: '确定',
+      content: `一旦你封闭【${projectName}】，所有项目信息将不可修改。这是一个不可恢复的操作，请谨慎对待！`,
+      type: 1,
+      status: 1001,
+    },
+    'reOpen': {
+      title: '解除封闭',
+      btnText: '确定',
+      content: '1. 解除封闭后，你可以修改项目内容\n2. 封闭之前将按原计划执行，封闭之后将按新的计划执行\n3. 请谨慎操作，尽快完成项目修改',
+      type: 2,
+      status: 1002,
+    },
+  };
 
   const [form] = Form.useForm();
-  const { getFieldValue } = form;
+  const { getFieldValue, setFieldsValue } = form;
 
   useEffect(() => {
     if (seconds === 0) {
@@ -49,25 +72,19 @@ function CommonTab(props: IProps) {
     }
   }, [seconds]);
 
+  // 封闭项目：1   解封项目：2   删除项目：3
   const fetchVcode = () => {
-
-    timer = setInterval(() => {
-      setSeconds((preSeconds) => preSeconds - 1);
-      setIsGetting(true);
-    }, 1000);
-
-    // const tel = getFieldValue('tel');
-    // if (!!tel && !Number.isNaN(+tel)) {
-    //   // postSms
-    //   window.$api.user.postSms({ tel }).then(() => {
-    //     timer = setInterval(() => {
-    //       setSeconds((preSeconds) => preSeconds - 1);
-    //       setIsGetting(true);
-    //     }, 1000);
-    //   });
-    // } else {
-    //   message.error('请输入正确的手机号码！');
-    // }
+    api.detail.patchCodeMake({
+      projectSid: projectSid,
+      projectNsId: projectNsId,
+      projectName,
+      type: modalText[modalType].type,
+    }).then(() => {
+      timer = setInterval(() => {
+        setSeconds((preSeconds) => preSeconds - 1);
+        setIsGetting(true);
+      }, 1000);
+    });
   };
 
 
@@ -93,40 +110,32 @@ function CommonTab(props: IProps) {
   const onFinish = (values: any) => {
 
     console.log('============== values, ', values);
+    api.detail.patchCodeCheck({
+      projectSid: projectSid,
+      projectNsId: projectNsId,
+      note: {
+        code: values.code,
+      },
+      status: modalText[modalType].status ?? status,
+      type: modalText[modalType].type,
+    }).then(() => {
 
-  };
-
-
-  const handleDel = () => {
-    console.log('modalType', modalType);
-    // 根据目前展示弹框 的类型判断调用 哪个接口
-    if (modalType === 'del') {
-      api.project.delProject(window.$storage.getItem('projectSid')).then(() => {
+      if (modalType === 'del') {
         message.success('项目删除成功');
         //更新常用问题列表
         history.push('/home');
-      });
-    } else {
-      const params = {
-        status: 1001,
-        projectSid: projectSid || window.$storage.getItem('projectSid'),
-        projectNsId,
-      };
-      api.detail.updateCroProject(params).then(() => {
+      } else {
         message.success('更改信息成功');
         setShowModal(false);
         dispatch({
           type: 'project/fetchProjectDetail',
           payload: projectSid || window.$storage.getItem('projectSid'),
         });
-      })
-        .catch((err) => {
-          message.error(err);
-        });
-    }
+      }
+    }).catch((err) => {
+      message.error(err);
+    });
   };
-
-
 
   const croNav = [
     {
@@ -174,8 +183,15 @@ function CommonTab(props: IProps) {
 
     if (modalType != type) {
       // 不一样，需要清空之前的计时等数据
-
+      clearInterval(Number(timer));
+      setSeconds(60);
+      setIsGetting(false);
+      setVal('');
+      setFieldsValue({
+        'code': '',
+      });
     }
+
     setModalType(type);
     setShowModal(true);
   };
@@ -213,23 +229,9 @@ function CommonTab(props: IProps) {
       </a>
     </Dropdown>
   );
-  const modalText: CommonData = {
-    'del': {
-      title: '删除项目',
-      btnText: '删除',
-      content: `一旦你彻底删除项目「${projectName}」，所有与项目有关的信息将会被永久删除。这是一个不可恢复的操作，请谨慎对待！`,
-    },
-    'close': {
-      title: '封闭试验',
-      btnText: '确定',
-      content: `一旦你封闭【${projectName}】，所有项目信息将不可修改。这是一个不可恢复的操作，请谨慎对待！`,
-    },
-    'reOpen': {
-      title: '解除封闭',
-      btnText: '确定',
-      content: '1. 解除封闭后，你可以修改项目内容\n2. 封闭之前将按原计划执行，封闭之后将按新的计划执行\n3. 请谨慎操作，尽快完成项目修改',
-    },
-  };
+
+
+  console.log('============ val', val);
   return (
     <>
       <Tabs

@@ -69,19 +69,6 @@ function PatientCro({ }: IProps) {
     }
   };
 
-  // const handleStop = (record: any) => {
-  //   const params = {
-  //     projectNsId,
-  //     sid: record.sid,
-  //     status: 1003,
-  //     exitReason: 1,
-  //   };
-  //   api.patientManage.patchPatientStatus(params).then(() => {
-  //     message.success('操作成功');
-  //     refreshList();
-  //   });
-  // };
-
   const toggleImg = (record: any) => {
     setImgVisible(true);
     setImgArr([record?.etcNote]);
@@ -121,18 +108,6 @@ function PatientCro({ }: IProps) {
         {
           record.status === 1002 ? hasOperationPermissions(record.team.members) && (
             <StopPatientMedicine record={record} changeSuccess={() => { refreshList(); }}><span>停止此患者试验</span></StopPatientMedicine>
-            // <Popconfirm
-            //   placement="topRight"
-            //   overlayClassName="delete__pop-confirm"
-            //   title={(
-            //     <div>
-            //       <h3>确定要停止此患者试验吗？</h3>
-            //     </div>
-            //   )}
-            //   onConfirm={() => handleStop(record)}
-            // >
-            //   <span>停止此患者试验</span>
-            // </Popconfirm>
           ) : <span style={{ color: '#C5C5C5' }}>已停止</span>
         }
 

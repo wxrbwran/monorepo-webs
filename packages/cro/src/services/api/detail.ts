@@ -37,7 +37,14 @@ export default {
   patchProjectFileList(data?: any): Promise<any> {
     return http.patch('research/project/file', { data });
   },
-
+  // 封闭试验解封试验生成验证码
+  patchCodeMake(data?: any): Promise<any> {
+    return http.patch('research/code/make', { data });
+  },
+  // 封闭试验解封试验校验验证码
+  patchCodeCheck(data?: any): Promise<any> {
+    return http.patch('research/code/check', { data });
+  },
   // 删除文件
   deleteProfileFile(fileId: string): Promise<any> {
     return http.delete(`research/project/file/${fileId}`);
