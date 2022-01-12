@@ -6,8 +6,6 @@ import { debounce } from 'lodash';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
-import { useDispatch } from 'umi';
-import EditIndex from '@/components/EditIndex';
 
 interface IProps {
   type: string;
@@ -102,28 +100,6 @@ const SearchDocument: FC<IProps> = (props) => {
                 </div>
               </>
             )}
-            {type !== 'HYD' && (
-              <>
-                <Form.Item
-                  label={`${documentType[type]}名称`}
-                  name="jcdName"
-                  rules={[{ required: true, message: `请输入${documentType[type]}名称!` }]}
-                >
-                  <Input placeholder={`请输入${documentType[type]}名称`} />
-                </Form.Item>
-              </>
-            )}
-            {type === 'JCD' && (
-              <>
-                <Form.Item label="检查部位" name="part">
-                  <Input placeholder="请输入检查部位" />
-                </Form.Item>
-                <Form.Item label="检查方法" name="method">
-                  <Input placeholder="请输入检查方法" />
-                </Form.Item>
-              </>
-            )}
-
             <Form.Item style={{ textAlign: 'center' }} {...submitLayout}>
               <div className="common__btn">
                 <Button onClick={toggleShowModal}>取消</Button>
@@ -131,9 +107,6 @@ const SearchDocument: FC<IProps> = (props) => {
                   确定
                 </Button>
               </div>
-              {/* <EditIndex onSuccess={addTypeSuccess} source="imgAddTypeIndex">
-                <input type="hidden" ref={hiddenRef} />
-              </EditIndex> */}
             </Form.Item>
           </Form>
         </div>

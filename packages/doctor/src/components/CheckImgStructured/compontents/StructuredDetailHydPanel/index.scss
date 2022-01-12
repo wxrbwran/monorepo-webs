@@ -1,7 +1,17 @@
 .structure_detail_item {
   :global {
     .ant-tabs-nav {
-      width: calc(100% - 89px);
+      width: calc(100% - 120px);
+      .ant-tabs-nav-add {
+        border: none;
+        background-color: #fff;
+        color: #999999;
+        height: 30px;
+        padding-top: 6px;
+        .anticon-plus {
+          font-size: 18px;
+        }
+      }
     }
     .ant-tabs-card {
       &.ant-tabs-editable-card {
@@ -22,7 +32,7 @@
         .ant-tabs-tab {
           flex: 0 0 auto;
           margin: 0;
-          padding: 5px 22px;
+          padding: 5px 10px;
           font-size: 14px;
           background-color: #fff;
           border: none;

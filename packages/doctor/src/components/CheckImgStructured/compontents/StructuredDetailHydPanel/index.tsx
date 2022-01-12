@@ -4,7 +4,7 @@ import React, {
 import { Tabs, Popconfirm, Button } from 'antd';
 import { useDispatch } from 'umi';
 import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
-import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
+import { CloseOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
 import SearchDocument from '../SearchDocument';
 import AddEditDocument from '@/pages/Index_library/components/AddEditDocument';
 import SubType from '../SubType';
@@ -319,28 +319,28 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       id: null,
     });
   };
-  const addSearch = () => {
-    return (
-      <TabPane
-        closable={false}
-        tab={
-          <div>
-            <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
-              handleChangeSubType={setSampleFroms}
-              initSampleFrom={initSubType}
-              sampleFroms={sampleFroms}
-              handleSelectTypeIndex={handleSelectTypeIndex}
-              documentType={outType}
-            >
-              <img src={IconAdd}></img>
-            </SearchDocument>
-          </div>
-        }
-        key='deactivation'
-      >
-      </TabPane>
-    );
-  };
+  // const addSearch = () => {
+  //   return (
+  //     <TabPane
+  //       closable={false}
+  //       tab={
+  //         <div>
+  //           <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
+  //             handleChangeSubType={setSampleFroms}
+  //             initSampleFrom={initSubType}
+  //             sampleFroms={sampleFroms}
+  //             handleSelectTypeIndex={handleSelectTypeIndex}
+  //             documentType={outType}
+  //           >
+  //             <img src={IconAdd}></img>
+  //           </SearchDocument>
+  //         </div>
+  //       }
+  //       key='deactivation'
+  //     >
+  //     </TabPane>
+  //   );
+  // };
   const handleActiveTab = (tab: string) => {
     // console.log('checkTypes', checkTypes);
     // console.log('tab', tab);
@@ -394,7 +394,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           <div className={styles.hyd_tab_wrap}>
             {
               !isViewOnly && (
-                <div className="flex justify-end absolute top-5 -right-10">
+                <div className="flex justify-end absolute top-5 -right-10 z-99">
                   <AddEditDocument mode="add" type="HYD" onSuccess={addIndexSuccess}>
                     <Button type="link" className="text-sm">
                       +创建新的单据模版
@@ -409,10 +409,20 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
                 activeKey={activeType}
                 onChange={(tab: string) => handleActiveTab(tab)}
                 type="editable-card"
-                hideAdd
+                addIcon={
+                  // <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
+                  //   handleChangeSubType={setSampleFroms}
+                  //   initSampleFrom={initSubType}
+                  //   sampleFroms={sampleFroms}
+                  //   handleSelectTypeIndex={handleSelectTypeIndex}
+                  //   documentType={outType}
+                  // >
+                  <PlusOutlined />
+                  // </SearchDocument>
+                }
               >
                 {renderTabPane()}
-                {addSearch()}
+                {/* {addSearch()} */}
               </Tabs>
             )}
             {
