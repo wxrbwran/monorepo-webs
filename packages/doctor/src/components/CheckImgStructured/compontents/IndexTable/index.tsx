@@ -5,6 +5,7 @@ import closeIcon from '@/assets/img/closeNocommon.png';
 import HiddenItems from '../HiddenItems';
 import RenderItem from './components/RenderItem';
 import styles from './index.scss';
+import { isEmpty } from 'lodash';
 
 interface IProps {
   apiData: any;
@@ -65,10 +66,11 @@ const IndexTable: FC<IProps> = (props) => {
           return r;
         });
       }
-      if (isViewOnly && item.referenceList.length === 0) {
+      // referenceList(编辑返回时，是这个字段)    references（从库里直接拉指标是这个字段）
+      if (isViewOnly && item?.referenceList?.length === 0) {
         return null;
       }
-      if (item.referenceList.length === 0 && !isViewOnly) {
+      if (item?.referenceList?.length === 0 && !isViewOnly) {
         item.referenceList.push({ indexValue: '' });
       }
       return (

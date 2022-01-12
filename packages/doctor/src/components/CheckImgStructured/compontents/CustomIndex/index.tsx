@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState, useMemo, useRef } from 'react';
 import { Form, Button, message } from 'antd';
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import CopyDocument from '@/pages/Index_library/components/CopyDocument';
@@ -113,6 +113,7 @@ const CustomIndex: FC<IProps> = (props) => {
     const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary.fetchIndexDocumentIndex(
       params,
     );
+    console.log('-------33', list);
     const commonItems = list.filter((item) => item.common);
     const noCommonItems = list.filter((item) => !item.common);
     // 如果有指定首行展示哪个指标，这里移动到第一个
@@ -120,10 +121,10 @@ const CustomIndex: FC<IProps> = (props) => {
       ? formatFirshIndex(commonItems, noCommonItems)
       : { commonItems, noCommonItems };
     // console.log('=====+2,initList没数据，请求接口时');
-    setApiData({ ...formatDataAddIndex(data, addIndexNum) });
+    console.log('999999999999', cloneDeep(formatDataAddIndex(data, addIndexNum)));
+    setApiData(cloneDeep(formatDataAddIndex(data, addIndexNum)));
   };
   useEffect(() => {
-    console.log('curtomIndex1');
     // 首次渲染
     if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
       // console.log('curtomIndex2');
@@ -223,6 +224,7 @@ const CustomIndex: FC<IProps> = (props) => {
         referenceList,
         originReferences,
       } = item;
+      console.log('-----item', item);
       const referenceData: Record<string, any> = {};
       if (referenceList?.length > 0) {
         const keys: string[] = ['value', 'indexValue'];
@@ -235,6 +237,12 @@ const CustomIndex: FC<IProps> = (props) => {
           // 如果有referenceId，则表明指标有参考值，标记select组件选中此条
           if (reference.referenceId) {
             referenceData[`${formIndex}_${index}_reference`] = reference.referenceId;
+          }
+        });
+      } else {
+        references?.forEach((reference: TReference) => {
+          if (reference.isDefault) {
+            referenceData[`${formIndex}_0_reference`] = reference.id;
           }
         });
       }
@@ -250,12 +258,14 @@ const CustomIndex: FC<IProps> = (props) => {
         ...referenceData,
       };
     });
+    console.log('initForminitForminitForm+++++++++', initForm);
     setFormInit(initForm);
     setFieldsValue({
       ...initForm,
     });
   };
   useEffect(() => {
+    console.log('-----===apiData', apiData);
     handleInitForm(); // 初始化表单
   }, [apiData]);
   useEffect(() => {

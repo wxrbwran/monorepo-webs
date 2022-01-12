@@ -21,6 +21,8 @@ const RenderItem: FC<IProps> = (props) => {
   const curDocument = useSelector((state: IState) => state.document.curDocument);
   const sid = window.$storage.getItem('sid');
   useEffect(() => {
+    console.log('====22221', form.getFieldValue(`${indexItem.formIndex}_referenceList`));
+
     // const
     // console.log('RenderItem', indexItem);
     if (indexItem.referenceList) {
@@ -46,6 +48,7 @@ const RenderItem: FC<IProps> = (props) => {
       return `${reference.note || ''} ${getReferenceTitle(reference)} ${reference.unit || ''}`;
     }
   };
+  console.log('=====indexItem', indexItem);
   return (
     <div className="flex w-full">
       <Form.Item initialValue={indexItem.name} name={`${indexItem.formIndex}_name`}>
@@ -133,6 +136,7 @@ const RenderItem: FC<IProps> = (props) => {
                           setList((prev) => [...prev, { value: '', key: +new Date() }]);
                           form.setFieldsValue({
                             [`${indexItem.formIndex}_valueCount`]: list.length + 1,
+                            [`${indexItem.formIndex}_${list.length}_reference`]: indexItem?.references.filter(re => re.isDefault)?.[0]?.id,
                           });
                         }}
                       >
