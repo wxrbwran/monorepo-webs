@@ -66,8 +66,8 @@ const IndexTable: FC<IProps> = (props) => {
           return r;
         });
       }
-      // referenceList(编辑返回时，是这个字段)    references（从库里直接拉指标是这个字段）
-      if (isViewOnly && item?.referenceList?.length === 0) {
+      if (isViewOnly && item?.referenceList.length === 0
+        || isViewOnly && !item?.referenceList.find(r => r.indexValue !== undefined)) {
         return null;
       }
       if (item?.referenceList?.length === 0 && !isViewOnly) {
