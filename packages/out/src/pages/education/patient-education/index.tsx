@@ -63,7 +63,7 @@ const PatientEducation: FC<ILocation> = ({ location }) => {
                     // <p className="cursor-pointer">
                     //   <ProfileOutlined /> 回复详情
                     // </p>
-                    <ReplyDetail id={sen.id}>
+                    <ReplyDetail id={sen.id} scaleId={sen.rules[0].actions[0].params.sourceMember[0].sourceId}>
                       <p className='cursor-pointer'><ProfileOutlined /> 回复详情</p>
                     </ReplyDetail>
                   )}

@@ -5,6 +5,7 @@ import closeIcon from '@/assets/img/closeNocommon.png';
 import HiddenItems from '../HiddenItems';
 import RenderItem from './components/RenderItem';
 import styles from './index.scss';
+import { isEmpty } from 'lodash';
 
 interface IProps {
   apiData: any;
@@ -64,6 +65,13 @@ const IndexTable: FC<IProps> = (props) => {
           r.id = r.referenceId;
           return r;
         });
+      }
+      if (isViewOnly && item?.referenceList.length === 0
+        || isViewOnly && !item?.referenceList.find(r => r.indexValue !== undefined)) {
+        return null;
+      }
+      if (item?.referenceList?.length === 0 && !isViewOnly) {
+        item.referenceList.push({ indexValue: '' });
       }
       return (
         <div key={item.formIndex}>

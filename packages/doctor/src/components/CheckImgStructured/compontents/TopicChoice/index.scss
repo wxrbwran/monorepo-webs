@@ -4,6 +4,13 @@
       display: block;
       margin-left: 20px;
     }
+    .ant-checkbox-group {
+      &.RADIO {
+        .ant-checkbox-inner {
+          border-radius: 50%;
+        }
+      }
+    }
     .ant-checkbox-wrapper {
       font-size: 14px;
       display: flex;

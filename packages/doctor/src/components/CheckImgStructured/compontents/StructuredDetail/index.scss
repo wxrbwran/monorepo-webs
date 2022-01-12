@@ -6,6 +6,9 @@
   min-width: 632px;
   &.disabled {
     :global {
+      .ant-tabs-nav-add {
+        display: none;
+      }
       .structured-edit-wrap {
         position: relative;
         &::before {

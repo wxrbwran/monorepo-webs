@@ -136,7 +136,7 @@ function SearchHospital({
           value="unresult"
           style={{ display: (hospitals.length === 0 && searchEmpty) ? 'block' : 'none' }}
         >
-          未找到想要的医院
+          点击添加机构
         </Option>
       </Select>
       {

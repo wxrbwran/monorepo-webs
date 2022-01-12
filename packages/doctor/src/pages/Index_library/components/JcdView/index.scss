@@ -6,17 +6,16 @@
       font-weight: 600;
       align-items: center;
       .edit_btn {
-        display: none;
-      }
-      &:hover {
-        .edit_btn {
-          display: block;
+        display: block;
+        color: #3296FA;
+        cursor: pointer;
+        margin-left: 3px;
+        span {
           color: #3296FA;
-          cursor: pointer;
-          span {
-            color: #3296FA;
-            font-size: 14px;
-          }
+          font-size: 14px;
+        }
+        .anticon-edit {
+          margin-right: 2px;
         }
       }
     }

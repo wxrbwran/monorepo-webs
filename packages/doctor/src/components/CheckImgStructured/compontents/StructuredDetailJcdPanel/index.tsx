@@ -1,11 +1,12 @@
 import React, { FC, useState, useMemo, useRef, useEffect } from 'react';
 import { Tabs, Popconfirm, Button } from 'antd';
-import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
+import { CloseOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
 import uuid from 'react-uuid';
 import { isEmpty, cloneDeep } from 'lodash';
 import StructuredJcdTabItem from '../StructuredJcdTabItem';
 import SearchJcd from '../SearchJcd';
 import CreateJcd from '../CreateJcd';
+import SearchJcdModal from '../SearchJcdModal';
 import { IAddJcdItem, IJcdTabItem } from '../type';
 // import * as api from '@/services/api';
 import { getSource } from '../utils';
@@ -74,13 +75,16 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
       setRefreshTsbInx(null);
     }, 1000);
   };
-  // 删除页签的回调
-  const handelTabsEdit = (deleteTabKey: string) => {
-    const newTabs = jcdList.filter(item => item.meta.tabKey !== deleteTabKey);
-    if (deleteTabKey === activeTabKey && !(isEmpty(newTabs))) {
-      setActiveTabKey(newTabs?.[newTabs?.length - 1].meta.tabKey);
+
+  const handelTabsEdit = (deleteTabKey: string, action: string) => {
+    if (action === 'remove') {
+      // 删除页签
+      const newTabs = jcdList.filter(item => item.meta.tabKey !== deleteTabKey);
+      if (deleteTabKey === activeTabKey && !(isEmpty(newTabs))) {
+        setActiveTabKey(newTabs?.[newTabs?.length - 1].meta.tabKey);
+      }
     }
-    // setActiveTabKey(cloneDeep(newTabs));
+
   };
   const renderTabPane = useMemo(() => () => jcdList.map(
     (item: IJcdTabItem, inx: number) => (
@@ -162,16 +166,19 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   console.log('****initDatainitData', initData);
 
   console.log('*******jcdList', jcdList);
+  const searchJcdProps = {
+    outType,
+    createJcdNum,
+    changePartMethod,
+    handleAddJcdTab,
+    handleShowAddJctBtn: (isShow: boolean) => setShowAddJctBtn(isShow),
+  };
   return (
     <div>
       {
         !isViewOnly && (
           <SearchJcd
-            outType={outType}
-            changePartMethod={changePartMethod}
-            handleAddJcdTab={handleAddJcdTab}
-            handleShowAddJctBtn={(isShow: boolean) => setShowAddJctBtn(isShow)}
-            createJcdNum={createJcdNum}
+            {...searchJcdProps}
           />
         )
       }
@@ -183,7 +190,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
               activeKey={activeTabKey}
               onChange={(tab: string) => setActiveTabKey(tab)}
               type="editable-card"
-            // hideAdd
+              addIcon={<SearchJcdModal {...searchJcdProps}> <PlusOutlined /></SearchJcdModal>}
             >
               {renderTabPane()}
             </Tabs>
@@ -198,8 +205,8 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
               updateCreateJcdNum={updateCreateJcdNum}
               outType={outType}
             >
-              <div className={styles.add_jct_btn}>+创建新的单据模版</div>
-              {/* <div className={styles.add_jct_btn}>{`+添加${outType === 'JCD' ? '检查单' : '其他单据'}`}</div> */}
+
+              <div className={styles.add_jct_btn}>+创建新的单据模板</div>
             </CreateJcd>
           )
         }
