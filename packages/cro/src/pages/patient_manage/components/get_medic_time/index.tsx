@@ -1,26 +1,37 @@
 import React, { FC, useState } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import { Form, Input, Button, message } from 'antd';
-import * as api from '@/services/api';
+import { Form, Input, Button, DatePicker } from 'antd';
 import { useSelector, useDispatch } from 'umi';
+import * as api from '@/services/api';
 
-const StopPatientMedicine: FC = (props) => {
-  const { children, changeSuccess, record } = props;
+const GetMedicTime: FC = (props) => {
+  const { children, record, isStop, changeSuccess } = props;
   const [showModal, setshowModal] = useState(false);
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
 
-
   const onFinish = (values) => {
-    console.log('=========== 停止试验', values.etcNotes);
-    const params = {
-      projectNsId,
-      sid: record.sid,
-      status: 1003,
-      exitReason: 1,
-      exitDesc: values.etcNotes,
+
+    const param = {
+      patientId: record.sid,
+      projectNsId: projectNsId,
     };
-    api.patientManage.patchPatientStatus(params).then(() => {
-      message.success('操作成功');
+
+    if (record.ioLocationConfig.stopMedTime) {
+      param.stopMedTime = record.ioLocationConfig.stopMedTime;
+    }
+    if (record.ioLocationConfig.startMedTime) {
+      param.startMedTime = record.ioLocationConfig.startMedTime;
+    }
+
+    if (isStop) {
+      param.stopMedTime = values.time.valueOf();
+    } else {
+      param.startMedTime = values.time.valueOf();
+    }
+
+    api.patientManage.patchPatientMedTimeStatus(param).then(() => {
+
+      setshowModal(false);
       if (changeSuccess) {
         changeSuccess();
       }
@@ -31,7 +42,7 @@ const StopPatientMedicine: FC = (props) => {
       <span onClick={() => setshowModal(true)}>{children}</span>
       <DragModal
         visible={showModal}
-        title="停止此患者试验"
+        title={isStop ? '设置停止此项目用药日期' : '设置给药时间'}
         width={500}
         wrapClassName="ant-modal-wrap-center"
         onCancel={() => setshowModal(false)}
@@ -43,11 +54,11 @@ const StopPatientMedicine: FC = (props) => {
           onFinish={onFinish}
         >
           <Form.Item
-            label="退出原因"
-            name="etcNotes"
-            rules={[{ required: true, message: '请输入退出原因!' }]}
+            name="time"
+            rules={[{ required: true, message: '请选择时间!' }]}
           >
-            <Input.TextArea placeholder='请输入退出原因' rows={5} />
+            <DatePicker className='w-full h-40' showTime={{ format: 'HH:mm' }}
+            />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -64,4 +75,4 @@ const StopPatientMedicine: FC = (props) => {
   );
 };
 
-export default StopPatientMedicine;
+export default GetMedicTime;

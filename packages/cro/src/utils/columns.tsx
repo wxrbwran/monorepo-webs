@@ -144,7 +144,7 @@ export const stopReason = {
   key: 'etcNotes',
   render: (text: any, _record: any) => (
     <div>
-      {text ? exitReason[text?.exitReason] : '--'}
+      {text ? (`${exitReason[text?.exitReason]}:${text?.exitReason == 1 ? (text?.exitDesc ?? '') : ''}`) : '--'}
     </div>
   ),
 };

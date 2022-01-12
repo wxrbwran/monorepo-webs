@@ -18,6 +18,8 @@ import { hasPermissions, hasOperationPermissions } from '@/utils/utils';
 import IconAutograph from '@/assets/img/icon_autograph.png';
 import StopPatientMedicine from '../components/stop_patient_medicine';
 import { debounce } from 'lodash';
+import dayjs from 'dayjs';
+import GetMedicTime from '../components/get_medic_time';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -118,7 +120,7 @@ function PatientCro({ }: IProps) {
       <div className="table-operating">
         {
           record.status === 1002 ? hasOperationPermissions(record.team.members) && (
-            <StopPatientMedicine><span>停止此患者试验</span></StopPatientMedicine>
+            <StopPatientMedicine record={record} changeSuccess={() => { refreshList(); }}><span>停止此患者试验</span></StopPatientMedicine>
             // <Popconfirm
             //   placement="topRight"
             //   overlayClassName="delete__pop-confirm"
@@ -165,37 +167,26 @@ function PatientCro({ }: IProps) {
       </div >
     ),
   };
-  const handleMedicineTime = (date, dateString, record) => {
-    console.log('-------', date, dateString, record);
-
-  };
-
-
-
 
   const medicineEndTime = {
     title: '停止此项目用药日期',
-    dataIndex: 'qcIssuingDate',
+    dataIndex: 'ioLocationConfig',
     width: 140,
     align: 'center',
-    render: (_text: any, record: any) => (
-      <div>
-        {/* <StopPatientMedicine><span>停止此患者试验</span></StopPatientMedicine> */}
-        <DatePicker showTime={{ format: 'HH:mm' }} style={{ width: 140 }}
-          onChange={(date, dateString) => handleMedicineTime(date, dateString, record)} />
+    render: (text: any, record: any) => (
+      <div className="table-operating">
+        <GetMedicTime isStop={true} record={record} changeSuccess={() => { refreshList(); }}><span>{text.stopMedTime ? dayjs(text.stopMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
       </div >
-
     ),
   };
   const medicineStartTime = {
     title: '给药时间',
-    dataIndex: 'qcIssuingDate',
+    dataIndex: 'ioLocationConfig',
     width: 140,
     align: 'center',
-    render: (_text: any, record: any) => (
-      <div>
-        <DatePicker showTime={{ format: 'HH:mm' }} style={{ width: 140 }}
-          onChange={(date, dateString) => handleMedicineTime(date, dateString, record)} />
+    render: (text: any, record: any) => (
+      <div className="table-operating">
+        <GetMedicTime isStop={false} record={record} changeSuccess={() => { refreshList(); }}><span>{text.startMedTime ? dayjs(text.startMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
       </div >
     ),
   };
