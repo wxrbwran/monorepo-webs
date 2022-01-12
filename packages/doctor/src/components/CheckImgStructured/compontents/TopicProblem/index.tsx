@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Input } from 'antd';
 import { IQuestions } from 'typings/imgStructured';
 import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
+import { searchHighLight } from '@/utils/utils';
 import { IQaItem } from '../type';
 
 const { TextArea } = Input;
@@ -12,9 +13,10 @@ interface IProps {
   isViewOnly: boolean;
   templateId: string;
   isShowEdit: boolean;
+  lightKeyWord: string;
 }
 function TopicProblem(props: IProps) {
-  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit, lightKeyWord } = props;
   console.log('initDatatext', initData);
   const [questions, setQuestions] = useState<IQuestions[]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
@@ -56,6 +58,9 @@ function TopicProblem(props: IProps) {
       setQuestions(cloneDeep(questions));
     }
   };
+  const renderQuestion = useMemo(() => (quesText: string) => {
+    return searchHighLight(quesText, lightKeyWord);
+  }, [lightKeyWord]);
   const editProps = {
     templateId,
     isShowEdit,
@@ -65,6 +70,7 @@ function TopicProblem(props: IProps) {
   };
   console.log('最新question text', questions);
   console.log('valuableQas text', valuableQas);
+
   return (
     <div>
       {
@@ -76,7 +82,10 @@ function TopicProblem(props: IProps) {
           >
             <div className="topic_title">
               <span>{quesIndex + 1}. </span>
-              <span className="mr-10">{item.question}</span>
+              <span
+                className="mr-10"
+                dangerouslySetInnerHTML={{ __html: renderQuestion(item.question) }}
+              ></span>
               <TopicAddBtn
                 {...editProps}
                 actionType="edit"

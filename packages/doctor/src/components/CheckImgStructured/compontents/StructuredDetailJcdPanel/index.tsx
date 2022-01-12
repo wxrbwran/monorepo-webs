@@ -1,5 +1,5 @@
 import React, { FC, useState, useMemo, useRef, useEffect } from 'react';
-import { Tabs, Popconfirm, Button } from 'antd';
+import { Tabs, Popconfirm, Button, Input } from 'antd';
 import { CloseOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
 import uuid from 'react-uuid';
 import { isEmpty, cloneDeep } from 'lodash';
@@ -86,6 +86,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
     }
 
   };
+  console.log('====jcdLis11t', jcdList);
   const renderTabPane = useMemo(() => () => jcdList.map(
     (item: IJcdTabItem, inx: number) => (
       <TabPane
@@ -132,23 +133,26 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
         }
       >
         <div className={styles.jcd_panel_item}>
-         {!item.data && item.meta.creatorSid !== doctorSid && <div className={styles.copy_temp}>
-          <CreateJcd
-            actionType="copy"
-            initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
-            templateId={item.meta.id}
-            onSuccess={handleAddJcdTab}
-            updateCreateJcdNum={updateCreateJcdNum}
-            outType={outType}
-          >
-            <Button
-              className="flex items-center text-sm mb-15"
-              icon={<img src={iconCopy} className="w-16 mr-2" />}
-            >
-              复制并修改单据
-            </Button>
-          </CreateJcd>
-          </div>}
+          <div className='flex absolute' style={{ left: 270 }}>
+            {!item.data && item.meta.creatorSid !== doctorSid && <div className={styles.copy_temp}>
+              <CreateJcd
+                actionType="copy"
+                initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
+                templateId={item.meta.id}
+                onSuccess={handleAddJcdTab}
+                updateCreateJcdNum={updateCreateJcdNum}
+                outType={outType}
+              >
+                <Button
+                  className="flex items-center text-sm mb-15"
+                  icon={<img src={iconCopy} className="w-16 mr-2" />}
+                >
+                  复制并修改单据
+                </Button>
+              </CreateJcd>
+            </div>}
+
+          </div>
           <StructuredJcdTabItem
             initData={item}
             imageId={imageId}

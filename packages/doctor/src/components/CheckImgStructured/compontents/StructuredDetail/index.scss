@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   min-width: 632px;
+
   &.disabled {
     :global {
       .ant-tabs-nav-add {
@@ -91,6 +92,18 @@
       .ant-select-selector, .ant-select-selection-placeholder {
         height: 32px;
         line-height: 32px;
+      }
+    }
+    // 搜索关键字高亮
+    .text_red {
+      color: #f5393c;
+    }
+    // 搜索关键字搜索框
+    .search_keyword {
+      .ant-input-search-button {
+        background-color: #fff;
+        color: #181818;
+        border: 1px solid #d9d9d9;
       }
     }
   }

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useMemo, useRef } from 'react';
-import { Form, Button, message } from 'antd';
+import { Form, Button, message, Input } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
@@ -76,6 +76,7 @@ const CustomIndex: FC<IProps> = (props) => {
   const [apiData, setApiData] = useState<any>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
   const [formInit, setFormInit] = useState({});
+  const [lightKeyWord, setlightKeyWord] = useState();
   const curDocument = useSelector((state: IState) => state.document.curDocument);
   const timeAndOrg = useRef({
     measuredAt: initList?.orgAndTime?.measuredAt || new Date().getTime(),
@@ -319,13 +320,13 @@ const CustomIndex: FC<IProps> = (props) => {
   }, [selectIndex]);
   const renderItem = useMemo(
     () => (subName?: string) => {
-      const param: any = { apiData, isViewOnly, getFieldsValue, formInit };
+      const param: any = { apiData, isViewOnly, getFieldsValue, formInit, lightKeyWord };
       if (subName) {
         param.subName = subName;
       }
       return <IndexTable {...param} form={form} />;
     },
-    [apiData, formInit, isViewOnly],
+    [apiData, formInit, isViewOnly, lightKeyWord],
   );
 
   const handleSetTimeAndOrg = (newItem: any) => {
@@ -398,8 +399,22 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
+    <div className='flex mb-10'>
+      {
+        !isViewOnly && (
+          <div>
+            <Input.Search
+              placeholder="请输入关键字"
+              allowClear
+              enterButton="搜索"
+              className='search_keyword'
+              onSearch={(val: string) => setlightKeyWord(val)}
+            />
+          </div>
+        )
+      }
       {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && !isViewOnly && !initList && (
-        <div className="mb-10">
+        <div className="mb-10 ml-20">
           <EditIndex
             onSuccess={addIndexSuccess}
             source="imgAddIndex"
@@ -412,20 +427,21 @@ const CustomIndex: FC<IProps> = (props) => {
           </EditIndex>
         </div>
       )}
-      {!initList &&
-        (apiParams.source === 'SYSTEM' ||
-          (apiParams.source === 'DOCTOR' && apiParams.sourceSid !== sid)) && (
-          <div className="mb-10">
-            <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
-              <Button
-                className="flex items-center text-sm"
-                icon={<img src={iconCopy} className="w-16 mr-2" />}
-              >
-                复制并修改单据
-              </Button>
-            </CopyDocument>
-          </div>
-      )}
+        {!initList &&
+          (apiParams.source === 'SYSTEM' ||
+            (apiParams.source === 'DOCTOR' && apiParams.sourceSid !== sid)) && (
+            <div className="mb-10 ml-20">
+              <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
+                <Button
+                  className="flex items-center text-sm"
+                  icon={<img src={iconCopy} className="w-16 mr-2" />}
+                >
+                  复制并修改单据
+                </Button>
+              </CopyDocument>
+            </div>
+        )}
+      </div>
       <Form name={`custom_${formKey}`} form={form}>
         {renderItem()}
       </Form>

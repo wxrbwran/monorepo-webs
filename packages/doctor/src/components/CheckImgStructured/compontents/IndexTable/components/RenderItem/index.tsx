@@ -1,10 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { Space, Form, Input, Select, Button } from 'antd';
 import { useSelector } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import { ProFormDependency } from '@ant-design/pro-form';
 import { getReferenceTitle } from 'xzl-web-shared/dist/utils/tool';
 import { yinYang } from 'xzl-web-shared/dist/utils/consts';
+import { searchHighLight } from '@/utils/utils';
 
 const { Option } = Select;
 
@@ -12,10 +13,11 @@ interface IProps {
   item: any;
   form: any;
   onSuccess: (p: TIndexItem) => void;
+  lightKeyWord: string;
 }
 
 const RenderItem: FC<IProps> = (props) => {
-  const { item, form, onSuccess } = props;
+  const { item, form, onSuccess, lightKeyWord } = props;
   const [list, setList] = useState<any[]>([]);
   const [indexItem, setIndexItem] = useState<any>(item);
   const curDocument = useSelector((state: IState) => state.document.curDocument);
@@ -49,13 +51,20 @@ const RenderItem: FC<IProps> = (props) => {
     }
   };
   console.log('=====indexItem', indexItem);
+  const renderName = useMemo(() => (name: string) => {
+    return searchHighLight(name, lightKeyWord);
+  }, [lightKeyWord]);
   return (
     <div className="flex w-full">
       <Form.Item initialValue={indexItem.name} name={`${indexItem.formIndex}_name`}>
         <Input readOnly type="hidden" />
       </Form.Item>
-      <span style={{ flex: '1 0 100px', maxWidth: '300px' }} className="truncate">
-        {item.name}
+      <span
+        style={{ flex: '1 0 100px', maxWidth: '300px' }}
+        className="truncate"
+        dangerouslySetInnerHTML={{ __html: renderName(item.name) }}
+      >
+
       </span>
       <div className="mx-10">
         <Form.Item
