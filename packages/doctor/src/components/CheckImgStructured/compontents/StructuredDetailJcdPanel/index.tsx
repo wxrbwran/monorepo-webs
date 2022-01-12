@@ -32,8 +32,8 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const [createJcdNum, setCreateJcdNum] = useState(0); // 添加新检查单累加器，searchJcd监听此参数，若变化，更新搜索列表
   const [refreshTabInx, setRefreshTsbInx] = useState<null | number>(null);
   const timer = useRef<any>(null);
-  console.log( setJcdList, setActiveTabKey);
-  const doctorSid =  window.$storage.getItem('sid');
+  console.log(setJcdList, setActiveTabKey);
+  const doctorSid = window.$storage.getItem('sid');
   const handleRemoveType = (targetItem: IJcdTabItem) => {
     const newJcdList = jcdList.filter(item => item.meta.tabKey !== targetItem.meta.tabKey);
     if (targetItem.meta.tabKey === activeTabKey && !isEmpty(newJcdList)) {
@@ -44,7 +44,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
   const handleAddJcdTab = (newTabData: IAddJcdItem) => {
     console.log('newTabData', newTabData);
     const tabKey = uuid();
-    setJcdList([ ...jcdList, { meta: { ...newTabData, tabKey } }]);
+    setJcdList([...jcdList, { meta: { ...newTabData, tabKey } }]);
     setActiveTabKey(tabKey);
   };
   // 即时更新用户输入的部位+方法 添加检查单时使用
@@ -94,7 +94,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
             item.meta.creatorSid === doctorSid ? (
               <CreateJcd
                 actionType="edit"
-                initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
+                initData={{ part: item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
                 templateId={item.meta.id}
                 onSuccess={handleEditJcdNameSuccess}
                 updateCreateJcdNum={updateCreateJcdNum}
@@ -113,7 +113,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
             )
           }
 
-        </span> }
+        </span>}
         key={`${item.meta.tabKey}`}
         forceRender
         closeIcon={
@@ -128,22 +128,22 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
         }
       >
         <div className={styles.jcd_panel_item}>
-         {!item.data && item.meta.creatorSid !== doctorSid && <div className={styles.copy_temp}>
-          <CreateJcd
-            actionType="copy"
-            initData ={{ part:item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
-            templateId={item.meta.id}
-            onSuccess={handleAddJcdTab}
-            updateCreateJcdNum={updateCreateJcdNum}
-            outType={outType}
-          >
-            <Button
-              className="flex items-center text-sm mb-15"
-              icon={<img src={iconCopy} className="w-16 mr-2" />}
+          {!item.data && item.meta.creatorSid !== doctorSid && <div className={styles.copy_temp}>
+            <CreateJcd
+              actionType="copy"
+              initData={{ part: item.meta.part, method: item.meta.method, jcdName: item.meta.jcdName }}
+              templateId={item.meta.id}
+              onSuccess={handleAddJcdTab}
+              updateCreateJcdNum={updateCreateJcdNum}
+              outType={outType}
             >
-              复制并修改单据
-            </Button>
-          </CreateJcd>
+              <Button
+                className="flex items-center text-sm mb-15"
+                icon={<img src={iconCopy} className="w-16 mr-2" />}
+              >
+                复制并修改单据
+              </Button>
+            </CreateJcd>
           </div>}
           <StructuredJcdTabItem
             initData={item}
@@ -183,7 +183,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
               activeKey={activeTabKey}
               onChange={(tab: string) => setActiveTabKey(tab)}
               type="editable-card"
-              hideAdd
+            // hideAdd
             >
               {renderTabPane()}
             </Tabs>
@@ -198,7 +198,8 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
               updateCreateJcdNum={updateCreateJcdNum}
               outType={outType}
             >
-              <div className={styles.add_jct_btn}>{`+添加${outType === 'JCD' ? '检查单' : '其他单据'}`}</div>
+              <div className={styles.add_jct_btn}>+创建新的单据模版</div>
+              {/* <div className={styles.add_jct_btn}>{`+添加${outType === 'JCD' ? '检查单' : '其他单据'}`}</div> */}
             </CreateJcd>
           )
         }

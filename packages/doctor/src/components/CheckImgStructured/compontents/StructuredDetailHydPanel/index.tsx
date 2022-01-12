@@ -5,6 +5,7 @@ import { Tabs, Popconfirm, Button } from 'antd';
 import { useDispatch } from 'umi';
 import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import { CloseOutlined, SyncOutlined } from '@ant-design/icons';
+import SearchDocument from '../SearchDocument';
 import AddEditDocument from '@/pages/Index_library/components/AddEditDocument';
 import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
@@ -13,6 +14,9 @@ import { getSource } from '../utils';
 
 import { isEmpty, cloneDeep } from 'lodash';
 import styles from './index.scss';
+import IconAdd from '@/assets/img/icon_add.png';
+import { render } from 'react-dom';
+
 // 此组件具体到，化验单或检查单panel
 const { TabPane } = Tabs;
 interface IProps {
@@ -64,10 +68,12 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   } else {
     initSubType = ['血液'];
   }
+  console.log('initSubType', initSubType);
   // 选择的【来源+单据来源】集合, tab使用
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
   const [activeType, setActiveType] = useState<string>();
   const [sampleFroms, setSampleFroms] = useState<string[]>(initSubType);
+  const [noSelect, setNoSelect] = useState<any>();
   const documentsCallbackFns = useRef({});
   const dispatch = useDispatch();
   const doctorSid = window.$storage.getItem('sid');
@@ -302,19 +308,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       );
     },
   ), [checkTypes, isViewOnly, initData]);
-  const handleActiveTab = (tab: string) => {
-    // console.log('checkTypes', checkTypes);
-    // console.log('tab', tab);
-    activeType1.current = tab;
-    setActiveType(tab);
-    const doc = checkTypes.filter(c => tab.includes(c.documentId))[0];
-    handleCurDocument({
-      ...doc,
-      id: doc.documentId,
-      name: doc.documentName,
-      sampleFrom: doc.sampleFrom,
-    });
-  };
+
   const addIndexSuccess = (newItemData) => {
     console.log('====gxxx', newItemData);
     handleSelectTypeIndex({
@@ -325,8 +319,51 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       id: null,
     });
   };
+  const addSearch = () => {
+    return (
+      <TabPane
+        closable={false}
+        tab={
+          <div>
+            <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
+              handleChangeSubType={setSampleFroms}
+              initSampleFrom={initSubType}
+              sampleFroms={sampleFroms}
+              handleSelectTypeIndex={handleSelectTypeIndex}
+              documentType={outType}
+            >
+              <img src={IconAdd}></img>
+            </SearchDocument>
+          </div>
+        }
+        key='deactivation'
+      >
+      </TabPane>
+    );
+  };
+  const handleActiveTab = (tab: string) => {
+    // console.log('checkTypes', checkTypes);
+    // console.log('tab', tab);
+    if (tab != 'deactivation') {
+      activeType1.current = tab;
+      console.log('tab', tab);
+      setActiveType(tab);
+      const doc = checkTypes.filter(c => tab.includes(c.documentId))[0];
+      handleCurDocument({
+        ...doc,
+        id: doc.documentId,
+        name: doc.documentName,
+        sampleFrom: doc.sampleFrom,
+      });
+    }
+  };
 
+  // 新增页签的回调
+  const handelTabsEdit = (deleteTabKey: string, action: any) => {
+
+  };
   console.log('checkTypes', checkTypes);
+  console.log('sampleFroms', sampleFroms);
   return (
     <div className={styles.structure_detail_item}>
       {
@@ -357,10 +394,10 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
           <div className={styles.hyd_tab_wrap}>
             {
               !isViewOnly && (
-                <div className="flex justify-end absolute top-5 -right-10 ">
+                <div className="flex justify-end absolute top-5 -right-10">
                   <AddEditDocument mode="add" type="HYD" onSuccess={addIndexSuccess}>
                     <Button type="link" className="text-sm">
-                      +添加新化验单
+                      +创建新的单据模版
                     </Button>
                   </AddEditDocument>
                 </div>
@@ -368,25 +405,28 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
             }
             {checkTypes.length > 0 && (
               <Tabs
+                onEdit={handelTabsEdit}
                 activeKey={activeType}
                 onChange={(tab: string) => handleActiveTab(tab)}
                 type="editable-card"
                 hideAdd
               >
                 {renderTabPane()}
+                {addSearch()}
               </Tabs>
             )}
             {
-            isEmpty(checkTypes) && (
-              <div className={styles.empty_wrap}>
-                暂无化验单，请添加
-              </div>
-            )
-        }
+              isEmpty(checkTypes) && (
+                <div className={styles.empty_wrap}>
+                  暂无化验单，请添加
+                </div>
+              )
+            }
           </div>
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 

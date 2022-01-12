@@ -4,7 +4,6 @@ import React, {
 import { Select, Space } from 'antd';
 import { debounce } from 'lodash';
 import { useDispatch } from 'umi';
-import EditIndex from '@/components/EditIndex';
 import * as api from '@/services/api';
 import { getSource } from '../utils';
 // 搜索大分类或者指标
@@ -15,14 +14,16 @@ interface IProps {
   handleSelectTypeIndex: (params: ISearchDocumentItem, type?: string) => void;
   // imageId: string;
   documentType: string; // HYD JCD
+  external?: boolean;
+  selectResult?: (source: {}) => void
 }
 
 const SearchHYD: FC<IProps> = (props) => {
   const {
-    sampleFroms, handleSelectTypeIndex, documentType,
+    sampleFroms, handleSelectTypeIndex, documentType, external, selectResult,
   } = props;
-  const selectRef:any = useRef<HTMLInputElement>();
-  const hiddenRef:any = useRef<HTMLInputElement>();
+  const selectRef: any = useRef<HTMLInputElement>();
+  const hiddenRef: any = useRef<HTMLInputElement>();
   const [typeList, settypeList] = useState<ISearchDocumentItem[]>([]);
   const [selectVal, setselectVal] = useState<string>();
   // const [listEmpty, setlistEmpty] = useState(false);
@@ -49,12 +50,19 @@ const SearchHYD: FC<IProps> = (props) => {
       payload: doc,
     });
   };
+
   const handleSelect = (e: string) => {
     if (e !== 'add') {
       // 这里只把选中的项返回出去，选中的大分类下的指标数据，由customIndex组件请求接口获取
       console.log('******99', typeList, e);
       handleChangeCurDocument(typeList[e]);
-      handleSelectTypeIndex(typeList[e]);
+      if (external) {
+        if (selectResult) {
+          selectResult(typeList[e]);
+        }
+      } else {
+        handleSelectTypeIndex(typeList[e]);
+      }
       setselectVal(e);
     } else {
       setselectVal('');
@@ -62,13 +70,15 @@ const SearchHYD: FC<IProps> = (props) => {
       hiddenRef.current.click();
     }
   };
-  const addTypeSuccess = (params: any) => {
-    console.log('添加大分类、指标成功', params);
-    handleSelectTypeIndex(params, 'add');
-    handleChangeCurDocument(params);
-  };
+
+  // const addTypeSuccess = (params: any) => {
+  //   console.log('添加大分类、指标成功', params);
+  //   handleSelectTypeIndex(params, 'add');
+  //   handleChangeCurDocument(params);
+  // };
   return (
-    <div className="mt-10 mb-10">
+    <div className="flex items-center mt-10 mb-10 w-full">
+      <span className="flex-shrink-0 font-bold mr-15 text-sm">化验单名称</span>
       <Select
         showSearch
         placeholder="输入化验单名称，如血常规，支持首字母缩写"
@@ -80,17 +90,17 @@ const SearchHYD: FC<IProps> = (props) => {
         }, 500)}
         onSelect={handleSelect}
         notFoundContent={null}
-        style={{ width: '100%' }}
+        style={{ width: '85%', flexShrink: 0 }}
         value={selectVal}
         ref={selectRef}
+      // className="flex-shrink-0 w-11/12"
       >
         {typeList.map((item, index) => (
           <Option key={index} value={index}>
             <Space>
               <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sourceSid) }}></span>
               <span>
-                {`${item?.sampleFrom} - ${
-                  item?.type === 'DOCUMENT' ? item?.name : `${item.documentName}-${item.name}`
+                {`${item?.sampleFrom} - ${item?.type === 'DOCUMENT' ? item?.name : `${item.documentName}-${item.name}`
                 }`}
               </span>
             </Space>
@@ -103,9 +113,9 @@ const SearchHYD: FC<IProps> = (props) => {
         )} */}
       </Select>
       {/* 放到option里会影响select失去焦点无效，导致编辑弹框内容输入不了 */}
-      <EditIndex onSuccess={addTypeSuccess} source="imgAddTypeIndex">
+      {/* <EditIndex onSuccess={addTypeSuccess} source="imgAddTypeIndex">
         <input type="hidden" ref={hiddenRef} />
-      </EditIndex>
+      </EditIndex> */}
     </div>
   );
 };
