@@ -68,7 +68,7 @@ const IndexTable: FC<IProps> = (props) => {
       if (isViewOnly && item.referenceList.length === 0) {
         return null;
       }
-      if (item.referenceList.length === 0 && !isViewOnly) {
+      if (item?.referenceList?.length === 0 && !isViewOnly) {
         item.referenceList.push({ indexValue: '' });
       }
       return (
