@@ -2,7 +2,7 @@
   padding: 0 10px;
 }
 .info {
-  @include flex(row, nowra, flex-start, flex-start);
+  @include flex(flex-start, flex-start);
   .items {
     :global(.ant-tabs-nav .ant-tabs-tab) {
       padding: 8px 0;
@@ -42,10 +42,10 @@
   }
 }
 .top_with_btn {
-  @include flex(row, nowrap, space-between, flex-start);
+  @include flex(space-between, flex-start);
 }
 .top {
-  @include flex(row, wrap, flex-start, flex-start);
+  @include flex( flex-start, flex-start);
 }
 .label {
   margin-right: 20px;

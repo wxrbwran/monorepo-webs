@@ -320,3 +320,24 @@ $progress-bar-transition: width 0.6s ease !default;
   margin: 12px auto 0;
   text-align: center;
 }
+$font-family: 'MicrosoftYaHei', '微软雅黑', 'Microsoft YaHei', Arial, sans-serif;
+
+$blue: #0d6efd;
+$theme-color: #007ada;
+$title-color: #09205d;
+//font
+$import-text-color: #000;
+$main-text-color: #333;
+$help-text-color: #999;
+
+//color
+$disabled-text-color: #ccc;
+$link-text-color: #3c868d;
+$border-color: #d8d8d8;
+$tag-bg-color: #ebebeb;
+
+//info
+$normal-info: #148de9;
+$success-info: #24b436;
+$warning-info: #fd6803;
+$error-info: #b91908;

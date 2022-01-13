@@ -1,0 +1,114 @@
+.record {
+	position: relative;
+	.today {
+    position: absolute;
+    right: 196px;
+    top: 9px;
+    width: 50px;
+    height: 30px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    cursor: pointer;
+	}
+	.events {
+		z-index: 1000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 300px;
+    background-color: #fefefe;
+		box-shadow: 1px 1px 5px 2px #eaeaea;
+		padding: 30px 0 10px;
+		.date {
+			position: absolute;
+			top: 4px;
+			left: 0;
+			line-height: 22px;
+			padding-left: 10px;
+		}
+		.close {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			color: #00a2ae;
+		}
+		ul {
+			padding: 10px;
+			max-height: 150px;
+			overflow: scroll;
+		}
+		li {
+      @include flex-lay(row, nowrap, flex-start, flex-start);
+      .name {
+        margin-right: 10px;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+			p{
+				margin-bottom: 8px;
+			}
+			.unit {
+				margin-right: 10px;
+			}
+			.green {
+        color: $success-info!important;
+        border: 1px solid $success-info!important;
+      }
+			.hour {
+				display: inline-block;
+				min-width: 24px;
+				height: 24px;
+				margin-right: 10px;
+				color: $error-info;
+				border: 1px solid $error-info;
+				border-radius: 50px;
+				line-height: 24px;
+				text-align: center;
+			}
+		}
+	}
+	.takeAll, .takeSome, .noTake, .noPlan {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: 120px;
+    height: 22px;
+    line-height: 22px;
+    padding-left: 10px;
+    border-left: 3px solid;
+  }
+	.takeAll {
+    border-color: $success-info;
+  }
+  .takeSome {
+    border-color: $warning-info;
+  }
+  .noTake {
+    border-color: $error-info;
+  }
+  .noPlan {
+    border-color: #c5c5c5;
+  }
+	:global {
+		.ant-picker-panel {
+			margin-top: 11px;
+			font-size: 14px;
+			th {
+				text-align: center;
+			}
+			td {
+				text-align: left;
+			}
+		}
+		.ant-picker-calendar-date-value {
+			padding-left: 10px;
+		}
+		.ant-picker-cell .ant-picker-cell-inner {
+			z-index: inherit;
+		}
+	}
+}

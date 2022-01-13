@@ -7,7 +7,7 @@
       margin: 0 10px;
     }
     .ant-form-item-control-input-content {
-      @include flex(row, nowrap, space-between, center);
+      @include flex(space-between, center);
     }
   }
   &_left {

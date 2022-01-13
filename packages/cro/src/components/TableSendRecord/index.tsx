@@ -48,7 +48,7 @@ const TableSendRecord: FC<IProps> = (props) => {
   // const [tableOptions, settableOptions] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
   const [tableOptions0, settableOptions0] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
   const [tableOptions1, settableOptions1] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
-  const [tableOptions2, settableOptions2] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: Number(initActiveTab), eventSourceType: eventSourceType, ruleId });
+  const [tableOptions2, settableOptions2] = useState<ITableOptions>({ projectNsId, scaleGroupId, scaleId, status: 1, eventSourceType: eventSourceType, ruleId });
 
 
   const [form] = useForm();
@@ -179,7 +179,6 @@ const TableSendRecord: FC<IProps> = (props) => {
     col = [sendAt, Receiver];
   }
   if (activeTab === '2' && source !== 'objective') { col.push(replyAt); }
-
   return (
     <div className={styles.send_record}>
       <Form form={form} onValuesChange={handleSelectChange}>

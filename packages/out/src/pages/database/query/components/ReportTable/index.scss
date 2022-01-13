@@ -18,7 +18,7 @@
     }
   }
   .table_top {
-    @include flex(row, nowrap, space-between, center);
+    @include flex(space-between, center);
     margin-bottom: 15px;
     margin-top: 30px;
     &__info {
@@ -26,7 +26,7 @@
       color: #181818;
     }
     .btn-wrap {
-      @include flex(row, nowrap, space-between, center);
+      @include flex(space-between, center);
 
       .create-btn {
         font-size: 14px;
