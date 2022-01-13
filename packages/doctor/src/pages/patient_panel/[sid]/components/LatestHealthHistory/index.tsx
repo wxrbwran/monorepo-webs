@@ -69,7 +69,8 @@ const LatestHealthHistory: FC = ({ children }) => {
     } else {
       // 图片结构化里的指标
       api.image.fetchImageIndexHistory({ ...params, imageTypeNew: activeTabKey }).then((res) => {
-        setHead(res?.subCategory ? res.headInfoList : res.headList);
+        const headerList = res?.subCategory ? res.headInfoList : res.headList;
+        setHead(headerList || []);
         apiData(res, params.pageAt, activeTabKey);
       }).catch(() => apiError());
     }
