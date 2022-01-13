@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import { List, Space } from 'antd';
+import { List, Space, Tooltip } from 'antd';
 import { BloodType2 } from '@/utils/tools';
 import { yinYangMap } from 'xzl-web-shared/dist/utils/consts';
 
@@ -88,11 +88,11 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
               size="small"
               dataSource={referenceList}
               renderItem={(ref: TReference) => {
-                const text = `${ref.note || ''}${ref.value || ''}-${ref.secondValue || ''}${
+                const text = `${ref.note || ''}${ref.value || ''}${ref.secondValue ? `-${ref.secondValue}` : ''}${
                   ref.unit || ''
                 }`;
                 return (
-                  <List.Item className="mx-auto text-center">
+                  <List.Item className="mx-auto text-center text-sm">
                     <Space className="w-full justify-center" style={{ display: 'flex' }}>
                       {(ref.value || ref.secondValue) && ref.type !== 'RADIO' && (
                         <>
@@ -102,7 +102,9 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
                             title={text}
                             style={{ color: '#ff0000', maxWidth: 100 }}
                           >
-                            {text}
+                            <Tooltip placement="topRight" title={text}>
+                              {text}
+                            </Tooltip>
                           </div>
                         </>
                       )}

@@ -167,6 +167,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   }, []);
   // 获取所有大分类数据list
   const handleDocumentsCallbackFns = ({ type, fn, action }: ICallbackFn) => {
+    console.log('=====type', type);
     const fns: CommonData = documentsCallbackFns.current;
     if (action === 'add') {
       fns[type] = fn;

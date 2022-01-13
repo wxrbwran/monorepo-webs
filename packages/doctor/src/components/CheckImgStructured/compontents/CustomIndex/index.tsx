@@ -277,7 +277,7 @@ const CustomIndex: FC<IProps> = (props) => {
     if (handleDocumentsCallbackFns) {
       handleDocumentsCallbackFns({
         action: 'add',
-        type: apiParams.sampleFrom + apiParams.documentName,
+        type: apiParams.documentId + apiParams.sampleFrom + apiParams.documentName,
         fn: handleSave,
       });
     }
@@ -285,7 +285,7 @@ const CustomIndex: FC<IProps> = (props) => {
       if (handleDocumentsCallbackFns) {
         handleDocumentsCallbackFns({
           action: 'remove',
-          type: apiParams.sampleFrom + apiParams.documentName,
+          type:  apiParams.documentId + apiParams.sampleFrom + apiParams.documentName,
         });
       }
     };
