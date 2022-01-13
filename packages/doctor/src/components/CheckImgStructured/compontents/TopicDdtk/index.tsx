@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styles from './index.scss';
 import { isEmpty, cloneDeep } from 'lodash';
 import { IQaItem, IMeta } from '../type';
 import TopicAddBtn from '../TopicAddBtn';
 import { formatTempDdtk } from '../utils';
+import { searchHighLight } from '@/utils/utils';
 
 interface IProps {
   changeCallbackFns: (params: ICallbackFn) => void;
@@ -12,10 +13,11 @@ interface IProps {
   templateId: string; // 检查单模板id（单据id)
   meta: IMeta;
   isShowEdit: boolean; // 是否首次结构化
+  lightKeyWord: string;
 }
 function Ddtk(props: IProps) {
   console.log('ddtkprops', props);
-  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit, lightKeyWord } = props;
   const [qasGroups, setQasGroups] = useState<IQaItem[][]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[][]>([]);
   const handleSave = () => new Promise((resolve) => {
@@ -82,6 +84,10 @@ function Ddtk(props: IProps) {
     isShowEdit,
     topicType: 'COMPLETION',
   };
+
+  const renderQuestion = useMemo(() => (quesText: string) => {
+    return searchHighLight(quesText, lightKeyWord);
+  }, [lightKeyWord]);
   return (
     <div className="mt-15">
       <div className='qa-wrap'>
@@ -93,7 +99,9 @@ function Ddtk(props: IProps) {
                   return qaInx === 0 ? (
                       <div key={qaItem?.question} className="topic_title">
                         <span>{quesIndex + 1}.</span>
-                        {qaItem?.question || '填空题'}
+                        {qaItem?.question ? (
+                          <span dangerouslySetInnerHTML={{ __html: renderQuestion(qaItem?.question) }}></span>
+                        ) : '填空题'}
                         <TopicAddBtn
                           actionType="edit"
                           initData={qas}
@@ -104,8 +112,10 @@ function Ddtk(props: IProps) {
                   ) : (
                     <div key={qaItem.question} className="ml-20 mb-10">
                       <span className={styles.order_number}>{qaInx}</span>
-                      <span className={`mt-5 ${styles.ques_span}`}>
-                        {qaItem.question}
+                      <span
+                        className={`mt-5 ${styles.ques_span}`}
+                        dangerouslySetInnerHTML={{ __html: renderQuestion(qaItem.question) }}
+                      >
                       </span>
                       {
                         <span

@@ -14,10 +14,11 @@ interface IProps {
   form: any;
   getFieldsValue: (key: string) => void;
   formInit: CommonData;
+  lightKeyWord: string;
 }
 
 const IndexTable: FC<IProps> = (props) => {
-  const { apiData, subName, isViewOnly, formInit, form } = props;
+  const { apiData, subName, isViewOnly, formInit, form, lightKeyWord } = props;
 
   const [showAll, setshowAll] = useState(isViewOnly);
   const [record, setRecord] = useState(apiData);
@@ -75,7 +76,7 @@ const IndexTable: FC<IProps> = (props) => {
       }
       return (
         <div key={item.formIndex}>
-          <RenderItem item={item} form={form} onSuccess={handleChangeRecord} />
+          <RenderItem item={item} lightKeyWord={lightKeyWord} form={form} onSuccess={handleChangeRecord} />
           {subName && (
             <Form.Item name={`${item.formIndex}_subCategoryName`} noStyle>
               <Input type="hidden" />

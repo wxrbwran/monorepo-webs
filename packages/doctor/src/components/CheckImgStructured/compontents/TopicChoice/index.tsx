@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Checkbox, Divider } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
 import { IQaItem } from '../type';
+import { searchHighLight } from '@/utils/utils';
 import styles from './index.scss';
 
 interface IProps {
@@ -11,11 +12,12 @@ interface IProps {
   isViewOnly: boolean;
   templateId: string;
   isShowEdit: boolean; // 是否首次结构化
+  lightKeyWord: string;
 }
 // saveAddQa
 function TopicChoice(props: IProps) {
   console.log('choiceProps', props);
-  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit, lightKeyWord } = props;
   const [questions, setQuestions] = useState<IQaItem[]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
   const handleSave = (a) => new Promise((resolve) => {
@@ -65,6 +67,9 @@ function TopicChoice(props: IProps) {
       setQuestions(cloneDeep(questions));
     }
   };
+  const renderQuestion = useMemo(() => (quesText: string) => {
+    return searchHighLight(quesText, lightKeyWord);
+  }, [lightKeyWord]);
   console.log('最新questions---choice', questions);
   const editProps = {
     templateId,
@@ -83,7 +88,9 @@ function TopicChoice(props: IProps) {
           <div key={item.question} className="relative ">
             <div className="topic_title">
               <span>{quesIndex + 1}. </span>
-              <span className="mr-10">{item.question}</span>
+              <span
+                className="mr-10"
+                dangerouslySetInnerHTML={{ __html: renderQuestion(item.question) }}></span>
               <TopicAddBtn
                 {...editProps}
                 actionType="edit"
