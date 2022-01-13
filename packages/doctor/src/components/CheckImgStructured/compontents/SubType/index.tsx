@@ -63,6 +63,8 @@ const SubType: FC<IProps> = (props) => {
                     allowClear
                     style={{ flex: 1, width: 200 }}
                     placeholder="请选择"
+                    listHeight={500}
+                    dropdownStyle={{ fontSize: 14 }}
                   // onChange={handleChange}
                   >
                     {subTypeList

@@ -56,7 +56,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const initCheckTypes: ICheckTypesItem[] = [];
   if (!isEmpty(initData)) {
     initData.documentList.forEach((item) => {
-      initSubType.push('其他');
       initSubType.push(item.sampleFroms?.[0] as string);
       initCheckTypes.push({
         ...item,
