@@ -410,15 +410,15 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
                 onChange={(tab: string) => handleActiveTab(tab)}
                 type="editable-card"
                 addIcon={
-                  // <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
-                  //   handleChangeSubType={setSampleFroms}
-                  //   initSampleFrom={initSubType}
-                  //   sampleFroms={sampleFroms}
-                  //   handleSelectTypeIndex={handleSelectTypeIndex}
-                  //   documentType={outType}
-                  // >
-                  <PlusOutlined />
-                  // </SearchDocument>
+                  <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
+                    handleChangeSubType={setSampleFroms}
+                    initSampleFrom={initSubType}
+                    sampleFroms={sampleFroms}
+                    handleSelectTypeIndex={handleSelectTypeIndex}
+                    documentType={outType}
+                  >
+                    <PlusOutlined />
+                  </SearchDocument>
                 }
               >
                 {renderTabPane()}
