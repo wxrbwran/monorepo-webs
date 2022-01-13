@@ -65,7 +65,6 @@ const SearchDocument: FC<IProps> = (props) => {
         width={600}
         visible={showModal}
         onCancel={() => setshowModal(false)}
-        wrapClassName="ant-modal-wrap-center"
         destroyOnClose
       >
         <div>

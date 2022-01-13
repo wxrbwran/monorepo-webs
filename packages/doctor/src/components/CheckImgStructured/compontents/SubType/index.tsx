@@ -61,6 +61,7 @@ const SubType: FC<IProps> = (props) => {
                   <Select
                     // mode="multiple"
                     allowClear
+                    showSearch
                     style={{ flex: 1, width: 200 }}
                     placeholder="请选择"
                     listHeight={500}

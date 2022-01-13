@@ -241,11 +241,15 @@ const CustomIndex: FC<IProps> = (props) => {
           }
         });
       } else {
-        references?.forEach((reference: TReference) => {
-          if (reference.isDefault) {
-            referenceData[`${formIndex}_0_reference`] = reference.id;
-          }
-        });
+        if (references && !isEmpty(references)) {
+          let defaultReferenceId = '';
+          references?.forEach((refitem: TReference) => {
+            if (refitem.isDefault) {
+              defaultReferenceId = refitem.id;
+            }
+          });
+          referenceData[`${formIndex}_0_reference`] = defaultReferenceId || references[0].id;
+        }
       }
       initForm = {
         ...initForm,
