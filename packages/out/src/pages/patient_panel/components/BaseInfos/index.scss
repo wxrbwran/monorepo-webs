@@ -1,0 +1,46 @@
+.base_infos {
+  background-color: #fff;
+  padding: 15px 0;
+  margin-bottom: 10px;
+  @include card-shadow();
+  .header {
+    @include flex();
+    span {
+      font-size: 14px;
+      color: #007ADA;
+      cursor: pointer;
+    }
+    .tag {
+      background-color: #F0881C;
+      color: #fff;
+      border-radius: 5px;
+      padding: 0 2px;
+      margin: 0 10px;
+    }
+    .cro_project {
+      color: #000;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .left {
+      @include flex(flex-start, center);
+      max-width: 90%;
+    }
+  }
+  .content {
+    @include flex(flex-start, center);
+    flex-wrap: wrap;
+    padding: 5px 15px 10px;
+    font-size: 14px;
+  }
+  .item {
+    @include flex();
+    margin-right: 40px;
+    p {
+      margin: 0;
+    }
+  }
+}

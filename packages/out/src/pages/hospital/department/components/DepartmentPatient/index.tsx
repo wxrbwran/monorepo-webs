@@ -4,13 +4,13 @@ import { Form } from 'antd';
 import { useLocation } from 'umi';
 import { UserOutlined } from '@ant-design/icons';
 import {
-  name,
   sex,
   upperDoctor,
   lowerDoctor,
   serviceLevel,
   tel,
 } from 'xzl-web-shared/dist/utils/columns';
+import { name } from './columns';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import { handleSelection } from '@/utils/conditions';
 import type { XzlTableCallBackProps } from 'xzl-web-shared/dist/components/XzlTable';
@@ -47,6 +47,7 @@ const DepartmentPatient: FC = () => {
   const handleCallback = (data: XzlTableCallBackProps) => {
     setTotal(data.apiData?.total as number);
   };
+
   return (
     <div>
       <div className="text-right mb-10">

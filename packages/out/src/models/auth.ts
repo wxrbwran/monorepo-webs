@@ -42,6 +42,9 @@ const Model: AuthModelType = {
         window.$storage.setItem('nsId', data.wcl[0].ns.id);
         window.$storage.setItem('wcId', data.wcl[0].wcId);
         window.$storage.setItem('roleId', data.wcl[0].roles[0].id);
+        window.$storage.setItem('sdktoken', data.yxRegister.token); // 连接IM用
+        window.$storage.setItem('uid', data.yxRegister.accid);
+
         yield put({
           type: 'changeLoginStatus',
           payload: data,

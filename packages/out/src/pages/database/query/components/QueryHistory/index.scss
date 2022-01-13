@@ -1,6 +1,6 @@
 .query_history {
   .info {
-    @include flex(row, wrap, flex-start, center);
+    @include flex(flex-start, center);
     font-size: 14px;
     color: #666;
     padding: 15px 40px;

@@ -1,0 +1,119 @@
+.plan_modal {
+  color: #000;
+  li {
+    font-size: 14px;
+    // @include flex-lay(row, nowrap, space-between, flex-start);
+    display: flex;
+  }
+  .name {
+    flex: 0 0 23%;
+  }
+  .head {
+    padding: 20px 30px;
+    .name {
+      // flex: 0 0 165px;
+      flex: 0 0 23%;
+    }
+    .frequency {
+      flex: 0 0 85px;
+    }
+    .code {
+      flex: 0 0 58px;
+    }
+    .instructions {
+      flex: 0 0 70px;
+    }
+    .time {
+      flex: 0 0 220px;
+    }
+    .count {
+      flex: 0 0 215px;
+    }
+    .dosage{
+      flex: 0 0 233px;
+    }
+  }
+  .sub_list {
+    padding: 20px 30px;
+    :global {
+      .ant-select {
+        @include flex-lay(column, nowrap, center, flex-start);
+      }
+    }
+    &>div {
+      flex-shrink: 0;
+    }
+    .name {
+      p {
+        width: 238px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-break: break-all;
+      }
+    }
+    .drugimg_bg {
+      @include size(50px);
+      background: #787878;
+      position: relative;
+      margin: 6px auto;
+    }
+    .drugimg_c {
+      @include size(50px);
+      position: absolute;
+      background: #787878;
+      top: 3px;
+      left: -3px;
+    }
+    .drug_img {
+      @include size(50px);
+      position: absolute;
+      top: 6px;
+      left: -6px;
+    }
+  }
+  .inbox {
+    background: #f2f2f2;
+  }
+  .add_medicine {
+    border: 1px solid #007ADA;
+    border-radius: 2px;
+    font-size: 15px;
+    color: #007ADA;
+    padding: 8px 17px;
+    display: inline-block;
+    cursor: pointer;
+    margin: 20px 0 0 40px;
+  }
+  :global {
+    .ant-select-selector {
+      height: 42px!important;
+      .ant-select-selection-item,.ant-select-selection-placeholder {
+        line-height: 42px!important;
+        font-size: 14px;
+      }
+    }
+    .ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input {
+      height: 42px;
+    }
+    .ant-radio-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .ant-radio-wrapper {
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+      color: #333;
+    }
+    .ant-input-number-input {
+      height: 40px;
+    }
+    .ant-input-number {
+      margin: 0 7px;
+    }
+    .ant-modal-body {
+      padding: 0 0 20px;
+    }
+  }
+}

@@ -334,3 +334,31 @@ section.ant-layout {
     height: 14px;
   }
 }
+.mode_hide {
+  z-index: 1!important;
+}
+.react-viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px!important;
+  li {
+    border-radius: 0!important;
+    box-sizing: content-box!important;
+    line-height: normal!important;
+    height: 46px!important;
+    width: 65px!important;
+  }
+}
+.react-viewer-btn[data-key=customStructured] {
+  background: rgba(2, 122, 218, 0.8);
+  width: 100px;
+  height: 46px;
+  padding: 2px 15px;
+  .react-viewer-btn {
+    background-color: transparent;
+  }
+  &:hover {
+    background: rgba(2, 122, 218, 0.9);
+  }
+}

@@ -1,5 +1,5 @@
 .content {
-  @include flex(row, nowrap, flex-start, flex-start);
+  @include flex(flex-start, flex-start);
 }
 .cropper {
   flex: 1 1 auto;
@@ -35,7 +35,7 @@
 }
 // .btns {
 //   text-align: center;
-//   //@include flex-lay(row, nowrap, flex-start, center);
+//   //@include flex-lay(flex-start, center);
 //   div {
 //     display: inline-block;
 //     font-size: 22px;

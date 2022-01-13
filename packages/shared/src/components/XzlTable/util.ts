@@ -187,6 +187,8 @@ const handlePatientTeamDataSource = (dataSource: Store[]) => {
         tmp.lower_doctor = member.name;
       } else if (['upper_doctor', 'sys_doctor', 'alone_doctor'].includes(curRole)) {
         tmp.upper_doctor = member.name;
+        tmp.upper_wcId = member.wcId;
+        tmp.upper_sid = member.sid;
       }
     });
     res.push(tmp);

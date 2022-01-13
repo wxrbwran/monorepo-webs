@@ -92,6 +92,19 @@ const routes = [
       },
     ],
   },
+  // {
+  //   path: '/patient_panel',
+  //   // path: '/user',
+  //   layout: false,
+  //   lacale: false,
+  //   component: './patient_panel/index',
+  // },
+  {
+    path: '/patient_panel',
+    layout: false,
+    lacale: false,
+    component: './patient_panel/index',
+  },
   {
     path: '/data-statistics',
     name: '数据统计',
