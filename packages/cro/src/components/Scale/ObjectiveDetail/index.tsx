@@ -49,6 +49,7 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
     const id = location.query.id;
 
 
+    console.log('=============== id id ', id);
     if (groupId !== id) {
       setGroupId(id);
       setIsEdit(false);

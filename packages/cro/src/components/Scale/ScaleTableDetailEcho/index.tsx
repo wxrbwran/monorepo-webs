@@ -56,16 +56,20 @@ function ScaleTableDetailEcho(props: IProps) {
 
   const onDelScale = () => {
     setShowModal(!showModal);
-    api.subjective.delScale({
-      scaleId: props.scaleId,
-      scaleGroupId: groupId,
-      projectSid: window.$storage.getItem('projectSid'),
-      scaleType: props.scaleType,
-      ruleId: ruleDoc?.id,
-    }).then(() => {
-      message.success('删除成功');
-      history.push(`${location.pathname}?name=${scaleGroupInfos[0].name}`);
-    });
+
+    console.log('=====================  scaleGroupInfos[0].name', JSON.stringify(scaleGroupInfos), location.pathname);
+
+    // api.subjective.delScale({
+    //   scaleId: props.scaleId,
+    //   scaleGroupId: groupId,
+    //   projectSid: window.$storage.getItem('projectSid'),
+    //   scaleType: props.scaleType,
+    //   ruleId: ruleDoc?.id,
+    // }).then(() => {
+    //   message.success('删除成功');
+    //   console.log('=====================  scaleGroupInfos[0].name', JSON.stringify(scaleGroupInfos), location.pathname);
+    //   // history.push(`${location.pathname}?name=${scaleGroupInfos[0].name}`);
+    // });
   };
 
   return (

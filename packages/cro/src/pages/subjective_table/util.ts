@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { IModel } from 'xzl-web-shared/dist/components/Rule/util';
+import dayjs from 'dayjs';
 
 
 // export const ResearchSourceType = '4';
@@ -263,6 +264,8 @@ export const IntoGroupTime = '受试者入组的时间';  // 项目sid和label
 export const GiveMedicTime = '受试者给药的时间';  // 
 export const StopMedicTime = '受试者停止此项目用药的时间';
 export const HandelTime = '受试者做处理的时间 ';
+export const SpecificDate = '选择特定日期';
+export const PlanCreatedSendImmediately = '计划创建成功后立即发送';
 
 export const DIY = '自定义';
 export const ImmediatelySend = '立即发送';
@@ -345,9 +348,6 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
         choiceModel.choiceModel = choiceModel.childItem?.filter((item) => item.description == StopMedicTime)[0];
       }
     }
-
-    // 
-
     if (action.params.period == 0) { // 选择的是 立即发送
       choiceModel.choiceModel.choiceModel = choiceModel.choiceModel?.childItem?.filter((item) => item.description == ImmediatelySend)[0];
     } else { // 选择的是自定义
@@ -355,14 +355,21 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
       choiceModel.choiceModel.choiceModel.inputDay = action.params.period;
       choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
     }
-  }
+  } else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
+    const choiceSpecificDateTime = {
+      childItemType: 'time',
+      description: SpecificDate,
+    };
+    choiceModel.choiceModel = choiceSpecificDateTime;
+    choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
+  } else {
 
-  // else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
-  //   choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
-  //   choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
-  // } else {
-  //   choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
-  // }
+    const choiceSendImmediately = {
+      childItemType: 'none',
+      description: PlanCreatedSendImmediately,
+    };
+    choiceModel.choiceModel = choiceSendImmediately;
+  }
   return ({
     choiceModel: choiceModel,
   });
@@ -495,13 +502,16 @@ export function getStartTimeDescriptionFromConditionss(firstTime: any) {
   let str = '';
 
   const choiceModel = firstTime?.choiceModel;
-
   str = str + choiceModel?.choiceModel?.description + '   ';
-
-  if (choiceModel?.choiceModel?.choiceModel?.description == ImmediatelySend) {
-    str = str + ImmediatelySend + '   ';
+  if (choiceModel?.choiceModel?.description == PlanCreatedSendImmediately) {
+  } else if (choiceModel?.choiceModel?.description == SpecificDate) {
+    str = str + '   ' + choiceModel.choiceModel.inputTime + '  ';
   } else {
-    str = str + '第' + (choiceModel?.choiceModel?.choiceModel?.inputDay ?? ' ') + '天' + (choiceModel?.choiceModel?.choiceModel?.inputHM ?? ' ');
+    if (choiceModel?.choiceModel?.choiceModel?.description == ImmediatelySend) {
+      str = str + ImmediatelySend + '   ';
+    } else {
+      str = str + '第' + (choiceModel?.choiceModel?.choiceModel?.inputDay ?? ' ') + '天' + (choiceModel?.choiceModel?.choiceModel?.inputHM ?? ' ');
+    }
   }
   return str;
 }

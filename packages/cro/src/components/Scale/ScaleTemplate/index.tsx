@@ -11,7 +11,8 @@ import { isEmpty, cloneDeep } from 'lodash';
 import { getRuleType, getSourceType, GiveMedicTime, HandelTime, IChooseValues, ICondition, IItem, IntoGroupTime, IRuleDoc, StopMedicTime } from '@/pages/subjective_table/util';
 import FirstSendTime from 'xzl-web-shared/dist/components/Rule/FirstSendTime';
 import SendFrequency from 'xzl-web-shared/dist/components/Rule/SendFrequency';
-import { DIY, ImmediatelySend, IModel } from 'xzl-web-shared/dist/components/Rule/util';
+import { DIY, ImmediatelySend, IModel, PlanCreatedSendImmediately, SpecificDate } from 'xzl-web-shared/dist/components/Rule/util';
+import dayjs from 'dayjs';
 
 const CheckboxGroup = Checkbox.Group;
 const { Option } = Select;
@@ -407,11 +408,14 @@ const titleAllChoosesToMustParma = (chooseStartTimeList: IItem[], firstSteps: st
 };
 
 const getFirstSteps = (firstTime: any): string[] => {
+
   const steps = [];
   steps.push(firstTime.description);
   if (firstTime.description == DIY) {
     steps.push(firstTime.inputDay);
     steps.push(firstTime.inputHM);
+  } else if (firstTime.description == SpecificDate) {
+    steps.push(firstTime.inputTime);
   }
   if (firstTime?.choiceModel) {
     steps.push(...getFirstSteps(firstTime.choiceModel));
@@ -618,7 +622,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const [firstTime, setFirstTime] = useState<{ choiceModel: any }>({ choiceModel: initFirstTimeChoiceMode });
 
-
   useEffect(() => {
     api.query.fetchFields(getRuleType(scaleType).templeType).then((res) => {
       // 循环判断每个item是不是dynimic
@@ -656,32 +659,38 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   useEffect(() => {
 
-
-    console.log('============== chooseValues.firstTime ', JSON.stringify(chooseValues?.firstTime));
+    let firstTimeTemp;
     if (chooseValues) {
-      // chooseStartTimeListRef.current = chooseValues.chooseStartTime;
-      // setChooseStartTimeList(chooseValues.chooseStartTime);
-      // setChoseScope(chooseValues.choseScope);
-      // setChoseConditions(chooseValues.choseConditions);
-      // setFrequency(chooseValues.frequency);
 
-      // setFirstTime(firstTime);
-
-      const firstTimeTemp = cloneDeep(chooseValues.firstTime);
+      firstTimeTemp = cloneDeep(chooseValues.firstTime);
 
       const handleTimeItem = firstTimeTemp.choiceModel.childItem.filter((item) => item.description == HandelTime)[0];
       handleTimeItem.childReact = childReactFunc;
-
-
       console.log('============== handleTimeItem.handleTimeItem ', JSON.stringify(firstTimeTemp));
 
-      setFirstTime(firstTimeTemp);
-      // setChooseStartTime(chooseValues.chooseStartTime);
       setChoseScope(cloneDeep(chooseValues.choseScope));
       setChoseConditions(cloneDeep(chooseValues.choseConditions));
       setFrequency(cloneDeep(chooseValues.frequency));
+    } else {
+
+      firstTimeTemp = { choiceModel: initFirstTimeChoiceMode };
     }
-  }, [originRuleDoc]);
+
+    if (scaleType == 'VISIT_CRF' || scaleType == 'VISIT_OBJECTIVE' || scaleType == 'VISIT_SUBJECTIVE') {
+      firstTimeTemp.choiceModel.childItem = [
+        ...firstTimeTemp.choiceModel.childItem,
+        {
+          childItemType: 'time',
+          description: SpecificDate,
+        },
+        {
+          childItemType: 'none',
+          description: PlanCreatedSendImmediately,
+        },
+      ];
+    }
+    setFirstTime(firstTimeTemp);
+  }, [originRuleDoc, scaleType]);
 
   useEffect(() => {
 
@@ -772,9 +781,14 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     if (originRuleDoc) { // 说明是修改
       meta = originRuleDoc.meta;
     }
-
+    // 判断是不是要添加时间firstAtTime
+    if (firstSteps.includes(SpecificDate)) {
+      const index = firstSteps.indexOf(SpecificDate);
+      meta.firstAtTime = dayjs(firstSteps[index + 1], 'YYYY-MM-DD HH:mm').valueOf();
+    } else {
+      delete meta.firstAtTime;
+    }
     // const actions = originRuleDoc ? tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
-
     const params: any = {
       rules: [{
         match: {
@@ -807,7 +821,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   };
 
   const onChoiceModelChange = (choiceModel: IModel) => {
-    console.log('============== choiceModel choiceModel', JSON.stringify(choiceModel));
     firstTime.choiceModel = choiceModel;
   };
 
