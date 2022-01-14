@@ -1,4 +1,9 @@
-export declare const fileTypes: {};
+import * as React from 'react';
+export declare const fileTypes: {
+    name: string;
+    code: number;
+    type: string;
+}[];
 export interface IItem {
     name: string;
     type: string;
@@ -55,8 +60,9 @@ export interface IChooseValues {
     };
 }
 export interface IModel {
-    childItemType: 'select' | 'diy' | 'time' | 'none';
+    childItemType: 'select' | 'diy' | 'time' | 'none' | 'childReact';
     childItem?: IModel[];
+    childReact?: () => React.ReactDOM;
     description: string;
     choiceModel?: IModel;
     inputDay?: number;
@@ -98,7 +104,7 @@ export declare function getStartTimeChoiceModel(chooseStartTime: IItem, action: 
         choiceModel: IModel;
         description: string;
     };
-    choiceContents: any;
+    choiceContents: any[];
 };
 export declare function getChooseValuesKeyFromRules(ruleDoc: {
     rules: IRule[];
@@ -110,13 +116,13 @@ export declare function getChooseValuesKeyFromRules(ruleDoc: {
             choiceModel: IModel;
             description: string;
         };
-        choiceContents: any;
+        choiceContents: any[];
     };
-    choseConditions: {};
-    choseScope: {};
+    choseConditions: any[];
+    choseScope: any[];
     frequency: {
         frequency: string;
-        custom: {};
+        custom: any[];
     };
 };
 export declare function getStartTimeDescriptionFromConditionss(firstTime: any): string;

@@ -53,6 +53,13 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
     return ([
       <>
         {
+          choiceItem.childReact ?
+            choiceItem.childReact()
+            : <div></div>
+        }
+      </>,
+      <>
+        {
           choiceItem.childItemType == 'select' &&
           <Select className='mr-10' onChange={(val) => { handleChangeType(val, choiceItem); }} value={choiceItem?.choiceModel?.description ?? ''}>
             {
@@ -87,7 +94,6 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
               <div className='hm'>
                 <TimePicker className='mr-10' value={choiceItem?.inputHM ? moment(choiceItem.inputHM, 'HH:mm') : null} format={'HH:mm'} onChange={(momentDate, dateString) => { dateChange(momentDate, dateString, choiceItem); }} />
               </div>
-
             </>,
           ]
         }

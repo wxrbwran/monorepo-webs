@@ -394,9 +394,6 @@ const eventClass = (key: string) => {
   if (key.indexOf('forth_') > -1) {
     className = 'event_label SICK';
   }
-  if (key.indexOf('fifth_') > -1) {
-    className = 'event_label OTHER';
-  }
   return className;
 };
 
@@ -408,11 +405,22 @@ export const content = {
     return (
       <span>
         {
-          text.map((item) => (
+          // 除其他事件外的显示
+          text.filter((item) => item.type != 5).map((item) => (
             (Object.keys(item.detail).filter((key) => !key.includes('answer_'))).map((det) => {
               const answerKey = 'answer_' + det.split('_')[1];
               return (
                 <span className={eventClass(det)}>{`${item.detail[det]}${item.detail[answerKey] ? `:${item.detail[answerKey]}` : ''}`}</span>
+              );
+            })
+          ))
+        }
+        {
+          // 其他事件的显示
+          text.filter((item) => item.type == 5).map((item) => (
+            (Object.keys(item.detail).filter((key) => key.includes('answer_'))).map((det) => {
+              return (
+                <span className='event_label OTHER'>{`${item.detail[det]}`}</span>
               );
             })
           ))

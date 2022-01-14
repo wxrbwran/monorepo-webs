@@ -13,7 +13,7 @@
 .shard_rule_first_send_time {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
 }

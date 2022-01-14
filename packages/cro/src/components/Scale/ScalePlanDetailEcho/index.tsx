@@ -13,7 +13,7 @@ import { useLocation } from 'umi';
 // import { IState } from 'typings/global';
 import { message } from 'antd';
 import './index.scss';
-import { getChooseValuesKeyFromRules, getConditionDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
+import { getChooseValuesKeyFromRules, getConditionDescriptionFromConditionss, getFrequencyDescriptionFromFrequency, getStartTimeDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
 import { isEmpty } from 'lodash';
 
 
@@ -35,9 +35,10 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   // const [val, setVal] = useState<IVal>({});
   const apiName = scaleType === 'CRF' ? 'getSubjectiveScaleDetail' : 'getSubjectiveScaleDetail';
 
-  const [chooseValues, setChooseValues] = useState<IChooseValues>({ chooseStartTime: {}, choseConditions: [], choseScope: [], frequency: { custom: [] } });
+  const [chooseValues, setChooseValues] = useState<IChooseValues>({ firstTime: {}, choseConditions: [], choseScope: [], frequency: { custom: [] } });
   const [conditionDescription, setConditionDescription] = useState();
-
+  const [firstTimeStr, setFirstTimeStr] = useState();
+  const [frequencyStr, setFrequencyStr] = useState();
 
   useEffect(() => {
 
@@ -52,11 +53,19 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
     if (!isEmpty(ruleDoc)) {
 
-      const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc.rules[0]);
+      const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc);
 
+
+      console.log('============ chooseValuesKey chooseValuesKey', JSON.stringify(chooseValuesKey));
       const conditionDes = getConditionDescriptionFromConditionss(chooseValuesKey.choseConditions);
       setChooseValues(chooseValuesKey);
       setConditionDescription(conditionDes);
+
+      const firstTime = getStartTimeDescriptionFromConditionss(chooseValuesKey.firstTime);
+      setFirstTimeStr(firstTime);
+
+      const frequency = getFrequencyDescriptionFromFrequency(chooseValuesKey.frequency);
+      setFrequencyStr(frequency);
     }
 
   }, [ruleDoc]);
@@ -156,7 +165,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
             <img src={iconTime} alt="" />
             <span>首次发送时间</span>
           </div>
-          <div className="text">{chooseValues.chooseStartTime.description}</div>
+          <div className="text">{firstTimeStr}</div>
         </div>
 
 
@@ -181,7 +190,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
             <img src={iconFrequency} alt="" />
             <span>发送频率</span>
           </div>
-          {chooseValues.frequency && <div className="text">{chooseValues.frequency.frequency == 'CUSTOM' ? '第' : '每'}{chooseValues.frequency.custom.join()}天发送一次</div>}
+          {chooseValues.frequency && <div className="text">{frequencyStr}</div>}
         </div>
         <div className="item">
           <div className="tit">

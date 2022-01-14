@@ -1,3 +1,4 @@
+/// <reference types="react" />
 declare type INumUnd = number | undefined;
 declare type IStrUnd = string | undefined;
 export interface IRegion {

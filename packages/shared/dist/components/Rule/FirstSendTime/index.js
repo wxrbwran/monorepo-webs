@@ -65,6 +65,9 @@ var FirstSendTime = function (_a) {
     var getReactEle = function (choiceItem) {
         var _a, _b;
         return ([
+            React.createElement(React.Fragment, null, choiceItem.childReact ?
+                choiceItem.childReact()
+                : React.createElement("div", null)),
             React.createElement(React.Fragment, null, choiceItem.childItemType == 'select' &&
                 React.createElement(Select, { className: 'mr-10', onChange: function (val) { handleChangeType(val, choiceItem); }, value: (_b = (_a = choiceItem === null || choiceItem === void 0 ? void 0 : choiceItem.choiceModel) === null || _a === void 0 ? void 0 : _a.description) !== null && _b !== void 0 ? _b : '' }, (choiceItem === null || choiceItem === void 0 ? void 0 : choiceItem.childItem) &&
                     choiceItem.childItem.map(function (it) { return (React.createElement(Option, { value: it.description, key: it.description }, it.description)); }))),

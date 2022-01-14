@@ -98,7 +98,7 @@ const ProjectModel: ProjectModelType = {
       }
       // 处理数据，添加chooseValues内容
       for (let i = 0; i < response.infos.length; i++) {
-        const chooseValuesKey = getChooseValuesKeyFromRules(response.infos[i].ruleDoc.rules[0]);
+        const chooseValuesKey = getChooseValuesKeyFromRules(response.infos[i].ruleDoc);
         response.infos[i].chooseValues = chooseValuesKey;
       }
       yield put({

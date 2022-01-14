@@ -80,7 +80,13 @@ export declare const businessType: {
     picture: number;
     audio: number;
 };
-export declare const sendType: {};
-export declare const staticType: {};
+export declare const sendType: {
+    key: string;
+    value: string;
+}[];
+export declare const staticType: {
+    key: string;
+    value: string;
+}[];
 export declare const beforeEl: string;
 export declare const alfterEl: string;

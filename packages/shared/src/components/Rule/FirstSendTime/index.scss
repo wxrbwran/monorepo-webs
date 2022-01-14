@@ -15,7 +15,7 @@
 .shard_rule_first_send_time {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
   .item_value {
@@ -28,6 +28,7 @@
     .ant-select-selector {
       width: 237px !important;
     }
+
     // }
   }
   .label {
@@ -39,6 +40,7 @@
     margin-left: 5px;
   }
   // :global {
+
   .ant-select-selector .ant-select-selection-search-input {
     height: 40px;
   }

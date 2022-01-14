@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
+import * as React from 'react';
 
 
 export const fileTypes = [
@@ -102,8 +103,9 @@ export interface IChooseValues {
 }
 
 export interface IModel {
-  childItemType: 'select' | 'diy' | 'time' | 'none';
+  childItemType: 'select' | 'diy' | 'time' | 'none' | 'childReact';
   childItem?: IModel[];
+  childReact?: () => React.ReactDOM; // 当childItemType是childReact时，会渲染该childReact组件
   description: string;
   choiceModel?: IModel;
   inputDay?: number; // 当childItemType是diy时，会有输入day组件，此时才可能有值

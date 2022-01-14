@@ -17,7 +17,7 @@ import { message } from 'antd';
 import * as api from '@/services/api';
 import SendRecord from '../ObjectiveSendRecord';
 import styles from './index.scss';
-import { getConditionDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
+import { getConditionDescriptionFromConditionss, getFrequencyDescriptionFromFrequency, getStartTimeDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
 import { cloneDeep } from 'lodash';
 import RichText from '@/components/RichText';
 
@@ -45,17 +45,27 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
 
 
   const [ruleDoc, setRuleDoc] = useState<IRuleDoc>({});
-  const [chooseValues, setChooseValues] = useState<IChooseValues>({ chooseStartTime: {}, choseConditions: [], choseScope: [], frequency: { custom: [] } });
+  const [chooseValues, setChooseValues] = useState<IChooseValues>({ firstTime: {}, choseConditions: [], choseScope: [], frequency: { custom: [] } });
   const [conditionDescription, setConditionDescription] = useState();
+  const [firstTimeStr, setFirstTimeStr] = useState();
+  const [frequencyStr, setFrequencyStr] = useState();
 
   useEffect(() => {
 
     if (infoItem) {
-      console.log('=================== HistoryPlan', JSON.stringify(infoItem));
       setRuleDoc(infoItem.ruleDoc);
+
       setChooseValues(cloneDeep(infoItem.chooseValues));
       const conditionDes = getConditionDescriptionFromConditionss(infoItem.chooseValues.choseConditions);
       setConditionDescription(conditionDes);
+
+      console.log('=================== HistoryPlan', JSON.stringify(infoItem));
+
+      const firstTime = getStartTimeDescriptionFromConditionss(infoItem.chooseValues.firstTime);
+      setFirstTimeStr(firstTime);
+
+      const frequency = getFrequencyDescriptionFromFrequency(infoItem.chooseValues.frequency);
+      setFrequencyStr(frequency);
     }
   }, [infoItem]);
 
@@ -63,20 +73,6 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
   const updatePlan = (params: { plans: [], questions: string }) => {
 
     console.log('===================== updatePlan ====== ', JSON.stringify(params));
-    // ========
-
-    // api.subjective.deleteScaleRule(params.ruleDoc.id).then(() => {
-
-    //   delete params.ruleDoc.id;
-    //   api.subjective.addScaleRule(params.ruleDoc).then(() => {
-
-    //     changeEditStatus();
-    //   });
-    // })
-    //   .catch((err: string) => {
-    //     message.error(err);
-    //   });
-
     api.subjective
       .updateScalePlan({
         ruleDoc: params.ruleDoc,
@@ -181,14 +177,14 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
               <img src={iconTime} alt="" />
               <span>首次发送时间</span>
             </div>
-            <div className={styles.text}>{chooseValues.chooseStartTime.description}</div>
+            <div className={styles.text}>{firstTimeStr}</div>
           </div>
           <div className={styles.item}>
             <div className={styles.tit}>
               <img src={iconFrequency} alt="" />
               <span>发送频率</span>
             </div>
-            {chooseValues.frequency && <div className={styles.text}>{chooseValues.frequency.frequency == 'CUSTOM' ? '第' : '每'}{chooseValues.frequency.custom.join()}天发送一次</div>}
+            {chooseValues.frequency && <div className={styles.text}>{frequencyStr}</div>}
           </div>
           <div className={styles.space}></div>
           {(conditionDescription &&

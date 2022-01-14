@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Checkbox } from 'antd';
+import { Button, Checkbox, message, Select, Spin } from 'antd';
 import * as api from '@/services/api';
 import { IPlanItem } from '@/utils/consts';
 import { useSelector } from 'umi';
@@ -8,14 +8,14 @@ import RichText from '@/components/RichText';
 import styles from './index.scss';
 import { CrfScaleSourceType, SubectiveScaleSourceType, transformDynamicToStatic, ObjectiveSourceType } from '@/pages/query/util';
 import { isEmpty, cloneDeep } from 'lodash';
-import { IChooseValues, ICondition, IItem, IRuleDoc } from '@/pages/subjective_table/util';
+import { GiveMedicTime, HandelTime, IChooseValues, ICondition, IItem, IntoGroupTime, IRuleDoc, StopMedicTime } from '@/pages/subjective_table/util';
 import FirstSendTime from 'xzl-web-shared/dist/components/Rule/FirstSendTime';
 import SendFrequency from 'xzl-web-shared/dist/components/Rule/SendFrequency';
-import { IModel } from 'xzl-web-shared/dist/components/Rule/util';
+import { DIY, ImmediatelySend, IModel } from 'xzl-web-shared/dist/components/Rule/util';
 
 const CheckboxGroup = Checkbox.Group;
-// const { Option } = Select;
-// let timer: any = null;
+const { Option } = Select;
+let timer: any = null;
 interface IProps {
   mode: string;
   onCancel: Function;
@@ -33,7 +33,7 @@ interface IProps {
 }
 
 
-const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRoleType: String) => {
+const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRoleType: String, projectNsId: String) => {
 
   for (let i = 0; i < timeKey.items.length; i++) {
     const item = timeKey.items[i];
@@ -64,6 +64,17 @@ const fillValueInStartTimeKey = (timeKey: IItem, projectSid: String, projectRole
           subItem.value = '';
         }
       }
+    } else if (item.name === 'location-config') {
+      for (let j = 0; j < item.items.length; j++) {
+        const subItem = item.items[j];
+        subItem.operator = '=';
+        if (subItem.name === 'location-config.ns_id') {
+          subItem.value = projectNsId;
+        } else {
+          subItem.value = '*';
+          subItem.starting = true;
+        }
+      }
     }
   }
 };
@@ -87,18 +98,21 @@ const fillValueInScopeKey = (scopeKey: IItem) => {
 };
 
 
-// const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
+const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
 
-//   if (timeKey.name === 'diagnose.treatment') {
-//     for (let j = 0; j < timeKey.items.length; j++) {
-//       const subItem = timeKey.items[j];
-//       if (subItem.name === 'diagnose.treatment.uid') {
-//         subItem.value = treatmentId;
-//         subItem.description = treatmentDes;
-//       }
-//     }
-//   }
-// };
+
+  console.log('================ onChangeStateByValue  onChangeStateByValue', JSON.stringify(timeKey));
+
+  if (timeKey.name === 'diagnose.treatment') {
+    for (let j = 0; j < timeKey.items.length; j++) {
+      const subItem = timeKey.items[j];
+      if (subItem.name === 'diagnose.treatment.uid') {
+        subItem.value = treatmentId;
+        subItem.description = treatmentDes;
+      }
+    }
+  }
+};
 
 // const getTreatmentDesInStartTimeKey = (timeKey: IItem) => {
 
@@ -115,19 +129,23 @@ const fillValueInScopeKey = (scopeKey: IItem) => {
 
 const tileChooseToArray = (item: IItem) => {
 
-  const cloneItem = cloneDeep(item);
-  let array = {};
-  if (cloneItem.items && cloneItem.items.length > 0) {
-    // 将每个子项拿出来
-    for (let i = 0; i < cloneItem.items.length; i++) {
-      array = { ...array, ...tileChooseToArray(cloneItem.items[i]) };
-    }
-    // 将自己拼进去
-    delete cloneItem.items;
-  }
-  array[cloneItem.name] = cloneItem;
+  if (item) {
+    const cloneItem = cloneDeep(item);
+    let array = {};
+    if (cloneItem?.items && cloneItem?.items?.length > 0) {
+      // 将每个子项拿出来
+      for (let i = 0; i < cloneItem.items.length; i++) {
+        array = { ...array, ...tileChooseToArray(cloneItem.items[i]) };
+      }
+      // 将自己拼进去
+      delete cloneItem.items;
 
-  return array;
+    }
+    array[cloneItem.name] = cloneItem;
+
+    return array;
+  }
+  return [];
 };
 
 const addTreatmentOrDiseaseItem = (item: any, childItem: any) => {
@@ -243,34 +261,63 @@ const tileChooseScopeToArray = (chooseScope: IItem[]) => {
   return array;
 };
 
-const tileAllChoosesToArray = (chooseStartTime: IItem, choseConditions: ICondition[], chooseScope: IItem[]) => {
-
-
-  const param = {
-    must: [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)],
-    should_1: tileChooseScopeToArray(chooseScope),
-  };
-
-  return param;
+const getDelay = (time: string) => {
+  const hm = time.split(':');
+  return hm[0] * 60 * 60 + hm[1] * 60;
 };
 
 const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[] }, sourceMember?: []) => {
 
   // 自定义
   const arrary = [];
-  const delay = 9 * 60 * 60; // 9个小时的毫秒值
 
   if (frequency.frequency === 'CUSTOM') {
+    for (let i = 0; i < frequency.custom.length; i++) {
+
+      const period = frequency.custom[i];
+      console.log('================= period', JSON.stringify(period));
+
+      const action: any = {
+        type: 'once',
+        params: {
+          delay: getDelay(period.time),
+          period: period.day,
+          unit: 'day',
+        },
+      };
+      if (sourceMember) {
+        action.params.sourceMember = sourceMember;
+      }
+      arrary.push(action);
+    }
+  } else if (frequency.frequency === 'ADD') { // 
+
     for (let i = 0; i < frequency.custom.length; i++) {
 
       const period = frequency.custom[i];
       const action: any = {
         type: 'once',
         params: {
-          delay: delay,
-          period: period,
+          delay: 0,
+          period: 0,
           unit: 'day',
+          regulars: [
+            {
+              regularNum: period.day,
+              regularUnit: 'day',
+            },
+            {
+              regularNum: period.hour,
+              regularUnit: 'hour',
+            },
+
+            {
+              regularNum: period.min,
+              regularUnit: 'minute',
+            },
+          ],
         },
+
       };
       if (sourceMember) {
         action.params.sourceMember = sourceMember;
@@ -280,11 +327,13 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
   } else {
 
     const period = frequency.custom[0];
+    console.log('================= period', JSON.stringify(period));
+
     const action: any = {
       type: 'rolling',
       params: {
-        delay: delay,
-        period: period,
+        delay: getDelay(period.time),
+        period: period.day,
         unit: 'day',
       },
     };
@@ -296,6 +345,172 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
 
   return arrary;
 };
+
+
+const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, frequency: { frequency: string, custom: { day: number, time: string }[] }, sourceMember?: []) => {
+
+  const arr = [];
+
+  if (firstSteps.includes(DIY)) {
+    const index = firstSteps.indexOf(DIY);
+    const action: any = {
+      type: 'once',
+      params: {
+        delay: getDelay(firstSteps[index + 2]),
+        period: firstSteps[index + 1],
+        unit: 'day',
+      },
+    };
+    if (sourceMember) {
+      action.params.sourceMember = sourceMember;
+    }
+
+    arr.push(action);
+  } else { // 
+    const action: any = {
+      type: 'once',
+      params: {
+        delay: 0,
+        period: 0,
+        unit: 'day',
+      },
+    };
+    if (sourceMember) {
+      action.params.sourceMember = sourceMember;
+    }
+    arr.push(action);
+  }
+  //  tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
+
+  arr.push(...tileAllFrequencyToArray(frequency, sourceMember));
+  return arr;
+};
+
+
+const titleAllChoosesToMustParma = (chooseStartTimeList: IItem[], firstSteps: string[], choseConditions: ICondition[], scopeSource: IItem) => {
+  const allPatient = scopeSource.items.filter((item) => item.description == '全部受试者');
+  const allPatientArr = allPatient.length > 0 ? [tileChooseToArray(allPatient[0])] : [];
+
+  let chooseStartTime = chooseStartTimeList[0];
+  if (firstSteps.includes(IntoGroupTime)) {
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'team')[0];
+  } else if (firstSteps.includes(GiveMedicTime)) {
+
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.startMedTime'))[0];
+  } else if (firstSteps.includes(StopMedicTime)) {
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.stopMedTime'))[0];
+  } else if (firstSteps.includes(HandelTime)) {
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'diagnose.treatment')[0];
+  }
+
+  console.log('=================== chooseStartTime', JSON.stringify(chooseStartTime));
+  // 计划外多出来的2个不走这个if
+  if (firstSteps.includes(IntoGroupTime) || firstSteps.includes(GiveMedicTime) || firstSteps.includes(StopMedicTime) || firstSteps.includes(HandelTime)) {
+
+    const must = [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions), ...allPatientArr];
+    return must;
+  } else {
+    return [...tileChooseConditionToArray(choseConditions), ...allPatientArr];
+  }
+};
+
+const getFirstSteps = (firstTime: any): string[] => {
+  const steps = [];
+  steps.push(firstTime.description);
+  if (firstTime.description == DIY) {
+    steps.push(firstTime.inputDay);
+    steps.push(firstTime.inputHM);
+  }
+  if (firstTime?.choiceModel) {
+    steps.push(...getFirstSteps(firstTime.choiceModel));
+  }
+  return steps;
+};
+
+const tileAllChoosesToArray = (chooseStartTime: IItem, choseConditions: ICondition[], chooseScope: IItem[]) => {
+
+
+  const param = {
+    must: [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)],
+    should_1: tileChooseScopeToArray(chooseScope),
+  };
+
+  return param;
+};
+
+
+
+interface HandleChooseIProps {
+
+  onChangeStateByValue: (val: string[]) => void;
+}
+
+
+function HandleChoose({ onChangeStateByValue }: HandleChooseIProps) {
+
+  const [fetching, setFetchStatus] = useState(false); //搜索是否显示loading
+  const [treatment, setTreatment] = useState([]); //获取处理方式
+  const [chooseTreatmentDes, setChooseTreatmentDes] = useState<string>(); //存储患者做处理的时间-->处理方式
+
+  //获取处理方式
+  const fetchTreatment = (value: string) => {
+    if (value !== '') {
+      setFetchStatus(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        api.detail
+          .fetchTreatment({ name: value })
+          .then((res) => {
+            const { treatments } = res;
+            if (treatments.length > 0) {
+              setTreatment(treatments);
+            } else {
+              message.info('没有治疗方式信息!');
+            }
+          })
+          .catch((err) => {
+            message.error(err);
+          });
+        setFetchStatus(false);
+      }, 800);
+    }
+  };
+
+  //更改 患者做处理的时间-->处理方式
+  const changeStateByValue = (value: string) => {
+
+    const vals = String(value).split('_zsh_');
+
+    // fillTreatmentInStartTimeKey(chooseStartTimeList.filter((item) => item.name == 'diagnose.treatment')[0], vals[0], vals[1]);
+    setChooseTreatmentDes(vals[1]);
+    onChangeStateByValue(vals);
+  };
+
+  return (
+    <div className={styles.item_value}>
+      <span>患者做</span>
+      <Select
+        showSearch
+        allowClear
+        placeholder="请输入处理方式"
+        notFoundContent={fetching ? <Spin size="small" /> : null}
+        filterOption={false}
+        onSearch={fetchTreatment}
+        value={chooseTreatmentDes}
+        onChange={(value: string) => {
+          changeStateByValue(value);
+        }}
+      >
+        {treatment.map((item: { id: string; name: string }) => (
+          <Option key={item.id} value={item.id + '_zsh_' + item.name} title={item.name}>
+            {item.name}
+          </Option>
+        ))}
+      </Select>
+      <span>的时间</span>
+    </div>
+  );
+}
 
 function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   chooseValues, scaleType, question }: IProps) {
@@ -332,13 +547,29 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     },
   ];
 
-  const IntoGroupTime = '受试者入组的时间';
-  const GiveMedicTime = '受试者给药的时间';
-  const StopMedicTime = '受试者停止此项目用药的时间';
-  const HandelTime = '受试者做处理的时间 ';
 
-  const DIY = '自定义';
-  const ImmediatelySend = '立即发送';
+  const chooseStartTimeListRef = useRef<IItem[]>([]);
+
+  // const [chooseStartTimeList, setChooseStartTimeList] = useState<IItem[]>([]); //选中的起始发送时间子item 有4个
+  const [loading, setLoading] = useState(false);
+
+  const { projectSid, projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
+
+  const [remind, setRemind] = useState(''); //问题
+
+  // const remind = useRef('');
+  // const richTextCont = useRef('');
+  // const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
+
+  const [scopeKey, setScopeKey] = useState<IItem>({}); //选中的起始发送时间子item
+  const [choseScope, setChoseScope] = useState<IItem[]>([]); //选中的起始发送时间子item
+
+  const [conditionKey, setConditionKey] = useState<IItem>({}); //选中的起始发送时间子item
+  const [choseConditions, setChoseConditions] = useState<ICondition[]>([initItems]); //选中的起始发送时间子item
+
+  const [frequency, setFrequency] = useState(initFrequency); //发送频率
+
+  const sourceType = scaleType === 'CRF' ? CrfScaleSourceType : (scaleType === 'OBJECTIVE' ? ObjectiveSourceType : SubectiveScaleSourceType);
 
   const childChoiceModel = (name: string): IModel => {
 
@@ -357,6 +588,18 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       ],
     };
   };
+
+
+  //更改 患者做处理的时间-->处理方式
+  const onChangeStateByValue = (vals: string[]) => {
+    fillTreatmentInStartTimeKey(chooseStartTimeListRef.current.filter((item) => item.name == 'diagnose.treatment')[0], vals[0], vals[1]);
+  };
+
+  const childReactFunc = () => {
+
+    return (<HandleChoose onChangeStateByValue={onChangeStateByValue}></HandleChoose>);
+  };
+
   const initFirstTimeChoiceMode: IModel = {
 
     childItemType: 'select',
@@ -365,40 +608,25 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       childChoiceModel(IntoGroupTime),
       childChoiceModel(GiveMedicTime),
       childChoiceModel(StopMedicTime),
-      childChoiceModel(HandelTime),
+      {
+        childItemType: 'select',
+        description: HandelTime,
+        childReact: childReactFunc,
+        childItem: [
+          {
+            childItemType: 'diy',
+            description: DIY,
+          },
+          {
+            childItemType: 'none',
+            description: ImmediatelySend,
+          },
+        ],
+      },
     ],
   };
 
-  // const [fetching, setFetchStatus] = useState(false); //搜索是否显示loading
-  // const [treatment, setTreatment] = useState([]); //获取处理方式
-
-  const [loading, setLoading] = useState(false);
-
-
-
-  const { projectSid, projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
-
-  const [remind, setRemind] = useState(''); //问题
-  // const remind = useRef('');
-  // const richTextCont = useRef('');
-
   const [firstTime, setFirstTime] = useState<{ choiceModel: any }>({ choiceModel: initFirstTimeChoiceMode });
-
-  // const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
-
-  const [chooseStartTime, setChooseStartTime] = useState<IItem>({}); //选中的起始发送时间子item
-  // const [chooseTreatmentDes, setChooseTreatmentDes] = useState<string>(); //存储患者做处理的时间-->处理方式
-
-  const [scopeKey, setScopeKey] = useState<IItem>({}); //选中的起始发送时间子item
-  const [choseScope, setChoseScope] = useState<IItem[]>([]); //选中的起始发送时间子item
-
-  const [conditionKey, setConditionKey] = useState<IItem>({}); //选中的起始发送时间子item
-  const [choseConditions, setChoseConditions] = useState<ICondition[]>([initItems]); //选中的起始发送时间子item
-
-  const [frequency, setFrequency] = useState(initFrequency); //发送频率
-
-
-  const sourceType = scaleType === 'CRF' ? CrfScaleSourceType : (scaleType === 'OBJECTIVE' ? ObjectiveSourceType : SubectiveScaleSourceType);
 
 
   useEffect(() => {
@@ -406,16 +634,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       // 循环判断每个item是不是dynimic
       for (let i = 0; i < res.keys.length; i++) {
         if (res.keys[i].name == 'start') {
-          fillValueInStartTimeKey(res.keys[i], projectSid, projectRoleType);
-          // setStartTimeKey(res.keys[i]);
-
-          setChooseStartTime((preState) => {
-            if (isEmpty(preState)) {
-              return res.keys[i].items[0];
-            }
-            return preState;
-          });
-
+          fillValueInStartTimeKey(res.keys[i], projectSid, projectRoleType, projectNsId);
+          chooseStartTimeListRef.current = res.keys[i].items;
         } else if (res.keys[i].name == 'scope') {
 
           for (let j = 0; j < res.keys[i].items.length; j++) {
@@ -439,8 +659,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
           }
         } else if (res.keys[i].name == 'condition') {
           setConditionKey(res.keys[i]);
-
-          console.log('==================== res.keys[i] condition', res.keys[i]);
         }
       }
     });
@@ -449,14 +667,19 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   useEffect(() => {
 
     if (chooseValues) {
-      setChooseStartTime(chooseValues.chooseStartTime);
-      setChoseScope(chooseValues.choseScope);
-      setChoseConditions(chooseValues.choseConditions);
-      setFrequency(chooseValues.frequency);
+      // chooseStartTimeListRef.current = chooseValues.chooseStartTime;
+      // setChooseStartTimeList(chooseValues.chooseStartTime);
+      // setChoseScope(chooseValues.choseScope);
+      // setChoseConditions(chooseValues.choseConditions);
+      // setFrequency(chooseValues.frequency);
 
-      setFirstTime(firstTime);
-      // const des = getTreatmentDesInStartTimeKey(chooseValues.chooseStartTime);
-      // setChooseTreatmentDes(des);
+      // setFirstTime(firstTime);
+
+      setFirstTime(cloneDeep(chooseValues.firstTime));
+      // setChooseStartTime(chooseValues.chooseStartTime);
+      setChoseScope(cloneDeep(chooseValues.choseScope));
+      setChoseConditions(cloneDeep(chooseValues.choseConditions));
+      setFrequency(cloneDeep(chooseValues.frequency));
     }
   }, [originRuleDoc]);
 
@@ -465,6 +688,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     setRemind(question ?? '');
     // remind.current = question;
   }, [question]);
+
+
+
 
 
   //改变起始发送时间类型-zhou
@@ -490,46 +716,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   // const handleChangeRemind = (e: { target: { value: string } }) => {
   //   setRemind(e.target.value);
   // };
-  const handleChangeRemind = (value: any, text: string) => {
-    console.log('valueeeeee', value);
-    console.log('textttt', text);
-    setRemind(text);
+  const handleChangeRemind = (value: any, _text: string) => {
+    setRemind(value);
   };
-
-  //更改 患者做处理的时间-->处理方式
-  // const changeStateByValue = (value: string) => {
-
-  //   const vals = String(value).split('_zsh_');
-  //   fillTreatmentInStartTimeKey(chooseStartTime, vals[0], vals[1]);
-  //   // setChooseTreatmentDes(vals[1]);
-  // };
-  //改变发送频率类型
-  // const handleGetType = (value: string) => {
-  //   frequency.frequency = value;
-  //   frequency.custom = [''];
-  //   setFrequency({ ...frequency });
-  // };
-  //添加发送频率
-  // const handleAddDayEdit = () => {
-  //   frequency.custom.push('');
-  //   setFrequency({ ...frequency });
-  // };
-  //修改发送频率
-  // const handleChangeCustomCycleDay = (e: any, index: number) => {
-  //   frequency.custom[index] = e;
-  //   setFrequency({ ...frequency });
-  // };
-  //删除自定义发送频率
-  // const handleDeleteDay = (index: number) => {
-  //   frequency.custom.splice(index, 1);
-  //   setFrequency({ ...frequency });
-  // };
-  // //循环下发天数
-  // const handleChangeCycleDay = (day: number) => {
-  //   frequency.custom = [day];
-  //   setFrequency({ ...frequency });
-  // };
-  //格式化’发送试验组‘
 
   //确定，回传拼好的数据格式
   const handleSubmit = () => {
@@ -543,15 +732,22 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
     //去重、过滤空数据
     frequency.custom = Array.from(new Set(frequency.custom)).filter((item) => !!item);
-    console.log('============= chooseStartTime', JSON.stringify(chooseStartTime));
+    // console.log('============= chooseStartTime', JSON.stringify(chooseStartTime));
     console.log('============= choseConditions', JSON.stringify(choseConditions));
     console.log('============= choseScope', JSON.stringify(choseScope));
     console.log('============= frequency', JSON.stringify(frequency));
-    const hasValConditions = choseConditions.filter(item => !isEmpty(item.chooseValue));
-    const arrParma = tileAllChoosesToArray(chooseStartTime, hasValConditions, choseScope);
 
+    const firstSteps = getFirstSteps(firstTime.choiceModel);
 
-    console.log('=============arrParma arrParma', JSON.stringify(arrParma));
+    console.log('============= firstSteps', JSON.stringify(firstSteps));
+
+    const must = titleAllChoosesToMustParma(chooseStartTimeListRef.current, firstSteps, choseConditions, scopeKey);
+    console.log('=============must must', JSON.stringify(must));
+    const should1 = tileChooseScopeToArray(choseScope);
+    console.log('=============should_1 should_1', JSON.stringify(should1));
+
+    const actions = originRuleDoc ? titleAllChoosesToActionsParma(firstSteps, firstTime, frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : titleAllChoosesToActionsParma(firstSteps, firstTime, frequency);
+    console.log('=============actions actions', JSON.stringify(actions));
 
     setLoading(false);
     // 如果是添加
@@ -576,24 +772,29 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       meta = originRuleDoc.meta;
     }
 
-    const actions = originRuleDoc ? tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
+    // const actions = originRuleDoc ? tileAllFrequencyToArray(frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : tileAllFrequencyToArray(frequency);
+
     const params: any = {
       rules: [{
-        match: arrParma,
+        match: {
+          must: must,
+          should_1: should1,
+        },
         actions: actions,
       }],
       meta: meta,
     };
     if (originRuleDoc) {
       params.id = originRuleDoc.id;
+      params.createdAtTime = originRuleDoc.createdAtTime;
     }
 
     addPlan({
       ruleDoc: params,
       questions: remind,
       chooseValues: {
-        chooseStartTime: chooseStartTime,
-        choseConditions: hasValConditions,
+        firstTime: firstTime,
+        choseConditions: choseConditions,
         choseScope: choseScope,
         frequency: frequency,
       },
@@ -603,29 +804,14 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const handCancel = () => {
     onCancel();
   };
-  // //获取处理方式
-  // const fetchTreatment = (value: string) => {
-  //   if (value !== '') {
-  //     setFetchStatus(true);
-  //     clearTimeout(timer);
-  //     timer = setTimeout(() => {
-  //       api.detail
-  //         .fetchTreatment({ name: value })
-  //         .then((res) => {
-  //           const { treatments } = res;
-  //           if (treatments.length > 0) {
-  //             setTreatment(treatments);
-  //           } else {
-  //             message.info('没有治疗方式信息!');
-  //           }
-  //         })
-  //         .catch((err) => {
-  //           message.error(err);
-  //         });
-  //       setFetchStatus(false);
-  //     }, 800);
-  //   }
-  // };
+
+  const onChoiceModelChange = (choiceModel: IModel) => {
+    console.log('============== choiceModel choiceModel', JSON.stringify(choiceModel));
+    firstTime.choiceModel = choiceModel;
+  };
+
+
+
   //存在空记录不可提交
   const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];
   const isEmptyGroup = choseScope.length == 0;
@@ -641,6 +827,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   }));
   const des = choseScope.map(item => item.description);
   console.log('isDisabled', isDisabled);
+
+  console.log('==================== use ues ', JSON.stringify(chooseStartTimeListRef.current));
+
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
       {isShowTextArea && (
@@ -655,7 +844,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
           <RichText handleChange={handleChangeRemind} value={remind} style={{ height: '135px' }} />
         </div>
       )}
-      <FirstSendTime choiceModelChange={() => { }} choiceModelSource={firstTime.choiceModel} popverContent={undefined} />
+
+
+
+      <FirstSendTime choiceModelChange={onChoiceModelChange} choiceModelSource={firstTime.choiceModel} popverContent={undefined} />
       {/* 
       <div className={styles.send_time}>
         <Select style={{ width: 180 }} onChange={handleChangeType} value={chooseStartTime.description}>
@@ -703,7 +895,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   }; */}
 
 
-      <SendFrequency onFrequencyChange={() => { }} initFrequency={frequency} frequencySource={frequencySource}></SendFrequency>
+      <SendFrequency onFrequencyChange={(fre) => { setFrequency(fre); }} initFrequency={frequency} frequencySource={frequencySource}></SendFrequency>
 
       {/* <h2>
         <span className={styles.start}>*</span>发送频率：
