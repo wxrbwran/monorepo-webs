@@ -10,6 +10,7 @@ import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
 import iconCopy from '@/assets/img/icon_copy_dj.png';
+import { SearchOutlined } from '@ant-design/icons';
 import IndexTable from '../IndexTable';
 
 // 获取图片详情接口返回的格式 | 搜索单据或指标时返回的item格式
@@ -373,7 +374,51 @@ const CustomIndex: FC<IProps> = (props) => {
 
   return (
     <div className="relative">
-      <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
+      <div className='flex mb-10'>
+      {
+        !isViewOnly && (
+          <div style={{ flex: 1 }}>
+            <Input.Search
+              placeholder="请输入关键字"
+              allowClear
+              enterButton="搜索"
+              className='search_keyword'
+              prefix={<SearchOutlined className='text-gray-600' />}
+              onSearch={(val: string) => setlightKeyWord(val)}
+            />
+          </div>
+        )
+      }
+      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && !isViewOnly && !initList && (
+        <div className="mb-10 ml-20">
+          <EditIndex
+            onSuccess={addIndexSuccess}
+            source="imgAddIndex"
+            documentId={apiParams.documentId}
+            sampleFrom={apiParams.sampleFrom}
+          >
+            <Button type="link" className="text-sm pr-0">
+              +添加新指标
+            </Button>
+          </EditIndex>
+        </div>
+      )}
+        {!initList &&
+          (apiParams.source === 'SYSTEM' ||
+            (apiParams.source === 'DOCTOR' && apiParams.sourceSid !== sid)) && (
+            <div className="mb-10 ml-20">
+              <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
+                <Button
+                  className="flex items-center text-sm"
+                  icon={<img src={iconCopy} className="w-16 mr-2" />}
+                >
+                  复制并修改单据
+                </Button>
+              </CopyDocument>
+            </div>
+        )}
+      </div>
+      <div className="flex text-sm justify-between items-center mb-20 structured-edit-wrap">
         {!(isViewOnly && !initList?.orgAndTime?.orgName) ? (
           <div className="flex" style={{ flex: '0 0 47%' }}>
             <div className="font-medium mr-5" style={{ flex: '0 0 63px', lineHeight: '25px' }}>
@@ -402,49 +447,6 @@ const CustomIndex: FC<IProps> = (props) => {
           isUnknownTime={initList?.orgAndTime?.unknownReport}
           type="HYD"
         />
-      </div>
-    <div className='flex mb-10'>
-      {
-        !isViewOnly && (
-          <div>
-            <Input.Search
-              placeholder="请输入关键字"
-              allowClear
-              enterButton="搜索"
-              className='search_keyword'
-              onSearch={(val: string) => setlightKeyWord(val)}
-            />
-          </div>
-        )
-      }
-      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && !isViewOnly && !initList && (
-        <div className="mb-10 ml-20">
-          <EditIndex
-            onSuccess={addIndexSuccess}
-            source="imgAddIndex"
-            documentId={apiParams.documentId}
-            sampleFrom={apiParams.sampleFrom}
-          >
-            <Button type="link" className="text-sm">
-              +添加新指标
-            </Button>
-          </EditIndex>
-        </div>
-      )}
-        {!initList &&
-          (apiParams.source === 'SYSTEM' ||
-            (apiParams.source === 'DOCTOR' && apiParams.sourceSid !== sid)) && (
-            <div className="mb-10 ml-20">
-              <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
-                <Button
-                  className="flex items-center text-sm"
-                  icon={<img src={iconCopy} className="w-16 mr-2" />}
-                >
-                  复制并修改单据
-                </Button>
-              </CopyDocument>
-            </div>
-        )}
       </div>
       <Form name={`custom_${formKey}`} form={form}>
         {renderItem()}

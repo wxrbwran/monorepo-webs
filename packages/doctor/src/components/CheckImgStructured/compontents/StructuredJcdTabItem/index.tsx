@@ -8,6 +8,7 @@ import styles from './index.scss';
 import { IJcdTabItem, IQaItem } from '../type';
 import { cloneDeep } from 'lodash';
 import * as api from '@/services/api';
+import { SearchOutlined } from '@ant-design/icons';
 import { Spin, Input } from 'antd';
 
 interface IProps {
@@ -123,12 +124,13 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
     <div className={`${styles.topic_list}`}>
       {
         !isViewOnly && (
-          <div className='w-250 mb-20'>
+          <div className='mb-20' style={{ width: !initData.data && initData.meta.creatorSid !== doctorSid ? 'calc(100% - 160px)' : '100%'  }}>
             <Input.Search
               placeholder="请输入关键字"
               allowClear
               enterButton="搜索"
               className='search_keyword'
+              prefix={<SearchOutlined className='text-gray-600' />}
               onSearch={(val) => setlightKeyWord(val)}
             />
           </div>
