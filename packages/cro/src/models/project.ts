@@ -5,7 +5,7 @@ import detail from '@/services/api/detail';
 import { IPlanInfos } from '@/utils/consts';
 import { patientManage, subjective } from '@/services/api';
 import { Role } from 'xzl-web-shared/dist/utils/role';
-import { getChooseValuesKeyFromRules } from '../pages/subjective_table/util';
+import { getChooseValuesKeyFromRules, getUrlPreFix } from '../pages/subjective_table/util';
 import * as api from '@/services/api';
 import { history } from 'umi';
 
@@ -85,14 +85,18 @@ const ProjectModel: ProjectModelType = {
       });
     },
     *fetchObjectiveScale({ payload }, { call, put }) {
-      const response = yield call(subjective.getObjectiveScale, payload);
+
+      console.log('payload   payload   payload', JSON.stringify(payload));
+
+      const response = yield call(api.subjective.getObjectiveScale, payload.id);
       if (response.infos.length == 0) {
         const projectSid = window.$storage.getItem('projectSid');
-        api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+        api.subjective.getScaleGroup({ projectSid, type: payload.scaleType }).then((res) => {
+
           if (res.scaleGroupInfos.length > 0) {
-            history.replace((`/objective_table/detail?name=${res.scaleGroupInfos[0].name}`));
+            history.replace((`/${getUrlPreFix(payload.scaleType)}/detail?name=${res.scaleGroupInfos[0].name}`));
           } else {
-            history.replace(('/objective_table/detail?name=_zsh_null'));
+            history.replace((`/${getUrlPreFix(payload.scaleType)}/detail?name=_zsh_null`));
           }
         });
       }

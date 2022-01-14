@@ -18,6 +18,7 @@ interface IProps {
     };
     pathname: string;
   };
+  scaleType: 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
 interface IState {
   project: {
@@ -25,7 +26,7 @@ interface IState {
     formName: string;
   };
 }
-function ObjectiveDetail({ location }: IProps) {
+function ObjectiveDetail({ location, scaleType }: IProps) {
   let initInfos: IPlanInfos = {
     questions: '',
     scaleId: '',
@@ -46,15 +47,18 @@ function ObjectiveDetail({ location }: IProps) {
 
   useEffect(() => {
     const id = location.query.id;
+
+
     if (groupId !== id) {
       setGroupId(id);
       setIsEdit(false);
       // 解决只要有编辑着没保存着的时候，location一切换到另一个表就有问题，所以置空；
       setEditStatus([]);
       if (!!id) {
+
         dispatch({
           type: 'project/fetchObjectiveScale',
-          payload: id,
+          payload: { id, scaleType },
         });
       }
     }
@@ -85,7 +89,7 @@ function ObjectiveDetail({ location }: IProps) {
       message.error('客观检查名称不能为空');
     } else {
       setIsEdit(false);
-      api.subjective.patchSubjectiveScale({
+      api.subjective.patchScale({
         name: scaleName,
         projectSid: window.$storage.getItem('projectSid'),
         scaleGroupId: location.query.id,
@@ -93,7 +97,7 @@ function ObjectiveDetail({ location }: IProps) {
         message.success('修改成功');
         dispatch({
           type: 'project/fetchObjectiveScale',
-          payload: location.query.id,
+          payload: { id: location.query.id, scaleType },
         });
         history.push(`${location.pathname}?name=${scaleName}`);
       });
@@ -137,7 +141,7 @@ function ObjectiveDetail({ location }: IProps) {
       projectSid,
       projectName,
       projectNsId,
-      type: 'OBJECTIVE',
+      type: scaleType,
       scaleGroupId: location.query.id,
     };
     console.log('====================== rule', JSON.stringify(params.questions));
@@ -150,7 +154,7 @@ function ObjectiveDetail({ location }: IProps) {
         console.log('================ 添加成功 editStatus,', JSON.stringify(editStatus));
         dispatch({
           type: 'project/fetchObjectiveScale',
-          payload: location.query.id,
+          payload: { id: location.query.id, scaleType },
         });
       });
   };
@@ -160,13 +164,13 @@ function ObjectiveDetail({ location }: IProps) {
       scaleId: item.scaleId,
       scaleGroupId: groupId,
       projectSid: window.$storage.getItem('projectSid'),
-      scaleType: 'OBJECTIVE',
+      scaleType: scaleType,
       ruleId: item?.ruleDoc?.id,
     }).then(() => {
       message.success('删除成功');
       dispatch({
         type: 'project/fetchObjectiveScale',
-        payload: location.query.id,
+        payload: { id: location.query.id, scaleType },
       });
     });
   };
@@ -175,7 +179,7 @@ function ObjectiveDetail({ location }: IProps) {
     setEditStatus([]);
     dispatch({
       type: 'project/fetchObjectiveScale',
-      payload: location.query.id,
+      payload: { id: location.query.id, scaleType },
     });
   };
 
@@ -216,7 +220,7 @@ function ObjectiveDetail({ location }: IProps) {
               mode="Add"
               onCancel={() => handleCancel(index)}
               addPlan={(params) => addPlan(params, index)}
-              scaleType={'OBJECTIVE'}
+              scaleType={scaleType}
               question={item.questions}
               originRuleDoc={item.ruleDoc}
               chooseValues={item.chooseValues}
@@ -231,6 +235,7 @@ function ObjectiveDetail({ location }: IProps) {
               location={location}
               changeEditStatus={changeEditStatus}
               handleDel={() => handleDelPlan(item)}
+              scaleType={scaleType}
             />
           );
         }

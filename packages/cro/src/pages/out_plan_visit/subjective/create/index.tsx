@@ -14,7 +14,7 @@ interface IProps {
   };
 }
 function Create(props: IProps) {
-  return <ScaleTableCreate {...props} scaleType="SUBJECTIVE" />;
+  return <ScaleTableCreate {...props} scaleType='VISIT_SUBJECTIVE' />;
 }
 
 export default Create;

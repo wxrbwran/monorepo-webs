@@ -16,8 +16,9 @@ interface IProps {
       id: string;
     }
   };
+  scaleType: 'CRF' | 'VISIT_CRF';
 }
-function CrfReply({ location }: IProps) {
+function CrfReply({ location, scaleType }: IProps) {
   const [dataSource, setDataSource] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [questions, setQuestions] = useState<IQuestions[]>([]);
@@ -27,6 +28,7 @@ function CrfReply({ location }: IProps) {
     api.subjective.getCrfScaleReplyList({
       scaleGroupId: location.query.id,
       projectNsId,
+      type: scaleType == 'CRF' ? 2 : 5,
     }).then((res) => {
       if (res.crfScaleReplyList.length > 0) {
         setDataSource(res.crfScaleReplyList);

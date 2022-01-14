@@ -6,9 +6,9 @@ import { useSelector } from 'umi';
 import ScaleCondition from '@/components/Scale/ScaleCondition';
 import RichText from '@/components/RichText';
 import styles from './index.scss';
-import { CrfScaleSourceType, SubectiveScaleSourceType, transformDynamicToStatic, ObjectiveSourceType } from '@/pages/query/util';
+import { transformDynamicToStatic } from '@/pages/query/util';
 import { isEmpty, cloneDeep } from 'lodash';
-import { GiveMedicTime, HandelTime, IChooseValues, ICondition, IItem, IntoGroupTime, IRuleDoc, StopMedicTime } from '@/pages/subjective_table/util';
+import { getRuleType, getSourceType, GiveMedicTime, HandelTime, IChooseValues, ICondition, IItem, IntoGroupTime, IRuleDoc, StopMedicTime } from '@/pages/subjective_table/util';
 import FirstSendTime from 'xzl-web-shared/dist/components/Rule/FirstSendTime';
 import SendFrequency from 'xzl-web-shared/dist/components/Rule/SendFrequency';
 import { DIY, ImmediatelySend, IModel } from 'xzl-web-shared/dist/components/Rule/util';
@@ -25,7 +25,7 @@ interface IProps {
   location?: {
     pathname: string,
   };
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
   question?: string;
 
   plans?: IPlanItem[];
@@ -569,7 +569,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
 
-  const sourceType = scaleType === 'CRF' ? CrfScaleSourceType : (scaleType === 'OBJECTIVE' ? ObjectiveSourceType : SubectiveScaleSourceType);
+
+  const sourceType = getSourceType(scaleType);
+
+  console.log('================== scaleType  sourceType', scaleType, sourceType);
 
   const childChoiceModel = (name: string): IModel => {
 
@@ -630,7 +633,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
 
   useEffect(() => {
-    api.query.fetchFields('SUBJECTIVE_SCALE').then((res) => {
+    api.query.fetchFields(getRuleType(scaleType).templeType).then((res) => {
       // 循环判断每个item是不是dynimic
       for (let i = 0; i < res.keys.length; i++) {
         if (res.keys[i].name == 'start') {
@@ -817,7 +820,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const isEmptyGroup = choseScope.length == 0;
   // const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
 
-  const isShowTextArea = scaleType === 'OBJECTIVE';
+  const isShowTextArea = scaleType === 'OBJECTIVE' || scaleType == 'VISIT_OBJECTIVE';
   const disabled =
     isShowTextArea ? !remind.trim() || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
 

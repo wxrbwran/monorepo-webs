@@ -1,3 +1,4 @@
+import { getUrlPreFix } from '@/pages/subjective_table/util';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'umi';
 
@@ -6,11 +7,10 @@ interface IProps {
   location: {
     pathname: string;
   };
-  scaleType: string;
-  source?: string; // out_plan_visit计划外随访
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
 }
 
-function ScaleTableTab({ location, id, scaleType, source }: IProps) {
+function ScaleTableTab({ location, id, scaleType }: IProps) {
   const [activeTab, setActiveTab] = useState('');
   useEffect(() => {
     let newTab = 'detail';
@@ -23,7 +23,7 @@ function ScaleTableTab({ location, id, scaleType, source }: IProps) {
   }, [location.pathname]);
   const tabList = [
     {
-      name: scaleType === 'CRF' ? 'CRF量表' : '主观量表',
+      name: (scaleType === 'CRF' || scaleType === 'VISIT_CRF') ? 'CRF量表' : '主观量表',
       url: 'detail',
     },
     {
@@ -35,10 +35,8 @@ function ScaleTableTab({ location, id, scaleType, source }: IProps) {
       url: 'send_record',
     },
   ];
-  let urlPrefix = scaleType === 'CRF' ? 'end_event' : 'subjective_table';
-  if (source === 'out_plan_visit') {
-    urlPrefix = `out_plan_visit/${scaleType.toLocaleLowerCase()}`;
-  }
+
+  console.log('============== scaleType scaleType', scaleType);
 
   return (
     <div className="subjective-table-tab">
@@ -50,7 +48,7 @@ function ScaleTableTab({ location, id, scaleType, source }: IProps) {
               className={['item', activeTab === item.url ? 'active' : ''].join(' ')}
               onClick={() => setActiveTab(item.url)}
             >
-              <Link to={`/${urlPrefix}/${item.url}?id=${id}`}>{item.name}</Link>
+              <Link to={`/${getUrlPreFix(scaleType)}/${item.url}?id=${id}`}>{item.name}</Link>
             </div>
           );
         })

@@ -14,7 +14,7 @@ interface IProps {
   quesIndex: number;
   editIndex: number;
   item: IQuestions;
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
 }
 function QuestionChoice(props: IProps) {
   const {
@@ -74,7 +74,7 @@ function QuestionChoice(props: IProps) {
     questions[quesIndex].detail.required = e.target.checked;
     changeQues([...questions]);
   };
-  const showInx = scaleType !== 'CRF';
+  const showInx = scaleType !== 'CRF' && scaleType !== 'VISIT_CRF';
   return (
     <div
       className={`topic-item ${editIndex === quesIndex ? 'edit' : ''}`}

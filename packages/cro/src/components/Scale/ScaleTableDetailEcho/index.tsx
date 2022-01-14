@@ -6,12 +6,13 @@ import { Checkbox, Input, message, Divider } from 'antd';
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Link, history, useSelector, useLocation } from 'umi';
 import { IQuestions } from '@/utils/consts';
+import { getUrlPreFix } from '@/pages/subjective_table/util';
 const TextArea = Input.TextArea;
 
 interface IProps {
   scaleName: string;
   questions: IQuestions[];
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
   source?: number;
   groupId?: string;
   scaleId?: string;
@@ -78,8 +79,7 @@ function ScaleTableDetailEcho(props: IProps) {
           && !location.pathname.includes('template') && (
             <p className={`${styles.icon} mr-20 absolute right-0 top-0`}>
               <Link
-                to={`/${scaleType === 'CRF' ? 'end_event' : 'subjective_table'
-                }/create?groupId=${groupId}`}
+                to={`/${getUrlPreFix(scaleType)}/create?groupId=${groupId}`}
               >
                 <p className="inline-block text-base cursor-pointer">
                   <FormOutlined /> 编辑 <Divider type="vertical" />

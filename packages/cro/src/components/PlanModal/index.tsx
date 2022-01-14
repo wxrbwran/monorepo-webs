@@ -10,7 +10,7 @@ interface IProps {
   title: string;
   infoIndex: number;
   scaleId?: string;
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
   // plans?: IPlanInfos[];
   ruleDoc: IRuleDoc;
   chooseValues: IChooseValues;

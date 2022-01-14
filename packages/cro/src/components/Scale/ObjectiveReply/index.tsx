@@ -8,6 +8,7 @@ import styles from './index.scss';
 interface IProps {
   children: React.ReactElement;
   scaleId: string;
+  scaleType: 'SUBJECTIVE' | 'VISIT_SUBJECTIVE';
 }
 interface IInfoList {
   imageList: string[];
@@ -17,7 +18,7 @@ interface IInfoList {
   sendNumber: number;
 }
 
-function Reply({ children, scaleId }: IProps) {
+function Reply({ children, scaleId, scaleType }: IProps) {
 
   const [wordKey, setWordKey] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -32,8 +33,9 @@ function Reply({ children, scaleId }: IProps) {
     setActiveIndex(idx);
   };
   const fetchScaleDetail = () => {
-    const params: { scaleId: string, patientName?: string } = {
+    const params: any = {
       scaleId,
+      type: scaleType == 'SUBJECTIVE' ? 1 : 4,
     };
     if (wordKey) {
       params.patientName = wordKey;
@@ -68,7 +70,7 @@ function Reply({ children, scaleId }: IProps) {
   return (
     <>
       <div style={{ display: 'inline' }} onClick={handleShowImgModal}>{children}</div>
-			{showModal && (
+      {showModal && (
         <DragModal
           visible={showModal}
           title='回复详情'
@@ -91,27 +93,27 @@ function Reply({ children, scaleId }: IProps) {
           {
             infoList.length > 0 ? infoList.map((item) => {
               return (
-                 <>
-                    <div className={styles.img_title}>
-                      <p className={styles.name}>{item.patientName}</p>
-                      <p>发送客观检查提醒次数：{item.sendNumber}</p>
-                      <p>回复单据数量：{item.replyNumber}</p>
-                    </div>
-                    <div className={styles.img_list}>
+                <>
+                  <div className={styles.img_title}>
+                    <p className={styles.name}>{item.patientName}</p>
+                    <p>发送客观检查提醒次数：{item.sendNumber}</p>
+                    <p>回复单据数量：{item.replyNumber}</p>
+                  </div>
+                  <div className={styles.img_list}>
                     {
                       item.imageList && item.imageList.map((img) => {
                         return (
-                          <img src={img} key={img} onClick={() => handleShowViewer(img)}/>
+                          <img src={img} key={img} onClick={() => handleShowViewer(img)} />
                         );
                       })
                     }
                   </div>
-                 </>
+                </>
               );
             }) : <div className={styles.empty}>暂无数据</div>
           }
         </DragModal>
-			) }
+      )}
       {
         images && (
           <Viewer

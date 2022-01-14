@@ -10,6 +10,7 @@ import styles from './index.scss';
 import { IState } from 'typings/global';
 import ScaleTemplate from '@/components/Scale/ScaleTemplate';
 import { cloneDeep } from 'lodash';
+import { getUrlPreFix } from '@/pages/subjective_table/util';
 
 interface IProps {
   location: {
@@ -18,8 +19,10 @@ interface IProps {
     };
     pathname: string;
   };
+  scaleType: 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
-function Create({ location }: IProps) {
+function Create({ location, scaleType }: IProps) {
+
   let initInfos: IPlanInfos = {
     // plans: [
     //   {
@@ -82,7 +85,7 @@ function Create({ location }: IProps) {
       const params = {
         infos: ruleList,
         name: formName,
-        type: 'OBJECTIVE',
+        type: scaleType,
         projectSid,
         projectName: window.$storage.getItem('projectName'),
         projectNsId,
@@ -94,7 +97,8 @@ function Create({ location }: IProps) {
         .then(() => {
           message.success('添加成功');
           setLoading(false);
-          history.push(`/objective_table/detail?name=${formName}`);
+
+          history.push(`/${getUrlPreFix(scaleType)}/detail?name=${formName}`);
         })
         .catch((err: string) => {
           message.error(err);
@@ -143,7 +147,7 @@ function Create({ location }: IProps) {
             onCancel={() => handleCancel(index)}
             infoIndex={index}
             addPlan={(params) => addPlan(params, index)}
-            scaleType={'OBJECTIVE'}
+            scaleType={scaleType}
             question={item.questions}
             originRuleDoc={item.ruleDoc}
             chooseValues={item.chooseValues}
@@ -156,6 +160,7 @@ function Create({ location }: IProps) {
             location={location}
             changeEditStatus={() => changeEditStatus(index)}
             handleDel={() => delPlan(index)}
+            scaleType={scaleType}
           />
         ),
       )}

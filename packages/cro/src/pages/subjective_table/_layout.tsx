@@ -5,6 +5,7 @@ import SideMenu from './components/side_menu';
 import ScaleTableTab from '@/components/Scale/ScaleTableTab';
 import { history, useDispatch } from 'umi';
 import * as api from '@/services/api';
+import { RuleTypeMap } from './util';
 
 interface IProps {
   children: React.ReactElement[];
@@ -28,7 +29,7 @@ function PatientManage(props: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
     if (!props.location.query.isTemp) {
-      api.subjective.getScaleGroup({ projectSid, type: 'SUBJECTIVE' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.subjective.type }).then((res) => {
         setTableList(res.scaleGroupInfos);
         if (res.scaleGroupInfos.length > 0) {
           history.replace(`/subjective_table/detail?id=${res.scaleGroupInfos[0].id}`);
@@ -41,7 +42,7 @@ function PatientManage(props: IProps) {
     const newUrlName = props.location.query.name;
     if (newUrlName && urlName !== newUrlName) {
       console.log('newUrlName', newUrlName);
-      api.subjective.getScaleGroup({ projectSid, type: 'SUBJECTIVE' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.subjective.type }).then((res) => {
         setTableList(res.scaleGroupInfos);
         const scaleGroupInfos = res.scaleGroupInfos.filter(
           (item: { name: string }) => item.name === newUrlName,
@@ -76,7 +77,7 @@ function PatientManage(props: IProps) {
               <ScaleTableTab
                 id={props.location.query.id}
                 location={props.location}
-                scaleType="SUBJECTIVE"
+                scaleType={RuleTypeMap.subjective.scaleType}
               />
             )}
             {props.children}

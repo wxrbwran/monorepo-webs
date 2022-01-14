@@ -6,9 +6,10 @@ interface IProps {
   children: React.ReactElement;
   scaleId: string;
   ruleId: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
 
-function SendRecord({ children, scaleId, ruleId }: IProps) {
+function SendRecord({ children, scaleId, ruleId, scaleType }: IProps) {
 
   const [showModal, setshowModal] = useState(false);
   const handleShowModal = () => {
@@ -27,7 +28,7 @@ function SendRecord({ children, scaleId, ruleId }: IProps) {
         maskClosable
         footer={null}
       >
-        <TableSendRecord source="objective" ruleId={ruleId} scaleId={scaleId} />
+        <TableSendRecord scaleType={scaleType} ruleId={ruleId} scaleId={scaleId} />
       </DragModal>
     </div>
   );

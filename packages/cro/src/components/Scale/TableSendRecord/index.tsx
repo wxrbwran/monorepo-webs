@@ -10,12 +10,12 @@ import { useForm } from 'antd/lib/form/Form';
 import * as api from '@/services/api';
 import { useSelector } from 'umi';
 import { IState } from 'typings/global';
-// import { debounce } from 'lodash';
-import { CrfScaleSourceType, ObjectiveSourceType, SubectiveScaleSourceType } from '@/pages/query/util';
+import { getRuleType } from '@/pages/subjective_table/util';
 
 const { TabPane } = Tabs;
 interface IProps {
-  source: 'crf' | 'objective' | 'subjective';
+  // source: 'crf' | 'objective' | 'subjective';
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
   scaleGroupId?: string;  // 主观量表和crf量表会传
   ruleId?: string;  // 客观量表会传
   scaleId?: string;  // 客观量表会传
@@ -30,18 +30,26 @@ interface ITableOptions {
   eventSourceType: string;
 }
 const TableSendRecord: FC<IProps> = (props) => {
-  const { source, scaleGroupId, ruleId, scaleId } = props;
+  const { scaleType, scaleGroupId, ruleId, scaleId } = props;
+
 
 
   const apiRequest = {
-    crf: api.research.fetchCrfRecord,
-    objective: api.research.fetchObjectiveRecord,
-    subjective: api.research.fetchSubjectiveRecord,
+    CRF: api.research.fetchCrfRecord,
+    VISIT_CRF: api.research.fetchCrfRecord,
+
+    OBJECTIVE: api.research.fetchObjectiveRecord,
+    VISIT_OBJECTIVE: api.research.fetchObjectiveRecord,
+
+    SUBJECTIVE: api.research.fetchSubjectiveRecord,
+    VISIT_SUBJECTIVE: api.research.fetchSubjectiveRecord,
   };
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const initActiveTab = '0';
   // const [activeTab, setactiveTab] = useState(initActiveTab);
-  const eventSourceType = source === 'subjective' ? SubectiveScaleSourceType : (source === 'objective' ? ObjectiveSourceType : CrfScaleSourceType);
+  const eventSourceType = getRuleType(scaleType).sourceType;
+
+  console.log('============== scaleType scaleType  TableSendRecord', scaleType, eventSourceType, scaleGroupId, ruleId);
 
   const [activeTab, setactiveTab] = useState(initActiveTab);
 
@@ -56,15 +64,12 @@ const TableSendRecord: FC<IProps> = (props) => {
 
 
   useEffect(() => {
-    console.log('=================== res res 111111111');
-    if (source !== 'objective' && !ruleId) { // 主观量表和crf量表才需要再获取ruleId
+    console.log('=================== res res 111111111', scaleType, ruleId);
+    // if (source !== 'objective' && !ruleId) { // 主观量表和crf量表才需要再获取ruleId
+
+    if ((scaleType !== 'OBJECTIVE' && scaleType !== 'VISIT_OBJECTIVE') && !ruleId) { // 主观量表和crf量表才需要再获取ruleId
+
       api.subjective.getSubjectiveScaleDetail(scaleGroupId).then((res) => {
-
-        // settableOptions({
-        //   ...tableOptions,
-        //   ruleId: res?.ruleDoc?.id,
-        // });
-
         settableOptions0({
           ...tableOptions0,
           ruleId: res?.ruleDoc?.id,
@@ -175,10 +180,12 @@ const TableSendRecord: FC<IProps> = (props) => {
   // }, [tableOptions]);
 
   let col = [...columns];
-  if (source === 'crf') {
+
+  // if (source === 'crf') {
+  if (scaleType === 'CRF' || scaleType == 'VISIT_CRF') {
     col = [sendAt, Receiver];
   }
-  if (activeTab === '2' && source !== 'objective') { col.push(replyAt); }
+  if (activeTab === '2' && (scaleType !== 'OBJECTIVE' && scaleType !== 'VISIT_OBJECTIVE')) { col.push(replyAt); }
 
   return (
     <div className={styles.send_record}>
@@ -193,7 +200,7 @@ const TableSendRecord: FC<IProps> = (props) => {
               (
                 <div>
                   <XzlTable
-                    request={apiRequest[source]}
+                    request={apiRequest[scaleType]}
                     depOptions={tableOptions0}
                     // noPagination={true}
                     columns={col}
@@ -208,13 +215,13 @@ const TableSendRecord: FC<IProps> = (props) => {
           }
         </TabPane>
 
-        {source !== 'objective' && <TabPane tab="已发送/已填写" key="2">
+        {(scaleType != 'OBJECTIVE' && scaleType != 'VISIT_OBJECTIVE') && <TabPane tab="已发送/已填写" key="2">
           {
             tableOptions1.ruleId ?
               (
                 <div>
                   <XzlTable
-                    request={apiRequest[source]}
+                    request={apiRequest[scaleType]}
                     depOptions={tableOptions1}
                     // noPagination={true}
                     columns={col}
@@ -228,13 +235,13 @@ const TableSendRecord: FC<IProps> = (props) => {
               ) : <div></div>
           }
         </TabPane>}
-        <TabPane tab={source === 'objective' ? '已发送' : '已发送/未填写'} key="1">
+        <TabPane tab={(scaleType == 'OBJECTIVE' || scaleType == 'VISIT_OBJECTIVE') ? '已发送' : '已发送/未填写'} key="1">
           {
             tableOptions2.ruleId ?
               (
                 <div>
                   <XzlTable
-                    request={apiRequest[source]}
+                    request={apiRequest[scaleType]}
                     depOptions={tableOptions2}
                     // noPagination={true}
                     columns={col}

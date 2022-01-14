@@ -24,7 +24,7 @@ const SendRecord: FC = () => {
   console.log('ruleId============= SendRecord subjective location', JSON.stringify(location.query.ruleId));
   return (
     <div>
-      <TableSendRecord source="subjective" scaleGroupId={location.query.id} />
+      <TableSendRecord scaleType='SUBJECTIVE' scaleGroupId={location.query.id} />
     </div>
   );
 };

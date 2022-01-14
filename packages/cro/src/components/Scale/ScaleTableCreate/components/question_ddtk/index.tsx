@@ -15,7 +15,7 @@ interface IProps {
   quesIndex: number;
   editIndex: number;
   item: IQuestions;
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
   changeDdtkQues: (newQues: IQuestions[]) => void;
   handSaveDdtkModify: () => void;
   originQue: IQuestions[];
@@ -62,7 +62,7 @@ function questionGapFilling(props: IProps) {
     setCursorIndex(ev.target.value.length);
     handleSaveStem(ev, quesIndex);
   };
-  const showInx = scaleType !== 'CRF';
+  const showInx = scaleType !== 'CRF' && scaleType !== 'VISIT_CRF';
   console.log('item2222', item);
   return (
     <div

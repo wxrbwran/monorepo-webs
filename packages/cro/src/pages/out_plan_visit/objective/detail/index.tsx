@@ -12,7 +12,7 @@ interface IProps {
 
 function Detail({ location }: IProps) {
   return (
-    <ObjectiveDetail location={location} />
+    <ObjectiveDetail location={location} scaleType='VISIT_OBJECTIVE' />
   );
 }
 

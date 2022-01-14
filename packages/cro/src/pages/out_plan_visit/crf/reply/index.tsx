@@ -8,6 +8,8 @@ interface IProps {
   };
 }
 function Reply({ location }: IProps) {
+
+  console.log('================ Reply ====  ,');
   return (
     <CrfReply location={location} />
   );

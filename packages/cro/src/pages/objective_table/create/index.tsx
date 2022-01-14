@@ -12,7 +12,7 @@ interface IProps {
 }
 function Create({ location }: IProps) {
   return (
-    <ObjectiveCreate location={location} />
+    <ObjectiveCreate location={location} scaleType='OBJECTIVE' />
   );
 }
 

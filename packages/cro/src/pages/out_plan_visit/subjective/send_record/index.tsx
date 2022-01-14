@@ -6,7 +6,7 @@ const SendRecord: FC = () => {
   const location: any = useLocation();
   return (
     <div>
-      <TableSendRecord source="subjective" scaleGroupId={location.query.id} />
+      <TableSendRecord scaleType='VISIT_SUBJECTIVE' scaleGroupId={location.query.id} />
     </div>
   );
 };

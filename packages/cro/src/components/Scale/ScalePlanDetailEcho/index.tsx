@@ -18,7 +18,7 @@ import { isEmpty } from 'lodash';
 
 
 interface IProps {
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
   scaleId?: string;
   addPlans?: (params: { plans: [] }) => void;
   // initPlans: any[];
@@ -33,7 +33,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   // const groupList = useSelector((state: IGroup) => state.project.objectiveGroup);
   const [ruleDoc, setRuleDoc] = useState<IRuleDoc>({});
   // const [val, setVal] = useState<IVal>({});
-  const apiName = scaleType === 'CRF' ? 'getSubjectiveScaleDetail' : 'getSubjectiveScaleDetail';
+  const apiName = 'getSubjectiveScaleDetail';
 
   const [chooseValues, setChooseValues] = useState<IChooseValues>({ firstTime: {}, choseConditions: [], choseScope: [], frequency: { custom: [] } });
   const [conditionDescription, setConditionDescription] = useState();
@@ -129,10 +129,12 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
   const des = chooseValues ? chooseValues.choseScope.map(item => item.description).join(',') : '';
 
+
+
   return (
     <>
       <div className="table-plan__title">
-        <span>{scaleType === 'CRF' ? 'CRF' : '主观'}量表计划</span>
+        <span>{(scaleType === 'CRF' || scaleType == 'VISIT_CRF') ? 'CRF' : '主观'}量表计划</span>
         {
           window.$storage.getItem('isLeader')
           && window.$storage.getItem('projectStatus') != 1001

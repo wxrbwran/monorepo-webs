@@ -1,5 +1,134 @@
 import { cloneDeep } from 'lodash';
 import { IModel } from 'xzl-web-shared/dist/components/Rule/util';
+
+
+// export const ResearchSourceType = '4';
+// export const SubectiveScaleSourceType = '5';
+// export const CrfScaleSourceType = '6';
+// export const ObjectiveSourceType = '7';
+
+
+// const sourceType = scaleType === 'CRF' ? CrfScaleSourceType : (scaleType === 'OBJECTIVE' ? ObjectiveSourceType : SubectiveScaleSourceType);
+
+
+// OBJECTIVE  CRF  SUBJECTIVE  VISIT_OBJECTIVE   VISIT_CRF  VISIT_SUBJECTIVE
+export const RuleTypeMap = {
+  objective: {
+    type: 'OBJECTIVE',
+    scaleType: 'OBJECTIVE',
+    text: '客观量表',
+    sourceType: '7',
+    templeType: 'OBJECTIVE_INSPECTION',
+  },
+  crf: {
+    type: 'CRF',
+    scaleType: 'CRF',
+    text: 'crf量表',
+    sourceType: '6',
+    templeType: 'CRF_SCALE',
+  },
+  subjective: {
+    type: 'SUBJECTIVE',
+    scaleType: 'SUBJECTIVE',
+    text: '主观量表',
+    sourceType: '5',
+    templeType: 'SUBJECTIVE_SCALE',
+  },
+
+  visit_objective: {
+    type: 'VISIT_OBJECTIVE',
+    scaleType: 'VISIT_OBJECTIVE',
+    text: '计划外访视客观',
+    sourceType: '13', // 计划外访视客观量表提醒
+    templeType: 'VISIT_OBJECTIVE_INSPECTION',
+  },
+  visit_crf: {
+    type: 'VISIT_CRF',
+    scaleType: 'VISIT_CRF',
+    text: '计划外访视CRF',
+    sourceType: '12', // 计划外访视CRF量表提醒
+    templeType: 'VISIT_CRF_SCALE',
+  },
+  visit_subjective: {
+    type: 'VISIT_SUBJECTIVE',
+    scaleType: 'VISIT_SUBJECTIVE',
+    text: '计划外访视主观',
+    sourceType: '11', //计划外访视主观量表提醒
+    templeType: 'VISIT_SUBJECTIVE_SCALE',
+  },
+};
+
+export const getUrlPreFix = (scaleType: string) => {
+
+  switch (scaleType) {
+    case RuleTypeMap.crf.scaleType:
+      return 'end_event';
+    case RuleTypeMap.subjective.scaleType:
+      return 'subjective_table';
+    case RuleTypeMap.objective.scaleType:
+      return 'objective_table';
+    case RuleTypeMap.visit_crf.scaleType:
+      return 'out_plan_visit/crf';
+    case RuleTypeMap.visit_subjective.scaleType:
+      return 'out_plan_visit/subjective';
+    case RuleTypeMap.visit_objective.scaleType:
+      return 'out_plan_visit/objective';
+    default:
+      return '';
+  }
+};
+
+export const getSourceType = (scaleType: string) => {
+
+  switch (scaleType) {
+    case RuleTypeMap.crf.scaleType:
+      return RuleTypeMap.crf.sourceType;
+
+    case RuleTypeMap.subjective.scaleType:
+      return RuleTypeMap.subjective.sourceType;
+
+    case RuleTypeMap.objective.scaleType:
+      return RuleTypeMap.objective.sourceType;
+
+    case RuleTypeMap.visit_crf.scaleType:
+      return RuleTypeMap.visit_crf.sourceType;
+
+    case RuleTypeMap.visit_subjective.scaleType:
+      return RuleTypeMap.visit_subjective.sourceType;
+
+    case RuleTypeMap.visit_objective.scaleType:
+      return RuleTypeMap.visit_objective.sourceType;
+    default:
+      return '';
+  }
+};
+
+export const getRuleType = (scaleType: string) => {
+
+  switch (scaleType) {
+    case RuleTypeMap.crf.scaleType:
+      return RuleTypeMap.crf;
+
+    case RuleTypeMap.subjective.scaleType:
+      return RuleTypeMap.subjective;
+
+    case RuleTypeMap.objective.scaleType:
+      return RuleTypeMap.objective;
+
+    case RuleTypeMap.visit_crf.scaleType:
+      return RuleTypeMap.visit_crf;
+
+    case RuleTypeMap.visit_subjective.scaleType:
+      return RuleTypeMap.visit_subjective;
+
+    case RuleTypeMap.visit_objective.scaleType:
+      return RuleTypeMap.visit_objective;
+    default:
+      return '';
+  }
+};
+
+
 export interface IItem {
   name: string;
   type: string;
@@ -212,6 +341,8 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
       }
     }
 
+    // 
+
     if (action.params.period == 0) { // 选择的是 立即发送
       choiceModel.choiceModel.choiceModel = choiceModel.choiceModel?.childItem?.filter((item) => item.description == ImmediatelySend)[0];
     } else { // 选择的是自定义
@@ -220,6 +351,13 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
       choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
     }
   }
+
+  // else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
+  //   choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
+  //   choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
+  // } else {
+  //   choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
+  // }
   return ({
     choiceModel: choiceModel,
   });
@@ -310,8 +448,10 @@ export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any
     if (action.params?.regulars?.length > 0) {
 
       const regulars = {};
-      for (let index = 0; i < action.params.regulars.length; index++) {
+      for (let index = 0; index < action.params.regulars.length; index++) {
         const regu = action.params.regulars[index];
+
+        console.log('================ regu regu', JSON.stringify(regu));
         if (regu.regularUnit == 'day') {
           regulars.day = regu.regularNum;
         } else if (regu.regularUnit == 'hour') {

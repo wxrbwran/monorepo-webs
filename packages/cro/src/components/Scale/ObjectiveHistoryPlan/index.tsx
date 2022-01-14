@@ -35,9 +35,10 @@ interface IProps {
   };
   changeEditStatus: () => void;
   handleDel?: () => void;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
 
-function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDel }: IProps) {
+function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDel, scaleType }: IProps) {
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const projectSid = window.$storage.getItem('projectSid');
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -53,6 +54,8 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
   useEffect(() => {
 
     if (infoItem) {
+
+      console.log('================ infoItem', JSON.stringify(infoItem));
       setRuleDoc(infoItem.ruleDoc);
 
       setChooseValues(cloneDeep(infoItem.chooseValues));
@@ -116,7 +119,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
             {location.pathname.includes('detail') ? (
               <>
                 {
-                  status === 1001 && (
+                  (status === 1001 || scaleType == 'VISIT_OBJECTIVE') && (
                     <>
                       <Reply scaleId={infoItem.scaleId}>
                         <div className={styles.detail}>
@@ -125,7 +128,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                         </div>
                       </Reply>
                       <Divider type="vertical" />
-                      <SendRecord scaleId={infoItem.scaleId} children={undefined} ruleId={infoItem.ruleDoc.id}>
+                      <SendRecord scaleId={infoItem.scaleId} ruleId={infoItem.ruleDoc.id} scaleType={scaleType}>
                         <div className={styles.detail}>
                           <img className={styles.icon_reply} src={iconRecord} />
                           <span>发送记录</span>
@@ -141,7 +144,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                   chooseValues={chooseValues}
                   updatePlan={updatePlan}
                   infoIndex={itemIndex}
-                  scaleType={'OBJECTIVE'}
+                  scaleType={scaleType}
                   question={infoItem.questions}
                 >
                   {window.$storage.getItem('isLeader') &&
@@ -204,7 +207,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
           <div className={styles.item}>
             <div className={styles.tit}>
               <img src={iconGroup} alt="" />
-              <span>发送试验组11</span>
+              <span>发送试验组</span>
             </div>
             <div className={styles.text}>{des}</div>
           </div>

@@ -19,7 +19,7 @@ function RichText({ handleChange, value, style, readonly }: IProps) {
       const quillEditor = quillRef.getEditor();
       quillRef.setEditorContents(quillEditor, value);
     }
-  }, [quillRef]);
+  }, [quillRef, value]);
 
   const toolbarContainer = [
     [{ size: [false, 'large', 'huge'] }],

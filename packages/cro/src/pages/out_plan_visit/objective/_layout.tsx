@@ -4,6 +4,7 @@ import ToogleSide from '@/components/ToogleSide';
 import SideMenu from '../components/SideMenu';
 import { history } from 'umi';
 import * as api from '@/services/api';
+import { RuleTypeMap } from '@/pages/subjective_table/util';
 
 interface IProps {
   children: React.ReactElement[];
@@ -21,7 +22,7 @@ function ObjectiveTable(props: IProps) {
   const [tableList, setTableList] = useState([]);
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
-    api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+    api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_objective.scaleType }).then((res) => {
       setTableList(res.scaleGroupInfos);
       if (res.scaleGroupInfos.length > 0) {
         history.replace((`/out_plan_visit/objective/detail?id=${res.scaleGroupInfos[0].id}`));
@@ -33,7 +34,7 @@ function ObjectiveTable(props: IProps) {
     const newUrlName = props.location.query.name;
     console.log('==================== 跳转到所创建的表详情页面', newUrlName);
     if (newUrlName) {
-      api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_objective.scaleType }).then((res) => {
         if (res.scaleGroupInfos.length > 0) {
           setTableList(res.scaleGroupInfos);
           const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
@@ -51,7 +52,7 @@ function ObjectiveTable(props: IProps) {
       {
         isShowSideMenu ? (
           <ToogleSide>
-            <SideMenu tableList={tableList} location={props.location} type="objective" />
+            <SideMenu tableList={tableList} location={props.location} type='visit_objective' />
             <div style={{ height: '100%' }}>
               {props.children}
             </div>

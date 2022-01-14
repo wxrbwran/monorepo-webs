@@ -13,7 +13,7 @@ interface IProps {
   };
 }
 function Create(props: IProps) {
-  return <ScaleTableCreate {...props} scaleType="CRF" />;
+  return <ScaleTableCreate {...props} scaleType='VISIT_CRF' />;
 }
 
 export default Create;

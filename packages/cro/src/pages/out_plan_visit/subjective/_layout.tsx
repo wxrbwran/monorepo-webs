@@ -5,6 +5,7 @@ import SideMenu from '../components/SideMenu';
 import ScaleTableTab from '@/components/Scale/ScaleTableTab';
 import { history } from 'umi';
 import * as api from '@/services/api';
+import { RuleTypeMap } from '@/pages/subjective_table/util';
 
 interface IProps {
   children: React.ReactElement[];
@@ -27,7 +28,7 @@ function OutPlanVisitSubjective(props: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
     if (!props.location.query.isTemp) {
-      api.subjective.getScaleGroup({ projectSid, type: 'SUBJECTIVE' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_subjective.type }).then((res) => {
         setTableList(res.scaleGroupInfos);
         if (res.scaleGroupInfos.length > 0) {
           history.replace(`/out_plan_visit/subjective/detail?id=${res.scaleGroupInfos[0].id}`);
@@ -40,7 +41,7 @@ function OutPlanVisitSubjective(props: IProps) {
     const newUrlName = props.location.query.name;
     if (newUrlName && urlName !== newUrlName) {
       console.log('newUrlName', newUrlName);
-      api.subjective.getScaleGroup({ projectSid, type: 'SUBJECTIVE' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_subjective.type }).then((res) => {
         setTableList(res.scaleGroupInfos);
         const scaleGroupInfos = res.scaleGroupInfos.filter(
           (item: { name: string }) => item.name === newUrlName,
@@ -69,14 +70,13 @@ function OutPlanVisitSubjective(props: IProps) {
     <div className="subjective-table">
       {isShowSideMenu ? (
         <ToogleSide>
-          <SideMenu tableList={tableList} location={props.location} type="subjective" />
+          <SideMenu tableList={tableList} location={props.location} type='visit_subjective' />
           <div style={{ height: '100%' }}>
             {tableList.length > 0 && (
               <ScaleTableTab
                 id={props.location.query.id}
                 location={props.location}
-                scaleType="SUBJECTIVE"
-                source="out_plan_visit"
+                scaleType={RuleTypeMap.visit_subjective.scaleType}
               />
             )}
             {props.children}

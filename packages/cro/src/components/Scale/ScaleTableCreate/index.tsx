@@ -14,8 +14,7 @@ import PlanModal from '@/components/PlanModal';
 import ScalePlanDetailEcho from '@/components/Scale/ScalePlanDetailEcho';
 
 import './index.scss';
-import { IRuleDoc, IRules } from '@/pages/subjective_table/util';
-// const { confirm } = Modal;
+import { getUrlPreFix, IRuleDoc, IRules } from '@/pages/subjective_table/util';
 
 interface IProps {
   location: {
@@ -28,9 +27,10 @@ interface IProps {
     };
     pathname: string;
   };
-  scaleType: string; // 区分来源 crf或主观量表
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
 }
 function ScaleTableCreate({ location, scaleType }: IProps) {
+
   const [formTit, setFormTit] = useState('');
   const [subTit, setSubTit] = useState('');
   const [questions, setQuestions] = useState<IQuestions[]>([]); //修改题目填写题目时一直变化的questions
@@ -143,30 +143,15 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   //创建量表
   const handleCreate = (params: any, tit: string) => {
     setLoading(true);
-    if (scaleType === 'CRF') {
-      // const apiName = groupId ? 'patchSubjectiveScale' : 'postCrfScale';
-      const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
+    const apiName = groupId ? 'patchScale' : 'addScale';
 
-      console.log('================ CRF', JSON.stringify(params));
-      api.subjective[apiName](params).then(() => {
-        // message.success('添加成功');
-        setLoading(false);
-        history.push(`/end_event/detail?name=${tit}`);
-      }).catch(() => {
-        setLoading(false);
-      });
-    } else {
-
-      const apiName = groupId ? 'patchSubjectiveScale' : 'addSubjectiveScale';
-
-      api.subjective[apiName](params).then(() => {
-        // message.success('修改成功');
-        setLoading(false);
-        history.push(`/subjective_table/detail?name=${tit}`);
-      }).catch(() => {
-        setLoading(false);
-      });
-    }
+    api.subjective[apiName](params).then(() => {
+      // message.success('添加成功');
+      setLoading(false);
+      history.push(`/${getUrlPreFix(scaleType)}/detail?name=${tit}`);
+    }).catch(() => {
+      setLoading(false);
+    });
   };
   const handleSubmit = () => {
 
@@ -273,6 +258,15 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const handleSetEditIndex = (inx: number) => {
     setEditIndex(inx);
   };
+
+  const titlePrex = () => {
+
+    if (scaleType === 'CRF' || scaleType == 'VISIT_CRF') {
+      return 'CRF';
+    } else {
+      return '主观';
+    }
+  };
   return (
     <div className="follow-table-create">
       <div className="left">
@@ -281,7 +275,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
           <div className="text-box">
             <Tooltip placement="top" title="点击可进行编辑">
               <Input
-                placeholder={`输入${scaleType === 'CRF' ? 'CRF' : '主观'}量表标题`}
+                placeholder={`输入${titlePrex()}量表标题`}
                 className="edit-input"
                 value={formTit}
                 onChange={handleFormTit}
@@ -291,7 +285,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
         </div>
         <div className="info">
           <Input
-            placeholder={`输入${scaleType === 'CRF' ? 'CRF' : '主观'}量表副标题`}
+            placeholder={`输入${titlePrex()}量表副标题`}
             className="edit-input"
             value={subTit}
             onChange={handleFormSubTit}

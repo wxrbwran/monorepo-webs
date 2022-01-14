@@ -12,12 +12,12 @@ interface IProps {
   quesIndex: number;
   editIndex: number;
   item: IQuestions;
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
 }
 const { TextArea } = Input;
 function QuestionText(props: IProps) {
   const { questions, changeQues, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex, scaleType } = props;
-  const showInx = scaleType !== 'CRF';
+  const showInx = scaleType !== 'CRF' && scaleType !== 'VISIT_CRF';
 
   const changeRequired = (e: any) => {
     questions[quesIndex].detail.required = e.target.checked;

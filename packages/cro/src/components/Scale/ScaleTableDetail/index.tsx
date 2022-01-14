@@ -7,7 +7,7 @@ import ScalePlanDetailEcho from '@/components/Scale/ScalePlanDetailEcho';
 // frequency // 频率
 import './index.scss';
 interface IProps {
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
 interface ILocation {
   query: {

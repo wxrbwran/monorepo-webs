@@ -3,14 +3,14 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
 import './index.scss';
 
-interface IProps{
+interface IProps {
   location: {
     pathname: string;
     query: {
       id: string;
     }
   };
-  type: string;
+  type: 'visit_objective' | 'visit_crf' | 'visit_subjective';
   tableList: {
     id: string,
     name: string;
@@ -21,13 +21,14 @@ function SideMenu(props: IProps) {
   const { type } = props;
   const [currentId, setCurrentId] = useState('');
   const scaleData = {
-    CRF: {  title: 'CRF量表', urlName: 'crf', createUrl: 'create' },
-    subjective: { title: '主观量表', urlName: 'subjective', createUrl: 'guide'  },
-    objective: { title: '客观检查', urlName: 'objective', createUrl: 'create'  },
+    visit_crf: { title: 'CRF量表', urlName: 'crf', createUrl: 'create' },
+    visit_subjective: { title: '主观量表', urlName: 'subjective', createUrl: 'guide' },
+    visit_objective: { title: '客观检查', urlName: 'objective', createUrl: 'create' },
   };
+
   useEffect(() => {
     const id = props.location.query.id;
-    if ( id !== currentId) {
+    if (id !== currentId) {
       setCurrentId(id);
     }
   }, [props]);

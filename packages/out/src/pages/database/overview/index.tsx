@@ -13,7 +13,7 @@ function Overview() {
   const fetchScaleList = async (projectSid: string) => {
     const { scaleGroupInfos } = await api.overview.getScaleGroup({
       projectSid,
-      type: 'SUBJECTIVE',
+      type: RuleTypeMap.subjective.type,
     });
     setScaleList(scaleGroupInfos);
     if (scaleGroupInfos.length > 0) {

@@ -9,6 +9,7 @@ import { IPlanInfos, IQuestions } from '@/utils/consts';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 import ScaleTemplate from '@/components/Scale/ScaleTemplate';
+import { RuleTypeMap } from '../util';
 
 interface IProps {
   location: {
@@ -40,12 +41,12 @@ function Template(props: IProps) {
       name,
       ruleDoc: plans.ruleDoc,
       projectSid: window.$storage.getItem('projectSid'),
-      type: 'SUBJECTIVE',
+      type: RuleTypeMap.subjective.type,
       info: { questions },
       projectName: window.$storage.getItem('projectName'),
       projectNsId,
     };
-    api.subjective.addSubjectiveScale(params).then(() => {
+    api.subjective.addScale(params).then(() => {
       message.success('添加成功');
       history.push(`/subjective_table/detail?name=${name}`);
     });
@@ -65,6 +66,7 @@ function Template(props: IProps) {
           mode='Edit'
           onCancel={() => history.go(-1)}
           addPlan={addPlan}
+          scaleType={'SUBJECTIVE'}
         />
       </div>
     </div>

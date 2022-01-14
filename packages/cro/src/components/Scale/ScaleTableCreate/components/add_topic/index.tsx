@@ -18,7 +18,7 @@ interface IProps {
     },
     pathname: string,
   };
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | string;
 }
 interface IItem {
   question: {
@@ -43,8 +43,9 @@ function AddTopic(props: IProps) {
       img: wdt,
     },
   ];
-  console.log('scaleType', scaleType);
-  if (['SUBJECTIVE', 'CRF'].includes(scaleType)) {
+
+
+  if (['SUBJECTIVE', 'CRF', 'VISIT_CRF', 'VISIT_SUBJECTIVE'].includes(scaleType)) {
     questionType.push({
       type: 'COMPLETION',
       name: '多段填空',

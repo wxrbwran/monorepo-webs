@@ -4,6 +4,7 @@ import SideMenu from '../components/SideMenu';
 import ScaleTableTab from '@/components/Scale/ScaleTableTab';
 import { history } from 'umi';
 import * as api from '@/services/api';
+import { RuleTypeMap } from '@/pages/subjective_table/util';
 
 interface IProps {
   children: React.ReactElement[];
@@ -26,7 +27,7 @@ function OutPlanVisitSubjective(props: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
     if (!props.location.query.isTemp) {
-      api.subjective.getScaleGroup({ projectSid, type: 'CRF' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_crf.scaleType }).then((res) => {
         setTableList(res.scaleGroupInfos);
         if (res.scaleGroupInfos.length > 0) {
           history.replace(`/out_plan_visit/crf/detail?id=${res.scaleGroupInfos[0].id}`);
@@ -39,7 +40,7 @@ function OutPlanVisitSubjective(props: IProps) {
     const newUrlName = props.location.query.name;
     if (newUrlName && urlName !== newUrlName) {
       console.log('newUrlName', newUrlName);
-      api.subjective.getScaleGroup({ projectSid, type: 'CRF' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_crf.scaleType }).then((res) => {
         setTableList(res.scaleGroupInfos);
         const scaleGroupInfos = res.scaleGroupInfos.filter(
           (item: { name: string }) => item.name === newUrlName,
@@ -60,14 +61,13 @@ function OutPlanVisitSubjective(props: IProps) {
     <div>
       {isShowSideMenu ? (
         <ToogleSide>
-          <SideMenu tableList={tableList} location={props.location} type="CRF" />
+          <SideMenu tableList={tableList} location={props.location} type='visit_crf' />
           <div style={{ height: '100%' }}>
             {tableList.length > 0 && (
               <ScaleTableTab
                 id={props.location.query.id}
                 location={props.location}
-                scaleType="CRF"
-                source="out_plan_visit"
+                scaleType={RuleTypeMap.visit_crf.scaleType}
               />
             )}
             {props.children}
