@@ -100,7 +100,7 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
                           <div
                             className="truncate"
                             title={text}
-                            style={{ color: '#ff0000', maxWidth: 100 }}
+                            style={{ color: '#ff0000', maxWidth: 200 }}
                           >
                             <Tooltip placement="topRight" title={text}>
                               {text}
