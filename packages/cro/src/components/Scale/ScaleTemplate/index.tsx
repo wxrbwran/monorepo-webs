@@ -555,9 +555,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const { projectSid, projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
 
-  const [remind, setRemind] = useState(''); //问题
+  const [remind, setRemind] = useState(''); //只是为了触发ui刷新用，并不存着最新值
 
-  // const remind = useRef('');
+  const remindRef = useRef('');
   // const richTextCont = useRef('');
   // const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
 
@@ -569,10 +569,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const [frequency, setFrequency] = useState(initFrequency); //发送频率
 
-
   const sourceType = getSourceType(scaleType);
-
-  console.log('================== scaleType  sourceType', scaleType, sourceType);
 
   const childChoiceModel = (name: string): IModel => {
 
@@ -689,7 +686,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   useEffect(() => {
 
     setRemind(question ?? '');
-    // remind.current = question;
+    remindRef.current = question;
   }, [question]);
 
 
@@ -720,7 +717,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   //   setRemind(e.target.value);
   // };
   const handleChangeRemind = (value: any, _text: string) => {
-    setRemind(value);
+    // setRemind(value); // 不能调用setRemind，会触发刷新，然后失去聚焦
+    remindRef.current = value;
   };
 
   //确定，回传拼好的数据格式
@@ -794,7 +792,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
     addPlan({
       ruleDoc: params,
-      questions: remind,
+      questions: remindRef.current,
       chooseValues: {
         firstTime: firstTime,
         choseConditions: choseConditions,
@@ -829,26 +827,15 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     value: item.description,
   }));
   const des = choseScope.map(item => item.description);
-  console.log('isDisabled', isDisabled);
 
-  console.log('==================== use ues ', JSON.stringify(chooseStartTimeListRef.current));
 
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>
       {isShowTextArea && (
-        // <TextArea
-        //   placeholder={'请输入提醒内容11'}
-        //   className={styles.question}
-        //   onChange={(ev) => handleChangeRemind(ev)}
-        //   value={remind}
-        //   disabled={!!isDisabled}
-        // />
         <div className="h-160 mb-40">
           <RichText handleChange={handleChangeRemind} value={remind} style={{ height: '135px' }} />
         </div>
       )}
-
-
 
       <FirstSendTime choiceModelChange={onChoiceModelChange} choiceModelSource={firstTime.choiceModel} popverContent={undefined} />
       {/* 
