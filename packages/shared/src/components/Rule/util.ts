@@ -105,12 +105,13 @@ export interface IChooseValues {
 export interface IModel {
   childItemType: 'select' | 'diy' | 'time' | 'none' | 'childReact';
   childItem?: IModel[];
-  childReact?: () => React.ReactDOM; // 当childItemType是childReact时，会渲染该childReact组件
+  childReact?: (value?: string) => React.ReactDOM; // 当childItemType是childReact时，会渲染该childReact组件
   description: string;
   choiceModel?: IModel;
   inputDay?: number; // 当childItemType是diy时，会有输入day组件，此时才可能有值
   inputHM?: string; // 当childItemType是diy时，会有输入时间组件，此时才可能有值
   inputTime?: string; // 当childItemType是time时，会有输入年月日时间组件，此时才可能有值
+  inputDes?: string;
 }
 
 export const AfterPatientBind = '患者与我绑定日期后';

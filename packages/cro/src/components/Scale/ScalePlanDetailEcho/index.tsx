@@ -56,7 +56,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
       const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc);
 
 
-      console.log('============ chooseValuesKey chooseValuesKey', JSON.stringify(chooseValuesKey));
+      console.log('============ chooseValuesKey chooseValuesKey ruleDoc', JSON.stringify(chooseValuesKey));
       const conditionDes = getConditionDescriptionFromConditionss(chooseValuesKey.choseConditions);
       setChooseValues(chooseValuesKey);
       setConditionDescription(conditionDes);

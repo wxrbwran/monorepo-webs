@@ -54,7 +54,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
       <>
         {
           choiceItem.childReact ?
-            choiceItem.childReact()
+            choiceItem.childReact(choiceItem.inputDes)
             : <div></div>
         }
       </>,

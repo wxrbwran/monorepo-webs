@@ -62,12 +62,13 @@ export interface IChooseValues {
 export interface IModel {
     childItemType: 'select' | 'diy' | 'time' | 'none' | 'childReact';
     childItem?: IModel[];
-    childReact?: () => React.ReactDOM;
+    childReact?: (value?: string) => React.ReactDOM;
     description: string;
     choiceModel?: IModel;
     inputDay?: number;
     inputHM?: string;
     inputTime?: string;
+    inputDes?: string;
 }
 export declare const AfterPatientBind = "\u60A3\u8005\u4E0E\u6211\u7ED1\u5B9A\u65E5\u671F\u540E";
 export declare const DIY = "\u81EA\u5B9A\u4E49";

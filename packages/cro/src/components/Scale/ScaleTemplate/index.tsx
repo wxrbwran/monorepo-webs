@@ -270,13 +270,9 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
 
   // 自定义
   const arrary = [];
-
   if (frequency.frequency === 'CUSTOM') {
     for (let i = 0; i < frequency.custom.length; i++) {
-
       const period = frequency.custom[i];
-      console.log('================= period', JSON.stringify(period));
-
       const action: any = {
         type: 'once',
         params: {
@@ -310,7 +306,6 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
               regularNum: period.hour,
               regularUnit: 'hour',
             },
-
             {
               regularNum: period.min,
               regularUnit: 'minute',
@@ -324,10 +319,9 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
       }
       arrary.push(action);
     }
-  } else {
+  } else if (frequency.frequency === 'LOOP') {
 
     const period = frequency.custom[0];
-    console.log('================= period', JSON.stringify(period));
 
     const action: any = {
       type: 'rolling',
@@ -342,7 +336,6 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
     }
     arrary.push(action);
   }
-
   return arrary;
 };
 
@@ -403,7 +396,6 @@ const titleAllChoosesToMustParma = (chooseStartTimeList: IItem[], firstSteps: st
     chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'diagnose.treatment')[0];
   }
 
-  console.log('=================== chooseStartTime', JSON.stringify(chooseStartTime));
   // 计划外多出来的2个不走这个if
   if (firstSteps.includes(IntoGroupTime) || firstSteps.includes(GiveMedicTime) || firstSteps.includes(StopMedicTime) || firstSteps.includes(HandelTime)) {
 
@@ -427,30 +419,25 @@ const getFirstSteps = (firstTime: any): string[] => {
   return steps;
 };
 
-const tileAllChoosesToArray = (chooseStartTime: IItem, choseConditions: ICondition[], chooseScope: IItem[]) => {
-
-
-  const param = {
-    must: [tileChooseToArray(chooseStartTime), ...tileChooseConditionToArray(choseConditions)],
-    should_1: tileChooseScopeToArray(chooseScope),
-  };
-
-  return param;
-};
-
-
 
 interface HandleChooseIProps {
 
   onChangeStateByValue: (val: string[]) => void;
+  chooseDes?: string;
 }
 
 
-function HandleChoose({ onChangeStateByValue }: HandleChooseIProps) {
+function HandleChoose({ onChangeStateByValue, chooseDes }: HandleChooseIProps) {
 
   const [fetching, setFetchStatus] = useState(false); //搜索是否显示loading
   const [treatment, setTreatment] = useState([]); //获取处理方式
   const [chooseTreatmentDes, setChooseTreatmentDes] = useState<string>(); //存储患者做处理的时间-->处理方式
+
+  useEffect(() => {
+    if (chooseDes) {
+      setChooseTreatmentDes(chooseDes);
+    }
+  }, [chooseDes]);
 
   //获取处理方式
   const fetchTreatment = (value: string) => {
@@ -558,8 +545,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const [remind, setRemind] = useState(''); //只是为了触发ui刷新用，并不存着最新值
 
   const remindRef = useRef('');
-  // const richTextCont = useRef('');
-  // const [startTimeKey, setStartTimeKey] = useState<IItem>({}); //起始发送模版数据
 
   const [scopeKey, setScopeKey] = useState<IItem>({}); //选中的起始发送时间子item
   const [choseScope, setChoseScope] = useState<IItem[]>([]); //选中的起始发送时间子item
@@ -592,12 +577,17 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   //更改 患者做处理的时间-->处理方式
   const onChangeStateByValue = (vals: string[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const handleItemList = firstTime?.choiceModel?.childItem?.filter((item) => item.description == HandelTime);
+    if (handleItemList.length > 0) {
+      handleItemList[0].inputDes = vals[1];
+    }
     fillTreatmentInStartTimeKey(chooseStartTimeListRef.current.filter((item) => item.name == 'diagnose.treatment')[0], vals[0], vals[1]);
   };
 
-  const childReactFunc = () => {
+  const childReactFunc = (value?: string) => {
 
-    return (<HandleChoose onChangeStateByValue={onChangeStateByValue}></HandleChoose>);
+    return (<HandleChoose onChangeStateByValue={onChangeStateByValue} chooseDes={value}></HandleChoose>);
   };
 
   const initFirstTimeChoiceMode: IModel = {
@@ -666,6 +656,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   useEffect(() => {
 
+
+    console.log('============== chooseValues.firstTime ', JSON.stringify(chooseValues?.firstTime));
     if (chooseValues) {
       // chooseStartTimeListRef.current = chooseValues.chooseStartTime;
       // setChooseStartTimeList(chooseValues.chooseStartTime);
@@ -675,7 +667,15 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
       // setFirstTime(firstTime);
 
-      setFirstTime(cloneDeep(chooseValues.firstTime));
+      const firstTimeTemp = cloneDeep(chooseValues.firstTime);
+
+      const handleTimeItem = firstTimeTemp.choiceModel.childItem.filter((item) => item.description == HandelTime)[0];
+      handleTimeItem.childReact = childReactFunc;
+
+
+      console.log('============== handleTimeItem.handleTimeItem ', JSON.stringify(firstTimeTemp));
+
+      setFirstTime(firstTimeTemp);
       // setChooseStartTime(chooseValues.chooseStartTime);
       setChoseScope(cloneDeep(chooseValues.choseScope));
       setChoseConditions(cloneDeep(chooseValues.choseConditions));
@@ -810,8 +810,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     console.log('============== choiceModel choiceModel', JSON.stringify(choiceModel));
     firstTime.choiceModel = choiceModel;
   };
-
-
 
   //存在空记录不可提交
   const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];

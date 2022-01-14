@@ -327,6 +327,11 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
     if (chooseStartTime.name == 'diagnose.treatment') { // 说明选择的是做处理的时间
 
       choiceModel.choiceModel = choiceModel.childItem?.filter((item) => item.description == HandelTime)[0];
+      const treatmentList = chooseStartTime.items.filter((item) => item.name == 'diagnose.treatment.uid');
+      if (treatmentList.length > 0) {
+
+        choiceModel.choiceModel.inputDes = treatmentList[0].description;
+      }
     } else if (chooseStartTime.name == 'team') {  // 说明选择的是  受试者入组的时间
 
       choiceModel.choiceModel = choiceModel.childItem?.filter((item) => item.description == IntoGroupTime)[0];
