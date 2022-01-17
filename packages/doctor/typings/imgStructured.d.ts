@@ -64,6 +64,7 @@ declare interface ISearchDocumentItem {
   documentId: string; // 单据id
   sourceSid: string;
   source: string;
+  tabKey?: string;
 }
 
 declare interface Ioptions {

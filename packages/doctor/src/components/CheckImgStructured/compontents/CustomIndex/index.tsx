@@ -141,21 +141,21 @@ const CustomIndex: FC<IProps> = (props) => {
   }, [initList]);
 
   // 刷新单据
-  useEffect(() => {
-    const listener = async (id: string) => {
-      console.log('apiParams.id', apiParams.documentId);
-      console.log('id', id);
-      if (apiParams.documentId === id) {
-        form.resetFields();
-        await fetchIndexDocumentIndex();
-        message.success('已刷新单据');
-      }
-    };
-    event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
-    return () => {
-      event.removeListener('REFERSH_DOCUMENT_BY_ID', listener);
-    };
-  }, [apiParams]);
+  // useEffect(() => {
+  //   const listener = async (id: string) => {
+  //     console.log('apiParams.id', apiParams.documentId);
+  //     console.log('id', id);
+  //     if (apiParams.documentId === id) {
+  //       form.resetFields();
+  //       await fetchIndexDocumentIndex();
+  //       message.success('已刷新单据');
+  //     }
+  //   };
+  //   event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
+  //   return () => {
+  //     event.removeListener('REFERSH_DOCUMENT_BY_ID', listener);
+  //   };
+  // }, [apiParams]);
 
   useEffect(() => {
     // 第一行指标有变动时候(并且apiData有数据，可以防止首次渲染走这里)，移下位置
