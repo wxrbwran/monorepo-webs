@@ -23,9 +23,11 @@ interface IItem {
   description: string;
   value: string | number;
   items: IItem[];
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
+
 }
 
-function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
+function ScaleCondition({ conditions, updateChoseConditions, values, scaleType }: IProps) {
 
 
   const initItems: ICondition = {
@@ -118,7 +120,7 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
       <div className={`${styles.title} ${styles.is_plan}`}>
         <p className={styles.head}>发送条件：</p>
         {
-          isLeader && status !== 1001 && (
+          isLeader && (status !== 1001 || ['VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE', 'VISIT_CRF'].includes(scaleType)) && (
             <p
               className={styles.add}
               onClick={addCondition}
@@ -129,7 +131,7 @@ function ScaleCondition({ conditions, updateChoseConditions, values }: IProps) {
         }
       </div>
       {
-        isLeader && status !== 1001 && conditions?.items ? (
+        isLeader && (status !== 1001 || ['VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE', 'VISIT_CRF'].includes(scaleType)) && conditions?.items ? (
           choseConditions.map((item, index: number) => (
             <div className={styles.edit} key={index}>
 

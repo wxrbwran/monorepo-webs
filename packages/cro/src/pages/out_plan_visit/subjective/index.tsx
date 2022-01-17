@@ -14,7 +14,7 @@ export default () => {
         您的项目内暂无主观量表，
       </p>
       <p>创建量表并设置计划开始您的科研吧。</p>
-      <Button type="primary" disabled={!window.$storage.getItem('isLeader') || status == 1001}>
+      <Button type="primary" disabled={!window.$storage.getItem('isLeader')}>
         <Link to="/out_plan_visit/subjective/guide">立即创建</Link>
       </Button>
     </div>

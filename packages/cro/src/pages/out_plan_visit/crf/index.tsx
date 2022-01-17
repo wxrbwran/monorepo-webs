@@ -12,7 +12,7 @@ export default () => {
         您的项目内暂无CRF量表，
       </p>
       <p>创建并设置提醒计划开始您的科研吧。</p>
-      <Button type="primary" disabled={!window.$storage.getItem('isLeader') || window.$storage.getItem('projectStatus') == 1001}>
+      <Button type="primary" disabled={!window.$storage.getItem('isLeader')}>
         <Link to="/out_plan_visit/crf/create">立即创建</Link>
       </Button>
     </div>

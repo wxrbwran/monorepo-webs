@@ -1030,6 +1030,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         conditions={conditionKey}
         updateChoseConditions={onUpdateChoseConditions}
         values={choseConditions}
+        scaleType={scaleType}
       />
 
       <h2>
