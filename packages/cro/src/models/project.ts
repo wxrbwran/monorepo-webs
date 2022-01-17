@@ -28,7 +28,6 @@ interface ProjectModelType {
     fetchGroupList: Effect;
     fetchProjectTeamMembers: Effect;
     fetchProjectDetail: Effect;
-    fetchScaleGroup: Effect;
   };
   reducers: {
     saveProjectList: Reducer<ProjectModelState>;
@@ -146,13 +145,6 @@ const ProjectModel: ProjectModelType = {
         payload: payload,
       });
     },
-    *fetchScaleGroup({ payload }, { call, put }) {
-      const response = yield call(subjective.getScaleGroup, payload);
-      yield put({
-        type: 'setScaleGroup',
-        payload: response,
-      });
-    },
   },
   reducers: {
     saveProjectList(state = projectState, { payload }): ProjectModelState {
@@ -212,6 +204,7 @@ const ProjectModel: ProjectModelType = {
 
 
     setScaleGroup(state = projectState, { payload }): ProjectModelState {
+
       return {
         ...state,
         scaleGroupInfos: payload,

@@ -50,6 +50,9 @@ function PatientManage(props: IProps) {
         if (scaleGroupInfos.length > 0) {
           const id = scaleGroupInfos[0].id;
           history.replace(`/subjective_table/detail?id=${id}`);
+        } else if (res.scaleGroupInfos?.length > 0) {
+          const id = res.scaleGroupInfos[0].id;
+          history.replace(`/subjective_table/detail?id=${id}`);
         } else {
           history.replace('/subjective_table');
         }

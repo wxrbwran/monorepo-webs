@@ -35,14 +35,29 @@ function ObjectiveTable(props: IProps) {
     console.log('==================== 跳转到所创建的表详情页面', newUrlName);
     if (newUrlName) {
       api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.objective.type }).then((res) => {
-        if (res.scaleGroupInfos.length > 0) {
-          setTableList(res.scaleGroupInfos);
-          const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
+
+        setTableList(res.scaleGroupInfos);
+        const scaleGroupInfos = res.scaleGroupInfos.filter(
+          (item: { name: string }) => item.name === newUrlName,
+        );
+        if (scaleGroupInfos.length > 0) {
+          const id = scaleGroupInfos[0].id;
+          history.replace((`/objective_table/detail?id=${id}`));
+        } else if (res.scaleGroupInfos?.length > 0) {
+          const id = res.scaleGroupInfos[0].id;
           history.replace((`/objective_table/detail?id=${id}`));
         } else {
-          setTableList([]);
           history.replace(('/objective_table'));
         }
+
+        // if (res.scaleGroupInfos.length > 0) {
+        //   setTableList(res.scaleGroupInfos);
+        //   const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
+        //   history.replace((`/objective_table/detail?id=${id}`));
+        // } else {
+        //   setTableList([]);
+        //   history.replace(('/objective_table'));
+        // }
       });
     }
   }, [props]);

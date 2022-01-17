@@ -3,7 +3,7 @@ import './index.scss';
 import ToogleSide from '@/components/ToogleSide';
 import SideMenu from '../components/SideMenu';
 import ScaleTableTab from '@/components/Scale/ScaleTableTab';
-import { history } from 'umi';
+import { history, useDispatch } from 'umi';
 import * as api from '@/services/api';
 import { RuleTypeMap } from '@/pages/subjective_table/util';
 
@@ -22,6 +22,7 @@ interface IProps {
 // 如果没有随访表，打开的是/subjective_table页面，展示引导创建表的ui，点击创建，打开新页面（创建页面）
 // 如果有表，默认打开第一个表，展示表详情，这里做页面跳转
 function OutPlanVisitSubjective(props: IProps) {
+  const dispatch = useDispatch();
   const [tableList, setTableList] = useState([]);
   // const [urlName, seturlName] = useState('');
   const urlName = '';
@@ -40,7 +41,7 @@ function OutPlanVisitSubjective(props: IProps) {
   useEffect(() => {
     const newUrlName = props.location.query.name;
     if (newUrlName && urlName !== newUrlName) {
-      console.log('newUrlName', newUrlName);
+      console.log('newUrlName  out-subjective ', newUrlName);
       api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_subjective.type }).then((res) => {
         setTableList(res.scaleGroupInfos);
         const scaleGroupInfos = res.scaleGroupInfos.filter(
@@ -49,18 +50,21 @@ function OutPlanVisitSubjective(props: IProps) {
         if (scaleGroupInfos.length > 0) {
           const id = scaleGroupInfos[0].id;
           history.replace(`/out_plan_visit/subjective/detail?id=${id}`);
+        } else if (res.scaleGroupInfos?.length > 0) {
+          const id = res.scaleGroupInfos[0].id;
+          history.replace(`/out_plan_visit/subjective/detail?id=${id}`);
         } else {
           history.replace('/out_plan_visit/subjective');
         }
       });
     }
   }, [props]);
-  // useEffect(() => {
-  //   dispatch({
-  //     type: 'project/setScaleGroup',
-  //     payload: [...tableList],
-  //   });
-  // }, [tableList]);
+  useEffect(() => {
+    dispatch({
+      type: 'project/setScaleGroup',
+      payload: [...tableList],
+    });
+  }, [tableList]);
   const isShowSideMenu = ![
     '/out_plan_visit/subjective/guide',
     '/out_plan_visit/subjective/create',

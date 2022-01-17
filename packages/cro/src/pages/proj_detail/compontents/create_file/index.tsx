@@ -20,26 +20,24 @@ const CreateFile: FC<IProps> = (props) => {
   const [showModal, setshowModal] = useState(false);
   const [fileName, setfileName] = useState('');
 
-  const [richTextCont, setRichTextCont] = useState('');
-
+  const [richTextCont, setRichTextCont] = useState(''); // 只用于更新值，并不是实时最新值
+  const richTextContRef = useRef(''); // 实时的最新值
 
   useEffect(() => {
     if (initData) {
+      richTextContRef.current = initData.content.ops;
       setRichTextCont(initData.content.ops);
       setfileName(initData.name);
     }
 
   }, [initData]);
 
-
   const handleShow = (e) => {
     e.stopPropagation();
     setshowModal(true);
   };
-  const handleChangeRemind = (value: any, text: string) => {
-    console.log('valueeeeee', value);
-    console.log('textttt', text);
-    setRichTextCont(value);
+  const handleChangeRemind = (value: any, _text: string) => {
+    richTextContRef.current = value;
   };
   //上传
   const handleSubmit = (rawUrl: string) => {
@@ -52,7 +50,7 @@ const CreateFile: FC<IProps> = (props) => {
         projectSid,
         type,
         content: {
-          ops: richTextCont,
+          ops: richTextContRef.current,
         },
         fileId,
       }).then(() => {
@@ -71,7 +69,7 @@ const CreateFile: FC<IProps> = (props) => {
         projectSid,
         type,
         content: {
-          ops: richTextCont,
+          ops: richTextContRef.current,
         },
       }).then(() => {
         setshowModal(false);
@@ -85,7 +83,7 @@ const CreateFile: FC<IProps> = (props) => {
   };
 
   const handleSave = () => {
-    const formatHtmlTxt = richTextCont;
+    const formatHtmlTxt = richTextContRef.current;
     const aFileParts: string[] = [`${beforeEl}${formatHtmlTxt}${alfterEl}`];
     console.log('aFileParts', aFileParts);
     const oMyBlob = new Blob(aFileParts, { type: 'text/html' });
@@ -118,6 +116,8 @@ const CreateFile: FC<IProps> = (props) => {
         console.log(err);
       });
   };
+
+  console.log('================ <RichText richTextCont', richTextCont);
   return (
     <span>
       <span onClick={handleShow}>{children}</span>

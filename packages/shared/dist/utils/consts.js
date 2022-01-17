@@ -484,7 +484,8 @@ export var beforeEl = '<!DOCTYPE html>' +
     '    <meta charset="UTF-8" />' +
     '    <meta http-equiv="X-UA-Compatible" content="IE=edge" />' +
     '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
-    '    <title>Document</title>' +
+    '    <title>Document12</title>' +
+    '    <link href="https://revomedi.oss-cn-beijing.aliyuncs.com/static/apps/web/index.css" rel="stylesheet" type="text/css"/>' +
     '    <style>' +
     '      img, video {' +
     '        width: 100%;' +
@@ -498,5 +499,5 @@ export var beforeEl = '<!DOCTYPE html>' +
     '      };' +
     '    </script>' +
     '  </head>' +
-    '  <body>';
+    '  <body class="ql-editor">';
 export var alfterEl = '  </body>' + '</html>';

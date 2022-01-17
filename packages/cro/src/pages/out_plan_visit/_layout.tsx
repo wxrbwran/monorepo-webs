@@ -8,13 +8,16 @@ interface IProps {
   }
 }
 const OutPlanVisitLayout: FC<IProps> = ({ children, location }) => {
-  console.log('locationlocation', location);
   const handleGo = (urlName: string) => {
     history.push(`/out_plan_visit/${urlName}`);
   };
   useEffect(() => {
-    handleGo('subjective');
+
+    if (location.pathname == '/out_plan_visit') {
+      handleGo('subjective');
+    }
   }, []);
+
   const scaleType = [
     { title: '主观量表', key: 'subjective' },
     { title: '客观检查', key: 'objective' },
@@ -30,7 +33,7 @@ const OutPlanVisitLayout: FC<IProps> = ({ children, location }) => {
               onClick={() => handleGo(item.key)}
               className={location.pathname.includes(item.key) ? styles.active_tab : ''}
             >
-                {item.title}
+              {item.title}
             </div>
           ))
         }
