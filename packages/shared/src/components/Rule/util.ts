@@ -218,32 +218,32 @@ export function getHMstr(delay: number) {
   return (hour < 10 ? '0' + hour : hour) + ':' + (min < 10 ? '0' + min : min);
 }
 
-export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
+// export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
 
-  const choiceModel = { childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' };
+//   const choiceModel = { childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' };
 
-  if (chooseStartTime) { // 说明选择的是 患者与我绑定日期后
-    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == AfterPatientBind)[0];
-    // action.
-    if (action.params.period == 0) { // 选择的是 立即发送
-      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == ImmediatelySend)[0];
-    } else { // 选择的是自定义
-      choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == DIY)[0];
-      choiceModel.choiceModel.choiceModel.choiceModel.inputDay = action.params.period;
-      choiceModel.choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
-    }
-  } else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
-    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
-    choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
-  } else {
-    choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
-  }
-  const sourceIds = action.params.sourceMember.flatMap((item) => item.sourceId);
-  return ({
-    choiceModel: choiceModel,
-    choiceContents: list.filter((item) => sourceIds.includes(item.id)),
-  });
-}
+//   if (chooseStartTime) { // 说明选择的是 患者与我绑定日期后
+//     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == AfterPatientBind)[0];
+//     // action.
+//     if (action.params.period == 0) { // 选择的是 立即发送
+//       choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == ImmediatelySend)[0];
+//     } else { // 选择的是自定义
+//       choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == DIY)[0];
+//       choiceModel.choiceModel.choiceModel.choiceModel.inputDay = action.params.period;
+//       choiceModel.choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
+//     }
+//   } else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
+//     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
+//     choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
+//   } else {
+//     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
+//   }
+//   const sourceIds = action.params.sourceMember.flatMap((item) => item.sourceId);
+//   return ({
+//     choiceModel: choiceModel,
+//     choiceContents: list.filter((item) => sourceIds.includes(item.id)),
+//   });
+// }
 
 export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
 

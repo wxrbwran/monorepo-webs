@@ -9,7 +9,7 @@ import HistoryPlan from '../ObjectiveHistoryPlan';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 import ScaleTemplate from '@/components/Scale/ScaleTemplate';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import { getUrlPreFix } from '@/pages/subjective_table/util';
 
 interface IProps {
@@ -23,16 +23,7 @@ interface IProps {
 }
 function Create({ location, scaleType }: IProps) {
 
-  let initInfos: IPlanInfos = {
-    // plans: [
-    //   {
-    //     type: '',
-    //     detail: {},
-    //   },
-    // ],
-    questions: '',
-    scaleId: '',
-  };
+  let initInfos: any = {};
   const projectSid = window.$storage.getItem('projectSid');
   const [infos, setInfos] = useState<IPlanInfos[]>([]);
   const [formName, setFormName] = useState('');
@@ -113,13 +104,23 @@ function Create({ location, scaleType }: IProps) {
   };
   //提醒计划的取消按钮执行操作
   const handleCancel = (index: number) => {
+
+    console.log('========== infos[index] infos[index]', JSON.stringify(infos));
     //点击取消，如果是空计划，直接删除，如果是编辑的之前的计划则直接更改状态为lock
-    if (infos[index].plans.length === 1) {
+    // if (infos[index]?.plans?.length === 1) {
+    //   delPlan(index);
+    // } else {
+    //   status[index] = 'lock';
+    //   setEditStatus([...status]);
+    // }
+
+    if (isEmpty(infos[index])) {
       delPlan(index);
     } else {
       status[index] = 'lock';
       setEditStatus([...status]);
     }
+
   };
   return (
     <div className={styles.gauge_table}>

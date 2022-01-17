@@ -59,15 +59,15 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
       setRuleDoc(infoItem.ruleDoc);
 
       setChooseValues(cloneDeep(infoItem.chooseValues));
-      const conditionDes = getConditionDescriptionFromConditionss(infoItem.chooseValues.choseConditions);
+      const conditionDes = getConditionDescriptionFromConditionss(infoItem.chooseValues?.choseConditions);
       setConditionDescription(conditionDes);
 
       console.log('=================== HistoryPlan', JSON.stringify(infoItem));
 
-      const firstTime = getStartTimeDescriptionFromConditionss(infoItem.chooseValues.firstTime);
+      const firstTime = getStartTimeDescriptionFromConditionss(infoItem?.chooseValues?.firstTime);
       setFirstTimeStr(firstTime);
 
-      const frequency = getFrequencyDescriptionFromFrequency(infoItem.chooseValues.frequency);
+      const frequency = getFrequencyDescriptionFromFrequency(infoItem?.chooseValues?.frequency);
       setFrequencyStr(frequency);
     }
   }, [infoItem]);
@@ -187,7 +187,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
               <img src={iconFrequency} alt="" />
               <span>发送频率</span>
             </div>
-            {chooseValues.frequency && <div className={styles.text}>{frequencyStr}</div>}
+            {chooseValues?.frequency && <div className={styles.text}>{frequencyStr}</div>}
           </div>
           <div className={styles.space}></div>
           {(conditionDescription &&

@@ -523,7 +523,7 @@ export function getConditionDescriptionFromConditionss(conditions: any[]) {
   let diseaseDes: any = '';
   let treatmentDes: string = '';
 
-  for (let i = 0; i < conditions.length; i++) {
+  for (let i = 0; i < conditions?.length; i++) {
     const condi = conditions[i];
     if (condi.chooseItem.name == 'basic.age') {
       ageDes = '年龄: ' + condi.chooseValue.min + '-' + condi.chooseValue.max;
@@ -557,19 +557,21 @@ export function getFrequencyDescriptionFromFrequency(frequency: any) {
 
   let str = '';
 
-  if (frequency.frequency == 'ADD') {
-    str = str + '在首次发送时间的基础上累加';
-    for (let index = 0; index < frequency.custom.length; index++) {
-      const element = frequency.custom[index];
-      str = str + '  ' + element.day + '天' + element.hour + '时' + element.hour + '分' + '发送一次;  ';
-    }
-  } else {
-    str = str + '首次发送给患者后';
-    for (let index = 0; index < frequency.custom.length; index++) {
-      const element = frequency.custom[index];
-      str = str + (frequency.frequency == 'CUSTOM' ? '    第' : '    每') + element.day + '天' + element.time + '发送一次;';
+  if (frequency && frequency.frequency) {
+
+    if (frequency.frequency == 'ADD') {
+      str = str + '在首次发送时间的基础上累加';
+      for (let index = 0; index < frequency.custom.length; index++) {
+        const element = frequency.custom[index];
+        str = str + '  ' + element.day + '天' + element.hour + '时' + element.hour + '分' + '发送一次;  ';
+      }
+    } else {
+      str = str + '首次发送给患者后';
+      for (let index = 0; index < frequency.custom.length; index++) {
+        const element = frequency.custom[index];
+        str = str + (frequency.frequency == 'CUSTOM' ? '    第' : '    每') + element.day + '天' + element.time + '发送一次;';
+      }
     }
   }
-
   return str;
 }

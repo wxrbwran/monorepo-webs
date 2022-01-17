@@ -115,6 +115,8 @@ const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatm
   }
 };
 
+
+
 // const getTreatmentDesInStartTimeKey = (timeKey: IItem) => {
 
 //   if (timeKey.name === 'diagnose.treatment') {
@@ -470,11 +472,14 @@ function HandleChoose({ onChangeStateByValue, chooseDes }: HandleChooseIProps) {
   //更改 患者做处理的时间-->处理方式
   const changeStateByValue = (value: string) => {
 
-    const vals = String(value).split('_zsh_');
-
-    // fillTreatmentInStartTimeKey(chooseStartTimeList.filter((item) => item.name == 'diagnose.treatment')[0], vals[0], vals[1]);
-    setChooseTreatmentDes(vals[1]);
-    onChangeStateByValue(vals);
+    if (value?.length > 0) {
+      const vals = String(value).split('_zsh_');
+      setChooseTreatmentDes(vals[1]);
+      onChangeStateByValue(vals);
+    } else {
+      setChooseTreatmentDes('');
+      onChangeStateByValue(['', '']);
+    }
   };
 
   return (
@@ -582,7 +587,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   //更改 患者做处理的时间-->处理方式
   const onChangeStateByValue = (vals: string[]) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const handleItemList = firstTime?.choiceModel?.childItem?.filter((item) => item.description == HandelTime);
+    const handleItemList = firstTime?.choiceModel?.choiceModel?.childItem?.filter((item) => item.description == HandelTime);
+
+    // eslint - disable - next - line @typescript-eslint / no - use - before - define
+    console.log('============= firstTime', vals);
     if (handleItemList.length > 0) {
       handleItemList[0].inputDes = vals[1];
     }
@@ -730,8 +738,73 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     remindRef.current = value;
   };
 
+
+  const canSave = (firstSteps: string[]) => {
+
+
+    // 首次发送时间一定要填写 
+    if (firstSteps.includes(IntoGroupTime) || firstSteps.includes(GiveMedicTime) || firstSteps.includes(StopMedicTime) || firstSteps.includes(HandelTime)) {
+
+      // 处理选择的值要补全
+      if (firstSteps.includes(HandelTime)) {
+
+        if (!(firstTime.choiceModel?.choiceModel?.inputDes?.length > 0)) {
+          return '请补全首次发送时间的处理';
+        }
+      }
+
+      if (firstSteps.includes(ImmediatelySend)) {
+        // 填全了
+      } else if (firstSteps.includes(DIY)) {
+
+        const diyIndex = firstSteps.indexOf(DIY);
+        if (firstSteps.length > diyIndex + 2) {
+          if (!firstSteps[diyIndex + 1]) { // 没填写自定义的天数
+            return '请补全首次发送时间';
+          } else if (!firstSteps[diyIndex + 2]) { // 没填写自定义的时分
+            return '请补全首次发送时间';
+          }
+          // 填全了
+        } else {
+          return '请补全首次发送时间'; // 没填写自定义的天数或时间
+        }
+      } else {
+        return '请补全首次发送时间'; // 没选择自定义还是立即发送
+      }
+    } else if (firstSteps.includes(SpecificDate)) {
+      const dateIndex = firstSteps.indexOf(SpecificDate);
+      if (firstSteps.length > dateIndex + 1) {
+        if (!firstSteps[dateIndex + 1]) { // 没填写特定日期的时间
+          return '请补全首次发送时间';
+        }
+        // 填全了
+      } else {
+        return '请补全首次发送时间';
+      }
+    } else if (firstSteps.includes(PlanCreatedSendImmediately)) {
+      // 填全了
+    } else {
+      return '请补全首次发送时间';
+    }
+
+    // 发送对象
+    if (!(choseScope.length > 0)) {
+      return '请选择发送对象';
+    }
+
+    return null;
+  };
+
   //确定，回传拼好的数据格式
   const handleSubmit = () => {
+
+    const firstSteps = getFirstSteps(firstTime.choiceModel);
+
+    const can = canSave(firstSteps);
+    if (can) {
+      message.error(can);
+      return;
+    }
 
     setLoading(true);
 
@@ -742,12 +815,12 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
     //去重、过滤空数据
     frequency.custom = Array.from(new Set(frequency.custom)).filter((item) => !!item);
-    // console.log('============= chooseStartTime', JSON.stringify(chooseStartTime));
+    console.log('============= firstTime', JSON.stringify(firstTime));
     console.log('============= choseConditions', JSON.stringify(choseConditions));
     console.log('============= choseScope', JSON.stringify(choseScope));
     console.log('============= frequency', JSON.stringify(frequency));
 
-    const firstSteps = getFirstSteps(firstTime.choiceModel);
+
 
     console.log('============= firstSteps', JSON.stringify(firstSteps));
 
@@ -822,6 +895,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const onChoiceModelChange = (choiceModel: IModel) => {
     firstTime.choiceModel = choiceModel;
+    console.log('============= onChoiceModelChange onChoiceModelChange', JSON.stringify(firstTime));
   };
 
   //存在空记录不可提交
@@ -830,8 +904,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   // const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
 
   const isShowTextArea = scaleType === 'OBJECTIVE' || scaleType == 'VISIT_OBJECTIVE';
-  const disabled =
-    isShowTextArea ? !remind.trim() || isEmptyCustom || isEmptyGroup : isEmptyCustom || isEmptyGroup;
 
   const options = isEmpty(scopeKey) ? [] : scopeKey.items.map((item: IItem) => ({
     label: item.description,
@@ -970,7 +1042,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       />
       <div className={styles.submit}>
         <Button onClick={handCancel}>取消</Button>
-        <Button type="primary" onClick={handleSubmit} disabled={disabled} loading={loading}>
+        <Button type="primary" onClick={handleSubmit} loading={loading}>
           确定
         </Button>
       </div>
