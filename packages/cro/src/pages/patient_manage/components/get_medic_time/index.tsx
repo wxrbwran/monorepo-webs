@@ -16,10 +16,10 @@ const GetMedicTime: FC = (props) => {
       projectNsId: projectNsId,
     };
 
-    if (record.ioLocationConfig.stopMedTime) {
+    if (record?.ioLocationConfig?.stopMedTime) {
       param.stopMedTime = record.ioLocationConfig.stopMedTime;
     }
-    if (record.ioLocationConfig.startMedTime) {
+    if (record?.ioLocationConfig?.startMedTime) {
       param.startMedTime = record.ioLocationConfig.startMedTime;
     }
 

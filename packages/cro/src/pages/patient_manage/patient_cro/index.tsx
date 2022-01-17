@@ -150,7 +150,7 @@ function PatientCro({ }: IProps) {
     align: 'center',
     render: (text: any, record: any) => (
       <div className="table-operating">
-        <GetMedicTime isStop={true} record={record} changeSuccess={() => { refreshList(); }}><span>{text.stopMedTime ? dayjs(text.stopMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
+        <GetMedicTime isStop={true} record={record} changeSuccess={() => { refreshList(); }}><span>{text?.stopMedTime ? dayjs(text.stopMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
       </div >
     ),
   };
@@ -161,7 +161,7 @@ function PatientCro({ }: IProps) {
     align: 'center',
     render: (text: any, record: any) => (
       <div className="table-operating">
-        <GetMedicTime isStop={false} record={record} changeSuccess={() => { refreshList(); }}><span>{text.startMedTime ? dayjs(text.startMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
+        <GetMedicTime isStop={false} record={record} changeSuccess={() => { refreshList(); }}><span>{text?.startMedTime ? dayjs(text.startMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
       </div >
     ),
   };
