@@ -182,4 +182,6 @@ export declare const documentTypeSource: Record<string, string>;
 export declare const requiredRule: {
     required: boolean;
 }[];
+export declare const beforeEl: string;
+export declare const alfterEl: string;
 export {};

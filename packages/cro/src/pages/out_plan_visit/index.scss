@@ -1,0 +1,25 @@
+.out_plan_visit {
+  .tabs {
+    display: flex;
+    padding-left: 60px;
+    height: 40px;
+    border-bottom: 1px solid #F7F7F7;
+    >div {
+      font-size: 14px;
+      width: 56px;
+      margin-right: 40px;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      &.active_tab {
+        color: #3296FA;
+        font-weight: bold;
+      }
+    }
+  }
+  :global {
+    .toogle-side__right {
+      padding: 0;
+    }
+  }
+}

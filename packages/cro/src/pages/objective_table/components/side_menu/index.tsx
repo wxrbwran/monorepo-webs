@@ -17,17 +17,17 @@ interface IProps {
 }
 
 const setFormName = (name:string)=> {
-  window.$storage.setItem('objectFormName',name);
-}
+  window.$storage.setItem('objectFormName', name);
+};
 
-function SideMenu({tableList, location}: IProps) {
+function SideMenu({ tableList, location }: IProps) {
   const [currentId, setCurrentId] = useState('');
   useEffect(() => {
-    const id = location.query.id
-    if( id !== currentId) {
+    const id = location.query.id;
+    if ( id !== currentId) {
       setCurrentId(id);
     }
-  }, [location])
+  }, [location]);
   return (
     <div className="left-slide">
       <div className="tit">
@@ -41,9 +41,9 @@ function SideMenu({tableList, location}: IProps) {
                 className={['item', item.id === currentId ? 'active' : ''].join(' ')}
                 key={item.id}
               >
-                <Link to={`/objective_table/detail?id=${item.id}`} onClick={()=>setFormName(item.name)}>{index+1}. {item.name}</Link>
+                <Link to={`/objective_table/detail?id=${item.id}`} onClick={()=>setFormName(item.name)}>{index + 1}. {item.name}</Link>
               </div>
-            )
+            );
           })
         }
       </div>
@@ -57,7 +57,7 @@ function SideMenu({tableList, location}: IProps) {
         }
       </div>
     </div>
-  )
+  );
 }
 
 export default SideMenu;

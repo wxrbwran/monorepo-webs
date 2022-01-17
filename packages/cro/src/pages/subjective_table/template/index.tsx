@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import { history, useSelector } from 'umi';
-// import SendPlan from '@/components/SendPlan';
-import QuestionDetail from '../components/question_detail';
+import QuestionDetail from '@/components/Scale/QuestionDetail';
 import file from '@/assets/img/file.png';
 import * as api from '@/services/api';
 import { IPlanInfos, IQuestions } from '@/utils/consts';
 import styles from './index.scss';
 import { IState } from 'typings/global';
-import ScaleTemplate from '@/components/ScaleTemplate';
+import ScaleTemplate from '@/components/Scale/ScaleTemplate';
+import { RuleTypeMap } from '../util';
 
 interface IProps {
   location: {
@@ -41,12 +41,12 @@ function Template(props: IProps) {
       name,
       ruleDoc: plans.ruleDoc,
       projectSid: window.$storage.getItem('projectSid'),
-      type: 'SUBJECTIVE',
+      type: RuleTypeMap.subjective.type,
       info: { questions },
       projectName: window.$storage.getItem('projectName'),
       projectNsId,
     };
-    api.subjective.addSubjectiveScale(params).then(() => {
+    api.subjective.addScale(params).then(() => {
       message.success('添加成功');
       history.push(`/subjective_table/detail?name=${name}`);
     });
@@ -58,22 +58,16 @@ function Template(props: IProps) {
       <div className={styles.main}>
         <p className={styles.tmp_title}>
           <img src={file} /><span style={{ fontWeight: 500 }}>{tempName}</span>
-          <QuestionDetail scaleName={name} questions={questions}>
+          <QuestionDetail scaleName={name} questions={questions} scaleType="subjective">
             <span className={styles.look}>查看详情</span>
           </QuestionDetail>
         </p>
-        {/* <SendPlan
-          mode='Edit'
-          onCancel={() => history.go(-1)}
-          infoIndex={0}
-          addPlan={addPlan}
-        /> */}
         <ScaleTemplate
           mode='Edit'
           onCancel={() => history.go(-1)}
           addPlan={addPlan}
+          scaleType={'SUBJECTIVE'}
         />
-
       </div>
     </div>
   );

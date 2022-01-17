@@ -1,0 +1,126 @@
+.shard_rule_send_frequency {
+  margin-top: 20px;
+}
+.shard_rule_send_frequency h2 {
+  font-size: 15px;
+  margin: 30px 0 15px;
+  font-weight: 600;
+  color: #181818;
+}
+.shard_rule_send_frequency h2:first-child {
+  margin-top: 0;
+  margin-top: 30px;
+}
+.shard_rule_send_frequency h2 .start {
+  color: red;
+  margin-right: 3px;
+}
+.shard_rule_send_frequency .send_type {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.shard_rule_send_frequency .send_type .cycle {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 40px;
+  line-height: 40px;
+}
+.shard_rule_send_frequency .send_type .ant-input {
+  height: 40px;
+  font-size: 14px;
+  color: #181818;
+}
+.shard_rule_send_frequency .send_type .ant-select-selector {
+  width: 180px !important;
+  height: 40px !important;
+  border-radius: 3px;
+}
+.shard_rule_send_frequency .send_type .ant-select-selector .ant-select-selection-item,
+.shard_rule_send_frequency .send_type .ant-select-selector .ant-select-selection-placeholder {
+  line-height: 40px !important;
+  font-size: 14px;
+}
+.shard_rule_send_frequency .send_type .ant-input-number-input {
+  height: 40px;
+}
+.shard_rule_send_frequency .send_type .ant-checkbox-group-item {
+  color: #181818;
+  font-size: 14px;
+}
+.shard_rule_send_frequency .send_type .ant-checkbox-input {
+  width: 16px;
+  height: 16px;
+}
+.shard_rule_send_frequency .self {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-left: 10px;
+  line-height: 40px;
+}
+.shard_rule_send_frequency .self_content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+.shard_rule_send_frequency .self .add_item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.shard_rule_send_frequency .self .add_item .addBtn,
+.shard_rule_send_frequency .self .add_item .deleteBtn {
+  width: 50px;
+  height: 40px;
+  background: #ffffff;
+  border-radius: 3px;
+  border: 1px solid #d3e8fb;
+  font-size: 14px;
+  font-weight: 500;
+  color: #218ce9;
+}
+.shard_rule_send_frequency .self ul {
+  margin-top: 10px;
+}
+.shard_rule_send_frequency .self .add_day {
+  display: inline-block;
+  background: rgba(0, 122, 218, 0.1);
+  border-radius: 3px;
+  margin: 0 10px 10px 0;
+  padding: 5px 10px;
+  color: #3296fa;
+  font-size: 14px;
+}
+.shard_rule_send_frequency .self .add_day .delete {
+  margin-left: 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.shard_rule_send_frequency .self .ant-btn {
+  width: 66px;
+  height: 40px;
+  font-size: 14px;
+  color: #666;
+  padding: 0;
+}
+.shard_rule_send_frequency .time .ant-picker {
+  height: 40px;
+  width: 100px;
+}
+
+/*# sourceMappingURL=index.css.map */

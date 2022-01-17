@@ -1,0 +1,39 @@
+.reply_wrap {
+  margin: 13px 35px;
+  font-size: 14px;
+  color: #181818;
+  .ant-table {
+    border: 1px solid #EEEEEE;
+  }
+  .count {
+    margin: 25px 0 20px;
+    span {
+      margin-right: 50px;
+    }
+  }
+  .number {
+    color: #3296FA;
+    cursor: pointer;
+  }
+}
+.not_reply {
+  :global {
+    .ant-checkbox-wrapper-disabled {
+      &:hover {
+        &::before {
+          content: "提醒每天只能发一次，明天再来吧";
+          position: absolute;
+          z-index: 1;
+          width: 196px;
+          top: 0;
+          padding: 6px 8px;
+          color: #fff;
+          background-color: rgba(0,0,0,.75);
+          border-radius: 2px;
+          box-shadow: 0 3px 6px -4px rgba(0,0,0,.12);
+        }
+      }
+    }
+  }
+}
+

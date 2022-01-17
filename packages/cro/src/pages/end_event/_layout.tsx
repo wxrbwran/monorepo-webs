@@ -3,8 +3,9 @@ import './index.scss';
 import ToogleSide from '@/components/ToogleSide';
 import SideMenu from './components/side_menu';
 import * as api from '@/services/api';
-import ScaleTableTab from '@/components/ScaleTableTab';
+import ScaleTableTab from '@/components/Scale/ScaleTableTab';
 import { history, useDispatch } from 'umi';
+import { RuleTypeMap } from '../subjective_table/util';
 
 interface IProps {
   children: React.ReactElement[];
@@ -27,7 +28,7 @@ function PatientManage(props: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
     if (!props.location.query.isTemp) {
-      api.subjective.getScaleGroup({ projectSid, type: 'CRF' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.crf.type }).then((res) => {
         setTableList(res.scaleGroupInfos);
       });
     }
@@ -37,7 +38,7 @@ function PatientManage(props: IProps) {
     const newUrlName = props.location.query.name;
     if (newUrlName && urlName !== newUrlName) {
       console.log('newUrlName', newUrlName);
-      api.subjective.getScaleGroup({ projectSid, type: 'CRF' }).then((res) => {
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.crf.type }).then((res) => {
         setTableList(res.scaleGroupInfos);
         const scaleGroupInfos = res.scaleGroupInfos.filter(
           (item: { name: string }) => item.name === newUrlName,
@@ -45,9 +46,13 @@ function PatientManage(props: IProps) {
         if (scaleGroupInfos.length > 0) {
           const id = scaleGroupInfos[0].id;
           history.replace(`/end_event/detail?id=${id}`);
+        } else if (res.scaleGroupInfos?.length > 0) {
+          const id = res.scaleGroupInfos[0].id;
+          history.replace(`/end_event/detail?id=${id}`);
         } else {
           history.replace('/end_event/define');
         }
+
       });
     }
   }, [props]);
@@ -68,7 +73,7 @@ function PatientManage(props: IProps) {
               <ScaleTableTab
                 id={props.location.query.id}
                 location={props.location}
-                scaleType="crf"
+                scaleType={RuleTypeMap.crf.scaleType}
               />
             )}
             {props.children}

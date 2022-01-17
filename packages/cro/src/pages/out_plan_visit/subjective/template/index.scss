@@ -1,0 +1,28 @@
+.template {
+  font-size: 14px;
+  color: #181818;
+  @include flex-lay(row, nowrap, flex-start, flex-start);
+  width: 70%;
+  margin: 30px auto 0;
+  .back {
+    font-size: 17px;
+    color: #666;
+    margin-right: 78px;
+  }
+  .tmp_title {
+    font-size: 15px;
+    margin-bottom: 46px;
+		img {
+			width: 24px;
+			height: 24px;
+			margin-right: 12px;
+			vertical-align: top;
+		}
+		.look {
+			font-size: 14px;
+			color: #3296FA;
+			margin-left: 15px;
+			cursor: pointer;
+		}
+	}
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import ScaleTableCreate from '@/components/ScaleTableCreate';
+import ScaleTableCreate from '@/components/Scale/ScaleTableCreate';
 
 interface IProps {
   location: {

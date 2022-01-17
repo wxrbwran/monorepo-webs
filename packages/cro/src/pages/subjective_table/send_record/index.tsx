@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import TableSendRecord from '@/components/TableSendRecord';
+import TableSendRecord from '@/components/Scale/TableSendRecord';
 import { useLocation } from 'umi';
 import { useSelector } from 'react-redux';
 
@@ -24,7 +24,7 @@ const SendRecord: FC = () => {
   console.log('ruleId============= SendRecord subjective location', JSON.stringify(location.query.ruleId));
   return (
     <div>
-      <TableSendRecord source="subjective" scaleGroupId={location.query.id} />
+      <TableSendRecord scaleType='SUBJECTIVE' scaleGroupId={location.query.id} />
     </div>
   );
 };

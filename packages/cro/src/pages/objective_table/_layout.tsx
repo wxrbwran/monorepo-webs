@@ -4,6 +4,7 @@ import ToogleSide from '@/components/ToogleSide';
 import SideMenu from './components/side_menu';
 import { history } from 'umi';
 import * as api from '@/services/api';
+import { RuleTypeMap } from '../subjective_table/util';
 
 interface IProps {
   children: React.ReactElement[];
@@ -21,7 +22,7 @@ function ObjectiveTable(props: IProps) {
   const [tableList, setTableList] = useState([]);
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
-    api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+    api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.objective.type }).then((res) => {
       setTableList(res.scaleGroupInfos);
       if (res.scaleGroupInfos.length > 0) {
         history.replace((`/objective_table/detail?id=${res.scaleGroupInfos[0].id}`));
@@ -33,15 +34,30 @@ function ObjectiveTable(props: IProps) {
     const newUrlName = props.location.query.name;
     console.log('==================== 跳转到所创建的表详情页面', newUrlName);
     if (newUrlName) {
-      api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
-        if (res.scaleGroupInfos.length > 0) {
-          setTableList(res.scaleGroupInfos);
-          const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
+      api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.objective.type }).then((res) => {
+
+        setTableList(res.scaleGroupInfos);
+        const scaleGroupInfos = res.scaleGroupInfos.filter(
+          (item: { name: string }) => item.name === newUrlName,
+        );
+        if (scaleGroupInfos.length > 0) {
+          const id = scaleGroupInfos[0].id;
+          history.replace((`/objective_table/detail?id=${id}`));
+        } else if (res.scaleGroupInfos?.length > 0) {
+          const id = res.scaleGroupInfos[0].id;
           history.replace((`/objective_table/detail?id=${id}`));
         } else {
-          setTableList([]);
           history.replace(('/objective_table'));
         }
+
+        // if (res.scaleGroupInfos.length > 0) {
+        //   setTableList(res.scaleGroupInfos);
+        //   const id = res.scaleGroupInfos.filter((item: { name: string; }) => item.name === newUrlName)[0].id;
+        //   history.replace((`/objective_table/detail?id=${id}`));
+        // } else {
+        //   setTableList([]);
+        //   history.replace(('/objective_table'));
+        // }
       });
     }
   }, [props]);

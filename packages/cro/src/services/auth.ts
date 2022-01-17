@@ -1,14 +1,12 @@
 import { extend } from 'umi-request';
 
 export const auth = extend({
-  prefix: `${process.env.BASEURL}${process.env.AUTH_NAMESPACE}`,
+  prefix: `${process.env.BASEURL}`,
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': 'Basic ZG9jdG9yX3dlYjo='
+    'Content-Type': 'application/json;charset=UTF-8',
+    'xzl-client-id': 'xzl-web-doctor',
   },
-  // @ts-ignore
-  auth: { username: 'doctor_web' },
 });
 
 export const ajax = extend({

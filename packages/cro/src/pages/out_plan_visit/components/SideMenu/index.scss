@@ -1,0 +1,37 @@
+.follow-table-menu {
+  font-size: 14px;
+  .tit {
+    @include flex;
+    margin-top: 34px;
+    color: #868686;
+    a{
+      color: #868686;
+    }
+  }
+  .table-list {
+    margin-top: 15px;
+    max-height: calc(100vh - 310px);
+    overflow: auto;
+    .item {
+      line-height: 30px;
+      color: #181818;
+      padding: 5px 20px;
+      word-break: break-word;
+      text-align: left;
+      a {
+        color: #181818;
+        display: block;
+      }
+
+      &.active {
+        background: #EEF2F4;
+        border-radius: 3px;
+      }
+    }
+  }
+  .create {
+    text-align: left;
+    margin-top: 15px;
+    padding: 0 20px;
+  }
+}

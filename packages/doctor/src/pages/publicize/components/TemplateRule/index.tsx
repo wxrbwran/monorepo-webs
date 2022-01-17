@@ -340,7 +340,7 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
 const titleAllChoosesToMustParma = (chooseStartTime: IItem, firstSteps: string[], choseConditions: ICondition[], scopeSource: IItem) => {
 
 
-  const allPatient = scopeSource.items.filter((item) => item.description == '全部患者');
+  const allPatient = scopeSource.items.filter((item) => item.description == '全部受试者');
 
   const allPatientArr = allPatient.length > 0 ? [tileChooseToArray(allPatient[0])] : [];
 

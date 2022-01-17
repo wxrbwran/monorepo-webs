@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { message, Form, Tabs, Popconfirm } from 'antd';
+import { message, Form, Tabs, DatePicker } from 'antd';
 import SelectGroup from '../components/select_group';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import * as api from '@/services/api';
@@ -16,7 +16,10 @@ import ChoiceTeam from '../../researcher/croservice/components/ChoiceTeam';
 import distributionTeamPng from '@/assets/img/distribution_team.png';
 import { hasPermissions, hasOperationPermissions } from '@/utils/utils';
 import IconAutograph from '@/assets/img/icon_autograph.png';
+import StopPatientMedicine from '../components/stop_patient_medicine';
 import { debounce } from 'lodash';
+import dayjs from 'dayjs';
+import GetMedicTime from '../components/get_medic_time';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -66,19 +69,6 @@ function PatientCro({ }: IProps) {
     }
   };
 
-  const handleStop = (record: any) => {
-    const params = {
-      projectNsId,
-      sid: record.sid,
-      status: 1003,
-      exitReason: 1,
-    };
-    api.patientManage.patchPatientStatus(params).then(() => {
-      message.success('操作成功');
-      refreshList();
-    });
-  };
-
   const toggleImg = (record: any) => {
     setImgVisible(true);
     setImgArr([record?.etcNote]);
@@ -117,18 +107,7 @@ function PatientCro({ }: IProps) {
       <div className="table-operating">
         {
           record.status === 1002 ? hasOperationPermissions(record.team.members) && (
-            <Popconfirm
-              placement="topRight"
-              overlayClassName="delete__pop-confirm"
-              title={(
-                <div>
-                  <h3>确定要停止此患者试验吗？</h3>
-                </div>
-              )}
-              onConfirm={() => handleStop(record)}
-            >
-              <span>停止此患者试验</span>
-            </Popconfirm>
+            <StopPatientMedicine record={record} changeSuccess={() => { refreshList(); }}><span>停止此患者试验</span></StopPatientMedicine>
           ) : <span style={{ color: '#C5C5C5' }}>已停止</span>
         }
 
@@ -164,11 +143,30 @@ function PatientCro({ }: IProps) {
     ),
   };
 
-  const patientColums = [...patientCroColumns({
-    handleStop,
-    toggleImg,
-    distributionTeam,
-  }), operation, subject, cro];
+  const medicineEndTime = {
+    title: '停止此项目用药日期',
+    dataIndex: 'ioLocationConfig',
+    width: 140,
+    align: 'center',
+    render: (text: any, record: any) => (
+      <div className="table-operating">
+        <GetMedicTime isStop={true} record={record} changeSuccess={() => { refreshList(); }}><span>{text.stopMedTime ? dayjs(text.stopMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
+      </div >
+    ),
+  };
+  const medicineStartTime = {
+    title: '给药时间',
+    dataIndex: 'ioLocationConfig',
+    width: 140,
+    align: 'center',
+    render: (text: any, record: any) => (
+      <div className="table-operating">
+        <GetMedicTime isStop={false} record={record} changeSuccess={() => { refreshList(); }}><span>{text.startMedTime ? dayjs(text.startMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
+      </div >
+    ),
+  };
+
+  const patientColums = [...patientCroColumns(), operation, subject, cro, medicineEndTime, medicineStartTime];
 
   const columns = {
     1002: patientColums,

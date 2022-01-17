@@ -1,11 +1,8 @@
-import { auth, ajax } from '@/services/auth';
-import qs from 'qs';
+import { auth } from '@/services/auth';
 
 export default {
   // 登录
-  token(formData: CommonData): Promise<any> {
-    return auth.post('token', {
-      data: qs.stringify(formData)
-    });
+  token(data): Promise<any> {
+    return auth.post('user/token', { data });
   },
 };

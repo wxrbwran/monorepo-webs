@@ -478,3 +478,26 @@ export var documentTypeSource = {
     OTHERS: '他人',
 };
 export var requiredRule = [{ required: true }];
+export var beforeEl = '<!DOCTYPE html>' +
+    '<html lang="en">' +
+    '  <head>' +
+    '    <meta charset="UTF-8" />' +
+    '    <meta http-equiv="X-UA-Compatible" content="IE=edge" />' +
+    '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
+    '    <title>Document12</title>' +
+    '    <link href="https://revomedi.oss-cn-beijing.aliyuncs.com/static/apps/web/index.css" rel="stylesheet" type="text/css"/>' +
+    '    <style>' +
+    '      img, video {' +
+    '        width: 100%;' +
+    '      }' +
+    '    </style>' +
+    '    <script>' +
+    '      document.onclick = function (event) {' +
+    '        event = event || window.event;' +
+    "        console.log('event', event);" +
+    '        fetchJSPost.postMessage(JSON.stringify({ src: event.target.currentSrc }));' +
+    '      };' +
+    '    </script>' +
+    '  </head>' +
+    '  <body class="ql-editor">';
+export var alfterEl = '  </body>' + '</html>';
