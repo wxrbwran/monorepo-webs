@@ -35,7 +35,7 @@ interface IProps {
   };
   changeEditStatus: () => void;
   handleDel?: () => void;
-  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
+  scaleType: 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
 
 function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDel, scaleType }: IProps) {
@@ -121,7 +121,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                 {
                   (status === 1001 || scaleType == 'VISIT_OBJECTIVE') && (
                     <>
-                      <Reply scaleId={infoItem.scaleId}>
+                      <Reply scaleId={infoItem.scaleId} scaleType={scaleType}>
                         <div className={styles.detail}>
                           <img className={styles.icon_reply} src={iconReply} />
                           <span>回复详情</span>
