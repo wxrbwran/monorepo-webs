@@ -3,6 +3,7 @@ import React from 'react';
 import { List, Space, Tooltip } from 'antd';
 import { BloodType2 } from '@/utils/tools';
 import { yinYangMap } from 'xzl-web-shared/dist/utils/consts';
+import { getReferenceTitle } from 'xzl-web-shared/dist/utils/tool';
 
 const measuredAt = (format?: string) => ({
   title: '时间',
@@ -88,9 +89,7 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
               size="small"
               dataSource={referenceList}
               renderItem={(ref: TReference) => {
-                const text = `${ref.note || ''}${ref.value || ''}${ref.secondValue ? `-${ref.secondValue}` : ''}${
-                  ref.unit || ''
-                }`;
+                const text = `${ref.note || ''}${getReferenceTitle(ref)}${ ref.unit || '' }`;
                 return (
                   <List.Item className="mx-auto text-center text-sm">
                     <Space className="w-full justify-center" style={{ display: 'flex' }}>
