@@ -64,8 +64,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
   }, [location]);
 
   useEffect(() => {
-
-    console.log('================ objectiveScaleList,', JSON.stringify(objectiveScaleList));
     setInfos([...objectiveScaleList]);
     setScaleName(formName);
     //默认第一次加载时执行
@@ -75,8 +73,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
       statusList.push('lock');
     });
     setEditStatus([...statusList]);
-
-    console.log('================ editStatus,', JSON.stringify(statusList));
     // }
   }, [objectiveScaleList]);
 
@@ -87,8 +83,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
     if (!scaleName) {
       message.error('客观检查名称不能为空');
     } else {
-
-
       setIsEdit(false);
       api.subjective.patchScale({
         name: scaleName,
@@ -102,7 +96,19 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
           type: 'project/fetchObjectiveScale',
           payload: { id: location.query.id, scaleType },
         });
-        history.push(`${location.pathname}?name=${scaleName}`);
+
+        // 预防编辑计划外客观标题时，点击tab切换，导致2个tab来回切换抽搐现象
+        if (scaleType == 'VISIT_OBJECTIVE') {
+          if (history.location.pathname.includes('/out_plan_visit/objective')) {
+            history.push(`${location.pathname}?name=${scaleName}`);
+          }
+        } else if (scaleType == 'OBJECTIVE') {
+          if (history.location.pathname.includes('/objective_table')) {
+            history.push(`${location.pathname}?name=${scaleName}`);
+          }
+        } else {
+          history.push(`${location.pathname}?name=${scaleName}`);
+        }
       });
     }
   };
