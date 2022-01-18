@@ -210,10 +210,7 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
                     }
                     <a id="upload" style={{ display: 'none' }} target="_blank" href={item.address}>11</a>
                     {
-                      type === 'RISK_FILE' ?
-                        // <span className={styles.download}>
-                        //   <a style={{ display: "table-cell" }} target="_blank" href={item.address}><img src={projectRiskSee} style={{ width: 20, height: 20 }} /> 查看</a>
-                        // </span>
+                      (type === 'RISK_FILE' && !(item.name.includes('doc') || item.name.includes('xls'))) ?
                         <span className={styles.download}>
                           <CreateFile {...createFileProps} initData={item} readonly={true}>
                             <span><FileSearchOutlined /> 查看</span>

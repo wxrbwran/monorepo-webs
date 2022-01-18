@@ -1,6 +1,5 @@
 import React from 'react';
 import noTable from '@/assets/img/follow-table/no_table.png';
-import styles from './index.scss';
 import { Button } from 'antd';
 import { Link } from 'umi';
 
@@ -8,7 +7,7 @@ export default () => {
   return (
     // 无主观量表展示
     <div className="follow-table-empty">
-      <img className="no-data-img" src={noTable} alt="暂无提醒"/>
+      <img className="no-data-img" src={noTable} alt="暂无提醒" />
       <p>
         您的项目内暂无提醒，
       </p>
@@ -18,4 +17,4 @@ export default () => {
       </Button>
     </div>
   );
-}
+};

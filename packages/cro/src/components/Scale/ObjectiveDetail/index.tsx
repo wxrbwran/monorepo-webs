@@ -192,8 +192,9 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
     });
   };
 
+  console.log('================ status', status, (status !== 1001 || scaleType == 'VISIT_OBJECTIVE'));
   return (
-    <>
+    <div className={styles.object_detail}>
       <div className={styles.table_name}>
         {isEdit ? (
           <p className={styles.title}>
@@ -249,7 +250,7 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
           );
         }
       })}
-    </>
+    </div>
   );
 }
 

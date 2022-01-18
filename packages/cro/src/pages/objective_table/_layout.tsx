@@ -63,7 +63,7 @@ function ObjectiveTable(props: IProps) {
   }, [props]);
   const isShowSideMenu = props.location.pathname !== '/objective_table/create'; // 创建页面不显示侧边栏
   return (
-    <>
+    <div className="objective-table">
       {
         isShowSideMenu ? (
           <ToogleSide>
@@ -76,8 +76,7 @@ function ObjectiveTable(props: IProps) {
           <div>{props.children}</div>
         )
       }
-    </>
-
+    </div>
   );
 }
 
