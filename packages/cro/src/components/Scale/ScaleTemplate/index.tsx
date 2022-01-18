@@ -787,10 +787,53 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       return '请补全首次发送时间';
     }
 
+    // 发送频率
+    if (frequency.frequency == 'CUSTOM' || frequency.frequency == 'LOOP') {
+      for (let i = 0; i < frequency.custom.length; i++) {
+        const period = frequency.custom[i];
+        if (!period.day || !period.time) {
+          return '请补全发送频率';
+        }
+      }
+    } else if (frequency.frequency == 'ADD') {
+      for (let i = 0; i < frequency.custom.length; i++) {
+        const period = frequency.custom[i];
+        if (!period.day || !period.hour || !period.min) {
+          return '请补全发送频率';
+        }
+      }
+    }
+
     // 发送对象
     if (!(choseScope.length > 0)) {
       return '请选择发送对象';
     }
+
+
+    // 发送条件
+    for (let i = 0; i < choseConditions.length; i++) {
+      if (choseConditions[i].chooseItem.name == 'basic.age') {
+        if (!choseConditions[i].chooseValue.min || !choseConditions[i].chooseValue.max) {
+          return '请补全发送条件的年龄范围';
+        }
+      } else if (choseConditions[i].chooseItem.name == 'basic.sex') {
+        if (!choseConditions[i].chooseValue.value) {
+          return '请补全发送条件的性别';
+        }
+      } else if (choseConditions[i].chooseItem.name == 'diagnose.disease') { // 诊断，多个用，连接
+
+        if (!choseConditions[i].chooseValue.value) {
+          return '请补全发送条件的诊断内容';
+        }
+      } else if (choseConditions[i].chooseItem.name == 'diagnose.treatment') { // 诊断，多个用，连接
+
+        if (!choseConditions[i].chooseValue.value) {
+          return '请补全发送条件的处理内容';
+        }
+      }
+    }
+
+
 
     return null;
   };

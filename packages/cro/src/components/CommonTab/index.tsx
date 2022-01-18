@@ -9,6 +9,7 @@ import * as api from '@/services/api';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import './index.scss';
 import { CommonData, IState } from 'typings/global';
+import { useRef } from 'react';
 
 
 const { TabPane } = Tabs;
@@ -21,8 +22,6 @@ interface IProps {
     }
   };
 }
-
-let timer: NodeJS.Timeout | null = null;
 function CommonTab(props: IProps) {
   const dispatch = useDispatch();
   const [currTab, setCurrTab] = useState('');
@@ -37,6 +36,7 @@ function CommonTab(props: IProps) {
   const [val, setVal] = useState('');
   const [seconds, setSeconds] = useState(60);
   const [isGetting, setIsGetting] = useState(false);
+  const timerRef = useRef();
 
   const modalText: CommonData = {
     'del': {
@@ -62,11 +62,11 @@ function CommonTab(props: IProps) {
   };
 
   const [form] = Form.useForm();
-  const { getFieldValue, setFieldsValue } = form;
+  const { setFieldsValue } = form;
 
   useEffect(() => {
     if (seconds === 0) {
-      clearInterval(Number(timer));
+      clearInterval(timerRef.current);
       setSeconds(60);
       setIsGetting(false);
     }
@@ -80,7 +80,7 @@ function CommonTab(props: IProps) {
       projectName,
       type: modalText[modalType].type,
     }).then(() => {
-      timer = setInterval(() => {
+      timerRef.current = setInterval(() => {
         setSeconds((preSeconds) => preSeconds - 1);
         setIsGetting(true);
       }, 1000);
@@ -132,8 +132,6 @@ function CommonTab(props: IProps) {
           payload: projectSid || window.$storage.getItem('projectSid'),
         });
       }
-    }).catch((err) => {
-      message.error(err);
     });
   };
 
@@ -183,7 +181,7 @@ function CommonTab(props: IProps) {
 
     if (modalType != type) {
       // 不一样，需要清空之前的计时等数据
-      clearInterval(Number(timer));
+      clearInterval(timerRef.current);
       setSeconds(60);
       setIsGetting(false);
       setVal('');
@@ -229,9 +227,6 @@ function CommonTab(props: IProps) {
       </a>
     </Dropdown>
   );
-
-
-  console.log('============ val', val);
   return (
     <>
       <Tabs
