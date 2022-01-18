@@ -35,7 +35,7 @@ import { isEmpty } from 'lodash';
 var Option = Select.Option;
 var FirstSendTime = function (_a) {
     var choiceModelChange = _a.choiceModelChange, popverContent = _a.popverContent, choiceModelSource = _a.choiceModelSource;
-    var _b = __read(useState({ childItemType: 'select', choiceModel: choiceModelSource, description: 'first' }), 2), choiceModel = _b[0], setChoiceModel = _b[1];
+    var _b = __read(useState({}), 2), choiceModel = _b[0], setChoiceModel = _b[1];
     // const [contentList, setContentList] = useState<any[]>([]);
     var handleChangeType = function (val, currentItem) {
         var _a;
