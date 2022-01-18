@@ -1,9 +1,8 @@
 import React, {
   FC, useState, useMemo, useRef, useEffect,
 } from 'react';
-import { Tabs, Popconfirm, Button } from 'antd';
+import { Tabs, Popconfirm, Button, message } from 'antd';
 import { useDispatch } from 'umi';
-import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import { CloseOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
 import SearchDocument from '../SearchDocument';
 import AddEditDocument from '@/pages/Index_library/components/AddEditDocument';
@@ -11,11 +10,10 @@ import SubType from '../SubType';
 import SearchHYD from '../SearchHYD';
 import CustomIndex from '../CustomIndex';
 import { getSource } from '../utils';
+import uuid from 'react-uuid';
 
 import { isEmpty, cloneDeep } from 'lodash';
 import styles from './index.scss';
-import IconAdd from '@/assets/img/icon_add.png';
-import { render } from 'react-dom';
 
 // 此组件具体到，化验单或检查单panel
 const { TabPane } = Tabs;
@@ -44,6 +42,7 @@ interface ICheckTypesItem extends IApiDocumentItem {
   orgName?: string;
   measuredAt?: number;
   unknownReport?: boolean;
+  tabKey?: string;
 }
 // ICheckTypesItem保存过后init数据，接口返回的格式。ISearchDocumentItem是搜索时候接口返回的数据格式
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
@@ -72,7 +71,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const [checkTypes, setCheckTypes] = useState<ICheckTypes>(initCheckTypes || []);
   const [activeType, setActiveType] = useState<string>();
   const [sampleFroms, setSampleFroms] = useState<string[]>(initSubType);
-  const [noSelect, setNoSelect] = useState<any>();
   const documentsCallbackFns = useRef({});
   const dispatch = useDispatch();
   const doctorSid = window.$storage.getItem('sid');
@@ -87,6 +85,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   // 搜索框：点击下拉框的数据【来源+单据来源】, type === 'add'表示是新添加的大分类+指标
   const handleSelectTypeIndex = (params: ISearchDocumentItem, _type?: string) => {
     console.log('handleSelectTypeIndex', params, _type);
+    const newUuid: string = uuid();
     // console.log('checkTypes', checkTypes);
     let newCheckTypes: ICheckTypes = [];
     let isNew = true;
@@ -115,6 +114,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
               ...params,
               indexId: params.id,
             },
+            tabKey: newUuid,
           };
         }
       }
@@ -126,6 +126,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         {
           ...params,
           firstIndex: params.id,
+          tabKey: newUuid,
         },
       ];
       handleCurDocument({
@@ -135,10 +136,10 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         sampleFrom: params.sampleFrom,
       });
     } else if (isNew && _type === 'copy') {
-      newCheckTypes = [...checkTypes, { ...params }];
+      newCheckTypes = [...checkTypes, { ...params, tabKey: newUuid }];
     }
-    activeType1.current = params.documentId + params.sampleFrom;
-    setActiveType(params.documentId + params.sampleFrom);
+    activeType1.current = newUuid;
+    setActiveType(newUuid);
     setCheckTypes([...newCheckTypes]);
   };
   useEffect(() => {
@@ -211,20 +212,42 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     }
     return null;
   };
+  const handleActiveTab = (tab: string) => {
+    console.log('checkTypes111', checkTypes);
+    // console.log('tab', tab);
+    if (tab != 'deactivation') {
+      activeType1.current = tab;
+      console.log('tab1111', tab);
+      setActiveType(tab);
+      const doc = checkTypes.filter(c => tab === c.tabKey)[0];
+      handleCurDocument({
+        ...doc,
+        id: doc.documentId,
+        name: doc.documentName,
+        sampleFrom: doc.sampleFrom,
+      });
+    }
+  };
   const handleRemoveType = (targetItem: ICheckTypesItem | ISearchDocumentItem) => {
-    const targetKey = targetItem.documentId + targetItem.sampleFrom;
-    const newCheckTypes = checkTypes.filter((item: ICheckTypesItem | ISearchDocumentItem) => (
-      item.documentId + item.sampleFrom) !== targetKey);
+    const targetKey = targetItem.tabKey;
+    const newCheckTypes = checkTypes.filter((item: ICheckTypesItem | ISearchDocumentItem) => item.tabKey !== targetKey);
     setCheckTypes(newCheckTypes);
     if (activeType1.current === targetKey && newCheckTypes.length > 0) {
       activeType1.current = newCheckTypes[0].documentId + newCheckTypes[0].sampleFrom;
-      setActiveType(newCheckTypes[0].documentId + newCheckTypes[0].sampleFrom);
+      // setActiveType(newCheckTypes[0].tabKey);
+      handleActiveTab(newCheckTypes[0].tabKey!);
     }
   };
   const handleRefershDocument = (e: React.MouseEvent, id: string): void => {
+    const newUUid =  uuid();
     e.stopPropagation();
     console.log(id);
-    event.emit('REFERSH_DOCUMENT_BY_ID', id);
+    const refreshCur = checkTypes.filter(item => item.documentId === id)[0];
+    refreshCur.tabKey = newUUid;
+    setCheckTypes(cloneDeep(checkTypes));
+    setActiveType(newUUid);
+    message.success('已刷新单据');
+    // event.emit('REFERSH_DOCUMENT_BY_ID', id);
   };
   const handleEditName = (hydInfo: { id: string; name: string }) => {
     checkTypes.forEach(item => {
@@ -276,7 +299,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
               )}
             </span>
           }
-          key={`${item.documentId}${item.sampleFrom}`}
+          key={`${item.tabKey}`}
           forceRender
           closeIcon={
             <Popconfirm
@@ -341,22 +364,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   //     </TabPane>
   //   );
   // };
-  const handleActiveTab = (tab: string) => {
-    // console.log('checkTypes', checkTypes);
-    // console.log('tab', tab);
-    if (tab != 'deactivation') {
-      activeType1.current = tab;
-      console.log('tab', tab);
-      setActiveType(tab);
-      const doc = checkTypes.filter(c => tab.includes(c.documentId))[0];
-      handleCurDocument({
-        ...doc,
-        id: doc.documentId,
-        name: doc.documentName,
-        sampleFrom: doc.sampleFrom,
-      });
-    }
-  };
+
 
   // 新增页签的回调
   const handelTabsEdit = (deleteTabKey: string, action: any) => {
