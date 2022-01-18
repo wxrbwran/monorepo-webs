@@ -74,7 +74,7 @@ function ScaleTableDetailEcho(props: IProps) {
       <div className={`${styles.first_title} relative`}>
         {scaleName}
         {
-          status !== 1001
+          (status !== 1001 || ['VISIT_CRF', 'VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE'].includes(scaleType))
           && window.$storage.getItem('isLeader')
           && !location.pathname.includes('reply')
           && !location.pathname.includes('template') && (

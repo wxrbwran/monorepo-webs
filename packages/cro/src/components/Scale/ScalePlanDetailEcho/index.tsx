@@ -137,7 +137,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
         <span>{(scaleType === 'CRF' || scaleType == 'VISIT_CRF') ? 'CRF' : '主观'}量表计划</span>
         {
           window.$storage.getItem('isLeader')
-          && window.$storage.getItem('projectStatus') != 1001
+          && (window.$storage.getItem('projectStatus') != 1001 || ['VISIT_CRF', 'VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE'].includes(scaleType))
           && !groupId && (
             <PlanModal title="修改发送计划"
               scaleId={scaleId}
