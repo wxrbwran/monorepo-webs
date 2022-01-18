@@ -209,12 +209,12 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
         ) : (
           <p className={styles.title}>
             {formName}
-            {status !== 1001 && window.$storage.getItem('isLeader') && <FormOutlined onClick={changeIsEdit} />}
+            {(status !== 1001 || scaleType == 'VISIT_OBJECTIVE') && window.$storage.getItem('isLeader') && <FormOutlined onClick={changeIsEdit} />}
           </p>
         )}
       </div>
       {
-        status !== 1001 && window.$storage.getItem('isLeader') &&
+        (status !== 1001 || scaleType == 'VISIT_OBJECTIVE') && window.$storage.getItem('isLeader') &&
         <div className={styles.add} onClick={addInfo}>
           <img src={create} alt="" />
           创建新提醒
