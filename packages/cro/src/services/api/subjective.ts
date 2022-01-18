@@ -42,7 +42,6 @@ export default {
   },
   // 客观检查计划回复详情
   getReplyDetail(data?: any): Promise<any> {
-    // return http.get('research/objective/examination/info',{ data });
     return http.get(`research/objective/examination/info?data=${JSON.stringify(data)}`);
   },
   // 获取量表回复详情

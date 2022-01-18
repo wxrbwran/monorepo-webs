@@ -115,6 +115,21 @@ const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatm
   }
 };
 
+const getTreatmentDes = (timeKey: IItem) => {
+
+  if (timeKey.name === 'diagnose.treatment') {
+    for (let j = 0; j < timeKey.items.length; j++) {
+      const subItem = timeKey.items[j];
+      if (subItem.name === 'diagnose.treatment.uid') {
+
+        return subItem.description;
+      }
+    }
+  }
+
+  return '';
+};
+
 
 
 // const getTreatmentDesInStartTimeKey = (timeKey: IItem) => {
@@ -584,21 +599,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   };
 
 
-  //更改 患者做处理的时间-->处理方式
-  const onChangeStateByValue = (vals: string[]) => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const handleItemList = firstTime?.choiceModel?.choiceModel?.childItem?.filter((item) => item.description == HandelTime);
-
-    // eslint - disable - next - line @typescript-eslint / no - use - before - define
-    console.log('============= firstTime', vals);
-    if (handleItemList.length > 0) {
-      handleItemList[0].inputDes = vals[1];
-    }
-    fillTreatmentInStartTimeKey(chooseStartTimeListRef.current.filter((item) => item.name == 'diagnose.treatment')[0], vals[0], vals[1]);
-  };
-
   const childReactFunc = (value?: string) => {
 
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return (<HandleChoose onChangeStateByValue={onChangeStateByValue} chooseDes={value}></HandleChoose>);
   };
 
@@ -629,6 +632,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   };
 
   const [firstTime, setFirstTime] = useState<{ choiceModel: any }>({ choiceModel: initFirstTimeChoiceMode });
+
+  //更改 患者做处理的时间-->处理方式
+  const onChangeStateByValue = (vals: string[]) => {
+    fillTreatmentInStartTimeKey(chooseStartTimeListRef.current.filter((item) => item.name == 'diagnose.treatment')[0], vals[0], vals[1]);
+  };
 
   useEffect(() => {
     api.query.fetchFields(getRuleType(scaleType).templeType).then((res) => {
@@ -674,7 +682,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
       const handleTimeItem = firstTimeTemp.choiceModel.childItem.filter((item) => item.description == HandelTime)[0];
       handleTimeItem.childReact = childReactFunc;
-      console.log('============== handleTimeItem.handleTimeItem ', JSON.stringify(firstTimeTemp));
 
       setChoseScope(cloneDeep(chooseValues.choseScope));
       setChoseConditions(cloneDeep(chooseValues.choseConditions));
@@ -697,6 +704,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         },
       ];
     }
+
     setFirstTime(firstTimeTemp);
   }, [originRuleDoc, scaleType]);
 
@@ -706,13 +714,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     remindRef.current = question;
   }, [question]);
 
-
-
-
-
   //改变起始发送时间类型-zhou
   // const handleChangeType = (value: string) => {
-
   //   const choseList = startTimeKey.items.filter(item => item.name === value);
   //   setChooseStartTime(choseList[0]);
   // };
@@ -721,7 +724,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const handleChangeGroup = (checkedValues: any[]) => {
 
     const choseList = scopeKey.items.filter(item => checkedValues.includes(item.description));
-
     setChoseScope(choseList);
   };
 
@@ -741,13 +743,11 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const canSave = (firstSteps: string[]) => {
 
-
     // 首次发送时间一定要填写 
     if (firstSteps.includes(IntoGroupTime) || firstSteps.includes(GiveMedicTime) || firstSteps.includes(StopMedicTime) || firstSteps.includes(HandelTime)) {
 
       // 处理选择的值要补全
       if (firstSteps.includes(HandelTime)) {
-
         if (!(firstTime.choiceModel?.choiceModel?.inputDes?.length > 0)) {
           return '请补全首次发送时间的处理';
         }
@@ -798,7 +798,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     } else if (frequency.frequency == 'ADD') {
       for (let i = 0; i < frequency.custom.length; i++) {
         const period = frequency.custom[i];
-        if (!period.day || !period.hour || !period.min) {
+        if (!(period.day >= 0) || !(period.hour >= 0) || !(period.min >= 0)) {
           return '请补全发送频率';
         }
       }
@@ -808,7 +808,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     if (!(choseScope.length > 0)) {
       return '请选择发送对象';
     }
-
 
     // 发送条件
     for (let i = 0; i < choseConditions.length; i++) {
@@ -833,8 +832,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       }
     }
 
-
-
     return null;
   };
 
@@ -842,6 +839,9 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   const handleSubmit = () => {
 
     const firstSteps = getFirstSteps(firstTime.choiceModel);
+    const handleItemList = firstTime?.choiceModel?.childItem?.filter((item) => item.description == HandelTime);
+    handleItemList[0].inputDes = getTreatmentDes(chooseStartTimeListRef.current.filter((item) => item.name == 'diagnose.treatment')[0]);
+
 
     const can = canSave(firstSteps);
     if (can) {
@@ -854,15 +854,12 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     const set = Array.from(new Set(frequency.custom));
     const filter = set.filter((item) => !!item);
     frequency.custom = filter;
-    console.log('============= frequency 11', JSON.stringify(filter), JSON.stringify(frequency.custom));
-
     //去重、过滤空数据
     frequency.custom = Array.from(new Set(frequency.custom)).filter((item) => !!item);
     console.log('============= firstTime', JSON.stringify(firstTime));
     console.log('============= choseConditions', JSON.stringify(choseConditions));
     console.log('============= choseScope', JSON.stringify(choseScope));
     console.log('============= frequency', JSON.stringify(frequency));
-
 
 
     console.log('============= firstSteps', JSON.stringify(firstSteps));
@@ -937,13 +934,24 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   };
 
   const onChoiceModelChange = (choiceModel: IModel) => {
-    firstTime.choiceModel = choiceModel;
-    console.log('============= onChoiceModelChange onChoiceModelChange', JSON.stringify(firstTime));
+
+    console.log('===============1  111', JSON.stringify(choiceModel));
+
+    console.log('===============1  2222', JSON.stringify(firstTime.choiceModel));
+
+    console.log('===============1  333', JSON.stringify(firstTime.choiceModel) == JSON.stringify(choiceModel));
+
+    // console.log('============= onChoiceModelChange onChoiceModelChange', JSON.stringify(firstTime));
+
+    if (JSON.stringify(firstTime.choiceModel) != JSON.stringify(choiceModel)) {
+      setFirstTime({ choiceModel: choiceModel });
+    }
+
   };
 
   //存在空记录不可提交
-  const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];
-  const isEmptyGroup = choseScope.length == 0;
+  // const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];
+  // const isEmptyGroup = choseScope.length == 0;
   // const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
 
   const isShowTextArea = scaleType === 'OBJECTIVE' || scaleType == 'VISIT_OBJECTIVE';
@@ -953,7 +961,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     value: item.description,
   }));
   const des = choseScope.map(item => item.description);
-
 
   return (
     <div className={mode === 'Add' ? styles.send_plan : `${styles.send_plan} ${styles.edit}`}>

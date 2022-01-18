@@ -9,7 +9,7 @@ interface IProps {
 }
 function Reply({ location }: IProps) {
   return (
-    <CrfReply location={location} />
+    <CrfReply location={location} scaleType='CRF' />
   );
 }
 export default Reply;

@@ -8,7 +8,7 @@ import styles from './index.scss';
 interface IProps {
   children: React.ReactElement;
   scaleId: string;
-  scaleType: 'SUBJECTIVE' | 'VISIT_SUBJECTIVE';
+  scaleType: 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
 interface IInfoList {
   imageList: string[];
@@ -33,9 +33,11 @@ function Reply({ children, scaleId, scaleType }: IProps) {
     setActiveIndex(idx);
   };
   const fetchScaleDetail = () => {
+
+    console.log('============= scaleType scaleType', scaleType);
     const params: any = {
       scaleId,
-      type: scaleType == 'SUBJECTIVE' ? 1 : 4,
+      type: scaleType == 'OBJECTIVE' ? 1 : 4,
     };
     if (wordKey) {
       params.patientName = wordKey;
