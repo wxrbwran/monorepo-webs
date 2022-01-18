@@ -223,7 +223,7 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
                         <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
                     }
                     {
-                      type === 'RISK_FILE' && (
+                      isEdit && type === 'RISK_FILE' && (
                         <CreateFile {...createFileProps} initData={item} readonly={false} fileId={item.id}>
                           <span><EditOutlined /> 编辑</span>
                         </CreateFile>
