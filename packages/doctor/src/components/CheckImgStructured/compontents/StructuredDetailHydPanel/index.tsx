@@ -60,6 +60,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         ...item,
         sampleFrom: item.sampleFroms?.[0],
         firstIndex: item.indexList?.[0]?.indexId,
+        tabKey: uuid(),
       });
     });
     initSubType = [...new Set(initSubType)];
@@ -257,6 +258,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     });
     setCheckTypes(cloneDeep(checkTypes));
   };
+  console.log('checkTypes1212', checkTypes);
   const renderTabPane = useMemo(() => () => checkTypes.map(
     (item: ICheckTypesItem | ISearchDocumentItem) => {
       console.log('item888', item);

@@ -44,7 +44,6 @@ const SubType: FC<IProps> = (props) => {
         onValuesChange={handleValueChange}
         initialValues={{
           radio: initSampleFromString,
-          selects: [...initSampleFrom.filter((s) => !['血液', '其他'].includes(s))],
         }}
       >
         <Form.Item name="radio" noStyle>
