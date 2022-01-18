@@ -48,6 +48,18 @@ const RenderItem: FC<IProps> = (props) => {
       [`${indexItem.formIndex}_abbreviation`]: param.abbreviation,
       [`${indexItem.formIndex}_referenceList`]: param.references,
     });
+    const defaultRefer = param.references ? param.references.filter(i => i.isDefault)[0].id : null;
+    if (defaultRefer) {
+      const formValues = form.getFieldsValue();
+      Object.keys(formValues).forEach(formKey => {
+        if (formKey.endsWith('reference') && Number(formKey.split('_')[0]) === indexItem.formIndex) {
+          form.setFieldsValue({
+            [formKey]: defaultRefer,
+          });
+        }
+      });
+    }
+
     onSuccess({ ...indexItem, ...param });
   };
   const formatOption = (reference: TReference) => {
