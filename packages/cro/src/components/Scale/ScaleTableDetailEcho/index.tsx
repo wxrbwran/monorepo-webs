@@ -80,7 +80,7 @@ function ScaleTableDetailEcho(props: IProps) {
           && !location.pathname.includes('template') && (
             <p className={`${styles.icon} mr-20 absolute right-0 top-0`}>
               <Link
-                to={`/${getUrlPreFix(scaleType)}/create?groupId=${groupId}`}
+                to={`/${getUrlPreFix(scaleType)}/create?groupId=${groupId}&scaleId=${props.scaleId}`}
               >
                 <p className="inline-block text-base cursor-pointer">
                   <FormOutlined /> 编辑 <Divider type="vertical" />
