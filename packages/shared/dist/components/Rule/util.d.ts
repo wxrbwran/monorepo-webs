@@ -96,29 +96,11 @@ export declare function getChooseValueFromItem(item: any): {
 export declare function changeDescritionWithItem(item: IItem): void;
 export declare function deleteStartOrEndSymbol(str: string): any;
 export declare function getHMstr(delay: number): string;
-export declare function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, ruleDoc: {
-    rules: IRule[];
-    meta: any;
-}, list: any[]): {
-    choiceModel: {
-        childItemType: string;
-        choiceModel: IModel;
-        description: string;
-    };
-    choiceContents: any[];
-};
 export declare function getChooseValuesKeyFromRules(ruleDoc: {
     rules: IRule[];
     meta: any;
 }, list: any[]): {
-    firstTime: {
-        choiceModel: {
-            childItemType: string;
-            choiceModel: IModel;
-            description: string;
-        };
-        choiceContents: any[];
-    };
+    firstTime: any;
     choseConditions: any[];
     choseScope: any[];
     frequency: {
