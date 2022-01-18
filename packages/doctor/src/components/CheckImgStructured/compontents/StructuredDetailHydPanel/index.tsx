@@ -212,13 +212,30 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
     }
     return null;
   };
+  const handleActiveTab = (tab: string) => {
+    console.log('checkTypes111', checkTypes);
+    // console.log('tab', tab);
+    if (tab != 'deactivation') {
+      activeType1.current = tab;
+      console.log('tab1111', tab);
+      setActiveType(tab);
+      const doc = checkTypes.filter(c => tab === c.tabKey)[0];
+      handleCurDocument({
+        ...doc,
+        id: doc.documentId,
+        name: doc.documentName,
+        sampleFrom: doc.sampleFrom,
+      });
+    }
+  };
   const handleRemoveType = (targetItem: ICheckTypesItem | ISearchDocumentItem) => {
     const targetKey = targetItem.tabKey;
     const newCheckTypes = checkTypes.filter((item: ICheckTypesItem | ISearchDocumentItem) => item.tabKey !== targetKey);
     setCheckTypes(newCheckTypes);
     if (activeType1.current === targetKey && newCheckTypes.length > 0) {
       activeType1.current = newCheckTypes[0].documentId + newCheckTypes[0].sampleFrom;
-      setActiveType(newCheckTypes[0].tabKey);
+      // setActiveType(newCheckTypes[0].tabKey);
+      handleActiveTab(newCheckTypes[0].tabKey!);
     }
   };
   const handleRefershDocument = (e: React.MouseEvent, id: string): void => {
@@ -347,22 +364,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
   //     </TabPane>
   //   );
   // };
-  const handleActiveTab = (tab: string) => {
-    console.log('checkTypes111', checkTypes);
-    // console.log('tab', tab);
-    if (tab != 'deactivation') {
-      activeType1.current = tab;
-      console.log('tab1111', tab);
-      setActiveType(tab);
-      const doc = checkTypes.filter(c => tab === c.tabKey)[0];
-      handleCurDocument({
-        ...doc,
-        id: doc.documentId,
-        name: doc.documentName,
-        sampleFrom: doc.sampleFrom,
-      });
-    }
-  };
+
 
   // 新增页签的回调
   const handelTabsEdit = (deleteTabKey: string, action: any) => {
