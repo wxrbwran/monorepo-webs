@@ -20,7 +20,6 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     return to;
 };
 import { cloneDeep } from 'lodash';
-import dayjs from 'dayjs';
 export var fileTypes = [
     {
         name: '视频',
@@ -149,34 +148,30 @@ export function getHMstr(delay) {
     var min = (delay - hour * 3600) / 60;
     return (hour < 10 ? '0' + hour : hour) + ':' + (min < 10 ? '0' + min : min);
 }
-export function getStartTimeChoiceModel(chooseStartTime, action, ruleDoc, list) {
-    var _a, _b, _c, _d, _e, _f, _g;
-    var choiceModel = { childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' };
-    if (chooseStartTime) { // 说明选择的是 患者与我绑定日期后
-        choiceModel.choiceModel.choiceModel = (_a = choiceModel.choiceModel.childItem) === null || _a === void 0 ? void 0 : _a.filter(function (item) { return item.description == AfterPatientBind; })[0];
-        // action.
-        if (action.params.period == 0) { // 选择的是 立即发送
-            choiceModel.choiceModel.choiceModel.choiceModel = (_c = (_b = choiceModel.choiceModel.choiceModel) === null || _b === void 0 ? void 0 : _b.childItem) === null || _c === void 0 ? void 0 : _c.filter(function (item) { return item.description == ImmediatelySend; })[0];
-        }
-        else { // 选择的是自定义
-            choiceModel.choiceModel.choiceModel.choiceModel = (_e = (_d = choiceModel.choiceModel.choiceModel) === null || _d === void 0 ? void 0 : _d.childItem) === null || _e === void 0 ? void 0 : _e.filter(function (item) { return item.description == DIY; })[0];
-            choiceModel.choiceModel.choiceModel.choiceModel.inputDay = action.params.period;
-            choiceModel.choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
-        }
-    }
-    else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
-        choiceModel.choiceModel.choiceModel = (_f = choiceModel.choiceModel.childItem) === null || _f === void 0 ? void 0 : _f.filter(function (item) { return item.description == SpecificDate; })[0];
-        choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
-    }
-    else {
-        choiceModel.choiceModel.choiceModel = (_g = choiceModel.choiceModel.childItem) === null || _g === void 0 ? void 0 : _g.filter(function (item) { return item.description == PlanCreatedSendImmediately; })[0];
-    }
-    var sourceIds = action.params.sourceMember.flatMap(function (item) { return item.sourceId; });
-    return ({
-        choiceModel: choiceModel,
-        choiceContents: list.filter(function (item) { return sourceIds.includes(item.id); }),
-    });
-}
+// export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, ruleDoc: { rules: IRule[], meta: any }, list: any[]) {
+//   const choiceModel = { childItemType: 'select', choiceModel: cloneDeep(FirstTimeModel), description: 'first' };
+//   if (chooseStartTime) { // 说明选择的是 患者与我绑定日期后
+//     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == AfterPatientBind)[0];
+//     // action.
+//     if (action.params.period == 0) { // 选择的是 立即发送
+//       choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == ImmediatelySend)[0];
+//     } else { // 选择的是自定义
+//       choiceModel.choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.choiceModel?.childItem?.filter((item) => item.description == DIY)[0];
+//       choiceModel.choiceModel.choiceModel.choiceModel.inputDay = action.params.period;
+//       choiceModel.choiceModel.choiceModel.choiceModel.inputHM = getHMstr(action.params.delay);
+//     }
+//   } else if (ruleDoc.meta.firstAtTime) { // 说明选择的是 选择特定日期
+//     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == SpecificDate)[0];
+//     choiceModel.choiceModel.choiceModel.inputTime = dayjs(ruleDoc.meta.firstAtTime).format('YYYY-MM-DD HH:mm');
+//   } else {
+//     choiceModel.choiceModel.choiceModel = choiceModel.choiceModel.childItem?.filter((item) => item.description == PlanCreatedSendImmediately)[0];
+//   }
+//   const sourceIds = action.params.sourceMember.flatMap((item) => item.sourceId);
+//   return ({
+//     choiceModel: choiceModel,
+//     choiceContents: list.filter((item) => sourceIds.includes(item.id)),
+//   });
+// }
 export function getChooseValuesKeyFromRules(ruleDoc, list) {
     var _a, _b;
     var rule = ruleDoc.rules[0];

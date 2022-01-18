@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useState, useMemo, useRef } from 'react';
-import { Form, Button, message, Input } from 'antd';
+import { Form, Button, Input } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import CopyDocument from '@/pages/Index_library/components/CopyDocument';
-import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import * as api from '@/services/api';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
@@ -141,21 +140,21 @@ const CustomIndex: FC<IProps> = (props) => {
   }, [initList]);
 
   // 刷新单据
-  useEffect(() => {
-    const listener = async (id: string) => {
-      console.log('apiParams.id', apiParams.documentId);
-      console.log('id', id);
-      if (apiParams.documentId === id) {
-        form.resetFields();
-        await fetchIndexDocumentIndex();
-        message.success('已刷新单据');
-      }
-    };
-    event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
-    return () => {
-      event.removeListener('REFERSH_DOCUMENT_BY_ID', listener);
-    };
-  }, [apiParams]);
+  // useEffect(() => {
+  //   const listener = async (id: string) => {
+  //     console.log('apiParams.id', apiParams.documentId);
+  //     console.log('id', id);
+  //     if (apiParams.documentId === id) {
+  //       form.resetFields();
+  //       await fetchIndexDocumentIndex();
+  //       message.success('已刷新单据');
+  //     }
+  //   };
+  //   event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
+  //   return () => {
+  //     event.removeListener('REFERSH_DOCUMENT_BY_ID', listener);
+  //   };
+  // }, [apiParams]);
 
   useEffect(() => {
     // 第一行指标有变动时候(并且apiData有数据，可以防止首次渲染走这里)，移下位置
@@ -260,7 +259,10 @@ const CustomIndex: FC<IProps> = (props) => {
         [`${formIndex}_sourceSid`]: sourceSid,
         [`${formIndex}_source`]: source,
         [`${formIndex}_referenceList`]: originReferences || references,
-        [`${formIndex}_valueCount`]: referenceList?.length || 1,
+        [`${formIndex}_valueCount`]: referenceList ? referenceList.map((refI: any, inx) => {
+          console.log(refI);
+          return inx;
+        }) : [0],
         ...referenceData,
       };
     });
