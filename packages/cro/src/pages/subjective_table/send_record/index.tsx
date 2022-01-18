@@ -9,19 +9,6 @@ const SendRecord: FC = () => {
 
   const objectiveScaleList = useSelector((state: IState) => state.project.objectiveScaleList);
 
-  console.log('ruleId============= SendRecord subjective ruleId objectiveScaleList scaleGroupId', JSON.stringify(objectiveScaleList));
-
-  // useEffect(() => {
-  //   const id = location.query.id;
-  //   api.subjective.getSubjectiveScaleDetail(id).then((res) => {
-
-  //     res.ruleDoc.rules[0].id
-  //   });
-  // }, [location.query.id]);
-
-
-
-  console.log('ruleId============= SendRecord subjective location', JSON.stringify(location.query.ruleId));
   return (
     <div>
       <TableSendRecord scaleType='SUBJECTIVE' scaleGroupId={location.query.id} />

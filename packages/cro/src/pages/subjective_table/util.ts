@@ -203,7 +203,6 @@ export function getHierarchyFromItem(originItem: {}) {
   for (let i = 0; i < keys.length; i++) {
     const item = originItem[keys[i]];
     item.name = keys[i];
-    console.log('============ getHierarchyFromItem', JSON.stringify(item));
     if (!fatherItem || fatherItem.name.length > item.name.length) {
       if (fatherItem) {
         childItem.push(fatherItem);
@@ -214,7 +213,6 @@ export function getHierarchyFromItem(originItem: {}) {
     }
   }
   fatherItem.items = childItem;
-  console.log('========== getStartTimeKeyFromRules  startKey', JSON.stringify(fatherItem));
   return fatherItem;
 }
 
@@ -376,9 +374,6 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
 }
 
 export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any }) {
-
-
-  console.log('=============== ruleDoc  ----- ', JSON.stringify(ruleDoc));
 
   const rule = ruleDoc.rules[0];
   let chooseStartTime;

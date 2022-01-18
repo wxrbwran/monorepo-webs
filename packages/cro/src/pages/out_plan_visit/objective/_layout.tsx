@@ -22,17 +22,21 @@ function ObjectiveTable(props: IProps) {
   const [tableList, setTableList] = useState([]);
   const projectSid = window.$storage.getItem('projectSid');
   useEffect(() => {
+
+    console.log('==================== 跳转到所创建的表详情页面 useEffect', props.location, history.location);
     api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_objective.scaleType }).then((res) => {
       setTableList(res.scaleGroupInfos);
-      if (res.scaleGroupInfos.length > 0) {
-        history.replace((`/out_plan_visit/objective/detail?id=${res.scaleGroupInfos[0].id}`));
+      if (history.location.pathname.includes('/out_plan_visit/objective')) {
+        if (res.scaleGroupInfos.length > 0) {
+          history.replace((`/out_plan_visit/objective/detail?id=${res.scaleGroupInfos[0].id}`));
+        }
       }
     });
   }, []);
   // 创建成功，跳转到所创建的表详情页面
   useEffect(() => {
     const newUrlName = props.location.query.name;
-    console.log('==================== 跳转到所创建的表详情页面', newUrlName);
+    console.log('==================== 跳转到所创建的表详情页面', newUrlName, props.location, history.location);
     if (newUrlName) {
       api.subjective.getScaleGroup({ projectSid, type: RuleTypeMap.visit_objective.scaleType }).then((res) => {
 
@@ -40,14 +44,16 @@ function ObjectiveTable(props: IProps) {
         const scaleGroupInfos = res.scaleGroupInfos.filter(
           (item: { name: string }) => item.name === newUrlName,
         );
-        if (scaleGroupInfos.length > 0) {
-          const id = scaleGroupInfos[0].id;
-          history.replace((`/out_plan_visit/objective/detail?id=${id}`));
-        } else if (res.scaleGroupInfos?.length > 0) {
-          const id = res.scaleGroupInfos[0].id;
-          history.replace((`/out_plan_visit/objective/detail?id=${id}`));
-        } else {
-          history.replace(('/out_plan_visit/objective'));
+        if (history.location.pathname.includes('/out_plan_visit/objective')) {
+          if (scaleGroupInfos.length > 0) {
+            const id = scaleGroupInfos[0].id;
+            history.replace((`/out_plan_visit/objective/detail?id=${id}`));
+          } else if (res.scaleGroupInfos?.length > 0) {
+            const id = res.scaleGroupInfos[0].id;
+            history.replace((`/out_plan_visit/objective/detail?id=${id}`));
+          } else {
+            history.replace(('/out_plan_visit/objective'));
+          }
         }
       });
     }

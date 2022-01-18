@@ -55,14 +55,11 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
 
     if (infoItem) {
 
-      console.log('================ infoItem', JSON.stringify(infoItem));
       setRuleDoc(infoItem.ruleDoc);
 
       setChooseValues(cloneDeep(infoItem.chooseValues));
       const conditionDes = getConditionDescriptionFromConditionss(infoItem.chooseValues?.choseConditions);
       setConditionDescription(conditionDes);
-
-      console.log('=================== HistoryPlan', JSON.stringify(infoItem));
 
       const firstTime = getStartTimeDescriptionFromConditionss(infoItem?.chooseValues?.firstTime);
       setFirstTimeStr(firstTime);

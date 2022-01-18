@@ -12,7 +12,8 @@ const OutPlanVisitLayout: FC<IProps> = ({ children, location }) => {
     history.push(`/out_plan_visit/${urlName}`);
   };
   useEffect(() => {
-
+    // 
+    console.log('================= OutPlanVisitLayout OutPlanVisitLayout', location.pathname);
     if (location.pathname == '/out_plan_visit') {
       handleGo('subjective');
     }
