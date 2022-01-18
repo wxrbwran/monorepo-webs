@@ -148,7 +148,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                   question={infoItem.questions}
                 >
                   {window.$storage.getItem('isLeader') &&
-                    status !== 1001 ? (
+                    (status !== 1001 || scaleType == 'VISIT_OBJECTIVE') ? (
                     <p className={styles.detail}>
                       <FormOutlined />
                       <span className="ml-5">编辑</span>
@@ -158,7 +158,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                     )}
                 </PlanModal>
                 {
-                  status !== 1001 && window.$storage.getItem('isLeader') && (
+                  (status !== 1001 || scaleType == 'VISIT_OBJECTIVE') && window.$storage.getItem('isLeader') && (
                     <>
                       <Divider type="vertical" />
                       <p className={`${styles.detail} inline-block text-base cursor-pointer`} onClick={() => setShowModal(!showModal)}>

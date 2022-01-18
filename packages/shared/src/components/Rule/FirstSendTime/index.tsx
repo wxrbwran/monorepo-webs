@@ -17,11 +17,11 @@ const { Option } = Select;
 const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceModelSource }: IProps) => {
 
   const [choiceModel, setChoiceModel] = useState<IModel>({});
-  // const [contentList, setContentList] = useState<any[]>([]);
 
   const handleChangeType = (val: any, currentItem: IModel) => {
     currentItem.choiceModel = currentItem.childItem?.filter((item) => item.description == val)[0];
     setChoiceModel({ ...choiceModel });
+    choiceModelChange(choiceModel);
   };
 
   useEffect(() => {
@@ -38,6 +38,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
       choiceItem.inputTime = str;
     }
     setChoiceModel({ ...choiceModel });
+    choiceModelChange(choiceModel);
   };
 
   const dayChange = (val: any, choiceItem: IModel) => {
@@ -46,6 +47,7 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
       choiceItem.inputDay = val;
     }
     setChoiceModel({ ...choiceModel });
+    choiceModelChange(choiceModel);
   };
 
   const getReactEle = (choiceItem: IModel) => {
@@ -115,13 +117,6 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
     ]);
   };
 
-  useEffect(() => {
-
-    choiceModelChange(choiceModel);
-  }, [choiceModel]);
-
-
-  console.log('================= choiceModel , ', JSON.stringify(choiceModel));
 
   return (
     <div className='send'>

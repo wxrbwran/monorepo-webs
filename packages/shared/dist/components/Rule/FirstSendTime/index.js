@@ -36,11 +36,11 @@ var Option = Select.Option;
 var FirstSendTime = function (_a) {
     var choiceModelChange = _a.choiceModelChange, popverContent = _a.popverContent, choiceModelSource = _a.choiceModelSource;
     var _b = __read(useState({}), 2), choiceModel = _b[0], setChoiceModel = _b[1];
-    // const [contentList, setContentList] = useState<any[]>([]);
     var handleChangeType = function (val, currentItem) {
         var _a;
         currentItem.choiceModel = (_a = currentItem.childItem) === null || _a === void 0 ? void 0 : _a.filter(function (item) { return item.description == val; })[0];
         setChoiceModel(__assign({}, choiceModel));
+        choiceModelChange(choiceModel);
     };
     useEffect(function () {
         if (choiceModelSource && !isEmpty(choiceModelSource)) {
@@ -55,12 +55,14 @@ var FirstSendTime = function (_a) {
             choiceItem.inputTime = str;
         }
         setChoiceModel(__assign({}, choiceModel));
+        choiceModelChange(choiceModel);
     };
     var dayChange = function (val, choiceItem) {
         if (choiceItem.childItemType == 'diy') {
             choiceItem.inputDay = val;
         }
         setChoiceModel(__assign({}, choiceModel));
+        choiceModelChange(choiceModel);
     };
     var getReactEle = function (choiceItem) {
         var _a, _b;
@@ -87,10 +89,6 @@ var FirstSendTime = function (_a) {
                 getReactEle(choiceItem.choiceModel)),
         ]);
     };
-    useEffect(function () {
-        choiceModelChange(choiceModel);
-    }, [choiceModel]);
-    console.log('================= choiceModel , ', JSON.stringify(choiceModel));
     return (React.createElement("div", { className: 'send' },
         React.createElement("h2", null,
             React.createElement("span", { className: 'start' }, "*"),
