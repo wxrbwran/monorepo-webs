@@ -47,8 +47,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
 
   useEffect(() => {
     const id = location.query.id;
-
-
     console.log('=============== id id ', id);
     if (groupId !== id) {
       setGroupId(id);
@@ -89,11 +87,15 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
     if (!scaleName) {
       message.error('客观检查名称不能为空');
     } else {
+
+
       setIsEdit(false);
       api.subjective.patchScale({
         name: scaleName,
         projectSid: window.$storage.getItem('projectSid'),
         scaleGroupId: location.query.id,
+        type: scaleType,
+        scaleId: objectiveScaleList.length > 0 ? objectiveScaleList[0].scaleId : '',
       }).then(() => {
         message.success('修改成功');
         dispatch({

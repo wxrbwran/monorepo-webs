@@ -24,6 +24,7 @@ interface IProps {
       tempId?: string;
       modifyTemp?: string;
       groupId?: string;
+      scaleId?: string;
     };
     pathname: string;
   };
@@ -43,6 +44,8 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const [loading, setLoading] = useState(false);
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const groupId = location.query.groupId;
+  const scaleId = location.query.scaleId;
+
   // 随访表标题
   const handleFormTit = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormTit(e.target.value);
@@ -224,6 +227,9 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       }
       if (groupId) {
         params.scaleGroupId = groupId;
+      }
+      if (scaleId) {
+        params.scaleId = scaleId;
       }
       if (!groupId) { // 说明是新增
 
