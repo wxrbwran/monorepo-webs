@@ -57,7 +57,6 @@ const ChatList: FC = () => {
     // historyMsgs,
   } = im;
   // 接收人的wcId和sId
-  const patientWcId = window.$storage.getItem('patientWcId');
   const patientSid = window.$storage.getItem('patientSid');
   // const [msgs, setMsgs] = useState<any>([]); // 云信当前消息+历史消息
   // const [currMsgs, setCurrMsgs] = useState<any>([]); // 云信当前消息
@@ -65,6 +64,7 @@ const ChatList: FC = () => {
   const [fetching, setFetching] = useState(false);
   const [avatarArr, setAvatarArr] = useState<IAvatar[]>([]); // 存储通过sid拉取的包含有头像的用户信息
   const [sidArr, setSidArr] = useState<string[]>([]); // 存储用于拉取头像信息的sid
+  const [pageAt, setPageAt] = useState(1);
   const dispatch = useDispatch();
 
   const closeImageViewer = () => {
@@ -86,23 +86,20 @@ const ChatList: FC = () => {
       (item: IPerson) => `p2p-${item.sessionId}` === currSessionId,
     );
     // 得到发送者的信息
-    const currDoctor = getFromDoctorInfo(currSession[0]);
-    const sessionWcId = currDoctor[0]?.wcId;
-    const sessionSid = currDoctor[0]?.sid;
+    // const currDoctor = getFromDoctorInfo(currSession[0]);
     const params = {
-      sessionWcId,
-      sessionSid,
-      associateWcId: patientWcId,
       associateSId: patientSid,
+      pageAt,
+      pageSize: 20,
       // nsId,
-      sessionId: currSession[0]?.sessionId,
-      endTime: endTime || currSessionMsgs[0]?.time,
-      limit: 50,
+      nsessionId: currSession[0]?.sessionId,
+      // endTime: endTime || currSessionMsgs[0]?.time,
     };
     // 拉取历史消息
     api.im
       .getMsg(params)
       .then(async (res) => {
+        setPageAt(prev => prev + 1);
         setFetching(false);
         if (res.immessageInfos.length === 0) {
           // 上拉加载到没数据的情况
