@@ -560,6 +560,8 @@ export function getFrequencyDescriptionFromFrequency(frequency: any) {
         const element = frequency.custom[index];
         str = str + '  ' + element.day + '天' + element.hour + '时' + element.hour + '分' + '发送一次;  ';
       }
+    } else if (frequency.frequency == 'NONE') {
+      return str;
     } else {
       if (frequency.custom.length > 0) {
         str = str + '首次发送给患者后';

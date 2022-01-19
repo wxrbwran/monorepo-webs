@@ -6,7 +6,7 @@ import { Link } from 'umi';
 export default () => {
   return (
     // 无主观量表展示
-    <div className="follow-table-empty">
+    <div className="follow-table-empty  mt-100">
       <img className="no-data-img" src={noTable} alt="暂无提醒" />
       <p>
         您的项目内暂无提醒，

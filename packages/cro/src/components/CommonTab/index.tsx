@@ -29,8 +29,7 @@ function CommonTab(props: IProps) {
   const [modalType, setModalType] = useState('');
   const projectName = window.$storage.getItem('projectName');
   const { roleType, status } = useSelector((state: IState) => state.project.projDetail);
-  const { projectSid } = props.location.query;
-  const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
+  const { projectNsId, projectSid } = useSelector((state: IState) => state.project.projDetail);
 
 
   const [val, setVal] = useState('');
