@@ -710,6 +710,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   useEffect(() => {
 
+    console.log('=================== question', question);
     setRemind(question ?? '');
     remindRef.current = question;
   }, [question]);
