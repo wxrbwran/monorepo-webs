@@ -74,19 +74,21 @@ function CommonTab(props: IProps) {
 
   // 封闭项目：1   解封项目：2   删除项目：3
   const fetchVcode = () => {
-    api.detail.patchCodeMake({
-      projectSid: projectSid,
-      projectNsId: projectNsId,
-      projectName,
-      type: modalText[modalType].type,
-    }).then(() => {
-      timerRef.current = setInterval(() => {
-        setSeconds((preSeconds) => preSeconds - 1);
-        setIsGetting(true);
-      }, 1000);
-    });
-  };
+    if (!isGetting) {
 
+      setIsGetting(true);
+      api.detail.patchCodeMake({
+        projectSid: projectSid,
+        projectNsId: projectNsId,
+        projectName,
+        type: modalText[modalType].type,
+      }).then(() => {
+        timerRef.current = setInterval(() => {
+          setSeconds((preSeconds) => preSeconds - 1);
+        }, 1000);
+      });
+    }
+  };
 
   useEffect(() => {
     const urlName = props.location.pathname.split('/')[1];
