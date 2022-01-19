@@ -10,6 +10,7 @@ import * as api from '@/services/api';
 import styles from './index.scss';
 import ScaleTemplate from '@/components/Scale/ScaleTemplate';
 import { IRuleDoc, IChooseValues } from '@/pages/subjective_table/util';
+import dayjs from 'dayjs';
 
 interface IProps {
   location: {
@@ -123,18 +124,29 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
 
   //添加条件生成一条空计划
   const addInfo = () => {
-    setInfos([initInfos, ...infos]);
-    setEditStatus(['open', ...editStatus]);
+    if (editStatus.includes('open')) {
+      message.error('请先保存上条编辑');
+    } else {
+      setInfos([{ ...initInfos }, ...infos]);
+      setEditStatus(['open', ...editStatus]);
+    }
   };
   // 删除计划
   const delPlan = (index: number) => {
-    const newInfos = infos.filter((_item, vIndex) => vIndex !== index);
+
+    console.log('================ infos before', JSON.stringify(infos), index);
+    const deleted = infos.splice(index, 1);
+    console.log('================ newInfos after', JSON.stringify(infos));
+    console.log('================ newInfos deleted ', JSON.stringify(deleted));
+
     const newStatus = editStatus.filter((_item, sIndex) => sIndex !== index);
-    setInfos([...newInfos]);
+    setInfos([...infos]);
     setEditStatus([...newStatus]);
   };
   // 提醒计划的取消按钮执行操作
   const handleCancel = (index: number) => {
+
+    console.log('================== handleCancel index', index);
     delPlan(index);
   };
   //提醒计划的确定按钮回传回来的数据
@@ -169,6 +181,8 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
   };
 
   const handleDelPlan = (item: { scaleId: string; ruleDoc: { id: string } }) => {
+
+    console.log('====================== handleDelPlan ', item.questions, item.scaleId);
     api.subjective.delScale({
       scaleId: item.scaleId,
       scaleGroupId: groupId,
@@ -226,8 +240,8 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
           console.log('======================= item, item', JSON.stringify(item));
           return (
             <ScaleTemplate
-              key={index}
               mode="Add"
+              key={index}
               onCancel={() => handleCancel(index)}
               addPlan={(params) => addPlan(params, index)}
               scaleType={scaleType}
@@ -239,9 +253,9 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
         } else {
           return (
             <HistoryPlan
+              key={index}
               infoItem={infos[index]}
               itemIndex={index}
-              key={index}
               location={location}
               changeEditStatus={changeEditStatus}
               handleDel={() => handleDelPlan(item)}

@@ -892,7 +892,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       ],
     };
     if (originRuleDoc) { // 说明是修改
-      meta = originRuleDoc.meta;
+      meta = cloneDeep(originRuleDoc.meta);
     }
     // 判断是不是要添加时间firstAtTime
     if (firstSteps.includes(SpecificDate)) {
