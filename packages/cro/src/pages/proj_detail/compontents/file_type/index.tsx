@@ -22,6 +22,7 @@ interface IKey {
   name: string;
   address: string;
   id: string;
+  convertAddress?: string;
 }
 
 function FileType({ name, name2, imgSrc, type }: IProps) {
@@ -221,7 +222,7 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
                     }
                     {
                       // 对于富文本的文件才有编辑
-                      isEdit && type === 'RISK_FILE' && item.address.includes('https://file.xinzhili.cn') && (
+                      isEdit && type === 'RISK_FILE' && !item.convertAddress && (
                         <CreateFile {...createFileProps} initData={item} readonly={false} fileId={item.id}>
                           <span><EditOutlined /> 编辑</span>
                         </CreateFile>
