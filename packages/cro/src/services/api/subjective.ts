@@ -14,14 +14,13 @@ export default {
     return http.get(`research/scale/${groupId}`);
   },
   //更新计划-新
+  //删除主观量表里的计划-新
+  deleteScaleRule(data?: any): Promise<any> {
+    return http.delete(`/rules/${data}`);
+  },
   //新增主观量表里的计划-新
   addScaleRule(data?: any): Promise<any> {
     return http.post('rules', { data });
-  },
-
-  //新增主观量表里的计划-新
-  patchScaleRule(data?: any): Promise<any> {
-    return http.patch('rules', { data });
   },
 
   // 修改量表

@@ -43,33 +43,13 @@ function Create({ location, scaleType }: IProps) {
   }, []);
   // 删除条件
   const delPlan = (index: number, item: any) => {
-
-    setInfos((preInfo) => {
-      console.log('===================== delPlan  setInfos', JSON.stringify(preInfo), index);
-
-      const newInfos = preInfo.filter((_item, vIndex) => vIndex !== index);
-      // const newStatus = status.filter((_item, sIndex) => sIndex !== index);
-
-      // const newIndex = infos.indexOf(item);
-      // console.log('===================== newInfos  after', JSON.stringify(newInfos), index, newIndex);
-      // setInfos([...newInfos]);
-      // setEditStatus([...newStatus]);
-
-      return newInfos;
-    });
-    console.log('===================== delPlan  after', JSON.stringify(infos), index);
-    // const newInfos = infos.filter((_item, vIndex) => vIndex !== index);
-    // const newStatus = status.filter((_item, sIndex) => sIndex !== index);
-
-    // const newIndex = infos.indexOf(item);
-    // console.log('===================== newInfos  after', JSON.stringify(newInfos), index, newIndex);
-    // setInfos([...newInfos]);
-    // setEditStatus([...newStatus]);
+    const newInfos = infos.filter((_item, vIndex) => vIndex !== index);
+    const newStatus = status.filter((_item, sIndex) => sIndex !== index);
+    setInfos([...newInfos]);
+    setEditStatus([...newStatus]);
   };
   //提醒计划的确定按钮回传回来的数据
   const addPlan = (params: IPlanInfos, index: number) => {
-
-    console.log('===================== addPlan', JSON.stringify(params), index);
     infos[index] = params;
     setInfos([...infos]);
     status[index] = 'lock';
@@ -100,8 +80,6 @@ function Create({ location, scaleType }: IProps) {
         projectName: window.$storage.getItem('projectName'),
         projectNsId,
       };
-      console.log('================= 客观检查添加参数', JSON.stringify(params));
-      console.log('================= 客观检查添加参数旧==', JSON.stringify(infos));
       api.subjective
         .addObjectiveScale(params)
         .then(() => {
@@ -127,65 +105,14 @@ function Create({ location, scaleType }: IProps) {
 
     console.log('========== infos[index] infos[index]', JSON.stringify(infos));
     //点击取消，如果是空计划，直接删除，如果是编辑的之前的计划则直接更改状态为lock
-    // if (infos[index]?.plans?.length === 1) {
-    //   delPlan(index);
-    // } else {
-    //   status[index] = 'lock';
-    //   setEditStatus([...status]);
-    // }
-
-    // if (isEmpty(infos[index])) {
-    delPlan(index, item);
-    // } else {
-    //   status[index] = 'lock';
-    //   setEditStatus([...status]);
-    // }
+    if (Object.keys(infos[index]).length == 1) {
+      delPlan(index, item);
+    } else {
+      status[index] = 'lock';
+      setEditStatus([...status]);
+    }
 
   };
-
-
-
-  const ScaleTemplateMemo = useMemo(() => (prop: any) => {
-
-
-    const item = prop.item;
-    const index = prop.index;
-
-    console.log('========= item, ', JSON.stringify(item));
-    console.log('========= item, ', index);
-
-    return (
-      <ScaleTemplate
-        key={item.time}
-        mode="Add"
-        onCancel={() => handleCancel(index, item)}
-        infoIndex={index}
-        addPlan={(params) => addPlan(params, index)}
-        scaleType={scaleType}
-        question={item.questions}
-        originRuleDoc={item.ruleDoc}
-        chooseValues={item.chooseValues}
-      />
-    );
-  }, []);
-
-  // const ScaleTemplateMemo = useMemo((item: any, index: any) => {
-  //   return (
-  //     <ScaleTemplate
-  //       key={item.time}
-  //       mode="Add"
-  //       onCancel={() => handleCancel(index, item)}
-  //       infoIndex={index}
-  //       addPlan={(params) => addPlan(params, index)}
-  //       scaleType={scaleType}
-  //       question={item.questions}
-  //       originRuleDoc={item.ruleDoc}
-  //       chooseValues={item.chooseValues}
-  //     />
-  //   );
-  // }, []);
-
-  console.log('===================== render ', JSON.stringify(infos));
 
   return (
     <div className={styles.gauge_table}>
@@ -208,20 +135,17 @@ function Create({ location, scaleType }: IProps) {
       {/* {infos.map((item, index) => renderItem(item, index))} */}
       {infos.map((item, index) =>
         status[index] === 'open' ? (
-          <div>
-            <div>{item.time}</div>
-            {/* <ScaleTemplateMemo item={item} index={index}></ScaleTemplateMemo> */}
-            <ScaleTemplate
-              mode="Add"
-              onCancel={() => handleCancel(index, item)}
-              infoIndex={index}
-              addPlan={(params) => addPlan(params, index)}
-              scaleType={scaleType}
-              question={item.questions}
-              originRuleDoc={item.ruleDoc}
-              chooseValues={item.chooseValues}
-            />
-          </div>
+          <ScaleTemplate
+            mode="Add"
+            key={item.time}
+            onCancel={() => handleCancel(index, item)}
+            infoIndex={index}
+            addPlan={(params) => addPlan(params, index)}
+            scaleType={scaleType}
+            question={item.questions}
+            originRuleDoc={item.ruleDoc}
+            chooseValues={item.chooseValues}
+          />
         ) : (
           <HistoryPlan
             infoItem={infos[index]}

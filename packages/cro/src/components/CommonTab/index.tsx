@@ -77,6 +77,8 @@ function CommonTab(props: IProps) {
     if (!isGetting) {
 
       setIsGetting(true);
+
+      console.log('======== projectSid', projectSid);
       api.detail.patchCodeMake({
         projectSid: projectSid,
         projectNsId: projectNsId,
@@ -86,6 +88,9 @@ function CommonTab(props: IProps) {
         timerRef.current = setInterval(() => {
           setSeconds((preSeconds) => preSeconds - 1);
         }, 1000);
+      }).catch(() => {
+
+        setIsGetting(false);
       });
     }
   };
@@ -111,12 +116,18 @@ function CommonTab(props: IProps) {
 
   const onFinish = (values: any) => {
 
+    // values.code
+    if (!/^\d+$/.test(values.code)) {
+      message.error('请输入数字');
+      return;
+    }
     console.log('============== values, ', values);
     api.detail.patchCodeCheck({
       projectSid: projectSid,
       projectNsId: projectNsId,
       note: {
         code: values.code,
+        type: modalText[modalType].type,
       },
       status: modalText[modalType].status ?? status,
       type: modalText[modalType].type,
@@ -181,16 +192,14 @@ function CommonTab(props: IProps) {
   ];
   const handleShowModal = (type: string) => {
 
-    if (modalType != type) {
-      // 不一样，需要清空之前的计时等数据
-      clearInterval(timerRef.current);
-      setSeconds(60);
-      setIsGetting(false);
-      setVal('');
-      setFieldsValue({
-        'code': '',
-      });
-    }
+    // 清空之前的计时等数据
+    clearInterval(timerRef.current);
+    setSeconds(60);
+    setIsGetting(false);
+    setVal('');
+    setFieldsValue({
+      'code': '',
+    });
 
     setModalType(type);
     setShowModal(true);

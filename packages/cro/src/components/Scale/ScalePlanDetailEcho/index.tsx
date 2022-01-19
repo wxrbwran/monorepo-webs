@@ -76,20 +76,20 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
       const id = location.query.id;
 
+      api.subjective.deleteScaleRule(params.ruleDoc.id).then(() => {
 
-      // patchScaleRule
-      api.subjective
-        .patchScaleRule(params.ruleDoc)
-        .then(() => {
-          message.success('修改成功');
+        delete params.ruleDoc.id;
+        api.subjective.addScaleRule(params.ruleDoc).then(() => {
+
+          console.log('================== apiName', apiName);
           api.subjective[apiName](id).then((res) => {
 
             setRuleDoc(res.ruleDoc);
           });
-        })
-        .catch((err) => {
-          console.log('err', err);
-          message.error(err?.result ?? '修改失败');
+        });
+      })
+        .catch((err: string) => {
+          message.error(err);
         });
       // 从量表详情进入，更新计划调用接口
       // const id = location.query.id;
