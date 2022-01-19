@@ -171,7 +171,7 @@ export default {
   },
   // 删除宣教、随访、crf量表
   delPublicizRule(ruleId: string): Promise<any> {
-    return http.delete(`rules/${ruleId}`);
+    return http.patch(`rules/state/${ruleId}`);
   },
 
 
