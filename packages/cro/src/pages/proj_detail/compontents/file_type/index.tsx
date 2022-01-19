@@ -220,7 +220,8 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
                         <a className={styles.download} href={item.address}><DownloadOutlined /> 下载</a>
                     }
                     {
-                      isEdit && type === 'RISK_FILE' && (
+                      // 对于富文本的文件才有编辑
+                      isEdit && type === 'RISK_FILE' && item.address.includes('https://file.xinzhili.cn') && (
                         <CreateFile {...createFileProps} initData={item} readonly={false} fileId={item.id}>
                           <span><EditOutlined /> 编辑</span>
                         </CreateFile>
