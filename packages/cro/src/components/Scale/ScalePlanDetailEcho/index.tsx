@@ -9,12 +9,13 @@ import iconGroup from '@/assets/img/follow-table/icon_group.svg';
 // import { IGroup } from '@/utils/consts';
 // import { useSelector, useLocation } from 'umi';
 import * as api from '@/services/api';
-import { useLocation } from 'umi';
+import { useLocation, useSelector } from 'umi';
 // import { IState } from 'typings/global';
 import { message } from 'antd';
 import './index.scss';
 import { getChooseValuesKeyFromRules, getConditionDescriptionFromConditionss, getFrequencyDescriptionFromFrequency, getStartTimeDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
 import { isEmpty } from 'lodash';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 
 interface IProps {
@@ -39,6 +40,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   const [conditionDescription, setConditionDescription] = useState();
   const [firstTimeStr, setFirstTimeStr] = useState();
   const [frequencyStr, setFrequencyStr] = useState();
+  const { roleType, status } = useSelector((state: IState) => state.project.projDetail);
 
   useEffect(() => {
 
@@ -130,13 +132,16 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
 
 
+  const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType);
+
+
   return (
     <>
       <div className="table-plan__title">
         <span>{(scaleType === 'CRF' || scaleType == 'VISIT_CRF') ? 'CRF' : '主观'}量表计划</span>
         {
-          window.$storage.getItem('isLeader')
-          && (window.$storage.getItem('projectStatus') != 1001 || ['VISIT_CRF', 'VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE'].includes(scaleType))
+          isLeader
+          && (status != 1001 || ['VISIT_CRF', 'VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE'].includes(scaleType))
           && !groupId && (
             <PlanModal title="修改发送计划"
               scaleId={scaleId}
