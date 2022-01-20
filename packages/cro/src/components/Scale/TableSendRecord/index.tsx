@@ -72,17 +72,17 @@ const TableSendRecord: FC<IProps> = (props) => {
       api.subjective.getSubjectiveScaleDetail(scaleGroupId).then((res) => {
         settableOptions0({
           ...tableOptions0,
-          ruleId: res?.ruleDoc?.id,
+          ruleId: res?.ruleDoc?.meta?.docId,
           status: 0,
         });
         settableOptions1({
           ...tableOptions1,
-          ruleId: res?.ruleDoc?.id,
+          ruleId: res?.ruleDoc?.meta?.docId,
           status: 2,
         });
         settableOptions2({
           ...tableOptions2,
-          ruleId: res?.ruleDoc?.id,
+          ruleId: res?.ruleDoc?.meta?.docId,
           status: 1,
         });
 

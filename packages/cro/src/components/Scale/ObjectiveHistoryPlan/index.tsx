@@ -125,7 +125,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                         </div>
                       </Reply>
                       <Divider type="vertical" />
-                      <SendRecord scaleId={infoItem.scaleId} ruleId={infoItem.ruleDoc.id} scaleType={scaleType}>
+                      <SendRecord scaleId={infoItem.scaleId} ruleId={infoItem.ruleDoc.meta.docId} scaleType={scaleType}>
                         <div className={styles.detail}>
                           <img className={styles.icon_reply} src={iconRecord} />
                           <span>发送记录</span>

@@ -162,6 +162,7 @@ export interface IMeta {
   actionId: number;
   teamLocations: [];
   sourceMembers: [];
+  docId: string;
 }
 
 export interface IRule {
