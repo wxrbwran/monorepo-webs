@@ -407,9 +407,9 @@ const titleAllChoosesToMustParma = (chooseStartTimeList: IItem[], firstSteps: st
     chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'team')[0];
   } else if (firstSteps.includes(GiveMedicTime)) {
 
-    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.startMedTime.value'))[0];
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.startMedTime'))[0];
   } else if (firstSteps.includes(StopMedicTime)) {
-    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.stopMedTime.value'))[0];
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.stopMedTime'))[0];
   } else if (firstSteps.includes(HandelTime)) {
     chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'diagnose.treatment')[0];
   }

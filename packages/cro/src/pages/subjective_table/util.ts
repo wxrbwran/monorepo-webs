@@ -339,10 +339,10 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
 
     } else if (chooseStartTime.name == 'location-config') {  // 说明选择的是  受试者入组的时间
 
-      if (chooseStartTime.items.find((item) => item.name == 'location-config.startMedTime.value')) {
+      if (chooseStartTime.items.find((item) => item.name == 'location-config.startMedTime')) {
         choiceModel.choiceModel = choiceModel.childItem?.filter((item) => item.description == GiveMedicTime)[0];
 
-      } else if (chooseStartTime.items.find((item) => item.name == 'location-config.stopMedTime.value')) {
+      } else if (chooseStartTime.items.find((item) => item.name == 'location-config.stopMedTime')) {
         choiceModel.choiceModel = choiceModel.childItem?.filter((item) => item.description == StopMedicTime)[0];
       }
     }
