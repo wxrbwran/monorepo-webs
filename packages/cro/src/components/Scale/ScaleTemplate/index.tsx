@@ -101,10 +101,9 @@ const fillValueInScopeKey = (scopeKey: IItem) => {
 
 const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
 
-
   console.log('================ onChangeStateByValue  onChangeStateByValue', JSON.stringify(timeKey));
-
   if (timeKey.name === 'diagnose.treatment') {
+    timeKey.value = treatmentDes;
     for (let j = 0; j < timeKey.items.length; j++) {
       const subItem = timeKey.items[j];
       if (subItem.name === 'diagnose.treatment.uid') {
@@ -121,7 +120,6 @@ const getTreatmentDes = (timeKey: IItem) => {
     for (let j = 0; j < timeKey.items.length; j++) {
       const subItem = timeKey.items[j];
       if (subItem.name === 'diagnose.treatment.uid') {
-
         return subItem.description;
       }
     }
