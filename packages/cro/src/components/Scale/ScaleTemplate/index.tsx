@@ -407,9 +407,9 @@ const titleAllChoosesToMustParma = (chooseStartTimeList: IItem[], firstSteps: st
     chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'team')[0];
   } else if (firstSteps.includes(GiveMedicTime)) {
 
-    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.startMedTime'))[0];
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.startMedTime.value'))[0];
   } else if (firstSteps.includes(StopMedicTime)) {
-    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.stopMedTime'))[0];
+    chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'location-config' && item.items.find((it) => it.name == 'location-config.stopMedTime.value'))[0];
   } else if (firstSteps.includes(HandelTime)) {
     chooseStartTime = chooseStartTimeList.filter((item) => item.name == 'diagnose.treatment')[0];
   }
@@ -741,15 +741,17 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const canSave = (firstSteps: string[]) => {
 
+    if (isShowTextArea) {
 
-    let content = remindRef.current;
-    content = content.replaceAll('<br>', '');
-    content = content.replaceAll('<p>', '');
-    content = content.replaceAll('</p>', '');
-    content = content.replaceAll(' ', '');
-    if (isShowTextArea && !!!content) {
+      let content = remindRef.current;
+      content = content?.replaceAll('<br>', '');
+      content = content?.replaceAll('<p>', '');
+      content = content?.replaceAll('</p>', '');
+      content = content?.replaceAll(' ', '');
 
-      return '请输入内容';
+      if (!!!content) {
+        return '请输入内容';
+      }
     }
 
     // 首次发送时间一定要填写 

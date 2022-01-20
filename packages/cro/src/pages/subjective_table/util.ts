@@ -339,10 +339,10 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
 
     } else if (chooseStartTime.name == 'location-config') {  // 说明选择的是  受试者入组的时间
 
-      if (chooseStartTime.items.find((item) => item.name == 'location-config.startMedTime')) {
+      if (chooseStartTime.items.find((item) => item.name == 'location-config.startMedTime.value')) {
         choiceModel.choiceModel = choiceModel.childItem?.filter((item) => item.description == GiveMedicTime)[0];
 
-      } else if (chooseStartTime.items.find((item) => item.name == 'location-config.stopMedTime')) {
+      } else if (chooseStartTime.items.find((item) => item.name == 'location-config.stopMedTime.value')) {
         choiceModel.choiceModel = choiceModel.childItem?.filter((item) => item.description == StopMedicTime)[0];
       }
     }
@@ -558,7 +558,7 @@ export function getFrequencyDescriptionFromFrequency(frequency: any) {
       str = str + '在首次发送时间的基础上累加';
       for (let index = 0; index < frequency.custom.length; index++) {
         const element = frequency.custom[index];
-        str = str + '  ' + element.day + '天' + element.hour + '时' + element.hour + '分' + '发送一次;  ';
+        str = str + '  ' + element.day + '天' + element.hour + '时' + element.min + '分' + '发送一次;  ';
       }
     } else if (frequency.frequency == 'NONE') {
       return str;
