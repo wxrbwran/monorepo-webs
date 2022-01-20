@@ -28,7 +28,6 @@ function Create({ location, scaleType }: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   const [infos, setInfos] = useState<IPlanInfos[]>([]);
   const [formName, setFormName] = useState('');
-  const [disabled, setDidabled] = useState(true);
   const [status, setEditStatus] = useState<string[]>([]); //open开，为编辑状态
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const [loading, setLoading] = useState(false);
@@ -42,7 +41,7 @@ function Create({ location, scaleType }: IProps) {
     addInfo();
   }, []);
   // 删除条件
-  const delPlan = (index: number, item: any) => {
+  const delPlan = (index: number) => {
     const newInfos = infos.filter((_item, vIndex) => vIndex !== index);
     const newStatus = status.filter((_item, sIndex) => sIndex !== index);
     setInfos([...newInfos]);
@@ -54,7 +53,6 @@ function Create({ location, scaleType }: IProps) {
     setInfos([...infos]);
     status[index] = 'lock';
     setEditStatus([...status]);
-    setDidabled(false);
   };
   //表单标题
   const changeFormName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,17 +99,14 @@ function Create({ location, scaleType }: IProps) {
   };
   //提醒计划的取消按钮执行操作
   const handleCancel = (index: number, item: any) => {
-
-
     console.log('========== infos[index] infos[index]', JSON.stringify(infos));
     //点击取消，如果是空计划，直接删除，如果是编辑的之前的计划则直接更改状态为lock
     if (Object.keys(infos[index]).length == 1) {
-      delPlan(index, item);
+      delPlan(index);
     } else {
       status[index] = 'lock';
       setEditStatus([...status]);
     }
-
   };
 
   return (
@@ -160,7 +155,7 @@ function Create({ location, scaleType }: IProps) {
       )}
       {infos.length > 0 && (
         <div className={styles.operate}>
-          <Button type="primary" onClick={handleSubmit} disabled={disabled} loading={loading}>
+          <Button type="primary" onClick={handleSubmit} disabled={status.includes('open')} loading={loading}>
             完成
           </Button>
         </div>
