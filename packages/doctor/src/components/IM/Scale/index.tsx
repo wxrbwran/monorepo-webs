@@ -48,9 +48,9 @@ const Scale: FC<IMsg> = (props) => {
                 {`${msg.fromNick} (${getRoles(msg.custom)})`}
               </p>
               <div className="msg-content project">
-                <p className="project_status">
-                  <img src={scale} alt="" />
-                  {content.type === 115 ? content.msg : content.title}
+                <p className="project_status flex">
+                  <img className='w-18 h-18' src={scale} alt="" />
+                  {content.type === 115 ? <span dangerouslySetInnerHTML={{ __html: content.msg.replaceAll('<img ', '<img referrerPolicy="no-referrer" ') }}></span> : content.title}
                 </p>
                 <p className="project_content">
                   <span className="label">项目名称</span>
