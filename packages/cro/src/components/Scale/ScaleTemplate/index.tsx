@@ -746,7 +746,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       content = content?.replaceAll('<p>', '');
       content = content?.replaceAll('</p>', '');
       content = content?.replaceAll(' ', '');
-
       if (!!!content) {
         return '请输入内容';
       }
@@ -809,6 +808,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         const period = frequency.custom[i];
         if (!(period.day >= 0) || !(period.hour >= 0) || !(period.min >= 0)) {
           return '请补全发送频率';
+        } else if (period.hour >= 24) {
+          return '发送频率的小时不应该大于23';
+        } else if (period.min >= 60) {
+          return '发送频率的分钟不应该大于59';
         }
       }
     }
