@@ -149,7 +149,7 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
     listType: 'text',
     beforeUpload: fetchUrlThenUpload,
     showUploadList: false,
-    accept: type === 'INVITER_FILE' ? '.doc,.docx,.xlsx,.xls,.pdf' : '',
+    accept: (type === 'INVITER_FILE' || type === 'PROJECT_FILE') ? '.doc,.docx,.xlsx,.xls,.pdf' : '',
     onClick: stopPropagation,
   };
   const createFileProps = {
