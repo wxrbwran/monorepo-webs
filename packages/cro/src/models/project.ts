@@ -8,6 +8,7 @@ import { Role } from 'xzl-web-shared/dist/utils/role';
 import { getChooseValuesKeyFromRules, getUrlPreFix } from '../pages/subjective_table/util';
 import * as api from '@/services/api';
 import { history } from 'umi';
+import { name } from '../../../shared/src/utils/columns';
 
 export interface ProjectModelState {
   projectList: IProjectList[];
@@ -93,7 +94,9 @@ const ProjectModel: ProjectModelType = {
         api.subjective.getScaleGroup({ projectSid, type: payload.scaleType }).then((res) => {
 
           if (res.scaleGroupInfos.length > 0) {
-            history.replace((`/${getUrlPreFix(payload.scaleType)}/detail?name=${res.scaleGroupInfos[0].name}`));
+            if (res.scaleGroupInfos[0].id != payload.id) {
+              history.replace((`/${getUrlPreFix(payload.scaleType)}/detail?name=${res.scaleGroupInfos[0].name}`));
+            }
           } else {
             history.replace((`/${getUrlPreFix(payload.scaleType)}/detail?name=_zsh_null`));
           }

@@ -5,12 +5,10 @@ import { IPlanInfos } from '@/utils/consts';
 import { FormOutlined } from '@ant-design/icons';
 import create from '@/assets/img/create.svg';
 import { Input, message } from 'antd';
-import { history } from 'umi';
 import * as api from '@/services/api';
 import styles from './index.scss';
 import ScaleTemplate from '@/components/Scale/ScaleTemplate';
 import { IRuleDoc, IChooseValues } from '@/pages/subjective_table/util';
-import dayjs from 'dayjs';
 
 interface IProps {
   location: {

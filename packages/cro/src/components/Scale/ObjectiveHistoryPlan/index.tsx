@@ -97,119 +97,123 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
   };
   const des = chooseValues ? chooseValues.choseScope.map(item => item.description).join(',') : '';
 
-  console.log('================ chooseValues ', JSON.stringify(chooseValues));
   return (
     <div className={styles.history_plan}>
-      <div className={styles.plan_item}>
-        <h2>
-          <div className={styles.remind}>
-            <span>{itemIndex + 1}、</span>
-            <RichText value={infoItem.questions} style={{ height: '60px' }} handleChange={(content: any, text: string) => { }} readonly={true} />
-          </div>
-          <p className={styles.operate}>
-            {location.pathname.includes('create') && (
-              <>
-                <img src={Delete} alt="" onClick={handleDel} />
-                <span className={styles.split}></span>
-              </>
-            )}
-            {location.pathname.includes('detail') ? (
-              <>
-                {
-                  (status === 1001 || scaleType == 'VISIT_OBJECTIVE') && (
-                    <>
-                      <Reply scaleId={infoItem.scaleId} scaleType={scaleType}>
-                        <div className={styles.detail}>
-                          <img className={styles.icon_reply} src={iconReply} />
-                          <span>回复详情</span>
-                        </div>
-                      </Reply>
-                      <Divider type="vertical" />
-                      <SendRecord scaleId={infoItem.scaleId} ruleId={infoItem.ruleDoc.meta.docId} scaleType={scaleType}>
-                        <div className={styles.detail}>
-                          <img className={styles.icon_reply} src={iconRecord} />
-                          <span>发送记录</span>
-                        </div>
-                      </SendRecord>
-                      <Divider type="vertical" />
-                    </>
-                  )
-                }
-                <PlanModal title="修改发送计划"
-                  scaleId={infoItem.scaleId}
-                  ruleDoc={ruleDoc}
-                  chooseValues={chooseValues}
-                  updatePlan={updatePlan}
-                  infoIndex={itemIndex}
-                  scaleType={scaleType}
-                  question={infoItem.questions}
-                >
-                  {window.$storage.getItem('isLeader') &&
-                    (status !== 1001 || scaleType == 'VISIT_OBJECTIVE') ? (
-                    <p className={styles.detail}>
-                      <FormOutlined />
-                      <span className="ml-5">编辑</span>
-                    </p>
-                    ) : (
-                    <></>
-                    )}
-                </PlanModal>
-                {
-                  (status !== 1001 || scaleType == 'VISIT_OBJECTIVE') && window.$storage.getItem('isLeader') && (
-                    <>
-                      <Divider type="vertical" />
-                      <p className={`${styles.detail} inline-block text-base cursor-pointer`} onClick={() => setShowModal(!showModal)}>
-                        <DeleteOutlined /> 删除
-                      </p>
-                    </>
-                  )
-                }
+      {
+        chooseValues ?
+          <div className={styles.plan_item}>
+            <h2>
+              <div className={styles.remind}>
+                <span>{itemIndex + 1}、</span>
+                <RichText value={infoItem.questions} style={{ height: '60px' }} handleChange={(content: any, text: string) => { }} readonly={true} />
+              </div>
+              <p className={styles.operate}>
+                {location.pathname.includes('create') && (
+                  <>
+                    <img src={Delete} alt="" onClick={handleDel} />
+                    <span className={styles.split}></span>
+                  </>
+                )}
+                {location.pathname.includes('detail') ? (
+                  <>
+                    {
+                      (status === 1001 || scaleType == 'VISIT_OBJECTIVE') && (
+                        <>
+                          <Reply scaleId={infoItem.scaleId} scaleType={scaleType}>
+                            <div className={styles.detail}>
+                              <img className={styles.icon_reply} src={iconReply} />
+                              <span>回复详情</span>
+                            </div>
+                          </Reply>
+                          <Divider type="vertical" />
+                          <SendRecord scaleId={infoItem.scaleId} ruleId={infoItem.ruleDoc?.meta?.docId} scaleType={scaleType}>
+                            <div className={styles.detail}>
+                              <img className={styles.icon_reply} src={iconRecord} />
+                              <span>发送记录</span>
+                            </div>
+                          </SendRecord>
+                          <Divider type="vertical" />
+                        </>
+                      )
+                    }
+                    <PlanModal title="修改发送计划"
+                      scaleId={infoItem.scaleId}
+                      ruleDoc={ruleDoc}
+                      chooseValues={chooseValues}
+                      updatePlan={updatePlan}
+                      infoIndex={itemIndex}
+                      scaleType={scaleType}
+                      question={infoItem.questions}
+                    >
+                      {window.$storage.getItem('isLeader') &&
+                        (status !== 1001 || scaleType == 'VISIT_OBJECTIVE') ? (
+                        <p className={styles.detail}>
+                          <FormOutlined />
+                          <span className="ml-5">编辑</span>
+                        </p>
+                        ) : (
+                        <></>
+                        )}
+                    </PlanModal>
+                    {
+                      (status !== 1001 || scaleType == 'VISIT_OBJECTIVE') && window.$storage.getItem('isLeader') && (
+                        <>
+                          <Divider type="vertical" />
+                          <p className={`${styles.detail} inline-block text-base cursor-pointer`} onClick={() => setShowModal(!showModal)}>
+                            <DeleteOutlined /> 删除
+                          </p>
+                        </>
+                      )
+                    }
 
-              </>
-            ) : (
-              <img src={Edit} alt="" onClick={changeEditStatus} />
-            )}
-          </p>
-        </h2>
-        <div className={styles.plan__cont}>
-          <div className={styles.item}>
-            <div className={styles.tit}>
-              <img src={iconTime} alt="" />
-              <span>首次发送时间</span>
-            </div>
-            <div className={styles.text}>{firstTimeStr}</div>
-          </div>
-          <div className={styles.item}>
-            <div className={styles.tit}>
-              <img src={iconFrequency} alt="" />
-              <span>发送频率</span>
-            </div>
-            {chooseValues?.frequency && <div className={styles.text}>{frequencyStr}</div>}
-          </div>
-          <div className={styles.space}></div>
-          {(conditionDescription &&
-            <div className={styles.item}>
-              <div className={styles.tit}>
-                <img src={iconCondition} alt="" />
-                <span>发送条件</span>
+                  </>
+                ) : (
+                  <img src={Edit} alt="" onClick={changeEditStatus} />
+                )}
+              </p>
+            </h2>
+            <div className={styles.plan__cont}>
+              <div className={styles.item}>
+                <div className={styles.tit}>
+                  <img src={iconTime} alt="" />
+                  <span>首次发送时间</span>
+                </div>
+                <div className={styles.text}>{firstTimeStr}</div>
               </div>
-              <div className={styles.text}>
-                {conditionDescription.age && <p>{conditionDescription.age}</p>}
-                {conditionDescription.sex && <p>{conditionDescription.sex}</p>}
-                {conditionDescription.disease && <p>{conditionDescription.disease}</p>}
-                {conditionDescription.treatment && <p>{conditionDescription.treatment}</p>}
+              <div className={styles.item}>
+                <div className={styles.tit}>
+                  <img src={iconFrequency} alt="" />
+                  <span>发送频率</span>
+                </div>
+                {chooseValues?.frequency && <div className={styles.text}>{frequencyStr}</div>}
+              </div>
+              <div className={styles.space}></div>
+              {(conditionDescription &&
+                <div className={styles.item}>
+                  <div className={styles.tit}>
+                    <img src={iconCondition} alt="" />
+                    <span>发送条件</span>
+                  </div>
+                  <div className={styles.text}>
+                    {conditionDescription.age && <p>{conditionDescription.age}</p>}
+                    {conditionDescription.sex && <p>{conditionDescription.sex}</p>}
+                    {conditionDescription.disease && <p>{conditionDescription.disease}</p>}
+                    {conditionDescription.treatment && <p>{conditionDescription.treatment}</p>}
+                  </div>
+                </div>
+              )}
+              <div className={styles.item}>
+                <div className={styles.tit}>
+                  <img src={iconGroup} alt="" />
+                  <span>发送试验组</span>
+                </div>
+                <div className={styles.text}>{des}</div>
               </div>
             </div>
-          )}
-          <div className={styles.item}>
-            <div className={styles.tit}>
-              <img src={iconGroup} alt="" />
-              <span>发送试验组</span>
-            </div>
-            <div className={styles.text}>{des}</div>
-          </div>
-        </div>
-      </div>
+          </div> :
+          <></>
+      }
+
       {
         showModal && (
           <DragModal

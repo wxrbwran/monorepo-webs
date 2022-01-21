@@ -376,6 +376,9 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
 
 export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any }) {
 
+  if (!(ruleDoc?.rules?.length > 0)) {
+    return;
+  }
   const rule = ruleDoc.rules[0];
   let chooseStartTime;
   const choseConditions = [];
