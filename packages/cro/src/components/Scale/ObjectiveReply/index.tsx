@@ -29,7 +29,9 @@ function Reply({ children, scaleId, scaleType }: IProps) {
 
   const changePicState = (idx: any) => {
     setIsShowViewer(false);
-    setShowModal(true);
+    setTimeout(() => {
+      setShowModal(true);
+    }, 500); // 添加延迟修复bug点击回复详情弹窗再点击图片弹窗再关闭弹窗，量表列表不能滑动问题
     setActiveIndex(idx);
   };
   const fetchScaleDetail = () => {
