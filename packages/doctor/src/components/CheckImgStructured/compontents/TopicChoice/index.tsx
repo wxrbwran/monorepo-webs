@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Checkbox, Radio, Divider } from 'antd';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Checkbox, Divider } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
 import TopicAddBtn from '../TopicAddBtn';
 import { IQaItem } from '../type';
+import { searchHighLight } from '@/utils/utils';
 import styles from './index.scss';
 
 interface IProps {
@@ -11,11 +12,12 @@ interface IProps {
   isViewOnly: boolean;
   templateId: string;
   isShowEdit: boolean; // 是否首次结构化
+  lightKeyWord: string;
 }
 // saveAddQa
 function TopicChoice(props: IProps) {
   console.log('choiceProps', props);
-  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit } = props;
+  const { changeCallbackFns, initData, isViewOnly, templateId, isShowEdit, lightKeyWord } = props;
   const [questions, setQuestions] = useState<IQaItem[]>([]);
   const [valuableQas, setValuableQas] = useState<IQaItem[]>([]);
   const handleSave = (a) => new Promise((resolve) => {
@@ -43,11 +45,12 @@ function TopicChoice(props: IProps) {
   }, [questions]);
 
   // 勾选操作---显示状态勾选
-  const handleChangeOptions = (e: any, item: IQaItem, quesInx: number) => {
+  const handleChangeOptions = (checkedValue: string[], item: IQaItem, quesInx: number) => {
     if (item.question_type === 'RADIO') {
-      questions[quesInx].answer = [e.target.value];
+      const curSelect = checkedValue.filter((v: string) => !questions[quesInx].answer.includes(v));
+      questions[quesInx].answer = isEmpty(checkedValue) ? [] : curSelect;
     } else {
-      questions[quesInx].answer = e;
+      questions[quesInx].answer = checkedValue;
     }
     setQuestions([...questions]);
   };
@@ -64,6 +67,9 @@ function TopicChoice(props: IProps) {
       setQuestions(cloneDeep(questions));
     }
   };
+  const renderQuestion = useMemo(() => (quesText: string) => {
+    return searchHighLight(quesText, lightKeyWord);
+  }, [lightKeyWord]);
   console.log('最新questions---choice', questions);
   const editProps = {
     templateId,
@@ -82,7 +88,9 @@ function TopicChoice(props: IProps) {
           <div key={item.question} className="relative ">
             <div className="topic_title">
               <span>{quesIndex + 1}. </span>
-              <span className="mr-10">{item.question}</span>
+              <span
+                className="mr-10"
+                dangerouslySetInnerHTML={{ __html: renderQuestion(item.question) }}></span>
               <TopicAddBtn
                 {...editProps}
                 actionType="edit"
@@ -90,26 +98,14 @@ function TopicChoice(props: IProps) {
                 editGroupInx={quesIndex}
               />
             </div>
-            {
-              item.question_type === 'RADIO' ? (
-                <Radio.Group
-                  onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
-                  value={item.answer?.[0]}
-                >
-                  {
-                    item.options!.map((option, optionInx) => (
-                      <Radio key={optionInx} value={option}>{option}</Radio>
-                    ))
-                  }
-                </Radio.Group>
-              ) : (
-                <Checkbox.Group
-                  options={item.options}
-                  onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
-                  value={item.answer}
-                />
-              )
-            }
+            <div>
+              <Checkbox.Group
+                className={item.question_type}
+                options={item.options}
+                onChange={(e: Event) => handleChangeOptions(e, item, quesIndex)}
+                value={item.answer}
+              />
+            </div>
           </div>
         ))
       }

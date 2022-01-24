@@ -55,7 +55,7 @@ function CheckImages() {
       <div
         // className={styles[color[item.status]]}
         onClick={() => handleShowImages(item)}
-        key={item.name}
+        key={item.name + item.typeNew}
         className={(item.name === '待审核图片' && item.count > 0) ? styles.red : ''}
       >
         <span className={styles.name}>

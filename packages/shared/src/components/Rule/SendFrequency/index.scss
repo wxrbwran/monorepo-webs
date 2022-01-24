@@ -1,0 +1,166 @@
+.shard_rule_send_frequency {
+  margin-top: 20px;
+  h2 {
+    font-size: 15px;
+    margin: 30px 0 15px;
+    font-weight: 600;
+    color: #181818;
+    &:first-child {
+      margin-top: 0;
+      margin-top: 30px;
+    }
+    .start {
+      color: red;
+      margin-right: 3px;
+    }
+  }
+
+  .send_type {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .cycle {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+
+      height: 40px;
+      line-height: 40px;
+    }
+    // :global {
+    .ant-input {
+      height: 40px;
+      font-size: 14px;
+      color: #181818;
+    }
+    .ant-select-selector {
+      width: 180px !important;
+      height: 40px !important;
+      border-radius: 3px;
+      .ant-select-selection-item,
+      .ant-select-selection-placeholder {
+        line-height: 40px !important;
+        font-size: 14px;
+      }
+    }
+    .ant-input-number-input {
+      height: 40px;
+    }
+    .ant-checkbox-group-item {
+      color: #181818;
+      font-size: 14px;
+    }
+    .ant-checkbox-input {
+      width: 16px;
+      height: 16px;
+    }
+    // }
+  }
+
+  .self {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-left: 10px;
+    line-height: 40px;
+    &_content {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+      // margin: 0 12px 0 50px;
+      margin-left: 10px;
+    }
+    .add_item {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+
+      .addBtn,
+      .deleteBtn {
+        width: 50px;
+        height: 40px;
+        background: #ffffff;
+        border-radius: 3px;
+        border: 1px solid #d3e8fb;
+
+        font-size: 14px;
+        font-weight: 500;
+        color: #218ce9;
+      }
+
+      // ={styles.addBtn} size="large" onClick={handleAddDayEdit}>
+      //                     添加
+      //                   </Button>
+      //                 ) : (
+      //                   <Button className={styles.deleteBtn}
+
+      // :global {
+      //   .ant-input-number {
+      //     border: none;
+      //     flex: 1;
+      //     margin: 0 10px;
+      //   }
+      // }
+      // &_left {
+      //   width: 250px;
+      //   height: 40px;
+      //   border: 1px solid #e0e0e0;
+      //   border-radius: 3px;
+      //   overflow: hidden;
+      //   padding: 0 10px;
+      //   display: flex;
+      //   align-items: center;
+      //   justify-content: space-between;
+      //   margin-right: 10px;
+      // }
+    }
+    ul {
+      margin-top: 10px;
+    }
+    .add_day {
+      display: inline-block;
+      background: rgba(0, 122, 218, 0.1);
+      border-radius: 3px;
+      margin: 0 10px 10px 0;
+      padding: 5px 10px;
+      color: #3296fa;
+      font-size: 14px;
+      .delete {
+        margin-left: 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+    }
+    // :global {
+    .ant-btn {
+      width: 66px;
+      height: 40px;
+      font-size: 14px;
+      color: #666;
+      padding: 0;
+    }
+    // }
+  }
+
+  .time {
+    // :global {
+    .ant-picker {
+      height: 40px;
+      width: 100px;
+    }
+  }
+  // }
+}

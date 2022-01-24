@@ -4,7 +4,7 @@ import request from 'umi-request';
 import { LeftOutlined } from '@ant-design/icons';
 import { history, useSelector, useDispatch } from 'umi';
 import * as api from '@/services/api';
-import { beforeEl, alfterEl } from '../../../const';
+import { beforeEl, alfterEl } from 'xzl-web-shared/dist/utils/consts';
 import RichText from '../../../components/rich_text';
 import UploadCover from '../../../components/upload_cover';
 import './index.scss';
@@ -51,6 +51,7 @@ function ArticleCreate() {
     console.log('address', address);
     const { addPublicize, patchPublicize } = api.education;
     const imgReg: any = /https.*?(?:")/gi;
+    console.log('rickText', rickText);
     const url: string[] = rickText.match(imgReg)?.map((item) => item.replace('"', ''));
     const params: any = {
       content: {
@@ -97,6 +98,7 @@ function ArticleCreate() {
       .replace(/iframe/g, 'video')
       .replace(/class="ql-video"/g, videoCover);
     const aFileParts: string[] = [`${beforeEl}${formatHtmlTxt}${alfterEl}`];
+    console.log('aFileParts', aFileParts);
     const oMyBlob = new Blob(aFileParts, { type: 'text/html' });
     api.education
       .filePrepare({ businessType: 300 })
@@ -131,7 +133,7 @@ function ArticleCreate() {
   const handleChangeCover = (url: string) => {
     cover = url;
   };
-
+  console.log('======112', richText);
   return (
     <div className="py-30 px-60 create">
       <div className="flex justify-between  center">

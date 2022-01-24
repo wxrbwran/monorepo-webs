@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import styles from './index.scss';
 import { IChooseValues, IRuleDoc } from '../../pages/subjective_table/util';
-import ScaleTemplate from '../ScaleTemplate';
+import ScaleTemplate from '../Scale/ScaleTemplate';
 
 interface IProps {
 
@@ -10,7 +10,7 @@ interface IProps {
   title: string;
   infoIndex: number;
   scaleId?: string;
-  scaleType: string;
+  scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
   // plans?: IPlanInfos[];
   ruleDoc: IRuleDoc;
   chooseValues: IChooseValues;
@@ -55,16 +55,6 @@ function PlanModal({ children, title, ruleDoc, updatePlan, chooseValues, scaleTy
             question={question}
 
           />
-
-          {/* <SendPlan
-            mode='Edit'
-            onCancel={() => setShowModal(false)}
-            addPlan={addPlan}
-            infoIndex={infoIndex}
-            plans={plans}
-            question={question}
-            location={location}
-          /> */}
         </DragModal>
       )}
     </>

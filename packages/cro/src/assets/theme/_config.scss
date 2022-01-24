@@ -393,3 +393,18 @@ $filled-button-orange-color: #fc6906;
 //body{
 //  @extend %mr5;
 //}
+
+@mixin rich-text($content, $width: 35px) {
+  position: relative;
+  &:hover {
+    &::before {
+      content: $content;
+      position: absolute;
+      z-index: 1;
+      width: $width;
+      top: -15px;
+      left: -10px;
+      font-weight: bold;
+    }
+  }
+}

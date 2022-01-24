@@ -3,6 +3,8 @@ import { Link } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
 import styles from './index.scss';
+import { Role } from 'xzl-web-shared/dist/utils/role';
+import { useSelector } from 'umi';
 
 const { Panel } = Collapse;
 interface IProps {
@@ -20,14 +22,16 @@ function SideMenu(props: IProps) {
   const { tableList, location } = props;
   const pathname = props.location.pathname.split('/').pop();
   const [activeMenu, setActiveMenu] = useState(pathname);
-console.log('tableList', tableList)
+  const { roleType, status } = useSelector((state: IState) => state.project.projDetail);
+
+  console.log('tableList', tableList);
   useEffect(() => {
     const currentPathname = props.location.pathname.split('/').pop();
-    console.log('currentPathname', currentPathname)
+    console.log('currentPathname', currentPathname);
     if (currentPathname !== activeMenu) {
       setActiveMenu(currentPathname);
     }
-  }, [location])
+  }, [location]);
 
 
   const routerList = [
@@ -39,7 +43,10 @@ console.log('tableList', tableList)
       name: '终点事件(统计)',
       pathName: 'count',
     },
-  ]
+  ];
+
+  const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType);
+
   return (
     <div className={styles.end_event_side}>
       <Collapse defaultActiveKey={['1', '2']} expandIconPosition="right" bordered={false} ghost>
@@ -50,21 +57,21 @@ console.log('tableList', tableList)
                 <div className={[styles.menu, activeMenu === item.pathName ? styles.active : ''].join(' ')} key={item.name}>
                   <Link to={`/end_event/${item.pathName}`}>{item.name}</Link>
                 </div>
-              )
+              );
             })
           }
         </Panel>
         <Panel header="CRF量表" key="2">
           {
             tableList.map(item => {
-              const isActive = ['reply','detail', 'send_record'].includes(activeMenu as string) && location.query?.id === item.id;
+              const isActive = ['reply', 'detail', 'send_record'].includes(activeMenu as string) && location.query?.id === item.id;
               return (
                 <div
-                  className={`${ styles.menu} ${isActive ? styles.active : ''}`}
+                  className={`${styles.menu} ${isActive ? styles.active : ''}`}
                 >
                   <Link to={`/end_event/detail?id=${item.id}`}>{item.name}</Link>
                 </div>
-              )
+              );
             })
           }
           {
@@ -73,7 +80,7 @@ console.log('tableList', tableList)
         </Panel>
       </Collapse>
       {
-        window.$storage.getItem('isLeader') && window.$storage.getItem('projectStatus') != 1001 && (
+        isLeader && status != 1001 && (
           <div className="create">
             <Link to="/end_event/create">
               <PlusOutlined style={{ fontSize: 14 }} /> 创建CRF量表
@@ -82,6 +89,6 @@ console.log('tableList', tableList)
         )
       }
     </div>
-  )
+  );
 }
 export default SideMenu;

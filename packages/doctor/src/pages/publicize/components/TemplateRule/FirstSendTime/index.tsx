@@ -7,11 +7,6 @@ import { cloneDeep, isEmpty } from 'lodash';
 import { IModel, FirstTimeModel } from '../util';
 
 interface IProps {
-
-  // contentListDragModal: (children: React.ReactNode) => React.ReactNode; // 会将+号作为children传递给该组件
-  // contentListVisible: boolean;
-  // onVisibleChange: (visible: boolean) => void;
-
   choiceModelChange: (choiceModel: IModel) => void;
   popverContent: React.ReactNode;
   choiceModelSource?: any;

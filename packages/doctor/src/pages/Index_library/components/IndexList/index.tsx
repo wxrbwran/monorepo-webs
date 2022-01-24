@@ -2,14 +2,14 @@ import React, { FC, useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Form, Button, Popconfirm, message, Space } from 'antd';
 import { useLocation, Location, useSelector } from 'umi';
-import { /* Common, */ Search } from 'xzl-web-shared/dist/components/Selects';
+import { Common, Search } from 'xzl-web-shared/dist/components/Selects';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import copyIcon from '@/assets/img/icon_copy_img.png';
 import {
   indexName,
   indexAbbr,
   columnCreator,
-  // indexCommon,
+  indexCommon,
   note,
   reference,
   unit,
@@ -25,7 +25,7 @@ type ILocation = {
   query: {
     documentId: string;
     documentType: string;
-  }
+  };
 };
 interface IParams {
   documentId: string; // 单据id
@@ -152,7 +152,7 @@ const IndexList: FC = () => {
     note,
     reference,
     unit,
-    // indexCommon,
+    indexCommon,
     operation,
   ];
   return (
@@ -182,17 +182,13 @@ const IndexList: FC = () => {
           <div>
             <Form form={form} onValuesChange={handleSelectChange}>
               <Space>
-                {/* <Common /> */}
+                <Common />
                 <Search form={form} searchKey="name" value={getFieldValue('name')} />
               </Space>
             </Form>
           </div>
           {src === 'ONESELF' && (
-            <EditIndex
-              onSuccess={onSuccess}
-              documentId={documentId}
-              source="libraryAdd"
-            >
+            <EditIndex onSuccess={onSuccess} documentId={documentId} source="libraryAdd">
               <Button type="primary" className="create-btn">
                 <PlusOutlined />
                 新建

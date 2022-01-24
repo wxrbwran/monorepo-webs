@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Select, Form, Checkbox } from 'antd';
+import { Select, Form, Checkbox, Radio } from 'antd';
 import { ProFormDependency } from '@ant-design/pro-form';
 import * as api from '@/services/api';
+
 
 // 子分类： 选择样品来源，检查部分
 const { Option } = Select;
@@ -20,44 +21,51 @@ const SubType: FC<IProps> = (props) => {
     };
     api.indexLibrary.fetchIndexSampleFrom(params).then((res: any) => {
       setSubTypeList(res.list);
+      console.log('res.list===========' + res.list);
     });
   }, []);
 
   const handleValueChange = (_, allValues: any) => {
-    console.log(allValues);
+    console.log('allValues', allValues);
     handleChangeSubType([
-      ...(allValues?.checkbox || []),
-      ...(allValues?.selects || []),
+      ...([allValues?.radio] || []),
+      ...([allValues?.selects] || []),
     ].filter(v => v !== '其他'));
   };
+
+  const initSampleFromString = String(initSampleFrom);
+  console.log('initSampleFrom', initSampleFrom);
+  console.log('initSampleFromString', initSampleFromString, typeof (initSampleFromString));
   return (
     <div className="flex justify-start items-center">
-      <span className="font-bold mr-5 text-sm">选择样品来源:</span>
+      <span className="font-bold mr-8 text-sm">选择样品来源:</span>
       <Form
         form={form}
         onValuesChange={handleValueChange}
         initialValues={{
-          checkbox: [...initSampleFrom],
-          selects: [...initSampleFrom.filter((s) => !['血液', '其他'].includes(s))],
+          radio: initSampleFromString,
         }}
       >
-        <Form.Item name="checkbox" noStyle>
-          <Checkbox.Group>
-            <Checkbox value="血液">血液</Checkbox>
-            <Checkbox value="其他">其他</Checkbox>
-          </Checkbox.Group>
+        <Form.Item name="radio" noStyle>
+          <Radio.Group>
+            <Radio value="血液">血液</Radio>
+            <Radio value="其他">其他</Radio>
+          </Radio.Group>
         </Form.Item>
-        <ProFormDependency name={['checkbox']}>
-          {({ checkbox }: any) => {
-            if (checkbox?.includes('其他')) {
+        <ProFormDependency name={['radio']}>
+          {({ radio }: any) => {
+            if (radio?.includes('其他')) {
               return (
                 <Form.Item name="selects" noStyle>
                   <Select
-                    mode="multiple"
+                    // mode="multiple"
                     allowClear
+                    showSearch
                     style={{ flex: 1, width: 200 }}
                     placeholder="请选择"
-                    // onChange={handleChange}
+                    listHeight={500}
+                    dropdownStyle={{ fontSize: 14 }}
+                  // onChange={handleChange}
                   >
                     {subTypeList
                       .filter((s) => !['血液', '其他'].includes(s))

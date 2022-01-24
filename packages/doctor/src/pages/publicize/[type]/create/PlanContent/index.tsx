@@ -52,6 +52,7 @@ const PlanContent: FC<Iprops> = forwardRef(({ type, onSavePlan, onPlanChanged }:
   };
   //提醒计划的确定按钮回传回来的数据
   const addPlan = (params: any, index: number) => {
+
     console.log('===================== addPlan', JSON.stringify(params), index);
     infos[index] = params;
     setInfos([...infos]);

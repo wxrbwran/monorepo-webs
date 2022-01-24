@@ -153,10 +153,14 @@ export default {
     return http.post('publicize/rules', { data });
   },
 
-  // 新建宣教随访crf
-  editRules(data?: any): Promise<any> {
-    return http.patch('rules', { data });
+  //删除主观量表里的计划-新
+  deleteScaleRule(data?: any): Promise<any> {
+    return http.delete(`rules/${data}`);
   },
+  // // 新建宣教随访crf
+  // editRules(data?: any): Promise<any> {
+  //   return http.patch('rules', { data });
+  // },
   // 新建宣教随访crf
   appendRules(data?: any): Promise<any> {
     return http.post('rules', { data });
@@ -171,7 +175,7 @@ export default {
   },
   // 删除宣教、随访、crf量表
   delPublicizRule(ruleId: string): Promise<any> {
-    return http.delete(`rules/${ruleId}`);
+    return http.patch(`rules/state/${ruleId}`);
   },
 
 

@@ -31,7 +31,7 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
     const params = {
       startTime: startTime,   			//起始时间
       endTime: endTime, //截止时间
-      ruleId: rule.id,      // 规则id
+      ruleId: rule.meta.docId,     // 规则id
     };
     const sendCount = {};
     api.education.getPublicizSendCount(params).then((res: { sendList: ISendItem[], todoSendList: ISendItem[] }) => {
@@ -44,11 +44,6 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
           todoSendCount: item.sendCount,
         };
       });
-
-      // const last = res.todoSendList.pop();
-      // if (last) {
-      //   setLastTodoSend(last);
-      // }
       setsendDatas(sendCount);
     });
   };
@@ -57,26 +52,6 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
     setShowModal(true);
     getDatas(rule.createdAtTime, dayjs(rule.createdAtTime).endOf('month').valueOf());
   };
-
-
-  // const isInRollingTime = (itemTime) => {
-
-  //   const lastTodoSendTime = (lastTodoSend && !isEmpty(lastTodoSend) ? new Date(lastTodoSend.sendTime).setHours(0, 0, 0, 0) : 0);
-
-  //   if (rule?.rules[0].actions?.length == 2) { // 发送频率是循环发送的时候，一定是2，第一个是首次发送，第二次是循环发送或者一次自定义
-  //     const frequency = rule?.rules[0].actions[1];
-  //     if (frequency.type == 'rolling' && lastTodoSendTime > 0 && itemTime > lastTodoSendTime) { // 循环发送
-  //       const difference = itemTime - lastTodoSendTime;
-  //       console.log('================== difference ', difference);
-  //       if (difference % (frequency.params.period * 24 * 60 * 60 * 1000) === 0) {
-  //         return true;
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // };
-
-
   // 切换年/月，刷新
   const onPanelChange = (value: moment.Moment) => {
     getDatas(+moment(value).startOf('month'), +moment(value).endOf('month'));
@@ -88,18 +63,13 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
 
     const { todoSendCount, sendCount }: IDatData = sendDatas?.[itemTime] || {};
 
-    // if (isInRollingTime(itemTime)) {
-    //   todoSendCount = lastTodoSend.sendCount;
-    //   itemTime = new Date(lastTodoSend.sendTime).setHours(0, 0, 0, 0);
-    // }
-
     if (!todoSendCount && !sendCount) {
       return <></>;
     }
     // actionType 0已发送  1待发送
 
     const detailProp = {
-      ruleId: rule.id,
+      ruleId: rule.meta.docId,
       startTime: new Date(itemTime).setHours(dayjs(rule.createdAtTime).hour(), dayjs(rule.createdAtTime).minute(), dayjs(rule.createdAtTime).second(), dayjs(rule.createdAtTime).millisecond()),
       sourceType: sfTypeUrl?.[type]?.sourceType,
     };
@@ -120,7 +90,6 @@ const SendCalendar: FC<IProps> = ({ children, rule }) => {
   startDate.setDate(1);
   startDate.setHours(0, 0, 0, 0);
 
-  console.log('================= 1111 11 , rule', JSON.stringify(rule));
   return (
     <div>
       <span onClick={handleShow}>{children}</span>

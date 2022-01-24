@@ -5,6 +5,7 @@ import styles from './index.scss';
 import type { IQuestions } from '../../const';
 import ScaleDetail from '../scale_detail';
 
+
 interface IProps {
   children: React.ReactElement;
   title?: string;
@@ -24,13 +25,14 @@ function QuestionDetail(props: IProps) {
 
   useEffect(() => {
     if (isShowModal) {
-      if (id){
+      if (id) {
         api.education
           .getScaleDetail(id)
           .then((res) => {
-            setTitle(res.title);
-            setSubTitle(res.subTitle);
-            setQuestion(res.questions);
+
+            setTitle(res.result.title);
+            setSubTitle(res.result.subTitle);
+            setQuestion(res.result.questions);
           })
           .catch((err: string) => {
             console.log('err', err);
@@ -60,7 +62,7 @@ function QuestionDetail(props: IProps) {
             <ScaleDetail
               title={title}
               subTitle={subTitle}
-              question={question}
+              questions={question}
               source={source}
               id={id}
               isShowEdit={isShowEdit}

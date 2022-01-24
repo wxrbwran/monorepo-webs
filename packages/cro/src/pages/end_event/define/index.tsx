@@ -5,6 +5,8 @@ import { Form, Button, message } from 'antd';
 import EventItem from '../components/event_item';
 import Detail from '../components/detail';
 import styles from '../index.scss';
+import { Role } from 'xzl-web-shared/dist/utils/role';
+import { useSelector } from 'umi';
 interface IDetail {
   id: string;
   adverseEvent: {
@@ -25,6 +27,8 @@ function Define() {
   const [isDraft, setIsDraft] = useState(true);
   const [eventDetail, setEventDetail] = useState<IDetail>();
   const projectSid = window.$storage.getItem('projectSid');
+  const { roleType, status } = useSelector((state: IState) => state.project.projDetail);
+
   const handleEdit = () => {
     setIsEdit(true);
   };
@@ -136,6 +140,9 @@ function Define() {
     '需要住院治疗、延长住院时间',
   ];
   console.log(isDraft);
+
+  const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType);
+
   return (
     <div className={styles.define}>
       <Form
@@ -183,8 +190,8 @@ function Define() {
       {!isEdit && (
         <div className={styles.detail}>
           <Detail eventDetail={eventDetail} />
-          {window.$storage.getItem('isLeader') &&
-            window.$storage.getItem('projectStatus') != 1001 && (
+          {isLeader &&
+            status != 1001 && (
               <Button type="primary" ghost onClick={handleEdit}>
                 编辑
               </Button>

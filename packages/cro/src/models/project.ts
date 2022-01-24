@@ -5,9 +5,10 @@ import detail from '@/services/api/detail';
 import { IPlanInfos } from '@/utils/consts';
 import { patientManage, subjective } from '@/services/api';
 import { Role } from 'xzl-web-shared/dist/utils/role';
-import { getChooseValuesKeyFromRules } from '../pages/subjective_table/util';
+import { getChooseValuesKeyFromRules, getUrlPreFix } from '../pages/subjective_table/util';
 import * as api from '@/services/api';
 import { history } from 'umi';
+import { name } from '../../../shared/src/utils/columns';
 
 export interface ProjectModelState {
   projectList: IProjectList[];
@@ -28,7 +29,6 @@ interface ProjectModelType {
     fetchGroupList: Effect;
     fetchProjectTeamMembers: Effect;
     fetchProjectDetail: Effect;
-    fetchScaleGroup: Effect;
   };
   reducers: {
     saveProjectList: Reducer<ProjectModelState>;
@@ -85,20 +85,26 @@ const ProjectModel: ProjectModelType = {
       });
     },
     *fetchObjectiveScale({ payload }, { call, put }) {
-      const response = yield call(subjective.getObjectiveScale, payload);
+
+      console.log('payload   payload   payload', JSON.stringify(payload));
+
+      const response = yield call(api.subjective.getObjectiveScale, payload.id);
       if (response.infos.length == 0) {
         const projectSid = window.$storage.getItem('projectSid');
-        api.subjective.getScaleGroup({ projectSid, type: 'OBJECTIVE' }).then((res) => {
+        api.subjective.getScaleGroup({ projectSid, type: payload.scaleType }).then((res) => {
+
           if (res.scaleGroupInfos.length > 0) {
-            history.replace((`/objective_table/detail?name=${res.scaleGroupInfos[0].name}`));
+            if (res.scaleGroupInfos[0].id != payload.id) {
+              history.replace((`/${getUrlPreFix(payload.scaleType)}/detail?name=${res.scaleGroupInfos[0].name}`));
+            }
           } else {
-            history.replace(('/objective_table/detail?name=_zsh_null'));
+            history.replace((`/${getUrlPreFix(payload.scaleType)}/detail?name=_zsh_null`));
           }
         });
       }
       // 处理数据，添加chooseValues内容
       for (let i = 0; i < response.infos.length; i++) {
-        const chooseValuesKey = getChooseValuesKeyFromRules(response.infos[i].ruleDoc.rules[0]);
+        const chooseValuesKey = getChooseValuesKeyFromRules(response.infos[i].ruleDoc);
         response.infos[i].chooseValues = chooseValuesKey;
       }
       yield put({
@@ -140,13 +146,6 @@ const ProjectModel: ProjectModelType = {
       yield put({
         type: 'fetchProjectTeamMembers',
         payload: payload,
-      });
-    },
-    *fetchScaleGroup({ payload }, { call, put }) {
-      const response = yield call(subjective.getScaleGroup, payload);
-      yield put({
-        type: 'setScaleGroup',
-        payload: response,
       });
     },
   },
@@ -208,6 +207,7 @@ const ProjectModel: ProjectModelType = {
 
 
     setScaleGroup(state = projectState, { payload }): ProjectModelState {
+
       return {
         ...state,
         scaleGroupInfos: payload,

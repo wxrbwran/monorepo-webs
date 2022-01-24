@@ -1,24 +1,23 @@
-import React, {
-  FC, useEffect, useState, useMemo, useRef,
-} from 'react';
-import { Form, Button, message } from 'antd';
-import { isEmpty } from 'lodash';
+import React, { FC, useEffect, useState, useMemo, useRef } from 'react';
+import { Form, Button, Input } from 'antd';
+import { isEmpty, cloneDeep } from 'lodash';
 import { useSelector, useDispatch } from 'umi';
 import EditIndex from '@/components/EditIndex';
 import CopyDocument from '@/pages/Index_library/components/CopyDocument';
-import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import * as api from '@/services/api';
 import SearchHospital from '@/components/SearchHospital';
 import ItemDate from '../ItemDate';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
 import iconCopy from '@/assets/img/icon_copy_dj.png';
+import { SearchOutlined } from '@ant-design/icons';
 import IndexTable from '../IndexTable';
 
 // 获取图片详情接口返回的格式 | 搜索单据或指标时返回的item格式
 type ICheckTypes = IApiDocumentItem | ISearchDocumentItem;
 type IApiParams = {
   sampleFrom: string; // 自己补充的必要属性
-} & ICheckTypes & TIndexItem;
+} & ICheckTypes &
+TIndexItem;
 
 // 获取图片详情接口返回的指标item | 搜索点击获取的指标item
 type IIndexItemCustom = {
@@ -77,6 +76,7 @@ const CustomIndex: FC<IProps> = (props) => {
   const [apiData, setApiData] = useState<any>(initApiData);
   const [addIndexNum, setaddIndexNum] = useState(0);
   const [formInit, setFormInit] = useState({});
+  const [lightKeyWord, setlightKeyWord] = useState();
   const curDocument = useSelector((state: IState) => state.document.curDocument);
   const timeAndOrg = useRef({
     measuredAt: initList?.orgAndTime?.measuredAt || new Date().getTime(),
@@ -111,19 +111,21 @@ const CustomIndex: FC<IProps> = (props) => {
       sourceSid: apiParams.sourceSid,
       sid,
     };
-    const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary
-      .fetchIndexDocumentIndex(params);
-    const commonItems = list;//.filter((item) => item.common);
-    const noCommonItems = []; //list.filter((item) => !item.common);
+    const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary.fetchIndexDocumentIndex(
+      params,
+    );
+    console.log('-------33', list);
+    const commonItems = list.filter((item) => item.common);
+    const noCommonItems = list.filter((item) => !item.common);
     // 如果有指定首行展示哪个指标，这里移动到第一个
     const data: IApiData = firstIndex
       ? formatFirshIndex(commonItems, noCommonItems)
       : { commonItems, noCommonItems };
     // console.log('=====+2,initList没数据，请求接口时');
-    setApiData({ ...formatDataAddIndex(data, addIndexNum) });
+    console.log('999999999999', cloneDeep(formatDataAddIndex(data, addIndexNum)));
+    setApiData(cloneDeep(formatDataAddIndex(data, addIndexNum)));
   };
   useEffect(() => {
-    console.log('curtomIndex1');
     // 首次渲染
     if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
       // console.log('curtomIndex2');
@@ -138,21 +140,21 @@ const CustomIndex: FC<IProps> = (props) => {
   }, [initList]);
 
   // 刷新单据
-  useEffect(() => {
-    const listener = async (id: string) => {
-      console.log('apiParams.id', apiParams.documentId);
-      console.log('id', id);
-      if (apiParams.documentId === id) {
-        form.resetFields();
-        await fetchIndexDocumentIndex();
-        message.success('已刷新单据');
-      }
-    };
-    event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
-    return () => {
-      event.removeListener('REFERSH_DOCUMENT_BY_ID', listener);
-    };
-  }, [apiParams]);
+  // useEffect(() => {
+  //   const listener = async (id: string) => {
+  //     console.log('apiParams.id', apiParams.documentId);
+  //     console.log('id', id);
+  //     if (apiParams.documentId === id) {
+  //       form.resetFields();
+  //       await fetchIndexDocumentIndex();
+  //       message.success('已刷新单据');
+  //     }
+  //   };
+  //   event.addListener('REFERSH_DOCUMENT_BY_ID', listener);
+  //   return () => {
+  //     event.removeListener('REFERSH_DOCUMENT_BY_ID', listener);
+  //   };
+  // }, [apiParams]);
 
   useEffect(() => {
     // 第一行指标有变动时候(并且apiData有数据，可以防止首次渲染走这里)，移下位置
@@ -180,6 +182,8 @@ const CustomIndex: FC<IProps> = (props) => {
       validateFields()
         .then((values) => {
           // console.log('validateFields', values);
+          // console.log('itemsLength', itemsLength);
+
           // console.log('apiParams', apiParams);
 
           // apiParams
@@ -210,8 +214,18 @@ const CustomIndex: FC<IProps> = (props) => {
     ];
     // console.log('handleInitForm', all);
     all.forEach((item: IIndexItemCustom) => {
-      const { id, name, formIndex, indexId, references,
-        sourceSid, source, referenceList, originReferences } = item;
+      const {
+        id,
+        name,
+        formIndex,
+        indexId,
+        references,
+        sourceSid,
+        source,
+        referenceList,
+        originReferences,
+      } = item;
+      console.log('-----item', item);
       const referenceData: Record<string, any> = {};
       if (referenceList?.length > 0) {
         const keys: string[] = ['value', 'indexValue'];
@@ -226,6 +240,16 @@ const CustomIndex: FC<IProps> = (props) => {
             referenceData[`${formIndex}_${index}_reference`] = reference.referenceId;
           }
         });
+      } else {
+        if (references && !isEmpty(references)) {
+          let defaultReferenceId = '';
+          references?.forEach((refitem: TReference) => {
+            if (refitem.isDefault) {
+              defaultReferenceId = refitem.id;
+            }
+          });
+          referenceData[`${formIndex}_0_reference`] = defaultReferenceId || references[0].id;
+        }
       }
       initForm = {
         ...initForm,
@@ -235,23 +259,28 @@ const CustomIndex: FC<IProps> = (props) => {
         [`${formIndex}_sourceSid`]: sourceSid,
         [`${formIndex}_source`]: source,
         [`${formIndex}_referenceList`]: originReferences || references,
-        [`${formIndex}_valueCount`]: referenceList?.length || 1,
+        [`${formIndex}_valueCount`]: referenceList ? referenceList.map((refI: any, inx) => {
+          console.log(refI);
+          return inx;
+        }) : [0],
         ...referenceData,
       };
     });
+    console.log('initForminitForminitForm+++++++++', initForm);
     setFormInit(initForm);
     setFieldsValue({
       ...initForm,
     });
   };
   useEffect(() => {
+    console.log('-----===apiData', apiData);
     handleInitForm(); // 初始化表单
   }, [apiData]);
   useEffect(() => {
     if (handleDocumentsCallbackFns) {
       handleDocumentsCallbackFns({
         action: 'add',
-        type: apiParams.sampleFrom + apiParams.documentName,
+        type: apiParams.documentId + apiParams.sampleFrom + apiParams.documentName,
         fn: handleSave,
       });
     }
@@ -259,7 +288,7 @@ const CustomIndex: FC<IProps> = (props) => {
       if (handleDocumentsCallbackFns) {
         handleDocumentsCallbackFns({
           action: 'remove',
-          type: apiParams.sampleFrom + apiParams.documentName,
+          type:  apiParams.documentId + apiParams.sampleFrom + apiParams.documentName,
         });
       }
     };
@@ -298,13 +327,13 @@ const CustomIndex: FC<IProps> = (props) => {
   }, [selectIndex]);
   const renderItem = useMemo(
     () => (subName?: string) => {
-      const param: any = { apiData, isViewOnly, getFieldsValue, formInit };
+      const param: any = { apiData, isViewOnly, getFieldsValue, formInit, lightKeyWord };
       if (subName) {
         param.subName = subName;
       }
       return <IndexTable {...param} form={form} />;
     },
-    [apiData, formInit, isViewOnly],
+    [apiData, formInit, isViewOnly, lightKeyWord],
   );
 
   const handleSetTimeAndOrg = (newItem: any) => {
@@ -347,19 +376,51 @@ const CustomIndex: FC<IProps> = (props) => {
 
   return (
     <div className="relative">
-      {/* <div className="flex justify-end absolute -top-52 -right-10 ">
-        <EditIndex
-          onSuccess={addIndexSuccess}
-          source="imgAddTypeIndex"
-          documentId={apiParams.documentId}
-          sampleFrom={apiParams.sampleFrom}
-        >
-          <Button type="link" className="text-sm">
-            +添加新化验单
-          </Button>
-        </EditIndex>
-      </div> */}
-      <div className="flex text-sm justify-between items-center mb-10 structured-edit-wrap">
+      <div className='flex mb-10'>
+      {
+        !isViewOnly && (
+          <div style={{ flex: 1 }}>
+            <Input.Search
+              placeholder="请输入关键字"
+              allowClear
+              enterButton="搜索"
+              className='search_keyword'
+              prefix={<SearchOutlined className='text-gray-600' />}
+              onSearch={(val: string) => setlightKeyWord(val)}
+            />
+          </div>
+        )
+      }
+      {apiParams.source === 'DOCTOR' && apiParams.sourceSid === sid && !isViewOnly && !initList && (
+        <div className="mb-10 ml-20">
+          <EditIndex
+            onSuccess={addIndexSuccess}
+            source="imgAddIndex"
+            documentId={apiParams.documentId}
+            sampleFrom={apiParams.sampleFrom}
+          >
+            <Button type="link" className="text-sm pr-0">
+              +添加新指标
+            </Button>
+          </EditIndex>
+        </div>
+      )}
+        {!initList &&
+          (apiParams.source === 'SYSTEM' ||
+            (apiParams.source === 'DOCTOR' && apiParams.sourceSid !== sid)) && (
+            <div className="mb-10 ml-20">
+              <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
+                <Button
+                  className="flex items-center text-sm"
+                  icon={<img src={iconCopy} className="w-16 mr-2" />}
+                >
+                  复制并修改单据
+                </Button>
+              </CopyDocument>
+            </div>
+        )}
+      </div>
+      <div className="flex text-sm justify-between items-center mb-20 structured-edit-wrap">
         {!(isViewOnly && !initList?.orgAndTime?.orgName) ? (
           <div className="flex" style={{ flex: '0 0 47%' }}>
             <div className="font-medium mr-5" style={{ flex: '0 0 63px', lineHeight: '25px' }}>
@@ -389,37 +450,6 @@ const CustomIndex: FC<IProps> = (props) => {
           type="HYD"
         />
       </div>
-      {apiParams.source === 'DOCTOR' &&
-        apiParams.sourceSid === sid &&
-        !isViewOnly &&
-        !initList && (
-          <div className="mb-10">
-            <EditIndex
-              onSuccess={addIndexSuccess}
-              source="imgAddIndex"
-              documentId={apiParams.documentId}
-              sampleFrom={apiParams.sampleFrom}
-            >
-              <Button type="link" className="text-sm">
-                +添加新指标
-              </Button>
-            </EditIndex>
-          </div>
-      )}
-      {!initList &&
-        (apiParams.source === 'SYSTEM' ||
-          (apiParams.source === 'DOCTOR' && apiParams.sourceSid !== sid)) && (
-          <div className="mb-10">
-            <CopyDocument type="HYD" onSuccess={handleCopyDocument} document={curDocument}>
-              <Button
-                className="flex items-center text-sm"
-                icon={<img src={iconCopy} className="w-16 mr-2" />}
-              >
-                复制并修改单据
-              </Button>
-            </CopyDocument>
-          </div>
-      )}
       <Form name={`custom_${formKey}`} form={form}>
         {renderItem()}
       </Form>

@@ -1,10 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Form, Input } from 'antd';
-// import openIcon from '@/assets/img/showNocommon.png';
-// import closeIcon from '@/assets/img/closeNocommon.png';
+import openIcon from '@/assets/img/showNocommon.png';
+import closeIcon from '@/assets/img/closeNocommon.png';
 import HiddenItems from '../HiddenItems';
 import RenderItem from './components/RenderItem';
 import styles from './index.scss';
+import { isEmpty } from 'lodash';
 
 interface IProps {
   apiData: any;
@@ -13,14 +14,15 @@ interface IProps {
   form: any;
   getFieldsValue: (key: string) => void;
   formInit: CommonData;
+  lightKeyWord: string;
 }
 
 const IndexTable: FC<IProps> = (props) => {
-  const { apiData, subName, isViewOnly, formInit, form } = props;
+  const { apiData, subName, isViewOnly, formInit, form, lightKeyWord } = props;
 
   const [showAll, setshowAll] = useState(isViewOnly);
   const [record, setRecord] = useState(apiData);
-  console.log('formInit', formInit);
+  // console.log('formInit', formInit);
   useEffect(() => {
     setshowAll(isViewOnly);
   }, [isViewOnly]);
@@ -30,8 +32,8 @@ const IndexTable: FC<IProps> = (props) => {
   }, [apiData]);
 
   const handleChangeRecord = (param: TIndexItem) => {
-    console.log('param', param);
-    console.log('record', record);
+    // console.log('param', param);
+    // console.log('record', record);
 
     const isCommon = param.common;
     const tmp: any = { ...record };
@@ -39,12 +41,11 @@ const IndexTable: FC<IProps> = (props) => {
     //   .filter((i: TIndexItem) => i.id === param.id);
     // console.log('changedItem', changedItem);
 
-
     const commonItems = tmp.commonItems.filter((i: TIndexItem) => i.id !== param.id);
-    console.log('commonItems', commonItems);
+    // console.log('commonItems', commonItems);
 
     const noCommonItems = tmp.noCommonItems.filter((i: TIndexItem) => i.id !== param.id);
-    console.log('noCommonItems', noCommonItems);
+    // console.log('noCommonItems', noCommonItems);
 
     if (isCommon) {
       commonItems.push(param);
@@ -66,9 +67,16 @@ const IndexTable: FC<IProps> = (props) => {
           return r;
         });
       }
+      if (isViewOnly && item?.referenceList.length === 0
+        || isViewOnly && !item?.referenceList.find(r => r.indexValue !== undefined)) {
+        return null;
+      }
+      if (item?.referenceList?.length === 0 && !isViewOnly) {
+        item.referenceList.push({ indexValue: '' });
+      }
       return (
         <div key={item.formIndex}>
-          <RenderItem item={item} form={form} onSuccess={handleChangeRecord} />
+          <RenderItem item={item} lightKeyWord={lightKeyWord} form={form} onSuccess={handleChangeRecord} />
           {subName && (
             <Form.Item name={`${item.formIndex}_subCategoryName`} noStyle>
               <Input type="hidden" />
@@ -83,13 +91,13 @@ const IndexTable: FC<IProps> = (props) => {
   return (
     <div className={`structured-edit-wrap ${styles.hyd_form}`}>
       {renderItem('commonItems')}
-      <div style={{ display: showAll ? 'none' : 'none' }}>{renderItem('noCommonItems')}</div>
-      {/* {!isViewOnly && (
+      <div style={{ display: showAll ? 'block' : 'none' }}>{renderItem('noCommonItems')}</div>
+      {!isViewOnly && (
         <div className="flex justify-center" onClick={() => setshowAll(!showAll)}>
           {`点击${showAll ? '收起' : '展开'}不常用指标`}
           <img className="w-14 h-14 relative top-2" src={showAll ? closeIcon : openIcon} alt="" />
         </div>
-      )} */}
+      )}
     </div>
   );
 };

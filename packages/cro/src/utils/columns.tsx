@@ -144,7 +144,7 @@ export const stopReason = {
   key: 'etcNotes',
   render: (text: any, _record: any) => (
     <div>
-      {text ? exitReason[text?.exitReason] : '--'}
+      {text ? (`${exitReason[text?.exitReason]}:${text?.exitReason == 1 ? (text?.exitDesc ?? '') : ''}`) : '--'}
     </div>
   ),
 };
@@ -308,7 +308,7 @@ export const addedPatientColumns = () => [
   ethnicity,
 ];
 // 全部受试者列表
-export const patientCroColumns = (_params: Store) => [
+export const patientCroColumns = () => [
   name,
   patientGroup,
   inGroupAt,
@@ -405,14 +405,27 @@ export const content = {
     return (
       <span>
         {
-          text.map((item) => (
-            Object.keys(item.detail).map((det) => {
+          // 除其他事件外的显示
+          text.filter((item) => item.type != 5).map((item) => (
+            (Object.keys(item.detail).filter((key) => !key.includes('answer_'))).map((det) => {
+              const answerKey = 'answer_' + det.split('_')[1];
               return (
-                <span className={eventClass(det)}>{item.detail[det]}</span>
+                <span className={eventClass(det)}>{`${item.detail[det]}${item.detail[answerKey] ? `:${item.detail[answerKey]}` : ''}`}</span>
               );
             })
           ))
         }
+        {
+          // 其他事件的显示
+          text.filter((item) => item.type == 5).map((item) => (
+            (Object.keys(item.detail).filter((key) => key.includes('answer_'))).map((det) => {
+              return (
+                <span className='event_label OTHER'>{`${item.detail[det]}`}</span>
+              );
+            })
+          ))
+        }
+        {/* <span className={eventClass('other_')}>其他事件</span> */}
       </span>
     );
   },

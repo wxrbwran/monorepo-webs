@@ -32,7 +32,7 @@ export default {
   },
   // 查看随访表所有回复情况
   getScaleReplyList(data?: any): Promise<any> {
-    return http.get('statistics/list', { data });
+    return http.get('out/reply/count', { data });
   },
   // 查询列表回复和未回复列表
   getScalePatientReply(data?: any): Promise<any> {

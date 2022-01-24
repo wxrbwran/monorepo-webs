@@ -1,18 +1,17 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
-import { AutoComplete, Select, Button, Row, Col, message } from 'antd';
+import { AutoComplete, Row, Col, message, Button } from 'antd';
 import * as api from '@/services/api';
 import { IAddJcdItem } from '../type';
 import { isEmpty, debounce } from 'lodash';
 import { getSource } from '../utils';
 import styles from './index.scss';
 
-const { Option } = Select;
-type IPartMethod = {
+export type IPartMethod = {
   part?: string;
   method?: string
   jcdName?: string;
 };
-type INameItem = {
+export type INameItem = {
   jcdName: string;
   sid: string;
   source: string;
@@ -24,24 +23,33 @@ interface IProps {
   handleShowAddJctBtn: (isShow: boolean) => void;
   createJcdNum: number;
   outType: string;
+  action?: string;
+  onCancel?: () => void;
 }
 
 const SearchJcd: FC<IProps> = (props) => {
-  const { changePartMethod, handleAddJcdTab, handleShowAddJctBtn, createJcdNum, outType } = props;
+  const { changePartMethod, handleAddJcdTab, handleShowAddJctBtn, createJcdNum, outType, action, onCancel } = props;
   const partMethod = useRef({ part: '', method: '' });
   const [partsMethods, setPartsMethods] = useState({}); // 部位+方法列表数据源
   const [partList, setPartList] = useState([]);
   const [methodList, setMethodList] = useState([]);
   const [nameList, setNameList] = useState<INameItem[]>([]); // 检查单名称列表
   const [otherNames, setOtherNames] = useState<INameItem[]>([]); // 其它单据-单据名称
-  const [selectId, setSelectId] = useState<string | undefined>();
-  const handleBlur = () => {
+  const [selectId, setSelectId] = useState<string | undefined>(); // 检查单名称or单据名称勾选的id
+  const isSearchModal = action === 'searchModal';
+  const handleFetchNames = (jcdName?: string) => {
     changePartMethod(partMethod.current);
     const { part, method } = partMethod.current;
-    if (part && method) {
-      api.image.fetchImageTemplateName(partMethod.current).then(res => {
+    const p = { ...partMethod.current, jcdName };
+    if (part || method || !!jcdName) {
+      let apiParams = { title: 'JCD' };
+      Object.keys(p).forEach(key => {
+        if (p[key]) {
+          apiParams[key] = p[key];
+        }
+      });
+      api.image.fetchImageTemplateName(apiParams).then(res => {
         setNameList(res.jcdTitleSet);
-        console.log('999999', res.jcdTitleSet);
         setSelectId(undefined);
         handleShowAddJctBtn(!!isEmpty(res.jcdTitleSet));
       });
@@ -52,10 +60,10 @@ const SearchJcd: FC<IProps> = (props) => {
       setPartsMethods(res);
     });
     if (!isEmpty(nameList)) {
-      handleBlur(); // 父组件，双击tab修改了检查单名称后，这里重新拉一下检查名称列表，更新数据
+      handleFetchNames(); // 父组件，双击tab修改了检查单名称后，这里重新拉一下检查名称列表，更新数据
     }
   }, [createJcdNum]);
-  const handleSearch = (val: string, type: string) => {
+  const handleSearchPartMethod = (val: string, type: string) => {
     if (val) {
       const filterList = partsMethods?.[type]?.filter(item => {
         return item.toUpperCase().indexOf(val.toUpperCase()) !== -1;
@@ -68,28 +76,42 @@ const SearchJcd: FC<IProps> = (props) => {
     }
   };
   const handleChangePartMethod = (val: string, type: string) => {
-    partMethod.current = { ...partMethod.current, [type]: val };
+    const oVal = { ...partMethod.current };
+    if (val.trim() === '') { delete oVal[type]; } else { oVal[type] = val; }
+    partMethod.current = { ...oVal };
   };
-
-  const handleSelectJcd = (val: string) => {
-    setSelectId(val);
-  };
-  const handleAddJcd = () => {
-    if (selectId) {
-      console.log('添加检查单', selectId, partMethod);
-      // handleAddJcdTab
-      const baseInfo:INameItem = nameList.find(item => item.id === selectId) as INameItem;
-      console.log('9992', { ...baseInfo, ...partMethod.current, creatorSid: baseInfo.sid });
+  // 往tab栏增加选择的单据
+  const handleAddJcdBtn = (paramId?: string) => {
+    const curId = paramId || selectId;
+    if (curId) {
+      const baseInfo:INameItem = nameList.find(item => item.id === curId) as INameItem;
       handleAddJcdTab({ ...baseInfo, ...partMethod.current, creatorSid: baseInfo.sid });
+      if (onCancel) {onCancel();}
     } else {
       message.warn('请选择检查单');
     }
   };
-  const handleAddOther = (val: string) => {
-    const curInfo = otherNames.find(item => item.jcdName === val);
-    console.log('curInfo', curInfo);
+
+  const handleAddOtherBtn = (paramId?: string) => {
+    const curId = paramId || selectId;
+    const curInfo = otherNames.find(item => item.id === curId);
     handleAddJcdTab({ ...curInfo, creatorSid: curInfo.sid });
+    if (onCancel) {onCancel();}
   };
+  // 勾选检查单名称或者其他单据名称
+  const handleSelectName = (val: string, { key }: { key: string }) => {
+    console.log(val);
+    setSelectId(key);
+    // 如果不是搜索弹框，则直接进行添加tab流程。
+    if (!isSearchModal) {
+      if (outType === 'JCD') {
+        handleAddJcdBtn(key);
+      } else {
+        handleAddOtherBtn(key);
+      }
+    }
+  };
+  // 搜索其他医学单据-单据名称
   const handleSearchOtherName = (val: string) => {
     changePartMethod({ 'jcdName': val  });
     if (val) {
@@ -99,33 +121,51 @@ const SearchJcd: FC<IProps> = (props) => {
       });
     }
   };
-  console.log('nameList', nameList);
-  console.log('otherNames', otherNames);
+
   return (
-    <div className={styles.search_jcd}>
+    <div className={`${styles.search_jcd} ${isSearchModal ? styles.search_jcd_modal : ''}`}>
       <Row>
         {
           outType === 'JCD' ? (
             <>
-               <Col span={11} className='my-10 flex'>
+               <Col span={isSearchModal ? 24 : 11} className='my-10 flex'>
                 <span className={styles.tit}>检查部位：</span>
                 <AutoComplete
                   options={partList}
                   placeholder="请输入检查部位"
-                  onSearch={(e) => handleSearch(e, 'partList')}
+                  onSearch={(e) => handleSearchPartMethod(e, 'partList')}
                   onChange={(e) => handleChangePartMethod(e, 'part')}
-                  onBlur={handleBlur}
+                  onBlur={() => handleFetchNames()}
                 />
               </Col>
-              <Col span={13} className='my-10 flex pl-28'>
+              <Col span={isSearchModal ? 24 : 13} className={`my-10 flex ${isSearchModal ? '' : 'pl-28'}`}>
                 <span className={styles.tit}>检查方法：</span>
                 <AutoComplete
                   options={methodList}
                   placeholder="请输入检查方法"
-                  onSearch={(e) => handleSearch(e, 'methodList')}
+                  onSearch={(e) => handleSearchPartMethod(e, 'methodList')}
                   onChange={(e) => handleChangePartMethod(e, 'method')}
-                  onBlur={handleBlur}
+                  onBlur={() => handleFetchNames()}
                 />
+              </Col>
+              <Col span={24}>
+              <div className="mt-10 flex items-center">
+                <span className={styles.tit}>检查名称：</span>
+                <AutoComplete
+                  placeholder="请输入检查单名称"
+                  onSearch={debounce((val) => handleFetchNames(val), 500)}
+                  onSelect={handleSelectName}
+                >
+                  {
+                    nameList.map(item => (
+                      <AutoComplete.Option key={item.id} value={item.jcdName}>
+                        <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
+                        <span>{item.jcdName}</span>
+                      </AutoComplete.Option>
+                    ))
+                  }
+                </AutoComplete>
+              </div>
               </Col>
             </>
           ) : (
@@ -134,7 +174,7 @@ const SearchJcd: FC<IProps> = (props) => {
               <AutoComplete
                 placeholder="请输入单据名称"
                 onSearch={debounce(handleSearchOtherName, 500)}
-                onSelect={handleAddOther}
+                onSelect={handleSelectName}
               >
                 {
                   otherNames.map(item => (
@@ -149,25 +189,16 @@ const SearchJcd: FC<IProps> = (props) => {
           )
         }
       </Row>
-      {!isEmpty(nameList) && (
-        <div className="mt-10 flex items-center">
-          <span className={styles.tit}>检查名称：</span>
-          <Select style={{ flex: 1 }} onChange={handleSelectJcd} placeholder="请选择检查单">
-            {nameList.map((item) => {
-              // const { cName, title } = getSource(item.source, item.sid);
-              return (
-                <Option value={item.id} key={item.id}>
-                  <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
-                  <span>{item.jcdName}</span>
-                </Option>
-              );
-            })}
-          </Select>
-          <Button className={styles.add_btn} onClick={handleAddJcd}>
-            添加
-          </Button>
-        </div>
-      )}
+      {
+        isSearchModal && (
+          <div className="common__btn mt-20">
+            <Button onClick={onCancel} > 取消 </Button>
+            <Button htmlType="submit" type="primary" onClick={() => (
+              outType === 'JCD' ? handleAddJcdBtn() : handleAddOtherBtn())
+              } > 确定 </Button>
+          </div>
+        )
+      }
     </div>
   );
 };

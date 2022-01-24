@@ -7,12 +7,12 @@ import {
 } from './consts';
 import { Role, fetchRolePropValue } from './role';
 import moment from 'moment';
+import { isEmpty } from 'lodash';
 
 function getDefaultReferenceValue(references) {
-  if (references) {
+  if (references && !isEmpty(references)) {
     const defaultReference = references.filter((r) => r.isDefault)?.[0];
-    // console.log('defaultReference', defaultReference)
-    return defaultReference || {};
+    return defaultReference || references[0];
   }
   return {};
 }
