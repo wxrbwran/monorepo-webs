@@ -2,7 +2,7 @@ import { cloneDeep, isEmpty } from 'lodash';
 import { IUserAddTopicItem, StructuredModelState } from 'packages/doctor/typings/model';
 import { IMeta, IQuestions, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
 import { getDvaApp } from 'umi';
-import { IJcdTabItem } from './type';
+import { IJcdTabItem, InlineType } from './type';
 import { message } from 'antd';
 
 export const outTypes: CommonData = {
@@ -244,144 +244,6 @@ export const formatTempDdtk = (tkTmpList: any[]) => {
   return ddtk;
 };
 
-// 处理用户新加问题多tab共享-s
-interface IEditTopicProps {
-  userAddTopic: StructuredModelState,
-  questions: IQuestions,
-  tempKey: string,
-  editIndex: number,
-  tabKey: string,
-  questionsType?: string,
-}
-// 添加或编辑
-export const handleEditUserTopic = (props: IEditTopicProps) => {
-  const { userAddTopic, questions, tempKey, editIndex, tabKey, questionsType } = props;
-  const qadata = questionsType === 'COMPLETION' ? questions[editIndex][0] : questions[editIndex];
-  const returnAddData = (actionType: string) => {
-    return {
-      actionType,
-      qaType: qadata.question_type,
-      uuid: qadata.uuid,
-      // 模板里的问题答案清空
-      qa: questionsType === 'COMPLETION' ? questions[editIndex].map((item: IQuestions[] | IQuestions) => {
-        return { ...item, answer: item.answer.map(() => null) };
-      }) : { ...questions[editIndex], answer: [] },
-    };
-  };
-  const newTopicData = cloneDeep(userAddTopic);
-  // 检测新加问题池里，如果此检查方法已存在则更新，否则添加
-  if (newTopicData[tempKey]) {
-    let isHas = false;
-    newTopicData[tempKey].forEach((item: any, inx: number) => {
-      // 判断当前操作的问题id是否存在，如果存在则更新问题，否则添加。
-      if (item.uuid === qadata.uuid) {
-        isHas = true;
-        newTopicData[tempKey][inx] = returnAddData('edit');
-      }
-    });
-    if (!isHas) {
-      newTopicData[tempKey].push(returnAddData('add'));
-    }
-  } else {
-    newTopicData[tempKey] = [returnAddData('add')];
-  }
-  getDvaApp()._store.dispatch({
-    type: 'structured/saveAddQa',
-    // 保存下，当前编辑的问题的id.监听到变了，并且问题列表里有id，那就做出更新处理，如果是当前tabkey，则保留 问题答案，否则清空答案
-    payload: {
-      ...newTopicData,
-      currEditData: {
-        uuid: qadata.uuid, // 当前编辑的问题的uuid
-        qaType: qadata.question_type, // 当前编辑的问题的类型
-        tempKey, // 当前变化的是哪种分类
-        tabKey,
-      },
-    },
-  });
-};
-interface IDelTopicProps {
-  userAddTopic: StructuredModelState,
-  questions: IQuestions,
-  tempKey: string,
-  editIndex: number,
-  questionsType?: string,
-  tabKey: string;
-}
-// 删除
-export const handleDelUserTopic = (props: IDelTopicProps) => {
-  const { userAddTopic, questions, tempKey, editIndex, questionsType, tabKey } = props;
-  const newTopicData = cloneDeep(userAddTopic);
-  // 是否redux中存有些条问题：存在，表示用户添加过又清空问题的，不存在，表示用户添加新题后啥也没填，就点击其它区域的情况
-  // 返回此字段，组件根据返回值做判断是否操作question
-  let isHas = false;
-  const quesUuid = questionsType === 'COMPLETION' ?  questions[editIndex][0] :  questions[editIndex];
-  newTopicData[tempKey]?.forEach((item: any, index: number) => {
-    if (item.uuid === quesUuid.uuid) {
-      newTopicData[tempKey][index].actionType = 'delete';
-      isHas = true;
-      getDvaApp()._store.dispatch({
-        type: 'structured/saveAddQa',
-        payload: {
-          ...newTopicData,
-          currEditData: {
-            uuid: quesUuid.uuid, // 当前编辑的问题的uuid
-            qaType: quesUuid.question_type, // 当前编辑的问题的类型
-            tempKey, // 当前变化的是哪种分类
-            tabKey,
-          },
-        },
-      });
-    }
-  });
-  return isHas;
-};
-// 监听到usertopic有变化
-export const watchUserTopicChange = (
-  userAddTopic: StructuredModelState,
-  questions: IQuestions,
-  tempKey: string,
-  tabKey: string,
-  questionType: string[],  // ['RADIO', 'CHECKBOX'] ['COMPLETION'] ['TEXT']根据题型过滤
-  isDdtk?: boolean,
-) => {
-  const { tabKey: curTabKey, uuid: curUuid } = userAddTopic.currEditData || {};
-
-  if (!isEmpty(userAddTopic) && userAddTopic[tempKey] && tabKey !== curTabKey) {
-    // 先过滤出模板中同类型的问题
-    const methodPartTopic = userAddTopic[tempKey]
-      .filter((item: IUserAddTopicItem) => questionType.includes(item.qaType));
-
-    methodPartTopic.forEach((uItem: IUserAddTopicItem) => {
-      let hasUuid = false; // 是否有uuid 有uuid，表示之前添加过了，此次为edit或del
-      let currQaInx = 0; // 当前匹配到的qa项的索引
-      // 匹配出当前项在ques是否存在，存在的话，把索引存起来
-      questions.forEach((qaItem: any, inx: number) => {
-        const uuidEqual = isDdtk ? qaItem[0].uuid === uItem.uuid : qaItem.uuid === uItem.uuid;
-        if (uuidEqual) {
-          hasUuid = true;
-          currQaInx = inx;
-        }
-      });
-
-      // 有uuid，表示之前添加过了(此次是edit或del)，并且当前编辑的uuid是此项的uuid
-      if (hasUuid && curUuid === uItem.uuid) {
-        if (uItem.actionType === 'edit' ) {
-          questions[currQaInx] = cloneDeep(uItem.qa);
-        } else if (uItem.actionType === 'delete') {
-          questions.splice(currQaInx, 1);
-        }
-      }
-      // 当前questions列表没有此uuid两种情况 1新添加的，2已删除的. 3新增加的tab选项卡(init时所有temp里的问题都不存在)
-      if (!hasUuid && uItem.actionType !== 'delete') {
-        questions.push(cloneDeep(uItem.qa));
-      }
-    });
-    console.log('returnquestions', questions);
-    return questions;
-  } else {
-    return false;
-  }
-};
 // 处理用户新加问题多tab共享-e
 
 export const getSource = (source: string, sid: string) => {
@@ -394,3 +256,9 @@ export const getSource = (source: string, sid: string) => {
   }
 };
 
+export const DdtkSeniorInlineType: { [key: string]: string } = {
+  INLINE_COMPLETION: '填空题',
+  INLINE_RADIO: '单选题',
+  INLINE_CHECKBOX: '多选题',
+  INLINE_DATE: '日期类型题',
+};

@@ -5,6 +5,7 @@ import { IAddTopicProps } from '../type';
 import TopicAddDdtk from './AddDdtk';
 import TopicAddProblem from './AddProblem';
 import TopicAddChoice from './AddChoice';
+import AddDdtkSenior from './AddDdtkSenior';
 import { EditOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
@@ -30,6 +31,10 @@ const TopicAddBtn: FC<IAddTopicProps> = (props) => {
     TEXT: {
       title: '问答题',
       comp: <TopicAddProblem {...topicProps} />,
+    },
+    COMPLETION_SENIOR: {
+      title: '高级填空',
+      comp: <AddDdtkSenior {...topicProps} />,
     },
   };
   const handleShow = () => {

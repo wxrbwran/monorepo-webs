@@ -3,6 +3,7 @@ import TopicBaseInfo from '../TopicBaseInfo';
 import TopicChoice from '../TopicChoice';
 import TopicProblem from '../TopicProblem';
 import TopicDdtk from '../TopicDdtk';
+import TopicDdtkSenior from '../TopicDdtkSenior';
 import styles from './index.scss';
 // import { fetchInitData } from '../utils';
 import { IJcdTabItem, IQaItem } from '../type';
@@ -28,7 +29,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
   const { tabKey } = initData.meta;
   const [lightKeyWord, setlightKeyWord] = useState('');
   const [partMethod, setPartMethod] = useState({});
-  const initEmptyData: { [key: string]: IQaItem[] } = { COMPLETION: [], CHOICE: [], TEXT: [], BASIC: [] };
+  const initEmptyData: { [key: string]: IQaItem[] } = { COMPLETION: [], CHOICE: [], TEXT: [], BASIC: [], COMPLETION_SENIOR: [] };
   const doctorSid =  window.$storage.getItem('sid');
   const fetchInitData = (data: IQaItem[]) => {
     let initD: { [key: string]: IQaItem[] } = cloneDeep(initEmptyData);
@@ -37,6 +38,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
         case 'TEXT':
         case 'BASIC':
         case 'COMPLETION':
+        case 'COMPLETION_SENIOR':
           initD[item.question_type].push(item);
           break;
         case 'RADIO':
@@ -147,6 +149,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
             <TopicDdtk initData={initTopic.COMPLETION} {...subProps} />
             <TopicChoice initData={initTopic.CHOICE} {...subProps} />
             <TopicProblem initData={initTopic.TEXT} {...subProps} />
+            <TopicDdtkSenior initData={initTopic.COMPLETION_SENIOR} {...subProps} />
           </>
         ) : (
           <div className="flex justify-center items-center">
