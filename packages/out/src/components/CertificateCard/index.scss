@@ -1,5 +1,6 @@
 .cert {
   @include flex();
+  justify-content: center;
   &__item {
     margin-right: 10px;
     img {
@@ -15,6 +16,7 @@
   }
   &__imgs {
     @include flex();
+    justify-content: center;
   }
   .qualif0,
   .cert0,
@@ -35,7 +37,7 @@
       @include size(60px, 26px);
       color: #fff;
       background-color: rgba(0, 0, 0, 0.46);
-      @include flex(row, nowrap, center, center);
+      @include flex( center, center);
     }
   }
   .cert0 {

@@ -75,6 +75,7 @@ const Model: AuthModelType = {
         }
         if (payload.clientId === 'xzl-web-out-org') {
           localStorage.setItem('xzl-web-out-org_token', JSON.stringify(data));
+          localStorage.setItem('xzl-web-out-org_uid', data.yxRegister.accid);
           // (document.getElementById('go_out_hospital') as HTMLElement).click();
           window.location.href = config.OUT_HOSPITAL_PATIENT;
         }

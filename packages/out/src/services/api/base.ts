@@ -29,4 +29,12 @@ export default {
   fetchBaseDepartments(): Promise<any> {
     return http.get('/base/departments');
   },
+  // 获取当前用户相关的所有上下文
+  getCurrUserRole(wcId: string, sid: string): Promise<any> {
+    return http.get(`base/all/wcl/own/${wcId}/${sid}`);
+  },
+  // 根据关键字查询医院列表
+  fetchHospitalsDetail(data: { name: string; pageAt?: number; pageSize?: number }): Promise<any> {
+    return http.get('organization', { data });
+  },
 };

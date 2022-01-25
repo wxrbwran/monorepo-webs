@@ -167,5 +167,5 @@ export const formatDoctorTeams = (teams: any[]) => {
 
 export const searchHighLight = (text: string, lightKeyWord: string) => {
   return lightKeyWord === '' ? text :
-    text.replaceAll(lightKeyWord, `<span class="text_red">${lightKeyWord}</span>`);
+    text?.replaceAll(lightKeyWord, `<span class="text_red">${lightKeyWord}</span>`);
 };

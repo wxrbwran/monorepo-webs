@@ -77,9 +77,8 @@
   border-bottom-left-radius: $raduis;
 }
 
-@mixin flex($direction: row, $wrap: nowrap, $main: center, $cross: center) {
+@mixin flex($main: space-between, $cross: center) {
   display: flex;
-  flex-flow: $direction $wrap;
   justify-content: $main;
   align-items: $cross;
 }
@@ -137,5 +136,24 @@
       justify-content: center;
       align-items: center;
     }
+  }
+}
+
+@mixin card-shadow {
+  box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.13);
+  border-radius: 4px;
+}
+
+@mixin flex-lay($direction: row, $wrap: nowrap, $main: space-between, $cross: center) {
+  display: flex;
+  flex-flow: $direction $wrap;
+  justify-content: $main;
+  align-items: $cross;
+}
+%common_header {
+  background-color: #fff;
+  padding: 15px 0;
+  .header {
+    @include flex();
   }
 }

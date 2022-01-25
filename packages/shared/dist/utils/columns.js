@@ -3,12 +3,12 @@ import { Avatar, Button } from 'antd';
 import { defaultAvatar, sexList, inviteStatusLists, statusLists, orgCategroy, roleList, projectStatus, yinYangMap, } from './consts';
 import { Role, fetchRolePropValue } from './role';
 import moment from 'moment';
+import { isEmpty } from 'lodash';
 function getDefaultReferenceValue(references) {
     var _a;
-    if (references) {
+    if (references && !isEmpty(references)) {
         var defaultReference = (_a = references.filter(function (r) { return r.isDefault; })) === null || _a === void 0 ? void 0 : _a[0];
-        // console.log('defaultReference', defaultReference)
-        return defaultReference || {};
+        return defaultReference || references[0];
     }
     return {};
 }

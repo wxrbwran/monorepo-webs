@@ -22,10 +22,9 @@ export const formatSubmitItems = (data: CommonData, length: number) => {
         return r;
       }),
     };
-
     // 处理参考值
     const count = data[`${i}_valueCount`];
-    for (let j = 0; j < count; j++) {
+    count.forEach((j: number) => {
       let tmp: any = {};
       if (data[`${i}_${j}_indexValue`]) {
         tmp.indexValue = data[`${i}_${j}_indexValue`];
@@ -41,7 +40,8 @@ export const formatSubmitItems = (data: CommonData, length: number) => {
         newItem.referenceList.push({ ...tmp });
       }
       tmp = null;
-    }
+    });
+
     // 如果指标来源是DOCTOR，并且指标的sourceSid不是当前医生的sid，需要把当前医生的sid传过去
     if (
       data[`${i}_source`] === 'DOCTOR' &&

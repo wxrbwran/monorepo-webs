@@ -69,7 +69,8 @@ const LatestHealthHistory: FC = ({ children }) => {
     } else {
       // 图片结构化里的指标
       api.image.fetchImageIndexHistory({ ...params, imageTypeNew: activeTabKey }).then((res) => {
-        setHead(res?.subCategory ? res.headInfoList : res.headList);
+        const headerList = res?.subCategory ? res.headInfoList : res.headList;
+        setHead(headerList || []);
         apiData(res, params.pageAt, activeTabKey);
       }).catch(() => apiError());
     }
@@ -150,6 +151,9 @@ const LatestHealthHistory: FC = ({ children }) => {
       </TabPane>
     );
   }, [data, dataLoading]);
+  const disabledDate = (current) => {
+    return current && current > moment().endOf('day');
+  };
   return (
     <>
       <span onClick={() => setShow(true)}>{ children }</span>
@@ -168,6 +172,7 @@ const LatestHealthHistory: FC = ({ children }) => {
             value={[moment(startTime, dateFormat), moment(endTime, dateFormat)]}
             format={dateFormat}
             allowClear={false}
+            disabledDate={disabledDate}
           />
           <Tabs onChange={handleChangeTab} size="large">
             { tabList.map((item) => renderTab(item.tabTit, item.type, item.columns)) }

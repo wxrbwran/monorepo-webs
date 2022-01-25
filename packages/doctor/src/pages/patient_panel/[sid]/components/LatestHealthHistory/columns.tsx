@@ -1,8 +1,9 @@
 import moment from 'moment';
 import React from 'react';
-import { List, Space } from 'antd';
+import { List, Space, Tooltip } from 'antd';
 import { BloodType2 } from '@/utils/tools';
 import { yinYangMap } from 'xzl-web-shared/dist/utils/consts';
+import { getReferenceTitle } from 'xzl-web-shared/dist/utils/tool';
 
 const measuredAt = (format?: string) => ({
   title: '时间',
@@ -87,33 +88,35 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
             <List
               size="small"
               dataSource={referenceList}
-              renderItem={(ref: TReference) => (
-                <List.Item className="mx-auto text-center">
-                  <Space className="w-full justify-center" style={{ display: 'flex' }}>
-                    {(ref.value || ref.secondValue) && ref.type !== 'RADIO' && (
-                      <>
-                        <div>
-                          {ref.indexValue}
-                          {ref.unit || ''}
-                        </div>
-                        <div style={{ color: '#ff0000' }}>
-                          {`
-                          ${ref.note || ''}
-                          ${ref.value || ''}-${ref.secondValue || ''}
-                          ${ref.unit || ''}
-                        `}
-                        </div>
-                      </>
-                    )}
-                    {(ref.value || ref.secondValue) && ref.type === 'RADIO' && (
-                      <>
-                        {yinYangMap[ref.indexValue as string]}
-                        <div style={{ color: '#ff0000' }}>{`${ref.note || ''}阴阳`}</div>
-                      </>
-                    )}
-                  </Space>
-                </List.Item>
-              )}
+              renderItem={(ref: TReference) => {
+                const text = `${ref.note || ''}${getReferenceTitle(ref)}${ ref.unit || '' }`;
+                return (
+                  <List.Item className="mx-auto text-center text-sm">
+                    <Space className="w-full justify-center" style={{ display: 'flex' }}>
+                      {(ref.value || ref.secondValue) && ref.type !== 'RADIO' && (
+                        <>
+                          <div>{ref.indexValue}</div>
+                          <div
+                            className="truncate"
+                            title={text}
+                            style={{ color: '#ff0000', maxWidth: 200 }}
+                          >
+                            <Tooltip placement="topRight" title={text}>
+                              {text}
+                            </Tooltip>
+                          </div>
+                        </>
+                      )}
+                      {(ref.value || ref.secondValue) && ref.type === 'RADIO' && (
+                        <>
+                          {yinYangMap[ref.indexValue as string]}
+                          <div style={{ color: '#ff0000' }}>{`${ref.note || ''}阴阳`}</div>
+                        </>
+                      )}
+                    </Space>
+                  </List.Item>
+                );
+              }}
             />
           );
           // console.log('record', record);

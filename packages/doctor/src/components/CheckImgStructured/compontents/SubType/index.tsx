@@ -44,7 +44,6 @@ const SubType: FC<IProps> = (props) => {
         onValuesChange={handleValueChange}
         initialValues={{
           radio: initSampleFromString,
-          selects: [...initSampleFrom.filter((s) => !['血液', '其他'].includes(s))],
         }}
       >
         <Form.Item name="radio" noStyle>
@@ -61,8 +60,11 @@ const SubType: FC<IProps> = (props) => {
                   <Select
                     // mode="multiple"
                     allowClear
+                    showSearch
                     style={{ flex: 1, width: 200 }}
                     placeholder="请选择"
+                    listHeight={500}
+                    dropdownStyle={{ fontSize: 14 }}
                   // onChange={handleChange}
                   >
                     {subTypeList

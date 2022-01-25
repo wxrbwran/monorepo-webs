@@ -5,8 +5,6 @@ import NavBar from '@/components/NavBar';
 import { setAuthorizationToken } from '@/services/http';
 import { useSelector, useDispatch } from 'react-redux';
 import { history } from 'umi';
-import mqtt from 'mqtt';
-import { randomString } from '@/utils/utils';
 import './index.scss';
 
 interface IProps {
@@ -30,10 +28,6 @@ interface IState {
     institution: object;
   };
 }
-interface IData {
-  cells: object,
-  columns: []
-}
 
 function SecurityLayout({ children, location }: IProps) {
   const dispatch = useDispatch();
@@ -43,7 +37,16 @@ function SecurityLayout({ children, location }: IProps) {
   const legalRelationship = useSelector((state: IState) => state.user.legalRelationship);
   const institution = useSelector((state: IState) => state.user.institution);
   // const [tableData, setTableData] = useState<IData[]>([]);
-
+  const getCurrentUser = () => {
+    if (dispatch) {
+      dispatch({
+        type: 'user/fetchCurrent',
+        payload: {
+          wcIds: [localStorage.getItem('xzl-web-doctor_wcId')],
+        },
+      });
+    }
+  };
   useEffect(() => {
     const token = localStorage.getItem('xzl-web-doctor_access_token');
     if (!!token) {
@@ -91,18 +94,9 @@ function SecurityLayout({ children, location }: IProps) {
     }
   }, []);
 
-  const getCurrentUser = () => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-        payload: {
-          wcIds: [localStorage.getItem('xzl-web-doctor_wcId')]
-        },
-      });
-    }
-  };
+
   const isHome = location.pathname.includes('/home');
-  const isTemp = location.pathname.includes('/template') || !!location.query.isTemp;
+  const isTemp = location.pathname === '/template' || !!location.query.isTemp;
   return (
     <>
       {isLogin ? (

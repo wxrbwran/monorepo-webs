@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './index.scss';
 import { Popover } from 'antd';
-import ContentList from '../FirstSendTime/ContentList';
+import ContentList from './ContentList';
 // import { ContentListModel } from '../FirstSendTime/ChoiceContent';
 import { IList } from '../../../const';
 

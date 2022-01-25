@@ -133,7 +133,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
         }
       >
         <div className={styles.jcd_panel_item}>
-          <div className='flex absolute' style={{ left: 270 }}>
+          <div className='flex absolute right-0'>
             {!item.data && item.meta.creatorSid !== doctorSid && <div className={styles.copy_temp}>
               <CreateJcd
                 actionType="copy"

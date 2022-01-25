@@ -10,10 +10,10 @@ import { IState } from 'typings/global';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import { isEmpty } from 'lodash';
 
-let timer:any = null;
+let timer: any = null;
 const { Option } = Select;
 
-interface IProps{
+interface IProps {
   type: string;
   isPlan?: Boolean;
   updateSubmitPlan: Function;
@@ -26,7 +26,7 @@ interface IProps{
   };
 }
 interface IAbled {
-  [key:string]: boolean;
+  [key: string]: boolean;
 }
 interface IInit {
   type: string,
@@ -37,7 +37,7 @@ interface IInit {
   }
 }
 
-function GroupStatic({ type, isPlan, updateSubmitPlan, infoItem, sendTime }:IProps) {
+function GroupStatic({ type, isPlan, updateSubmitPlan, infoItem, sendTime }: IProps) {
   let initCondition: IInit = {
     type: 'SEND',
     detail: {},
@@ -188,38 +188,38 @@ function GroupStatic({ type, isPlan, updateSubmitPlan, infoItem, sendTime }:IPro
       </div>
       {isLeader && status !== 1001
         ? conditions.map((item: { detail: any }, index: number) => (
-            <div className={styles.edit} key={index}>
-              {isPlan && (
-                <Select
-                  style={{ width: 290, height: 40 }}
-                  onChange={(value: string) => {
-                    handleChange(value, index);
-                  }}
-                  placeholder="请选择选项"
-                  value={item.detail.send}
-                  data-testid={type === '纳入标准' ? 'selectJoin' : 'selectExclude'}
-                >
-                  {staticType.map((t) => (
-                    <Option value={t.key} key={t.key} disabled={disabled[t.key]}>
-                      {t.value}
-                    </Option>
-                  ))}
-                </Select>
-              )}
-              <ListItem
-                planIndex={index}
-                planItem={item}
-                changeStateByValue={changeStateByValue}
-                type={type}
-              />
-              <DeleteOutlined
-                className={styles.icon}
-                onClick={() => {
-                  delCondition(index);
+          <div className={styles.edit} key={index}>
+            {isPlan && (
+              <Select
+                style={{ width: 290, height: 40 }}
+                onChange={(value: string) => {
+                  handleChange(value, index);
                 }}
-                data-testid={type === '纳入标准' ? 'delJoin' : 'delExclude'}
-              />
-            </div>
+                placeholder="请选择选项"
+                value={item.detail.send}
+                data-testid={type === '纳入标准' ? 'selectJoin' : 'selectExclude'}
+              >
+                {staticType.map((t) => (
+                  <Option value={t.key} key={t.key} disabled={disabled[t.key]}>
+                    {t.value}
+                  </Option>
+                ))}
+              </Select>
+            )}
+            <ListItem
+              planIndex={index}
+              planItem={item}
+              changeStateByValue={changeStateByValue}
+              type={type}
+            />
+            <DeleteOutlined
+              className={styles.icon}
+              onClick={() => {
+                delCondition(index);
+              }}
+              data-testid={type === '纳入标准' ? 'delJoin' : 'delExclude'}
+            />
+          </div>
         ))
         : '暂无标准'}
       {isLeader && status !== 1001 && !isPlan && (

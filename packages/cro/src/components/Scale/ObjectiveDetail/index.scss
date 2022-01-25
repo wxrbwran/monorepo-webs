@@ -1,0 +1,66 @@
+// object_detail
+
+.object_detail {
+  margin: 0 auto;
+  color: #181818;
+  font-size: 14px;
+  padding: 30px 0;
+  .head {
+    // @include flex-lay(row, nowrap, space-between, center);
+    margin-bottom: 10px;
+  }
+  .back {
+    color: #666;
+    font-size: 18px;
+  }
+  .table_name {
+    text-align: center;
+    font-size: 14px;
+    color: #8f8f8f;
+    margin-bottom: 25px;
+    .title {
+      color: #181818;
+      font-size: 20px;
+      :global {
+        .anticon {
+          margin-left: 5px;
+          color: #3296fa;
+        }
+      }
+    }
+  }
+
+  .tip {
+    :global {
+      .ant-input {
+        border: none;
+        font-size: 14px;
+        color: #8f8f8f;
+        text-align: center;
+        &::placeholder {
+          font-size: 14px;
+          color: #8f8f8f;
+        }
+      }
+    }
+  }
+  .operate {
+    text-align: center;
+    margin-top: 15px;
+    :global {
+      .ant-btn {
+        width: 180px;
+        height: 40px;
+        font-size: 14px;
+        // background: #3296FA;
+        position: relative;
+        left: -32px;
+      }
+    }
+  }
+}
+.add {
+  @extend %create__btn;
+  cursor: pointer;
+  margin-left: 0;
+}

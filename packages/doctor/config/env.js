@@ -4,9 +4,9 @@ module.exports = {
   },
   dev: {
     // BASEURL:
-    //   process.env.NODE_ENV === 'development'
-    //     ? 'http://localhost:8001/api/'
-    //     : 'http://napi.xzlcorp.com/',
+    // process.env.NODE_ENV === 'development'
+    //   ? 'http://localhost:8001/api/'
+    //   : 'http://napi.xzlcorp.com/',
     BASEURL: 'http://napi.xzlcorp.com/',
     APP_ENV: 'dev',
     PREFIX: 'test',

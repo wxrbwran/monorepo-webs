@@ -55,6 +55,7 @@ export default defineConfig({
   extraBabelPlugins: [],
   externals: {
     echarts: 'window.echarts',
+    vis: 'vis',
   },
   headScripts: ['https://cdn.bootcss.com/d3/3.2.7/d3.min.js'],
   // umi routes: https://umijs.org/docs/routing

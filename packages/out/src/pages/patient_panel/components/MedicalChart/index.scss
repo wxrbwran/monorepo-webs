@@ -1,0 +1,21 @@
+.latest-health-chart {
+  ul {
+    width: 394px;
+    margin: 10px auto;
+    line-height: 26px;
+    border: 1px solid #09888f;
+    border-radius: 50px;
+    li {
+      display: inline-block;
+      width: 56px;
+      text-align: center;
+      color: #09888f;
+      border-radius: 50px;
+      cursor: pointer;
+      &.active {
+        background-color: #09888f;
+        color: #fff;
+      }
+    }
+  }
+}

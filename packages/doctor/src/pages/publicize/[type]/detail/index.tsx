@@ -179,9 +179,12 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
   const onEditPlan = (editPlan: { ruleDoc: any, chooseValues: any }, _sen: any) => {
 
     setLoading(true);
-    api.education
-      .editRules(editPlan.ruleDoc)
-      .then(() => {
+
+    api.education.deleteScaleRule(editPlan.ruleDoc.id).then(() => {
+
+      delete editPlan.ruleDoc.id;
+      api.education.appendRules(editPlan.ruleDoc).then(() => {
+
         message.success('修改成功');
         setActiveKey('0');
         setTimeout(() => {
@@ -190,11 +193,30 @@ const EducationDetail: FC<ILocation> = ({ location }) => {
         if (plansRef.current) {
           plansRef.current.clearInfos();
         }
-      })
-      .catch((err) => {
-        console.log('err', err);
-        message.error(err?.result ?? '修改失败');
       });
+    })
+      .catch((err: string) => {
+        message.error(err);
+      });
+
+
+
+    // api.education
+    //   .editRules(editPlan.ruleDoc)
+    //   .then(() => {
+    //     message.success('修改成功');
+    //     setActiveKey('0');
+    //     setTimeout(() => {
+    //       getRules('0');
+    //     }, 1000);
+    //     if (plansRef.current) {
+    //       plansRef.current.clearInfos();
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log('err', err);
+    //     message.error(err?.result ?? '修改失败');
+    //   });
   };
 
   const onEditClick = (index: number) => {
