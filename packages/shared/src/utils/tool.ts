@@ -15,7 +15,8 @@ export const getReferenceTitle = (reference: TReference): string => {
       return `${yinYangMap[value as string]}`;
     case 'OTHER':
     default:
-      return `${value}`;
+      return '';
   }
 };
+
 export const noop = () => {};
