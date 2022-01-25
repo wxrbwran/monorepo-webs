@@ -101,10 +101,9 @@ const fillValueInScopeKey = (scopeKey: IItem) => {
 
 const fillTreatmentInStartTimeKey = (timeKey: IItem, treatmentId: string, treatmentDes: string) => {
 
-
   console.log('================ onChangeStateByValue  onChangeStateByValue', JSON.stringify(timeKey));
-
   if (timeKey.name === 'diagnose.treatment') {
+    timeKey.value = treatmentDes;
     for (let j = 0; j < timeKey.items.length; j++) {
       const subItem = timeKey.items[j];
       if (subItem.name === 'diagnose.treatment.uid') {
@@ -121,7 +120,6 @@ const getTreatmentDes = (timeKey: IItem) => {
     for (let j = 0; j < timeKey.items.length; j++) {
       const subItem = timeKey.items[j];
       if (subItem.name === 'diagnose.treatment.uid') {
-
         return subItem.description;
       }
     }
@@ -568,7 +566,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const [remind, setRemind] = useState(''); //只是为了触发ui刷新用，并不存着最新值
 
-  const remindRef = useRef('');
+  const remindRef = useRef<string>('');
 
   const [scopeKey, setScopeKey] = useState<IItem>({}); //选中的起始发送时间子item
   const [choseScope, setChoseScope] = useState<IItem[]>([]); //选中的起始发送时间子item
@@ -632,6 +630,8 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
   };
 
   const [firstTime, setFirstTime] = useState<{ choiceModel: any }>({ choiceModel: initFirstTimeChoiceMode });
+
+  const isShowTextArea = scaleType === 'OBJECTIVE' || scaleType == 'VISIT_OBJECTIVE';
 
   //更改 患者做处理的时间-->处理方式
   const onChangeStateByValue = (vals: string[]) => {
@@ -715,12 +715,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     remindRef.current = question;
   }, [question]);
 
-  //改变起始发送时间类型-zhou
-  // const handleChangeType = (value: string) => {
-  //   const choseList = startTimeKey.items.filter(item => item.name === value);
-  //   setChooseStartTime(choseList[0]);
-  // };
-
   //发送实验组-zhou
   const handleChangeGroup = (checkedValues: any[]) => {
 
@@ -732,17 +726,30 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     setChoseConditions(conditions);
   };
 
-  //问题
-  // const handleChangeRemind = (e: { target: { value: string } }) => {
-  //   setRemind(e.target.value);
-  // };
-  const handleChangeRemind = (value: any, _text: string) => {
+  const handleChangeRemind = (value: any, text: string) => {
     // setRemind(value); // 不能调用setRemind，会触发刷新，然后失去聚焦
+
+    console.log('============== value', value);
+    console.log('============== text', JSON.stringify(text));
+
     remindRef.current = value;
   };
 
 
+
   const canSave = (firstSteps: string[]) => {
+
+    if (isShowTextArea) {
+
+      let content = remindRef.current;
+      content = content?.replaceAll('<br>', '');
+      content = content?.replaceAll('<p>', '');
+      content = content?.replaceAll('</p>', '');
+      content = content?.replaceAll(' ', '');
+      if (!!!content) {
+        return '请输入内容';
+      }
+    }
 
     // 首次发送时间一定要填写 
     if (firstSteps.includes(IntoGroupTime) || firstSteps.includes(GiveMedicTime) || firstSteps.includes(StopMedicTime) || firstSteps.includes(HandelTime)) {
@@ -801,6 +808,10 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         const period = frequency.custom[i];
         if (!(period.day >= 0) || !(period.hour >= 0) || !(period.min >= 0)) {
           return '请补全发送频率';
+        } else if (period.hour >= 24) {
+          return '发送频率的小时不应该大于23';
+        } else if (period.min >= 60) {
+          return '发送频率的分钟不应该大于59';
         }
       }
     }
@@ -949,13 +960,6 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     }
 
   };
-
-  //存在空记录不可提交
-  // const isEmptyCustom = frequency.custom.length === 1 && !frequency.custom[0];
-  // const isEmptyGroup = choseScope.length == 0;
-  // const isShowTextArea = mode === 'Add' || location?.pathname.includes('objective_table/detail');
-
-  const isShowTextArea = scaleType === 'OBJECTIVE' || scaleType == 'VISIT_OBJECTIVE';
 
   const options = isEmpty(scopeKey) ? [] : scopeKey.items.map((item: IItem) => ({
     label: item.description,

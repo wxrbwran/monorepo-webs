@@ -149,9 +149,16 @@ function PatientCro({ }: IProps) {
     width: 140,
     align: 'center',
     render: (text: any, record: any) => (
-      <div className="table-operating">
-        <GetMedicTime isStop={true} record={record} changeSuccess={() => { refreshList(); }}><span>{text?.stopMedTime ? dayjs(text.stopMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
-      </div >
+      <>
+        {
+          hasOperationPermissions(record.team.members) ?
+            <div className="table-operating">
+              <GetMedicTime isStop={true} record={record} changeSuccess={() => { refreshList(); }}><span>{text?.stopMedTime ? dayjs(text.stopMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
+            </div >
+            : <span>{text?.stopMedTime ? dayjs(text.stopMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span>
+        }
+      </>
+
     ),
   };
   const medicineStartTime = {
@@ -160,9 +167,15 @@ function PatientCro({ }: IProps) {
     width: 140,
     align: 'center',
     render: (text: any, record: any) => (
-      <div className="table-operating">
-        <GetMedicTime isStop={false} record={record} changeSuccess={() => { refreshList(); }}><span>{text?.startMedTime ? dayjs(text.startMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
-      </div >
+      <>
+        {
+          hasOperationPermissions(record.team.members) ?
+            <div className="table-operating">
+              <GetMedicTime isStop={false} record={record} changeSuccess={() => { refreshList(); }}><span>{text?.startMedTime ? dayjs(text.startMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span></GetMedicTime>
+            </div >
+            : <span>{text?.startMedTime ? dayjs(text.startMedTime).format('YYYY-MM-DD HH:mm:ss') : '无'}</span>
+        }
+      </>
     ),
   };
 

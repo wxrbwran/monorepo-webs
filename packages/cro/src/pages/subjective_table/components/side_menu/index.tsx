@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
 import './index.scss';
-
-interface IProps{
+import { Role } from 'xzl-web-shared/dist/utils/role';
+import { useSelector } from 'umi';
+interface IProps {
   location: {
     pathname: string;
     query: {
@@ -17,12 +18,17 @@ interface IProps{
 }
 function SideMenu(props: IProps) {
   const [currentId, setCurrentId] = useState('');
+  const { roleType, status } = useSelector((state: IState) => state.project.projDetail);
+
   useEffect(() => {
     const id = props.location.query.id;
-    if ( id !== currentId) {
+    if (id !== currentId) {
       setCurrentId(id);
     }
   }, [props]);
+
+  const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType);
+
   return (
     <div className="follow-table-menu">
       <div className="tit">
@@ -43,7 +49,7 @@ function SideMenu(props: IProps) {
         }
       </div>
       {
-        window.$storage.getItem('isLeader') && window.$storage.getItem('projectStatus') != 1001 && (
+        isLeader && status != 1001 && (
           <div className="create">
             <Link to="/subjective_table/guide">
               <PlusOutlined style={{ fontSize: 14 }} /> 创建主观量表

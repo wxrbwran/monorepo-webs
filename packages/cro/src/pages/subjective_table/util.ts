@@ -162,6 +162,7 @@ export interface IMeta {
   actionId: number;
   teamLocations: [];
   sourceMembers: [];
+  docId: string;
 }
 
 export interface IRule {
@@ -375,6 +376,9 @@ export function getStartTimeChoiceModel(chooseStartTime: IItem, action: any, rul
 
 export function getChooseValuesKeyFromRules(ruleDoc: { rules: IRule[], meta: any }) {
 
+  if (!(ruleDoc?.rules?.length > 0)) {
+    return;
+  }
   const rule = ruleDoc.rules[0];
   let chooseStartTime;
   const choseConditions = [];
@@ -558,7 +562,7 @@ export function getFrequencyDescriptionFromFrequency(frequency: any) {
       str = str + '在首次发送时间的基础上累加';
       for (let index = 0; index < frequency.custom.length; index++) {
         const element = frequency.custom[index];
-        str = str + '  ' + element.day + '天' + element.hour + '时' + element.hour + '分' + '发送一次;  ';
+        str = str + '  ' + element.day + '天' + element.hour + '时' + element.min + '分' + '发送一次;  ';
       }
     } else if (frequency.frequency == 'NONE') {
       return str;

@@ -259,7 +259,7 @@ const CustomIndex: FC<IProps> = (props) => {
         [`${formIndex}_sourceSid`]: sourceSid,
         [`${formIndex}_source`]: source,
         [`${formIndex}_referenceList`]: originReferences || references,
-        [`${formIndex}_valueCount`]: referenceList ? referenceList.map((refI: any, inx) => {
+        [`${formIndex}_valueCount`]: referenceList && !isEmpty(referenceList) ? referenceList.map((refI: any, inx) => {
           console.log(refI);
           return inx;
         }) : [0],

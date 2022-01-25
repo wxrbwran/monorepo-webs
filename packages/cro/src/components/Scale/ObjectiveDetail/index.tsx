@@ -5,12 +5,10 @@ import { IPlanInfos } from '@/utils/consts';
 import { FormOutlined } from '@ant-design/icons';
 import create from '@/assets/img/create.svg';
 import { Input, message } from 'antd';
-import { history } from 'umi';
 import * as api from '@/services/api';
 import styles from './index.scss';
 import ScaleTemplate from '@/components/Scale/ScaleTemplate';
 import { IRuleDoc, IChooseValues } from '@/pages/subjective_table/util';
-import dayjs from 'dayjs';
 
 interface IProps {
   location: {
@@ -97,19 +95,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
           type: 'project/fetchObjectiveScale',
           payload: { id: location.query.id, scaleType },
         });
-
-        // 预防编辑计划外客观标题时，点击tab切换，导致2个tab来回切换抽搐现象
-        if (scaleType == 'VISIT_OBJECTIVE') {
-          if (history.location.pathname.includes('/out_plan_visit/objective')) {
-            history.push(`${location.pathname}?name=${scaleName}`);
-          }
-        } else if (scaleType == 'OBJECTIVE') {
-          if (history.location.pathname.includes('/objective_table')) {
-            history.push(`${location.pathname}?name=${scaleName}`);
-          }
-        } else {
-          history.push(`${location.pathname}?name=${scaleName}`);
-        }
       });
     }
   };

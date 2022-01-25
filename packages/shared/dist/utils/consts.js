@@ -483,7 +483,7 @@ export var beforeEl = '<!DOCTYPE html>' +
     '  <head>' +
     '    <meta charset="UTF-8" />' +
     '    <meta http-equiv="X-UA-Compatible" content="IE=edge" />' +
-    '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
+    '    <meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0,maximum-scale=1.0"/>' +
     '    <title>Document12</title>' +
     '    <link href="https://revomedi.oss-cn-beijing.aliyuncs.com/static/apps/web/index.css" rel="stylesheet" type="text/css"/>' +
     '    <style>' +
