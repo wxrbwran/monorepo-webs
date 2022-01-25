@@ -30,10 +30,11 @@ const SearchHYD: FC<IProps> = (props) => {
   // const [listEmpty, setlistEmpty] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    let library = typeList.length > 0;
-    console.log('library===值', library);
     if (isLibrary) {
-      isLibrary(library);
+      if (typeList.length == 0) {
+        setselectVal(null);
+        isLibrary(false);
+      }
     }
   }, [typeList]);
   const handleSearch = (e: React.ChangeEvent<ReactElement>) => {
@@ -68,6 +69,9 @@ const SearchHYD: FC<IProps> = (props) => {
       if (external) {
         if (selectResult) {
           selectResult(typeList[e]);
+          if (isLibrary) {
+            isLibrary(true);
+          }
           console.log('selectResult(typeList[e])=======>', selectResult);
         }
       } else {
