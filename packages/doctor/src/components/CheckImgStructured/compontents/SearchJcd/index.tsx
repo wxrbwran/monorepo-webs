@@ -100,7 +100,6 @@ const SearchJcd: FC<IProps> = (props) => {
   };
   // 勾选检查单名称或者其他单据名称
   const handleSelectName = (val: string, { key }: { key: string }) => {
-    console.log(val);
     setSelectId(key);
     // 如果不是搜索弹框，则直接进行添加tab流程。
     if (!isSearchModal) {
@@ -155,10 +154,11 @@ const SearchJcd: FC<IProps> = (props) => {
                   placeholder="请输入检查单名称"
                   onSearch={debounce((val) => handleFetchNames(val), 500)}
                   onSelect={handleSelectName}
+                  value={nameList.find(i => i.id === selectId)?.jcdName}
                 >
                   {
                     nameList.map(item => (
-                      <AutoComplete.Option key={item.id} value={item.jcdName}>
+                      <AutoComplete.Option key={item.id} value={item.id}>
                         <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
                         <span>{item.jcdName}</span>
                       </AutoComplete.Option>

@@ -14,7 +14,7 @@ import iconCopy from '@/assets/img/icon_copy_dj.png';
 import styles from './index.scss';
 
 interface IProps {
-  imageId: string;
+  // imageId: string;
   outType: string;
   initData: any;
   jcdCallbackFns: any; // 保存时候的回调
@@ -23,7 +23,7 @@ interface IProps {
 }
 const { TabPane } = Tabs;
 const StructuredDetailJcdPanel: FC<IProps> = (props) => {
-  const { imageId, outType, isViewOnly, setJcdCallbackFns, initData, jcdCallbackFns } = props;
+  const { outType, isViewOnly, setJcdCallbackFns, initData, jcdCallbackFns } = props;
   // const topicPanelCallbackFns = useRef({});
   // const addJcdNum = useRef();
   const [jcdList, setJcdList] = useState<IJcdTabItem[]>(initData || []); // 检查单tab list
@@ -155,7 +155,7 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
 
           <StructuredJcdTabItem
             initData={item}
-            imageId={imageId}
+            // imageId={imageId}
             outType={outType}
             isViewOnly={isViewOnly}
             jcdCallbackFns={jcdCallbackFns}

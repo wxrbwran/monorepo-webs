@@ -15,7 +15,7 @@ import { Spin, Input } from 'antd';
 interface IProps {
   jcdCallbackFns: any; // 保存时候的回调
   setJcdCallbackFns: (params: { [type: string]: () => void }) => void;
-  imageId: string;
+  // imageId: string;
   initData: IJcdTabItem;
   isViewOnly: boolean;
   outType: string; //JCT  OTHER
@@ -25,7 +25,7 @@ interface IProps {
 
 const StructuredJcdTabItem: FC<IProps> = (props) => {
   console.log('gggprops', props);
-  const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, imageId, outType, refreshTabInx, tabInx } = props;
+  const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, outType, refreshTabInx, tabInx } = props;
   const { tabKey } = initData.meta;
   const [lightKeyWord, setlightKeyWord] = useState('');
   const [partMethod, setPartMethod] = useState({});
@@ -89,7 +89,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
         resolve({
           data: topicList,
           meta: {
-            imageId,
+            // imageId,
             createdTime: clickSaveTime,
             title: outType,
             ...meta,

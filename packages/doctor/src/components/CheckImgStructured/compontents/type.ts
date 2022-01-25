@@ -53,3 +53,5 @@ export enum InlineType {
   'INLINE_CHECKBOX' = '多选题',
   'INLINE_DATE' = '日期',
 }
+
+

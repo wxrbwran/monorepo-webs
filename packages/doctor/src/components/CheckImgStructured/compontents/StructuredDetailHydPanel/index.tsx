@@ -18,7 +18,7 @@ import styles from './index.scss';
 // 此组件具体到，化验单或检查单panel
 const { TabPane } = Tabs;
 interface IProps {
-  imageId: string;
+  // imageId: string;
   tabKey: string;// 一级tab
   outType: string;
   initData: {
@@ -48,7 +48,7 @@ interface ICheckTypesItem extends IApiDocumentItem {
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
 const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const {
-    hydCallbackFns, setHydCallbackFns, tabKey, outType, initData, imageId, isViewOnly,
+    hydCallbackFns, setHydCallbackFns, tabKey, outType, initData, isViewOnly,
   } = props;
   const activeType1 = useRef('');
   let initSubType: string[] = [];
@@ -151,7 +151,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         // console.log('hospital', hospital);
         resolve({
           documentList,
-          imageId,
+          // imageId,
           outType,
           operatorId: window.$storage.getItem('sid'),
           sid: window.$storage.getItem('patientSid'),
