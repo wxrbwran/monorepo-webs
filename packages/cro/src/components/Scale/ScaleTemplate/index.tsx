@@ -305,7 +305,6 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
   } else if (frequency.frequency === 'ADD') { // 
 
     for (let i = 0; i < frequency.custom.length; i++) {
-
       const period = frequency.custom[i];
       const action: any = {
         type: 'once',
