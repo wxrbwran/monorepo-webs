@@ -1,57 +1,61 @@
+.ql-container.ql-disabled .ql-tooltip {
+  display: none;
+}
+
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
   content: '14px';
 }
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=large]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=large]::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value='large']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='large']::before {
   content: '18px';
 }
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=huge]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=huge]::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value='huge']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='huge']::before {
   content: '32px';
 }
 .ql-bold {
-  @include rich-text('加粗')
+  @include rich-text('加粗');
 }
 .ql-italic {
-  @include rich-text('倾斜')
+  @include rich-text('倾斜');
 }
 .ql-underline {
-  @include rich-text('下划线', 50px)
+  @include rich-text('下划线', 50px);
 }
 .ql-strike {
-  @include rich-text('删除线', 50px)
+  @include rich-text('删除线', 50px);
 }
 .ql-blockquote {
-  @include rich-text('引用')
+  @include rich-text('引用');
 }
 .ql-list[value='ordered'] {
-  @include rich-text('有序列表', 65px)
+  @include rich-text('有序列表', 65px);
 }
 .ql-list[value='bullet'] {
-  @include rich-text('无序列表', 65px)
+  @include rich-text('无序列表', 65px);
 }
 .ql-indent[value='-1'] {
-  @include rich-text('左缩进', 50px)
+  @include rich-text('左缩进', 50px);
 }
 .ql-indent[value='+1'] {
-  @include rich-text('右缩进', 50px)
+  @include rich-text('右缩进', 50px);
 }
-.ql-link{
-  @include rich-text('链接')
+.ql-link {
+  @include rich-text('链接');
 }
-.ql-image{
-  @include rich-text('图片')
+.ql-image {
+  @include rich-text('图片');
 }
-.ql-video{
-  @include rich-text('视频')
+.ql-video {
+  @include rich-text('视频');
 }
-.ql-color{
-  @include rich-text('字体颜色', 65px)
+.ql-color {
+  @include rich-text('字体颜色', 65px);
 }
 .ql-background {
-  @include rich-text('字体背景色', 80px)
+  @include rich-text('字体背景色', 80px);
 }
 .ql-clean {
-  @include rich-text('清除文本格式', 100px)
+  @include rich-text('清除文本格式', 100px);
 }
