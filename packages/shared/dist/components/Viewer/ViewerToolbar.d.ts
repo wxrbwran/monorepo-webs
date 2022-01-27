@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { ToolbarConfig } from './ViewerProps';
 export interface ViewerToolbarProps {
     prefixCls: string;

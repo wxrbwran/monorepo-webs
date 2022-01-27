@@ -26,6 +26,7 @@ const SearchDocument: FC<IProps> = (props) => {
   const [form] = Form.useForm();
   const sid = window.$storage.getItem('sid');
   const [source, setSource] = useState({});
+  const [library, setLibrary] = useState(false);
   // const [listEmpty, setlistEmpty] = useState(false);
   // console.log('添加record', record);
   useEffect(() => {
@@ -39,6 +40,10 @@ const SearchDocument: FC<IProps> = (props) => {
   };
   const selectReturn = (data: any) => {
     setSource(data);
+
+  };
+  const isLibrary = (data: boolean) => {
+    setLibrary(data);
   };
   const handleConfirm = async () => {
     // 这里只把选中的项返回出去，选中的大分类下的指标数据，由customIndex组件请求接口获取
@@ -95,6 +100,7 @@ const SearchDocument: FC<IProps> = (props) => {
                     documentType={documentType}
                     external={true}
                     selectResult={selectReturn}
+                    isLibrary={isLibrary}
                   />
                 </div>
               </>
@@ -102,7 +108,7 @@ const SearchDocument: FC<IProps> = (props) => {
             <Form.Item style={{ textAlign: 'center' }} {...submitLayout}>
               <div className="common__btn">
                 <Button onClick={toggleShowModal}>取消</Button>
-                <Button className="finish" htmlType="submit" type="primary">
+                <Button className="finish" htmlType="submit" type="primary" disabled={library ? false : true}>
                   确定
                 </Button>
               </div>

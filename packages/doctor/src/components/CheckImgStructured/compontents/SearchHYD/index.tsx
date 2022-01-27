@@ -1,5 +1,5 @@
 import React, {
-  FC, ReactElement, useState, useRef,
+  FC, ReactElement, useState, useEffect, useRef,
 } from 'react';
 import { Select, Space } from 'antd';
 import { debounce } from 'lodash';
@@ -15,12 +15,13 @@ interface IProps {
   // imageId: string;
   documentType: string; // HYD JCD
   external?: boolean;
-  selectResult?: (source: {}) => void
+  selectResult?: (source: {}) => void;
+  isLibrary?: (data: boolean) => void;
 }
 
 const SearchHYD: FC<IProps> = (props) => {
   const {
-    sampleFroms, handleSelectTypeIndex, documentType, external, selectResult,
+    sampleFroms, handleSelectTypeIndex, documentType, external, selectResult, isLibrary,
   } = props;
   const selectRef: any = useRef<HTMLInputElement>();
   const hiddenRef: any = useRef<HTMLInputElement>();
@@ -28,6 +29,14 @@ const SearchHYD: FC<IProps> = (props) => {
   const [selectVal, setselectVal] = useState<string>();
   // const [listEmpty, setlistEmpty] = useState(false);
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (isLibrary) {
+      if (typeList.length == 0) {
+        setselectVal(null);
+        isLibrary(false);
+      }
+    }
+  }, [typeList]);
   const handleSearch = (e: React.ChangeEvent<ReactElement>) => {
     console.log(3232, e);
     if (e) {
@@ -43,6 +52,7 @@ const SearchHYD: FC<IProps> = (props) => {
         // setlistEmpty(isEmpty(res.list));
       });
     }
+    console.log('typeList======>', typeList);
   };
   const handleChangeCurDocument = (doc: TIndexItem) => {
     dispatch({
@@ -59,6 +69,10 @@ const SearchHYD: FC<IProps> = (props) => {
       if (external) {
         if (selectResult) {
           selectResult(typeList[e]);
+          if (isLibrary) {
+            isLibrary(true);
+          }
+          console.log('selectResult(typeList[e])=======>', selectResult);
         }
       } else {
         handleSelectTypeIndex(typeList[e]);

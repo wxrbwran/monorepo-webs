@@ -14,7 +14,7 @@ export var getReferenceTitle = function (reference) {
             return "" + yinYangMap[value];
         case 'OTHER':
         default:
-            return "" + value;
+            return '';
     }
 };
 export var noop = function () { };
