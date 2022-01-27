@@ -11,7 +11,7 @@ import styles from './index.scss';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
 import EmptyIcon from '@/assets/img/jgh_empty.png';
 import { CloseOutlined } from '@ant-design/icons';
-import { IStructuredDetailProps } from 'typings/imgStructured';
+import { IApiDocumentList, IStructuredDetailProps } from 'typings/imgStructured';
 
 const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
@@ -212,6 +212,8 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         outType: typeStart,
         tabKey: itemTabType,
         // imageId,
+        images,
+        groupId,
         isViewOnly,
         initData: fetInitData(inx),
       };

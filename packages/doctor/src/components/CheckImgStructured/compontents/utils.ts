@@ -1,8 +1,6 @@
-import { cloneDeep, isEmpty } from 'lodash';
-import { IUserAddTopicItem, StructuredModelState } from 'packages/doctor/typings/model';
+import { cloneDeep } from 'lodash';
 import { IMeta, IQuestions, ITopicQaItemApi, ITopicTemplateItemApi } from 'typings/imgStructured';
-import { getDvaApp } from 'umi';
-import { IJcdTabItem, InlineType } from './type';
+import { IJcdTabItem } from './type';
 import { message } from 'antd';
 
 export const outTypes: CommonData = {
@@ -64,7 +62,6 @@ export const msg = (content:string, type: string = 'success') => {
 };
 // 提交时3，把问题转成api接口参数格式  ui->api
 export const fetchSubmitData = (questions: IQuestions[], startInx: number | string, clickSaveTime: number, gid?: string) => {
-  // console.log('gid', gid);
   const backData = questions.map((item, inx) => {
     const newItem = cloneDeep(item);
     // delete newItem.isAdd;
@@ -111,46 +108,7 @@ interface IIlist {
   data: ITopicTemplateItemApi[];
   meta: IMeta;
 }
-// 只有提交检查单数据的meta中的sid是患者的，其余全是医生(问题列表的sid、模板中的meta的sid都是医生的)
-const formatTemps = (temps: StructuredModelState, createdTime: number, imageId: string) => {
-  const addTempList: any[] = [];
-  const sid = window.$storage.getItem('sid');
-  Object.keys(temps).forEach((type: string) => {
-    if (type !== 'currEditData') {
-      const curTypeTemps: any = {
-        data: [],
-        meta: { createdTime, imageId, sid },
-      };
-      if (type === 'OTHER') {
-        curTypeTemps.meta.title = 'OTHER';
-      } else {
-        const { part, method } = JSON.parse(type);
-        curTypeTemps.meta = { ...curTypeTemps.meta, title: 'JCD', part, method };
-      }
-      let qaItem: IQuestions | IQuestions[] = {};
-      temps[type].filter((tempsItem: IUserAddTopicItem) => tempsItem?.actionType !== 'delete')
-        .forEach((groupItem: IUserAddTopicItem) => {
-          if (groupItem.qaType === 'COMPLETION') {
-            groupItem.qa.map((ddtkItem: IQuestions, inx: number) => {
-              qaItem = cloneDeep({ ...ddtkItem, sid });
-              delete qaItem.isAdd;
-              curTypeTemps.data.push( {
-                ...qaItem,
-                group: `1-0-${inx}`,
-                answer: qaItem.answer.map(() => null),
-              });
-            });
-          } else {
-            qaItem = cloneDeep({ ...groupItem.qa, answer: [], sid });
-            delete qaItem.isAdd;
-            curTypeTemps.data.push( qaItem );
-          }
-        });
-      addTempList.push(curTypeTemps);
-    }
-  });
-  return addTempList;
-};
+
 // 提交时1，ui结构转成大平层格式，返回jcd列表  ui--->api
 export const formatJcdSubmitData = (jcdTabList: IJcdItem[], clickSaveTime: number) => {
   console.log('jcdTabList', jcdTabList);
@@ -161,23 +119,17 @@ export const formatJcdSubmitData = (jcdTabList: IJcdItem[], clickSaveTime: numbe
     jcdTabItem.data.forEach((topic, inx) => {
       const jcdAmdTemp = jcdTabItem.data[inx].data;
       // @ts-ignore
-      newJcdTabItem.data[inx] = inx === 1 ?
+      newJcdTabItem.data[inx] = (inx === 1 || inx === 4) ?
         fetchSubmitDataDdtk(jcdAmdTemp, topic.groupInx, clickSaveTime)
         : fetchSubmitData(jcdAmdTemp, topic.groupInx, clickSaveTime);
     });
     newJcdTabItem.data = newJcdTabItem.data.flat(); //  flat用于将嵌套的数组“拉平”，变成一维数组
     list.push(newJcdTabItem);
   });
-  let addTypeTemps = [];
-  const userAddTemps = getDvaApp()._store.getState().structured;
-  if (!isEmpty(jcdTabList) && !isEmpty(userAddTemps)) {
-    addTypeTemps = formatTemps(userAddTemps, clickSaveTime, jcdTabList[0].meta.imageId);
-  }
-  console.log('addTypeTemps', addTypeTemps);
+
   console.log('submitLis11t112', list);
   return {
     jcdList: { list },
-    tempList: addTypeTemps,
   };
 };
 
@@ -225,9 +177,7 @@ export const formatTempDdtk = (tkTmpList: any[]) => {
   console.log('groupDdtk', groupDdtk);
   Object.values(groupDdtk).forEach(groupItem => {
     const groupList: ITopicTemplateItemApi[] = [];
-    console.log('groupItem', groupItem);
     groupItem.forEach((qaItem: ITopicTemplateItemApi) => {
-      console.log('qaItem', qaItem);
       // 新版多段填空，一组题存在一个题目，例： 1-1（题目）  1-1-0（题目下每一个问答内容） 1-1-1(第二个问答)依次类推
       const targetInx: number = Number(qaItem.group.split('-')[2]); // 根据此值进行小组内问题排序
       // 只有题止的group得到的targetInx是NAN，此时inx设为0；（ui渲染时，默认认为第一个元素为题目，其余为问答）
@@ -262,3 +212,4 @@ export const DdtkSeniorInlineType: { [key: string]: string } = {
   INLINE_CHECKBOX: '多选题',
   INLINE_DATE: '日期类型题',
 };
+

@@ -11,11 +11,14 @@ import { cloneDeep } from 'lodash';
 import * as api from '@/services/api';
 import { SearchOutlined } from '@ant-design/icons';
 import { Spin, Input } from 'antd';
+import { IImg } from 'typings/imgStructured';
 
 interface IProps {
   jcdCallbackFns: any; // 保存时候的回调
   setJcdCallbackFns: (params: { [type: string]: () => void }) => void;
   // imageId: string;
+  images: IImg[];
+  groupId: string;
   initData: IJcdTabItem;
   isViewOnly: boolean;
   outType: string; //JCT  OTHER
@@ -25,7 +28,7 @@ interface IProps {
 
 const StructuredJcdTabItem: FC<IProps> = (props) => {
   console.log('gggprops', props);
-  const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, outType, refreshTabInx, tabInx } = props;
+  const { initData, jcdCallbackFns, setJcdCallbackFns, isViewOnly, outType, refreshTabInx, tabInx, groupId, images } = props;
   const { tabKey } = initData.meta;
   const [lightKeyWord, setlightKeyWord] = useState('');
   const [partMethod, setPartMethod] = useState({});
@@ -38,17 +41,23 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
         case 'TEXT':
         case 'BASIC':
         case 'COMPLETION':
-        case 'COMPLETION_SENIOR':
           initD[item.question_type].push(item);
           break;
         case 'RADIO':
         case 'CHECKBOX':
           initD.CHOICE.push(item);
           break;
+        case 'INLINE_COMPLETION':
+        case 'INLINE_RADIO':
+        case 'INLINE_CHECKBOX':
+        case 'INLINE_DATE':
+          initD.COMPLETION_SENIOR.push(item);
+          break;
         default:
           break;
       }
     });
+
     console.log('========initD', initD);
     return initD;
   };
@@ -86,6 +95,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
         if (meta.id) {
           delete meta.id; // 结构化时不要回传id
         }
+        const imgInfo = groupId ? { imgGroupId: groupId } : { imageId: images?.[0]?.imageId };
         resolve({
           data: topicList,
           meta: {
@@ -93,6 +103,7 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
             createdTime: clickSaveTime,
             title: outType,
             ...meta,
+            ...imgInfo,
             ...partMethod,
             sid: window.$storage.getItem('patientSid'),
             creatorSid: initData.meta.creatorSid, // 模板创建者的sid

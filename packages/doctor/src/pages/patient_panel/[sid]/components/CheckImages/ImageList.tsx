@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 // @ts-ignore
 import { Button, Empty } from 'antd';
 import Viewer from '@/components/Viewer';
-import jgh from '@/assets/img/jgh.png';
+// import jgh from '@/assets/img/jgh.png';
 import CheckImgStructured from '@/components/CheckImgStructured';
 import styles from './index.scss';
 import { IImageItem } from 'typings/model';
@@ -47,19 +47,20 @@ function ImageList(props: IProps) {
     window.$api.image.fetchImageDetailNew(params).then((res: { imageInfos: IImg[] }) => {
       let imgs: { [key: string]: IImg[] } = {};
       console.log('res3333', res);
-      Object.keys(res).forEach(groupId => {
-        const time = data.category === 2 && isToReview ? res[groupId][0].uploadTime : res[groupId][0].lastReportAt;
-        const date = dayjs(time).format('YYYY.MM.DD');
-        const groupImgs = res[groupId].map((img: IImg[]) => {
-          return isToReview ? img : { ...img, groupId };
+      if (res) {
+        Object.keys(res).forEach(groupId => {
+          const time = data.category === 2 && isToReview ? res[groupId][0].uploadTime : res[groupId][0].lastReportAt;
+          const date = dayjs(time).format('YYYY.MM.DD');
+          if (imgs[date]) {
+            imgs[date].push(res[groupId]);
+          } else {
+            imgs[date] = [res[groupId]];
+          }
         });
-        if (imgs[date]) {
-          imgs[date].push(groupImgs);
-        } else {
-          imgs[date] = [groupImgs];
-        }
-      });
-      setImgList(imgs);
+        setImgList(imgs);
+      } else {
+        setImgList({});
+      }
     });
   };
   useEffect(() => {
@@ -152,11 +153,7 @@ function ImageList(props: IProps) {
               }
             </span>
           ) : (
-            <span className={styles.img_count}>
-              {
-                groupItem.length > 1 && `共${groupItem.length}张`
-              }
-            </span>
+            groupItem.length > 1 && <span className={styles.img_count}>共{groupItem.length}张</span>
           )
         }
         <img
@@ -216,27 +213,28 @@ function ImageList(props: IProps) {
         onMaskClick={hideViewer}
         disableKeyboardSupport
         onChange={(img, inx) => setActiveIndex(inx)}
-        customToolbar={(config) => [
-          ...config,
-          {
-            key: 'customStructured',
-            render: (
-              <span onClick={() => handleGoStructured()}>
-                <CheckImgStructured
-                  images={selectImgs}
-                  handleRefresh={handleRefresh}
-                >
-                  <span className="react-viewer-btn" key="structured">
-                    <div>
-                      <img src={jgh} alt="" />
-                    </div>
-                    <span>结构化数据</span>
-                  </span>
-                </CheckImgStructured>
-              </span>
-            ),
-          },
-        ]}
+        // 已和产品沟通，由于待审核问题处，可以勾选多张，再查看大图，此时点击结构化，是结构当前图片还是外面勾选的图片有歧义，此按钮隐藏
+        // customToolbar={(config) => [
+        //   ...config,
+        //   {
+        //     key: 'customStructured',
+        //     render: (
+        //       <span onClick={() => handleGoStructured()}>
+        //         <CheckImgStructured
+        //           images={selectImgs}
+        //           handleRefresh={handleRefresh}
+        //         >
+        //           <span className="react-viewer-btn" key="structured">
+        //             <div>
+        //               <img src={jgh} alt="" />
+        //             </div>
+        //             <span>结构化数据</span>
+        //           </span>
+        //         </CheckImgStructured>
+        //       </span>
+        //     ),
+        //   },
+        // ]}
       />
     </>
   );

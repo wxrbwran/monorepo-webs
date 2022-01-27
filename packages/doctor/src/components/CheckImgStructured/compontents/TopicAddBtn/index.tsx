@@ -41,7 +41,7 @@ const TopicAddBtn: FC<IAddTopicProps> = (props) => {
     setshowModal(true);
   };
   return (
-    <div className={styles.btn_wrap}>
+    <span className={styles.btn_wrap}>
       {
         isShowEdit && (
           actionType === 'add' ? (
@@ -50,9 +50,9 @@ const TopicAddBtn: FC<IAddTopicProps> = (props) => {
                 +添加新的{typeObj[topicType].title}
               </span>
             </div>
-          ) : <div onClick={debounce(handleShow, 300)} className="edit_btn">
+          ) : <span onClick={debounce(handleShow, 300)} className="edit_btn">
                 <EditOutlined />编辑
-              </div>
+              </span>
         )
       }
       <DragModal
@@ -68,7 +68,7 @@ const TopicAddBtn: FC<IAddTopicProps> = (props) => {
       >
         { typeObj[topicType].comp }
       </DragModal>
-    </div>
+    </span>
   );
 };
 

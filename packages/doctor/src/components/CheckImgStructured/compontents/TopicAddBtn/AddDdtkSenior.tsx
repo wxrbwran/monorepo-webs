@@ -14,9 +14,24 @@ const { TextArea } = Input;
 const AddDdtkSenior: FC<IAddTopicProps & { closeModal: () => void }> = (props) => {
   const { actionType, handleDelQuestion, closeModal, templateId, handleSaveQuestion,
     initData, editGroupInx } = props;
+  const formatInit = () => {
+    if (initData) {
+      let qatext = '';
+      (initData as IQaItem[]).forEach((item, inx) => {
+        if (inx !== (initData as IQaItem[]).length - 1) {
+          qatext += item.question + '「」';
+        } else {
+          qatext += item.question;
+        }
+      });
+      return qatext;
+    } else {
+      return '填空1「」, 填空2「」';
+    }
+  };
   const [loading, setLoading] = useState(false);
-  const [question, setQuestion] = useState('填空1「」, 填空2「」'); // 问题文本
-  const [qas, setQas] = useState<IQaItem[]>([]); // 问题组
+  const [question, setQuestion] = useState(formatInit()); // 问题文本
+  const [qas, setQas] = useState<IQaItem[]>(initData ? initData as IQaItem[] : []); // 问题组
   const [cursorIndex, setCursorIndex] = useState(); // 光标位置
   const groupUuid = uuid();
 

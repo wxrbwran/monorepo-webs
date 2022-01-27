@@ -34,6 +34,7 @@ function DdtkSenior(props: IProps) {
     if (initData && isEmpty(qasGroups)) {
       const qaGroups = formatTempDdtk(initData);
       setQasGroups(cloneDeep(qaGroups));
+      console.log('qaGroupsqaGroups', qaGroups);
       if (isViewOnly) {
         // 过滤出有填写答案的问题组
         const hasValWt = qaGroups.filter(qas => qas.find(qa => !isEmpty(qa.answer)));
@@ -42,6 +43,7 @@ function DdtkSenior(props: IProps) {
         hasValWt.map(item =>{
           qas.push(item.filter((qa, inx) => !isEmpty(qa.answer) || inx === 0));
         });
+        console.log('=======qas', qas);
         setValuableQas(cloneDeep(qas));
       }
     }
@@ -92,19 +94,26 @@ function DdtkSenior(props: IProps) {
       case 'INLINE_RADIO':
       case 'INLINE_CHECKBOX':
         return (
-          <Select
-            style={{ width: 120 }}
-            onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)}
-            { ...(t === 'INLINE_CHECKBOX' ? { mode: 'multiple' } : {}) }
-            allowClear
-          >
-            {
-              qaItem.options!.map(itemO => <Option key={itemO} value={itemO}>{itemO}</Option>)
-            }
-          </Select>
+          isViewOnly ? (
+            qaItem.answer.map(ansItem => <span key={ansItem}>{ansItem}</span>)
+          ) : (
+            <Select
+              style={{ width: 120 }}
+              onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)}
+              { ...(t === 'INLINE_CHECKBOX' ? { mode: 'multiple', defaultValue: qaItem.answer } : { defaultValue:qaItem.answer?.[0] }) }
+              allowClear
+            >
+              {
+                qaItem.options!.map(itemO => <Option key={itemO} value={itemO}>{itemO}</Option>)
+              }
+            </Select>
+          )
         );
       case 'INLINE_DATE':
-        return <DatePicker onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)} />;
+        return (
+          isViewOnly ? <span>{moment(Number(qaItem.answer?.[0])).format('YYYY-MM-DD') }</span>
+            : <DatePicker onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)} defaultValue={moment(Number(qaItem.answer?.[0]))} />
+        );
       default:
         return <span
           className={isViewOnly ? `${styles.edit_span} ${styles.no_border}` : styles.edit_span}
@@ -132,23 +141,35 @@ function DdtkSenior(props: IProps) {
       <div className='qa-wrap'>
         {
           (isViewOnly ? valuableQas : qasGroups).map((qas, quesIndex: number) => (
-            <pre className={`${styles.ddtk} ${styles.done}` }  key={quesIndex}>
-              <span>{quesIndex + 1}</span>
-              {
-                qas.map((qaItem: IQaItem, qaInx: number) => {
-                  return (
-                    <span key={qaItem.question} className="ml-20 mb-10">
-                      <span
-                        className={`mt-5 ${styles.ques_span}`}
-                        dangerouslySetInnerHTML={{ __html: renderQuestion(qaItem.question) }}
-                      >
+            <div className="flex topic_title" style={{ alignItems: 'flex-start' }} key={qas[0].question}>
+              <span className='mr-5'>{quesIndex + 1}.</span>
+              <pre className={styles.ddtk_senior}  key={quesIndex}>
+                {
+                  qas.map((qaItem: IQaItem, qaInx: number) => {
+                    return (
+                      <span key={qaItem.question} className="mb-10">
+                        <span
+                          className={`mt-5 ${styles.ques_span}`}
+                          dangerouslySetInnerHTML={{ __html: renderQuestion(qaItem.question) }}
+                        >
+                        </span>
+                        {
+                          (qaInx !== (qas.length - 1) || isViewOnly) && (
+                            renderAnswerType(qaItem, quesIndex, qaInx)
+                          )
+                        }
                       </span>
-                        {renderAnswerType(qaItem, quesIndex, qaInx)}
-                    </span>
-                  );
-                })
-              }
-            </pre>
+                    );
+                  })
+                }
+                <TopicAddBtn
+                  actionType="edit"
+                  initData={qas}
+                  editGroupInx={quesIndex}
+                  {...editProps}
+                />
+              </pre>
+            </div>
           ))
         }
         <TopicAddBtn
