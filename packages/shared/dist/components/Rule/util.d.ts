@@ -62,7 +62,8 @@ export interface IChooseValues {
 export interface IModel {
     childItemType: 'select' | 'diy' | 'time' | 'none' | 'childReact';
     childItem?: IModel[];
-    childReact?: (value?: string) => React.ReactDOM;
+    firstchildReact?: (value?: string) => React.ReactDOM;
+    lastChildReact?: (value?: string) => React.ReactDOM;
     description: string;
     choiceModel?: IModel;
     inputDay?: number;
