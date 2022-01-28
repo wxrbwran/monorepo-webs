@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Input, Select, DatePicker } from 'antd';
+import { Button, Input, Select, DatePicker, message } from 'antd';
 import { DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { IAddTopicProps, IQaItem } from '../type';
 import * as api from '@/services/api';
@@ -98,35 +98,41 @@ const AddDdtkSenior: FC<IAddTopicProps & { closeModal: () => void }> = (props) =
   };
 
   const handleSave = () => {
-    console.log(questionToQas());
-    const qasData = questionToQas().map((qaItem, inx) => {
-      return {
-        ...qaItem,
-        answer: [],
-        ...actionType === 'add' ?
-          { action: 'ADD' }
-          : { action: 'ALTER', createdTime: initData?.[0]?.createdTime },
+    console.log('========21d', questionToQas());
+    console.log('d', question);
+    if (question.trim() === '' || !question.includes('「」')) {
+      message.error('请正确输入问题！');
+    } else {
+      const qasData = questionToQas().map((qaItem, inx) => {
+        return {
+          ...qaItem,
+          answer: [],
+          ...actionType === 'add' ?
+            { action: 'ADD' }
+            : { action: 'ALTER', createdTime: initData?.[0]?.createdTime },
+        };
+      });
+      const params = {
+        meta: { id: templateId },
+        data: qasData,
       };
-    });
-    const params = {
-      meta: { id: templateId },
-      data: qasData,
-    };
-    //
-    // const qasParams = qas.map(item => ({ ...item  }));
-    // handleSaveQuestion(qasParams, actionType, editGroupInx);
-    //
-    api.image.postImageTemplate(params).then((res) => {
-      msg('保存成功', 'success');
-      const createdTime = res?.list?.[0]?.data?.[0]?.createdTime;
-      const qasParams = qas.map(item => ({ ...item, createdTime  }));
-      handleSaveQuestion(qasParams, actionType, editGroupInx);
-      closeModal();
-      setLoading(false);
-    }).catch(err => {
-      msg(err?.result || '保存失败', 'error');
-      setLoading(false);
-    });
+      //
+      // const qasParams = qas.map(item => ({ ...item  }));
+      // handleSaveQuestion(qasParams, actionType, editGroupInx);
+      //
+      api.image.postImageTemplate(params).then((res) => {
+        msg('保存成功', 'success');
+        const createdTime = res?.list?.[0]?.data?.[0]?.createdTime;
+        const qasParams = qas.map(item => ({ ...item, createdTime  }));
+        console.log('qasParamsqasParams', qasParams);
+        handleSaveQuestion(qasParams, actionType, editGroupInx);
+        closeModal();
+        setLoading(false);
+      }).catch(err => {
+        msg(err?.result || '保存失败', 'error');
+        setLoading(false);
+      });
+    }
   };
   const handleChangeQuestionType = () => {
     setQas(questionToQas());

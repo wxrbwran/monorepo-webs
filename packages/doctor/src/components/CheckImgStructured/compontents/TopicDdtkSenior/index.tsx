@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import styles from './index.scss';
 import { isEmpty, cloneDeep } from 'lodash';
-import { IQaItem, IMeta } from '../type';
+import { IQaItem } from '../type';
 import TopicAddBtn from '../TopicAddBtn';
 import { formatTempDdtk } from '../utils';
 import { searchHighLight } from '@/utils/utils';
@@ -13,7 +13,6 @@ interface IProps {
   initData: IQaItem[];
   isViewOnly: boolean;
   templateId: string; // 检查单模板id（单据id)
-  meta: IMeta;
   isShowEdit: boolean; // 是否首次结构化
   lightKeyWord: string;
 }
@@ -99,6 +98,7 @@ function DdtkSenior(props: IProps) {
           ) : (
             <Select
               style={{ width: 120 }}
+              placeholder="请选择"
               onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)}
               { ...(t === 'INLINE_CHECKBOX' ? { mode: 'multiple', defaultValue: qaItem.answer } : { defaultValue:qaItem.answer?.[0] }) }
               allowClear
@@ -112,7 +112,10 @@ function DdtkSenior(props: IProps) {
       case 'INLINE_DATE':
         return (
           isViewOnly ? <span>{moment(Number(qaItem.answer?.[0])).format('YYYY-MM-DD') }</span>
-            : <DatePicker onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)} defaultValue={moment(Number(qaItem.answer?.[0]))} />
+            : <DatePicker
+                onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)}
+                defaultValue={!isEmpty(qaItem.answer) ? moment(Number(qaItem.answer?.[0])) : undefined}
+              />
         );
       default:
         return <span
