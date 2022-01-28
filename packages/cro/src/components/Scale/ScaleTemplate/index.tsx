@@ -775,8 +775,10 @@ function ScaleTemplate(props: IProps) {
           lastChildReact: childReactSwitchFunc,
         },
       ];
+      console.log('firstTimeTemp21', firstTimeTemp);
+      console.log('childReactSwitchFunc', childReactSwitchFunc);
       // 特定日期和计划创建成功后立即发送choiceModel里没有lastChildReact？？？
-      if (!firstTimeTemp.choiceModel.choiceModel.choiceModel) {
+      if (firstTimeTemp?.choiceModel?.choiceModel && !firstTimeTemp?.choiceModel?.choiceModel?.choiceModel) {
         firstTimeTemp.choiceModel.choiceModel.lastChildReact = childReactSwitchFunc;
       }
       // 特定日期和计划创建成功后立即发送
