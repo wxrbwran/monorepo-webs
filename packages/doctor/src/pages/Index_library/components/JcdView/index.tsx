@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { useSelector, useLocation } from 'umi';
 import { Space, Button, Empty } from 'antd';
 import * as api from '@/services/api';
@@ -53,8 +53,6 @@ const JcdView: FC<IProps> = (props) => {
     getJcdTemplate();
   };
 
-  console.log('curDocument', curDocument);
-  console.log('======32', src);
   const templateProps = {
     id,
     type,
@@ -78,15 +76,15 @@ const JcdView: FC<IProps> = (props) => {
           </Button>
         </CopyDocument>
       </h2>
-      <Space direction="vertical" className="w-full px-20">
+      {<Space direction="vertical" className="w-full px-20">
         {
           isEmpty(completions) && isEmpty(radioAndCheckboxs) && isEmpty(texts) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         }
         <CompletionTemplate { ...templateProps } questions={completions} />
         <RadioTemplate { ...templateProps } questions={radioAndCheckboxs} />
         <TextTemplate { ...templateProps } questions={texts} />
-        <DdtkSenior changeCallbackFns={onSuccess} initData={ddtkSenior} templateId={id} isShowEdit={true} />
-      </Space>
+        <DdtkSenior initData={ddtkSenior} templateId={id} isShowEdit={true} />
+      </Space>}
     </div>
   );
 };
