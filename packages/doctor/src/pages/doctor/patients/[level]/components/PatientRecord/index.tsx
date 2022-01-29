@@ -6,7 +6,10 @@ import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
 
-const PatientRecord:FC = ({ children }) => {
+interface IProps {
+  onSuccess: () => void;
+}
+const PatientRecord:FC<IProps> = ({ children, onSuccess }) => {
   const [showModal, setShowModal] = useState(false);
   const [activeId, setActiveId] = useState<string>(); // 机构空间id
   const [loading, setLoading] = useState(false);
@@ -15,12 +18,13 @@ const PatientRecord:FC = ({ children }) => {
   const fetchFilterOrgList = () => {
     const filterList: ISubject[] = [];
     orgTeams.forEach((item: IOrgTeams) => {
-      let isAlone: boolean = false;
+      let aloneDoctorNsid: string = '';
       let orgInfo: ISubject = {};
       // 过滤只显示独立角色所在机构列表
       item.members.forEach((member:ISubject) => {
         if (member.role === Role.ALONE_DOCTOR.id) {
-          isAlone = true;
+          // i. 拉取医生所在医院列表的返回值中，有医生作为独立角色的对象，提取空间ID，作为患者所在的空间ID
+          aloneDoctorNsid = member.nsId!;
         }
         if (member.role === Role.ORG.id) {
           orgInfo = {
@@ -29,10 +33,11 @@ const PatientRecord:FC = ({ children }) => {
           };
         }
       });
-      if (isAlone && !isEmpty(orgInfo)) {
-        filterList.push({ ...orgInfo });
+      if (!!aloneDoctorNsid && !isEmpty(orgInfo)) {
+        filterList.push({ ...orgInfo, aloneDoctorNsid });
       }
     });
+    console.log('===3=23', filterList);
     setOrgList([...filterList]);
     if (filterList.length === 1) {
       setActiveId(filterList[0].nsId);
@@ -50,8 +55,21 @@ const PatientRecord:FC = ({ children }) => {
   const onFinish = (values: CommonData) => {
     setLoading(true);
     if (activeId) {
-      setLoading(false);
       console.log(values);
+      // PATIENT
+      const params = {
+        ...values,
+        nsId: activeId,
+        role: Role.PATIENT.id,
+      };
+      window.$api.doctor.putDoctorRegistryPatient(params).then(() => {
+        message.success('建档成功');
+        setLoading(false);
+        setShowModal(false);
+        onSuccess();
+      }).catch((err: any) => {
+        message.error(err?.resutresult || '建档失败');
+      });
     } else {
       setLoading(false);
       message.error('请选择医院！');
@@ -81,7 +99,7 @@ const PatientRecord:FC = ({ children }) => {
             <Form.Item label="手机号" name="tel" rules={[{ required: true, message: '请输入手机号!' }]}>
               <Input maxLength={11} />
             </Form.Item>
-            <Form.Item label="身份证号" name="idCard" rules={[{ required: true, message: '请输入身份证号!' }]} >
+            <Form.Item label="身份证号" name="idNum" rules={[{ required: true, message: '请输入身份证号!' }]} >
               <Input maxLength={18} />
             </Form.Item>
             <div className={styles.item}>
@@ -92,8 +110,8 @@ const PatientRecord:FC = ({ children }) => {
                   orgList.map((item) => (
                     <li
                       key={item.nsId}
-                      className={activeId === item.nsId && styles.active}
-                      onClick={() => { setActiveId(item.nsId); } }
+                      className={activeId === item.aloneDoctorNsid && styles.active}
+                      onClick={() => { setActiveId(item.aloneDoctorNsid); } }
                     >
                       {item.name}
                     </li>

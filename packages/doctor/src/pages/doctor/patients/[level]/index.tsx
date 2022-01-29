@@ -147,7 +147,7 @@ function Patients() {
             <Sex />
             { isDoctor && <PatientRole /> }
             {
-              <PatientRecord>
+              <PatientRecord onSuccess={refresh}>
                 <span className={styles.btn_bind}>
                   患者建档
                 </span>
