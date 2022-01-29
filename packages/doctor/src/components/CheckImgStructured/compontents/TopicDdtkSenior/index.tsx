@@ -30,7 +30,7 @@ function DdtkSenior(props: IProps) {
     });
   });
   useEffect(() => {
-    if (initData && isEmpty(qasGroups)) {
+    if (initData) {
       const qaGroups = formatTempDdtk(initData);
       setQasGroups(cloneDeep(qaGroups));
       console.log('qaGroupsqaGroups', qaGroups);
@@ -144,13 +144,13 @@ function DdtkSenior(props: IProps) {
       <div className='qa-wrap'>
         {
           (isViewOnly ? valuableQas : qasGroups).map((qas, quesIndex: number) => (
-            <div className="flex topic_title" style={{ alignItems: 'flex-start' }} key={qas[0].question}>
+            <div className="flex topic_title" style={{ alignItems: 'flex-start' }} key={qas[0].question + qas[0].uuid}>
               <span className='mr-5'>{quesIndex + 1}.</span>
               <pre className={styles.ddtk_senior}  key={quesIndex}>
                 {
                   qas.map((qaItem: IQaItem, qaInx: number) => {
                     return (
-                      <span key={qaItem.question} className="mb-10">
+                      <span key={qaItem.question + qaItem.uuid} className="mb-10">
                         <span
                           className={`mt-5 ${styles.ques_span}`}
                           dangerouslySetInnerHTML={{ __html: renderQuestion(qaItem.question) }}

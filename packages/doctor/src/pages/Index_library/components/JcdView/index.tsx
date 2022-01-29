@@ -31,6 +31,7 @@ const JcdView: FC<IProps> = (props) => {
   const getJcdTemplate = async () => {
     const res = await api.indexLibrary.fetchImageTemplate({ id });
     const data = res.list[0]?.data || [];
+    console.log('====32222222333', data);
     // setQuestions(data);
     setCompletions(data.filter((datum: TIndexItem) => datum.question_type === 'COMPLETION'));
     setRadioAndCheckboxs(
@@ -38,7 +39,9 @@ const JcdView: FC<IProps> = (props) => {
     );
     setTexts(data.filter((datum: TIndexItem) => ['TEXT'].includes(datum.question_type as string)));
     setDdtkSenior(
-      data.filter((datum: TIndexItem) => ['INLINE_COMPLETION', 'INLINE_RADIO', 'INLINE_CHECKBOX', 'INLINE_DATE'].includes(datum.question_type as string)),
+      data.filter((datum: TIndexItem) =>
+        ['INLINE_COMPLETION', 'INLINE_RADIO',
+          'INLINE_CHECKBOX', 'INLINE_DATE'].includes(datum.question_type as string)),
     );
   };
 
