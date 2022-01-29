@@ -67,8 +67,8 @@ var FirstSendTime = function (_a) {
     var getReactEle = function (choiceItem) {
         var _a, _b;
         return ([
-            React.createElement(React.Fragment, null, choiceItem.childReact ?
-                choiceItem.childReact(choiceItem.inputDes)
+            React.createElement(React.Fragment, null, choiceItem.firstchildReact ?
+                choiceItem.firstchildReact(choiceItem.inputDes)
                 : React.createElement("div", null)),
             React.createElement(React.Fragment, null, choiceItem.childItemType == 'select' &&
                 React.createElement(Select, { className: 'mr-10', onChange: function (val) { handleChangeType(val, choiceItem); }, value: (_b = (_a = choiceItem === null || choiceItem === void 0 ? void 0 : choiceItem.choiceModel) === null || _a === void 0 ? void 0 : _a.description) !== null && _b !== void 0 ? _b : '' }, (choiceItem === null || choiceItem === void 0 ? void 0 : choiceItem.childItem) &&
@@ -85,6 +85,9 @@ var FirstSendTime = function (_a) {
             React.createElement(React.Fragment, null, choiceItem.childItemType == 'time' &&
                 React.createElement("div", { className: 'time' },
                     React.createElement(DatePicker, { showTime: { format: 'HH:mm' }, value: (choiceItem === null || choiceItem === void 0 ? void 0 : choiceItem.inputTime) ? moment(choiceItem.inputTime, 'YYYY-MM-DD HH:mm') : null, onChange: function (momentDate, dateString) { dateChange(momentDate, dateString, choiceItem); }, format: 'YYYY-MM-DD HH:mm' }))),
+            React.createElement(React.Fragment, null, choiceItem.lastChildReact ?
+                choiceItem.lastChildReact(choiceItem.inputDes)
+                : React.createElement("div", null)),
             React.createElement(React.Fragment, null, (choiceItem === null || choiceItem === void 0 ? void 0 : choiceItem.choiceModel) &&
                 getReactEle(choiceItem.choiceModel)),
         ]);

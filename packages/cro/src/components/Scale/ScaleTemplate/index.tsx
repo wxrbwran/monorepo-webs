@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Checkbox, message, Select, Spin } from 'antd';
+import { Button, Checkbox, message, Select, Spin, Switch } from 'antd';
 import * as api from '@/services/api';
 import { IPlanItem } from '@/utils/consts';
 import { useSelector } from 'umi';
@@ -302,10 +302,9 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
       }
       arrary.push(action);
     }
-  } else if (frequency.frequency === 'ADD') { // 
+  } else if (frequency.frequency === 'ADD') { //
 
     for (let i = 0; i < frequency.custom.length; i++) {
-
       const period = frequency.custom[i];
       const action: any = {
         type: 'once',
@@ -356,7 +355,7 @@ const tileAllFrequencyToArray = (frequency: { frequency: string, custom: string[
 };
 
 
-const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, frequency: { frequency: string, custom: { day: number, time: string }[] }, sourceMember?: []) => {
+const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, frequency: { frequency: string, custom: { day: number, time: string }[] }, isFirstSend: boolean, sourceMember?: []) => {
 
   const arr = [];
 
@@ -373,9 +372,11 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
     if (sourceMember) {
       action.params.sourceMember = sourceMember;
     }
-
+    if (!isFirstSend) {
+      action.type = 'block';
+    }
     arr.push(action);
-  } else { // 
+  } else { //
     const action: any = {
       type: 'once',
       params: {
@@ -386,6 +387,9 @@ const titleAllChoosesToActionsParma = (firstSteps: string[], firstTime: any, fre
     };
     if (sourceMember) {
       action.params.sourceMember = sourceMember;
+    }
+    if (!isFirstSend) {
+      action.type = 'block';
     }
     arr.push(action);
   }
@@ -521,8 +525,10 @@ function HandleChoose({ onChangeStateByValue, chooseDes }: HandleChooseIProps) {
   );
 }
 
-function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
-  chooseValues, scaleType, question }: IProps) {
+function ScaleTemplate(props: IProps) {
+  const { onCancel, mode, isDisabled, addPlan, originRuleDoc,
+    chooseValues, scaleType, question } = props;
+  console.log('pxxxrops', props);
   //起始发送时间默认值
   //发送频率默认值
   const initFrequency = {
@@ -578,6 +584,25 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
 
   const sourceType = getSourceType(scaleType);
 
+  const isFirstSendRef = useRef<boolean>(true);
+
+  const onChangeSwitch = (isSend: boolean) => {
+
+    console.log('================= isSend ', isSend);
+    isFirstSendRef.current = isSend;
+  };
+
+  const childReactSwitchFunc = () => {
+    return <div className={styles.switch_bg}>
+      <Switch
+        checkedChildren="发送"
+        unCheckedChildren="不发送"
+        defaultChecked={isFirstSendRef.current}
+        onChange={(e) => { onChangeSwitch(e); }}
+      />
+    </div>;
+  };
+
   const childChoiceModel = (name: string): IModel => {
 
     return {
@@ -587,10 +612,12 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         {
           childItemType: 'diy',
           description: DIY,
+          lastChildReact: childReactSwitchFunc,
         },
         {
           childItemType: 'none',
           description: ImmediatelySend,
+          lastChildReact: childReactSwitchFunc,
         },
       ],
     };
@@ -614,15 +641,17 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       {
         childItemType: 'select',
         description: HandelTime,
-        childReact: childReactFunc,
+        firstchildReact: childReactFunc,
         childItem: [
           {
             childItemType: 'diy',
             description: DIY,
+            lastChildReact: childReactSwitchFunc,
           },
           {
             childItemType: 'none',
             description: ImmediatelySend,
+            lastChildReact: childReactSwitchFunc,
           },
         ],
       },
@@ -678,14 +707,55 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     let firstTimeTemp;
     if (chooseValues) {
 
+      if (originRuleDoc.rules[0].actions[0].type == 'block') {
+        isFirstSendRef.current = false;
+      }
       firstTimeTemp = cloneDeep(chooseValues.firstTime);
 
-      const handleTimeItem = firstTimeTemp.choiceModel.childItem.filter((item) => item.description == HandelTime)[0];
-      handleTimeItem.childReact = childReactFunc;
+      for (let index = 0; index < firstTimeTemp.choiceModel.childItem.length; index++) {
+
+        const element = firstTimeTemp.choiceModel.childItem[index];
+        if (element.description == HandelTime) {
+          element.firstchildReact = childReactFunc;
+        }
+
+        // 这里赋值影响到外面 的chooseModel也会增加lastChildReact？？？
+        for (let childIndex = 0; childIndex < element.childItem.length; childIndex++) {
+          const childElement = element.childItem[childIndex];
+          childElement.lastChildReact = childReactSwitchFunc;
+        }
+      }
+
+      //     childChoiceModel(IntoGroupTime),
+      // childChoiceModel(GiveMedicTime),
+      // childChoiceModel(StopMedicTime),
+      // {
+      //   childItem: [
+      //     {
+      //       childItemType: 'diy',
+      //       description: DIY,
+      //       lastChildReact: childReactSwitchFunc,
+      //     },
+      //     {
+      //       childItemType: 'none',
+      //       description: ImmediatelySend,
+      //       lastChildReact: childReactSwitchFunc,
+      //     },
+      //   ],
+
+
+
+      // export const GiveMedicTime = '受试者给药的时间';  //
+      // export const StopMedicTime = '受试者停止此项目用药的时间';
+      // export const HandelTime = '受试者做处理的时间 ';
+      // export const SpecificDate = '选择特定日期';
+      // export const PlanCreatedSendImmediately = '计划创建成功后立即发送';
+
 
       setChoseScope(cloneDeep(chooseValues.choseScope));
       setChoseConditions(cloneDeep(chooseValues.choseConditions));
       setFrequency(cloneDeep(chooseValues.frequency));
+
     } else {
 
       firstTimeTemp = { choiceModel: initFirstTimeChoiceMode };
@@ -697,15 +767,23 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
         {
           childItemType: 'time',
           description: SpecificDate,
+          lastChildReact: childReactSwitchFunc,
         },
         {
           childItemType: 'none',
           description: PlanCreatedSendImmediately,
+          lastChildReact: childReactSwitchFunc,
         },
       ];
+      console.log('firstTimeTemp21', firstTimeTemp);
+      console.log('childReactSwitchFunc', childReactSwitchFunc);
+      // 特定日期和计划创建成功后立即发送choiceModel里没有lastChildReact？？？
+      if (firstTimeTemp?.choiceModel?.choiceModel && !firstTimeTemp?.choiceModel?.choiceModel?.choiceModel) {
+        firstTimeTemp.choiceModel.choiceModel.lastChildReact = childReactSwitchFunc;
+      }
+      // 特定日期和计划创建成功后立即发送
     }
-
-    setFirstTime(firstTimeTemp);
+    setFirstTime(cloneDeep(firstTimeTemp));
   }, [originRuleDoc, scaleType]);
 
   useEffect(() => {
@@ -751,7 +829,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       }
     }
 
-    // 首次发送时间一定要填写 
+    // 首次发送时间一定要填写
     if (firstSteps.includes(IntoGroupTime) || firstSteps.includes(GiveMedicTime) || firstSteps.includes(StopMedicTime) || firstSteps.includes(HandelTime)) {
 
       // 处理选择的值要补全
@@ -881,7 +959,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
     const should1 = tileChooseScopeToArray(choseScope);
     console.log('=============should_1 should_1', JSON.stringify(should1));
 
-    const actions = originRuleDoc ? titleAllChoosesToActionsParma(firstSteps, firstTime, frequency, originRuleDoc.rules[0].actions[0].params.sourceMember) : titleAllChoosesToActionsParma(firstSteps, firstTime, frequency);
+    const actions = originRuleDoc ? titleAllChoosesToActionsParma(firstSteps, firstTime, frequency, isFirstSendRef.current, originRuleDoc.rules[0].actions[0].params.sourceMember) : titleAllChoosesToActionsParma(firstSteps, firstTime, frequency, isFirstSendRef.current);
     console.log('=============actions actions', JSON.stringify(actions));
 
     setLoading(false);
@@ -976,7 +1054,7 @@ function ScaleTemplate({ onCancel, mode, isDisabled, addPlan, originRuleDoc,
       )}
 
       <FirstSendTime choiceModelChange={onChoiceModelChange} choiceModelSource={firstTime.choiceModel} popverContent={undefined} />
-      {/* 
+      {/*
       <div className={styles.send_time}>
         <Select style={{ width: 180 }} onChange={handleChangeType} value={chooseStartTime.description}>
           {startTimeKey.items &&

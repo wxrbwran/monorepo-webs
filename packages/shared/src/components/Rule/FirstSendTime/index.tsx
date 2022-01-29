@@ -55,8 +55,8 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
     return ([
       <>
         {
-          choiceItem.childReact ?
-            choiceItem.childReact(choiceItem.inputDes)
+          choiceItem.firstchildReact ?
+            choiceItem.firstchildReact(choiceItem.inputDes)
             : <div></div>
         }
       </>,
@@ -110,10 +110,18 @@ const FirstSendTime: FC<IProps> = ({ choiceModelChange, popverContent, choiceMod
       </>,
       <>
         {
+          choiceItem.lastChildReact ?
+            choiceItem.lastChildReact(choiceItem.inputDes)
+            : <div></div>
+        }
+      </>,
+      <>
+        {
           choiceItem?.choiceModel &&
           getReactEle(choiceItem.choiceModel)
         }
       </>,
+
     ]);
   };
 

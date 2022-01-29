@@ -105,7 +105,7 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
             <h2>
               <div className={styles.remind}>
                 <span>{itemIndex + 1}、</span>
-                <RichText value={infoItem.questions} style={{ height: '60px' }} handleChange={(content: any, text: string) => { }} readonly={true} />
+                <RichText value={infoItem.questions} style={{ height: 'max-content' }} handleChange={(content: any, text: string) => { }} readonly={true} />
               </div>
               <p className={styles.operate}>
                 {location.pathname.includes('create') && (

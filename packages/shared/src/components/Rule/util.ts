@@ -105,7 +105,8 @@ export interface IChooseValues {
 export interface IModel {
   childItemType: 'select' | 'diy' | 'time' | 'none' | 'childReact';
   childItem?: IModel[];
-  childReact?: (value?: string) => React.ReactDOM; // 当childItemType是childReact时，会渲染该childReact组件
+  firstchildReact?: (value?: string) => React.ReactDOM;
+  lastChildReact?: (value?: string) => React.ReactDOM;
   description: string;
   choiceModel?: IModel;
   inputDay?: number; // 当childItemType是diy时，会有输入day组件，此时才可能有值
