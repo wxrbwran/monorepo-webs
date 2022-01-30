@@ -6,6 +6,9 @@ declare interface AuthModelState {
 
 declare interface UserModelState {
   user: any;
+  organizations: {
+    teams: any[];
+  }
 }
 
 declare interface DocumentModelState {

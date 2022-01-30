@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Input, message, Form, Button } from 'antd';
-import { useSelector } from 'umi';
+import { useSelector, useDispatch } from 'umi';
 import { isEmpty } from 'lodash';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Role } from 'xzl-web-shared/dist/utils/role';
@@ -15,8 +15,10 @@ const PatientRecord:FC<IProps> = ({ children, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [orgList, setOrgList] = useState<ISubject[]>([]);
   const orgTeams: IOrgTeams[] = useSelector((state: IState) => state.user.organizations.teams);
+  const dispatch = useDispatch();
   const fetchFilterOrgList = () => {
     const filterList: ISubject[] = [];
+    console.log('orgTeams', orgTeams);
     orgTeams.forEach((item: IOrgTeams) => {
       let aloneDoctorNsid: string = '';
       let orgInfo: ISubject = {};
@@ -45,9 +47,14 @@ const PatientRecord:FC<IProps> = ({ children, onSuccess }) => {
   };
   useEffect(() => {
     fetchFilterOrgList();
-  }, []);
+  }, [orgTeams]);
   useEffect(() => {
-    if (!showModal) {
+    if (!!showModal) {
+      dispatch({
+        type: 'user/getUserOrganizations',
+        payload: null,
+      });
+    } else {
       setActiveId('');
     }
   }, [showModal]);
