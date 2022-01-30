@@ -7,12 +7,12 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import { IState } from 'typings/model';
 import Viewer from '@/components/Viewer';
 import * as api from '@/services/api';
-// import { Role } from 'xzl-web-shared/dist/utils/role';
-import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
+// import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
+import { compareMsgs } from '@/utils/utils';
 import { imMsgType } from '@/utils/tools';
 import reCalcAllMessageTime from '@/utils/reCalcAllMessageTime';
-import CheckImgStructured from '@/components/CheckImgStructured';
-import jgh from '@/assets/img/jgh.png';
+// import CheckImgStructured from '@/components/CheckImgStructured';
+// import jgh from '@/assets/img/jgh.png';
 import ChatItem, { IAvatar } from '../ChatItem';
 import styles from './index.scss';
 
@@ -270,29 +270,29 @@ const ChatList: FC = () => {
         images={images}
         onChange={handleChangeViewerPic}
         disableKeyboardSupport
-        customToolbar={(config) => (
-          [
-            ...config,
-            {
-              key: 'customStructured',
-              render: (
-                <div>
-                  <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
-                    <span
-                      className="react-viewer-btn"
-                      key="structured"
-                    >
-                      <div>
-                        <img src={jgh} alt="" />
-                      </div>
-                      <span>结构化数据</span>
-                    </span>
-                  </CheckImgStructured>
-                </div>
-              ),
-            },
-          ]
-        )}
+        // customToolbar={(config) => (
+        //   [
+        //     ...config,
+        //     {
+        //       key: 'customStructured',
+        //       render: (
+        //         <div>
+        //           <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
+        //             <span
+        //               className="react-viewer-btn"
+        //               key="structured"
+        //             >
+        //               <div>
+        //                 <img src={jgh} alt="" />
+        //               </div>
+        //               <span>结构化数据</span>
+        //             </span>
+        //           </CheckImgStructured>
+        //         </div>
+        //       ),
+        //     },
+        //   ]
+        // )}
       />
     </>
   );

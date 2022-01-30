@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { btnRender } from '@/utils/button';
-import CustomChoice from '../custom_choice';
+import CustomChoice from './CustomChoice';
 import { Table, Select, Checkbox } from 'antd';
 import { IQuestions } from '@/utils/consts';
 import './index.scss';
@@ -21,7 +21,7 @@ interface IData {
   key: number;
   name: string;
 }
-const AddPatient = (props: IProps) => {
+const EditDdtkQuestionType = (props: IProps) => {
   const { questions, changeQues, quesIndex, item, children, handSaveDdtkModify, originQue } = props;
   const [showModal, setShowModal] = useState(false);
   const [dataSource, setDataSource] = useState<IData[]>([]);
@@ -260,4 +260,4 @@ const AddPatient = (props: IProps) => {
     </>
   );
 };
-export default AddPatient;
+export default EditDdtkQuestionType;

@@ -43,14 +43,24 @@ declare interface IIndexItem extends IApiIndexItem {
   id: string; // 指标id  ===   api回显的indexId
 }
 
-declare interface IStructuredDetailProps {
+export interface IImg {
   imageId: string;
+  uploadTime: number;
+  lastReportAt?: number;
+  url: string;
+  status: number; // 0是异常 1是正常
+  degree: number;
+  reviewStatus: string; // 0待审核   TO_REVIEW,   4已审核 REVIEW
+}
+declare interface IStructuredDetailProps {
+  images: IImg[];
   handleRefresh?: () => void;
   handleClose: () => void;
   hydData: IApiDocumentList[];
   jcdData: ITopicItemApi[];
   tempAll: ITmpList;
   jcdOriginIds: string;
+  groupId?: string;
 }
 
 // 搜索指标或者单据名称时，返回的item
