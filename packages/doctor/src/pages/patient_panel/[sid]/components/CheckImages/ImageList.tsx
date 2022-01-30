@@ -31,7 +31,6 @@ function ImageList(props: IProps) {
   const [activeIndex, setActiveIndex] = useState(0); // 预览图片，当前选中第几张
   const [imageId, setImageId] = useState<string>();
   const [imgList, setImgList] = useState< { [key: string]: IImg[] }>({}); // key是时间
-  const [degree, setDegree] = useState(0);
   const [selectImgs, setSelectImgs] = useState<IImg[]>([]);
   const isToReview = data.name === '待审核图片';
   const fetchImgList = () => {
@@ -68,6 +67,9 @@ function ImageList(props: IProps) {
   }, []);
   // 点击图片显示图片查看器
   const toggleShowViewer = (imgId: string, imgDegree: number) => {
+    console.log('imgId', imgId);
+    console.log('imgDegree', imgDegree);
+    console.log('===11',  Object.values(imgList).flat(2));
     Object.values(imgList).flat(2).forEach((img, imgInx) => {
       if (img.imageId === imgId) {
         setActiveIndex(imgInx);
@@ -75,17 +77,16 @@ function ImageList(props: IProps) {
     });
     setImageId(imgId);
     setShowViewer(!showViewer);
-    setDegree(imgDegree);
     handleHideCont();
-    setTimeout(() => {
-      const domKey = imgDegree > 0 ? 'rotateRight' : 'rotateLeft';
-      const degreeDom = document.querySelector(`.react-viewer-btn[data-key="${domKey}"]`);
-      const clickNum = (imgDegree / 90) % 4;
-      for (let i = 0; i < Math.abs(clickNum); i++) {
-        // @ts-ignore
-        degreeDom?.click();
-      }
-    }, 300);
+    // setTimeout(() => {
+    //   const domKey = imgDegree > 0 ? 'rotateRight' : 'rotateLeft';
+    //   const degreeDom = document.querySelector(`.react-viewer-btn[data-key="${domKey}"]`);
+    //   const clickNum = (imgDegree / 90) % 4;
+    //   for (let i = 0; i < Math.abs(clickNum); i++) {
+    //     // @ts-ignore
+    //     degreeDom?.click();
+    //   }
+    // }, 300);
   };
   const handleGoStructured = (imgs?: IImg[]) => {
     console.log('clickkk', JSON.stringify(imgs));
@@ -102,7 +103,6 @@ function ImageList(props: IProps) {
   };
   const hideViewer = () => {
     setShowViewer(false);
-    setDegree(0);
     handleHideCont();
   };
   const handleRefresh = () => {
@@ -110,6 +110,7 @@ function ImageList(props: IProps) {
     refresh();
   };
   const handleImageRotate = (degreeNum: number) => {
+    console.log('degreeNumdegreeNum', degreeNum);
     const params = {
       imageId,
       degree: degreeNum,
@@ -117,6 +118,10 @@ function ImageList(props: IProps) {
       wcId: window.$storage.getItem('patientWcId'),
     };
     window.$api.image.patchImageDegree(params);
+  };
+  const handleImageChange = (imgDetail: any, inx:number) => {
+    setActiveIndex(inx);
+    setImageId(imgDetail.imageId);
   };
   const handleChangeSelect = (curImg: IImg) => {
     let newSelectImgs: IImg[] = [];
@@ -204,15 +209,16 @@ function ImageList(props: IProps) {
           src: image.url,
           alt: '化验单检查单',
           degree: image.degree,
+          imageId: image.imageId,
         }))}
-        rotateDegree={degree}
         activeIndex={activeIndex}
         scalable={false}
         onClose={hideViewer}
         onRotateClick={handleImageRotate}
         onMaskClick={hideViewer}
         disableKeyboardSupport
-        onChange={(img, inx) => setActiveIndex(inx)}
+        // onChange={(img, inx) => setActiveIndex(inx)}
+        onChange={handleImageChange}
         // 已和产品沟通，由于待审核问题处，可以勾选多张，再查看大图，此时点击结构化，是结构当前图片还是外面勾选的图片有歧义，此按钮隐藏
         // customToolbar={(config) => [
         //   ...config,
