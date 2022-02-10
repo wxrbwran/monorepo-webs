@@ -75,7 +75,8 @@ const PatientRecord:FC<IProps> = ({ children, onSuccess }) => {
         setShowModal(false);
         onSuccess();
       }).catch((err: any) => {
-        message.error(err?.resutresult || '建档失败');
+        message.error(err?.result || '建档失败');
+        setLoading(false);
       });
     } else {
       setLoading(false);

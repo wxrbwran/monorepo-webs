@@ -7,7 +7,7 @@ import CheckImgStructured from '@/components/CheckImgStructured';
 import styles from './index.scss';
 import { IImageItem } from 'typings/model';
 import IconCheckFill from '@/assets/img/icon_check_fill.png';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import dayjs from 'dayjs';
 
 interface IProps {
@@ -107,6 +107,7 @@ function ImageList(props: IProps) {
   };
   const handleRefresh = () => {
     fetchImgList();
+    setSelectImgs([]);
     refresh();
   };
   const handleImageRotate = (degreeNum: number) => {
@@ -142,7 +143,6 @@ function ImageList(props: IProps) {
   };
   const renderItem = useMemo(() => (groupItem: IImg[]) => {
     const item = groupItem[0];
-    console.log('groupItem', groupItem);
     return (
       <div
         key={item.imageId}
@@ -194,12 +194,14 @@ function ImageList(props: IProps) {
       ))}
       {
         isToReview && (
-          <CheckImgStructured
-            handleRefresh={handleRefresh}
-            images={selectImgs}
-          >
-            <Button className='absolute bottom-20 right-40' type="primary">批量结构化</Button>
-          </CheckImgStructured>
+          isEmpty(selectImgs) ? <Button className='absolute bottom-20 ml-20 right-25' type="primary" disabled>批量结构化</Button> : (
+            <CheckImgStructured
+              handleRefresh={handleRefresh}
+              images={selectImgs}
+            >
+              <Button type="primary" className='absolute bottom-20 ml-20 right-25'>批量结构化</Button>
+            </CheckImgStructured>
+          )
         )
       }
       {Object.values(imgList).length === 0 && <Empty />}

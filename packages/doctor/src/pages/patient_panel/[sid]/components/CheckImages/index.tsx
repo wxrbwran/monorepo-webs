@@ -103,7 +103,7 @@ function CheckImages() {
       ))}
       <DragModal
         // ant-modal-wrap-center
-        wrapClassName={`${hideCont ? 'mode_hide' : 'mode_block'}`}
+        wrapClassName={`${hideCont ? 'mode_hide' : 'mode_block ant-modal-wrap-center'}`}
         mask={!hideCont}
         width="1200px"
         visible={showModal}
