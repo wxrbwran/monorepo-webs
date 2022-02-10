@@ -109,6 +109,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
                   </Form.Item>
                   <span className="text-sm font-medium mr-2 w-65 inline-block">检查机构: </span>
                   <SearchHospital
+                    allowClear={true}
                     placeholder="请输入检查机构"
                     callback={handleSetHospital}
                     fieldName="hospital"

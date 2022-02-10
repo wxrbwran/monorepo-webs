@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 import { useParams, history } from 'umi';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import {
@@ -22,7 +21,8 @@ import {
   noteC,
   project,
 } from './columns';
-import AddPatient from './components/AddPatient';
+// import AddPatient from './components/AddPatient';
+import PatientRecord from './components/PatientRecord';
 // import UnBind from './components/UnBind';
 import ChangeServicePackage from './components/ChangeServicePackage';
 import { useDispatch } from 'react-redux';
@@ -131,7 +131,7 @@ function Patients() {
     columns.push(changeServicePackage);
     columns.splice(2, 0, patientLevel(refresh), noteC(refresh));
   }
-  console.log('为构建添加console');
+  console.log('为构建添加console', level);
   return (
     <div className={styles.patients}>
       {/* <div className={styles.header_tab}>
@@ -146,6 +146,13 @@ function Patients() {
             <Age />
             <Sex />
             { isDoctor && <PatientRole /> }
+            {
+              <PatientRecord onSuccess={refresh}>
+                <span className={styles.btn_bind}>
+                  患者建档
+                </span>
+              </PatientRecord>
+            }
           </div>
           <div className={styles.operating}>
             <div className={styles.search}>
@@ -153,11 +160,11 @@ function Patients() {
             </div>
             <div className={styles.btn_wrap}>
               {/* <UnBind selectedPatientId={selectedPatientId} /> */}
-              {level === 'alone' && (
+              {/* {level === 'alone_doctor' && (
                 <Button className="m-2" type="primary" icon={<PlusOutlined />}>
                   <AddPatient>添加患者</AddPatient>
                 </Button>
-              )}
+              )} */}
               {/* <Button disabled>群发消息</Button> */}
             </div>
           </div>

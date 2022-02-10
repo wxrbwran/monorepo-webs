@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { useSelector, useLocation } from 'umi';
 import { Space, Button, Empty } from 'antd';
 import * as api from '@/services/api';
@@ -7,6 +7,7 @@ import CopyDocument from '../../components/CopyDocument';
 import CompletionTemplate from './Completion/CompletionTemplate';
 import RadioTemplate from './Radio/RadioTemplate';
 import TextTemplate from './Text/TextTemplate';
+import DdtkSenior from '@/components/CheckImgStructured/compontents/TopicDdtkSenior';
 import { isEmpty } from 'lodash';
 import copyIcon from '@/assets/img/icon_copy_img.png';
 import styles from './index.scss';
@@ -25,16 +26,23 @@ const JcdView: FC<IProps> = (props) => {
   const [completions, setCompletions] = useState<TIndexItem[]>([]);
   const [radioAndCheckboxs, setRadioAndCheckboxs] = useState<TIndexItem[]>([]);
   const [texts, setTexts] = useState<TIndexItem[]>([]);
+  const [ddtkSenior, setDdtkSenior] = useState<TIndexItem[]>([]);
 
   const getJcdTemplate = async () => {
     const res = await api.indexLibrary.fetchImageTemplate({ id });
     const data = res.list[0]?.data || [];
+    console.log('====32222222333', data);
     // setQuestions(data);
     setCompletions(data.filter((datum: TIndexItem) => datum.question_type === 'COMPLETION'));
     setRadioAndCheckboxs(
       data.filter((datum: TIndexItem) => ['CHECKBOX', 'RADIO'].includes(datum.question_type as string)),
     );
     setTexts(data.filter((datum: TIndexItem) => ['TEXT'].includes(datum.question_type as string)));
+    setDdtkSenior(
+      data.filter((datum: TIndexItem) =>
+        ['INLINE_COMPLETION', 'INLINE_RADIO',
+          'INLINE_CHECKBOX', 'INLINE_DATE'].includes(datum.question_type as string)),
+    );
   };
 
   useEffect(() => {
@@ -45,8 +53,6 @@ const JcdView: FC<IProps> = (props) => {
     getJcdTemplate();
   };
 
-  console.log('curDocument', curDocument);
-  console.log('======32', src);
   const templateProps = {
     id,
     type,
@@ -70,14 +76,15 @@ const JcdView: FC<IProps> = (props) => {
           </Button>
         </CopyDocument>
       </h2>
-      <Space direction="vertical" className="w-full px-20">
+      {<Space direction="vertical" className="w-full px-20">
         {
           isEmpty(completions) && isEmpty(radioAndCheckboxs) && isEmpty(texts) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         }
         <CompletionTemplate { ...templateProps } questions={completions} />
         <RadioTemplate { ...templateProps } questions={radioAndCheckboxs} />
         <TextTemplate { ...templateProps } questions={texts} />
-      </Space>
+        <DdtkSenior initData={ddtkSenior} templateId={id} isShowEdit={true} />
+      </Space>}
     </div>
   );
 };

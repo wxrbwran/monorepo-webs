@@ -11,10 +11,11 @@ import styles from './index.scss';
 import { isEmpty, cloneDeep, debounce } from 'lodash';
 import EmptyIcon from '@/assets/img/jgh_empty.png';
 import { CloseOutlined } from '@ant-design/icons';
+import { IApiDocumentList, IStructuredDetailProps } from 'typings/imgStructured';
 
 const { TabPane } = Tabs;
 const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
-  const { hydData, jcdData, imageId, handleRefresh, handleClose, jcdOriginIds,
+  const { hydData, jcdData, images, handleRefresh, handleClose, jcdOriginIds, groupId,
   } = props;
   console.log('hydData232', hydData);
   console.log('jcdData', jcdData);
@@ -127,13 +128,16 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       setSaveSuccess(0);
       if (!isEmpty(typeTabs)) {
         const apiParams: CommonData = {
-          imageId,
+          imageIds:images.map(item => item.imageId),
           allTypes: typeTabs.map(item => item.outType),
           operatorId: sid,
           sid: window.$storage.getItem('patientSid'),
           wcId:window.$storage.getItem('patientWcId'),
           list: [],
         };
+        if (groupId) {
+          apiParams.groupId = groupId;
+        }
         // 化验单
         Promise.all(Object.values(hydCallbackFns)
           .map((fn) => fn()))
@@ -207,7 +211,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       const baseProps = {
         outType: typeStart,
         tabKey: itemTabType,
-        imageId,
+        // imageId,
+        images,
+        groupId,
         isViewOnly,
         initData: fetInitData(inx),
       };

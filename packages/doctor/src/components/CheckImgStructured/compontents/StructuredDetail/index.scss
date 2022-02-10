@@ -90,8 +90,12 @@
   :global {
     .searchHospital {
       .ant-select-selector, .ant-select-selection-placeholder {
-        height: 32px;
+        min-height: 32px;
         line-height: 32px;
+        height: auto;
+      }
+      .ant-select-selection-item {
+        white-space: break-spaces;
       }
     }
     // 搜索关键字高亮

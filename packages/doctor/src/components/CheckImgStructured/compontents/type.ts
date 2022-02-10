@@ -7,6 +7,7 @@ export interface IAddTopicProps {
   isShowEdit: boolean;
   initData?: IQaItem[] | IQaItem; // 编辑数据  填空填是数组，其余是{}
   editGroupInx?: number; // 编辑的groupInx
+  closeModal?:() => void;
 }
 export interface IAddJcdItem {
   part: string;
@@ -45,3 +46,12 @@ export interface IQaItem {
   action?: string; // ADD EDIT DELETE
   createdTime?: number;
 }
+
+export enum InlineType {
+  'INLINE_COMPLETION' = '填空题',
+  'INLINE_RADIO' = '单选题',
+  'INLINE_CHECKBOX' = '多选题',
+  'INLINE_DATE' = '日期',
+}
+
+
