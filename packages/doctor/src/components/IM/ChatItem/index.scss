@@ -58,6 +58,14 @@
       }
     }
   }
+  .file-desc {
+    height: 60px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    color: #999999;
+  }
 }
 .tip {
   font-size: 12px;

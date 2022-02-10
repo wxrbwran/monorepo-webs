@@ -13,6 +13,7 @@ import DoctorTip from '../DoctorTip';
 import Project from '../Project';
 import ProjectInvite from '../ProjectInvite';
 import Scale from '../Scale';
+import PublicizeFile from '../PublicizeFile';
 import './index.scss';
 import BindCustom from '../BindCustom';
 import Video from '../Video';
@@ -42,6 +43,7 @@ const audio:any = { // 正在播放音频的 audio、target
 
 const ChatItem: FC<IProps> = (props) => {
   const { rawMsg, avatarArr } = props;
+  console.log('propsffff', props);
   const [show, setShow] = useState(false);
   // console.log('rawMsg', JSON.stringify(rawMsg));
   const dispatch = useDispatch();
@@ -190,6 +192,7 @@ const ChatItem: FC<IProps> = (props) => {
       )
       : <>{child}</>
   );
+  console.log('xxxewe', msg);
   return (
     <li
       className={`${classnames('u-msg', {
@@ -236,6 +239,8 @@ const ChatItem: FC<IProps> = (props) => {
                 return <div className="tip">你发送了一条调药消息，请在手机上查看</div>;
               case 124:
                 return <div className="tip">你收到了一个crf量表，请在手机上查看</div>;
+              case 128: // 宣教文章
+                return  <PublicizeFile msg={msg}  />;
               default:
                 return '';
             }

@@ -573,7 +573,8 @@ body {
 }
 .react-viewer-btn[data-key=customStructured] {
   background: rgba(2, 122, 218, 0.8);
-  width: 100px;
+  min-width: 100px;
+  max-width: 200px;
   height: 46px;
   padding: 2px 15px;
   .react-viewer-btn {
