@@ -123,7 +123,8 @@ const AddDdtkSenior: FC<IAddTopicProps & { closeModal: () => void }> = (props) =
       api.image.postImageTemplate(params).then((res) => {
         msg('保存成功', 'success');
         const createdTime = res?.list?.[0]?.data?.[0]?.createdTime;
-        const qasParams = qas.map(item => ({ ...item, createdTime  }));
+        // questionToQas()
+        const qasParams = questionToQas().map(item => ({ ...item, createdTime  }));
         console.log('qasParamsqasParams', qasParams);
         handleSaveQuestion(qasParams, actionType, editGroupInx);
         closeModal();

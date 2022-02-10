@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 // @ts-ignore
 import { Button, Empty } from 'antd';
 import Viewer from '@/components/Viewer';
-// import jgh from '@/assets/img/jgh.png';
+import jgh from '@/assets/img/jgh.png';
 import CheckImgStructured from '@/components/CheckImgStructured';
 import styles from './index.scss';
 import { IImageItem } from 'typings/model';
@@ -31,6 +31,7 @@ function ImageList(props: IProps) {
   const [activeIndex, setActiveIndex] = useState(0); // 预览图片，当前选中第几张
   const [imageId, setImageId] = useState<string>();
   const [imgList, setImgList] = useState< { [key: string]: IImg[] }>({}); // key是时间
+  const viewerImages = useRef<IImg[]>([]);
   const [selectImgs, setSelectImgs] = useState<IImg[]>([]);
   const isToReview = data.name === '待审核图片';
   const fetchImgList = () => {
@@ -57,8 +58,10 @@ function ImageList(props: IProps) {
           }
         });
         setImgList(imgs);
+        viewerImages.current = Object.values(imgs).flat(2);
       } else {
         setImgList({});
+        viewerImages.current = [];
       }
     });
   };
@@ -207,7 +210,7 @@ function ImageList(props: IProps) {
       {Object.values(imgList).length === 0 && <Empty />}
       <Viewer
         visible={showViewer}
-        images={Object.values(imgList).flat(2).map((image) => ({
+        images={viewerImages.current.map((image) => ({
           src: image.url,
           alt: '化验单检查单',
           degree: image.degree,
@@ -222,27 +225,28 @@ function ImageList(props: IProps) {
         // onChange={(img, inx) => setActiveIndex(inx)}
         onChange={handleImageChange}
         // 已和产品沟通，由于待审核问题处，可以勾选多张，再查看大图，此时点击结构化，是结构当前图片还是外面勾选的图片有歧义，此按钮隐藏
-        // customToolbar={(config) => [
-        //   ...config,
-        //   {
-        //     key: 'customStructured',
-        //     render: (
-        //       <span onClick={() => handleGoStructured()}>
-        //         <CheckImgStructured
-        //           images={selectImgs}
-        //           handleRefresh={handleRefresh}
-        //         >
-        //           <span className="react-viewer-btn" key="structured">
-        //             <div>
-        //               <img src={jgh} alt="" />
-        //             </div>
-        //             <span>结构化数据</span>
-        //           </span>
-        //         </CheckImgStructured>
-        //       </span>
-        //     ),
-        //   },
-        // ]}
+        customToolbar={(config) => [
+          ...config,
+          isToReview ?
+            {
+              key: 'customStructured',
+              render: (
+              <span onClick={() => handleGoStructured()}>
+                <CheckImgStructured
+                  images={[viewerImages.current[activeIndex]]}
+                  handleRefresh={handleRefresh}
+                >
+                  <span className="react-viewer-btn" key="structured">
+                    <div>
+                      <img src={jgh} alt="" />
+                    </div>
+                    <span>结构化该张图片</span>
+                  </span>
+                </CheckImgStructured>
+              </span>
+              ),
+            } : {},
+        ]}
       />
     </>
   );
