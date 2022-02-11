@@ -1,8 +1,6 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable no-param-reassign */
 import React, { FC } from 'react';
-import dayjs from 'dayjs';
-import scale from '@/assets/img/scale.png';
 import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { getRoles } from '@/utils/utils';
 import '../Project/index.scss';
@@ -23,17 +21,19 @@ interface IMsg {
 }
 interface IContent {
   content: {
-    projectName: string;
+    filename: string;
+    description: string;
+    cover: string;
+    address: string;
   }
   title: string;
   msg: string;
   type: number;
 }
 
-const Scale: FC<IMsg> = (props) => {
+const PublicizeFile: FC<IMsg> = (props) => {
   const { msg } = props;
-  const { content, time } = msg;
-  const { projectName } = content.content;
+  const { filename, description, cover, address } = msg.content.content;
 
   return (
     <div className="chat__item chat__doctor">
@@ -47,14 +47,14 @@ const Scale: FC<IMsg> = (props) => {
         <div className="msg-content project">
           <div className='text-left'>
               <a
-                href={msg.content.content.address}
+                href={address}
                 target="_blank"
                 className='w-full inline-block p-10'
               >
-                <div className='text-blue-400'>{msg.content.content.filename}</div>
+                <div className='text-blue-400'>{filename}</div>
                 <span className='flex justify-end mt-10'>
-                  <span className='file-desc mr-20'> {msg.content.content.description} </span>
-                  <img className='w-60 h-60' src={msg.content.content.cover} />
+                  <span className='file-desc mr-20'> {description} </span>
+                  <img className='w-60 h-60' src={cover} />
                 </span>
               </a>
             </div>
@@ -63,4 +63,4 @@ const Scale: FC<IMsg> = (props) => {
     </div>
   );
 };
-export default Scale;
+export default PublicizeFile;

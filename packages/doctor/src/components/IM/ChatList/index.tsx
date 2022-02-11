@@ -143,6 +143,7 @@ const ChatList: FC = () => {
             } else if ([1, 2, 3, 6].includes(type)) {
               formatMsgsItem.file = { ...body }; // 视频、图片、声音、文件
             } else if (
+              // 128 宣教类型
               [103, 106, 110, 111, 102, 101, 116, 118, 119, 120, 114, 115, 123, 124, 127, 128, 129].includes(type)
             ) {
               formatMsgsItem.type = 'custom';

@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Input, message, Form, Button } from 'antd';
+import { Input, message, Form, Button, InputNumber } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import { isEmpty } from 'lodash';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
@@ -104,8 +104,8 @@ const PatientRecord:FC<IProps> = ({ children, onSuccess }) => {
             <Form.Item label="姓名" name="name" rules={[{ required: true, message: '请输入姓名!' }]} >
               <Input />
             </Form.Item>
-            <Form.Item label="手机号" name="tel" rules={[{ required: true, len: 11, message: '请输入正确的手机号!' }]}>
-              <Input maxLength={11} />
+            <Form.Item label="手机号" name="tel" rules={[{ required: true, type: 'number', max: 99999999999, min: 10000000000,  message: '请输入正确的手机号!' }]}>
+              <InputNumber maxLength={11} controls={false} />
             </Form.Item>
             <Form.Item label="身份证号" name="idNum" rules={[{ required: true, len: 18, message: '请输入正确的身份证号!' }]} >
               <Input maxLength={18} />
