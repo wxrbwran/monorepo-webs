@@ -57,8 +57,12 @@ function ImageList(props: IProps) {
             imgs[date] = [res[groupId]];
           }
         });
-        setImgList(imgs);
-        viewerImages.current = Object.values(imgs).flat(2);
+        const orderImgs: { [key: string]: IImg[] } = {};
+        Object.keys(imgs).sort().reverse().forEach(timeKey => {
+          orderImgs[timeKey] = imgs[timeKey];
+        });
+        setImgList(orderImgs);
+        viewerImages.current = Object.values(orderImgs).flat(2);
       } else {
         setImgList({});
         viewerImages.current = [];
@@ -109,6 +113,11 @@ function ImageList(props: IProps) {
     handleHideCont();
   };
   const handleRefresh = () => {
+    if (showViewer) {
+      setShowViewer(false);
+      handleHideCont();
+    }
+    setActiveIndex(0);
     fetchImgList();
     setSelectImgs([]);
     refresh();
