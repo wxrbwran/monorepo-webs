@@ -54,7 +54,10 @@
     }
   }
   :global {
-    .ant-input {
+    .ant-input-number {
+      width: 100%;
+    }
+    .ant-input, .ant-input-number-input {
       height: 40px;
       line-height: 40px;
     }

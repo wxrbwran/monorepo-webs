@@ -3,6 +3,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import Viewer from '@/components/Viewer';
 import { IImg } from '../type';
 import styles from './index.scss';
+import { isEmpty } from 'lodash';
 
 interface IProps {
   handleClose: () => void;
@@ -49,7 +50,7 @@ const ImgWrap = (props: IProps) => {
         noClose
         onClose={() => {}}
         onMaskClick={() => { }}
-        // changeable={false} // 是否隐藏切换上一张下一张
+        // changeable={isEmpty(images)} // 是否隐藏切换上一张下一张
         // noNavbar // 是否展示底部缩略图
         onRotateClick={handleImageRotate}
         onChange={handleImageChange}

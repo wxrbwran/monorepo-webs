@@ -95,19 +95,6 @@ function ImageList(props: IProps) {
     //   }
     // }, 300);
   };
-  const handleGoStructured = (imgs?: IImg[]) => {
-    console.log('clickkk', JSON.stringify(imgs));
-    if (imgs) {
-      // 图片列表，点击结构化按钮
-      setSelectImgs(imgs);
-    } else {
-      // 图片查看器点击下面nav上的结构化
-      const time = isToReview ? 'uploadTime' : 'lastReportAt';
-      const timeKey =  Object.values(imgList).flat(2)?.[activeIndex]?.[time];
-      setSelectImgs(cloneDeep(imgList[dayjs(timeKey).format('YYYY.MM.DD')].flat(2)));
-    }
-
-  };
   const hideViewer = () => {
     setShowViewer(false);
     handleHideCont();
@@ -180,7 +167,7 @@ function ImageList(props: IProps) {
         />
         <Button
           className="mt-10 border-blue-500 text-blue-400"
-          onClick={() => handleGoStructured(groupItem)}
+          onClick={() => setSelectImgs(groupItem)}
         >
           <CheckImgStructured
             handleRefresh={handleRefresh}
@@ -240,7 +227,6 @@ function ImageList(props: IProps) {
             {
               key: 'customStructured',
               render: (
-              <span onClick={() => handleGoStructured()}>
                 <CheckImgStructured
                   images={[viewerImages.current[activeIndex]]}
                   handleRefresh={handleRefresh}
@@ -252,7 +238,6 @@ function ImageList(props: IProps) {
                     <span>结构化该张图片</span>
                   </span>
                 </CheckImgStructured>
-              </span>
               ),
             } : {},
         ]}
