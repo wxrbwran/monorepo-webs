@@ -94,7 +94,7 @@ function DdtkSenior(props: IProps) {
       case 'INLINE_CHECKBOX':
         return (
           isViewOnly ? (
-            qaItem.answer.map(ansItem => <span key={ansItem}>{ansItem}</span>)
+            qaItem.answer.map((ansItem, ansInx) => <span key={ansItem}>{ansItem}{ansInx === qaItem.answer.length - 1 ? '' : '、'}</span>)
           ) : (
             <Select
               style={{ width: 120 }}
@@ -156,11 +156,13 @@ function DdtkSenior(props: IProps) {
                           dangerouslySetInnerHTML={{ __html: renderQuestion(qaItem.question) }}
                         >
                         </span>
-                        {
-                          (qaInx !== (qas.length - 1) || isViewOnly) && (
-                            renderAnswerType(qaItem, quesIndex, qaInx)
-                          )
-                        }
+                        <span className={isViewOnly ? 'mx-8 px-3 border' : ''}>
+                          {
+                            (qaInx !== (qas.length - 1) || isViewOnly) && (
+                              renderAnswerType(qaItem, quesIndex, qaInx)
+                            )
+                          }
+                        </span>
                       </span>
                     );
                   })
