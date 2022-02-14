@@ -38,6 +38,7 @@ function ImageList(props: IProps) {
     const params: CommonData = {
       sid: window.$storage.getItem('patientSid'),
       wcId: window.$storage.getItem('patientWcId'),
+      category: data.category,
     };
     if (data.imageIdList) {
       params.imageIdList = data.imageIdList;
