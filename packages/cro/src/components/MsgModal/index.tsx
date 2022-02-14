@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {CheckCircleOutlined, CloseCircleOutlined} from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import warning from '@/assets/img/warning.png';
 import { parabola } from '@/utils/tools';
 import * as api from '@/services/api';
@@ -21,7 +21,7 @@ function MsgModal({ wrapper, target, changeShake }: IProps) {
 
   const animateStyle = {
     transform: `translate(${x}px, ${y}px)`,
-    opacity: isVisible ? 1 : 0
+    opacity: isVisible ? 1 : 0,
   };
 
   useEffect(() => {
@@ -29,37 +29,50 @@ function MsgModal({ wrapper, target, changeShake }: IProps) {
       pageAt: 1,
       pageSize: 9999,
       type: 1000,
-    }
-    api.research.fetchSysMessage(params).then((res: {sysMessages: navBarIMsg[]}) => {
+    };
+    api.research.fetchSysMessage(params).then((res: { sysMessages: navBarIMsg[] }) => {
       const inviteList: navBarIMsg[] = res.sysMessages.filter(item => (
-        item.type === 1000 && item.state === 0)
+        item.type === 1000 && item.state === 0),
       );
-      console.log('inviteList', inviteList.slice(0, 5))
+      console.log('inviteList', inviteList.slice(0, 5));
       setInviteMsgList(inviteList.slice(0, 5));
-      if (inviteList.length > 0) {setShow(true)}
-    })
-  }, [])
+      if (inviteList.length > 0) {setShow(true);}
+    });
+  }, []);
 
   const handleUpdateState = (item: navBarIMsg, state: number) => {
-    const {inviterName, projectNsId, inviterSid } = item.body.content;
+    const { inviterName, projectNsId, inviterSid } = item.body.content;
     const params = {
       doctorName: inviterName,
       id: item.id,
       projectNsId,
       receiverSid: inviterSid,
       state,
-    }
-    console.log('paramsssss', JSON.stringify(params))
-    setLaterId((laterId) => [...laterId, item.id]);
+    };
+    console.log('paramsssss', JSON.stringify(params));
+    setLaterId((preLaterId) => [...preLaterId, item.id]);
     api.research.patchSysMessageStatus(params).then(() => {
       message.success('操作成功');
       window.location.reload();
-    })
-  }
+    }).catch(err => {
+      console.log('ddddddddw', err);
+    });
+  };
+
+  const updateLocation = (xNum: number, yNum:number) => {
+    setIsVisible(true);
+    setX(xNum);
+    setY(yNum);
+  };
 
   //动画引导
   const onAnimate = (origin: any) => {
     return new Promise(resolve => {
+      function animationDone() {
+        setIsVisible(false);
+        resolve();
+      }
+
       const config = {
         ballWrapper: wrapper.current,
         origin,
@@ -68,28 +81,17 @@ function MsgModal({ wrapper, target, changeShake }: IProps) {
         a: 0.02,
         callback: updateLocation,
         finish: animationDone,
-        offset: 8
+        offset: 8,
       };
       parabola(config);
-
-      function animationDone() {
-        setIsVisible(false);
-        resolve();
-      }
     });
-  };
-
-  const updateLocation = (x: number, y:number) => {
-    setIsVisible(true);
-    setX(x);
-    setY(y);
   };
 
   const onAdd = (className: string, id: string) => {
     changeShake(false);
     onAnimate(document.querySelector(`.${className}`)).then(() => {
       changeShake(true);
-      setLaterId((laterId) => [...laterId, id]);
+      setLaterId((preLaterId) => [...preLaterId, id]);
     });
 
   };
@@ -119,7 +121,7 @@ function MsgModal({ wrapper, target, changeShake }: IProps) {
                         </div>
                       </div>
                     </div>
-                  )
+                  );
                 }
               })
             }
@@ -129,7 +131,7 @@ function MsgModal({ wrapper, target, changeShake }: IProps) {
       )
     }
     </>
-  )
-};
+  );
+}
 
 export default MsgModal;
