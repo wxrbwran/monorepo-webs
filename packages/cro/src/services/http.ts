@@ -43,7 +43,8 @@ interface IError {
   message: string;
 }
 const errorHandler = (error: IError): Response => {
-  const { response, result, message } = error;
+  const { response, result } = error;
+  console.log('error3333', error);
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
@@ -53,9 +54,9 @@ const errorHandler = (error: IError): Response => {
     });
     throw result;
   } else if (!response) {
-    if (result || message) {
+    if (result || error.message) {
       notification.error({
-        description: result || message,
+        description: result || error.message,
         message: '请求错误',
       });
     }
@@ -76,9 +77,9 @@ export const ajax = extend({
   errorHandler,
   timeout: 10000,
   headers: {
-    'Content-Type': 'multipart/form-data'
+    'Content-Type': 'multipart/form-data',
   },
-})
+});
 
 export const http = extend({
   errorHandler, // 默认错误处理
@@ -110,9 +111,9 @@ http.interceptors.request.use((url, options) => {
       url: formatUrl(url),
       options: {
         ...options,
-        params: options.data
-      }
-    }
+        params: options.data,
+      },
+    };
   }
   return {
     url,
@@ -127,7 +128,7 @@ http.interceptors.response.use(
       'user/verification',
       'token',
       'https://xzl-project-files.oss-cn-hangzhou.aliyuncs.com',
-      'https://xzl-user-avatar.oss-cn-hangzhou.aliyuncs.com/'
+      'https://xzl-user-avatar.oss-cn-hangzhou.aliyuncs.com/',
     ];
     const isWhiteList = authUrl.some(url => response.url.includes(url));
     if (isWhiteList) {
@@ -135,9 +136,9 @@ http.interceptors.response.use(
     } else {
       if (response.status === 401) {
         message.error('身份验证失败, 请重新登录', () => {
-          window.location.href = '/xzl-web-doctor/#/login'
+          window.location.href = '/xzl-web-doctor/#/login';
         });
-      } else if(response.status !== 200) {
+      } else if (response.status !== 200) {
         return Promise.reject('接口请求失败');
       }
       const resData = await response.clone().json();
@@ -150,7 +151,7 @@ http.interceptors.response.use(
       return data;
     }
   },
-  { global: false }
+  { global: false },
 );
 
 

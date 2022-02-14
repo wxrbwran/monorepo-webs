@@ -7,7 +7,7 @@ import CheckImgStructured from '@/components/CheckImgStructured';
 import styles from './index.scss';
 import { IImageItem } from 'typings/model';
 import IconCheckFill from '@/assets/img/icon_check_fill.png';
-import { cloneDeep, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import dayjs from 'dayjs';
 
 interface IProps {
@@ -74,10 +74,7 @@ function ImageList(props: IProps) {
     fetchImgList();
   }, []);
   // 点击图片显示图片查看器
-  const toggleShowViewer = (imgId: string, imgDegree: number) => {
-    console.log('imgId', imgId);
-    console.log('imgDegree', imgDegree);
-    console.log('===11',  Object.values(imgList).flat(2));
+  const toggleShowViewer = (imgId: string) => {
     Object.values(imgList).flat(2).forEach((img, imgInx) => {
       if (img.imageId === imgId) {
         setActiveIndex(imgInx);
@@ -86,15 +83,6 @@ function ImageList(props: IProps) {
     setImageId(imgId);
     setShowViewer(!showViewer);
     handleHideCont();
-    // setTimeout(() => {
-    //   const domKey = imgDegree > 0 ? 'rotateRight' : 'rotateLeft';
-    //   const degreeDom = document.querySelector(`.react-viewer-btn[data-key="${domKey}"]`);
-    //   const clickNum = (imgDegree / 90) % 4;
-    //   for (let i = 0; i < Math.abs(clickNum); i++) {
-    //     // @ts-ignore
-    //     degreeDom?.click();
-    //   }
-    // }, 300);
   };
   const hideViewer = () => {
     setShowViewer(false);
@@ -164,7 +152,7 @@ function ImageList(props: IProps) {
         <img
           src={item.url}
           style={{ transform: `rotate(${item.degree}deg)` }}
-          onClick={() => toggleShowViewer(item.imageId, item.degree)}
+          onClick={() => toggleShowViewer(item.imageId)}
         />
         <Button
           className="mt-10 border-blue-500 text-blue-400"
@@ -174,7 +162,7 @@ function ImageList(props: IProps) {
             handleRefresh={handleRefresh}
             images={selectImgs}
           >
-            结构化
+            {isToReview ? '结构化' : '查看详情'}
           </CheckImgStructured>
         </Button>
       </div>
