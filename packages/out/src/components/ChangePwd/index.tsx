@@ -1,8 +1,7 @@
 import type { FC } from 'react';
 import React from 'react';
-import { message, Form } from 'antd';
+import { message, Form, Input } from 'antd';
 import ModalForm from '@/components/DragModal/DragModalForm';
-import ProForm, { ProFormText } from '@ant-design/pro-form';
 import { formItemLayout } from 'xzl-web-shared/dist/utils/consts';
 import { useSelector } from 'umi';
 // import { useDispatch } from 'umi';
@@ -48,39 +47,37 @@ const ChangePwd: FC<IProps> = (props) => {
         onFinish={handleSubmit}
         form={form}
       >
-        <ProForm.Group>
-          <ProFormText
-            width="lg"
-            rules={[{ required: true, message: '请输入原密码!', min: 6 }]}
-            name="oldPassword"
-            label="原密码"
-            placeholder="请输入原密码"
-          />
-          <ProFormText
-            width="lg"
-            rules={[{ required: true, message: '请输入新密码!', min: 6 }]}
-            name="password"
-            label="新密码"
-            placeholder="请输入新密码"
-          />
-          <ProFormText
-            width="lg"
-            rules={[
-              { required: true, message: '请再次输入新密码!', min: 6 },
-              ({ getFieldValue }) => ({
-                validator(_rule, value) {
-                  if (!value || getFieldValue('password') === value || value.length < 6) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error('两次密码不一致!'));
-                },
-              }),
-            ]}
-            name="newPassword"
-            label="确认密码"
-            placeholder="请确认密码"
-          />
-        </ProForm.Group>
+        <Form.Item
+          label="原密码"
+          name="oldPassword"
+          rules={[{ required: true, message: '请输入原密码!', min: 6 }]}
+        >
+          <Input placeholder="请输入原密码" />
+        </Form.Item>
+        <Form.Item
+          label="新密码"
+          name="password"
+          rules={[{ required: true, message: '请输入新密码!', min: 6 }]}
+        >
+          <Input placeholder="请输入新密码" />
+        </Form.Item>
+        <Form.Item
+          label="确认密码"
+          name="newPassword"
+          rules={[
+            { required: true, message: '请再次输入新密码!', min: 6 },
+            ({ getFieldValue }) => ({
+              validator(_rule, value) {
+                if (!value || getFieldValue('password') === value || value.length < 6) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('两次密码不一致!'));
+              },
+            }),
+          ]}
+        >
+          <Input placeholder="请确认密码" />
+        </Form.Item>
       </ModalForm>
     </div>
   );

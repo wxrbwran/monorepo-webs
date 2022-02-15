@@ -1,7 +1,7 @@
 /**
  * Created by wuxiaoran on 2019/1/28.
  */
-import type { FC} from 'react';
+import type { FC } from 'react';
 import React, { useState } from 'react';
 import { ModalForm } from '@ant-design/pro-form';
 // import ProForm from '@ant-design/pro-form';
@@ -16,6 +16,7 @@ interface IDMProps extends ModalProps {
 /* eslint-disable */
 const AntdModalDrag: FC<IDMProps> = (props) => {
   const { title, children, modalProps, ...formPops } = props;
+  console.log('propsAntdModalDrag', formPops)
   const [disabled, setDisabled] = useState(true);
   const titleNode = (
     <div

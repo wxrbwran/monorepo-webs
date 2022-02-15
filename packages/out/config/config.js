@@ -4,7 +4,7 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from '../src/routes';
 import env from './env.json';
-var pkg = require('../package.json');
+var pjson = require('../package.json');
 
 const oriEnv = env[process.env.APP_ENV];
 const defineEnv = {};
@@ -16,12 +16,16 @@ Object.keys(oriEnv).forEach((key) => {
 });
 
 export default defineConfig({
-  // mfsu: {},
   define: defineEnv,
   hash: true,
   favicon: '/out-hospital-patient/assets/favicon.ico',
+  // @ts-ignore
+  title: false,
+  ignoreMomentLocale: true,
+  base: oriEnv.publicPath,
+  publicPath: process.env.NODE_ENV === 'development' ? '/' : `/${pjson.name}/`,
   antd: {},
-  outputPath: pkg.name,
+  outputPath: `../../${pjson.name}`,
   dva: {
     hmr: true,
   },
@@ -61,17 +65,71 @@ export default defineConfig({
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
   },
-  // proxy: ['bj_dev', 'dev'].includes(APP_ENV) ? proxy[APP_ENV] : {},
+
+  chunks: ['vendors', 'umi', 'rc_base', 'lib', 'polyfill'],
+  chainWebpack: (config, { webpack }) => {
+    config.optimization.splitChunks({
+      chunks: 'all',
+      minSize: 30000,
+      minChunks: 1,
+      automaticNameDelimiter: '~',
+      // maxAsyncRequests: 7,
+      maxInitialRequests: 7,
+      cacheGroups: {
+        polyfill: {
+          name: 'polyfill',
+          test({ resource }) {
+            return /polyfill|core-js/.test(resource);
+          },
+          priority: 25,
+          reuseExistingChunk: true,
+        },
+        lib: {
+          name: 'lib',
+          test({ resource }) {
+            return /antd|moment/.test(resource);
+          },
+          priority: 25,
+          reuseExistingChunk: true,
+        },
+        rc_base: {
+          name: 'rc_base',
+          test({ resource }) {
+            return /react|react-dom|dva/.test(resource);
+          },
+          priority: 25,
+          reuseExistingChunk: true,
+        },
+        vendors: {
+          name: 'vendors',
+          test({ resource }) {
+            return /node_modules/.test(resource);
+          },
+          priority: 10,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+        },
+      },
+    });
+    config
+      .plugin('replace')
+      .use(require('webpack').ContextReplacementPlugin)
+      .tap(() => [/moment[/\\]locale$/, /zh-cn/]);
+    // config.module
+    //   .rule('xlsx')
+    //   .test(/.(xlsx)$/)
+    //   .use('file-loader')
+    //   .loader(require.resolve('file-loader'));
+    // config.plugin('umi-webpack-bundle-analyzer').use(BundleAnalyzerPlugin);
+  },
   proxy: {
     '/api': {
-      target: 'http://172.16.10.9:8000/',
+      target: 'http://172.16.10.16:8000/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
   },
-  // @ts-ignore
-  title: false,
-  ignoreMomentLocale: true,
-  base: oriEnv.publicPath,
-  publicPath: process.env.NODE_ENV === 'development' ? '/' : `/${pjson.name}/`,
 });
