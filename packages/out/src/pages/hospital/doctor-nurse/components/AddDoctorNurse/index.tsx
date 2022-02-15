@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
-import { Form, message } from 'antd';
+import { Form, message, Input } from 'antd';
 import ModalForm from '@/components/DragModal/DragModalForm';
 import { ProFormText } from '@ant-design/pro-form';
 import { formItemLayout } from 'xzl-web-shared/dist/utils/consts';
@@ -62,6 +62,7 @@ const AddDoctorNurse: FC<IProps> = (props) => {
     }
 
   };
+  console.log('ProFormText', ProFormText);
   return (
     <ModalForm
       title={`添加${text}`}
@@ -76,7 +77,7 @@ const AddDoctorNurse: FC<IProps> = (props) => {
       onFinish={async (values) => handleSave(values)}
       form={form}
     >
-      <ProFormText
+      {/* <ProFormText
         width="lg"
         rules={[{ required: true }]}
         name="name"
@@ -89,7 +90,21 @@ const AddDoctorNurse: FC<IProps> = (props) => {
         name="account"
         label="手机号"
         placeholder="请输入手机号"
-      />
+      /> */}
+      <Form.Item
+        label="姓名"
+        name="name"
+        rules={[{ required: true, message: '请输入姓名!' }]}
+      >
+        <Input placeholder="请输入姓名" />
+      </Form.Item>
+      <Form.Item
+        label="手机号"
+        name="account"
+        rules={[{ required: true, message: '请输入手机号!' }]}
+      >
+        <Input placeholder="请输入手机号" />
+      </Form.Item>
       <Form.Item label="  ">
         <span className="text-gray-500">默认密码：123456</span>
       </Form.Item>
