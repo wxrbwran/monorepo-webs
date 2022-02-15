@@ -39,13 +39,14 @@ function ImageList(props: IProps) {
       sid: window.$storage.getItem('patientSid'),
       wcId: window.$storage.getItem('patientWcId'),
       category: data.category,
+      groupName: data.name,
     };
-    if (data.imageIdList) {
+    if (data.imageIdList) {  // 检查单
       params.imageIdList = data.imageIdList;
-    } else {
+    } else { // 其他图片，化验单
       params.typeNew = data.typeNew;
     }
-    window.$api.image.fetchImageDetailNew(params).then((res: { imageInfos: IImg[] }) => {
+    window.$api.image.fetchImageDetailV1(params).then((res: { imageInfos: IImg[] }) => {
       let imgs: { [key: string]: IImg[] } = {};
       console.log('res3333', res);
       if (res) {
