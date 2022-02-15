@@ -105,7 +105,12 @@ function Reply({ rule, children, chooseValues }: IProps) {
       sorter: (a: { replyNumber: number }, b: { replyNumber: number }) =>
         a.replyNumber - b.replyNumber,
       render: (text: number, record: any) => (
-        <ReplyTable planRuleId={rule.id} sid={record.sid} status={3} scaleId={choiceContent.id}>
+        <ReplyTable
+          planRuleId={rule.meta.docId}
+          sid={record.sid}
+          status={3}
+          scaleId={choiceContent.id}
+        >
           <span className={styles.number}>{text}</span>
         </ReplyTable>
       ),
