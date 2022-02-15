@@ -65,7 +65,7 @@
     "@alitajs/keep-alive": "^2.5.14",
     "@ant-design/icons": "^4.0.0",
     "@ant-design/pro-descriptions": "^1.0.19",
-    "@ant-design/pro-form": "^1.0.2",
+    "@ant-design/pro-form": "1.43.3",
     "@ant-design/pro-layout": "^6.4.19",
     "@ant-design/pro-table": "^2.9.5",
     "@fullhuman/postcss-purgecss": "^3.1.3",
