@@ -100,13 +100,13 @@ const StructuredJcdTabItem: FC<IProps> = (props) => {
           data: topicList,
           meta: {
             // imageId,
-            createdTime: clickSaveTime,
             title: outType,
             ...meta,
             ...imgInfo,
             ...partMethod,
             sid: window.$storage.getItem('patientSid'),
             creatorSid: initData.meta.creatorSid, // 模板创建者的sid
+            createdTime: clickSaveTime, // 添加或者编辑，此值都使用点击保存时的时间
           },
         });
       });
