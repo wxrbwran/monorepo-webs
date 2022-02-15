@@ -15,7 +15,6 @@ interface IProps {
 
 const { Option } = Select;
 function Reply({ rule, children, chooseValues }: IProps) {
-
   const [showModal, setShowModal] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [sendNumber, setSendNumber] = useState(0);
@@ -26,30 +25,31 @@ function Reply({ rule, children, chooseValues }: IProps) {
   const [choiceContent, setChoiceContent] = useState();
 
   const getScaleReplyList = () => {
-
-    api.education.getScaleReplyList({
-      planRuleId: rule.id,
-      pageAt: current,
-      scaleId: choiceContent.id,
-      pageSize,
-    }).then((res: any) => {
-
-      const { list, total, sum, replySum } = res;
-      setDataSource(list);
-      setSendNumber(sum);
-      setReplyNumber(replySum);
-      setTotals(total);
-    });
+    api.education
+      .getScaleReplyList({
+        planRuleId: rule.meta.docId,
+        pageAt: current,
+        scaleId: choiceContent.id,
+        pageSize,
+      })
+      .then((res: any) => {
+        const { list, total, sum, replySum } = res;
+        setDataSource(list);
+        setSendNumber(sum);
+        setReplyNumber(replySum);
+        setTotals(total);
+      });
   };
 
   useEffect(() => {
-
     if (chooseValues) {
       // 获取随访表列表
-      const contents = [...chooseValues.frequency.custom.flatMap((custom) => custom.contents), ...chooseValues.firstTime.choiceContents];
+      const contents = [
+        ...chooseValues.frequency.custom.flatMap((custom) => custom.contents),
+        ...chooseValues.firstTime.choiceContents,
+      ];
       let mySet = new Set();
       const list = contents.filter((item) => {
-
         if (!mySet.has(item.id)) {
           mySet.add(item.id);
           return true;
@@ -66,7 +66,6 @@ function Reply({ rule, children, chooseValues }: IProps) {
   }, [showModal, chooseValues]);
 
   useEffect(() => {
-
     if (showModal && choiceContent) {
       getScaleReplyList();
     }
@@ -83,12 +82,10 @@ function Reply({ rule, children, chooseValues }: IProps) {
   };
 
   const handleChange = (val) => {
-
     console.log('============= handleChange', val);
     setCurrent(1);
     setChoiceContent(contentsList.filter((item) => item.id == val)[0]);
   };
-
 
   const columns: any = [
     {
@@ -105,38 +102,27 @@ function Reply({ rule, children, chooseValues }: IProps) {
       title: '已回复量表数量',
       dataIndex: 'replyCount',
       align: 'center',
-      sorter: (a: { replyNumber: number; }, b: { replyNumber: number; }) => a.replyNumber - b.replyNumber,
-      render: (text: number, record: any) =>
-        <ReplyTable
-          planRuleId={rule.id}
-          sid={record.sid}
-          status={3}
-          scaleId={choiceContent.id}
-        >
-          <span className={styles.number}>
-            {text}
-          </span>
-        </ReplyTable>,
+      sorter: (a: { replyNumber: number }, b: { replyNumber: number }) =>
+        a.replyNumber - b.replyNumber,
+      render: (text: number, record: any) => (
+        <ReplyTable planRuleId={rule.id} sid={record.sid} status={3} scaleId={choiceContent.id}>
+          <span className={styles.number}>{text}</span>
+        </ReplyTable>
+      ),
     },
     {
       title: '未回复量表数量',
       dataIndex: 'unReplyCount',
       align: 'center',
-      sorter: (a: { noReplyNumber: number; }, b: { noReplyNumber: number; }) => a.noReplyNumber - b.noReplyNumber,
-      render: (text: number, record: any) =>
-        <ReplyTable
-          planRuleId={rule.id}
-          sid={record.sid}
-          status={1}
-          scaleId={choiceContent.id}
-        >
-          <span className={styles.number}>
-            {text}
-          </span>
-        </ReplyTable>,
+      sorter: (a: { noReplyNumber: number }, b: { noReplyNumber: number }) =>
+        a.noReplyNumber - b.noReplyNumber,
+      render: (text: number, record: any) => (
+        <ReplyTable planRuleId={rule.id} sid={record.sid} status={1} scaleId={choiceContent.id}>
+          <span className={styles.number}>{text}</span>
+        </ReplyTable>
+      ),
     },
   ];
-
 
   return (
     <>
@@ -144,7 +130,7 @@ function Reply({ rule, children, chooseValues }: IProps) {
       {showModal && (
         <DragModal
           visible={showModal}
-          title='回复详情'
+          title="回复详情"
           width={800}
           wrapClassName="ant-modal-wrap-center"
           onCancel={() => setShowModal(false)}
@@ -153,18 +139,23 @@ function Reply({ rule, children, chooseValues }: IProps) {
         >
           <div className={styles.reply_wrap}>
             <Select value={choiceContent.title} style={{ width: 180 }} onChange={handleChange}>
-              {
-                contentsList.map((item) => {
-                  return (<Option key={item.id} value={item.id}>{item.title}</Option>);
-                })
-              }
+              {contentsList.map((item) => {
+                return (
+                  <Option key={item.id} value={item.id}>
+                    {item.title}
+                  </Option>
+                );
+              })}
             </Select>
             <div className={styles.count}>
               <span>已发出: {sendNumber}张</span>
               <span>已回复: {replyNumber}张</span>
-              <span>回复率: {sendNumber > 0 ? Math.round((replyNumber / sendNumber) * 100 * 100) / 100 : 0}%</span>
+              <span>
+                回复率:{' '}
+                {sendNumber > 0 ? Math.round((replyNumber / sendNumber) * 100 * 100) / 100 : 0}%
+              </span>
             </div>
-            <div className='mt-8'>
+            <div className="mt-8">
               <Table
                 dataSource={dataSource}
                 columns={columns}
@@ -176,7 +167,7 @@ function Reply({ rule, children, chooseValues }: IProps) {
                   onChange: handlePagerChange,
                   showSizeChanger: false,
                 }}
-              // onHeaderCell={()=>({style:{textAlign: 'center'}})}
+                // onHeaderCell={()=>({style:{textAlign: 'center'}})}
               />
             </div>
           </div>
