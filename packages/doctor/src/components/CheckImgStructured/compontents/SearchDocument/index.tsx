@@ -1,7 +1,5 @@
-import React, { FC, useState, useEffect, useRef } from 'react';
-import {
-  Form, Input, Button, message,
-} from 'antd';
+import React, { FC, useState, useEffect } from 'react';
+import { Form, Button } from 'antd';
 import { debounce } from 'lodash';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import SubType from '../SubType';
@@ -10,21 +8,18 @@ import SearchHYD from '../SearchHYD';
 interface IProps {
   type: string;
   mode: 'add' | 'edit' | 'search';
-  onSuccess?: (params: Record<string, string>) => void;
   record?: TIndexItem;
   clickEvent?: string;
-  handleChangeSubType?: any;
-  initSampleFrom?: any;
-  sampleFroms?: any;
   handleSelectTypeIndex?: any;
   documentType?: any;
 }
 const SearchDocument: FC<IProps> = (props) => {
-  const { type, mode, record, children, onSuccess, clickEvent, handleChangeSubType, initSampleFrom, sampleFroms, handleSelectTypeIndex, documentType } = props;
+  const { type, mode, record, children, clickEvent, handleSelectTypeIndex, documentType } = props;
   // console.log('record', record);
+  console.log('propsprops111', props);
+  const [sampleFroms, setSampleFroms] = useState<string[]>(['血液']);
   const [showModal, setshowModal] = useState(false);
   const [form] = Form.useForm();
-  const sid = window.$storage.getItem('sid');
   const [source, setSource] = useState({});
   const [library, setLibrary] = useState(false);
   // const [listEmpty, setlistEmpty] = useState(false);
@@ -87,8 +82,8 @@ const SearchDocument: FC<IProps> = (props) => {
                   <span>*</span>
                   <SubType
                     leve1Type={'HYD'}
-                    handleChangeSubType={handleChangeSubType}
-                    initSampleFrom={initSampleFrom}
+                    handleChangeSubType={setSampleFroms}
+                    initSampleFrom={sampleFroms}
                   />
                 </div>
                 <div className="flex items-center structured-edit-wrap">
