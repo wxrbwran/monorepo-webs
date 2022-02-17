@@ -246,7 +246,7 @@ function PlansDetail() {
                               }
                             </p>
                             <p className={styles.list_time}>
-                              {[...new Set(rItem.plans[Number(pItem)].map((p: { start: string }) => moment(p.start).format('H:mm')))].map(
+                              {[...new Set(rItem.plans[Number(pItem) || pItem]?.map((p: { start: string }) => moment(p.start).format('H:mm')))].map(
                                 (v: any) => (<span key={v} className={styles.time}>{v}</span>),
                               )}
                             </p>

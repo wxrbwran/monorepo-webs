@@ -81,6 +81,29 @@
       width: 150px;
       margin: 10px 6px 10px;
       text-align: center;
+      .img_count {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        z-index: 5;
+        background: rgba(255, 255, 255, 0.6);
+        height: 18px;
+        line-height: 18px;
+        padding: 0 5px;
+        border-radius: 3px
+      }
+      .check_border {
+        width: 16px;
+        height: 16px;
+        background: #FFFFFF;
+        border-radius: 3px;
+        border: 1px solid #C7C7C7;
+        display: inline-block;
+      }
+      .check_fill {
+        width: 16px;
+        height: 16px;
+      }
       .exception, .normal{
         position: absolute;
         top: 8px;

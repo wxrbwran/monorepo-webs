@@ -83,7 +83,7 @@ const JcdView: FC<IProps> = (props) => {
         <CompletionTemplate { ...templateProps } questions={completions} />
         <RadioTemplate { ...templateProps } questions={radioAndCheckboxs} />
         <TextTemplate { ...templateProps } questions={texts} />
-        <DdtkSenior initData={ddtkSenior} templateId={id} isShowEdit={true} />
+        <DdtkSenior initData={ddtkSenior} templateId={id} isShowEdit={src === 'ONESELF'} />
       </Space>}
     </div>
   );

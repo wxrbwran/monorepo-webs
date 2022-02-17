@@ -10,9 +10,9 @@ export default {
   fetchImageDetail(data: any): Promise<any> {
     return http.get('image/detail', { data });
   },
-  // 获取具体类型化验单检查单图片new
-  fetchImageDetailNew(data: any): Promise<any> {
-    return http.get('image/detail/new', { data });
+  // 获取具体类型化验单检查单图片V1版接口
+  fetchImageDetailV1(data: any): Promise<any> {
+    return http.get('image/detail/v1', { data });
   },
   // 修改图片旋转角度
   patchImageDegree(data: CommonData): Promise<any> {

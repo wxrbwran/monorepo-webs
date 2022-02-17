@@ -44,6 +44,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData)); // true仅查看 false编辑中
   const [typeTabs, setTypeTabs] = useState <any[]>(initTypeTabs());
   const [activeType, setActiveType] = useState(initTypeTabs()[0]);
+  const [loading, setLoading] = useState(false);
   // 1：检查单或化验单中某一个保存成功，2表示两个都成功，此时关闭弹框
   const [saveSuccess, setSaveSuccess] = useState(0);
 
@@ -67,6 +68,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   useEffect(() => {
     if (saveSuccess === 2) {
       message.success('保存成功');
+      setLoading(false);
       // im进入的没有刷新函数，此时直接调用redux里的更新化验单/检查单接口
       if (handleRefresh) {
         isRefreshParent.current = true;
@@ -122,8 +124,10 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       });
   };
   const handleSaveClick = async () => {
+    setLoading(true);
     if (isViewOnly) {
       setisViewOnly(false);
+      setLoading(false);
     } else {
       setSaveSuccess(0);
       if (!isEmpty(typeTabs)) {
@@ -264,7 +268,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             )
           }
         </div>
-        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 500)}>
+        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 500)} loading={loading}>
           {isViewOnly ? '修改结果' : '保存并退出'}
         </Button>
       </div>
