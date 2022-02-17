@@ -1,0 +1,37 @@
+.ddtk_senior {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  :global {
+    .ant-picker, .ant-select {
+      margin-bottom: 5px;
+    }
+  }
+}
+.edit_span {
+  border: 1px solid #E6E6E6;
+  margin-bottom: 5px;
+  min-height: 30px;
+  line-height: 30px;
+  border-radius: 4px;
+  min-width: 120px;
+  display: inline-block;
+  outline: none;
+  vertical-align: middle;
+  position: relative;
+  max-width: calc(100% - 50px);
+  overflow-x: auto;
+  margin-left: 5px;
+  padding: 0 5px;
+  &.no_border {
+    border: none;
+  }
+  &:empty {
+    &:before {
+      content: '\8bf7\8f93\5165\7b54\6848';
+      position: absolute;
+      left: 5px;
+      top: 0;
+      color: #999999;
+    }
+  }
+}

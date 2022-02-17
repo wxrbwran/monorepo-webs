@@ -431,6 +431,7 @@ const CustomIndex: FC<IProps> = (props) => {
               callback={handleSetHospital}
               fieldName="hospital"
               style={{ flex: 1, maxWidth: '78%' }}
+              allowClear={true}
               defaultValue={{
                 hospitalId: initList?.orgAndTime?.orgId,
                 hospitalName: initList?.orgAndTime?.orgName,

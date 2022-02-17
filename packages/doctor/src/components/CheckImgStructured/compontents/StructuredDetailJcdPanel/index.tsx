@@ -1,5 +1,5 @@
 import React, { FC, useState, useMemo, useRef, useEffect } from 'react';
-import { Tabs, Popconfirm, Button, Input } from 'antd';
+import { Tabs, Popconfirm, Button } from 'antd';
 import { CloseOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
 import uuid from 'react-uuid';
 import { isEmpty, cloneDeep } from 'lodash';
@@ -12,9 +12,12 @@ import { IAddJcdItem, IJcdTabItem } from '../type';
 import { getSource } from '../utils';
 import iconCopy from '@/assets/img/icon_copy_dj.png';
 import styles from './index.scss';
+import { IImg } from 'typings/imgStructured';
 
 interface IProps {
-  imageId: string;
+  // imageId: string;
+  groupId: string;
+  images: IImg[];
   outType: string;
   initData: any;
   jcdCallbackFns: any; // 保存时候的回调
@@ -23,7 +26,7 @@ interface IProps {
 }
 const { TabPane } = Tabs;
 const StructuredDetailJcdPanel: FC<IProps> = (props) => {
-  const { imageId, outType, isViewOnly, setJcdCallbackFns, initData, jcdCallbackFns } = props;
+  const { outType, isViewOnly, setJcdCallbackFns, initData, jcdCallbackFns, groupId, images } = props;
   // const topicPanelCallbackFns = useRef({});
   // const addJcdNum = useRef();
   const [jcdList, setJcdList] = useState<IJcdTabItem[]>(initData || []); // 检查单tab list
@@ -155,7 +158,9 @@ const StructuredDetailJcdPanel: FC<IProps> = (props) => {
 
           <StructuredJcdTabItem
             initData={item}
-            imageId={imageId}
+            // imageId={imageId}
+            images={images}
+            groupId={groupId}
             outType={outType}
             isViewOnly={isViewOnly}
             jcdCallbackFns={jcdCallbackFns}

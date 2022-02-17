@@ -166,6 +166,7 @@ export const formatDoctorTeams = (teams: any[]) => {
 };
 
 export const searchHighLight = (text: string, lightKeyWord: string) => {
-  return lightKeyWord === '' ? text :
-    text?.replaceAll(lightKeyWord, `<span class="text_red">${lightKeyWord}</span>`);
+  return !lightKeyWord ? text :
+    text.replaceAll(lightKeyWord.toLowerCase(), `<span class="text_red">${lightKeyWord.toLowerCase()}</span>`).replaceAll(
+      lightKeyWord.toUpperCase(), `<span class="text_red">${lightKeyWord.toUpperCase()}</span>`);
 };

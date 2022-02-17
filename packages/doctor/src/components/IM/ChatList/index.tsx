@@ -7,12 +7,12 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import { IState } from 'typings/model';
 import Viewer from '@/components/Viewer';
 import * as api from '@/services/api';
-// import { Role } from 'xzl-web-shared/dist/utils/role';
-import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
+// import { compareMsgs, getFromDoctorInfo } from '@/utils/utils';
+import { compareMsgs } from '@/utils/utils';
 import { imMsgType } from '@/utils/tools';
 import reCalcAllMessageTime from '@/utils/reCalcAllMessageTime';
-import CheckImgStructured from '@/components/CheckImgStructured';
-import jgh from '@/assets/img/jgh.png';
+// import CheckImgStructured from '@/components/CheckImgStructured';
+// import jgh from '@/assets/img/jgh.png';
 import ChatItem, { IAvatar } from '../ChatItem';
 import styles from './index.scss';
 
@@ -143,7 +143,8 @@ const ChatList: FC = () => {
             } else if ([1, 2, 3, 6].includes(type)) {
               formatMsgsItem.file = { ...body }; // 视频、图片、声音、文件
             } else if (
-              [103, 106, 110, 111, 102, 101, 116, 118, 119, 120, 114, 115, 123, 124, 127, 129].includes(type)
+              // 128 宣教类型
+              [103, 106, 110, 111, 102, 101, 116, 118, 119, 120, 114, 115, 123, 124, 127, 128, 129].includes(type)
             ) {
               formatMsgsItem.type = 'custom';
               formatMsgsItem.content = { ...body }; // 调达标值、调药、血压、医生提醒、医生通知
@@ -227,7 +228,8 @@ const ChatList: FC = () => {
     console.log(activeImage);
     dispatch({ type: 'im/TOGGLE_VIEWER_ACTIVE_INDEX', payload: { index } });
   };
-  // console.log('===========**********历史msg', reCalcAllMessageTime(currSessionMsgs));
+  console.log('currSessionMsgs', currSessionMsgs);
+  console.log('===========**********历史msg', reCalcAllMessageTime(currSessionMsgs));
   return (
     <>
       <ul id="CHAT_LIST" ref={chatList} className={styles.chat_list}>
@@ -270,29 +272,29 @@ const ChatList: FC = () => {
         images={images}
         onChange={handleChangeViewerPic}
         disableKeyboardSupport
-        customToolbar={(config) => (
-          [
-            ...config,
-            {
-              key: 'customStructured',
-              render: (
-                <div>
-                  <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
-                    <span
-                      className="react-viewer-btn"
-                      key="structured"
-                    >
-                      <div>
-                        <img src={jgh} alt="" />
-                      </div>
-                      <span>结构化数据</span>
-                    </span>
-                  </CheckImgStructured>
-                </div>
-              ),
-            },
-          ]
-        )}
+        // customToolbar={(config) => (
+        //   [
+        //     ...config,
+        //     {
+        //       key: 'customStructured',
+        //       render: (
+        //         <div>
+        //           <CheckImgStructured imageInfo={{ imageUrl: images?.[activeImageIndex]?.src }}>
+        //             <span
+        //               className="react-viewer-btn"
+        //               key="structured"
+        //             >
+        //               <div>
+        //                 <img src={jgh} alt="" />
+        //               </div>
+        //               <span>结构化数据</span>
+        //             </span>
+        //           </CheckImgStructured>
+        //         </div>
+        //       ),
+        //     },
+        //   ]
+        // )}
       />
     </>
   );

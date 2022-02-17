@@ -135,6 +135,17 @@
       transform: scaleY(0.9);
     }
   }
+  .btn_bind {
+    margin-left: 10px;
+    line-height: 34px;
+    border: 1px solid #AED3F4;
+    color: #218CE9;
+    display: inline-block;
+    padding: 0 17px;
+    cursor: pointer;
+    height: 34px;
+  border-radius: 5px;
+  }
 }
 .unbind {
   .title {
@@ -162,4 +173,5 @@
   .agreement {
     color: #1890ff;
   }
+
 }

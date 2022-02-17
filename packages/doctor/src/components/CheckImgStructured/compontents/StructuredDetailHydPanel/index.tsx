@@ -14,11 +14,12 @@ import uuid from 'react-uuid';
 
 import { isEmpty, cloneDeep } from 'lodash';
 import styles from './index.scss';
+import { IApiDocumentItem, ISearchDocumentItem } from 'typings/imgStructured';
 
 // 此组件具体到，化验单或检查单panel
 const { TabPane } = Tabs;
 interface IProps {
-  imageId: string;
+  // imageId: string;
   tabKey: string;// 一级tab
   outType: string;
   initData: {
@@ -48,7 +49,7 @@ interface ICheckTypesItem extends IApiDocumentItem {
 type ICheckTypes = Array<ICheckTypesItem | ISearchDocumentItem>;
 const StructuredDetailHydPanel: FC<IProps> = (props) => {
   const {
-    hydCallbackFns, setHydCallbackFns, tabKey, outType, initData, imageId, isViewOnly,
+    hydCallbackFns, setHydCallbackFns, tabKey, outType, initData, isViewOnly,
   } = props;
   const activeType1 = useRef('');
   let initSubType: string[] = [];
@@ -151,7 +152,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
         // console.log('hospital', hospital);
         resolve({
           documentList,
-          imageId,
+          // imageId,
           outType,
           operatorId: window.$storage.getItem('sid'),
           sid: window.$storage.getItem('patientSid'),
@@ -344,36 +345,7 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
       id: null,
     });
   };
-  // const addSearch = () => {
-  //   return (
-  //     <TabPane
-  //       closable={false}
-  //       tab={
-  //         <div>
-  //           <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
-  //             handleChangeSubType={setSampleFroms}
-  //             initSampleFrom={initSubType}
-  //             sampleFroms={sampleFroms}
-  //             handleSelectTypeIndex={handleSelectTypeIndex}
-  //             documentType={outType}
-  //           >
-  //             <img src={IconAdd}></img>
-  //           </SearchDocument>
-  //         </div>
-  //       }
-  //       key='deactivation'
-  //     >
-  //     </TabPane>
-  //   );
-  // };
 
-
-  // 新增页签的回调
-  const handelTabsEdit = (deleteTabKey: string, action: any) => {
-
-  };
-  console.log('checkTypes', checkTypes);
-  console.log('sampleFroms', sampleFroms);
   return (
     <div className={styles.structure_detail_item}>
       {
@@ -415,15 +387,11 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
             }
             {checkTypes.length > 0 && (
               <Tabs
-                onEdit={handelTabsEdit}
                 activeKey={activeType}
                 onChange={(tab: string) => handleActiveTab(tab)}
                 type="editable-card"
                 addIcon={
-                  <SearchDocument mode="search" type="HYD" onSuccess={addIndexSuccess}
-                    handleChangeSubType={setSampleFroms}
-                    initSampleFrom={initSubType}
-                    sampleFroms={sampleFroms}
+                  <SearchDocument mode="search" type="HYD"
                     handleSelectTypeIndex={handleSelectTypeIndex}
                     documentType={outType}
                   >
@@ -432,7 +400,6 @@ const StructuredDetailHydPanel: FC<IProps> = (props) => {
                 }
               >
                 {renderTabPane()}
-                {/* {addSearch()} */}
               </Tabs>
             )}
             {

@@ -118,7 +118,7 @@ export default function ViewerToolbar(props: ViewerToolbarProps) {
         {`(${props.width} x ${props.height})`}
                              </span>}
       {props.showTotal
-        && <span className={`${props.prefixCls}-showTotal`}>{`${props.activeIndex + 1} of ${props.count}`}</span>}
+        && <span className={`${props.prefixCls}-showTotal text-white`}>{`${props.activeIndex + 1} / ${props.count}`}</span>}
     </p>
   ) : null;
   let { toolbars } = props;

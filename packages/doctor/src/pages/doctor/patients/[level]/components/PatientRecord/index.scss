@@ -1,0 +1,65 @@
+.patient_record {
+  margin: 0 auto;
+  .item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+    span {
+      flex: 0 0 auto;
+      margin-right: 6px;
+      font-size: 14px;
+      color: #333;
+    }
+    input {
+      height: 42px;
+      font-size: 14px;
+    }
+    .orgList {
+      flex: 1;
+      @include flex(flex-start, center);
+      flex-wrap: wrap;
+      li {
+        background: #F7F7F7;
+        border-radius: 2px;
+        font-size: 14px;
+        height: 42px;
+        line-height: 14px;
+        margin-right: 10px;
+        border: none;
+        text-align: center;
+        padding: 14px 12px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        margin-bottom: 10px;
+        &.active {
+          border: 1px solid #007ADA;
+          color: #007ADA;
+          background: #fff;
+        }
+      }
+    }
+  }
+  .patient_info {
+    >div {
+      color: #333;
+      font-size: 16px;
+      line-height: 30px;
+      height: 30px;
+      padding-left: 100px;
+      margin-bottom: 30px;
+      span {
+        margin-right: 30px;
+      }
+    }
+  }
+  :global {
+    .ant-input-number {
+      width: 100%;
+    }
+    .ant-input, .ant-input-number-input {
+      height: 40px;
+      line-height: 40px;
+    }
+  }
+}

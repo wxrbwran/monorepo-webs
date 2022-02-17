@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { IQuestions } from '../../../../../const';
 import delIcon from '@/assets/img/suifang/delete-icon.svg';
-import DdtkModal from '../ddtk_modal';
+// import DdtkModal from '../ddtk_modal';
+import EditDdtkQuestionType from '@/components/EditDdtkQuestionType';
 import styles from './index.scss';
 import { Input, Button } from 'antd';
 
@@ -19,7 +20,7 @@ interface IProps {
   handSaveDdtkModify: () => void;
   originQue: IQuestions[];
 }
-function questionGapFilling(props: IProps) {
+function QuestionDdtk(props: IProps) {
   const { questions, quesIndex, editIndex, item, handleSaveStem, handleDelStem, setEditIndex, changeDdtkQues, handSaveDdtkModify } = props;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [cursorIndex, setCursorIndex] = useState();
@@ -69,18 +70,18 @@ function questionGapFilling(props: IProps) {
       <div className="flex justify-between">
         <div className={styles.add_btn} onClick={handleAddSymbol}>+ 添加填空符</div>
         <Button type="primary" ghost>
-          <DdtkModal
+          <EditDdtkQuestionType
             questions={questions}
             changeQues={changeDdtkQues}
             quesIndex={quesIndex}
             item={item}
             handSaveDdtkModify={handSaveDdtkModify}
             originQue={props.originQue}
-          ><span>修改填空题型</span></DdtkModal>
+          ><span>修改填空题型</span></EditDdtkQuestionType>
         </Button>
       </div>
     </div>
   );
 }
 
-export default questionGapFilling;
+export default QuestionDdtk;

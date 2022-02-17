@@ -72,4 +72,8 @@ export default {
   getDoctorHeadingPatients(data: any): Promise<any> {
     return http.get('doctor/heading_patients', { data });
   },
+  // 主动注册患者到独立管理
+  putDoctorRegistryPatient(data: CommonData): Promise<any> {
+    return http.put('doctor/registry/patient', { data });
+  },
 };
