@@ -33,7 +33,7 @@ const AddDdtkSenior: FC<IAddTopicProps & { closeModal: () => void }> = (props) =
   const [question, setQuestion] = useState(formatInit()); // 问题文本
   const [qas, setQas] = useState<IQaItem[]>(initData ? initData as IQaItem[] : []); // 问题组
   const [cursorIndex, setCursorIndex] = useState(); // 光标位置
-  const groupUuid = uuid();
+  const groupUuid = initData?.[0]?.uuid || uuid();
 
   const handleDelete = () => {
     if (actionType === 'edit' && editGroupInx !== undefined && initData) {
