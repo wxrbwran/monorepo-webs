@@ -37,6 +37,8 @@ function SecurityLayout({ children, location }: IProps) {
   const legalRelationship = useSelector((state: IState) => state.user.legalRelationship);
   const institution = useSelector((state: IState) => state.user.institution);
   // const [tableData, setTableData] = useState<IData[]>([]);
+  const stageToken = localStorage.getItem('xzl-web-doctor_access_token');
+
   const getCurrentUser = () => {
     if (dispatch) {
       dispatch({
@@ -47,6 +49,21 @@ function SecurityLayout({ children, location }: IProps) {
       });
     }
   };
+
+  useEffect(() => {
+    document.addEventListener('visibilitychange', function () {
+      var isHidden = document.hidden;
+      console.log(document.visibilityState);
+      if (isHidden) {
+      } else {
+        // 切换了账号然后重新打开该窗口时
+        if (stageToken != localStorage.getItem('xzl-web-doctor_access_token')) {
+          history.push('/home');
+        }
+      }
+    });
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem('xzl-web-doctor_access_token');
     if (!!token) {
