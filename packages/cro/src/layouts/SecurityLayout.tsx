@@ -61,12 +61,22 @@ function SecurityLayout({ children, location }: IProps) {
       if (isHidden) {
       } else {
         const token = localStorage.getItem('xzl-web-doctor_access_token');
+
+        console.log('================token', token);
+        console.log('================stageToken', stageToken);
         // 切换了账号然后重新打开该窗口时
         if (stageToken != token) {
 
           setAuthorizationToken(token);
           setIsLogin(true);
           getCurrentUser();
+          // 如果当前路由就是home，则需要主动调用项目列表
+          if (location.pathname === '/home') {
+            dispatch({
+              type: 'project/fetchProjectList',
+              payload: null,
+            });
+          }
           history.push('/home');
         }
       }

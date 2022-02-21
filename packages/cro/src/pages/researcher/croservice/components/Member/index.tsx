@@ -6,6 +6,7 @@ import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import styles from './index.scss';
 import avatar from '@/assets/img/default_project.png';
+import config from '@/config';
 interface IMemberProps {
 
   title: string;
@@ -32,7 +33,7 @@ const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleCho
             <div className={`flex flex-row justify-center box-shadow relative w-150 h-80 text-center rounded-md mr-20 mt-15 rounded-md ${styles.item}`}>
               {
                 editable &&
-                <img className="absolute right-3 top-3 w-14 h-14" src={iconClose} alt="" onClick={() => { onRemove(item, index); }} />
+                <img className="absolute right-3 top-3 w-14 h-14" src={iconClose} alt="" onClick={() => { onRemove(item, index); }} onError={(e) => { e.target.src = config.defaultAvatar; }} />
               }
               <img className="w-50 h-50 rounded mt-15 ml-15" src={item.avatarUrl ?? defaultAvatar} alt="" />
               <div className={'flex flex-col items-center justify-center'}>
