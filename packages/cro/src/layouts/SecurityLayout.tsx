@@ -39,6 +39,9 @@ function SecurityLayout({ children, location }: IProps) {
   // const [tableData, setTableData] = useState<IData[]>([]);
   const stageToken = localStorage.getItem('xzl-web-doctor_access_token');
 
+  console.log('================zhousuhua token', JSON.stringify(stageToken));
+
+
   const getCurrentUser = () => {
     if (dispatch) {
       dispatch({
@@ -54,6 +57,7 @@ function SecurityLayout({ children, location }: IProps) {
     document.addEventListener('visibilitychange', function () {
       var isHidden = document.hidden;
       console.log(document.visibilityState);
+      console.log('================zhousuhua document.visibilityState', document.visibilityState);
       if (isHidden) {
       } else {
         // 切换了账号然后重新打开该窗口时
