@@ -60,8 +60,13 @@ function SecurityLayout({ children, location }: IProps) {
       console.log('================zhousuhua document.visibilityState', document.visibilityState);
       if (isHidden) {
       } else {
+        const token = localStorage.getItem('xzl-web-doctor_access_token');
         // 切换了账号然后重新打开该窗口时
-        if (stageToken != localStorage.getItem('xzl-web-doctor_access_token')) {
+        if (stageToken != token) {
+
+          setAuthorizationToken(token);
+          setIsLogin(true);
+          getCurrentUser();
           history.push('/home');
         }
       }
