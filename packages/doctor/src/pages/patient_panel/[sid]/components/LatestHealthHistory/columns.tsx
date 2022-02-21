@@ -34,7 +34,24 @@ export const bpCol = [
     render: (text: number) => <div className="w-160">{text}</div>,
   },
 ];
-
+export const weightCol = [
+  measuredAt(),
+  {
+    title: '体重/KG',
+    dataIndex: 'WEIGHT',
+    key: 'WEIGHT',
+    width: 160,
+  },
+];
+export const stepCol = [
+  measuredAt(),
+  {
+    title: '步数',
+    dataIndex: 'STEP',
+    key: 'STEP',
+    width: 160,
+  },
+];
 const getGluTit = () => {
   const colList: CommonData[] = [];
   Object.keys(BloodType2).forEach((key, index) => {

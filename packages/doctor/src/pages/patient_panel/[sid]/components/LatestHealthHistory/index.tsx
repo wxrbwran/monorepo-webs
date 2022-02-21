@@ -9,7 +9,7 @@ import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import * as api from '@/services/api';
 import config from '@/config';
 import LatestHealthHistoryTable from '../LatestHealthHistoryTable';
-import { bpCol, gluCol, getCustomCol } from './columns';
+import { bpCol, gluCol, getCustomCol, weightCol, stepCol } from './columns';
 import { formatData, fetchTypeList } from './formatData';
 
 const { RangePicker } = DatePicker;
@@ -60,7 +60,7 @@ const LatestHealthHistory: FC = ({ children }) => {
       pageSize: config.LATES_HEALTH_SIZE,
       ...apiParams,
     };
-    if (['BP', 'GLU'].includes(activeTabKey)) {
+    if (['BP', 'GLU', 'WEIGHT', 'STEP'].includes(activeTabKey)) {
       // 血压、血糖
       params.indexTypeList = fetchTypeList(activeTabKey);
       api.medical.fetchMedicalIndexHistory(params).then((res) => {
@@ -126,6 +126,8 @@ const LatestHealthHistory: FC = ({ children }) => {
   const tabList = [
     { tabTit: '血压心率', columns: bpCol, type: 'BP' },
     { tabTit: '血糖', columns: gluCol, type: 'GLU' },
+    { tabTit: '体重', columns: weightCol, type: 'WEIGHT' },
+    { tabTit: '步数', columns: stepCol, type: 'STEP' },
   ];
 
   const renderTab = useMemo(() => (tab: string, key: string, col?: object[]) => {

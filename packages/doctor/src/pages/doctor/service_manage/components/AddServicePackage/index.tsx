@@ -12,6 +12,7 @@ import * as api from '@/services/api';
 import { isEmpty, debounce } from 'lodash';
 import { handleRelatedDoctorsDataSource } from 'xzl-web-shared/dist/components/XzlTable/util';
 import { doctorRoles } from '@/utils/tools';
+import config from '@/config';
 interface IProps {
   initData?: {
     innerTeams: {
@@ -173,7 +174,7 @@ const AddServicePackage: FC<IProps> = (props) => {
                     <img className="absolute right-10 top-10 w-14" src={iconClose} alt="" onClick={() => handleDel(doctor.sid, roleId)} />
                   )
                 }
-                <img className="w-50 h-50 rounded m-12 mr-6" src={doctor.avatarUrl || defaultAvatar} alt="" />
+                <img className="w-50 h-50 rounded m-12 mr-6" src={doctor.avatarUrl || defaultAvatar} alt="" onError={(e) => { e.target.src = config.defaultAvatar; }} />
                 <div className="w-78">
                   <div className="text-sm font-bold mt-5 hide-text" title={doctor.name}>{doctor.name}</div>
                   <div className={`text-gray-600 text-xs ${styles.org_name}`} title={doctor.orgName}>{doctor.orgName}</div>
