@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Dropdown, Avatar } from 'antd';
-import { CaretDownOutlined, UserOutlined } from '@ant-design/icons';
+import { Menu, Dropdown } from 'antd';
+import { CaretDownOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'umi';
 import config from '@/config';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
@@ -125,17 +125,16 @@ function Setting() {
       <Menu.Item>{Logout}</Menu.Item>
     </Menu>
   );
-  const avatar = config.defaultAvatar;
+
   return (
     <div className={styles.setting}>
       <Dropdown overlay={menu} placement="bottomLeft">
         <div className={styles.avatar}>
-          <Avatar
+          <img
             src={userInfo.avatarUrl || config.defaultAvatar}
-            icon={avatar ? null : <UserOutlined />}
-            shape="square"
-            size={32}
+            className='w-32 h-32'
             alt="用户头像"
+            onError={(e) => { e.target.src = config.defaultAvatar; }}
           />
           <span className="ml-8 mr-3 pointer">{userInfo.name}</span>
           <CaretDownOutlined />

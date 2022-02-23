@@ -8,6 +8,7 @@ import { handleSelection } from 'xzl-web-shared/dist/utils/conditions';
 import styles from './index.scss';
 import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { cloneDeep, isEmpty, debounce } from 'lodash';
+import config from '@/config';
 interface IProps {
   handleRefresh: () => void;
 }
@@ -39,6 +40,7 @@ const AddTeamMember: FC<IProps> = (props) => {
         <img
           src={text || defaultAvatar}
           style={{ width: 40, height: 40 }}
+          onError={(e) => { e.target.src = config.defaultAvatar; }}
         />
       ),
     },

@@ -3,6 +3,7 @@ import female from '@/assets/img/icon_female.svg';
 import male from '@/assets/img/icon_male.svg';
 import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import { isEmpty } from 'lodash';
+import config from '@/config';
 import styles from './index.scss';
 
 interface IProps {
@@ -20,7 +21,7 @@ const MemberItem: FC<IProps> = ({ doctorData, style, doctorWorkOrg }) => {
   return (
     <div className={`mt-10 p-15 rounded-md ${styles.item}`} style={style}>
       <div className="flex items-start mb-14">
-        <img className="w-60 h-60 mr-15 rounded-md" src={avatarUrl || defaultAvatar} />
+        <img className="w-60 h-60 mr-15 rounded-md" src={avatarUrl || defaultAvatar} onError={(e) => { e.target.src = config.defaultAvatar; }} />
         <div>
           <div className="flex items-center  mt-10">
             <span className="text-lg font-bold">{name}</span>

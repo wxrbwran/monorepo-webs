@@ -2,6 +2,7 @@ import React, { FC, useMemo } from 'react';
 import { defaultAvatar } from 'xzl-web-shared/dist/utils/consts';
 import styles from '../PackageTeamItem/index.scss';
 import { Role, fetchRolePropValue } from 'xzl-web-shared/dist/utils/role';
+import config from '@/config';
 interface IProps {
   members:  ISubject[];
 }
@@ -35,7 +36,7 @@ const PackageDoctorItem: FC<IProps> = (props) => {
     return (
       <div className="text-center mb-15 w-160">
         <div className="relative w-100 mx-auto">
-          <img className="w-100 h-100 rounded" src={avatarUrl} />
+          <img className="w-100 h-100 rounded" src={avatarUrl}  onError={(e) => { e.target.src = config.defaultAvatar; }} />
           {isCreator && <div className={styles.creator}>创建人</div>}
         </div>
         <div className="mt-10 text-base font-bold line-ellipsis w-160" title={doctorName}>{doctorName}</div>
