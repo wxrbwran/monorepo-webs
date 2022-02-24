@@ -248,10 +248,8 @@ const EditIndex: FC<IProps> = (props) => {
               {/* 指标库添加指标/结构化添加指标 */}
               {['imgAddIndex', 'libraryAdd'].includes(source) && (
                 <>
-                  <Form.Item className="hidden" noStyle name="name">
+                  <Form.Item label="指标名称" name="name" rules={rules}>
                     <Input type="hidden" />
-                  </Form.Item>
-                  <Form.Item label="指标名称" rules={rules}>
                     <DebounceSelect
                       mode="tags"
                       allowClear
