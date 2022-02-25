@@ -27,7 +27,7 @@ function LifeStandard({ children }: IProps) {
       let date = null;
       conditionType = type;
       date = r.createdAt
-        ? dayjs(r.createdAt).format('MM月DD日') : '';
+        ? dayjs(r.createdAt).format('MM月DD日 HH:mm') : '';
       recordArr.push({
         condition: { ...r.content },
         date,
@@ -46,7 +46,7 @@ function LifeStandard({ children }: IProps) {
     };
     api.medicine.getLifeStatus(params)
       .then((res) => {
-        setLifeStatusList(res.lifeStatusList);
+        setLifeStatusList(res.lifeStatusList.sort((a, b) => a.createdAt - b.createdAt));
       })
       .catch((err) => {
         console.log('err', err);
