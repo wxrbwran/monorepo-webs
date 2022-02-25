@@ -155,6 +155,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
               // 选择了化验单tab，但没有选择任何单据
               if (isEmpty(documentData[0].documentList)) {
                 message.error('化验单内容为空，请填写!');
+                setLoading(false);
               } else {
                 const errDocument = documentData[0].documentList.filter(item => isEmpty(item.indexList));
                 // 选择的化验单据，没有填写任何指标（有且仅有一个化验单据，且没填写任何指标数值，直接保存会导致图片丢失，这里拦截一下）
@@ -162,15 +163,18 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
                   handleSaveJcd(apiParams);
                 } else {
                   message.error(`【${errDocument[0].documentName}】单据未填写内容！`);
+                  setLoading(false);
                 }
               }
             }
           }).catch((err) => {
             console.log('请完善化验单后提交！err', err);
+            setLoading(false);
             message.error('请完善化验单后提交！');
           });
       } else {
         message.error('请选择图片类型');
+        setLoading(false);
       }
     }
   };
