@@ -5,5 +5,28 @@
         height: 100%;
       }
     }
+    .family_form {
+      .ant-select-selector, .ant-input-number-input, .ant-select-selector {
+        height: 32px !important;
+        line-height: 32px !important;
+        min-height: 32px !important;
+      }
+      .ant-select-multiple {
+        .ant-select-selector {
+          height: auto!important;
+        }
+      }
+      .ant-select-selection-item, .ant-select-selection-search {
+        min-height: 27px!important;
+        height: 27px!important;
+        line-height: 27px!important;
+      }
+    }
+    .info {
+      display: flex;
+    }
+    .ant-divider {
+      margin: 18px 0;
+    }
   }
 }

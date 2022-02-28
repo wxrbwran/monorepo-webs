@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'umi';
 import {
-  Form, Checkbox, Radio, Select, InputNumber, Input, message,
+  Form, Checkbox, Radio, Select, InputNumber, Input, message, Divider,
 } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { SelectValue } from 'antd/lib/select';
@@ -138,7 +138,7 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
       // initialValues={integratedHistory}
         onFinish={handleSubmit}
         form={form}
-        className="more-padding"
+        className="more-padding family_form"
       >
         <Form.Item name="familyHistory">
           <Checkbox
@@ -174,32 +174,35 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
             </Select>
           </Form.Item>
         ))}
+        <Divider dashed />
         <div className="info">
-          <Form.Item name="smoking">
-            <Checkbox
-              defaultChecked={integratedHistory && integratedHistory.smoking === 'SICK'}
-              onChange={(e) => changeDiseaseHistory('smoking', e)}
-            >
-              吸烟史
-            </Checkbox>
-          </Form.Item>
-          <Form.Item name="smokingSince">
-            <InputNumber
-              min={0}
-              max={99}
-              disabled={getFieldValue('smoking') === 'WELL' || !getFieldValue('smoking')}
-              step={0.5}
-              defaultValue={integratedHistory ? integratedHistory.smokingSince : ''}
-              onChange={(value) => handleSetFieldsVal('smokingSince', value)}
-              style={{ width: 100 }}
-            />
-            {' '}
-            年
-          </Form.Item>
+          <div className='flex'>
+            <Form.Item name="smoking">
+              <Checkbox
+                defaultChecked={integratedHistory && integratedHistory.smoking === 'SICK'}
+                onChange={(e) => changeDiseaseHistory('smoking', e)}
+              >
+                吸烟史:
+              </Checkbox>
+            </Form.Item>
+            <Form.Item name="smokingSince">
+              <InputNumber
+                min={0}
+                max={99}
+                disabled={getFieldValue('smoking') === 'WELL' || !getFieldValue('smoking')}
+                step={0.5}
+                defaultValue={integratedHistory ? integratedHistory.smokingSince : ''}
+                onChange={(value) => handleSetFieldsVal('smokingSince', value)}
+                style={{ width: 100 }}
+              />
+              {' '}
+              年
+            </Form.Item>
+          </div>
           <Form.Item name="smokingLevel" label="吸烟情况：">
             <Select
               disabled={getFieldValue('smoking') === 'WELL' || !getFieldValue('smoking')}
-              style={{ width: 151 }}
+              style={{ width: 120 }}
             >
               <Option value="LEVEL_ONE">1-5支/日</Option>
               <Option value="LEVEL_TWO">5-10支/日</Option>
@@ -219,47 +222,50 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
             </RadioGroup>
           </Form.Item>
           {getFieldValue('quitSmoking') === 'QUITED' && (
-          <Form.Item name="quitSmokingSince" label="戒烟：">
-            <InputNumber
-              min={0}
-              max={99}
-              disabled={getFieldValue('smoking') === 'WELL' || !getFieldValue('smoking')}
-              step={0.5}
-              defaultValue={integratedHistory ? integratedHistory.quitSmokingSince : ''}
-              onChange={(value) => handleSetFieldsVal('quitSmokingSince', value)}
-              style={{ width: 100 }}
-            />
-            {' '}
-            年
-          </Form.Item>
+            <Form.Item name="quitSmokingSince" label="戒烟：" >
+              <InputNumber
+                min={0}
+                max={99}
+                disabled={getFieldValue('smoking') === 'WELL' || !getFieldValue('smoking')}
+                step={0.5}
+                defaultValue={integratedHistory ? integratedHistory.quitSmokingSince : ''}
+                onChange={(value) => handleSetFieldsVal('quitSmokingSince', value)}
+                style={{ width: 105 }}
+              />
+              {' '}
+              年
+            </Form.Item>
           )}
         </div>
+        <Divider dashed />
         <div className="info">
-          <Form.Item name="drinking">
-            <Checkbox
-              defaultChecked={integratedHistory && integratedHistory.drinking === 'SICK'}
-              onChange={(e) => changeDiseaseHistory('drinking', e)}
-            >
-              饮酒史
-            </Checkbox>
-          </Form.Item>
-          <Form.Item name="drinkingSince">
-            <InputNumber
-              min={0}
-              max={99}
-              disabled={getFieldValue('drinking') === 'WELL' || !getFieldValue('drinking')}
-              step={0.5}
-              defaultValue={integratedHistory ? integratedHistory.drinkingSince : ''}
-              onChange={(value) => handleSetFieldsVal('drinkingSince', value)}
-              style={{ width: 100 }}
-            />
-            {' '}
-            年
-          </Form.Item>
+          <div className='flex'>
+            <Form.Item name="drinking">
+              <Checkbox
+                defaultChecked={integratedHistory && integratedHistory.drinking === 'SICK'}
+                onChange={(e) => changeDiseaseHistory('drinking', e)}
+              >
+                饮酒史:
+              </Checkbox>
+            </Form.Item>
+            <Form.Item name="drinkingSince">
+              <InputNumber
+                min={0}
+                max={99}
+                disabled={getFieldValue('drinking') === 'WELL' || !getFieldValue('drinking')}
+                step={0.5}
+                defaultValue={integratedHistory ? integratedHistory.drinkingSince : ''}
+                onChange={(value) => handleSetFieldsVal('drinkingSince', value)}
+                style={{ width: 100 }}
+              />
+              {' '}
+              年
+            </Form.Item>
+          </div>
           <Form.Item name="drinkingLevel" label="饮酒情况：">
             <Select
               disabled={getFieldValue('drinking') === 'WELL' || !getFieldValue('drinking')}
-              style={{ width: 151 }}
+              style={{ width: 120 }}
             >
               <Option value="LEVEL_ONE">少量</Option>
               <Option value="LEVEL_TWO">多量</Option>
@@ -293,13 +299,14 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
           </Form.Item>
           )}
         </div>
+        <Divider dashed />
         <div className="info">
           <Form.Item name="allergy">
             <Checkbox
               defaultChecked={integratedHistory && integratedHistory.allergy === 'SICK'}
               onChange={(e) => changeDiseaseHistory('allergy', e)}
             >
-              过敏史
+              过敏史:
             </Checkbox>
           </Form.Item>
           <Form.Item name="allergyInfo" style={{ flex: '1 0 auto' }}>

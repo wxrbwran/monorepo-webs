@@ -241,6 +241,9 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             {...baseProps}
           />;
           break;
+        case 'JWS':
+          dom = '既往史';
+          break;
         default:
           dom = <div>无数据</div>;
           break;

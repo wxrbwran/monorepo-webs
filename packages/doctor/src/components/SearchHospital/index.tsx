@@ -120,7 +120,7 @@ function SearchHospital({
         onSelect={handleSelect}
         notFoundContent={fetching ? <Spin size="small" /> : null}
         style={style}
-        value={hospitalName}
+        value={hospitalName || undefined}
         onPopupScroll={handleOptionScroll}
         virtual={false}
         allowClear={allowClear || false}
