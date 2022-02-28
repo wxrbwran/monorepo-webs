@@ -26,13 +26,6 @@ function AdjustInspection(props: Iprops) {
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
 
-  const btnText: CommonData = {
-    UPPER_DOCTOR: '发送',
-    LOWER_DOCTOR: '发给主管医生',
-    ALONE_DOCTOR: '发送',
-    DEP_HEAD: '发送',
-  };
-
   const saveMedicalList = (medicalListParams: IMedicalList[]) => {
     setMedicalList(medicalListParams);
   };
@@ -160,7 +153,7 @@ function AdjustInspection(props: Iprops) {
                   { step === 1 ? '取消' : '重新调整' }
                 </Button>
                 <Button className={styles.submit} onClick={debounce(handleOk, 300)} htmlType="submit" type="primary">
-                  { step === 1 ? '确认' : btnText[role] }
+                  { step === 1 ? '确认' : '发送' }
                 </Button>
               </div>
             </div>
