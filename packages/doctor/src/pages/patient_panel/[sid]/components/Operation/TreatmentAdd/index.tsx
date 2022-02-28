@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import TreatmentAddEdit, { IProps } from './TreatmentAddEdit';
+import AddEditTreatment, { IProps } from '@/components/AddEditTreatment/index';
 
 function AddTreatment(props: IProps) {
   const { children, type } = props;
@@ -20,7 +20,7 @@ function AddTreatment(props: IProps) {
         footer={null}
         destroyOnClose
       >
-        <TreatmentAddEdit {...props} closeModal={() => setIsShowModal(false)} />
+        <AddEditTreatment {...props} closeModal={() => setIsShowModal(false)} />
       </DragModal>
 
     </span>

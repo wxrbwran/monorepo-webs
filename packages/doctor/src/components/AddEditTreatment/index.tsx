@@ -8,8 +8,8 @@ import SearchHospital from '@/components/SearchHospital';
 import Calendar from '@/components/Calendar';
 import * as api from '@/services/api';
 import { getDateVal } from '@/utils/date';
-import PlaceItem from '../PlaceItem';
-import styles from '../DiagnoseAdd/index.scss';
+import PlaceItem from './PlaceItem';
+import styles from '../AddEditDiagnose/index.scss';
 import { isEmpty } from 'lodash';
 
 export interface ItreatmentDataItem {
@@ -52,7 +52,7 @@ interface IformVal {
 const { Option } = Select;
 let uuid: number = 0;
 
-function TreatmentAddEdit(props: IProps) {
+function AddEditTreatment(props: IProps) {
   const {  type, refresh, initData, closeModal } = props;
   const [form] = Form.useForm();
   const { setFieldsValue } = form;
@@ -414,4 +414,4 @@ function TreatmentAddEdit(props: IProps) {
     </div>
   );
 }
-export default TreatmentAddEdit;
+export default AddEditTreatment;
