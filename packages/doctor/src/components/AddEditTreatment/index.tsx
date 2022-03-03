@@ -11,6 +11,7 @@ import { getDateVal } from '@/utils/date';
 import PlaceItem from './PlaceItem';
 import styles from '../AddEditDiagnose/index.scss';
 import { isEmpty } from 'lodash';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 
 export interface ItreatmentDataItem {
   hospitalInfo: Ihospital,
@@ -33,7 +34,6 @@ export interface Ihospital {
   hospitalName: string;
 }
 export interface IProps {
-  children: React.ReactElement;
   type: string;
   refresh: () => void;
   initData?: ItreatmentDataItem;
@@ -55,7 +55,7 @@ let uuid: number = 0;
 function AddEditTreatment(props: IProps) {
   const {  type, refresh, initData, closeModal } = props;
   const [form] = Form.useForm();
-  const { setFieldsValue } = form;
+  const { setFieldsValue, validateFields } = form;
   const [treaType, setTreaType] = useState<number>(0); // 治疗方式类型，支架为1，普通为0
   const [initialQueue, setInitialQueue] = useState<number[]>([0]); // 冠状动脉，支架位置列表
   const [initialStentQueue, setInitialStentQueue] = useState<number[][]>([]); // 支架名称与尺寸初始队列
@@ -146,45 +146,64 @@ function AddEditTreatment(props: IProps) {
   const handleSubmit = (values: IformVal) => {
     if (flag) {
       flag = false;
+      const treatmentData = {
+        ...values.treatment,
+        hospitalInfo: treaType === 0 ? {
+          ...values.hospital,
+          diagnosisAt: new Date(values.diagnosisAt).getTime(),
+        } : {},
+        stentInfos: treaType === 1 ? coronaryStent(values) : [],
+        ...(type === 'add' ? {} : { id: (initData as ItreatmentDataItem).id }),
+      };
       const params: CommonData = {
         wcId: patientWcid,
         sid,
         roleType: window.$storage.getItem('roleId'),
         treatmentInfo: {
           category: 'DIAGNOSIS_TREATMENT',
-          treatmentDataList: [
-            {
-              ...values.treatment,
-              hospitalInfo: treaType === 0 ? {
-                ...values.hospital,
-                diagnosisAt: new Date(values.diagnosisAt).getTime(),
-              } : {},
-              stentInfos: treaType === 1 ? coronaryStent(values) : [],
-            },
-          ],
+          treatmentDataList: [treatmentData],
         },
       };
-      if (type === 'add') {
-        api.diagnosis.addTreatment(params).then(() => {
-          message.success('添加成功');
-          resetStatus();
-          flag = true;
-        }).catch(() => {
-          flag = true;
-        });
+      if (closeModal) {
+        if (type === 'add') {
+          api.diagnosis.addTreatment(params).then(() => {
+            message.success('添加成功');
+            resetStatus();
+            flag = true;
+          }).catch(() => {
+            flag = true;
+          });
+        } else {
+          // params.treatmentInfo.treatmentDataList[0].id = (initData as ItreatmentDataItem).id;
+          api.diagnosis.patchTreatment(params).then(() => {
+            message.success('修改成功');
+            resetStatus();
+            flag = true;
+          }).catch(() => {
+            flag = true;
+          });
+        }
       } else {
-        params.treatmentInfo.treatmentDataList[0].id = (initData as ItreatmentDataItem).id;
-        api.diagnosis.patchTreatment(params).then(() => {
-          message.success('修改成功');
-          resetStatus();
-          flag = true;
-        }).catch(() => {
-          flag = true;
-        });
+        console.log('paramsparams11', treatmentData);
+        event.emit('fetchStructuredPreviousHistory', 'treatment', treatmentData);
       }
     }
   };
 
+  useEffect(() => {
+    const handleSubmitImg = () => {
+      validateFields().then((values) => {
+        handleSubmit(values);
+      }).catch((err) => {
+        console.log('errrr11', err);
+        event.emit('fetchStructuredPreviousHistory', 'treatment', 'error');
+      });
+    };
+    event.addListener('saveStructured', handleSubmitImg);
+    return () => {
+      event.removeListener('saveStructured', handleSubmitImg);
+    };
+  }, [treaType]);
   const handleSetFieldsVal = (key: string, val: any) => {
     if (key === 'diagnosisAt') {
       const dateArr = val.split('/');
@@ -200,6 +219,9 @@ function AddEditTreatment(props: IProps) {
       });
     }
   };
+  useEffect(() => {
+    console.log('#####treaType', treaType);
+  }, [treaType]);
   const handleSelect = (values: string, option: any) => {
     console.log(values);
     const trea = {
@@ -285,6 +307,7 @@ function AddEditTreatment(props: IProps) {
     setInitialQueue(queueList);
   };
   useEffect(() => {
+    console.log('==========333', initData);
     if (initData) {
       if (initData.stentInfos.length === 0) {
         setTreaType(0); // 非支架类型
@@ -397,17 +420,21 @@ function AddEditTreatment(props: IProps) {
                     </>
                   )
               }
-          <Form.Item>
-            <div className="common__btn">
-              <Button
-                className={styles.submit}
-                onClick={closeModal}
-              >
-                取消
-              </Button>
-              <Button className={styles.submit} htmlType="submit" type="primary">保存</Button>
-            </div>
-          </Form.Item>
+          {
+            closeModal && (
+              <Form.Item>
+                <div className="common__btn">
+                  <Button
+                    className={styles.submit}
+                    onClick={closeModal}
+                  >
+                    取消
+                  </Button>
+                  <Button className={styles.submit} htmlType="submit" type="primary">保存</Button>
+                </div>
+              </Form.Item>
+            )
+          }
         </Form>
        )
       }

@@ -8,10 +8,10 @@ import {
 import Calendar from '@/components/Calendar';
 import SearchHospital from '@/components/SearchHospital';
 import * as api from '@/services/api';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import styles from './index.scss';
 
 interface Iprops {
-  children: React.ReactElement;
   type: string;
   initData?: IdiagnosisItem | null;
   refreshList: () => void;
@@ -43,10 +43,10 @@ interface IformValues {
   },
 }
 const { Option } = Select;
-function DiagnoseAddEdit(props: Iprops) {
+function AddEditDiagnose(props: Iprops) {
   const { type, initData, refreshList, closeModal } = props;
   const [form] = Form.useForm();
-  const { setFieldsValue } = form;
+  const { setFieldsValue, validateFields } = form;
   const [fetching, setFetching] = useState(false);
   const [diseaseList, setDiseaseList] = useState<Idisease[]>([]);
   const [initFormVal, setInitFormVal] = useState<IformValues>();
@@ -119,6 +119,7 @@ function DiagnoseAddEdit(props: Iprops) {
     };
     handleSetFieldsVal('diagnose', trea);
   };
+
   const handleSubmit = (values: IformValues) => {
     // patchDisease
     console.log(values);
@@ -133,23 +134,39 @@ function DiagnoseAddEdit(props: Iprops) {
       wcId: patientWcid,
       sid,
       roleType: window.$storage.getItem('roleId'),
+      ...(type === 'add' ? {} : { id: (initData as IdiagnosisItem).id }),
     };
-    if (type === 'add') {
-      api.diagnosis.addDisease(params).then(() => {
-        message.success('添加成功');
-        if (closeModal) { closeModal(); }
-        refreshList();
-      });
+    if (closeModal) {
+      if (type === 'add') {
+        api.diagnosis.addDisease(params).then(() => {
+          message.success('添加成功');
+          closeModal();
+          refreshList();
+        });
+      } else {
+        api.diagnosis.patchDisease(params).then(() => {
+          message.success('修改成功');
+          closeModal();
+          refreshList();
+        });
+      }
     } else {
-      params.id = (initData as IdiagnosisItem).id;
-      api.diagnosis.patchDisease(params).then(() => {
-        message.success('修改成功');
-        if (closeModal) { closeModal(); }
-        refreshList();
-      });
+      event.emit('fetchStructuredPreviousHistory', 'disagnose', params);
     }
   };
-
+  useEffect(() => {
+    const handleSubmitImg = () => {
+      validateFields().then((values) => {
+        handleSubmit(values);
+      }).catch(() => {
+        event.emit('fetchStructuredPreviousHistory', 'disagnose', 'error');
+      });
+    };
+    event.addListener('saveStructured', handleSubmitImg);
+    return () => {
+      event.removeListener('saveStructured', handleSubmitImg);
+    };
+  }, []);
   // 回显时间
   let year: string | number = '';
   let month: string | number = '';
@@ -185,6 +202,7 @@ function DiagnoseAddEdit(props: Iprops) {
                   label="诊断"
                   name="diagnose"
                   rules={[{ required: true, message: '请输入项目名称!' }]}
+                  labelCol={{ span: 4 }}
                 >
                   <Input type="hidden" />
                 </Form.Item>
@@ -245,23 +263,27 @@ function DiagnoseAddEdit(props: Iprops) {
                   defaultValue={initFormVal && initFormVal.hospital}
                 />
               </div>
-              <Form.Item>
-                <div className="common__btn">
-                  <Button
-                    className={styles.submit}
-                    onClick={closeModal}
-                  >
-                    取消
-                  </Button>
-                  <Button
-                    className={styles.submit}
-                    htmlType="submit"
-                    type="primary"
-                  >
-                    {type === 'add' ? '添加' : '保存'}
-                  </Button>
-                </div>
-              </Form.Item>
+              {
+                closeModal && (
+                  <Form.Item>
+                    <div className="common__btn">
+                      <Button
+                        className={styles.submit}
+                        onClick={closeModal}
+                      >
+                        取消
+                      </Button>
+                      <Button
+                        className={styles.submit}
+                        htmlType="submit"
+                        type="primary"
+                      >
+                        {type === 'add' ? '添加' : '保存'}
+                      </Button>
+                    </div>
+                  </Form.Item>
+                )
+              }
             </Form>
           )
         }
@@ -269,7 +291,7 @@ function DiagnoseAddEdit(props: Iprops) {
     </span>
   );
 }
-DiagnoseAddEdit.defaultProps = {
+AddEditDiagnose.defaultProps = {
   initData: null,
 };
-export default DiagnoseAddEdit;
+export default AddEditDiagnose;

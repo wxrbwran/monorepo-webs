@@ -56,7 +56,10 @@ declare interface IStructuredDetailProps {
   images: IImg[];
   handleRefresh?: () => void;
   handleClose: () => void;
-  hydData: IApiDocumentList[];
+  indexesData: {
+    hydData: IApiDocumentList[];
+    previousHistory: IpreviousHistory;
+  }
   jcdData: ITopicItemApi[];
   tempAll: ITmpList;
   jcdOriginIds: string;
@@ -130,4 +133,48 @@ declare interface IMeta {
 }
 declare interface ITmpList {
   [key: string]: ITopicTemplateItemApi[];
+}
+
+export interface IdiagnosisItem {
+  name: string;
+  diseaseId: string;
+  id: string;
+  attachedInfo: {
+    diagnosisAt: number;
+    hospitalName: string;
+    hospitalId: string;
+  }
+}
+export interface ITreatmentDataItem {
+  hospitalInfo: Ihospital,
+  id: string;
+  stentInfos: {
+    hospitalInfo: Ihospital,
+    location: string;
+    stentDataList: {
+      stentId: string;
+      stentName: string;
+      stentSize: string;
+    }[]
+  }[];
+  treatmentId: string;
+  treatmentName: string;
+}
+export interface ITreatmentItem {
+  sid: string;
+  wcId: string;
+  roleType: string;
+  treatmentInfo: {
+    category: string;
+    treatmentDataList: ITreatmentDataItem[]
+  }
+}
+export interface IpreviousHistory {
+  diagnosisList: IdiagnosisItem[],
+  treatmentInfoList: ITreatmentItem,
+  integrateHistory: CommonData;
+}
+export interface IIndexesData {
+  hydData: IApiDocumentList[],
+  previousHistory: IpreviousHistory;
 }

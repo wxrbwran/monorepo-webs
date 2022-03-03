@@ -8,6 +8,7 @@ import { SelectValue } from 'antd/lib/select';
 import { btnRender } from '@/utils/button';
 import { relatedOptions, familyList } from '@/utils/tools';
 import * as api from '@/services/api';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import styles from './index.scss';
 
 const RadioGroup = Radio.Group;
@@ -15,9 +16,8 @@ const { Option } = Select;
 
 interface IProps {
   closeModal?: () => void; // 患者详情使用
-  handleCallbackFns?: (params: ICallbackFn) => void; // 图片审核大病历使用
 }
-function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
+function RelatedHistory({ closeModal }: IProps) {
   const dispatch = useDispatch();
   const infos = useSelector((state: IPatient) => state.detail.infos);
   const { integratedHistory } = infos;
@@ -26,6 +26,12 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
   const [form] = Form.useForm();
   const { setFieldsValue, getFieldValue, validateFields } = form;
 
+  const refreshList = () => {
+    dispatch({
+      type: 'detail/fetchMedicalRecord',
+      payload: patientSid,
+    });
+  };
   const handleSave = (values: CommonData) => {
     const params = {
       integratedHistory: { ...values },
@@ -33,54 +39,39 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
       sid: window.$storage.getItem('patientSid'),
       roleType: window.$storage.getItem('roleId'),
     };
-    return (
+    if (closeModal) {
       api.medical.updateDisease(params).then(() => {
-        dispatch({
-          type: 'detail/fetchMedicalRecord',
-          payload: patientSid,
-        });
-        return true;
-      }).catch(() => false)
-    );
-  };
-  const handleSubmitImg = () => new Promise((resolve, reject) => {
-    validateFields().then((values) => {
-      if (handleSave(values)) {
-        resolve('DBL_SDDX');
-      } else {
-        reject();
-      }
-    });
-  });
-  const handleSubmit = (values: CommonData) => {
-    if (handleSave(values) && closeModal) {
-      message.success('添加成功');
-      closeModal();
+        refreshList();
+        message.success('添加成功');
+        closeModal();
+      }).catch(() => {
+        message.error('请求出错');
+      });
+    } else {
+      event.emit('fetchStructuredPreviousHistory', 'integratedHistory', params);
     }
+
   };
-  console.log(date);
+  // 图片审核
+  useEffect(() => {
+    const handleSubmitImg = () => {
+      validateFields().then((values) => {
+        handleSave(values);
+      });
+    };
+    event.addListener('refreshPreviousHistory', refreshList);
+    event.addListener('saveStructured', handleSubmitImg);
+    return () => {
+      event.removeListener('refreshPreviousHistory', refreshList);
+      event.removeListener('saveStructured', handleSubmitImg);
+    };
+  }, []);
+
   useEffect(() => {
     setFieldsValue({ ...integratedHistory }); // 初使化患者的信息
     setDate(new Date());
   }, []);
-  // 图片审核
-  useEffect(() => {
-    if (handleCallbackFns) {
-      handleCallbackFns({
-        action: 'add',
-        type: 'DBL',
-        fn: handleSubmitImg,
-      });
-    }
-    return () => {
-      if (handleCallbackFns) {
-        handleCallbackFns({
-          action: 'remove',
-          type: 'DBL',
-        });
-      }
-    };
-  }, []);
+
   const formatData = (arr: []) => {
     const disease = {
       coronary: false,
@@ -136,7 +127,7 @@ function RelatedHistory({ closeModal, handleCallbackFns }: IProps) {
       <Form
         name="related"
       // initialValues={integratedHistory}
-        onFinish={handleSubmit}
+        onFinish={handleSave}
         form={form}
         className="more-padding family_form"
       >
