@@ -16,6 +16,7 @@ import Scale from '../Scale';
 import PublicizeFile from '../PublicizeFile';
 import './index.scss';
 import BindCustom from '../BindCustom';
+import WeightCustom from '../WeightCustom';
 import Video from '../Video';
 import { getRoles } from '@/utils/utils';
 
@@ -241,6 +242,8 @@ const ChatItem: FC<IProps> = (props) => {
                 return <div className="tip">你收到了一个crf量表，请在手机上查看</div>;
               case 128: // 宣教文章
                 return  <PublicizeFile msg={msg}  />;
+              case 133:
+                return <WeightCustom msg={msg} />;
               default:
                 return '';
             }

@@ -4,7 +4,7 @@ import { useDispatch, useParams } from 'umi';
 import { isEmpty, debounce } from 'lodash';
 import { getIssueParams } from '@/utils/utils';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import AdjustAdvice from '@/components/AdjustAdvice';
+// import AdjustAdvice from '@/components/AdjustAdvice';
 import AdjustPanel from './AdjustPanel';
 import InspectionDiff from './InspectionDiff';
 import styles from './index.scss';
@@ -25,13 +25,6 @@ function AdjustInspection(props: Iprops) {
   const role = window.$storage.getItem('role') || '';
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
-
-  const btnText: CommonData = {
-    UPPER_DOCTOR: '发送',
-    LOWER_DOCTOR: '发给主管医生',
-    ALONE_DOCTOR: '发送',
-    DEP_HEAD: '发送',
-  };
 
   const saveMedicalList = (medicalListParams: IMedicalList[]) => {
     setMedicalList(medicalListParams);
@@ -147,20 +140,20 @@ function AdjustInspection(props: Iprops) {
                   />
                 )
               }
-              {
+              {/* {
                 ['LOWER_DOCTOR', 'UPPER_DOCTOR'].includes(role) && (
                   // 如果是上级医生并且是来源是用药达标，则不展示评价与指导。如果是待审核问题的用药达标则展示
                   !(role === 'UPPER_DOCTOR' && !issueData) && (
                     <AdjustAdvice isInput={step === 1} handleChangeNote={handleChangeNote} />
                   )
                 )
-              }
+              } */}
               <div className="common__btn">
                 <Button className={styles.submit} onClick={handleCancel}>
                   { step === 1 ? '取消' : '重新调整' }
                 </Button>
                 <Button className={styles.submit} onClick={debounce(handleOk, 300)} htmlType="submit" type="primary">
-                  { step === 1 ? '确认' : btnText[role] }
+                  { step === 1 ? '确认' : '发送' }
                 </Button>
               </div>
             </div>

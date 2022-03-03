@@ -25,7 +25,7 @@ export const formatData = (
   tabType: string, paramsPageAt: number,
 ) => {
   let dataList:any[] = [];
-  if (tabType === 'BP' || tabType === 'GLU') {
+  if (['BP', 'GLU', 'WEIGHT', 'STEP'].includes(tabType)) {
     (data as IInfoList).list.forEach((info: IInfoListItem) => {
       let newItem: CommonData = {
         measuredAt: info.measuredAt,
@@ -68,7 +68,7 @@ export const formatData = (
 export const fetchTypeList = (tabType: string) => {
   if (tabType === 'BP') {
     return ['BP', 'HEART_RATE'];
-  } if (tabType === 'GLU') {
+  } else if (tabType === 'GLU') {
     return [
       'GLU_AFTER_BREAKFAST',
       'GLU_AFTER_DINNER',
@@ -78,6 +78,7 @@ export const fetchTypeList = (tabType: string) => {
       'GLU_BEFORE_LUNCH',
       'GLU_BEFORE_SLEEP',
     ];
+  } else {
+    return [tabType];
   }
-  return [];
 };

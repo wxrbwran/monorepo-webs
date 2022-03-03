@@ -145,7 +145,7 @@ function DdtkSenior(props: IProps) {
         {
           (isViewOnly ? valuableQas : qasGroups).map((qas, quesIndex: number) => (
             <div className="flex topic_title" style={{ alignItems: 'flex-start' }} key={qas[0].question + qas[0].uuid}>
-              <span className='mr-5'>{quesIndex + 1}.</span>
+              <span className='mr-5 pt-5'>{quesIndex + 1}.</span>
               <pre className={styles.ddtk_senior}  key={quesIndex}>
                 {
                   qas.map((qaItem: IQaItem, qaInx: number) => {
@@ -167,13 +167,13 @@ function DdtkSenior(props: IProps) {
                     );
                   })
                 }
-                <TopicAddBtn
-                  actionType="edit"
-                  initData={qas}
-                  editGroupInx={quesIndex}
-                  {...editProps}
-                />
               </pre>
+              <TopicAddBtn
+                actionType="edit"
+                initData={qas}
+                editGroupInx={quesIndex}
+                {...editProps}
+              />
             </div>
           ))
         }
