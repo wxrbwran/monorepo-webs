@@ -1,0 +1,25 @@
+.fieldCard {
+  // @include flex-lay(row, nowrap, flex-start, flex-start);
+
+  // :global {
+  //   .ant-cascader-menu-item:has(> 12) {
+  //     font-size: 14px;
+  //     margin-bottom: 15px;
+  //   }
+  // }
+}
+
+.hasMoreCascader {
+  :global {
+    .ant-cascader-menus {
+      .ant-cascader-menu {
+        .ant-cascader-menu-item:last-child {
+          background-color: lime;
+          .ant-cascader-checkbox {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

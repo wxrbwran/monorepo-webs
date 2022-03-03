@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '@/services/api';
-import { message, Checkbox } from 'antd';
+import { message, Checkbox, Steps, Divider, Select } from 'antd';
 import { history, useSelector, useDispatch } from 'umi';
 import ToogleSide from '@/components/ToogleSide';
 import FieldCard from './components/field_card';
@@ -8,6 +8,14 @@ import PreTable from './components/pre_table';
 import { handleFormatValues, handleShouldValues, ResearchSourceType, transformDynamicToStatic } from './util';
 import styles from './index.scss';
 import { IState } from 'typings/global';
+import radioCheck from '@/assets/img/radio_check.png';
+import deletePng from '@/assets/img/delete.png';
+import exportStylesPng from '@/assets/img/export_styles.jpg';
+import addPng from '@/assets/img/add.png';
+import deleteBluePng from '@/assets/img/delete_blue.png';
+import dayjs from 'dayjs';
+
+const { Option } = Select;
 interface IProps {
 }
 export interface IChecked {
@@ -31,62 +39,109 @@ interface IFieldItem {
 }
 
 const CheckboxGroup = Checkbox.Group;
+const { Step } = Steps;
 function Query({ }: IProps) {
+
+  const [currentStep, setCurrentStep] = useState<number>(2);
+
   const dispatch = useDispatch();
   const projectSid = window.$storage.getItem('projectSid');
   const { projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
-  const [card, setCard] = useState<IFieldItem[]>([]);
+
   const [checkedField, setCheckedField] = useState<IChecked[]>([]);
-  const [active, setActive] = useState<string[]>([]); // 用来控制菜单前面圆点的样式
-  const [allFields, setAllFields] = useState<IFields>();
+
+
+  const [allFields, setAllFields] = useState<IFields>(); // 所有节点
+  const [activeField, setActiveField] = useState<IFields>(); // 选中的节点
+
+
+
+  const defaultItem = {
+    name: '',
+    operation: '',
+    value: '',
+    time: dayjs(),
+  };
+  const [allRules, setAllRules] = useState<any[]>([
+    {
+      items: [
+        { ...defaultItem },
+        { ...defaultItem },
+        { ...defaultItem },
+      ],
+    },
+    {
+      items: [
+        { ...defaultItem },
+      ],
+    },
+  ]); // 查询规则
+
+
+
   const [groupIds, setGroupIds] = useState<string[]>(['全部受试者']);
 
   const [groupList, setGroupList] = useState<any[]>([]);
 
 
-  // const groupList = useSelector((state:IGroup)=>state.project.objectiveGroup);
+  const fetchField = async () => {
 
+    const res = await api.query.fetchFields('RESEARCH');
+    let allItems = res.keys[0];
+    // 循环判断每个item是不是dynimic
+    for (let i = 0; i < allItems.items.length; i++) {
 
+      const items = await transformDynamicToStatic(allItems.items[i], projectSid, projectRoleType, ResearchSourceType);
+
+      if (res.keys[0].items[i].name.includes('team')) {
+        allItems.items[i].items = items;
+      }
+
+      // 如果allItems.items[i]?.items的第一个元素是dynamic,再请求真是数据
+      if (allItems.items[i]?.items[0].type.includes('dynamic')) {
+        const childItems = await transformDynamicToStatic(allItems.items[i]?.items[0], projectSid, projectRoleType, ResearchSourceType);
+        allItems.items[i].items = [...childItems];
+      }
+
+      // 将所有数据都添加上formateData
+      const tempData = allItems.items[i]?.items?.filter(f => !!f.show).map((itemTemp: IField, index: number) => ({
+        title: itemTemp.description,
+        key: `${itemTemp.name}_${index}`,
+        fieldCheck: itemTemp.description == '姓名',
+        parent: res.keys[0].items[i]?.description,
+        parentName: res.keys[0].items[i]?.name,
+        value: itemTemp.description,
+        label: itemTemp.description,
+        children: itemTemp?.items ? itemTemp.items?.filter(t => !!t.show).map((childItem: IField, idx: number) => ({
+          title: childItem.description,
+          key: `${childItem.name}_${index + 1}${idx}`,
+          value: childItem.description,
+          label: childItem.description,
+          parent: res.keys[0].items[i]?.description,
+          parentName: res.keys[0].items[i]?.name,
+          subParent: itemTemp.description,
+          subParentName: itemTemp.name,
+          subParentAssign: itemTemp.assign,
+          children: [],
+          isLeaf: !(childItem?.items && childItem?.items[0]?.type.includes('dynamic')),
+          ...childItem,
+        })) : [],
+        isLeaf: ['终点事件'].includes(res.keys[0].items[i].description) ? false : !(itemTemp?.items && itemTemp?.items[0].type.includes('dynamic')),
+        disabled: itemTemp?.items && itemTemp?.items[0].type.includes('dynamic') && itemTemp?.items.length === 1,
+        ...itemTemp,
+      }));
+      allItems.items[i].checkSources = tempData;
+    }
+    console.log('====================== useEffect, ', allItems);
+    setAllFields({ ...allItems });
+    setActiveField(allItems.items[0]);
+  };
 
   useEffect(() => {
 
+    // 获取数据
+    fetchField();
 
-    api.query.fetchFields('RESEARCH').then((res) => {
-
-      let item = res.keys[0];
-      // 循环判断每个item是不是dynimic
-      for (let i = 0; i < res.keys[0].items.length; i++) {
-
-        transformDynamicToStatic(res.keys[0].items[i], projectSid, projectRoleType, ResearchSourceType).then((items: any) => {
-
-          if (res.keys[0].items[i].name.includes('team')) {
-
-            // groupListTemplete = groupListTemplete.concat(items);
-            // setGroupList(groupListTemplete);
-            setGroupList((preList) => {
-              return [...preList, ...items];
-            });
-
-            let deleteIndex = item.items.indexOf(res.keys[0].items[i]);
-            item.items.splice(deleteIndex, 1);
-          } else {
-
-            let deleteIndex = item.items.indexOf(res.keys[0].items[i]);
-            item.items.splice(deleteIndex, 1, ...items);
-          }
-
-          setAllFields(item);
-          setCard([item.items[0]]);
-          setActive(item.items[0].name);
-
-        }).catch((err) => {
-
-          message.error(err);
-        });
-      }
-    }).catch((err: string) => {
-      message.error(err);
-    });
   }, []);
 
   /** 数据去重 */
@@ -95,270 +150,308 @@ function Query({ }: IProps) {
     return arr.filter((item) => !res.has(item[key]) && res.set(item[key], 1));
   };
 
-  const handleChangeTab = (item: IFieldItem, index: number) => {
+
+  const handleChangeActiveField = (item: IFieldItem, index: number) => {
     const FIELDCARD = document.getElementById('FIELD_CARD');
     if (FIELDCARD) {
       setTimeout(() => {
         FIELDCARD.scrollTop = 999999;
       }, 300);
     }
-    const info = item.items[0];
-    if (active.includes(item.name)) {
+    if (activeField.name == item.name) {
       return;
     }
-
-    if (info.type.includes('dynamic')) {
-
-      transformDynamicToStatic(info, projectSid, projectRoleType, ResearchSourceType).then((items) => {
-
-        // '终点事件' '主观量表', '客观检查', 'CRF量表' 有全选功能
-        if (allFields && items?.length > 0) {
-          if (['主观量表', '客观检查', 'CRF量表'].includes(item.description)) {
-            allFields.items[index].items[0] = {
-              description: `全部${item.description}`,
-              items: [{ ...allFields.items[index].items[0] }, ...items],
-              level: 'abstract',
-              name: `${item.name}.all`,
-              show: true,
-              type: 'entity',
-            };
-          } else {
-            allFields.items[index].items = [{ ...allFields.items[index].items[0] }, ...items];
-          }
-          setAllFields({ ...allFields });
-        }
-
-      }).catch((err) => {
-
-        message.error(err);
-      });
-    } else {
-
-      if (allFields) {
-        // 加后面”&&“的判断是为了关闭”终点事件“卡片后再次点击左侧tab追加新的”终点事件“卡片时不再重复执行以下操作
-        if (['终点事件'].includes(item.description) && allFields.items[index].items.length > 1) {
-          allFields.items[index].items = [{
-            description: '全部事件',
-            items: [...item.items],
-            level: 'abstract',
-            name: 'end-event.all',
-            show: true,
-            type: 'entity',
-          }];
-          setAllFields({ ...allFields });
-        }
-      }
-    }
-    setCard(unique([...card, item], 'name'));
-    setActive(Array.from(new Set([...active, item.name])));
+    setActiveField(item);
   };
 
-  const deepTree = (parent: string, name: string) => {
-    let result: any = {};
-    allFields?.items.forEach((item, index) => {
-      if (item.description === parent) {
-        result.parentIndex = index;
-      }
-      item.items.forEach((el, idx) => {
-        if (el.description === name) {
-          result.childIndex = idx;
-        }
-      });
-    });
-    return result;
+  const onValueChange = (items: IChecked[]) => {
+    console.log('============= onValueChange', JSON.stringify(items));
+    setAllFields((preState) => { return { ...preState }; });
   };
 
-  const onValueChange = (item: IChecked, checked: boolean) => {
+  console.log('=========== allFields', allFields?.items?.length);
+  console.log('============ allFields allFields ,', JSON.stringify(allFields));
 
-    if (checked) {
-      api.query.fetchKvScope({ kp: item.name }).then((res) => {
-        if (res.values.length > 1) {
-          const newItem = { ...item, option: res.values };
-          setCheckedField((pre) => [...pre, newItem]);
-        } else {
-          setCheckedField((pre) => [...pre, item]);
-        }
-      })
-        .catch((err: string) => {
-          message.error(err);
-        });
-    } else {
-      setCheckedField((pre) => [...pre.filter((f) => f.key !== item.key)]);
-    }
+  const checkedList = allFields?.items?.filter((item) => item.name != 'basic').flatMap((item) => item.checkSources).filter((item) => item.fieldCheck);
+
+  console.log('=========== checkedList', JSON.stringify(checkedList));
+
+  const onCancelItemFieldCheck = (item) => {
+    item.fieldCheck = false;
+    setAllFields((preState) => { return { ...preState }; });
+  };
+
+  const onCancelItemRuleCheck = (item) => {
+
+    item.ruleCheck = false;
+    setAllFields((preState) => { return { ...preState }; });
+  };
+
+  const onNextStepClick = () => {
+
+    setCurrentStep(currentStep + 1);
+  };
+
+  const onPreStepClick = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
+  const otherChoiceFields = allFields?.items?.filter((item) => item.name != 'basic').flatMap((item) => item.checkSources).filter((item) => item.fieldCheck);
+  const otherChoiceRules = allFields?.items?.flatMap((item) => item.checkSources).filter((item) => item.ruleCheck);
+
+  if (otherChoiceFields?.length > 0) {
+    console.log('================= otherChoiceFields ', JSON.stringify(otherChoiceFields[0]));
+  }
+
+  const getChoiceItemsView = (type: 'fieldChoice' | 'ruleChoice') => {
+    return (
+      <div className={styles.choiceItems}>
+        <div className={styles.left}>
+          {allFields && allFields?.items?.map((item, index) => (
+            <div
+              className={`${activeField?.name == item.name ? styles.active : ''} ${styles.field}`}
+              title={item.description}
+              onClick={() => handleChangeActiveField(item, index)}
+            >
+              {item.description}
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.centerLine}></div>
+
+        <div className={styles.right}>
+          <FieldCard
+            key={activeField?.name}
+            currentField={activeField}
+            type={type}
+            onValueChange={onValueChange}
+          />
+        </div>
+      </div>
+    );
   };
 
 
-  const handleExpand = (node: IChecked) => {
-    // 点击下拉箭头，异步加载数据
-    transformDynamicToStatic(node.items[0], projectSid, projectRoleType, ResearchSourceType, node?.description).then((items) => {
+  const onAddRule = () => {
 
-      if (allFields) {
-        const { parentIndex, childIndex } = deepTree(node.parent, node.description);
-        const defaultEl = allFields.items[parentIndex].items[childIndex].items;
-        allFields.items[parentIndex].items[childIndex].items = [...defaultEl, ...items];
-        setAllFields({ ...allFields });
-      }
-    }).catch((err) => {
-
-      message.error(err);
-    });
+    setAllRules([...allRules, {
+      items: [
+        { ...defaultItem },
+      ],
+    }]);
   };
 
-  const handleChangeGroup = (checkedValues: any[]) => {
-    console.log('checkedValues', checkedValues);
-    setGroupIds(checkedValues);
+  const onCopyClick = (ruleIndex) => {
+
+    setAllRules([...allRules, allRules[ruleIndex]]);
   };
 
-  const handleSubmit = async (values: any) => {
+  const onDeleteRule = (ruleIndex) => {
 
-    console.log('values', values, 'card', card, 'checkedField', checkedField, 'active', active, 'allFields', allFields, 'groupIds', groupIds);
+    allRules.splice(ruleIndex, 1);
+    setAllRules([...allRules]);
+  };
 
-    const should = handleShouldValues(groupList, groupIds);
-
-    const rules = handleFormatValues(values, checkedField, projectSid);
-    console.log('rule', rules);
-
-    //   {
-    //     "sid": "12[科研项目sid]",
-    //     "ns": "12[科研项目空间]",
-    //     "role": "DOCTOR[科研sid的角色]"，
-    // },
-    // {
-    //     "sid": "12[登录者的sid]",
-    //     "ns": "12[登录者的空间]",
-    //     "role": "DOCTOR[登录者的所在项目的角色分pi]"
-    // }
+  const onAddItem = (ruleIndex, itemIndex) => {
+    // [allRules, setAllRules
+    allRules[ruleIndex].items = [...allRules[ruleIndex].items, { ...defaultItem }];
+    setAllRules([...allRules]);
+  };
 
 
-    // nsId: window.$storage.getItem("nsId"),
-    // sid: window.$storage.getItem('sid')
 
-    if (rules) {
+  const onDeleteItem = (ruleIndex, itemIndex) => {
 
-      const params: any = {
-        rules: [{
-          match: {
-            must: rules,
-            should_1: should,
-          },
-        }],
-        meta: {
-          sourceType: 4,
-          teamLocations: [
+    allRules[ruleIndex].items.splice(itemIndex, 1);
+
+    console.log('============== onDeleteItem', JSON.stringify(allRules));
+    setAllRules([...allRules]);
+  };
+
+  const getRuleView = (rule, ruleIndex) => {
+
+    return (
+      <div className={styles.rule}>
+        <div className='flex flex-row justify-between'>
+          <div className={styles.ruleTitle}>查询规则{ruleIndex + 1}</div>
+
+          <div className={`flex flex-row items-center ${styles.ruleTitleRight}`}>
             {
-              sid: projectSid,
-              ns: projectNsId,
-              role: projectRoleType,
-              tag: 'ownership',
-            },
-            {
-              sid: localStorage.getItem('xzl-web-doctor_sid'),
-              ns: projectNsId,
-              role: roleType,
-              tag: 'operator',
-            },
-          ],
-        },
-      };
-      const head = await api.query.fetchQueryId(params);
-      dispatch({
-        type: 'query/setQueryHead',
-        payload: head.tableHead,
-      });
-
-      history.replace(`/query/query_result?resultKey=${head.resultKey}`);
-
-      // const { rule_id } = await api.query.fetchQueryId(params);
-      // const start = Date.now();
-      // // 初始为0，一旦查询到数据就+1，证明有查询结果
-      // let isEmpty = 0;
-      // const timer = setInterval(async () => {
-      //   // 5分钟之后终止查询
-      //   if (Date.now() - start > 5 * 60 * 1000) {
-      //     clearInterval(timer);
-      //     dispatch({
-      //       type: 'query/setIsQueryStop',
-      //     });
-      //     // return;
-      //   }
-      //   // 20s后如果一条数据也没有查到，证明无查询结果，终止查询
-      //   if (Date.now() - start > 20 * 1000 && !isEmpty) {
-      //     clearInterval(timer);
-      //     dispatch({
-      //       type: 'query/setIsQueryStop',
-      //     });
-      //   }
-      //   const { results } = await api.query.fetchQueryResult(rule_id);
-      //   dispatch({
-      //     type: 'query/setQueryResult',
-      //     payload: [...results]
-      //   });
-      //   if (results.length > 0) {
-      //     isEmpty++
-      //   }
-      // }, 2000);
-      // window.$timer = timer;
-    }
+              ruleIndex != 0 &&
+              <>
+                <div className='flex flex-row items-center' onClick={() => { onDeleteRule(ruleIndex); }}>
+                  <img src={deleteBluePng} className='w-16 h-16' />
+                  <div className='ml-4'>删除该组规则</div>
+                </div>
+                <div className={`${styles.ruleLine}`}></div>
+              </>
+            }
+            <div className='flex flex-row items-center mr-20' onClick={() => { onCopyClick(ruleIndex); }}  >
+              <img src={deleteBluePng} className='w-16 h-16' />
+              <div className='ml-4'>复制</div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.line}></div>
+        {
+          rule.items.map((item, itemIndex) => {
+            return (
+              <div className={styles.item} key={JSON.stringify(item.time)}>
+                <Select className={styles.name} defaultValue="lucy">
+                  <Option value="jack">Jack</Option>
+                  <Option value="lucy">Lucy</Option>
+                  <Option value="disabled" disabled>
+                    Disabled
+                  </Option>
+                  <Option value="Yiminghe">yiminghe</Option>
+                </Select>
+                <Select className={styles.operation} defaultValue="lucy">
+                  <Option value="jack">Jack</Option>
+                  <Option value="lucy">Lucy</Option>
+                  <Option value="disabled" disabled>
+                    Disabled
+                  </Option>
+                  <Option value="Yiminghe">yiminghe</Option>
+                </Select>
+                <Select className={styles.value} defaultValue="lucy">
+                  <Option value="jack">Jack</Option>
+                  <Option value="lucy">Lucy</Option>
+                  <Option value="disabled" disabled>
+                    Disabled
+                  </Option>
+                  <Option value="Yiminghe">yiminghe</Option>
+                </Select>
+                {
+                  itemIndex == 0 ?
+                    <>
+                      <div className={styles.add} onClick={() => onAddItem(ruleIndex, itemIndex)}>
+                        <img src={addPng} className='w-16 h-16 ml-10' />
+                        <div className='ml-4'>增加</div>
+                      </div>
+                    </>
+                    :
+                    <>
+                      <div className={styles.delete} onClick={() => onDeleteItem(ruleIndex, itemIndex)}>
+                        <img src={deleteBluePng} className='w-16 h-16 ml-10' />
+                        <div className='ml-4'>删除</div>
+                      </div>
+                    </>
+                }
+              </div>);
+          })
+        }
+      </div>
+    );
   };
 
-  const closeCard = (description: string, name: string) => {
-    const filterFields = checkedField.filter(item => item.parent !== description);
-    setCheckedField([...filterFields]);
-    setCard(card.filter(item => item.name !== name));
-    setActive(active.filter(item => item !== name));
-  };
-
-  const options = groupList.map((item: { name: string, description: string, }) => ({
-    label: item.description,
-    value: item.description,
-  }));
-
-  console.log('checkedField', checkedField);
   return (
     <div className={styles.query}>
-      <ToogleSide>
-        <div className={styles.left}>
-          {allFields && allFields.items
-            .map((item, index) => (
-              <div
-                className={active.includes(item.name) ? styles.active : ''}
-                title={item.description}
-                onClick={() => handleChangeTab(item, index)}
-                key={item.name}
-              >
-                <span>·</span>{item.description}
-              </div>
-            ))}
-        </div>
-        <div className={styles.right}>
-          <span className={styles.scope}>查询范围：</span>
-          <CheckboxGroup
-            options={options}
-            onChange={handleChangeGroup}
-            value={groupIds}
-          />
-          <div className={styles.r_top} id="FIELD_CARD">
+      <Steps current={currentStep} className={styles.steps}>
+        <Step title="输出变量配置" />
+        <Step title="查询字段选择" />
+        <Step title="构造查询条件" />
+        <Step title="数据查询" />
+      </Steps>
+      {
+        currentStep == 0 &&
+        <div className={styles.fieldsChoice}>
+          <div className={styles.exportTitle}>导出字段配置</div>
+          {getChoiceItemsView('fieldChoice')}
+          <div className={styles.hasChoicedItems}>
+            <div className={styles.left}>
+              {/* 基本数据展示 */}
+              {
+                allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.checkSources).filter((item) => item.fieldCheck).map((item) => {
+                  return (
+                    <div className={styles.hasChoiceItem}>
+                      <div className={styles.hasChoiceItemTitle}>{item.title}</div>
+                      {
+                        item.title != '姓名' && <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemFieldCheck(item); }} />
+                      }
+                    </div>
+                  );
+                })
+              }
+            </div>
+            <div className={styles.centerLine}></div>
+            <div className={styles.right}>
+              {
+                otherChoiceFields && otherChoiceFields.length > 0 ?
+                  otherChoiceFields.map((item) => {
+                    return (
+                      <div className={styles.hasChoiceItem}>
+                        {
+                          //递归显示名字
+                          <div className={styles.hasChoiceItemTitle}>{item.title}</div>
+                        }
+
+                        <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemFieldCheck(item); }} />
+                      </div>
+                    );
+                  })
+                  : <div className={styles.empty}>请在上方选择自定义导出字段</div>
+              }
+            </div>
+          </div>
+          <div className={styles.centerLine}></div>
+          <div className={styles.exportStylesChoice}>
+            <div className={styles.exportStylesTitle}>请选择导出样式</div>
             {
-              card.map((item) => (
-                <FieldCard
-                  key={item.name}
-                  currentCardFields={item}
-                  closeCard={closeCard}
-                  onValueChange={onValueChange}
-                  handleExpand={handleExpand}
-                />
-              ))
+              ['样式1'].map((title) => {
+                return (
+                  <div className={styles.exportBtn}>
+                    <img src={radioCheck} className='w-16 h-16' />
+                    <img src={exportStylesPng} className='w-38 h-32' />
+                    <div>样式一</div>
+                  </div>
+                );
+              })
             }
           </div>
-          {
-            unique(checkedField, 'key').length > 0 && (
-              <div className={styles.r_bottom}>
-                <PreTable checkedField={unique(checkedField, 'key')} onSubmit={handleSubmit} />
-              </div>
-            )
-          }
         </div>
-      </ToogleSide>
+      }
+      {
+        currentStep == 1 &&
+        <div className={styles.rulesChoice}>
+          {getChoiceItemsView('ruleChoice')}
+          <div className={styles.ruleHasChoices}>
+            {
+              otherChoiceRules && otherChoiceRules.length > 0 ?
+                otherChoiceRules.map((item) => {
+                  return (
+                    <div className={styles.hasChoiceItem}>
+                      <div className={styles.hasChoiceItemTitle}>{item.title}</div>
+                      <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemRuleCheck(item); }} />
+                    </div>
+                  );
+                })
+                : <div className={styles.empty}>请在上方选择自定义导出字段</div>
+            }
+          </div>
+        </div>
+      }
+      {
+        currentStep == 2 &&
+        <div className={styles.rulesBuild}>
+          {
+            allRules.map((rule, index) => {
+              return getRuleView(rule, index);
+            })
+          }
+          <div className={`flex flex-row ${styles.addRule}`} onClick={onAddRule}>
+            <div>+</div>
+            <div className='ml-4'>增加多组规则</div>
+          </div>
+        </div>
+      }
+
+      <div className={styles.bottom_steps}>
+        {
+          currentStep != 0 && <div className={styles.pre_step} onClick={onPreStepClick}>上一步</div>
+        }
+        <div className={styles.next_step} onClick={onNextStepClick}>下一步</div>
+      </div>
     </div>
   );
 }
