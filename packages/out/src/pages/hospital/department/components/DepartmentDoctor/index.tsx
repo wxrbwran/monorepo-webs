@@ -113,6 +113,7 @@ const DepartmentDoctor: FC = () => {
         // onCancel={cancel}
         okText="确定"
         cancelText="取消"
+        disabled={!!isOpenSub}
       >
         <Button
           type="link"
