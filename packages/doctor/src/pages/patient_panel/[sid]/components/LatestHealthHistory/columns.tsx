@@ -72,8 +72,16 @@ const time = {
   dataIndex: 'time',
   key: 'time',
   width: 160,
-  render: (data: { time: number }) =>
-    data?.time ? moment(data?.time).format('YYYY/MM/DD') : '时间不详',
+  render: (data: { time: number }, record: any) => {
+    console.log('data32322', record);
+    return (
+      <div>
+        { record.unknownReport.unknownReport && '*' }
+        { moment(data?.time).format('YYYY/MM/DD')}
+      </div>
+    );
+  },
+
 };
 // 有子分类的数据格式
 interface IHasSubItem {

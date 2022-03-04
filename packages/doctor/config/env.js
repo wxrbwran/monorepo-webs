@@ -3,11 +3,11 @@ module.exports = {
     BASEURL: 'http://localhost:8001/api/',
   },
   dev: {
-    // BASEURL:
-    // process.env.NODE_ENV === 'development'
-    //   ? 'http://localhost:8000/api/'
-    //   : 'http://napi.xzlcorp.com/',
-    BASEURL: 'http://napi.xzlcorp.com/',
+    BASEURL:
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:8000/api/'
+      : 'http://napi.xzlcorp.com/',
+    // BASEURL: 'http://napi.xzlcorp.com/',
     APP_ENV: 'dev',
     PREFIX: 'test',
   },

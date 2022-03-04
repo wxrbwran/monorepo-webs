@@ -105,6 +105,7 @@ declare interface ITopicTemplateItemApi {
   isAdd?: string;
 }
 declare interface ITopicItemApi {
+  isStructAt: string;
   data: ITopicQaItemApi[],
   meta: IMeta;
 }
@@ -130,6 +131,7 @@ declare interface IMeta {
   imageId: string;
   method: string;
   part: string;
+  isStructAt: boolean; // true表示时间为结构化时间，也就是检查时间 选 为了时间不详
 }
 declare interface ITmpList {
   [key: string]: ITopicTemplateItemApi[];
@@ -172,7 +174,7 @@ export interface ITreatmentItem {
 export interface IpreviousHistory {
   diagnosisList: IdiagnosisItem[],
   treatmentInfoList: ITreatmentItem,
-  integrateHistory: CommonData;
+  integratedHistory: CommonData;
 }
 export interface IIndexesData {
   hydData: IApiDocumentList[],

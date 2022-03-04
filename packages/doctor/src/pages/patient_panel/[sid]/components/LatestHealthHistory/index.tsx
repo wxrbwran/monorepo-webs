@@ -2,8 +2,9 @@ import React, {  FC, useEffect, useState } from 'react';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import Hyd from './hyd';
-import Jcd from './jcd';
+import Hyd from './compontents/Hyd';
+import Jcd from './compontents/Jcd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
 const { RangePicker } = DatePicker;
@@ -48,7 +49,7 @@ const LatestHealthHistory: FC = ({ children }) => {
         footer={null}
       >
         <div className="text-center">
-          <div className='flex justify-between mb-20'>
+          <div className='flex justify-between mb-10'>
             <div className='flex'>
               {
                 Object.keys(outType).map(key => (
@@ -69,11 +70,14 @@ const LatestHealthHistory: FC = ({ children }) => {
               disabledDate={disabledDate}
             />
           </div>
+          <div className='text-left text-gray-500'><ExclamationCircleOutlined className='mr-5' style={{ fontSize: 14 }} />
+            如采样(检查)时间不详, 则展示结构化时间, 已用*标注
+          </div>
           {
             show && (
               <>
                {activeType === 'HYD' && <Hyd time={time} />}
-               {activeType === 'JCD' && <Jcd time={time} />}
+               {activeType === 'JCD' && <Jcd time={time}  category={activeType} />}
               </>
             )
           }

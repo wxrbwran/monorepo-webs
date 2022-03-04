@@ -50,7 +50,7 @@ const config = {
   proxy: {
     '/api': {
       // target: 'http://172.16.10.16:8000/',
-      target: 'http://172.16.10.27:8000/', // 晓然
+      target: 'http://172.16.10.20:8000/', // 晓然
       // target: 'http://172.16.10.25:8000/', // 志超
       changeOrigin: true,
       pathRewrite: { '^/api': '' },

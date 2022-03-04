@@ -2,9 +2,9 @@ import React, { FC, useState, useMemo, useEffect } from 'react';
 import { Tabs, message, Spin, Button } from 'antd';
 import config from '@/config';
 import * as api from '@/services/api';
-import { bpCol, gluCol, getCustomCol, weightCol, stepCol } from './columns';
-import { formatData, fetchTypeList } from './formatData';
-import LatestHealthHistoryTable from '../LatestHealthHistoryTable';
+import { bpCol, gluCol, getCustomCol, weightCol, stepCol } from '../columns';
+import { formatData, fetchTypeList } from '../formatData';
+import LatestHealthHistoryTable from '../../LatestHealthHistoryTable';
 
 
 const { TabPane } = Tabs;

@@ -45,12 +45,12 @@ const StructuredDetailPreviousHistory: FC<IProps> = (props) => {
       initD.current = {
         treatmentDataList,
         diagnosisList: initData.diagnosisList,
-        integratedHistory: initData.integrateHistory,
+        integratedHistory: initData.integratedHistory,
       };
       console.log('=============2', {
         treatmentDataList,
         diagnosisList: initData.diagnosisList,
-        integratedHistory: initData.integrateHistory,
+        integratedHistory: initData.integratedHistory,
       });
       console.log('tKeys', tKeys);
     }
@@ -116,6 +116,7 @@ const StructuredDetailPreviousHistory: FC<IProps> = (props) => {
     initD.current = { ...d };
   };
   console.log('++++++++++++5', diagnoses);
+  console.log('initDatainitDatainitData', initD);
   return (
     <div className={styles.previous_history}>
       <div className='box-shadow p-10 mt-20'>
@@ -193,8 +194,11 @@ const StructuredDetailPreviousHistory: FC<IProps> = (props) => {
         </div> }
       </div>
       <div className='box-shadow py-20 pl-20 mt-20 w-full modal'>
+        <div className='flex justify-between border-b border-gray-200 border-solid pb-8 mb-20'>
+          <div className={styles.tit}>家族史 吸烟史 饮酒史 过敏史</div>
+        </div>
         {
-          isViewOnly ? <RelatedHistoryToView /> : <RelatedHistory />
+          isViewOnly ? <RelatedHistoryToView initData={initD.current?.integratedHistory || {}}/> : <RelatedHistory />
         }
       </div>
     </div>
