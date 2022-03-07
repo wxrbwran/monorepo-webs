@@ -14,7 +14,7 @@ const LatestHealthHistory: FC = ({ children }) => {
   // 这里不采用时间戳格式，便于DatePicker使用value
   const [time, setTime] = useState({ startTime: initFrom,  endTime: new Date() });
   const [show, setShow] = useState(false);
-  const [activeType, setActiveType] = useState('JCD');
+  const [activeType, setActiveType] = useState('HYD');
   useEffect(() => {
     if (show) {
       setTime({ ...time,  endTime: new Date() });
@@ -78,6 +78,7 @@ const LatestHealthHistory: FC = ({ children }) => {
               <>
                {activeType === 'HYD' && <Hyd time={time} />}
                {activeType === 'JCD' && <Jcd time={time}  category={activeType} />}
+               {activeType === 'OTHER' && <Jcd time={time}  category={activeType} />}
               </>
             )
           }

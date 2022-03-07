@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Timeline, Collapse, Tabs, Spin } from 'antd';
+import { Timeline, Collapse, Tabs, Spin, Empty } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import styles from '../index.scss';
 import * as api from '@/services/api';
@@ -23,8 +23,7 @@ interface IData {
   jcdList: ITopicItemApi[];
 }
 const Jcd: FC<IProps> = ({ time, category }) => {
-  const [dataLoading, setDataLoading] = useState(false); // 列表的loading
-  const [activeTab, setActiveTab] = useState();
+  const [dataLoading, setDataLoading] = useState(true); // 列表的loading
   const [data, setData] = useState<IData[]>([]); // 部分+方法下面的单据列表
   const patientSid = window.$storage.getItem('patientSid');
   const fetchData = () => {
@@ -37,6 +36,7 @@ const Jcd: FC<IProps> = ({ time, category }) => {
     api.image.fetchImageMedicalJcdData(params).then(res => {
       console.log('fetchImageMedicalJcdData', res);
       setData(res.images);
+      setDataLoading(false);
     });
   };
   useEffect(() => {
@@ -82,6 +82,9 @@ const Jcd: FC<IProps> = ({ time, category }) => {
                   </TabPane>
                 );
               })
+            }
+            {
+              data.length === 0 && <div className='text-center w-full'><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></div>
             }
           </Tabs>
         )

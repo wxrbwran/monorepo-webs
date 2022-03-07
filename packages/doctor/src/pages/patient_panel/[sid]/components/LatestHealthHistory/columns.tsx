@@ -10,7 +10,11 @@ const measuredAt = (format?: string) => ({
   dataIndex: 'measuredAt',
   key: 'measuredAt',
   width: 160,
-  render: (text: number) => moment(text).format(format || 'YYYY/MM/DD HH:mm'),
+  render: (text: number) => {
+    return (
+     <div>{ moment(text).format(format || 'YYYY/MM/DD HH:mm')}</div>
+    );
+  },
 });
 export const bpCol = [
   measuredAt(),
@@ -118,26 +122,42 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
                 return (
                   <List.Item className="mx-auto text-center text-sm">
                     <Space className="w-full justify-center" style={{ display: 'flex' }}>
-                      {(ref.value || ref.secondValue || ref.indexValue) && ref.type !== 'RADIO' && (
+                      {(ref.value || ref.secondValue || ref.indexValue) && (
                         <>
-                          <div>{ref.indexValue}</div>
-                          {text && (
-                            <div
-                              className="truncate"
-                              title={text}
-                              style={{ color: '#ff0000', maxWidth: 200 }}
-                            >
-                              <Tooltip placement="topRight" title={text}>
-                                {text}
-                              </Tooltip>
-                            </div>
-                          )}
-                        </>
-                      )}
-                      {(ref.value || ref.secondValue) && ref.type === 'RADIO' && (
-                        <>
-                          {yinYangMap[ref.indexValue as string]}
-                          <div style={{ color: '#ff0000' }}>{`${ref.note || ''}阴阳`}</div>
+                          {
+                            ref.type === 'RADIO' && (
+                            <>
+                              {yinYangMap[ref.indexValue as string]}
+                              <div style={{ color: '#ff0000' }}>{`${ref.note || ''} ${yinYangMap[ref.value as string]}`}</div>
+                            </>
+                            )
+                          }
+                          {
+                            ref.type === 'OTHER' && (
+                              <>
+                                {ref.indexValue}
+                                <div style={{ color: '#ff0000' }}> {ref.value}</div>
+                              </>
+                            )
+                          }
+                          {
+                            !['OTHER', 'RADIO'].includes(ref.type) && (
+                              <>
+                                <div>{ref.indexValue}</div>
+                                  {text && (
+                                    <div
+                                      className="truncate"
+                                      title={text}
+                                      style={{ color: '#ff0000', maxWidth: 200 }}
+                                    >
+                                      <Tooltip placement="topRight" title={text}>
+                                        {text}
+                                      </Tooltip>
+                                    </div>
+                                  )}
+                              </>
+                            )
+                          }
                         </>
                       )}
                     </Space>
