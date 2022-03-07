@@ -22,7 +22,7 @@ function RelatedEdit({ children }: Iprops) {
       {showModal && (
         <DragModal
           wrapClassName="ant-modal-wrap-center"
-          width="580px"
+          width="600px"
           visible={showModal}
           title="家族史 吸烟史 饮酒史 过敏史"
           onCancel={() => setShowModal(false)}

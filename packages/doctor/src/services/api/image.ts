@@ -96,5 +96,8 @@ export default {
   fetchImageTemplateName(data: CommonData): Promise<any> {
     return http.get('image/template/name', { data });
   },
-  // 结构化
+  // 根据检查部位或检查方法获取检查名称
+  fetchImageMedicalJcdData(data: CommonData): Promise<any> {
+    return http.get('medical/jcd/data', { data });
+  },
 };

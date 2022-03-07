@@ -64,7 +64,9 @@ const RenderItem: FC<IProps> = (props) => {
   };
   const formatOption = (reference: TReference) => {
     if (reference.type === 'RADIO') {
-      return `${reference.note || ''} 阴阳`;
+      return `${reference.note || ''} ${reference.value === 'YIN' ? '阴' : '阳'}`;
+    } else if (reference.type === 'OTHER') {
+      return reference.value;
     } else {
       return `${reference.note || ''} ${getReferenceTitle(reference)} ${reference.unit || ''}`;
     }

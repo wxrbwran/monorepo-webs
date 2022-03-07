@@ -118,9 +118,10 @@ function DatePicker(props: Iprops) {
         <Select
           name="year"
           disabled={disabled}
-          value={`${year}`}
+          value={year || undefined}
           onChange={(value) => handelChangeYear('year', value)}
           className="year"
+          placeholder="请选择"
           {...style}
         >
           {
@@ -141,9 +142,10 @@ function DatePicker(props: Iprops) {
         <Select
           name="month"
           disabled={disabled}
-          value={month}
+          value={month || undefined}
           onChange={(value) => handelChangeMonth('month', value)}
           className="month"
+          placeholder="请选择"
           {...style}
         >
           {months.map((m) => (
@@ -162,9 +164,10 @@ function DatePicker(props: Iprops) {
         <Select
           name="day"
           disabled={disabled}
-          value={day}
+          value={day || undefined}
           onChange={(value) => handelChangeDay('day', value)}
           className="day"
+          placeholder="请选择"
           {...style}
         >
           {

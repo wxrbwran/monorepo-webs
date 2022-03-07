@@ -7,6 +7,7 @@ import * as api from '@/services/api';
 import AddTreatment, { ItreatmentDataItem, Ihospital } from '../TreatmentAdd';
 import TumourTreatItem from '../TumourTreatItem';
 import Title from '../../Title';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 import styles from '../index.scss';
 
 interface ItreatmentItem {
@@ -31,6 +32,10 @@ function TreatmentList({ isTumour }: IProps) {
     if (treatmentInfoList.length === 0) {
       fetchTreatments();
     }
+    event.addListener('refreshPreviousHistory', fetchTreatments);
+    return () => {
+      event.removeListener('refreshPreviousHistory', fetchTreatments);
+    };
   }, []);
   const fetchHospitalDetail = (id: string, nameVal: string) => {
     const params = {

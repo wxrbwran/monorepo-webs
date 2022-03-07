@@ -7,7 +7,7 @@ import ImgWrap from './compontents/ImgWrap';
 import StructuredDetail from './compontents/StructuredDetail';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
-import { IApiDocumentList, ITopicItemApi } from 'typings/imgStructured';
+import { ITopicItemApi, IIndexesData } from 'typings/imgStructured';
 
 interface IImg {
   imageId: string;
@@ -35,7 +35,9 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const { children, handleRefresh, images } = props;
   console.log('image232s', images);
   const [showViewer, setShowViewer] = useState(false);
-  const [hydData, setHydData] = useState<IApiDocumentList[]>([]);
+  const initIndexes = { hydData:[], previousHistory: {} };
+  // 化验单和既往史
+  const [indexesData, setIndexesData] = useState<IIndexesData>(initIndexes);
   const [jcdData, setJcdData] = useState<ITopicItemApi[]>([]);
   const [imgData, setImgData] = useState<IImg[]>(images);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -76,10 +78,23 @@ const CheckImgStructured: FC<IProps> = (props) => {
   };
   const fetchData = (id: string, groupId: string | undefined) => {
     Promise.all([fetchImageIndexes(id, groupId), fetchImageJcds(id, groupId)]).then((res: any[]) => {
-      const [hData, jData ] = res;
-      setHydData(hData.list.map(item => {
-        return ({ ...item, key: uuid() });
-      }));
+      const [indexesD, jData ] = res;
+      const { list, diagnosisList, treatmentInfoList, integratedHistory } = indexesD;
+      const data = {
+        hydData: list.map(item => {
+          return ({ ...item, key: uuid() });
+        }),
+        previousHistory: {},
+      };
+      if (integratedHistory) {
+        data.previousHistory = {
+          diagnosisList,
+          treatmentInfoList,
+          integratedHistory,
+        };
+      }
+
+      setIndexesData({ ...data });
       setJcdData(jData.list.map(item => {
         return ({ ...item, meta: {
           ...item.meta,
@@ -120,7 +135,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
       }
       // }
     } else {
-      setHydData([]);
+      setIndexesData(initIndexes);
       setJcdData([]);
       setIsLoaded(false);
     }
@@ -149,7 +164,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
               />
               {isLoaded && (
                 <StructuredDetail
-                  hydData={hydData}
+                  indexesData={indexesData}
                   jcdData={jcdData}
                   jcdOriginIds={jcdData.map((item) => item.meta.id)}
                   images={imgData}

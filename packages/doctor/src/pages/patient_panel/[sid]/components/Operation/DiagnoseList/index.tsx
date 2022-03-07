@@ -9,6 +9,7 @@ import * as api from '@/services/api';
 import AddDiagnose, { IdiagnosisItem } from '../DiagnoseAdd';
 import Title from '../../Title';
 import styles from '../index.scss';
+import event from 'xzl-web-shared/dist/utils/events/eventEmitter';
 
 function DiagnoseList() {
   const [diagnosisList, setDiagnosisList] = useState<IdiagnosisItem[]>([]);
@@ -19,21 +20,25 @@ function DiagnoseList() {
       setDiagnosisList(res.diagnosisList);
     });
   };
+  const refreshList = () => {
+    fetchDiagnosis();
+  };
   useEffect(() => {
     if (diagnosisList.length === 0) {
       fetchDiagnosis();
     }
+    event.addListener('refreshPreviousHistory', refreshList);
+    return () => {
+      event.removeListener('refreshPreviousHistory', refreshList);
+    };
   }, []);
-  const refreshList = () => {
-    fetchDiagnosis();
-  };
   const handleDelete = (id: string) => {
     api.diagnosis.deleteDisease({ id, sid }).then(() => {
       message.success('删除成功');
       fetchDiagnosis();
     });
   };
-  const fetchHospitalDetail = (hosInfo: {hospitalId: string, hospitalName: string}) => {
+  const fetchHospitalDetail = (hosInfo: { hospitalId: string, hospitalName: string }) => {
     const params = {
       id: hosInfo.hospitalId,
       name: hosInfo.hospitalName,

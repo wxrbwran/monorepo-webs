@@ -155,6 +155,7 @@ const SearchJcd: FC<IProps> = (props) => {
                   onSearch={debounce((val) => handleFetchNames(val), 500)}
                   onSelect={handleSelectName}
                   value={nameList.find(i => i.id === selectId)?.jcdName}
+                  dropdownClassName={styles.autocomplete}
                 >
                   {
                     nameList.map(item => (

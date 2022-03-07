@@ -17,6 +17,40 @@ interface IRlated {
   name?: string;
   text?: React.ReactElement | string;
 }
+export const illnessName:CommonData = {
+  // four
+  hypertension: '高血压病',
+  hyperlipemia: '高脂血症',
+  hyperglycemia: '糖尿病',
+  hyperuricemia: '高尿酸血症',
+  // other
+  nephroticSyndrome: '肾功能不全',
+  renalArteryStenosis: '肾动脉狭窄',
+  sleepApnea: '睡眠呼吸暂停综合症',
+  duodenalUlcer: '胃-十二指肠溃疡',
+  pylori: '幽门螺旋杆菌感染',
+  // related
+  familyHistory: '家族史',
+  coronary: '冠心病',
+  gout: '痛风',
+  tumour: '肿瘤',
+  peripheralVascular: '外周血管病',
+  smoking: '吸烟史',
+  drinking: '饮酒史',
+  allergy: '过敏史',
+};
+export const smokingLevel = {
+  LEVEL_ONE: '每天1-5支',
+  LEVEL_TWO: '每天5-10支',
+  LEVEL_THREE: '每天10-20支',
+  LEVEL_FOUR: '每天20支以上',
+};
+export const drinkLevel = {
+  LEVEL_ZERO: '不喝酒',
+  LEVEL_ONE: '少量',
+  LEVEL_TWO: '多量',
+  LEVEL_THREE: '超量',
+};
 export default function transformMedicalRecordData(type: string, obj:{ [key:string]:any }) {
   /* eslint-disable */
 	const keysArray = keys(obj);
@@ -26,28 +60,6 @@ export default function transformMedicalRecordData(type: string, obj:{ [key:stri
 			'nephroticSyndrome', 'renalArteryStenosis',
 			'sleepApnea', 'duodenalUlcer', 'pylori'];
 		const related = ['familyHistory', 'smoking', 'drinking', 'allergy'];
-		const illnessName:{[key:string]:string} = {
-			// four
-			hypertension: '高血压病',
-			hyperlipemia: '高脂血症',
-			hyperglycemia: '糖尿病',
-			hyperuricemia: '高尿酸血症',
-			// other
-			nephroticSyndrome: '肾功能不全',
-			renalArteryStenosis: '肾动脉狭窄',
-			sleepApnea: '睡眠呼吸暂停综合症',
-			duodenalUlcer: '胃-十二指肠溃疡',
-			pylori: '幽门螺旋杆菌感染',
-			// related
-			familyHistory: '家族史',
-			coronary: '冠心病',
-			gout: '痛风',
-			tumour: '肿瘤',
-			peripheralVascular: '外周血管病',
-			smoking: '吸烟史',
-			drinking: '饮酒史',
-			allergy: '过敏史',
-		};
 		let list;
 		let fourHigh:IFour[] = [];
 		let otherDia:IOther[] = [];
@@ -137,19 +149,7 @@ export default function transformMedicalRecordData(type: string, obj:{ [key:stri
 				if (obj.smoking === 'SICK') {
 					const since = !!obj.smokingSince ?
 						`吸烟${obj.smokingSince}年 ` : '';
-					switch (obj.smokingLevel) {
-						case 'LEVEL_ONE':
-							data.text = `${since} 每天1-5支`; break;
-						case 'LEVEL_TWO':
-							data.text = `${since} 每天5-10支`; break;
-						case 'LEVEL_THREE':
-							data.text = `${since} 每天10-20支`; break;
-						case 'LEVEL_FOUR':
-							data.text = `${since} 每天20支以上`; break;
-						case 'LEVEL_ZERO':
-						default:
-							data.text = `${since}`; break;
-					}
+          data.text = `${since} ${smokingLevel?.[obj.smokingLevel] || ''}`;
 					if (obj.quitSmoking === 'QUITED') {
 						if (!!obj.quitSmokingSince) {
 							data.text += `  已戒烟${obj.quitSmokingSince}年`;
@@ -167,18 +167,8 @@ export default function transformMedicalRecordData(type: string, obj:{ [key:stri
 				if (obj.drinking === 'SICK') {
 					const since = !!obj.drinkingSince ?
 						`饮酒${obj.drinkingSince}年 ` : '';
-					switch (obj.drinkingLevel) {
-						case 'LEVEL_ZERO':
-							data.text = `${since} 不喝酒`; break;
-						case 'LEVEL_ONE':
-							data.text = `${since} 少量`; break;
-						case 'LEVEL_TWO':
-							data.text = `${since} 多量`; break;
-						case 'LEVEL_THREE':
-							data.text = `${since} 超量`; break;
-						default:
-							data.text = `${since}`; break;
-					}
+
+          data.text = `${since} ${drinkLevel?.[obj.drinkingLevel] || ''}` ;
 					if (obj.quitDrinking === 'QUITED') {
 						if (!!obj.quitDrinkingSince) {
 							data.text += `  已戒酒${obj.quitDrinkingSince}年`;
