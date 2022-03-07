@@ -41,7 +41,7 @@ const Jcd: FC<IProps> = ({ time, category }) => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [time]);
 
   return (
     <div className={styles.jcd_wrap}>
@@ -60,7 +60,7 @@ const Jcd: FC<IProps> = ({ time, category }) => {
                               <Timeline.Item key={djItem.meta.id}>
                                 <div className='flex'>
                                   <div className='text-sm pt-5 mr-6'>
-                                    {djItem.isStructAt && '*'} {dayjs(djItem.meta.createdTime).format('YYYY/MM/DD')}
+                                    {djItem.meta.isStructAt && '*'} {dayjs(djItem.meta.createdTime).format('YYYY/MM/DD')}
                                   </div>
                                   <div className='flex-1'>
                                     <Collapse

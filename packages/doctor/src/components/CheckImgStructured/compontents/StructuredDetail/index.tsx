@@ -45,10 +45,11 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
   const sid = window.$storage.getItem('sid');
   const dispatch = useDispatch();
   const isRefreshParent = useRef(false);
+  console.log('======previousHistory', previousHistory);
   // 保存各个分类的方法队列 - 检查单、图片不清晰、非医学单据
   const [hydCallbackFns, setHydCallbackFns] = useState<CommonData>({});
   const [jcdCallbackFns, setJcdCallbackFns] = useState<CommonData>({});
-  const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData)); // true仅查看 false编辑中
+  const [isViewOnly, setisViewOnly] = useState(!isEmpty(hydData) || !isEmpty(jcdData) || !isEmpty(previousHistory)); // true仅查看 false编辑中
   const [typeTabs, setTypeTabs] = useState <any[]>(initTypeTabs());
   const [activeType, setActiveType] = useState(initTypeTabs()[0]);
   const [loading, setLoading] = useState(false);
@@ -67,8 +68,8 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
     const tabs: any[] = initTypeTabs();
     setTypeTabs(tabs);
     setActiveType(tabs.filter(item => !['NOT_CLEAR', 'NOT_HYD_JCD'].includes(item.outType))?.[0]?.outType);
-    setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData));
-  }, [hydData, jcdData]);
+    setisViewOnly(!isEmpty(hydData) || !isEmpty(jcdData) || !isEmpty(previousHistory));
+  }, [hydData, jcdData, previousHistory]);
 
   useEffect(() => () => {
     // 在组件销毁时判断：如果保存成功了，刷新下单据列表，更新数据

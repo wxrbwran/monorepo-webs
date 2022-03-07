@@ -23,10 +23,10 @@ const AddEditDocument: FC<IProps> = (props) => {
   const sid = window.$storage.getItem('sid');
   // console.log('添加record', record);
   useEffect(() => {
-    if (record) {
+    if (record && showModal) {
       form.setFieldsValue({ ...record });
     }
-  }, [record]);
+  }, [record, showModal]);
 
   const toggleShowModal = () => {
     setshowModal(false);
