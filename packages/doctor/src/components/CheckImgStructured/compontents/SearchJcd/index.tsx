@@ -154,7 +154,7 @@ const SearchJcd: FC<IProps> = (props) => {
                   placeholder="请输入检查单名称"
                   onSearch={debounce((val) => handleFetchNames(val), 500)}
                   onSelect={handleSelectName}
-                  value={nameList.find(i => i.id === selectId)?.jcdName}
+                  value={selectId ? nameList.find(i => i.id === selectId)?.jcdName : ''}
                   dropdownClassName={styles.autocomplete}
                 >
                   {

@@ -80,7 +80,7 @@ const time = {
     console.log('data32322', record);
     return (
       <div>
-        { record.unknownReport.unknownReport && '*' }
+        { record?.unknownReport?.unknownReport && '*' }
         { moment(data?.time).format('YYYY/MM/DD')}
       </div>
     );
