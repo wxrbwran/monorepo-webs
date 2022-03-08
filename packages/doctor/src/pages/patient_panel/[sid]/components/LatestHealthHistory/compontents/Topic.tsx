@@ -108,7 +108,7 @@ const Topic: FC<IProps> = ({ initData }) => {
       }
       {
         initTopic.COMPLETION_SENIOR.map((groups, i) => (
-          <pre key={i}>
+          <pre key={i} className='whitespace-pre-wrap'>
             {initTopic.COMPLETION.length + initTopic.CHOICE.length + initTopic.TEXT.length + i + 1}
             {
               groups.map((qaItem: IQaItem, qaInx: number) => {
@@ -117,7 +117,7 @@ const Topic: FC<IProps> = ({ initData }) => {
                     <span> {qaItem.question} </span>
                     <span>
                       {
-                        qaItem.question_type === 'INLINE_DATE' ? dayjs(qaItem.answer[0]).format('YYYY-MM-DD') : qaItem.answer.join('、')
+                        qaItem.question_type === 'INLINE_DATE' ? dayjs(Number(qaItem.answer[0])).format('YYYY-MM-DD') : qaItem.answer.join('、')
                       }
                     </span>
                   </span>

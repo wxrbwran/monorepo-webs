@@ -127,7 +127,7 @@ export const getCustomCol = (headList: string[] | IHasSubItem[]) => {
                           {
                             ref.type === 'RADIO' && (
                             <>
-                              {yinYangMap[ref.indexValue as string]}
+                              {yinYangMap?.[ref.indexValue as string] || ref.indexValue}
                               <div style={{ color: '#ff0000' }}>{`${ref.note || ''} ${yinYangMap[ref.value as string]}`}</div>
                             </>
                             )
