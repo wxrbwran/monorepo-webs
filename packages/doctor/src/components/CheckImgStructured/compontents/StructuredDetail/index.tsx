@@ -321,7 +321,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             )
           }
         </div>
-        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 1000)} loading={loading}>
+        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 800)} loading={loading}>
           {isViewOnly ? '修改结果' : '保存并退出'}
         </Button>
       </div>

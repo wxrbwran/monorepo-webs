@@ -13,7 +13,7 @@ interface familyMembers {
 }
 interface IProps {
   initData: {
-    familyHistory: boolean; // 是否有家族史
+    familyHistory: 'SICK' | 'WELL'; // 是否有家族史
     fatherFamilyHistory: familyMembers | null;
     motherFamilyHistory: familyMembers | null;
     brotherFamilyHistory: familyMembers | null;
@@ -45,98 +45,101 @@ const RelatedHistoryToView: FC<IProps> = ({ initData }) => {
   };
   return (
     <>
-      <div>家族史</div>
       {
-        d.familyHistory ? (
+        d.familyHistory === 'SICK' ? (
           <>
-            <div className='mb-10 text-sm flex'>
-              <div className='text-gray-500 w-70 mr-15'>父亲：</div>
-              <div> { !!d.fatherFamilyHistory ? renderMemberHis(d.fatherFamilyHistory) : '无'}  </div>
+            <div className='w-70 mb-10 text-sm'>家族史</div>
+              <div className='mb-10 text-sm flex'>
+                <div className='text-gray-500 w-70 mr-15'>父亲：</div>
+                <div> { !!d.fatherFamilyHistory ? renderMemberHis(d.fatherFamilyHistory) : '无'}  </div>
+              </div>
+              <div className='mb-10 text-sm flex'>
+                <div className='text-gray-500 w-70 mr-15'>母亲：</div>
+                <div> { !!d.motherFamilyHistory ? renderMemberHis(d.motherFamilyHistory)  : '无'} </div>
+              </div>
+              <div className='text-sm flex'>
+                <div className='text-gray-500 w-70 mr-15'>兄弟姐妹：</div>
+                <div> { !!d.brotherFamilyHistory ? renderMemberHis(d.brotherFamilyHistory) : '无'}  </div>
+              </div>
+          </>
+        ) : <div className='text-sm flex' style={{ width: '50%' }}>
+        <div className='text-gray-500 w-70 mr-15'>家族史：</div>
+        <div>无</div>
+      </div>
+      }
+      <Divider dashed />
+      {
+        d.smoking === 'SICK' ? (
+          <>
+            <div className='flex'>
+              <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
+                <div className='text-gray-500 w-70 mr-15'>吸烟史：</div>
+                <div> { d.smokingSince} </div>
+              </div>
+              <div className='mb-10 text-sm flex'>
+                <div className='text-gray-500 w-70 mr-15'>吸烟情况：</div>
+                <div> { smokingLevel?.[d.smokingLevel]} </div>
+              </div>
             </div>
-            <div className='mb-10 text-sm flex'>
-              <div className='text-gray-500 w-70 mr-15'>母亲：</div>
-              <div> { !!d.motherFamilyHistory ? renderMemberHis(d.motherFamilyHistory)  : '无'} </div>
-            </div>
-            <div className='text-sm flex'>
-              <div className='text-gray-500 w-70 mr-15'>兄弟姐妹：</div>
-              <div> { !!d.brotherFamilyHistory ? renderMemberHis(d.brotherFamilyHistory) : '无'}  </div>
-            </div>
-            <Divider dashed />
-            {
-              d.smoking === 'SICK' ? (
-                <>
-                  <div className='flex'>
-                    <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
-                      <div className='text-gray-500 w-70 mr-15'>吸烟史：</div>
-                      <div> { d.smokingSince} </div>
-                    </div>
-                    <div className='mb-10 text-sm flex'>
-                      <div className='text-gray-500 w-70 mr-15'>吸烟情况：</div>
-                      <div> { smokingLevel?.[d.smokingLevel]} </div>
-                    </div>
-                  </div>
-                  <div className='flex'>
-                    <div className='text-sm flex' style={{ width: '50%' }}>
-                      <div className='text-gray-500 w-70 mr-15'>戒烟情况：</div>
-                      <div> { d.quitSmoking === 'QUITED' ? '已戒烟' : '未戒烟'}</div>
-                    </div>
-                    {
-                      d.quitSmoking === 'QUITED' && (
-                      <div className='text-sm flex'>
-                        <div className='text-gray-500 w-70 mr-15'>戒烟：</div>
-                        <div> { d.quitSmokingSince }</div>
-                      </div>
-                      )
-                    }
-                  </div>
-                </>
-              ) : <div className='text-sm flex' style={{ width: '50%' }}>
-                    <div className='text-gray-500 w-70 mr-15'>吸烟史：</div>
-                    <div>无</div>
-                  </div>
-            }
-            <Divider dashed />
-            {
-              d.drinking === 'SICK' ? (
-                <>
-                  <div className='flex'>
-                    <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
-                      <div className='text-gray-500 w-70 mr-15'>饮酒史：</div>
-                      <div> { d.drinkingSince} </div>
-                    </div>
-                    <div className='mb-10 text-sm flex'>
-                      <div className='text-gray-500 w-70 mr-15'>饮酒情况：</div>
-                      <div> { smokingLevel?.[d.drinkingLevel]} </div>
-                    </div>
-                  </div>
-                  <div className='flex'>
-                    <div className='text-sm flex' style={{ width: '50%' }}>
-                      <div className='text-gray-500 w-70 mr-15'>戒酒情况：</div>
-                      <div> { d.quitDrinking === 'QUITED' ? '已戒烟' : '未戒烟'}</div>
-                    </div>
-                    {
-                      d.quitDrinking === 'QUITED' && (
-                      <div className='text-sm flex'>
-                        <div className='text-gray-500 w-70 mr-15'>戒洒：</div>
-                        <div> { d.quitDrinkingSince }</div>
-                      </div>
-                      )
-                    }
-                  </div>
-                </>
-              ) : <div className='text-sm flex' style={{ width: '50%' }}>
-                    <div className='text-gray-500 w-70 mr-15'>饮酒史：</div>
-                    <div>无</div>
-                  </div>
-            }
-            <Divider dashed />
-            <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
-              <div className='text-gray-500 w-70 mr-15'>过敏史：</div>
-              <div>{d.allergyInfo && d.allergy === 'SICK' ? d.allergyInfo : '无'}</div>
+            <div className='flex'>
+              <div className='text-sm flex' style={{ width: '50%' }}>
+                <div className='text-gray-500 w-70 mr-15'>戒烟情况：</div>
+                <div> { d.quitSmoking === 'QUITED' ? '已戒烟' : '未戒烟'}</div>
+              </div>
+              {
+                d.quitSmoking === 'QUITED' && (
+                <div className='text-sm flex'>
+                  <div className='text-gray-500 w-70 mr-15'>戒烟：</div>
+                  <div> { d.quitSmokingSince }</div>
+                </div>
+                )
+              }
             </div>
           </>
-        ) :  <div>无</div>
+        ) : <div className='text-sm flex' style={{ width: '50%' }}>
+              <div className='text-gray-500 w-70 mr-15'>吸烟史：</div>
+              <div>无</div>
+            </div>
       }
+      <Divider dashed />
+      {
+        d.drinking === 'SICK' ? (
+          <>
+            <div className='flex'>
+              <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
+                <div className='text-gray-500 w-70 mr-15'>饮酒史：</div>
+                <div> { d.drinkingSince} </div>
+              </div>
+              <div className='mb-10 text-sm flex'>
+                <div className='text-gray-500 w-70 mr-15'>饮酒情况：</div>
+                <div> { smokingLevel?.[d.drinkingLevel]} </div>
+              </div>
+            </div>
+            <div className='flex'>
+              <div className='text-sm flex' style={{ width: '50%' }}>
+                <div className='text-gray-500 w-70 mr-15'>戒酒情况：</div>
+                <div> { d.quitDrinking === 'QUITED' ? '已戒烟' : '未戒烟'}</div>
+              </div>
+              {
+                d.quitDrinking === 'QUITED' && (
+                <div className='text-sm flex'>
+                  <div className='text-gray-500 w-70 mr-15'>戒洒：</div>
+                  <div> { d.quitDrinkingSince }</div>
+                </div>
+                )
+              }
+            </div>
+          </>
+        ) : <div className='text-sm flex' style={{ width: '50%' }}>
+              <div className='text-gray-500 w-70 mr-15'>饮酒史：</div>
+              <div>无</div>
+            </div>
+      }
+      <Divider dashed />
+      <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
+        <div className='text-gray-500 w-70 mr-15'>过敏史：</div>
+        <div>{d.allergyInfo && d.allergy === 'SICK' ? d.allergyInfo : '无'}</div>
+      </div>
     </>
   );
 };
