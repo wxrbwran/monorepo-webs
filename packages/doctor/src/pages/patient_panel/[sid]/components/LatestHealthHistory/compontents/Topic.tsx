@@ -45,7 +45,7 @@ const Topic: FC<IProps> = ({ initData }) => {
     formatTempDdtk(initD.COMPLETION_SENIOR)
       .filter(qaList => qaList.find(qa => !isEmpty(qa.answer)))
       .map(item =>{
-        ddtkSeniorList.push(item.filter((qa, inx) => !isEmpty(qa.answer) || inx === 0));
+        ddtkSeniorList.push(item.filter((qa, inx) => !isEmpty(qa.answer) || inx === 0 || inx === item.length - 1));
       });
 
     const completionList: IQaItem[][] = [];

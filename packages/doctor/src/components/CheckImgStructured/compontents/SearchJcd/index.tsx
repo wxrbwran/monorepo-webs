@@ -154,12 +154,11 @@ const SearchJcd: FC<IProps> = (props) => {
                   placeholder="请输入检查单名称"
                   onSearch={debounce((val) => handleFetchNames(val), 500)}
                   onSelect={handleSelectName}
-                  value={selectId ? nameList.find(i => i.id === selectId)?.jcdName : ''}
                   dropdownClassName={styles.autocomplete}
                 >
                   {
                     nameList.map(item => (
-                      <AutoComplete.Option key={item.id} value={item.id}>
+                      <AutoComplete.Option key={item.id} value={item.jcdName}>
                         <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
                         <span>{item.jcdName}</span>
                       </AutoComplete.Option>
