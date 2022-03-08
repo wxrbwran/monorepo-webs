@@ -42,7 +42,7 @@ const SearchHYD: FC<IProps> = (props) => {
     if (e) {
       const params = {
         documentType,
-        sampleFroms, // 子分类名称集合
+        sampleFroms: sampleFroms?.[0] === '血液' ? ['血液', '血'] : sampleFroms, // 勾选血液默认要把来源为血的也查出来
         keyWord: e,
         sourceSid: window.$storage.getItem('sid'),
       };

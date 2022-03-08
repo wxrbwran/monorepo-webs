@@ -42,7 +42,7 @@ const LatestHealthHistory: FC = ({ children }) => {
       <span onClick={() => setShow(true)}>{ children }</span>
       <DragModal
         wrapClassName="ant-modal-wrap-center"
-        width="99%"
+        width={1200}
         visible={show}
         title="结构化数据"
         onCancel={() => setShow(false)}
