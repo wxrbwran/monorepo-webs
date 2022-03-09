@@ -74,7 +74,7 @@ const RelatedHistoryToView: FC<IProps> = ({ initData }) => {
             <div className='flex'>
               <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
                 <div className='text-gray-500 w-70 mr-15'>吸烟史：</div>
-                <div> { d.smokingSince} </div>
+                <div> { d.smokingSince || '--'} 年 </div>
               </div>
               <div className='mb-10 text-sm flex'>
                 <div className='text-gray-500 w-70 mr-15'>吸烟情况：</div>
@@ -90,7 +90,7 @@ const RelatedHistoryToView: FC<IProps> = ({ initData }) => {
                 d.quitSmoking === 'QUITED' && (
                 <div className='text-sm flex'>
                   <div className='text-gray-500 w-70 mr-15'>戒烟：</div>
-                  <div> { d.quitSmokingSince }</div>
+                  <div> { d.quitSmokingSince || '--' } 年</div>
                 </div>
                 )
               }
@@ -108,7 +108,7 @@ const RelatedHistoryToView: FC<IProps> = ({ initData }) => {
             <div className='flex'>
               <div className='mb-10 text-sm flex' style={{ width: '50%' }}>
                 <div className='text-gray-500 w-70 mr-15'>饮酒史：</div>
-                <div> { d.drinkingSince} </div>
+                <div> { d.drinkingSince || '--'} 年 </div>
               </div>
               <div className='mb-10 text-sm flex'>
                 <div className='text-gray-500 w-70 mr-15'>饮酒情况：</div>
@@ -124,7 +124,7 @@ const RelatedHistoryToView: FC<IProps> = ({ initData }) => {
                 d.quitDrinking === 'QUITED' && (
                 <div className='text-sm flex'>
                   <div className='text-gray-500 w-70 mr-15'>戒洒：</div>
-                  <div> { d.quitDrinkingSince }</div>
+                  <div> { d.quitDrinkingSince || '--'} 年</div>
                 </div>
                 )
               }
