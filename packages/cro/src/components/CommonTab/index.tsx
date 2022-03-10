@@ -165,6 +165,10 @@ function CommonTab(props: IProps) {
       status: 'objective_table',
     },
     {
+      statusName: '操作日志',
+      status: 'operation_log',
+    },
+    {
       statusName: '终点事件和CRF量表',
       status: 'end_event',
     },
@@ -188,6 +192,7 @@ function CommonTab(props: IProps) {
       statusName: '计划外访视',
       status: 'out_plan_visit',
     },
+
   ];
   const handleShowModal = (type: string) => {
 
