@@ -8,8 +8,8 @@ import { IState } from 'typings/global';
 import * as api from '@/services/api';
 
 interface IProps {
-  location: {
-    pathname: string;
+  param: {
+    // pathname: string;
     query: {
       reportName: string;
       resultKey: string;
@@ -17,7 +17,7 @@ interface IProps {
   };
 }
 
-function QueryResult({ location }: IProps) {
+function QueryResult({ param }: IProps) {
   const dispatch = useDispatch();
   const tableData = useSelector((state: IState) => state.query.tableData);
   const isQueryStop = useSelector((state: IState) => state.query.isQueryStop);
@@ -78,26 +78,25 @@ function QueryResult({ location }: IProps) {
   };
 
   useEffect(() => {
-
     dispatch({
       type: 'query/clearQueryResult',
     });
 
     retryTimes.current = 1;
     // 开始从0查询结果
-    queryResult(location.query.resultKey, 0); // 循环查询结果知道没内容返回
+    queryResult(param.query.resultKey, 0); // 循环查询结果知道没内容返回
 
   }, []);
 
   return (
     <div className={styles.result}>
-      <LeftOutlined
+      {/* <LeftOutlined
         onClick={() => history.replace('/query')}
         style={{ marginBottom: 36 }}
-      />
+      /> */}
 
       <QueryTable
-        location={location}
+        location={param}
         tableData={tableData}
         head={head}
       />

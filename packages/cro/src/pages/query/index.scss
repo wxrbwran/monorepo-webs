@@ -97,6 +97,13 @@
     margin: 20px 0;
   }
 
+  .searchRange {
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    font-size: 14px;
+    color: #181818;
+  }
+
   .fieldsChoice,
   .rulesChoice {
     margin: 0 50px;
@@ -253,13 +260,24 @@
     }
   }
 
-  .ruleHasChoices {
+  .ruleHasChoices,
+  .step3ruleHasChoices {
     overflow: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
+  }
+
+  .ruleHasChoices {
     height: 200px;
+  }
+
+  .step3ruleHasChoices {
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    margin: 15px 50px;
+    padding-bottom: 15px;
   }
 
   .bottom_steps {
