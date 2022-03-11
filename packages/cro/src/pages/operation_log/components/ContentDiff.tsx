@@ -1,6 +1,9 @@
 import React, { FC, useState, useMemo } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import RichTextDiff from './RichTextDiff';
+import ConditionCriteria from './ConditionCriteria';
+import ScaleTableDetailEcho from '@/components/Scale/ScaleTableDetailEcho';
+import ScalePlanDetailEcho from '@/components/Scale/ScalePlanDetailEcho';
 import styles from './index.scss';
 
 interface ILogItem {
@@ -44,6 +47,34 @@ const ContentDiff: FC<IProps> = (props) => {
         return <div>{contData}</div>;
       case 2:
         return <RichTextDiff contData={contData} />;
+      case 3:
+        return <ConditionCriteria contData={contData}  />;
+      case 5:
+        return <div>分组名称: {contData.groupName}<br />目标人数: {contData.note.note1}</div>;
+      case 6:
+        return <div>有效病例数:人</div>;
+      case 7:
+      case 12:
+      case 15:
+      case 19:
+        return (
+          <ScaleTableDetailEcho
+            scaleType={contData.type}
+            scaleName={contData.name}
+            questions={contData.questions}
+          />
+        );
+      case 8:
+      case 13:
+      case 16:
+      case 20:
+        return (
+          <ScalePlanDetailEcho
+            scaleType={contData.scaleType}
+            initRule={contData}
+            hideEditBtn={true}
+          />
+        );
       default:
         return <div>未知内容</div>;
     }

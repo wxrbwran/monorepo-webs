@@ -154,7 +154,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
     api.subjective.addObjectiveScale(paraAdd)
       .then(() => {
         message.success('添加成功');
-
         infos[index] = params;
         setInfos([...infos]);
         console.log('================ 添加成功 editStatus,', JSON.stringify(editStatus));
@@ -162,6 +161,15 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
           type: 'project/fetchObjectiveScale',
           payload: { id: location.query.id, scaleType },
         });
+        // 写入日志
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: params.questions,
+          businessType: scaleType === 'OBJECTIVE' ?
+            window.$log.businessType.CREATE_OBJECTIVE.code :
+            window.$log.businessType.CREATE_UNPLANNED_OBJECTIVE.code,
+        });
+        // 写入日志
       });
   };
 

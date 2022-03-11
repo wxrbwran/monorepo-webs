@@ -28,7 +28,17 @@ const OperationLog: FC = () => {
             <Timeline.Item className={`${styles.dot} ${docColor[logItem.type]}`} key={logItem.id}>
               <div className='flex justify-between'>
                 <div className='font-bold text-sm mb-6 flex items-center'>
-                  <span className='mr-30'>{logItem.copyWriting}</span>
+                  <span className='mr-30'>
+                    {[31, 32].includes(logItem?.businessType) ?
+
+                    <div className='flex'>
+                      <div style={{ flex: '0 0 95px' }}>创建客观检查 - </div>
+                      <div className={styles.objective_tit} dangerouslySetInnerHTML={{ __html: logItem.copyWriting }}></div>
+                      {
+                        logItem.copyWriting.length > 50 && '......'
+                      }
+                    </div> : logItem.copyWriting}
+                  </span>
                   {
                     logItem.type !== 0 && (
                       <ContentDiff infoData={logItem}>
@@ -39,7 +49,7 @@ const OperationLog: FC = () => {
                     )
                   }
                 </div>
-                <div className='text-sm'>{dayjs(logItem.operationTime).format('YYYY-MM-DD HH:MM')}</div>
+                <div className={styles.time}>{dayjs(logItem.operationTime).format('YYYY-MM-DD HH:mm')}</div>
               </div>
               <Row className='text-gray-500 text-sm'>
                 <Col span={3}>创建人： {logItem.operatorName}</Col>
@@ -53,6 +63,9 @@ const OperationLog: FC = () => {
           ))
         }
        </Timeline>
+       {
+          LogList.length === 0 && '暂无操作日志'
+        }
     </div>
   );
 };

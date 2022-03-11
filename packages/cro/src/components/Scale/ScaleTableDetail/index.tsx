@@ -58,6 +58,7 @@ function ScaleTableDetail({ scaleType }: IProps) {
           scaleType={scaleType}
           scaleId={scaleId}
           initRule={ruleDoc}
+          scaleName={fromName}
         />
       </div>
     </div>

@@ -109,4 +109,8 @@ export const businessType = {
   DELETE_TEST_FILE: typeInfo(28, '删除试验文件'),
   DELETE_INFORMED_CONSENT: typeInfo(29, '删除知情同意书'),
   DELETE_RISK_ASSESSMENT: typeInfo(30, '删除风险评估、风险对策'),
+
+  // 创建
+  CREATE_OBJECTIVE: typeInfo(31, '创建客观检查'),
+  CREATE_UNPLANNED_OBJECTIVE: typeInfo(32, '创建计划外客观检查'),
 };

@@ -77,7 +77,8 @@ function ScaleTableDetailEcho(props: IProps) {
           (status !== 1001 || ['VISIT_CRF', 'VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE'].includes(scaleType))
           && window.$storage.getItem('isLeader')
           && !location.pathname.includes('reply')
-          && !location.pathname.includes('template') && (
+          && !location.pathname.includes('template')
+          && !location.pathname.includes('operation_log') && (
             <p className={`${styles.icon} mr-20 absolute right-0 top-0`}>
               <Link
                 to={`/${getUrlPreFix(scaleType)}/create?groupId=${groupId}&scaleId=${props.scaleId}`}

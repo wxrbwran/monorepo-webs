@@ -137,6 +137,10 @@ function CommonTab(props: IProps) {
         //更新常用问题列表
         history.push('/home');
       } else {
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: `${modalText[modalType].title}`,
+        });
         message.success('更改信息成功');
         setShowModal(false);
         dispatch({

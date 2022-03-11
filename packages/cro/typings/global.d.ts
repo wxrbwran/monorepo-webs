@@ -85,6 +85,7 @@ declare interface IOperationLogProps {
   newParams?: any;
   oldParams?: any;
   businessType?: number;
+  projectSid?: string; // 创建项目时会传入
 }
 declare interface Window {
   nim: any;
