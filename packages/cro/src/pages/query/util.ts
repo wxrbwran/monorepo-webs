@@ -371,18 +371,30 @@ export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRa
 
       if (item.type == 'primary') { // primary 类型，组装方式
 
-        tmpC = { operator: '=', value: projectSid };
+        tmpC = {
+          ...tmpC,
+          ...{ operator: '=', value: projectSid },
+        };
       } else if (utilTimeType.includes(item.type)) {
 
         // [1646150400000,1646409600000)
         if (searchTimeRange?.length > 1) {
-          tmpC = { operator: '<>', value: `[${moment(searchTimeRange[0]).valueOf()},${moment(searchTimeRange[1]).valueOf()})` };
+          tmpC = {
+            ...tmpC,
+            ...{ operator: '<>', value: `[${moment(searchTimeRange[0]).valueOf()},${moment(searchTimeRange[1]).valueOf()})` },
+          };
         } else {
-          tmpC = { operator: '=', value: '*' };
+          tmpC = {
+            ...tmpC,
+            ...{ operator: '=', value: '*' },
+          };
         }
       } else if (item.type == 'implicit' || item.type == 'final' || item.type == 'node') {
 
-        tmpC = { operator: '=', value: item?.assign?.value };
+        tmpC = {
+          ...tmpC,
+          ...{ operator: '=', value: item?.assign?.value },
+        };
       } else {
         let tempCTemp = {} = {};
         const value = ruleItem.operation == '范围' ? `[${ruleItem.min},${ruleItem.max})` : ruleItem.value;
@@ -390,18 +402,35 @@ export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRa
 
         if (ruleItem.name.choiceType == 'medical-img-noReference') {
           if (numberOperationType.includes(ruleItem.operation) && item.type == 'number') { // 数字类型将值给type为number的key
-            tmpC = tempCTemp;
+            tmpC = {
+              ...tmpC,
+              ...tempCTemp,
+            };
           } else if (stringOperationType.includes(ruleItem.operation) && item.type == 'string') { // 字符串类型将值给type为string的key
-            tmpC = tempCTemp;
+            tmpC = {
+              ...tmpC,
+              ...tempCTemp,
+            };
           } else {
-            tmpC = { operator: '=', value: '*' };
+            tmpC = {
+              ...tmpC,
+              ...{ operator: '=', value: '*' },
+            };
           }
         } else {
-          tmpC = tempCTemp;
+          tmpC = {
+            ...tmpC,
+            ...tempCTemp,
+          };
         }
       }
 
       console.log('===================  getItemConfigFormItem tmpC', JSON.stringify(tmpC));
+    } else { // 自己没有赋值过
+      tmpC = {
+        ...tmpC,
+        ...{ operator: '=', value: item?.assign?.value ?? '*' },
+      };
     }
 
     console.log('===================  getItemConfigFormItem tmpC', JSON.stringify({
@@ -471,9 +500,32 @@ export const transformQueryPageTeamsToFetchQueryIdShoulds = (searchRangeItems) =
   return should_1;
 };
 
-export const transformQueryPageAllRuleToFetchQueryIdRules = (allRule, searchTimeRange, projectSid, allField, searchRangeItems) => {
+export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField) => {
+
+  console.log('================= transformQueryPageFieldsToFetchQueryIdRules start', JSON.stringify(fields));
+
+  const should_1 = [];
+  for (const field of fields) {
+    let nameConfig = getChildItemsConfig(field, { search: true });
+    // 加上顶级的
+    console.log('================= nameConfig', JSON.stringify(nameConfig));
+    const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == field.parentName);
+    if (parentItems.length > 0) {
+      nameConfig = {
+        ...nameConfig,
+        ...getItemConfigFormItem(parentItems[0], { search: true }),
+      };
+    }
+    should_1.push(nameConfig);
+  }
+  console.log('================= transformQueryPageFieldsToFetchQueryIdRules should_1', JSON.stringify(should_1));
+  return should_1;
+};
+
+export const transformQueryPageAllRuleToFetchQueryIdRules = (allRule, searchTimeRange, projectSid, allField, searchRangeItems, fields) => {
 
   const should_1 = transformQueryPageTeamsToFetchQueryIdShoulds(searchRangeItems);
+  const fieldShould_1 = transformQueryPageFieldsToFetchQueryIdRules(fields, allField);
   const rules = [];
   for (const rule of allRule) {
     const must: any[] = [];
@@ -497,36 +549,11 @@ export const transformQueryPageAllRuleToFetchQueryIdRules = (allRule, searchTime
     });
   }
 
+  if (rules.length > 0) {
+    rules[0].match.should_1 = [...rules[0].match.should_1, ...fieldShould_1];
+  }
+
   console.log('================= transformQueryPageAllRuleToFetchQueryIdRules rules', JSON.stringify(rules));
   return rules;
 };
 
-export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField) => {
-
-  console.log('================= transformQueryPageFieldsToFetchQueryIdRules start', JSON.stringify(fields));
-
-  const rules = [];
-  const must: any[] = [];
-  for (const field of fields) {
-    let nameConfig = getChildItemsConfig(field, { isSearch: true });
-    // 加上顶级的
-    console.log('================= nameConfig', JSON.stringify(nameConfig));
-    const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == field.parentName);
-    if (parentItems.length > 0) {
-      nameConfig = {
-        ...nameConfig,
-        ...getItemConfigFormItem(parentItems[0], { isSearch: true }),
-      };
-    }
-    must.push(nameConfig);
-  }
-  rules.push({
-    match: {
-      must: must,
-      should_1: [],
-    },
-  });
-
-  console.log('================= transformQueryPageFieldsToFetchQueryIdRules rules', JSON.stringify(rules));
-  return rules;
-};

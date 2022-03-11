@@ -799,15 +799,13 @@ function Query({ }: IProps) {
           }
         }
       }
-
-      const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems);
       const otherSingleFields = allFields?.items?.flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
-      const fieldRule = transformQueryPageFieldsToFetchQueryIdRules([...otherSingleFields, ...choiceMuiltItems], allFields);
+      const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, [...otherSingleFields, ...choiceMuiltItems]);
 
       if (rules) {
 
         const params: any = {
-          rules: [...rules, fieldRule],
+          rules: rules,
           meta: {
             sourceType: 4,
             teamLocations: [

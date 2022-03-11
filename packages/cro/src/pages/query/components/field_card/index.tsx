@@ -98,29 +98,30 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       targetOption.items.forEach((item) => {
 
         const reference_type = item.items.find((i) => i.name.includes('reference_type'));
+        const note = item.items.find((i) => i.name.includes('note'));
+        const noteDes = note?.assign?.value ?? '';
 
         item.show = true;
         console.log('============= reference_type reference_type 结果', JSON.stringify(reference_type));
         if (reference_type?.assign?.value == 'OTHER') {  // 其他类型
 
-          item.description = '其他文字说明';
+          item.description = `${noteDes}其他文字说明`;
           item.type = 'string';
         } else if (reference_type?.assign?.value == 'RANGE') {  // 范围 a-b  字符串
 
-          const note = item.items.find((i) => i.name.includes('note'));
           const referenceValue = item.items.find((i) => i.name.includes('referenceValue'));
           const referenceSecondValue = item.items.find((i) => i.name.includes('referenceSecondValue'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
           console.log('notenotenotenote', JSON.stringify(note));
-          item.description = `${note?.assign?.value ?? ''}${referenceValue?.assign?.value ?? ''}~${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
+          item.description = `${noteDes}${referenceValue?.assign?.value ?? ''}~${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
           item.type = 'float';
         } else if (reference_type?.assign?.value == 'GT') {   // 大于
 
           const referenceValue = item.items.find((i) => i.name.includes('referenceValue'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
-          item.description = `>${referenceValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
+          item.description = `${noteDes}>${referenceValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
           item.type = 'float';
 
         } else if (reference_type?.assign?.value == 'LT') {   // 小于
@@ -128,7 +129,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           const referenceSecondValue = item.items.find((i) => i.name.includes('referenceSecondValue'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
-          item.description = `<${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
+          item.description = `${noteDes}<${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
           item.type = 'float';
 
         } else if (reference_type?.assign?.value == 'AROUND') {   // 包裹 a±b
@@ -137,16 +138,19 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           const referenceSecondValue = item.items.find((i) => i.name.includes('referenceSecondValue'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
-          item.description = `${referenceValue?.assign?.value ?? ''}±${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
+          item.description = `${noteDes}${referenceValue?.assign?.value ?? ''}±${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
           item.type = 'float';
         } else if (reference_type?.assign?.value == 'RADIO') {   // 单选 阴阳
 
           const referenceValue = item.items.find((i) => i.name.includes('referenceValue'));
-          item.description = `${referenceValue?.assign?.value ?? ''}`;
+          item.description = `${noteDes}${{
+            'YANG': '阳',
+            'YIN': '阴',
+          }[referenceValue?.assign?.value] ?? ''}`;
           item.type = 'medical-img-radio';// 特色type
         } else {  // 没有参考值的情况
 
-          item.description = '无参考值';
+          item.description = `${noteDes}无参考值`;
           item.type = 'medical-img-noReference';
         }
       });

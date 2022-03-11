@@ -7,7 +7,7 @@ import './index.scss';
 interface IProps {
   location: {
     pathname: string;
-    query : {
+    query: {
       reportName: string;
       resultKey: string;
     }
@@ -16,7 +16,7 @@ interface IProps {
     column_data: object,
     row_key: number,
     result_id: string,
-    
+
   }],
   head: [],
 }
@@ -42,16 +42,16 @@ function QueryTable({ location, tableData, head }: IProps) {
   };
 
   const getComponent = (text: any, record: any, tree: any) => {
-    
+
     const { kp } = tree;
     let value = '';
     for (let key in text) {
- 
+
       if (key.includes('.value')) {
         value = text[key];
       }
     }
-    if (kp.includes('end-event')){
+    if (kp.includes('end-event')) {
       // return <EndEvent row={text}><span>{text.value}</span></EndEvent>
       const endEventRow = { text: text, record: record, tree: tree, resultKey: location.query.resultKey, value: Number(value) };
       return <EndEvent row={endEventRow}><span>{value}</span></EndEvent>;
@@ -71,7 +71,7 @@ function QueryTable({ location, tableData, head }: IProps) {
 
       const renderTree = (subTree: IColumns[]) => {
         let treeList: any[] = [];
-        subTree.forEach((tree: IColumns)=> {
+        subTree.forEach((tree: IColumns) => {
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           treeList.push(renderItem(tree));
         });
@@ -83,7 +83,7 @@ function QueryTable({ location, tableData, head }: IProps) {
           {
             ...tree,
             children: !!tree?.children?.length ? renderTree(tree.children) : [],
-            render: !!tree?.children?.length ? () => {} : (text: any, record: IColumns) => {
+            render: !!tree?.children?.length ? () => { } : (text: any, record: IColumns) => {
               // return <span>{"hhhhh"}</span>
               return getComponent(text, record, tree);
             },
@@ -99,9 +99,9 @@ function QueryTable({ location, tableData, head }: IProps) {
 
   useEffect(() => {
 
-    if (tableData?.length > 0){
-     
-      const validData = tableData.map(item => { return { ...item.column_data, item };});
+    if (tableData?.length > 0) {
+
+      const validData = tableData.map(item => { return { ...item.column_data, item }; });
       setData([...validData]);
     }
     return () => {
@@ -129,7 +129,7 @@ function QueryTable({ location, tableData, head }: IProps) {
       <QueryDetail
         row={row}
         showModal={showModal}
-        onCancel={()=> { setShowModal(false); }}
+        onCancel={() => { setShowModal(false); }}
       ></QueryDetail>
     );
   }, [showModal]);
@@ -142,14 +142,14 @@ function QueryTable({ location, tableData, head }: IProps) {
             <span>导出Word</span>
           </div>
         ) : (
-            <div className="table-top">
-              <div className="table-top__info">查询结果：</div>
-              {/* <div className="btn-wrap">
+          <div className="table-top">
+            <div className="table-top__info">查询结果：</div>
+            {/* <div className="btn-wrap">
                 <span className="create-btn">
                   <CreateReport handleCreateReport={handleCreateReport}>生成报告</CreateReport>
                 </span>
               </div> */}
-            </div>
+          </div>
         )
       }
       {/* <Table
@@ -163,6 +163,7 @@ function QueryTable({ location, tableData, head }: IProps) {
         dataSource={data}
         bordered
         rowKey={() => Math.random()}
+      // rowSelection={{ columnWidth: 100 }}
       />
       {modal}
     </div>
