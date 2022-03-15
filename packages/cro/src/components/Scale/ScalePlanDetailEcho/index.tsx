@@ -16,7 +16,7 @@ import './index.scss';
 import { getChooseValuesKeyFromRules, getConditionDescriptionFromConditionss, getFrequencyDescriptionFromFrequency, getStartTimeDescriptionFromConditionss, IChooseValues, IRuleDoc } from '@/pages/subjective_table/util';
 import { isEmpty } from 'lodash';
 import { Role } from 'xzl-web-shared/dist/utils/role';
-
+import { cloneDeep } from 'lodash';
 
 interface IProps {
   scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE';
@@ -25,9 +25,12 @@ interface IProps {
   // initPlans: any[];
   initRule: IRuleDoc;
   groupId?: string;
+  scaleName?: string;
+  hideEditBtn?: boolean;
 }
 const ScalePlanDetailEcho: FC<IProps> = (props) => {
-  const { scaleType, scaleId, initRule, addPlans, groupId } = props;
+  const { scaleType, scaleId, initRule, addPlans, groupId, scaleName, hideEditBtn } = props;
+  console.log('23i2323', props);
   // const projectSid = window.$storage.getItem('projectSid');
   const location = useLocation();
   // const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
@@ -45,14 +48,13 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
   useEffect(() => {
 
     if (initRule) {
-      setRuleDoc(initRule);
+      setRuleDoc(cloneDeep(initRule));
     }
 
   }, [initRule]);
 
 
   useEffect(() => {
-
     if (!isEmpty(ruleDoc)) {
 
       const chooseValuesKey = getChooseValuesKeyFromRules(ruleDoc);
@@ -85,7 +87,33 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
           console.log('================== apiName', apiName);
           api.subjective[apiName](id).then((res) => {
-
+            // 主观量表，crf量表，编辑时写入日志
+            let businessType =  window.$log.businessType.UPDATE_SUBJECTIVE_PLAN.code;
+            if (location.pathname.includes('subjective')) {
+              if (location.pathname.includes('out_plan_visit')) {
+                businessType = window.$log.businessType.UPDATE_UNPLANNED_SUBJECTIVE_PLAN.code;
+              }
+            } else {
+              if (location.pathname.includes('out_plan_visit')) {
+                businessType = window.$log.businessType.UPDATE_UNPLANNED_CRF_PLAN.code;
+              } else {
+                businessType = window.$log.businessType.UPDATE_CRF_PLAN.code;
+              }
+            }
+            window.$log.handleOperationLog({
+              type: 1,
+              copyWriting: `编辑${scaleName}发送计划`,
+              businessType: businessType,
+              oldParams: { content: {
+                ...initRule,
+                scaleType,
+              } },
+              newParams: { content: {
+                ...params.ruleDoc,
+                scaleType,
+              } },
+            });
+            // 写入日志
             setRuleDoc(res.ruleDoc);
           });
         });
@@ -142,7 +170,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
         {
           isLeader
           && (status != 1001 || ['VISIT_CRF', 'VISIT_SUBJECTIVE', 'VISIT_OBJECTIVE'].includes(scaleType))
-          && !groupId && (
+          && !groupId && !hideEditBtn && (
             <PlanModal title="修改发送计划"
               scaleId={scaleId}
               ruleDoc={ruleDoc}

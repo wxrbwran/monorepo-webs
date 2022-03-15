@@ -9,7 +9,7 @@ import { useSelector } from 'umi';
 import CreateFile from '../create_file';
 import styles from './index.scss';
 import { IState } from 'typings/global';
-import projectRiskSee from '@/assets/project_rish_see.png';
+import { handleOperationLog } from '@/utils/logReason';
 
 interface IProps {
   name: string;
@@ -31,6 +31,12 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
   const [isShowModal, setIsShowModal] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const typeText = {
+    PROJECT_FILE: { tit: '试验文件', delCode:  window.$log.businessType.DELETE_TEST_FILE.code },
+    INVITER_FILE: { tit: '项目邀请书、知情同意书', delCode: window.$log.businessType.DELETE_INFORMED_CONSENT.code },
+    RISK_FILE: { tit: '风险评估、风险对策', delCode: window.$log.businessType.DELETE_RISK_ASSESSMENT.code },
+  };
 
   const toogleUpload = () => {
     setIsShowModal(!isShowModal);
@@ -61,6 +67,7 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
 
   //上传
   const handleSubmit = (rawUrl: string, fileName: string) => {
+    // PROJECT_FILE
     api.detail.addProjectFile({
       address: rawUrl,
       name: fileName,
@@ -74,6 +81,12 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
           fetchFileList();
         }, 5000);
       }
+      // 上传写入到日志
+      handleOperationLog({
+        type: 0,
+        copyWriting: `上传${ typeText[type].tit} - ${fileName}`,
+      });
+      // 上传写入到日志
     })
       .catch((err) => {
         message.error(err);
@@ -120,10 +133,18 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
   };
 
   //删除文件
-  const handleRemove = (fileId: string) => {
+  const handleRemove = (fileId: string, address: string, filename: string) => {
     api.detail.deleteProfileFile(fileId).then(() => {
       message.success('删除文件成功');
       fetchFileList();
+      window.$log.handleOperationLog({
+        type: 2,
+        copyWriting: `删除${ typeText[type].tit} - ${filename}`,
+        oldParams: {
+          content: address,
+        },
+        businessType: typeText[type].delCode,
+      });
     })
       .catch((err) => {
         message.error(err);
@@ -229,7 +250,7 @@ function FileType({ name, name2, imgSrc, type }: IProps) {
                       )
                     }
                     {
-                      isEdit && <span className="ml-20" onClick={() => handleRemove(item.id)}><DeleteOutlined /> 删除</span>
+                      isEdit && <span className="ml-20" onClick={() => handleRemove(item.id, item.convertAddress || item.address, item.name)}><DeleteOutlined /> 删除</span>
                     }
                   </p>
                 </li>

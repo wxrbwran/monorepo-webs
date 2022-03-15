@@ -74,6 +74,9 @@ function GroupStatic({ projectSid }: IProps) {
   };
 
   const updateCroProject = (newJoinVal: object, newExcludeVal: object, status: number) => {
+    console.log('projDetailprojDetail', projDetail);
+    console.log('newJoinVal', newJoinVal);
+    console.log('newExcludeVal', newExcludeVal);
     api.detail
       .updateCroProject({
         // ...projDetail,
@@ -89,6 +92,32 @@ function GroupStatic({ projectSid }: IProps) {
         message.success('添加成功');
         getStandard();
         setIsShowEdit(true);
+        // 写入到日志
+        if (projDetail.detail?.joinStandard || projDetail.detail?.excludeStandard) {
+          window.$log.handleOperationLog({
+            type: 1,
+            copyWriting: '编辑纳入标准、排除标准',
+            businessType: window.$log.businessType.UPDATE_INCLUSION_CRITERIA.code,
+            newParams: {
+              content: {
+                joinStandard: { ...newJoinVal },
+                excludeStandard: { ...newExcludeVal },
+              },
+            },
+            oldParams: {
+              content: {
+                joinStandard: projDetail.detail?.joinStandard,
+                excludeStandard: projDetail.detail?.excludeStandard,
+              },
+            },
+          });
+        } else {
+          window.$log.handleOperationLog({
+            type: 0,
+            copyWriting: '创建纳入标准、排除标准',
+          });
+        }
+        // 写入到日志
       })
       .catch((err) => {
         message.error(err);

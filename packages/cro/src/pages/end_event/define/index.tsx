@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '@/services/api';
 // import draft from '@/assets/img/draft.png';
-import { Form, Button, message } from 'antd';
+import { Form, Button, message, Input } from 'antd';
 import EventItem from '../components/event_item';
 import Detail from '../components/detail';
 import styles from '../index.scss';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import { useSelector } from 'umi';
+import { debounce } from 'lodash';
 interface IDetail {
   id: string;
   adverseEvent: {
@@ -124,6 +125,26 @@ function Define() {
         setIsEdit(false);
         fetchEndEvent();
         form.resetFields();
+        if (eventDetail) {
+          // 编辑
+          window.$log.handleOperationLog({
+            type: 1,
+            copyWriting:'编辑终点事件',
+            businessType: window.$log.businessType.UPDATE_END_EVENT.code,
+            oldParams: {
+              content: eventDetail,
+            },
+            newParams: {
+              content: params,
+            },
+          });
+        } else {
+          // 创建
+          window.$log.handleOperationLog({
+            type: 0,
+            copyWriting:'创建终点事件',
+          });
+        }
       })
       .catch((err) => {
         console.log('err', err);
@@ -132,19 +153,18 @@ function Define() {
   useEffect(() => {
     fetchEndEvent();
   }, []);
-  const sick = [
-    '死亡',
-    '危及生命',
-    '永远、严重残疾、功能丧失',
-    '先天性异常、出生缺陷',
-    '需要住院治疗、延长住院时间',
-  ];
   console.log(isDraft);
 
   const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType);
-
+  const handleI = (e) => {
+    console.log(e.target.value);
+    debounce(() => {
+      console.log(33);
+    }, 800)();
+  };
   return (
     <div className={styles.define}>
+      <Input onChange={handleI} />
       <Form
         name="event"
         // initialValues={initFormVal}
@@ -198,14 +218,6 @@ function Define() {
           )}
         </div>
       )}
-      <div className={styles.sick}>
-        <p className={styles.title}>2. 严重不良反应事件（SAE）</p>
-        <div className={styles.data}>
-          {sick.map((item) => (
-            <span className={styles.sick_item}>{item}</span>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

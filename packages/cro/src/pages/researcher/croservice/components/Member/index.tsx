@@ -18,9 +18,9 @@ interface IMemberProps {
   onDoctorChoice?: (member) => DoctorOrgsProp;
   onDoctorUnChoice?: (member) => boolean; // 取消选中了某个医生，需要返回一个bool值，判断chiceOrg是不是要赋空值
 }
-const Member: FC<IMemberProps> = ({ title, members, editable, friends, handleChoice, onRemove, onDoctorChoice, onDoctorUnChoice }) => {
-
-  console.log('======fetchDoctorFriends==', JSON.stringify(friends));
+const Member: FC<IMemberProps> = (props) => {
+  const { title, members, editable, friends, handleChoice, onRemove, onDoctorChoice, onDoctorUnChoice } = props;
+  // console.log('======fetchDoctorFriends==', JSON.stringify(friends));
 
 
   return (
@@ -67,7 +67,7 @@ interface ITeamMemberProps {
 
 export const TeamMember: FC<ITeamMemberProps> = ({ team }) => {
 
-
+  console.log('teamteamteamteam', team);
   const getDoctorMember = (members) => {
 
     const roles = [Role.CRO_CRC.id, Role.CRO_CRA.id, Role.CRO_PM.id, Role.RESEARCH_PROJECT_DOCTOR.id];

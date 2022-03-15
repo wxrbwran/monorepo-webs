@@ -78,12 +78,23 @@ function Create({ location, scaleType }: IProps) {
         projectName: window.$storage.getItem('projectName'),
         projectNsId,
       };
+      console.log('paramsparamsparams', params);
       api.subjective
         .addObjectiveScale(params)
         .then(() => {
           message.success('添加成功');
           setLoading(false);
-
+          // 写入日志
+          ruleList.forEach(item => {
+            window.$log.handleOperationLog({
+              type: 0,
+              copyWriting: item.questions,
+              businessType: scaleType === 'OBJECTIVE' ?
+                window.$log.businessType.CREATE_OBJECTIVE.code :
+                window.$log.businessType.CREATE_UNPLANNED_OBJECTIVE.code,
+            });
+          });
+          // 写入日志
           history.push(`/${getUrlPreFix(scaleType)}/detail?name=${formName}`);
         })
         .catch((err: string) => {
