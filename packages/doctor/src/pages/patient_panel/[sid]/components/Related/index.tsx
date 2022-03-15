@@ -10,6 +10,7 @@ import RelatedEdit from '../RelatedEdit';
 function Related() {
   const infos = useSelector((state: IPatient) => state.detail.infos);
   const lists = transformMedicalRecordData('related', infos.integratedHistory);
+  console.log('transformMedicalRecordData', lists);
   return (
     <div className={styles.related}>
       <div className={styles.header}>
@@ -25,7 +26,7 @@ function Related() {
       </div>
       {lists && lists.length > 0 ? (
         <ul>
-          {lists?.map((item:{name: string, text:string}) => {
+          {lists?.map((item:{ name: string, text:string }) => {
             const { name, text } = item;
             return (
               <li key={item.name} className={styles.related__lists}>
