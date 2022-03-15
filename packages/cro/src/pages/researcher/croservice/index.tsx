@@ -73,7 +73,6 @@ const Croservice: FC<IProps> = () => {
   const onHandleRemove = (team) => {
 
     const parma = {
-
       name: team.name,
       teamNSId: team.teamNSId,
       teamNSLabels: ['research_pro_patient'],
@@ -83,11 +82,16 @@ const Croservice: FC<IProps> = () => {
         .map((item) => { return { sid: item.sid, role: item.role }; }),
     };
 
-    console.log('======================= memberList', JSON.stringify(parma));
-
     api.service.deleteTeamMembers(parma).then(() => {
-
       onSaveSuccess();
+      //   // 写入日志
+      window.$log.handleOperationLog({
+        type: 2,
+        copyWriting: `解散 - ${team.name}`,
+        businessType: window.$log.businessType.DELETE_CRO_GROUP.code,
+        oldParams: { content: team },
+      });
+    // 写入日志
     });
   };
 
@@ -97,7 +101,6 @@ const Croservice: FC<IProps> = () => {
     return team.innerTeams
       .find((innerTeam) => innerTeam.members.find((item) => localStorage.getItem('xzl-web-doctor_sid') == item.sid && item.role == Role.NS_OWNER.id));
   };
-
   return (
     <div className={styles.croservice}>
       <AddServicePackage onSaveSuccess={onSaveSuccess} edit={edit} source={source} show={show} onCancel={() => { setShow(false); }}>

@@ -57,7 +57,6 @@ export const handleOperationLog = (info: IOperationLogProps) => {
 
   api.research.postBusinessLog(params).then(res => {
     if (params.type !== 0) {
-      console.log('====222', res);
       renderLogReason(params.type, res.businessLogId);
     }
   });
@@ -79,22 +78,28 @@ export const businessType = {
   UPDATE_PROJECT_INTRODUCE: typeInfo(0, '编辑项目介绍'),
   UPDATE_MIN_DAY: typeInfo(1, '编辑最小试验天数'),
   UPDATE_RISK_ASSESSMENT: typeInfo(2, '编辑风险评估、风险对策'),
-  UPDATE_INCLUSION_CRITERIA: typeInfo(3, '编辑纳入标准'),
-  UPDATE_EXCLUSION_CRITERIA: typeInfo(4, '编辑排除标准'),
+  UPDATE_INCLUSION_CRITERIA: typeInfo(3, '编辑纳入标准排除标准'),
+  // UPDATE_INCLUSION_CRITERIA: typeInfo(3, '编辑纳入标准'),
+  // UPDATE_EXCLUSION_CRITERIA: typeInfo(4, '编辑排除标准'),
   UPDATE_TEST_GROUPING: typeInfo(5, '编辑试验分组'),
   UPDATE_EFFECTIVE_CASES_NUM: typeInfo(6, '编辑有效病例数'),
   UPDATE_SUBJECTIVE_CONTENT: typeInfo(7, '编辑主观量表内容'),
   UPDATE_SUBJECTIVE_PLAN: typeInfo(8, '编辑主观量表发送计划'),
+  // UPDATE_OBJECTIVE_CONTENT: typeInfo(9, '编辑客观检查内容和发送计划'),
   UPDATE_OBJECTIVE_CONTENT: typeInfo(9, '编辑客观检查内容'),
-  UPDATE_OBJECTIVE_PLAN: typeInfo(10, '编辑客观检查发送计划'),
+  // UPDATE_OBJECTIVE_PLAN: typeInfo(10, '编辑客观检查发送计划'),
+  UPDATE_OBJECTIVE_NAME: typeInfo(10, '编辑计划外客观检查组名称'),
   UPDATE_END_EVENT: typeInfo(11, '编辑终点事件'),
   UPDATE_CRF_CONTENT: typeInfo(12, '编辑CRF量表内容'),
   UPDATE_CRF_PLAN: typeInfo(13, '编辑CRF量表发送计划'),
   UPDATE_CRO_GROUP: typeInfo(14, '编辑CRO小组'),
   UPDATE_UNPLANNED_SUBJECTIVE_CONTENT: typeInfo(15, '编辑计划外主观量表内容'),
   UPDATE_UNPLANNED_SUBJECTIVE_PLAN: typeInfo(16, '编辑计划外主观量表发送计划'),
-  UPDATE_UNPLANNED_OBJECTIVE_CONTENT: typeInfo(17, '编辑计划外客观检查内容'),
-  UPDATE_UNPLANNED_OBJECTIVE_PLAN: typeInfo(18, '编辑计划外客观检查发送计划'),
+  // UPDATE_UNPLANNED_OBJECTIVE_CONTENT: typeInfo(17, '编辑计划外客观检查内容'),
+  UPDATE_UNPLANNED_OBJECTIVE_CONTENT: typeInfo(17, '编辑计划外客观检查内容和发送计划'),
+
+  // UPDATE_UNPLANNED_OBJECTIVE_PLAN: typeInfo(18, '编辑计划外客观检查发送计划'),
+  UPDATE_UNPLANNED_OBJECTIVE_NAME: typeInfo(18, '编辑计划外客观检查组名称'),
   UPDATE_UNPLANNED_CRF_CONTENT: typeInfo(19, '编辑计划外CRF量表内容'),
   UPDATE_UNPLANNED_CRF_PLAN: typeInfo(20, '编辑计划外CRF量表发送计划'),
 

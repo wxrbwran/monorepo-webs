@@ -17,3 +17,55 @@
     padding-bottom: 5px;
   }
 }
+.objective_diff {
+  font-size: 14px;
+  color: #181818;
+  .border {
+    border: 1px solid #DFDFDF;
+    margin-bottom: 10px;
+  }
+  .plan__cont {
+    @include flex-lay(row, wrap, flex-start, flex-start);
+    .space {
+      flex: 100%;
+      height: 25px;
+    }
+    .item {
+      flex: 50%;
+      .tit {
+        font-size: 15px;
+        @include flex(flex-start);
+        img {
+          margin-right: 5px;
+        }
+      }
+      .text {
+        font-size: 14px;
+        color: #666666;
+      }
+    }
+  }
+  .plan_item {
+    padding: 20px 25px;
+    margin-bottom: 15px;
+    &:hover {
+      box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 3px;
+      .operate {
+        img,
+        .split {
+          display: block;
+        }
+      }
+    }
+    pre {
+      position: relative;
+      white-space: break-spaces;
+      span {
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+}
+

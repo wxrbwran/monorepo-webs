@@ -23,6 +23,7 @@ interface IProps {
 }
 function ScaleTableDetailEcho(props: IProps) {
   const location = useLocation();
+  console.log('propsdelll', props);
   const { source, groupId, ruleDoc } = props;
   const [scaleType, setScaleType] = useState('');
   const [scaleName, setScaleName] = useState('');
@@ -65,6 +66,37 @@ function ScaleTableDetailEcho(props: IProps) {
       ruleId: ruleDoc?.id,
     }).then(() => {
       message.success('删除成功');
+      // 删除量表写入日志
+      let bType = 21;
+      // scaleType: 'CRF' | 'SUBJECTIVE' | 'VISIT_CRF' | 'VISIT_SUBJECTIVE' | 'OBJECTIVE' | 'VISIT_OBJECTIVE';
+      switch (props.scaleType) {
+        case 'CRF':
+          bType = window.$log.businessType.DELETE_CRF.code;
+          break;
+        case 'VISIT_CRF':
+          bType = window.$log.businessType.DELETE_CRF_UNPLANNED.code;
+          break;
+        case 'SUBJECTIVE':
+          bType = window.$log.businessType.DELETE_SUBJECTIVE.code;
+          break;
+        case 'VISIT_SUBJECTIVE':
+          bType = window.$log.businessType.DELETE_UNPLANNED_SUBJECTIVE.code;
+          break;
+        default:
+          break;
+      }
+      window.$log.handleOperationLog({
+        type: 2,
+        copyWriting: `删除 - ${props.scaleName}`,
+        businessType: bType,
+        oldParams: {
+          content: {
+            name: props.scaleName,
+            questions: props.questions,
+          },
+        },
+      });
+      // 删除量表写入日志
       history.push(`${location.pathname}?name=${scaleGroupInfos[0].name}`);
     });
   };

@@ -87,7 +87,7 @@ const ScalePlanDetailEcho: FC<IProps> = (props) => {
 
           console.log('================== apiName', apiName);
           api.subjective[apiName](id).then((res) => {
-            // 写入日志
+            // 主观量表，crf量表，编辑时写入日志
             let businessType =  window.$log.businessType.UPDATE_SUBJECTIVE_PLAN.code;
             if (location.pathname.includes('subjective')) {
               if (location.pathname.includes('out_plan_visit')) {

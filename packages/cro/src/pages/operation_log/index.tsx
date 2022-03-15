@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Timeline, Row, Col, Button } from 'antd';
+import { Timeline, Row, Col, Button, Pagination } from 'antd';
 import styles from './index.scss';
 import * as api from '@/services/api';
 import ContentDiff, { ILogItem } from './components/ContentDiff';
@@ -7,21 +7,28 @@ import dayjs from 'dayjs';
 
 const OperationLog: FC = () => {
   const [pageAt, setPageAt] = useState(1);
+  const [total, setTotal] = useState();
+  const [pageSize, setPageSize] = useState(10);
   const [LogList, setLogList] = useState<ILogItem[]>([]);
   useEffect(() => {
     const params = {
       projectSid: window.$storage.getItem('projectSid'),
-      pageAt: pageAt,
-      pageSize: 10,
+      pageAt,
+      pageSize,
     };
     api.research.fetchLogList(params).then(res => {
       console.log('eeewoijeowi', res);
       setLogList(res.businessLogInfoList);
+      setTotal(res.total);
     });
-  }, []);
+  }, [pageAt, pageSize]);
+  const handlePage = (pageN: number, pageSizeN: number) => {
+    setPageAt(pageN);
+    setPageSize(pageSizeN);
+  };
   const docColor = [, styles.green, styles.red];
   return (
-    <div className='pt-40 pl-60 pr-20'>
+    <div className='py-40 pl-60 pr-20'>
       <Timeline>
         {
           LogList.map(logItem => (
@@ -64,8 +71,16 @@ const OperationLog: FC = () => {
         }
        </Timeline>
        {
-          LogList.length === 0 && '暂无操作日志'
-        }
+         total && total > 0 ?
+          <Pagination
+            className='text-center'
+            defaultCurrent={1}
+            total={total}
+            onChange={handlePage}
+          /> : <></>
+       }
+
+       {total === 0 && <div>暂无操作日志</div>}
     </div>
   );
 };

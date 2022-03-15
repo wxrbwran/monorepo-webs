@@ -36,7 +36,7 @@ function CommonTab(props: IProps) {
   const [seconds, setSeconds] = useState(60);
   const [isGetting, setIsGetting] = useState(false);
   const timerRef = useRef();
-
+  const isLeader = window.$storage.getItem('isLeader');
   const modalText: CommonData = {
     'del': {
       title: '删除项目',
@@ -169,10 +169,6 @@ function CommonTab(props: IProps) {
       status: 'objective_table',
     },
     {
-      statusName: '操作日志',
-      status: 'operation_log',
-    },
-    {
       statusName: '终点事件和CRF量表',
       status: 'end_event',
     },
@@ -198,6 +194,12 @@ function CommonTab(props: IProps) {
     },
 
   ];
+  if (isLeader) {
+    croNav.push({
+      statusName: '操作日志',
+      status: 'operation_log',
+    });
+  }
   const handleShowModal = (type: string) => {
 
     // 清空之前的计时等数据

@@ -4,6 +4,10 @@ import RichTextDiff from './RichTextDiff';
 import ConditionCriteria from './ConditionCriteria';
 import ScaleTableDetailEcho from '@/components/Scale/ScaleTableDetailEcho';
 import ScalePlanDetailEcho from '@/components/Scale/ScalePlanDetailEcho';
+import ObjectiveScaleDiff from './ObjectiveScaleDiff';
+import EndEventDetail from '@/pages/end_event/components/detail';
+import CroServiceDiff from './CroServiceDiff';
+import { TeamMember } from '@/pages/researcher/croservice/components/Member';
 import styles from './index.scss';
 
 interface ILogItem {
@@ -27,7 +31,7 @@ interface ILogItem {
 interface IProps {
   infoData: ILogItem;
 }
-/* businessType
+/* businessType 具体见utils/logReason
 * 文字string类型: 0,1,6
 * 量表内容      : 7,12, 15, 19   |  21, 23, 25, 27
 * 量表计划      : 8, 10,13, 16,18 , 20  |  22, 26
@@ -44,6 +48,8 @@ const ContentDiff: FC<IProps> = (props) => {
       case 0:
       case 1:
       case 6:
+      case 10:
+      case 18:
         return <div>{contData}</div>;
       case 2:
         return <RichTextDiff contData={contData} />;
@@ -57,6 +63,10 @@ const ContentDiff: FC<IProps> = (props) => {
       case 12:
       case 15:
       case 19:
+      case 21:
+      case 23:
+      case 25:
+      case 27:
         return (
           <ScaleTableDetailEcho
             scaleType={contData.type}
@@ -75,6 +85,16 @@ const ContentDiff: FC<IProps> = (props) => {
             hideEditBtn={true}
           />
         );
+      case 9:
+      case 22:
+      case 26:
+        return <ObjectiveScaleDiff contData={contData} />;
+      case 11:
+        return <EndEventDetail eventDetail={contData} />;
+      case 14:
+        return <CroServiceDiff contData={contData} />;
+      case 24:
+        return <TeamMember team={contData}></TeamMember>;
       default:
         return <div>未知内容</div>;
     }

@@ -19,15 +19,22 @@ function Detial({ eventDetail }: IProps) {
   const [secondEvent, setSecondEvent] = useState<string[]>([]);
   const [thirdEvent, setthirdEvent] = useState<string[]>([]);
   useEffect(() => {
-    if(!isEmpty(eventDetail)){
+    if (!isEmpty(eventDetail)){
       const { adverseEvent, mainEndpoint, secondaryEndpoint } = eventDetail;
       setFirstEvent(Object.values(mainEndpoint.detail));
       setSecondEvent(Object.values(secondaryEndpoint.detail));
       setthirdEvent(Object.values(adverseEvent.detail));
     }
-  }, [eventDetail])
+  }, [eventDetail]);
+  const sick = [
+    '死亡',
+    '危及生命',
+    '永远、严重残疾、功能丧失',
+    '先天性异常、出生缺陷',
+    '需要住院治疗、延长住院时间',
+  ];
   return (
-    <div>
+    <div className={styles.echo_detail}>
       <p className={styles.title}>一. 主要终点事件</p>
       {
         firstEvent.length > 0 ?
@@ -67,7 +74,15 @@ function Detial({ eventDetail }: IProps) {
             : <div className={styles.empty}>暂未填写</div>
         }
       </div>
+      <div className={styles.sick}>
+        <p className={styles.title}>2. 严重不良反应事件（SAE）</p>
+        <div className={styles.data}>
+          {sick.map((item) => (
+            <span className={styles.sick_item}>{item}</span>
+          ))}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 export default Detial;
