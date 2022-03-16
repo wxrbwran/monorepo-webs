@@ -21,7 +21,9 @@ const ObjectiveScaleDiff: FC<IProps> = ({ contData }) => {
   const des = chooseValues ? chooseValues.choseScope.map(item => item.description).join(',') : '';
   return (
     <div className={styles.objective_diff}>
-      <div className={styles.border}><RichText value={contData.questions} handleChange={() => { }} readonly={true} /></div>
+      <div className={`${styles.border} ${styles.rich_text}`}>
+        <RichText value={contData.questions} handleChange={() => { }} readonly={true} />
+        </div>
       <div className={styles.plan__cont}>
         <div className={styles.item}>
           <div className={styles.tit}>

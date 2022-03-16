@@ -18,7 +18,7 @@ const renderLogReason = (type: string, businessLogId: string) => {
     maskClosable: true,
     width: 1025,
     className: 'logModal',
-    content: <TextArea onChange={(e) => operationReason = e.target.value} autoSize={{ minRows: 8, maxRows:26 }} />,
+    content: <TextArea maxLength={300} onChange={(e) => operationReason = e.target.value} autoSize={{ minRows: 8, maxRows:26 }} />,
     onOk() {
       if (operationReason.trim() !== '') {
         const params = {
