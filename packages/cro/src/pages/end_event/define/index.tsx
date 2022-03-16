@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '@/services/api';
 // import draft from '@/assets/img/draft.png';
-import { Form, Button, message, Input } from 'antd';
+import { Form, Button, message } from 'antd';
 import EventItem from '../components/event_item';
 import Detail from '../components/detail';
 import styles from '../index.scss';
 import { Role } from 'xzl-web-shared/dist/utils/role';
 import { useSelector } from 'umi';
-import { debounce } from 'lodash';
 interface IDetail {
   id: string;
   adverseEvent: {
@@ -156,15 +155,8 @@ function Define() {
   console.log(isDraft);
 
   const isLeader = [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType);
-  const handleI = (e) => {
-    console.log(e.target.value);
-    debounce(() => {
-      console.log(33);
-    }, 800)();
-  };
   return (
     <div className={styles.define}>
-      <Input onChange={handleI} />
       <Form
         name="event"
         // initialValues={initFormVal}

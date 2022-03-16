@@ -20,7 +20,6 @@ const renderLogReason = (type: string, businessLogId: string) => {
     className: 'logModal',
     content: <TextArea onChange={(e) => operationReason = e.target.value} autoSize={{ minRows: 8, maxRows:26 }} />,
     onOk() {
-      console.log('OK', businessLogId, operationReason);
       if (operationReason.trim() !== '') {
         const params = {
           businessLogId,
@@ -53,7 +52,6 @@ export const handleOperationLog = (info: IOperationLogProps) => {
   } else if (info.type === 2){
     delete params.newParams;
   }
-  console.log('写入操作日志参数：', params);
 
   api.research.postBusinessLog(params).then(res => {
     if (params.type !== 0) {
@@ -67,13 +65,7 @@ const typeInfo = (code: number, desc: string) => {
     desc,
   };
 };
-/** 操作内容的类型
-   * 文字string类型: 0,1,6
-   * 量表内容      : 7,12, 15, 19   |  21, 23, 25, 27
-   * 量表计划      : 8, 10,13, 16,18 , 20  |  22, 26
-   * 富文本        : 2, 9, 17,   |   28， 30
-   * 其它      : 3, 4,5, 11, 14   |  24， 29
-*/
+
 export const businessType = {
   UPDATE_PROJECT_INTRODUCE: typeInfo(0, '编辑项目介绍'),
   UPDATE_MIN_DAY: typeInfo(1, '编辑最小试验天数'),

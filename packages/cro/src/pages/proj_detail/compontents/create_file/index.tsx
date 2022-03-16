@@ -60,7 +60,7 @@ const CreateFile: FC<IProps> = (props) => {
         // 编辑写入到日志
         window.$log.handleOperationLog({
           type: 1,
-          copyWriting: `创建风险评估、风险对策 - ${fileName}`,
+          copyWriting: `编辑风险评估、风险对策 - ${fileName}`,
           businessType: window.$log.businessType.UPDATE_RISK_ASSESSMENT.code,
           newParams: {
             content: {
