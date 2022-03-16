@@ -32,11 +32,15 @@ interface IProps {
   infoData: ILogItem;
 }
 /* businessType 具体见utils/logReason
-* 文字string类型: 0,1,6
+* 文字string类型: 0,1,6, 10, 18
 * 量表内容      : 7,12, 15, 19   |  21, 23, 25, 27
-* 量表计划      : 8, 10,13, 16,18 , 20  |  22, 26
-* 富文本        : 2, 9, 17,   |   28， 30, 29(删除是以链接形式)
-* 其它      : 3, 4,5, 11, 14   |  24，
+* 量表计划      : 8, 13, 16, 20
+* 客观量表与计划 : 9 22 26
+* 终点事件      : 11
+* cro服务包(编辑状态 ui)  14
+* crt服务包(展示ui): 24
+* 富文本        : 2(删除是以链接形式)
+* 其它          : 3 纳排标准， 5试验分组
 */
 const ContentDiff: FC<IProps> = (props) => {
   const { children, infoData } = props;
@@ -57,8 +61,6 @@ const ContentDiff: FC<IProps> = (props) => {
         return <ConditionCriteria contData={contData}  />;
       case 5:
         return <div>分组名称: {contData.groupName}<br />目标人数: {contData.note.note1}</div>;
-      case 6:
-        return <div>有效病例数:人</div>;
       case 7:
       case 12:
       case 15:
