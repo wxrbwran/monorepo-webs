@@ -190,7 +190,10 @@ function HistoryPlan(props: IProps) {
                   <img src={iconTime} alt="" />
                   <span>首次发送时间</span>
                 </div>
-                <div className={styles.text}>{firstTimeStr}</div>
+                <div className={styles.text}>
+                  {firstTimeStr}
+                  {ruleDoc?.rules?.[0]?.actions?.[0].type === 'block' && <span>(不发送)</span>}
+                </div>
               </div>
               <div className={styles.item}>
                 <div className={styles.tit}>

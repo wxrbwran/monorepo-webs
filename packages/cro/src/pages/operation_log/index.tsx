@@ -36,8 +36,8 @@ const OperationLog: FC = () => {
               <div className='flex justify-between'>
                 <div className='font-bold text-sm mb-6 flex items-center'>
                   <span className='mr-30'>
-                    {[31, 32].includes(logItem?.businessType) ?
-
+                    {[window.$log.businessType.CREATE_OBJECTIVE.code,
+                      window.$log.businessType.CREATE_UNPLANNED_OBJECTIVE.code, 32].includes(logItem?.businessType) ?
                     <div className='flex'>
                       <div style={{ flex: '0 0 95px' }}>创建客观检查 - </div>
                       <div className={styles.objective_tit} dangerouslySetInnerHTML={{ __html: logItem.copyWriting }}></div>

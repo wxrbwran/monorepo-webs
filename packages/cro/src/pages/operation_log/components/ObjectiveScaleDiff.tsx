@@ -28,7 +28,10 @@ const ObjectiveScaleDiff: FC<IProps> = ({ contData }) => {
             <img src={iconTime} alt="" />
             <span>首次发送时间</span>
           </div>
-          <div className={styles.text}>{getStartTimeDescriptionFromConditionss(chooseValues?.firstTime)}</div>
+          <div className={styles.text}>
+            {getStartTimeDescriptionFromConditionss(chooseValues?.firstTime)}
+            {contData?.ruleDoc?.rules?.[0]?.actions?.[0]?.type === 'block' && <span>(不发送)</span>}
+          </div>
         </div>
         <div className={styles.item}>
           <div className={styles.tit}>
