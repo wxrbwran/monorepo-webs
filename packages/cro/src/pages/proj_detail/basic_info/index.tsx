@@ -24,6 +24,7 @@ function BaseInfo({ projectSid }: IProps) {
   const projDetail = useSelector((state: IState) => state.project.projDetail);
   const [state, setState] = useState();
   const [intro, setIntro] = useState('');
+  const [minDay, setMinDay] = useState();
 
   useEffect(() => {
     if (projectSid) {
@@ -37,6 +38,7 @@ function BaseInfo({ projectSid }: IProps) {
   useEffect(() => {
     setState(projDetail.status);
     setIntro(projDetail.detail?.intro);
+    setMinDay(projDetail.detail?.minDays);
   }, [projDetail]);
 
 
@@ -153,9 +155,10 @@ function BaseInfo({ projectSid }: IProps) {
               <span>
                 <InputNumber
                   min={0}
-                  className={detail?.minDays ? styles.border_none : ''}
+                  className={minDay ? styles.border_none : ''}
                   onBlur={handleMinDay}
-                  value={detail?.minDays}
+                  onChange={(val) => setMinDay(val)}
+                  value={minDay}
                   disabled={![Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType) || projDetail.status === 1001}
                 />
                 <span className="ml-5">天</span>

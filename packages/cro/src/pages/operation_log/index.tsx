@@ -42,7 +42,7 @@ const OperationLog: FC = () => {
                       <div style={{ flex: '0 0 95px' }}>创建客观检查 - </div>
                       <div className={styles.objective_tit} dangerouslySetInnerHTML={{ __html: logItem.copyWriting }}></div>
                       {
-                        logItem.copyWriting.length > 50 && '......'
+                        logItem.copyWriting.length > 20 && <div className="w-50">...</div>
                       }
                     </div> : logItem.copyWriting}
                   </span>
