@@ -28,7 +28,7 @@ const OperationLog: FC = () => {
   };
   const docColor = [, styles.green, styles.red];
   return (
-    <div className='py-40 pl-60 pr-20'>
+    <div className={`py-40 pl-60 pr-20 ${styles.log}`}>
       <Timeline>
         {
           LogList.map(logItem => (
@@ -38,11 +38,11 @@ const OperationLog: FC = () => {
                   <span className='mr-30'>
                     {[window.$log.businessType.CREATE_OBJECTIVE.code,
                       window.$log.businessType.CREATE_UNPLANNED_OBJECTIVE.code, 32].includes(logItem?.businessType) ?
-                    <div className='flex'>
+                    <div className='flex objective'>
                       <div style={{ flex: '0 0 95px' }}>创建客观检查 - </div>
-                      <div className={styles.objective_tit} dangerouslySetInnerHTML={{ __html: logItem.copyWriting }}></div>
+                      <span className={styles.objective_tit} dangerouslySetInnerHTML={{ __html: logItem.copyWriting }}></span>
                       {
-                        logItem.copyWriting.length > 20 && <div className="w-50">...</div>
+                        logItem.copyWriting.length > 20 && <div style={{ flex: '0 0 50px' }}>...</div>
                       }
                     </div> : logItem.copyWriting}
                   </span>
