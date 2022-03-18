@@ -11,6 +11,7 @@ import styles from './index.scss';
 import { CommonData, IState } from 'typings/global';
 import { projectLabel } from '@/utils/consts';
 import { projectStatus } from '@/utils/consts';
+import { handleOperationLog, typeText, businessType } from '@/utils/logReason';
 
 const { TextArea } = Input;
 interface IProps {
@@ -23,6 +24,7 @@ function BaseInfo({ projectSid }: IProps) {
   const projDetail = useSelector((state: IState) => state.project.projDetail);
   const [state, setState] = useState();
   const [intro, setIntro] = useState('');
+  const [minDay, setMinDay] = useState();
 
   useEffect(() => {
     if (projectSid) {
@@ -36,34 +38,78 @@ function BaseInfo({ projectSid }: IProps) {
   useEffect(() => {
     setState(projDetail.status);
     setIntro(projDetail.detail?.intro);
+    setMinDay(projDetail.detail?.minDays);
   }, [projDetail]);
 
 
   const changeIntro = (e: { target: { value: string } }) => {
     setIntro(e.target.value);
   };
-
-  const updateCroProject = (apiParams?: object) => {
-    const params: CommonData = {
-      projectSid,
-      detail: {
-        intro,
-        ...apiParams,
+  const handleIntroWriteLog = () => {
+    const oldData = projDetail.detail?.intro;
+    // 老数据为空，为创建，否则为编辑 0:新增 1 修改
+    let type = !!oldData ? 1 : 0;
+    handleOperationLog({
+      type,
+      copyWriting: `${typeText[type]}项目介绍`,
+      ...type === 0 ? {} : {
+        newParams: { content: intro },
+        oldParams: { content: oldData },
+        businessType: businessType.UPDATE_PROJECT_INTRODUCE.code,
       },
-    };
-    api.detail.updateCroProject(params).then((_res) => {
-      message.success('更改信息成功');
-      dispatch({
-        type: 'project/fetchProjectDetail',
-        payload: projectSid,
-      });
-    })
-      .catch((err) => {
+    });
+  };
+  const handleIntro = () => {
+    const prevIntro = projDetail.detail?.intro;
+    if (prevIntro !== intro) {
+      const params = {
+        projectSid,
+        detail: { intro },
+      };
+      api.detail.updateCroProject(params).then((_res) => {
+        message.success('更改信息成功');
+        handleIntroWriteLog();
+        dispatch({
+          type: 'project/fetchProjectDetail',
+          payload: projectSid,
+        });
+      }).catch((err) => {
         message.error(err);
       });
+    }
+  };
+  const handleMinDayWriteLog = (newData: number) => {
+    const oldData = projDetail.detail?.minDays;
+    // 老数据为空，为创建，否则为编辑 0:新增 1 修改
+    let type = !!oldData ? 1 : 0;
+    handleOperationLog({
+      type,
+      copyWriting: `${typeText[type]}最小试验天数`,
+      ...type === 0 ? {} : {
+        newParams: { content: newData },
+        oldParams: { content: oldData },
+        businessType: businessType.UPDATE_MIN_DAY.code,
+      },
+    });
   };
   const handleMinDay = (e) => {
-    updateCroProject({ minDays: Number(e.target.value) });
+    const newDay = Number(e.target.value);
+    if (projDetail.detail?.minDays !== newDay) {
+      const params = {
+        projectSid,
+        detail: {  minDays: newDay },
+      };
+      api.detail.updateCroProject(params).then((_res) => {
+        message.success('更改信息成功');
+        handleMinDayWriteLog(newDay);
+        dispatch({
+          type: 'project/fetchProjectDetail',
+          payload: projectSid,
+        });
+      }).catch((err) => {
+        message.error(err);
+      });
+    }
   };
   const { name, detail, createdAt, patientCount, avgDay, label, practiceArea } = projDetail;
   console.log('======11', projDetail);
@@ -93,7 +139,7 @@ function BaseInfo({ projectSid }: IProps) {
               onChange={changeIntro}
               className={styles.content}
               value={intro}
-              onBlur={() => updateCroProject()}
+              onBlur={handleIntro}
               disabled={![Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType) || projDetail.status === 1001}
             />
           </Tooltip>
@@ -109,9 +155,10 @@ function BaseInfo({ projectSid }: IProps) {
               <span>
                 <InputNumber
                   min={0}
-                  className={detail?.minDays ? styles.border_none : ''}
+                  className={minDay ? styles.border_none : ''}
                   onBlur={handleMinDay}
-                  value={detail?.minDays}
+                  onChange={(val) => setMinDay(val)}
+                  value={minDay}
                   disabled={![Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(projDetail.roleType) || projDetail.status === 1001}
                 />
                 <span className="ml-5">天</span>

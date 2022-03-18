@@ -57,6 +57,25 @@ const CreateFile: FC<IProps> = (props) => {
         setshowModal(false);
         message.success('文件编辑成功');
         fetchFileList();
+        // 编辑写入到日志
+        window.$log.handleOperationLog({
+          type: 1,
+          copyWriting: `编辑风险评估、风险对策 - ${fileName}`,
+          businessType: window.$log.businessType.UPDATE_RISK_ASSESSMENT.code,
+          newParams: {
+            content: {
+              name: fileName,
+              fileCont: richTextContRef.current,
+            },
+          },
+          oldParams: {
+            content: {
+              name: initData.name,
+              fileCont: initData.content.ops,
+            },
+          },
+        });
+        // 编辑写入到日志
       })
         .catch((err) => {
           message.error(err);
@@ -75,6 +94,12 @@ const CreateFile: FC<IProps> = (props) => {
         setshowModal(false);
         message.success('文件上传成功');
         fetchFileList();
+        // 上传写入到日志
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: `创建风险评估、风险对策 - ${fileName}`,
+        });
+        // 上传写入到日志
       })
         .catch((err) => {
           message.error(err);

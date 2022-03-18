@@ -9,6 +9,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  :global {
+    .red_num {
+      font-size: 22px;
+      color: #FF6458;
+      margin: 0 5px;
+    }
+  }
 }
 .left {
   align-self: stretch;

@@ -711,18 +711,17 @@ function ScaleTemplate(props: IProps) {
         isFirstSendRef.current = false;
       }
       firstTimeTemp = cloneDeep(chooseValues.firstTime);
-
       for (let index = 0; index < firstTimeTemp.choiceModel.childItem.length; index++) {
-
         const element = firstTimeTemp.choiceModel.childItem[index];
         if (element.description == HandelTime) {
           element.firstchildReact = childReactFunc;
         }
-
+        if (element.childItem) {
         // 这里赋值影响到外面 的chooseModel也会增加lastChildReact？？？
-        for (let childIndex = 0; childIndex < element.childItem.length; childIndex++) {
-          const childElement = element.childItem[childIndex];
-          childElement.lastChildReact = childReactSwitchFunc;
+          for (let childIndex = 0; childIndex < element.childItem.length; childIndex++) {
+            const childElement = element.childItem[childIndex];
+            childElement.lastChildReact = childReactSwitchFunc;
+          }
         }
       }
 

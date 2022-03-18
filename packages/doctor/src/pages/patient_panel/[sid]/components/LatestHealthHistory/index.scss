@@ -1,0 +1,31 @@
+.outtype_btn {
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 13px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #E0E0E0;
+  margin-right: 10px;
+  cursor: pointer;
+  &.active {
+    background: #218CE9;
+    border: 1px solid #218CE9;
+    color: #fff;
+  }
+}
+.jcd_wrap {
+  :global {
+    .ant-collapse, .ant-collapse-content {
+      border: none;
+      background: #F6F6F6;
+      border-radius: 5px;
+      text-align: left;
+     >.ant-collapse-item {
+       border: none;
+     }
+    }
+    .ant-collapse-header {
+      font-weight: bold;
+    }
+  }
+}

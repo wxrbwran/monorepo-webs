@@ -37,7 +37,7 @@ function addTeam() {
           <div className={`${styles.operator} flex items-center`}>
             <p><img src={edit}  className='mr-5'/>编辑</p>
             <Divider type="vertical" />
-            <p><img src={remove}  className='mr-5'/>解散</p>
+            <p><img src={remove}  className='mr-5'/>1</p>
           </div>
         </div>
         <div className='flex'>

@@ -85,6 +85,11 @@ function CreateProject({ onCloseModal }: IProps) {
     api.project.postCroProject(params).then(res => {
       setLoading(false);
       message.success('创建成功');
+      window.$log.handleOperationLog({
+        projectSid: res.projectSid,
+        type: 0,
+        copyWriting: `创建项目 - ${name}`,
+      });
       // 更新项目列表
       dispatch({
         type: 'project/fetchProjectList',

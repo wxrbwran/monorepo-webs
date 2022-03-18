@@ -25,7 +25,8 @@ interface IState {
     formName: string;
   };
 }
-function ObjectiveDetail({ location, scaleType }: IProps) {
+function ObjectiveDetail(props: IProps) {
+  const { location, scaleType } = props;
   let initInfos: IPlanInfos = {
     questions: '',
     scaleId: '',
@@ -43,7 +44,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   const projectName = window.$storage.getItem('projectName');
   const { projectNsId, status } = useSelector((state: IState) => state.project.projDetail);
-
   useEffect(() => {
     const id = location.query.id;
     console.log('=============== id id ', id);
@@ -65,6 +65,7 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
   useEffect(() => {
     setInfos([...objectiveScaleList]);
     setScaleName(formName);
+    console.log('formNameformName', formName);
     //默认第一次加载时执行
     // if (editStatus.length === 0) {
     const statusList: string[] = [];
@@ -91,6 +92,16 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
         scaleId: objectiveScaleList.length > 0 ? objectiveScaleList[0].scaleId : '',
       }).then(() => {
         message.success('修改成功');
+        // 写入日志
+        window.$log.handleOperationLog({
+          type: 1,
+          copyWriting: '编辑客观检查名称',
+          oldParams: { content: formName },
+          newParams: { content: scaleName },
+          businessType: scaleType === 'OBJECTIVE' ? window.$log.businessType.UPDATE_OBJECTIVE_NAME.code :
+            window.$log.businessType.UPDATE_UNPLANNED_OBJECTIVE_NAME.code,
+        });
+        // 写入日志
         dispatch({
           type: 'project/fetchObjectiveScale',
           payload: { id: location.query.id, scaleType },
@@ -154,7 +165,6 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
     api.subjective.addObjectiveScale(paraAdd)
       .then(() => {
         message.success('添加成功');
-
         infos[index] = params;
         setInfos([...infos]);
         console.log('================ 添加成功 editStatus,', JSON.stringify(editStatus));
@@ -162,12 +172,21 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
           type: 'project/fetchObjectiveScale',
           payload: { id: location.query.id, scaleType },
         });
+        // 写入日志
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: params.questions,
+          businessType: scaleType === 'OBJECTIVE' ?
+            window.$log.businessType.CREATE_OBJECTIVE.code :
+            window.$log.businessType.CREATE_UNPLANNED_OBJECTIVE.code,
+        });
+        // 写入日志
       });
   };
 
   const handleDelPlan = (item: { scaleId: string; ruleDoc: { id: string } }) => {
 
-    console.log('====================== handleDelPlan ', item.questions, item.scaleId);
+    console.log('====================== handleDelPlan ', item);
     api.subjective.delScale({
       scaleId: item.scaleId,
       scaleGroupId: groupId,
@@ -176,6 +195,14 @@ function ObjectiveDetail({ location, scaleType }: IProps) {
       ruleId: item?.ruleDoc?.id,
     }).then(() => {
       message.success('删除成功');
+
+      window.$log.handleOperationLog({
+        type: 2,
+        businessType: scaleType === 'OBJECTIVE' ? window.$log.businessType.DELETE_OBJECTIVE.code : window.$log.businessType.DELETE_UNPLANNED_OBJECTIVE.code,
+        copyWriting: '删除客观检查',
+        oldParams: { content: item },
+      });
+
       dispatch({
         type: 'project/fetchObjectiveScale',
         payload: { id: location.query.id, scaleType },

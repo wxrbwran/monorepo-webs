@@ -78,9 +78,28 @@ declare interface Iuser {
   workOrderAcceptStatus?: string;
 }
 
+declare interface IOperationLogProps {
+  type: number; // 操作类型 0创建 1修改 2删除
+  copyWriting: string; // 日志标题（例如：编辑项目名称）
+  title?: string; // 操作的日志标题
+  newParams?: any;
+  oldParams?: any;
+  businessType?: number;
+  projectSid?: string; // 创建项目时会传入
+}
 declare interface Window {
   nim: any;
   $api: any;
+  $log: {
+    typeText: string[];
+    handleOperationLog: (params: IOperationLogProps) => void;
+    businessType: {
+      [key: string]: {
+        code: number;
+        desc: string;
+      }
+    }
+  };
   $storage: {
     setType: (key: 'localStorage' | 'sessionStorage') => any;
     init: () => any;

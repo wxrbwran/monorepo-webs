@@ -7,6 +7,7 @@ export const outTypes: CommonData = {
   HYD: '化验单',
   JCD: '检查单',
   OTHER: '其他医学单据',
+  JWS: '既往史',
   NOT_CLEAR: '图片不清晰',
   NOT_HYD_JCD: '非医学单据',
 };

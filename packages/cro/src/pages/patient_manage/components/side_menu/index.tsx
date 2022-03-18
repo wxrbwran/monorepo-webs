@@ -59,6 +59,20 @@ function SideMenu(props: IProps) {
     };
     api.detail.updateCroProject(params).then((_res: any) => {
       message.success('更改信息成功');
+      if (detail.effectiveCaseNum) {
+        window.$log.handleOperationLog({
+          type: 1,
+          copyWriting: '编辑有效病例数',
+          businessType: window.$log.businessType.UPDATE_EFFECTIVE_CASES_NUM.code,
+          oldParams: { content: `有效病例数:${detail.effectiveCaseNum }人` },
+          newParams: { content: `有效病例数:${params.detail.effectiveCaseNum }人` },
+        });
+      } else {
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: '创建有效病例数',
+        });
+      }
       dispatch({
         type: 'project/fetchProjectDetail',
         payload: projectSid,

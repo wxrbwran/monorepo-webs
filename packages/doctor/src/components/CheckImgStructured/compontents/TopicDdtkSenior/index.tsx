@@ -5,7 +5,7 @@ import { IQaItem } from '../type';
 import TopicAddBtn from '../TopicAddBtn';
 import { formatTempDdtk } from '../utils';
 import { searchHighLight } from '@/utils/utils';
-import { DatePicker, Select } from 'antd';
+import { DatePicker, Select, Divider } from 'antd';
 import moment from 'moment';
 
 interface IProps {
@@ -36,11 +36,12 @@ function DdtkSenior(props: IProps) {
       console.log('qaGroupsqaGroups', qaGroups);
       if (isViewOnly) {
         // 过滤出有填写答案的问题组
-        const hasValWt = qaGroups.filter(qas => qas.find(qa => !isEmpty(qa.answer)));
+        const hasValWt = qaGroups.filter(qas => qas.find(qa => !isEmpty(qa.answer) ));
         // 问题组中，多个问答，过滤掉没答案的item
+        console.log('hasValWt', hasValWt);
         const qas: IQaItem[][] = [];
         hasValWt.map(item =>{
-          qas.push(item.filter((qa, inx) => !isEmpty(qa.answer) || inx === 0));
+          qas.push(item.filter((qa, inx) => !isEmpty(qa.answer) || inx === 0 || inx === item.length - 1));
         });
         console.log('=======qas', qas);
         setValuableQas(cloneDeep(qas));
@@ -94,7 +95,7 @@ function DdtkSenior(props: IProps) {
       case 'INLINE_CHECKBOX':
         return (
           isViewOnly ? (
-            qaItem.answer.map((ansItem, ansInx) => <span key={ansItem}>{ansItem}{ansInx === qaItem.answer.length - 1 ? '' : '、'}</span>)
+            qaItem.answer.map((ansItem, ansInx) => <span className='border px-3' key={ansItem}>{ansItem}{ansInx === qaItem.answer.length - 1 ? '' : '、'}</span>)
           ) : (
             <Select
               style={{ width: 120 }}
@@ -111,7 +112,7 @@ function DdtkSenior(props: IProps) {
         );
       case 'INLINE_DATE':
         return (
-          isViewOnly ? <span>{moment(Number(qaItem.answer?.[0])).format('YYYY-MM-DD') }</span>
+          isViewOnly ? <span className='border  px-3'>{moment(Number(qaItem.answer?.[0])).format('YYYY-MM-DD') }</span>
             : <DatePicker
                 onChange={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)}
                 defaultValue={!isEmpty(qaItem.answer) ? moment(Number(qaItem.answer?.[0])) : undefined}
@@ -119,7 +120,7 @@ function DdtkSenior(props: IProps) {
         );
       default:
         return <span
-          className={isViewOnly ? `${styles.edit_span} ${styles.no_border}` : styles.edit_span}
+          className={styles.edit_span}
           contentEditable={!isViewOnly}
           suppressContentEditableWarning
           onBlur={(e) => handleChangeAnswer(e, quesIndex, qaInx, t)}
@@ -141,6 +142,7 @@ function DdtkSenior(props: IProps) {
   };
   return (
     <div className="mt-15">
+      {(isViewOnly || !isShowEdit) && <Divider dashed />}
       <div className='qa-wrap'>
         {
           (isViewOnly ? valuableQas : qasGroups).map((qas, quesIndex: number) => (
@@ -156,9 +158,9 @@ function DdtkSenior(props: IProps) {
                           dangerouslySetInnerHTML={{ __html: renderQuestion(qaItem.question) }}
                         >
                         </span>
-                        <span className={isViewOnly ? 'mx-8 px-3 border' : ''}>
+                        <span className={isViewOnly ? 'mx-8' : ''}>
                           {
-                            (qaInx !== (qas.length - 1) || isViewOnly) && (
+                            (qaInx !== (qas.length - 1)) && (
                               renderAnswerType(qaItem, quesIndex, qaInx)
                             )
                           }

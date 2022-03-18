@@ -29,7 +29,7 @@ interface IApiParams {
 }
 const AddEditGroup: FC<IProps> = (props) => {
   const { children, type, projectNsId, onSuccess, initData, className } = props;
-  console.log('initData', initData);
+  console.log('initData1111', initData);
   const [showModal, setshowModal] = useState(false);
   // const [loading, setloading] = useState(false);
   const loading = false;
@@ -46,12 +46,30 @@ const AddEditGroup: FC<IProps> = (props) => {
       api.patientManage.postAddGroup(params).then((_res: any) => {
         message.success('添加成功');
         onSuccess();
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: `创建试验分组 - ${groupName}`,
+        });
       });
     } else if (type === 'edit' && initData) {
       params.groupId = initData.groupId;
       api.patientManage.modifyGroup(params).then((_res: any) => {
         message.success('修改成功');
         onSuccess();
+        window.$log.handleOperationLog({
+          type: 1,
+          copyWriting: '编辑试验分组',
+          businessType: window.$log.businessType.UPDATE_TEST_GROUPING.code,
+          oldParams: {
+            content: {
+              groupName: initData.groupName,
+              note: initData.note,
+            },
+          },
+          newParams: {
+            content: params,
+          },
+        });
       });
     }
     setshowModal(false);

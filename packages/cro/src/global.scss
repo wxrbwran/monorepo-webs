@@ -209,6 +209,18 @@ body {
   .ant-btn-background-ghost.ant-btn-primary {
     background-color: transparent;
   }
+  .logModal {
+    &.ant-modal-confirm {
+      .ant-modal-confirm-btns {
+        float: initial;
+        display: flex;
+        justify-content: center;
+      }
+      .ant-modal-body {
+        border-top: 2px solid #3296FA;
+      }
+    }
+  }
 }
 
 .mode_hide {

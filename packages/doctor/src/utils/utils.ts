@@ -102,6 +102,9 @@ export function getRoles(msgCustom: { fromUsers?: { role: string }[], fromUser: 
     return [...new Set(msgCustom?.fromUsers.map(item => item.role))]
       .sort(roleCompare)
       .map(roleId => getRole(roleId)).filter(Boolean).join('、');
+  } else if (msgCustom?.fromUser?.relativeRole) {
+    // 患者亲友备注，如果有这个字段，表示是患者亲友
+    return (msgCustom?.fromUser?.relativeRole);
   } else {
     return getRole(msgCustom?.fromUser?.role) || '';
   }

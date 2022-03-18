@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as api from '@/services/api';
-import { message, Checkbox, Steps, Divider, Select, DatePicker, Input } from 'antd';
-import { history, useSelector, useDispatch } from 'umi';
-import ToogleSide from '@/components/ToogleSide';
+import { message, Checkbox, Steps, DatePicker, Input } from 'antd';
+import { useSelector, useDispatch } from 'umi';
 import FieldCard from './components/field_card';
-import PreTable from './components/pre_table';
-import { handleFormatValues, handleShouldValues, numberOperationType, rangNumberOperationType, ResearchSourceType, stringOperationType, transformDynamicToStatic, transformQueryPageAllRuleToFetchQueryIdRules, transformQueryPageFieldsToFetchQueryIdRules } from './util';
+import { numberOperationType, rangNumberOperationType, ResearchSourceType, stringOperationType, transformDynamicToStatic, transformQueryPageAllRuleToFetchQueryIdRules } from './util';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 import radioCheck from '@/assets/img/radio_check.png';
@@ -17,9 +15,7 @@ import dayjs from 'dayjs';
 import { cloneDeep, isEmpty } from 'lodash';
 import moment from 'moment';
 import QueryResult from './query_result';
-import QueryTable from '../components/query_table';
 
-const { Option } = Select;
 const { RangePicker } = DatePicker;
 interface IProps {
 }
@@ -47,11 +43,7 @@ const CheckboxGroup = Checkbox.Group;
 const { Step } = Steps;
 function Query({ }: IProps) {
 
-  const utilTimeType = ['date', 'timestamp', 'ms', 'time'];
   const utilNumType = ['number', 'int', 'float'];
-  const utilStringType = ['string']; // 'refs'
-  const utilBoolType = ['bool'];
-
 
   const [currentStep, setCurrentStep] = useState<number>(0);
 
@@ -893,7 +885,9 @@ function Query({ }: IProps) {
         {
           currentStep != 0 && <div className={styles.pre_step} onClick={onPreStepClick}>上一步</div>
         }
-        <div className={styles.next_step} onClick={onNextStepClick}>下一步</div>
+        {
+          currentStep < 3 && <div className={styles.next_step} onClick={onNextStepClick}>下一步</div>
+        }
       </div>
     </div>
   );
