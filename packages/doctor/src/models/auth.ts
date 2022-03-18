@@ -74,6 +74,8 @@ const Model: AuthModelType = {
           history.push('/doctor/patients/alone_doctor');
         }
         if (payload.clientId === 'xzl-web-out-org') {
+          // 院外管理端是根据redux里的isLogin来判断是否登录，当重新登录时，把redux持久化清掉即可
+          localStorage.removeItem('persist:out-hospital-patient');
           localStorage.setItem('xzl-web-out-org_token', JSON.stringify(data));
           localStorage.setItem('xzl-web-out-org_uid', data.yxRegister.accid);
           // (document.getElementById('go_out_hospital') as HTMLElement).click();
