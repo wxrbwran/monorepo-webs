@@ -509,13 +509,13 @@ export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField) =>
     let nameConfig = getChildItemsConfig(field, { search: true });
     // 加上顶级的
     console.log('================= nameConfig', JSON.stringify(nameConfig));
-    const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == field.parentName);
-    if (parentItems.length > 0) {
-      nameConfig = {
-        ...nameConfig,
-        ...getItemConfigFormItem(parentItems[0], { search: true }),
-      };
-    }
+    // const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == field.parentName);
+    // if (parentItems.length > 0) {
+    //   nameConfig = {
+    //     ...nameConfig,
+    //     ...getItemConfigFormItem(parentItems[0], { search: true }),
+    //   };
+    // }
     should_1.push(nameConfig);
   }
   console.log('================= transformQueryPageFieldsToFetchQueryIdRules should_1', JSON.stringify(should_1));
@@ -532,13 +532,13 @@ export const transformQueryPageAllRuleToFetchQueryIdRules = (allRule, searchTime
     for (const ruleItem of rule.items) {
 
       let nameConfig = getChildItemsConfig(ruleItem.name, {}, ruleItem, searchTimeRange, projectSid);
-      const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == ruleItem.name.parentName);
-      if (parentItems.length > 0) {
-        nameConfig = {
-          ...nameConfig,
-          ...getItemConfigFormItem(parentItems[0], {}, ruleItem, searchTimeRange, projectSid),
-        };
-      }
+      // const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == ruleItem.name.parentName);
+      // if (parentItems.length > 0) {
+      //   nameConfig = {
+      //     ...nameConfig,
+      //     ...getItemConfigFormItem(parentItems[0], {}, ruleItem, searchTimeRange, projectSid),
+      //   };
+      // }
       must.push(nameConfig);
     }
     rules.push({

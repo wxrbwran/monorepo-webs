@@ -35,11 +35,11 @@ function QueryTable({ location, tableData, head }: IProps) {
 
   const { reportName } = location.query;
 
-  const handleShowModal = (text: any, record: any, tree: any, value: number) => {
+  const handleShowModal = (text: any, record: any, tree: any, value: number, kp: string) => {
     setShowModal(true);
-
-    setRow({ text: text, record: record, tree: tree, resultKey: location.query.resultKey, value });
+    setRow({ text: text, record: record, tree: tree, resultKey: location.query.resultKey, value, kp });
   };
+
 
   const getComponent = (text: any, record: any, tree: any) => {
 
@@ -51,16 +51,11 @@ function QueryTable({ location, tableData, head }: IProps) {
         value = text[key];
       }
     }
-    if (kp.includes('end-event')) {
-      // return <EndEvent row={text}><span>{text.value}</span></EndEvent>
-      const endEventRow = { text: text, record: record, tree: tree, resultKey: location.query.resultKey, value: Number(value) };
-      return <EndEvent row={endEventRow}><span>{value}</span></EndEvent>;
-    } else if (kp.includes('basic')) {
+    if (kp.includes('basic')) {
       return value;
     } else {
-      // return <QueryDetail row={text}><span>{text.value}</span></QueryDetail>
       return <>
-        <span onClick={() => handleShowModal(text, record, tree, Number(value))}>{value}</span>
+        <span onClick={() => handleShowModal(text, record, tree, Number(value), kp)}>{value}</span>
       </>;
     }
   };
@@ -133,6 +128,8 @@ function QueryTable({ location, tableData, head }: IProps) {
       ></QueryDetail>
     );
   }, [showModal]);
+
+
   return (
     <div className='report-wrap-table'>
       {

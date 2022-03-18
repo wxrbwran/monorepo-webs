@@ -109,8 +109,8 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           item.type = 'string';
         } else if (reference_type?.assign?.value == 'RANGE') {  // 范围 a-b  字符串
 
-          const referenceValue = item.items.find((i) => i.name.includes('referenceValue'));
-          const referenceSecondValue = item.items.find((i) => i.name.includes('referenceSecondValue'));
+          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
+          const referenceSecondValue = item.items.find((i) => i.name.includes('reference_second_value'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
           console.log('notenotenotenote', JSON.stringify(note));
@@ -118,7 +118,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           item.type = 'float';
         } else if (reference_type?.assign?.value == 'GT') {   // 大于
 
-          const referenceValue = item.items.find((i) => i.name.includes('referenceValue'));
+          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
           item.description = `${noteDes}>${referenceValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
@@ -126,7 +126,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
 
         } else if (reference_type?.assign?.value == 'LT') {   // 小于
 
-          const referenceSecondValue = item.items.find((i) => i.name.includes('referenceSecondValue'));
+          const referenceSecondValue = item.items.find((i) => i.name.includes('reference_second_value'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
           item.description = `${noteDes}<${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
@@ -134,15 +134,15 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
 
         } else if (reference_type?.assign?.value == 'AROUND') {   // 包裹 a±b
 
-          const referenceValue = item.items.find((i) => i.name.includes('referenceValue'));
-          const referenceSecondValue = item.items.find((i) => i.name.includes('referenceSecondValue'));
+          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
+          const referenceSecondValue = item.items.find((i) => i.name.includes('reference_second_value'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
           item.description = `${noteDes}${referenceValue?.assign?.value ?? ''}±${referenceSecondValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
           item.type = 'float';
         } else if (reference_type?.assign?.value == 'RADIO') {   // 单选 阴阳
 
-          const referenceValue = item.items.find((i) => i.name.includes('referenceValue'));
+          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
           item.description = `${noteDes}${{
             'YANG': '阳',
             'YIN': '阴',
@@ -329,9 +329,11 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
             const noChild = item.children?.length == 0 && (((item.items?.length ?? 0) == 0 || !item?.items[0].type.includes('dynamic')));
             if (noChild) {
               return (
-                <div className='flex flex-row items-center w-200 mt-15 mb-15' onClick={() => { onCheckChoice(item); }}>
+                <div className='flex flex-row items-center w-200 mt-15 mb-15 mr-15' onClick={() => { onCheckChoice(item); }}>
                   <img src={(type == 'fieldChoice' ? item.fieldCheck : item.ruleCheck) ? checkChoicePng : checkUnChoicePng} height="16" />
-                  <div className='ml-10'>{item.description}</div>
+                  <div className='ml-10' title={item.choiceDescription ? item.description : undefined}>{
+                    item.choiceDescription ?? item.description
+                  } </div>
                 </div>
               );
             } else {

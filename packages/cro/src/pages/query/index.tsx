@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as api from '@/services/api';
 import { message, Checkbox, Steps, Divider, Select, DatePicker, Input } from 'antd';
 import { history, useSelector, useDispatch } from 'umi';
@@ -64,6 +64,7 @@ function Query({ }: IProps) {
   const [searchRangeItems, setSearchRangeItems] = useState<any>([]); // 查询范围节点
   const [searchTimeRange, setSearchTimeRange] = useState<string[]>();  // 查询时间范围
   const [resultKey, setResultKey] = useState<string>(); // 查询结果
+  const queryResultRef = useRef();
 
   const defaultItem = {
     name: null,
@@ -96,27 +97,36 @@ function Query({ }: IProps) {
 
       if (fatherItem.children == undefined) {
         // 将所有数据都添加上formateData
-        const tempData = fatherItem?.items?.filter(f => !!f.show).map((itemTemp: IField, index: number) => ({
-          key: `${itemTemp.name}_${index}`,
-          fieldCheck: itemTemp.description == '姓名',
-          parent: fatherItem?.description,
-          parentName: fatherItem?.name,
-          value: itemTemp.description,
-          label: itemTemp.description,
-          children: itemTemp?.items ? itemTemp.items?.filter(t => !!t.show).map((childItem: IField, idx: number) => ({
-            key: `${childItem.name}_${index + 1}${idx}`,
-            value: childItem.description,
-            label: childItem.description,
-            parent: itemTemp?.description,
-            parentName: itemTemp?.name,
-            children: [],
-            isLeaf: !(childItem?.items && childItem?.items[0]?.type.includes('dynamic')),
-            ...childItem,
-          })) : [],
-          isLeaf: ['终点事件'].includes(fatherItem.description) ? false : !(itemTemp?.items && itemTemp?.items[0].type.includes('dynamic')),
-          disabled: itemTemp?.items && itemTemp?.items[0].type.includes('dynamic') && itemTemp?.items.length === 1,
-          ...itemTemp,
-        }));
+        const tempData = fatherItem?.items?.filter(f => !!f.show).map((itemTemp: IField, index: number) => {
+          const description = (itemTemp?.name?.includes('objective') || itemTemp?.name?.includes('visit_objective')) ? itemTemp.description.replace(/<[^>]+>/g, '') : itemTemp.description;
+
+          console.log('============= description description', description);
+          return (
+            {
+              key: `${itemTemp.name}_${index}`,
+              fieldCheck: itemTemp.description == '姓名',
+              parent: fatherItem?.description,
+              parentName: fatherItem?.name,
+              value: description,
+              label: itemTemp.description,
+              children: itemTemp?.items ? itemTemp.items?.filter(t => !!t.show).map((childItem: IField, idx: number) => ({
+                key: `${childItem.name}_${index + 1}${idx}`,
+                value: childItem.description,
+                label: childItem.description,
+                parent: itemTemp?.description,
+                parentName: itemTemp?.name,
+                children: [],
+                isLeaf: !(childItem?.items && childItem?.items[0]?.type.includes('dynamic')),
+                ...childItem,
+              })) : [],
+              isLeaf: ['终点事件'].includes(fatherItem.description) ? false : !(itemTemp?.items && itemTemp?.items[0].type.includes('dynamic')),
+              disabled: itemTemp?.items && itemTemp?.items[0].type.includes('dynamic') && itemTemp?.items.length === 1,
+              ...itemTemp,
+              choiceDescription: description.length > 25 ? description.slice(0, 25) + '...' : undefined,
+              description: description,
+            }
+          );
+        });
         fatherItem.children = tempData;
       }
     }
@@ -129,6 +139,9 @@ function Query({ }: IProps) {
     const searchRangeTemp = allItems.items.filter((item) => item.name == 'team');
     if (searchRangeTemp.length > 0) {
       const items = await transformDynamicToStatic(searchRangeTemp[0], projectSid, projectRoleType, ResearchSourceType);
+      if (items.length > 0) {
+        items[0].checked = true;
+      }
       setSearchRangeItems(items);
     }
 
@@ -205,9 +218,7 @@ function Query({ }: IProps) {
     );
   };
 
-
   //#region  Step 0
-
   const otherSingleItems = allFields?.items?.filter((item) => item.name != 'basic').flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
   const choiceMuiltItems = allFields?.items?.filter((item) => item.children?.find((i) => i.cascaderChoiceItems?.length > 0)).flatMap((item) => item.children).filter((item) => item.cascaderChoiceItems?.length > 0).flatMap((item) => item.cascaderChoiceItems) ?? [];
   const otherChoiceFields = [...otherSingleItems, ...choiceMuiltItems];
@@ -297,6 +308,7 @@ function Query({ }: IProps) {
               {
                 otherChoiceFields && otherChoiceFields.length > 0 ?
                   otherChoiceFields.map((item) => {
+                    console.log('============= item.choiceDescription', item.choiceDescription);
                     return (
                       <div className={styles.hasChoiceItem}>
                         <div className={styles.hasChoiceItemTitle}>{item.choiceDescription ?? item.description}</div>
@@ -829,13 +841,24 @@ function Query({ }: IProps) {
           type: 'query/setQueryHead',
           payload: head.tableHead,
         });
-        setResultKey(resultKey);
+        setResultKey(head.resultKey);
       }
     }
     setCurrentStep(currentStep + 1);
   };
 
   const onPreStepClick = () => {
+
+    // 如果是查询结果页面返回上一页，清空历史数据
+    if (currentStep == 3) {
+
+      console.log('============= currentStep===');
+      queryResultRef.current.setQueryStop();
+      setResultKey(undefined);
+      // dispatch({
+      //   type: 'query/setIsQueryStop',
+      // });
+    }
     setCurrentStep(currentStep - 1);
   };
 
@@ -862,6 +885,7 @@ function Query({ }: IProps) {
       {
         currentStep == 3 &&
         <QueryResult
+          ref={queryResultRef}
           param={{ query: { resultKey } }}
         />
       }

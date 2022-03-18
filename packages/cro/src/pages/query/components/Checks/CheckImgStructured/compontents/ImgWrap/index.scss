@@ -1,0 +1,21 @@
+.img_wrap {
+  // background-color: rgba(0, 0, 0, 0.4);
+}
+.img_box {
+  padding-left: 20px;
+  padding-top: 13px;
+  :global {
+    .react-viewer-toolbar {
+      li {
+        width: auto;
+        padding: 2px 9px;
+      }
+    }
+    #images {
+      background-color: rgba(0, 0, 0, 0.4) !important;
+      width: 45vw;
+      height: 89vh;
+      padding-bottom: 10px;
+    }
+  }
+}

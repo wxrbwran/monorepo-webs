@@ -11,3 +11,4 @@ export { default as research } from './research';
 export { default as base } from './base';
 export { default as event } from './event';
 export { default as service } from './croService';
+export { default as image } from './image';

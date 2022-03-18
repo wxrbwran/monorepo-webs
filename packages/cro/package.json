@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
+    "@ant-design/pro-form": "^1.50.0",
     "@ant-design/pro-layout": "^4.5.16",
     "@tailwindcss/postcss7-compat": "2.2.9",
     "@types/dva": "^1.1.0",
