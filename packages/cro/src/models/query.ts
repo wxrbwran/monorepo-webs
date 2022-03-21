@@ -43,7 +43,6 @@ export interface QueryType {
     setQueryHead: Reducer<QueryModelState>;
     setQueryResult: Reducer<QueryModelState>;
     clearQueryResult: Reducer<QueryModelState>;
-    setIsQueryStop: Reducer<QueryModelState>;
   };
 }
 export const queryState = {
@@ -51,7 +50,7 @@ export const queryState = {
   images: [],
   other: {},
   queryScope: {
-    'nsLabelType':'RESEARCH_PROJECT_PATIENT',
+    'nsLabelType': 'RESEARCH_PROJECT_PATIENT',
     'projectNsid': null,
   },
   baseCondition: [],
@@ -128,12 +127,6 @@ const queryModel: QueryType = {
         ...state,
         tableData: [],
         isQueryStop: false,
-      };
-    },
-    setIsQueryStop(state = queryState) {
-      return {
-        ...state,
-        isQueryStop: true,
       };
     },
   },
