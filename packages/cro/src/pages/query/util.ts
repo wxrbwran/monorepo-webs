@@ -263,6 +263,13 @@ export const handleFormValues = (values: any, checkedField: any[], projectSid: s
             ...oneGroup,
             [childItem.name]: tmpC,
           };
+        } else if (childItem.type == 'implicit') { // 如果是implicit 类型，组装方式
+
+          const tmpC: any = { operator: '=', value: childItem.assign.value };
+          oneGroup = {
+            ...oneGroup,
+            [childItem.name]: tmpC,
+          };
         } else { // 其他类型，从value里拿值组装
 
           // const tmp: any = { operator: values[(childItem.name + "_operator_" + number)], value: values[(childItem.name + "_value_" + number)] }
@@ -395,6 +402,12 @@ export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRa
           ...tmpC,
           ...{ operator: '=', value: item?.assign?.value },
         };
+      } else if (item.type == 'refs') {
+
+        tmpC = {
+          ...tmpC,
+          ...{ operator: operationConfig[ruleItem.operation], exist: ruleItem.value, value: item?.assign?.value },
+        };
       } else {
         let tempCTemp = {} = {};
         const value = ruleItem.operation == '范围' ? `[${ruleItem.min},${ruleItem.max})` : ruleItem.value;
@@ -424,7 +437,6 @@ export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRa
           };
         }
       }
-
       console.log('===================  getItemConfigFormItem tmpC', JSON.stringify(tmpC));
     } else { // 自己没有赋值过
       tmpC = {

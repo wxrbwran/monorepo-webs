@@ -469,7 +469,7 @@ function Query({ }: IProps) {
         description: '阳',
       }];
     } else {
-      const res = await api.query.fetchKvScope({ kp: ruleItem.name.name, target });
+      const res = await api.query.fetchKvScope({ kp: ruleItem.name.name, target, sourceType: ResearchSourceType });
       // 搜索
       if (res?.values?.length > 1) {
         ruleItem.optionArray = res.values;
@@ -554,17 +554,19 @@ function Query({ }: IProps) {
     }
   };
 
-  const handleSelectValueChange = (ruleItem, description) => {
+  const handleSelectValueChange = (ruleItem, desc) => {
 
-    const opts = ruleItem.optionArray.filter((opt) => (opt.description || opt.value) == description);
+    const opts = ruleItem.optionArray.filter((opt) => (opt.description || opt.value) == desc);
     if (opts.length > 0) {
 
       console.log(`handleSelectValueChange opts ${JSON.stringify(opts[0])}`);
-      const { value, unit, uid } = opts[0];
+      const { value, unit, uid, description } = opts[0];
 
       ruleItem.value = value;
       ruleItem.unit = unit || ruleItem.unit;
       ruleItem.uid = uid;
+      ruleItem.description = description;
+
 
       setAllRules(cloneDeep(allRules));
       console.log(`selected allRule ${JSON.stringify(allRules)}`);
@@ -665,7 +667,7 @@ function Query({ }: IProps) {
                       </Select>
                     </>
                     :
-                    <Select className={styles.value} showSearch value={ruleItem.value ? `${ruleItem.value}${ruleItem.unit}` : ''} onChange={(value) => handleSelectValueChange(ruleItem, value)} onSearch={(value) => handleSelectSearch(ruleItem, value)}>
+                    <Select className={styles.value} showSearch value={ruleItem.description ? ruleItem.description : ruleItem.value ? `${ruleItem.value}${ruleItem.unit}` : ''} onChange={(value) => handleSelectValueChange(ruleItem, value)} onSearch={(value) => handleSelectSearch(ruleItem, value)}>
                       {
                         ruleItem.optionArray?.map((opt) => {
                           return <Option key={`${opt.description || opt.value}`} value={`${opt.description || opt.value}`}>{`${opt.description || opt.value}`}</Option>;
@@ -764,6 +766,28 @@ function Query({ }: IProps) {
       return;
     }
 
+    // 查询字段修改后，
+    if (currentStep == 1) {
+      for (const rule of allRules) {
+
+        const choiceItems = rule.items.filter((item) => otherChoiceRules.find(choiceRule => `${choiceRule.key}_zsh_${choiceRule.choiceDescription ?? choiceRule.description}` == `${item.name?.key}_zsh_${item.name?.choiceDescription ?? item.name?.description}`));
+        rule.items = choiceItems;
+      }
+      const newRules = allRules.filter((rule) => rule.items?.length > 0);
+      console.log('============== newRules newRules', JSON.stringify(newRules));
+      if (newRules.length > 0) {
+        setAllRules(newRules);
+      } else {
+        setAllRules([
+          {
+            items: [
+              { ...defaultItem },
+            ],
+          },
+        ]);
+      }
+    }
+
     if (currentStep == 2) { // 构造出来的查询条件需要和查询时间范围需要
 
       if (searchTimeRange?.length == 0) {
@@ -794,7 +818,7 @@ function Query({ }: IProps) {
             return;
           }
 
-          if (stringOperationType.includes(item.operation) && item.value == '') {
+          if (stringOperationType.includes(item.operation) && item.value === '') {
 
             console.log('=============== 2 item', JSON.stringify(item));
             console.log('=============== 2', stringOperationType.includes(item.operation), item.value == '');
