@@ -62,6 +62,7 @@ const UserModel: UserModelType = {
   reducers: {
     saveCurrentUser(state, action) {
       console.log('action.payload', action.payload);
+      window.$storage.setItem('userName', action.payload?.roles?.[0]?.subject?.name);
       return {
         ...state,
         user: {

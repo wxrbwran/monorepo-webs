@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Input, Button, Select } from 'antd';
 import styles from './index.scss';
@@ -9,7 +9,7 @@ import { useSelector } from 'umi';
 import { message } from '@umijs/plugin-request/lib/ui';
 import Member from '../Member';
 import { isEmpty } from 'lodash';
-import { debounce } from 'lodash';
+import { debounce, cloneDeep } from 'lodash';
 
 interface IProps {
 
@@ -25,12 +25,14 @@ const AddServicePackage: FC<IProps> = (props) => {
 
   const [friends, setfriends] = useState([]);
 
-  const [choiceMember, setChoiceMember] = useState({
+  const init = {
     CRC: [],
     CRA: [],
     PM: [],
     SELF: [],
-  });
+  };
+  const [choiceMember, setChoiceMember] = useState(cloneDeep(init));
+  const initData = useRef(cloneDeep(init)); // 编辑时，保存初始化数据，提交日志时需要原数据
   const doctorSid = localStorage.getItem('xzl-web-doctor_sid');
 
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
@@ -115,12 +117,14 @@ const AddServicePackage: FC<IProps> = (props) => {
         console.log('============ useEffect CRC CRA PM', JSON.stringify(crcArray));
         console.log('============ useEffect CRC CRA PM', JSON.stringify(craArray));
         console.log('============ useEffect CRC CRA PM', JSON.stringify(pmArray));
-        setChoiceMember({
+        const formatInit = {
           CRC: crcArray,
           CRA: craArray,
           PM: pmArray,
           SELF: selfArray,
-        });
+        };
+        setChoiceMember(cloneDeep(formatInit));
+        initData.current = cloneDeep(formatInit);
       } else {
 
         setTeamName(undefined);
@@ -252,7 +256,13 @@ const AddServicePackage: FC<IProps> = (props) => {
         if (onSaveSuccess) {
           onSaveSuccess();
         }
-        //
+        window.$log.handleOperationLog({
+          type: 1,
+          businessType: window.$log.businessType.UPDATE_CRO_GROUP.code,
+          copyWriting: `编辑CRO小组--${teamName}`,
+          newParams: { content: choiceMember },
+          oldParams: { content: initData.current },
+        });
       });
     } else {
       api.service.putTeamMembers(parma).then(() => {
@@ -260,6 +270,10 @@ const AddServicePackage: FC<IProps> = (props) => {
         if (onSaveSuccess) {
           onSaveSuccess();
         }
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: `创建CRO小组--${teamName}`,
+        });
         //
       });
     }

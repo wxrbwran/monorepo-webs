@@ -95,5 +95,18 @@ export default {
   fetchObjectiveRecord(data?: any): Promise<any> {
     return http.get(`research/objective/record?data=${JSON.stringify(data)}`);
   },
+
+  // 新增操作日志
+  postBusinessLog(data?: any): Promise<any> {
+    return http.post('research/business/log', { data });
+  },
+  // 新增操作原因
+  postOperationReason(data?: any): Promise<any> {
+    return http.post('research/operation/reason', { data });
+  },
+  // 获取操作日志列表
+  fetchLogList(data?: any): Promise<any> {
+    return http.get(`research/business/log?data=${JSON.stringify(data)}`);
+  },
 };
 

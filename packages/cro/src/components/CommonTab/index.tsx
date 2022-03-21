@@ -36,7 +36,7 @@ function CommonTab(props: IProps) {
   const [seconds, setSeconds] = useState(60);
   const [isGetting, setIsGetting] = useState(false);
   const timerRef = useRef();
-
+  const isLeader = window.$storage.getItem('isLeader');
   const modalText: CommonData = {
     'del': {
       title: '删除项目',
@@ -137,6 +137,10 @@ function CommonTab(props: IProps) {
         //更新常用问题列表
         history.push('/home');
       } else {
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: `${modalText[modalType].title}`,
+        });
         message.success('更改信息成功');
         setShowModal(false);
         dispatch({
@@ -188,7 +192,14 @@ function CommonTab(props: IProps) {
       statusName: '计划外访视',
       status: 'out_plan_visit',
     },
+
   ];
+  if (isLeader) {
+    croNav.push({
+      statusName: '操作日志',
+      status: 'operation_log',
+    });
+  }
   const handleShowModal = (type: string) => {
 
     // 清空之前的计时等数据

@@ -17,40 +17,40 @@ function EventItem({ title, text, type, isEdit, initData }: IProps) {
   const [form] = Form.useForm();
   const { setFieldsValue, getFieldValue } = form;
   const [date, setDate] = useState(new Date());
-  const [initialQueue, setInitialQueue] = useState<number[]>([0,1]);//默认显示2个输入框
+  const [initialQueue, setInitialQueue] = useState<number[]>([0, 1]);//默认显示2个输入框
   const [uuid, setUuid] = useState(1);
   // const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
     const newQueue: number[] = [];
-    if(!isEmpty(initData)){
+    if (!isEmpty(initData)){
       Object.keys(initData).forEach((item, index)=>{
-        if(item.indexOf(type)>-1){
+        if (item.indexOf(type) > -1){
           newQueue.push(Number(item.split(`${type}_`)[1]));
         }
         // setFieldsValue({
         //   [item]: initData[item],
         // });
-      })
+      });
       setInitialQueue([...newQueue]);
-      setUuid(Object.keys(newQueue).length - 1)
-    }else{
+      setUuid(Object.keys(newQueue).length - 1);
+    } else {
       // 解决当删除到只有空input框的时候再次编辑仍显示出空框的问题
-      setInitialQueue([0,1]);
+      setInitialQueue([0, 1]);
       setUuid(1);
     }
-  }, [initData])
+  }, [initData]);
 
 
   const handleAdd = () => {
-    setInitialQueue([...initialQueue, uuid+1, uuid+2]);
-    setUuid(uuid+2)
+    setInitialQueue([...initialQueue, uuid + 1, uuid + 2]);
+    setUuid(uuid + 2);
   };
   const handleRemove = (item: number) => {
     const newQueue = initialQueue.filter((i) => i !== item);
     setInitialQueue([...newQueue]);
   };
 
-console.log('initialQueue', initialQueue);
+  console.log('initialQueue', initialQueue);
   return (
     <div className={styles.event_item}>
        <Form.Item>
@@ -74,7 +74,7 @@ console.log('initialQueue', initialQueue);
                   <DeleteOutlined onClick={() => handleRemove(item)} />
                 </FormItem>
               </div>
-            )
+            );
           })
         }
         <Form.Item>
@@ -84,6 +84,6 @@ console.log('initialQueue', initialQueue);
         </Form.Item>
       </div>
     </div>
-  )
+  );
 }
 export default EventItem;

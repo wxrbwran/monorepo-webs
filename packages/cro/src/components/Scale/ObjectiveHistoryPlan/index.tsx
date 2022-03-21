@@ -38,7 +38,8 @@ interface IProps {
   scaleType: 'OBJECTIVE' | 'VISIT_OBJECTIVE';
 }
 
-function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDel, scaleType }: IProps) {
+function HistoryPlan(props: IProps) {
+  const { infoItem, itemIndex, location, changeEditStatus, handleDel, scaleType } = props;
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const projectSid = window.$storage.getItem('projectSid');
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -71,8 +72,8 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
 
 
   const updatePlan = (params: { plans: [], questions: string }) => {
-
-    console.log('===================== updatePlan ====== ', JSON.stringify(params));
+    console.log('--3-3-', props);
+    console.log('===================== updatePlan ====== ', params);
     api.subjective
       .updateScalePlan({
         ruleDoc: params.ruleDoc,
@@ -84,6 +85,17 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
       .then(() => {
         message.success('修改成功');
         changeEditStatus();
+        window.$log.handleOperationLog({
+          type: 1,
+          businessType: window.$log.businessType.UPDATE_OBJECTIVE_CONTENT.code,
+          copyWriting: '编辑客观检查内容、发送计划',
+          oldParams: {
+            content: infoItem,
+          },
+          newParams: {
+            content: params,
+          },
+        });
       })
       .catch((err: string) => {
         message.error(err);
@@ -178,7 +190,10 @@ function HistoryPlan({ infoItem, itemIndex, location, changeEditStatus, handleDe
                   <img src={iconTime} alt="" />
                   <span>首次发送时间</span>
                 </div>
-                <div className={styles.text}>{firstTimeStr}</div>
+                <div className={styles.text}>
+                  {firstTimeStr}
+                  {ruleDoc?.rules?.[0]?.actions?.[0].type === 'block' && <span>(不发送)</span>}
+                </div>
               </div>
               <div className={styles.item}>
                 <div className={styles.tit}>

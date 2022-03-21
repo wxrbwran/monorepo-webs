@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LeftOutlined } from '@ant-design/icons';
 import { Input, Tooltip, Button, message } from 'antd';
 import { history, useSelector } from 'umi';
@@ -15,6 +15,7 @@ import ScalePlanDetailEcho from '@/components/Scale/ScalePlanDetailEcho';
 
 import './index.scss';
 import { getUrlPreFix, IRuleDoc, IRules } from '@/pages/subjective_table/util';
+import { cloneDeep } from 'lodash';
 
 interface IProps {
   location: {
@@ -42,10 +43,17 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
   const [ruleDoc, setRuleDoc] = useState<IRuleDoc>();
 
   const [loading, setLoading] = useState(false);
+  const editInitData = useRef({});
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const groupId = location.query.groupId;
   const scaleId = location.query.scaleId;
-
+  const titlePrex = () => {
+    if (scaleType === 'CRF' || scaleType == 'VISIT_CRF') {
+      return 'CRF';
+    } else {
+      return '主观';
+    }
+  };
   // 随访表标题
   const handleFormTit = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormTit(e.target.value);
@@ -73,6 +81,7 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     // 编辑
     if (groupId) {
       api.subjective.getSubjectiveScaleDetail(groupId).then((res: any) => {
+        editInitData.current = cloneDeep(res);
         setFormTit(res.name);
         setSubTit(res.subtitle);
         setQuestions(res.questions);
@@ -143,6 +152,13 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       history.push('/template');
     });
   };
+  const businessType = {
+    CRF: window.$log.businessType.UPDATE_CRF_CONTENT.code,
+    VISIT_CRF: window.$log.businessType.UPDATE_UNPLANNED_CRF_CONTENT.code,
+
+    SUBJECTIVE: window.$log.businessType.UPDATE_SUBJECTIVE_CONTENT.code,
+    VISIT_SUBJECTIVE: window.$log.businessType.UPDATE_UNPLANNED_SUBJECTIVE_CONTENT.code,
+  };
   //创建量表
   const handleCreate = (params: any, tit: string) => {
     setLoading(true);
@@ -152,6 +168,34 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
       // message.success('添加成功');
       setLoading(false);
       history.push(`/${getUrlPreFix(scaleType)}/detail?name=${tit}`);
+      // 写入到日志
+      // 新老数据格式保持一致
+      const newParams = {
+        ...cloneDeep(params),
+        questions: params.info.questions,
+      };
+      delete newParams.info;
+      console.log('paramsnewwwww', newParams);
+      console.log('olddddd', editInitData.current);
+      if (groupId) {
+        window.$log.handleOperationLog({
+          type: 1,
+          copyWriting: `编辑${tit}内容`,
+          businessType: businessType[scaleType],
+          newParams: {
+            content: newParams,
+          },
+          oldParams: {
+            content: editInitData.current,
+          },
+        });
+      } else {
+        window.$log.handleOperationLog({
+          type: 0,
+          copyWriting: `创建${titlePrex()}量表 - ${tit}`,
+        });
+      }
+      // 写入到日志
     }).catch(() => {
       setLoading(false);
     });
@@ -265,14 +309,6 @@ function ScaleTableCreate({ location, scaleType }: IProps) {
     setEditIndex(inx);
   };
 
-  const titlePrex = () => {
-
-    if (scaleType === 'CRF' || scaleType == 'VISIT_CRF') {
-      return 'CRF';
-    } else {
-      return '主观';
-    }
-  };
   return (
     <div className="follow-table-create">
       <div className="left">
