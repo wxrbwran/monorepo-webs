@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as api from '@/services/api';
-import { message, Checkbox, Steps, DatePicker, Input } from 'antd';
+import { message, Checkbox, Steps, DatePicker, Input, Select } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import FieldCard from './components/field_card';
 import { numberOperationType, rangNumberOperationType, ResearchSourceType, stringOperationType, transformDynamicToStatic, transformQueryPageAllRuleToFetchQueryIdRules } from './util';

@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState, useMemo, useRef } from 'react';
 import { Form, Button, Input } from 'antd';
 import { isEmpty, cloneDeep } from 'lodash';
-import { useSelector, useDispatch } from 'umi';
 import * as api from '@/services/api';
 import { formatSubmitItems, formatDataAddIndex } from './formatData';
 import IndexTable from '../IndexTable';
@@ -94,26 +93,26 @@ const CustomIndex: FC<IProps> = (props) => {
       noCommonItems,
     };
   };
-  const fetchIndexDocumentIndex = async () => {
-    const params = {
-      documentId: apiParams.documentId,
-      sourceSid: apiParams.sourceSid,
-      sid,
-    };
-    const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary.fetchIndexDocumentIndex(
-      params,
-    );
-    console.log('-------33', list);
-    const commonItems = list.filter((item) => item.common);
-    const noCommonItems = list.filter((item) => !item.common);
-    // 如果有指定首行展示哪个指标，这里移动到第一个
-    const data: IApiData = firstIndex
-      ? formatFirshIndex(commonItems, noCommonItems)
-      : { commonItems, noCommonItems };
-    // console.log('=====+2,initList没数据，请求接口时');
-    console.log('999999999999', cloneDeep(formatDataAddIndex(data, addIndexNum)));
-    setApiData(cloneDeep(formatDataAddIndex(data, addIndexNum)));
-  };
+  // const fetchIndexDocumentIndex = async () => {
+  //   const params = {
+  //     documentId: apiParams.documentId,
+  //     sourceSid: apiParams.sourceSid,
+  //     sid,
+  //   };
+  //   const { list }: { list: IIndexItemCustom[] } = await api.indexLibrary.fetchIndexDocumentIndex(
+  //     params,
+  //   );
+  //   console.log('-------33', list);
+  //   const commonItems = list.filter((item) => item.common);
+  //   const noCommonItems = list.filter((item) => !item.common);
+  //   // 如果有指定首行展示哪个指标，这里移动到第一个
+  //   const data: IApiData = firstIndex
+  //     ? formatFirshIndex(commonItems, noCommonItems)
+  //     : { commonItems, noCommonItems };
+  //   // console.log('=====+2,initList没数据，请求接口时');
+  //   console.log('999999999999', cloneDeep(formatDataAddIndex(data, addIndexNum)));
+  //   setApiData(cloneDeep(formatDataAddIndex(data, addIndexNum)));
+  // };
   useEffect(() => {
     // 首次渲染
     if (isEmpty(apiData.commonItems) && isEmpty(apiData.noCommonItems)) {
@@ -123,7 +122,7 @@ const CustomIndex: FC<IProps> = (props) => {
         setApiData(formatDataAddIndex(initList, addIndexNum));
       } else {
         console.log('curtomIndex3');
-        fetchIndexDocumentIndex();
+        // fetchIndexDocumentIndex();
       }
     }
   }, [initList]);
