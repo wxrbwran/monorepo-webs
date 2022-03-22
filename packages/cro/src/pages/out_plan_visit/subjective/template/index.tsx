@@ -48,6 +48,12 @@ function Template(props: IProps) {
     };
     api.subjective.addScale(params).then(() => {
       message.success('添加成功');
+      window.$log.handleOperationLog({
+        projectSid: window.$storage.getItem('projectSid'),
+        type: 0,
+        copyWriting: `创建主观量表 - ${name}`,
+      });
+
       history.push(`/out_plan_visit/subjective/detail?name=${name}`);
     });
   };
