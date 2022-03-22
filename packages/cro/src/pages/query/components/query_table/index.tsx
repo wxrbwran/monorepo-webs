@@ -4,6 +4,7 @@ import XLSX from 'xlsx';
 import { Table } from 'antd';
 import EndEvent from '@/pages/query/components/end_event';
 import './index.scss';
+import { cloneDeep } from 'lodash';
 interface IProps {
   location: {
     pathname: string;
@@ -21,7 +22,7 @@ interface IProps {
   head: [],
 }
 interface IColumns {
-  title: string;
+  title: any;
   dataIndex: string;
   children: []
 }
@@ -52,10 +53,10 @@ function QueryTable({ location, tableData, head }: IProps) {
       }
     }
     if (kp.includes('basic')) {
-      return value;
+      return value ?? '';
     } else {
       return <>
-        <span onClick={() => handleShowModal(text, record, tree, Number(value), kp)}>{value}</span>
+        <span onClick={() => handleShowModal(text, record, tree, Number(value), kp)}>{value ?? ''}</span>
       </>;
     }
   };
@@ -74,12 +75,24 @@ function QueryTable({ location, tableData, head }: IProps) {
       };
 
       const renderItem = (tree: IColumns) => {
+
+        const treeCopy = cloneDeep(tree);
+        if ((tree?.originalKeyPath?.includes('objective') || tree?.originalKeyPath?.includes('visit_objective'))) { // 客观检查计划外客观检查
+
+          const tempTitle = tree?.title.replace(/<[^>]+>/g, '');
+          if (tempTitle.length > 25) {
+            treeCopy.title = (<div title={tempTitle}>
+              {tempTitle.slice(0, 25) + '...'}
+            </div>);
+          } else {
+            treeCopy.title = tempTitle;
+          }
+        }
         return (
           {
-            ...tree,
+            ...treeCopy,
             children: !!tree?.children?.length ? renderTree(tree.children) : [],
             render: !!tree?.children?.length ? () => { } : (text: any, record: IColumns) => {
-              // return <span>{"hhhhh"}</span>
               return getComponent(text, record, tree);
             },
           }
