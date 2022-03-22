@@ -16,6 +16,11 @@ import { cloneDeep, isEmpty } from 'lodash';
 import moment from 'moment';
 import QueryResult from './query_result';
 
+
+import {
+  SortableContainer,
+  SortableElement,
+} from 'react-sortable-hoc';
 const { RangePicker } = DatePicker;
 interface IProps {
 }
@@ -58,6 +63,8 @@ function Query({ }: IProps) {
   const [resultKey, setResultKey] = useState<string>(); // 查询结果
   const queryResultRef = useRef();
 
+
+
   const defaultItem = {
     name: null,
     operation: null,
@@ -97,6 +104,7 @@ function Query({ }: IProps) {
             {
               key: `${itemTemp.name}_${index}`,
               fieldCheck: itemTemp.description == '姓名',
+              updateTime: itemTemp.description == '姓名' ? dayjs().valueOf() : undefined,
               parent: fatherItem?.description,
               parentName: fatherItem?.name,
               value: description,
@@ -235,6 +243,7 @@ function Query({ }: IProps) {
 
   const onCancelItemFieldCheck = (deletedItem) => {
 
+    console.log('==============  onCancelItemFieldCheck ');
     if (deletedItem.children.length > 0) { // 多层级的item删除
 
       const cancelNode = allFields?.items?.filter((item) => item.children?.find((i) => i.key == deletedItem.key));
@@ -260,6 +269,50 @@ function Query({ }: IProps) {
     }
   };
 
+  const SortableItem = SortableElement(({ item }) => (
+
+    <div className={styles.hasChoiceItem}>
+      <div className={styles.hasChoiceItemTitle}>{item.choiceDescription ?? item.description}</div>
+      {
+        item.description != '姓名' && <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemFieldCheck(item); }} />
+      }
+    </div>
+  ));
+
+  const SortableList = SortableContainer(({ items }) => (
+    <div className={styles.container}>
+      {items?.map((item, index) => (
+        <SortableItem
+          key={`${item.choiceDescription ?? item.description}`}
+          index={index}
+          item={item}
+        />
+      ))}
+    </div>
+  ));
+
+
+  const onSortEnd = (array, oldIndex, newIndex) => {
+
+    if (oldIndex > newIndex) {  // 将元素往前挪
+
+      const tempTiem = array[newIndex].updateTime;
+      for (let index = newIndex; index < oldIndex; index++) {
+        array[index].updateTime = array[index + 1].updateTime;
+      }
+      array[oldIndex].updateTime = tempTiem;
+    } else { // // 将元素往后挪  1  4 
+
+      const tempTiem = array[newIndex].updateTime;
+      for (let index = newIndex; index > oldIndex; index--) {
+        array[index].updateTime = array[index - 1].updateTime;
+      }
+      array[oldIndex].updateTime = tempTiem;
+    }
+    setAllFields((preState) => { return cloneDeep(preState); });
+  };
+
+  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.updateTime - b.updateTime);
   const step0View = () => {
 
     return (
@@ -282,7 +335,14 @@ function Query({ }: IProps) {
           <div className={styles.hasChoicedItems}>
             <div className={styles.left}>
               {/* 基本数据展示 */}
-              {
+              <SortableList
+                distance={1}
+                items={basicStep0Arr}
+                onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(basicStep0Arr, oldIndex, newIndex); }}
+                axis="xy"
+                helperClass={styles.SortableHelper}
+              />
+              {/* {
                 allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck)?.map((item) => {
                   return (
                     <div className={styles.hasChoiceItem}>
@@ -293,21 +353,30 @@ function Query({ }: IProps) {
                     </div>
                   );
                 })
-              }
+              } */}
             </div>
             <div className={styles.centerLine}></div>
             <div className={styles.right}>
               {
                 otherChoiceFields && otherChoiceFields.length > 0 ?
-                  otherChoiceFields.map((item) => {
-                    console.log('============= item.choiceDescription', item.choiceDescription);
-                    return (
-                      <div className={styles.hasChoiceItem}>
-                        <div className={styles.hasChoiceItemTitle}>{item.choiceDescription ?? item.description}</div>
-                        <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemFieldCheck(item); }} />
-                      </div>
-                    );
-                  })
+
+                  <SortableList
+                    distance={1}
+                    items={otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime)}
+                    onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime), oldIndex, newIndex); }}
+                    axis="xy"
+                    helperClass={styles.SortableHelper}
+                  />
+
+                  // otherChoiceFields.map((item) => {
+                  //   console.log('============= item.choiceDescription', item.choiceDescription);
+                  //   return (
+                  //     <div className={styles.hasChoiceItem}>
+                  //       <div className={styles.hasChoiceItemTitle}>{item.choiceDescription ?? item.description}</div>
+                  //       <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemFieldCheck(item); }} />
+                  //     </div>
+                  //   );
+                  // })
                   : <div className={styles.empty}>请在上方选择自定义导出字段</div>
               }
             </div>
@@ -681,6 +750,7 @@ function Query({ }: IProps) {
                       <div className={styles.add} onClick={() => onAddItem(ruleIndex, itemIndex)}>
                         <img src={addPng} className='w-16 h-16 ml-10' />
                         <div className='ml-4'>增加</div>
+                        <div className={`ml-4 ${styles.addRuleTips}`}>*同组之间为 且 关系</div>
                       </div>
                     </>
                     :
@@ -741,10 +811,14 @@ function Query({ }: IProps) {
             return getRuleView(rule, index);
           })
         }
-        <div className={`flex flex-row ${styles.addRule}`} onClick={onAddRule}>
-          <div>+</div>
-          <div className='ml-4'>增加多组规则</div>
+        <div className='flex flex-row'>
+          <div className={`flex flex-row ${styles.addRule}`} onClick={onAddRule}>
+            <div>+</div>
+            <div className='ml-4'>增加多组规则</div>
+          </div>
+          <div className={`ml-4 ${styles.ruleTips}`}>*不同组规则之间为 或 关系</div>
         </div>
+
       </div>
     );
   };
@@ -828,7 +902,8 @@ function Query({ }: IProps) {
         }
       }
       const otherSingleFields = allFields?.items?.flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
-      const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, [...otherSingleFields, ...choiceMuiltItems]);
+      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.updateTime - b.updateTime);
+      const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, searchField);
 
       if (rules) {
 
@@ -885,6 +960,7 @@ function Query({ }: IProps) {
         <Step title="查询字段选择" />
         <Step title="构造查询条件" />
         <Step title="数据查询" />
+        <Step title="多grid排序" />
       </Steps>
       {
         currentStep == 0 &&

@@ -10,6 +10,7 @@ import { handleFormatValues, handleShouldValues, ResearchSourceType, transformDy
 import { history, useSelector, useDispatch } from 'umi';
 import styles from './index.scss';
 import { cloneDeep } from 'lodash';
+import dayjs from 'dayjs';
 interface IProps {
   currentField: IFields
   onValueChange: (items: IChecked[]) => void
@@ -48,7 +49,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
 
     if (elementArray.length == index) { //无下一级了
 
-      console.log('==================最后一个 getChildChoiceItem ', JSON.stringify(item), item.children.length);
+      // console.log('==================最后一个 getChildChoiceItem ', JSON.stringify(item), item.children.length);
       return item;
     } else {
       const choiceItem = item.children.filter((i) => i.description == elementArray[index]);
@@ -57,7 +58,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       if (choiceItem.length > 0) {
         if (!choiceItem[0].name) {
           node.choiceType = choiceItem[0].type;
-          console.log('================ getChildChoiceItem item', JSON.stringify(node));
+          // console.log('================ getChildChoiceItem item', JSON.stringify(node));
         }
         node.choiceDescription = `${node.choiceDescription ?? node.description}-${choiceItem[0].description}`;
         return getChildChoiceItem(choiceItem[0], elementArray, index + 1, node);
@@ -66,7 +67,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       }
     }
   };
-
 
   // 单层选上了
   const onCheckChoice = (item) => {
@@ -81,6 +81,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
     } else {
       item.ruleCheck = !item.ruleCheck;
     }
+    item.updateTime = dayjs().valueOf();
     fetchKvScope(item);
     setFormatData({ ...formatData });
   };
@@ -226,6 +227,9 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
     await fetchKvScope(item);
     const itemChainList = [];
 
+    const oldItems = item.cascaderChoiceItems;
+    console.log('================= 旧 oldItems', oldItems);
+
     const cascaderChoiceValues = [];
     for (let index = 0; index < value.length; index++) {
       const element = value[index];
@@ -247,6 +251,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           lastChildItem.children = [child];
           cloneItem.choiceDescription = `${nodeDescription}-${child.description}`;
           cloneItem.choiceType = child.type;
+          // 更新时间
           cascaderChoiceValues.push([...element, child.description]);
           itemChainList.push(cloneDeep(cloneItem));
         }
@@ -257,7 +262,20 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       }
     }
 
-    console.log('=========== itemChainList', JSON.stringify(itemChainList));
+    // console.log('=========== 新', cascaderChoiceValues);
+
+
+    itemChainList.forEach((itemChain) => {
+
+      const oldItem = oldItems?.filter((oldTempItem) => oldTempItem.choiceDescription == itemChain.choiceDescription);
+      if (oldItem?.length > 0) {
+        itemChain.updateTime = oldItem[0].updateTime;
+      } else {  // 如果没找到，说明是新增的
+        itemChain.updateTime = dayjs().valueOf();
+      }
+    });
+
+    // console.log('=========== itemChainList', JSON.stringify(itemChainList));
 
     if (type == 'fieldChoice') {
       item.cascaderChoiceItems = itemChainList;
