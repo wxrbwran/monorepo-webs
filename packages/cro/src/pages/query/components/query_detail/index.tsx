@@ -42,7 +42,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
 
   const queryResultDetail = (page: number) => {
 
-    const pageSize = 1;
+    const pageSize = 10;
     api.query.fetchQueryResultDetail(
       {
         sid: row.record.item.row_key,
