@@ -782,7 +782,9 @@ function Query({ }: IProps) {
 
   const onDisabledDate = (current) => {
     // Can not select days before today and today
-    return current && current > moment().endOf('day');
+
+    console.log('======== current', current);
+    return current && current > moment().endOf('minute');
   };
 
   const step2View = () => {
