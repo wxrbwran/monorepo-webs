@@ -75,6 +75,7 @@ function Query({ }: IProps) {
     unit: '',
     uid: '',
     time: dayjs(),
+    description: '',
   };
   const [allRules, setAllRules] = useState<any[]>([
     {
@@ -568,6 +569,7 @@ function Query({ }: IProps) {
       ruleItem.optionArray = [];
       ruleItem.unit = '';
       ruleItem.uid = '';
+      ruleItem.description = '';
     }
 
     await handleSelectSearch(ruleItem);
@@ -583,6 +585,7 @@ function Query({ }: IProps) {
     if (stringOperationType.includes(ruleItem.operation) && numberOperationType.includes(value)) {
       ruleItem.value = '';
       ruleItem.optionArray = [];
+      ruleItem.description = '';
     }
     ruleItem.operation = value;
     setAllRules(cloneDeep(allRules));
