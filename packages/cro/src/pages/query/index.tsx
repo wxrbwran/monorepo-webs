@@ -273,7 +273,7 @@ function Query({ }: IProps) {
   const SortableItem = SortableElement(({ item }) => (
 
     <div className={styles.hasChoiceItem}>
-      <div className={styles.hasChoiceItemTitle}>{item.choiceDescription ?? item.description}</div>
+      <div className={styles.hasChoiceItemTitle} title={item.choiceDescription && item.description.length > item.choiceDescription.length ? item.description : undefined}>{item.choiceDescription ?? item.description}</div>
       {
         item.description != '姓名' && <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemFieldCheck(item); }} />
       }
@@ -451,7 +451,7 @@ function Query({ }: IProps) {
               otherChoiceRules.map((item) => {
                 return (
                   <div className={styles.hasChoiceItem}>
-                    <div className={styles.hasChoiceItemTitle}>{item.choiceDescription ?? item.description}</div>
+                    <div className={styles.hasChoiceItemTitle} title={item.choiceDescription && item.description.length > item.choiceDescription.length ? item.description : undefined}>{item.choiceDescription ?? item.description}</div>
                     <img className={styles.hasChoiceItemImg} src={deletePng} onClick={() => { onCancelItemRuleCheck(item); }} />
                   </div>
                 );
@@ -780,6 +780,11 @@ function Query({ }: IProps) {
     }]);
   };
 
+  const onDisabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current > moment().endOf('day');
+  };
+
   const step2View = () => {
     return (
       <div className={styles.rulesBuild}>
@@ -791,6 +796,7 @@ function Query({ }: IProps) {
             showTime={{ format: 'HH:mm' }}
             format="YYYY-MM-DD HH:mm"
             onChange={onTimeRangeChange}
+            disabledDate={onDisabledDate}
             value={searchTimeRange?.length == 2 ? [moment(searchTimeRange[0]), moment(searchTimeRange[1])] : []}
           />
         </div>
@@ -801,7 +807,7 @@ function Query({ }: IProps) {
               otherChoiceRules.map((item) => {
                 return (
                   <div className={styles.hasChoiceItem}>
-                    <div className={styles.hasChoiceItemTitle}>{item.choiceDescription ?? item.description}</div>
+                    <div className={styles.hasChoiceItemTitle} title={item.choiceDescription && item.description.length > item.choiceDescription.length ? item.description : undefined}>{item.choiceDescription ?? item.description}</div>
                   </div>
                 );
               })
@@ -865,12 +871,7 @@ function Query({ }: IProps) {
       }
     }
 
-    if (currentStep == 2) { // 构造出来的查询条件需要和查询时间范围需要
-
-      if (searchTimeRange?.length == 0) {
-        message.error('请选择您要查询的时间范围');
-        return;
-      }
+    if (currentStep == 2) { // 构造出来的查询条件需要
 
       for (const rule of allRules) {
         for (const item of rule.items) {
@@ -963,7 +964,6 @@ function Query({ }: IProps) {
         <Step title="查询字段选择" />
         <Step title="构造查询条件" />
         <Step title="数据查询" />
-        <Step title="多grid排序" />
       </Steps>
       {
         currentStep == 0 &&
