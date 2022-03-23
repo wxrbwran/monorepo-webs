@@ -101,16 +101,15 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
         const reference_type = item.items.find((i) => i.name.includes('reference_type'));
         const note = item.items.find((i) => i.name.includes('note'));
         const noteDes = note?.assign?.value ?? '';
+        const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
 
         item.show = true;
         console.log('============= reference_type reference_type 结果', JSON.stringify(reference_type));
         if (reference_type?.assign?.value == 'OTHER') {  // 其他类型
-
-          item.description = `${noteDes}其他文字说明`;
+          item.description = `${noteDes}${referenceValue?.assign?.value ?? ''}`;
           item.type = 'string';
         } else if (reference_type?.assign?.value == 'RANGE') {  // 范围 a-b  字符串
 
-          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
           const referenceSecondValue = item.items.find((i) => i.name.includes('reference_second_value'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
@@ -119,7 +118,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           item.type = 'float';
         } else if (reference_type?.assign?.value == 'GT') {   // 大于
 
-          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
           item.description = `${noteDes}>${referenceValue?.assign?.value ?? ''}${unit_value?.assign?.value ?? ''}`;
@@ -135,7 +133,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
 
         } else if (reference_type?.assign?.value == 'AROUND') {   // 包裹 a±b
 
-          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
           const referenceSecondValue = item.items.find((i) => i.name.includes('reference_second_value'));
           const unit_value = item.items.find((i) => i.name.includes('unit_value'));
 
@@ -143,7 +140,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           item.type = 'float';
         } else if (reference_type?.assign?.value == 'RADIO') {   // 单选 阴阳
 
-          const referenceValue = item.items.find((i) => i.name.includes('reference_value'));
           item.description = `${noteDes}${{
             'YANG': '阳',
             'YIN': '阴',

@@ -44,130 +44,12 @@ export const transformDynamicToStatic = (item: { type: string, name: string, ass
   });
 };
 
-
-// export const handleFormValues = (values: any) => {
-//   const keys = Object.keys(values)
-//   const specificWord = ['start', 'uid', 'assign', 'self', 'parent', 'high', 'low', 'project_sid']
-
-//   const uniqueNo = [
-//     ...new Set(
-//       keys.map(
-//         (key) => key.split('_value_')[1] || key.split('_operator_')[1]
-//           || key.split('_min_')[1] || key.split('_max_')[1] || key.split('_unit_')[1]
-//       ).map((n) => +n)
-//     )
-//   ]
-//   const uniqueKeys = [
-//     ...new Set(
-//       keys
-//         .map((key) => key.split('_value_')[0])
-//         .map((key) => key.split('_operator_')[0])
-//         .map((key) => key.split('_unit_')[0])
-//         .map((key) => key.split('_min_')[0])
-//         .map((key) => key.split('_max_')[0])
-//         .map((key) => key.split('start')[0])
-//         .map((key) => key.split('uid')[0])
-//         .map((key) => key.split('assign')[0])
-//         .map((key) => key.split('self')[0])
-//         .map((key) => key.split('parent')[0])
-//         .map((key) => key.split('high')[0])
-//         .map((key) => key.split('low')[0])
-//         .map((key) => key.split('project_sid')[0])
-//     )
-//   ]
-//   console.log('uniqueKeys', uniqueKeys)
-//   console.log('uniqueNo', uniqueNo)
-
-//   const rule: [] = []
-
-//   uniqueNo.forEach((no) => {
-//     uniqueKeys.forEach((key) => {
-//       const tmp: any = {}
-//       const curOperator = `${key}_operator_${no}`
-//       const curVal = `${key}_value_${no}`
-//       const curMin = `${key}_min_${no}`
-//       const curMax = `${key}_max_${no}`
-//       const curUnit = `${key}_unit_${no}`
-//       console.log('curOperator', curOperator)
-//       console.log('curVal', curVal)
-
-//       if (keys.includes(curOperator)) {
-//         tmp.operator = values[curOperator]
-//       }
-//       if (keys.includes(curVal)) {
-//         tmp.value = values[curVal]
-//       }
-//       if (keys.includes(curMin)) {
-//         tmp.min = values[curMin]
-//       }
-//       if (keys.includes(curMax)) {
-//         tmp.max = values[curMax]
-//       }
-//       if (keys.includes(curUnit)) {
-//         tmp.unit = values[curUnit]
-//       }
-//       if (tmp.operator || tmp.value || tmp.min || tmp.max || tmp.unit) {
-//         rule.push({ [key]: tmp })
-//       } else {
-//         const outTmp: any = {}
-//         specificWord.forEach((w) => {
-//           const specificKey = `${key}${w}`
-//           const specificTmp: any = {}
-//           const specificOperator = `${specificKey}_operator_${no}`
-//           const specificVal = `${specificKey}_value_${no}`
-//           const specificMin = `${specificKey}_min_${no}`
-//           const specificMax = `${specificKey}_max_${no}`
-//           if (keys.includes(specificOperator)) {
-//             specificTmp.operator = values[specificOperator]
-//           }
-//           if (keys.includes(specificVal)) {
-//             specificTmp.value = values[specificVal]
-//           }
-//           if (keys.includes(specificMin)) {
-//             specificTmp.min = values[specificMin]
-//           }
-//           if (keys.includes(specificMax)) {
-//             specificTmp.max = values[specificMax]
-//           }
-//           if (specificTmp.operator || specificTmp.value || specificTmp.min || specificTmp.max) {
-//             if (specificKey.includes('parent')) {
-//               outTmp[specificKey.split('.index.parent')[0]] = specificTmp
-//             } else if (specificKey.includes('self')) {
-//               outTmp[specificKey.split('.self')[0]] = specificTmp
-//             } else if (specificKey.includes('uid')) {
-//               outTmp[specificKey.split('.uid')[0]] = specificTmp
-//               outTmp[specificKey] = specificTmp
-//             } else {
-//               outTmp[specificKey] = specificTmp
-//             }
-//           }
-//         })
-//         if (!isEmpty(outTmp)) {
-//           rule.push(outTmp)
-//         }
-//       }
-//     })
-//   })
-//   return rule;
-// };
-
-
-/// -------- values ------ 例子--- start
-// basic.sex_value_0: "男"
-// medical-normal.index.attach_operator_0: "="
-// medical-normal.index.attach_operator_1: ">"
-// medical-normal.index.attach_value_0: 1
-// medical-normal.index.attach_value_1: 1
-// medical-normal.start_operator_0: ">"
-// medical-normal.start_operator_1: ">"
-// medical-normal.start_value_0: 1629734400000
-// medical-normal.start_value_1: 1629907200000
-/// -------- values ------ 例子----- end
-
 export const utilTimeType = ['date', 'timestamp', 'ms', 'time'];
 export const utilNumType = ['number', 'int', 'float'];
-export const utilStringType = ['string', 'refs'];
+export const utilStringType = ['string'];
 export const utilBoolType = ['bool'];
+export const utilYesNoType = ['refs']; // 有无数据
+
 export const operationConfig = {
   '=': '=',
   '<': '<',
@@ -402,13 +284,14 @@ export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRa
           ...tmpC,
           ...{ operator: '=', value: item?.assign?.value },
         };
-      } else if (item.type == 'refs') {
+      } else if (item.type == 'refs') { // refs 有无数据
 
         tmpC = {
           ...tmpC,
           ...{ operator: operationConfig[ruleItem.operation], exist: ruleItem.value, value: item?.assign?.value },
         };
       } else {
+
         let tempCTemp = {} = {};
         const value = ruleItem.operation == '范围' ? `[${ruleItem.min},${ruleItem.max})` : ruleItem.value;
         tempCTemp = { operator: operationConfig[ruleItem.operation], value: value };
