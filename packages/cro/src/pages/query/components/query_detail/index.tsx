@@ -77,6 +77,8 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
           }));
           if (formatResult) {
             setColumn([...formatResult]);
+          } else {
+            setColumn([]);
           }
         }
 
@@ -118,8 +120,6 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
     }
   }, [showModal]);
 
-
-
   return (
     <div>
       {
@@ -131,7 +131,6 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
           title={titleHead}
           onCancel={() => onCancel()}
           footer={null}
-
           wrapClassName={`${hideCont ? 'mode_hide' : 'mode_block ant-modal-wrap-center'}`}
           mask={!hideCont}
           // width="1200px"

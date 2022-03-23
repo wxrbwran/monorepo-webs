@@ -94,7 +94,11 @@
   .steps {
     padding-left: 220px;
     padding-right: 220px;
-    margin: 20px 0;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #3296fa;
+    font-weight: bold;
+    margin-bottom: 30px;
   }
 
   .searchRange {
@@ -102,6 +106,12 @@
     border-radius: 3px;
     font-size: 14px;
     color: #181818;
+
+    .searchRangeTitle {
+      font-size: 16px;
+      color: #181818;
+      font-weight: bold;
+    }
   }
 
   .fieldsChoice,
@@ -116,6 +126,7 @@
       font-size: 16px;
       margin: 20px;
       padding-top: 20px;
+      font-weight: bold;
     }
 
     .choiceItems {
@@ -215,6 +226,11 @@
       font-size: 16px;
       color: #181818;
 
+      .exportStylesTitle {
+        color: #181818;
+        font-size: 16px;
+        font-weight: bold;
+      }
       .exportBtn {
         width: 100px;
         height: 100px;
@@ -246,6 +262,7 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     height: max-content;
     padding: 0px 12px;
+    border-radius: 3px;
 
     .hasChoiceItemTitle {
       line-height: 34px;
@@ -375,7 +392,6 @@
         height: 34px;
         background: #ffffff;
         border-radius: 3px;
-        border: 1px solid #dbdbdb;
         margin-left: 20px;
       }
 
@@ -384,7 +400,6 @@
         height: 34px;
         background: #ffffff;
         border-radius: 3px;
-        border: 1px solid #dbdbdb;
         margin-left: 10px;
       }
 
@@ -393,7 +408,6 @@
         height: 34px;
         background: #ffffff;
         border-radius: 3px;
-        border: 1px solid #dbdbdb;
         margin-left: 10px;
       }
 

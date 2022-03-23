@@ -3,7 +3,7 @@ import * as api from '@/services/api';
 import { message, Checkbox, Steps, DatePicker, Input, Select } from 'antd';
 import { useSelector, useDispatch } from 'umi';
 import FieldCard from './components/field_card';
-import { numberOperationType, rangNumberOperationType, ResearchSourceType, stringOperationType, transformDynamicToStatic, transformQueryPageAllRuleToFetchQueryIdRules } from './util';
+import { numberOperationType, rangNumberOperationType, ResearchSourceType, stringOperationType, transformDynamicToStatic, transformQueryPageAllRuleToFetchQueryIdRules, utilNumType, utilStringType, utilYesNoType } from './util';
 import styles from './index.scss';
 import { IState } from 'typings/global';
 import radioCheck from '@/assets/img/radio_check.png';
@@ -48,8 +48,6 @@ const CheckboxGroup = Checkbox.Group;
 const { Step } = Steps;
 function Query({ }: IProps) {
 
-  const utilNumType = ['number', 'int', 'float'];
-
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const dispatch = useDispatch();
@@ -83,7 +81,7 @@ function Query({ }: IProps) {
         { ...defaultItem },
       ],
     },
-  ]); // 查询规则 
+  ]);
 
   const fillChildItemsAndChildren = async (fatherItem) => {
 
@@ -105,7 +103,7 @@ function Query({ }: IProps) {
             {
               key: `${itemTemp.name}_${index}`,
               fieldCheck: itemTemp.description == '姓名',
-              fieldUpdateTime: itemTemp.description == '姓名' ? dayjs().valueOf() * 1000 : undefined,
+              updateTime: itemTemp.description == '姓名' ? dayjs().valueOf() : undefined,
               parent: fatherItem?.description,
               parentName: fatherItem?.name,
               value: description,
@@ -295,36 +293,32 @@ function Query({ }: IProps) {
 
   const onSortEnd = (array, oldIndex, newIndex) => {
 
-
-    console.log('============= array', JSON.stringify(array));
-    console.log('============= oldIndex', oldIndex, newIndex);
-
     if (oldIndex > newIndex) {  // 将元素往前挪
 
-      const tempTiem = array[newIndex].fieldUpdateTime;
+      const tempTiem = array[newIndex].updateTime;
       for (let index = newIndex; index < oldIndex; index++) {
-        array[index].fieldUpdateTime = array[index + 1].fieldUpdateTime;
+        array[index].updateTime = array[index + 1].updateTime;
       }
-      array[oldIndex].fieldUpdateTime = tempTiem;
+      array[oldIndex].updateTime = tempTiem;
     } else { // // 将元素往后挪  1  4 
 
-      const tempTiem = array[newIndex].fieldUpdateTime;
+      const tempTiem = array[newIndex].updateTime;
       for (let index = newIndex; index > oldIndex; index--) {
-        array[index].fieldUpdateTime = array[index - 1].fieldUpdateTime;
+        array[index].updateTime = array[index - 1].updateTime;
       }
-      array[oldIndex].fieldUpdateTime = tempTiem;
+      array[oldIndex].updateTime = tempTiem;
     }
     setAllFields((preState) => { return cloneDeep(preState); });
   };
 
-  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
+  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.updateTime - b.updateTime);
   const step0View = () => {
 
     return (
       <div>
 
-        <div className={`${styles.searchRange} flex flex-row ml-50 mt-60 mb-10 h-66 items-center`}>
-          <div className='mr-20 ml-50'>查询范围:</div>
+        <div className={`${styles.searchRange} flex flex-row ml-50 mr-50 mb-10 h-66 items-center`}>
+          <div className={`mr-20 ml-20 ${styles.searchRangeTitle}`}>查询范围:</div>
           {
             <CheckboxGroup
               options={options}
@@ -367,8 +361,8 @@ function Query({ }: IProps) {
 
                   <SortableList
                     distance={1}
-                    items={otherChoiceFields.sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime)}
-                    onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(otherChoiceFields.sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime), oldIndex, newIndex); }}
+                    items={otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime)}
+                    onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime), oldIndex, newIndex); }}
                     axis="xy"
                     helperClass={styles.SortableHelper}
                   />
@@ -487,6 +481,20 @@ function Query({ }: IProps) {
     setAllRules([...allRules, cloneDeep(allRules[ruleIndex])]);
   };
 
+  const getRuleItemType = (ruleItem) => {
+    // 字符串、数字、'medical-img-noReference','medical-img-radio'
+    if ([...utilNumType, ...utilStringType, ...utilYesNoType, 'medical-img-noReference', 'medical-img-radio'].includes(ruleItem.name?.choiceType ?? ruleItem.name?.type)) {
+      return ruleItem.name?.choiceType ?? ruleItem.name?.type;
+    } else {  // 其他从子item里拿类型
+      const effectItems = ruleItem.name?.items?.filter((item) => [...utilNumType, ...utilStringType].includes(item.type));
+      if (effectItems?.length > 0) {
+        return effectItems[0].type;
+      } else {
+        return ruleItem.name?.choiceType ?? ruleItem.name?.type;
+      }
+    }
+  };
+
   function isNumber(inputData) {
 
     const floatNumber = parseFloat(inputData).toString();
@@ -502,10 +510,9 @@ function Query({ }: IProps) {
   }
 
   const generateDIYOptionArray = (ruleItem, target?) => {
-
     if (target) {
-      // 数字类型要求只能是数字
-      if (numberOperationType.includes(ruleItem.operation)) {
+      // 数字类型要求只能是数字, medical-img-noReference选择的操作符在numberOperationType中，也算数字类型
+      if (utilNumType.includes(getRuleItemType(ruleItem)) || ('medical-img-noReference' == getRuleItemType(ruleItem) && numberOperationType.includes(ruleItem.operation))) {
         if (isNumber(target)) {
           return [{
             value: target,
@@ -532,9 +539,9 @@ function Query({ }: IProps) {
     }
     // 如果是银
     // 'medical-img-noReference';medical-img-radio
-    if (ruleItem?.name?.choiceType == 'medical-img-noReference') {
+    if (getRuleItemType(ruleItem) == 'medical-img-noReference') {
       ruleItem.optionArray = generateDIYOptionArray(ruleItem, target);
-    } else if (ruleItem?.name?.choiceType == 'medical-img-radio') {
+    } else if (getRuleItemType(ruleItem) == 'medical-img-radio') {
       ruleItem.optionArray = [{
         value: '阴',
         description: '阴',
@@ -559,11 +566,12 @@ function Query({ }: IProps) {
     const filterRuleItems = otherChoiceRules.filter((item) => `${item.key}_zsh_${item.choiceDescription ?? item.description}` == value);
     if (filterRuleItems.length > 0) {
       ruleItem.name = filterRuleItems[0];
-
-      if (utilNumType.includes(ruleItem?.name?.choiceType ?? ruleItem.name.type)) {
-        ruleItem.operation = '='; // 默认值
-      } else {
+      if ([...utilNumType, ...utilYesNoType, 'medical-img-noReference', 'medical-img-radio'].includes(getRuleItemType(ruleItem))) {
+        ruleItem.operation = '='; // 数字、medical-img-noReference', 'medical-img-radio'类型 默认是=
+      } else if (utilStringType.includes(getRuleItemType(ruleItem))) {
         ruleItem.operation = '包含'; // 默认值
+      } else {
+        ruleItem.operation = '无'; // 默认值
       }
 
       // 清空旧值
@@ -700,7 +708,7 @@ function Query({ }: IProps) {
                   }
                 </Select>
                 {
-                  (ruleItem?.name?.choiceType) == 'medical-img-noReference' ?
+                  getRuleItemType(ruleItem) == 'medical-img-noReference' ?
                     <Select className={styles.operation} value={ruleItem.operation ?? ''} onChange={(value) => handleSelectOperationChange(ruleItem, value)}>
                       {
                         [...numberOperationType, ...stringOperationType].map((choiceRuleOperation) => {
@@ -711,7 +719,7 @@ function Query({ }: IProps) {
                     :
                     <>
                       {
-                        utilNumType.includes((ruleItem?.name?.choiceType ?? ruleItem?.name?.type)) ?
+                        utilNumType.includes(getRuleItemType(ruleItem)) ?
                           <Select className={styles.operation} value={ruleItem.operation ?? ''} onChange={(value) => handleSelectOperationChange(ruleItem, value)}>
                             {
                               numberOperationType.map((choiceRuleOperation) => {
@@ -785,6 +793,9 @@ function Query({ }: IProps) {
   };
 
   const onDisabledDate = (current) => {
+    // Can not select days before today and today
+
+    console.log('======== current', current);
     return current && current > moment().endOf('minute');
   };
 
@@ -909,7 +920,7 @@ function Query({ }: IProps) {
         }
       }
       const otherSingleFields = allFields?.items?.flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
-      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
+      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.updateTime - b.updateTime);
       const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, searchField);
 
       if (rules) {
