@@ -4,10 +4,11 @@ import XLSX from 'xlsx';
 import { Table } from 'antd';
 import EndEvent from '@/pages/query/components/end_event';
 import './index.scss';
+import { cloneDeep } from 'lodash';
 interface IProps {
   location: {
     pathname: string;
-    query : {
+    query: {
       reportName: string;
       resultKey: string;
     }
@@ -16,12 +17,12 @@ interface IProps {
     column_data: object,
     row_key: number,
     result_id: string,
-    
+
   }],
   head: [],
 }
 interface IColumns {
-  title: string;
+  title: any;
   dataIndex: string;
   children: []
 }
@@ -35,32 +36,27 @@ function QueryTable({ location, tableData, head }: IProps) {
 
   const { reportName } = location.query;
 
-  const handleShowModal = (text: any, record: any, tree: any, value: number) => {
+  const handleShowModal = (text: any, record: any, tree: any, value: number, kp: string) => {
     setShowModal(true);
-
-    setRow({ text: text, record: record, tree: tree, resultKey: location.query.resultKey, value });
+    setRow({ text: text, record: record, tree: tree, resultKey: location.query.resultKey, value, kp });
   };
 
+
   const getComponent = (text: any, record: any, tree: any) => {
-    
+
     const { kp } = tree;
     let value = '';
     for (let key in text) {
- 
+
       if (key.includes('.value')) {
         value = text[key];
       }
     }
-    if (kp.includes('end-event')){
-      // return <EndEvent row={text}><span>{text.value}</span></EndEvent>
-      const endEventRow = { text: text, record: record, tree: tree, resultKey: location.query.resultKey, value: Number(value) };
-      return <EndEvent row={endEventRow}><span>{value}</span></EndEvent>;
-    } else if (kp.includes('basic')) {
-      return value;
+    if (kp.includes('basic')) {
+      return value ?? '';
     } else {
-      // return <QueryDetail row={text}><span>{text.value}</span></QueryDetail>
       return <>
-        <span onClick={() => handleShowModal(text, record, tree, Number(value))}>{value}</span>
+        <span onClick={() => handleShowModal(text, record, tree, Number(value), kp)}>{value ?? ''}</span>
       </>;
     }
   };
@@ -71,7 +67,7 @@ function QueryTable({ location, tableData, head }: IProps) {
 
       const renderTree = (subTree: IColumns[]) => {
         let treeList: any[] = [];
-        subTree.forEach((tree: IColumns)=> {
+        subTree.forEach((tree: IColumns) => {
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           treeList.push(renderItem(tree));
         });
@@ -79,12 +75,24 @@ function QueryTable({ location, tableData, head }: IProps) {
       };
 
       const renderItem = (tree: IColumns) => {
+
+        const treeCopy = cloneDeep(tree);
+        if ((tree?.originalKeyPath?.includes('objective') || tree?.originalKeyPath?.includes('visit_objective'))) { // 客观检查计划外客观检查
+
+          const tempTitle = tree?.title.replace(/<[^>]+>/g, '');
+          if (tempTitle.length > 25) {
+            treeCopy.title = (<div title={tempTitle}>
+              {tempTitle.slice(0, 25) + '...'}
+            </div>);
+          } else {
+            treeCopy.title = tempTitle;
+          }
+        }
         return (
           {
-            ...tree,
+            ...treeCopy,
             children: !!tree?.children?.length ? renderTree(tree.children) : [],
-            render: !!tree?.children?.length ? () => {} : (text: any, record: IColumns) => {
-              // return <span>{"hhhhh"}</span>
+            render: !!tree?.children?.length ? () => { } : (text: any, record: IColumns) => {
               return getComponent(text, record, tree);
             },
           }
@@ -99,9 +107,9 @@ function QueryTable({ location, tableData, head }: IProps) {
 
   useEffect(() => {
 
-    if (tableData?.length > 0){
-     
-      const validData = tableData.map(item => { return { ...item.column_data, item };});
+    if (tableData?.length > 0) {
+
+      const validData = tableData.map(item => { return { ...item.column_data, item }; });
       setData([...validData]);
     }
     return () => {
@@ -129,10 +137,12 @@ function QueryTable({ location, tableData, head }: IProps) {
       <QueryDetail
         row={row}
         showModal={showModal}
-        onCancel={()=> { setShowModal(false); }}
+        onCancel={() => { setShowModal(false); }}
       ></QueryDetail>
     );
   }, [showModal]);
+
+
   return (
     <div className='report-wrap-table'>
       {
@@ -142,14 +152,14 @@ function QueryTable({ location, tableData, head }: IProps) {
             <span>导出Word</span>
           </div>
         ) : (
-            <div className="table-top">
-              <div className="table-top__info">查询结果：</div>
-              {/* <div className="btn-wrap">
+          <div className="table-top">
+            <div className="table-top__info">查询结果：</div>
+            {/* <div className="btn-wrap">
                 <span className="create-btn">
                   <CreateReport handleCreateReport={handleCreateReport}>生成报告</CreateReport>
                 </span>
               </div> */}
-            </div>
+          </div>
         )
       }
       {/* <Table
@@ -163,6 +173,7 @@ function QueryTable({ location, tableData, head }: IProps) {
         dataSource={data}
         bordered
         rowKey={() => Math.random()}
+      // rowSelection={{ columnWidth: 100 }}
       />
       {modal}
     </div>

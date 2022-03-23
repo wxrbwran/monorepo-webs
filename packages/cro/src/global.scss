@@ -223,6 +223,13 @@ body {
   }
 }
 
+.mode_hide {
+  display: none !important;
+}
+.mode_block {
+  display: block !important;
+}
+
 .main {
   position: absolute;
   width: 100%;
@@ -257,7 +264,7 @@ ul {
   background: #c07bff;
 }
 .OTHER {
-  background: #F49B22;
+  background: #f49b22;
 }
 
 .text-overflow {

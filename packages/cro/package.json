@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
+    "@ant-design/pro-form": "^1.50.0",
     "@ant-design/pro-layout": "^4.5.16",
     "@tailwindcss/postcss7-compat": "2.2.9",
     "@types/dva": "^1.1.0",
@@ -58,6 +59,7 @@
     "react-redux": "^7.2.5",
     "react-viewer": "^3.2.2",
     "redux-logger": "^3.0.6",
+    "react-sortable-hoc": "^2.0.0",
     "regenerator-runtime": "^0.13.3",
     "sass-loader": "^8.0.0",
     "store": "^2.0.12",

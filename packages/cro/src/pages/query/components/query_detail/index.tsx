@@ -6,6 +6,8 @@ import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import ImgViewer from '@/pages/report/components/img_viewer';
 import QuestionDetail from '@/components/Scale/QuestionDetail';
 import styles from './index.scss';
+import { isEmpty } from 'lodash';
+import ImageList from '../Checks/CheckImages/ImageList';
 
 
 
@@ -16,7 +18,8 @@ interface IProps {
     record: any;
     tree: any;
     resultKey: string;
-    value: number
+    value: number,
+    kp: string,
   },
   onCancel: () => void;
   showModal: boolean;
@@ -32,9 +35,14 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
   const [titleHead, setTitleHead] = useState('');
   const [imgList, setImgList] = useState<any[]>([]);
 
+
+  const [hideCont, setHideCont] = useState(false);
+  const [checkMeta, setCheckMeta] = useState<any>({});
+  const [sid, setSid] = useState<any>();
+
   const queryResultDetail = (page: number) => {
 
-    const pageSize = 1;
+    const pageSize = 10;
     api.query.fetchQueryResultDetail(
       {
         sid: row.record.item.row_key,
@@ -44,36 +52,47 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
         pageSize: pageSize,
       }).then((results) => {
 
-      if (page == 0) {
+      if (row.kp.includes('meta-jcd') || row.kp.includes('meta-other')) {
+
         setTitleHead(results?.resultKey);
-        const formatResult = results?.tableHead.map((item: IColumns) => ({
-          ...item,
-          render: (text: any) => {
+        setSid(results?.sid);
+        setCheckMeta((preCheckMeta: any[]) => {
 
-            return text?.source ? <QuestionDetail source={text.source}>
-                <span className={styles.look}>{text.value}</span>
-              </QuestionDetail> : <span>
-                {text.type && text.type === 'timestamp' ? moment(text.value).format('YYYY年MM月DD日 HH:mm') : text.value}
-              </span>;
-          },
-        }));
-        setColumn([...formatResult]);
-      }
-
-      if (results?.tableBody && results?.tableBody.length > 0) {
-
-        setDataSource((preDataSource: any[]) => {
-
-          const data = preDataSource || [];
-          return [...data, ...results?.tableBody];
+          const data = preCheckMeta || [];
+          return { ...data, ...results.meta };
         });
+      } else {
+        if (page == 0) {
+          setTitleHead(results?.resultKey);
+          const formatResult = results?.tableHead.map((item: IColumns) => ({
+            ...item,
+            render: (text: any) => {
 
-        setImgList((preImageList: any[]) => {
+              return text?.source ? <QuestionDetail source={text.source}>
+                  <span className={styles.look}>{text.value}</span>
+                </QuestionDetail> : <span>
+                  {text.type && text.value != '-' && text.type === 'timestamp' ? moment(text.value).format('YYYY年MM月DD日') : text.value ?? ''}
+                </span>;
+            },
+          }));
+          setColumn([...formatResult]);
+        }
 
-          const preList = preImageList || [];
-          const newList = results?.tableBody.map((item: { url: string; }) => item?.url).filter((i: string) => !!i) || [];
-          return [...preList, ...newList];
-        });
+        if (results?.tableBody && results?.tableBody.length > 0) {
+
+          setDataSource((preDataSource: any[]) => {
+
+            const data = preDataSource || [];
+            return [...data, ...results?.tableBody];
+          });
+
+          setImgList((preImageList: any[]) => {
+
+            const preList = preImageList || [];
+            const newList = results?.tableBody.map((item: { url: string; }) => item?.url).filter((i: string) => !!i) || [];
+            return [...preList, ...newList];
+          });
+        }
       }
 
       if (pageSize * (page + 1) < row.value) {
@@ -81,15 +100,18 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
         queryResultDetail(page + 1);
       }
     }).catch((err: string) => {
-      message.error(err);
+      message.error(err ?? '');
     });
   };
 
   useEffect(() => {
+
+    console.log('============= showModal ---', showModal);
     // 开始从0查询结果
     if (showModal) {
       setDataSource([]);
       setImgList([]);
+      setCheckMeta({});
       queryResultDetail(0); // 循环查询结果知道没内容返回
     }
   }, [showModal]);
@@ -99,27 +121,48 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
   return (
     <div>
       {
-        showModal && (
-          <DragModal
-            wrapClassName="ant-modal-wrap-center"
-            width="880px"
-            visible={showModal}
-            title={titleHead}
-            onCancel={() => onCancel()}
-            footer={null}
-          >
-            {
-              imgList.length > 0 ? <ImgViewer info={imgList} /> :
-                <Table
-                  columns={columns}
-                  dataSource={dataSource}
-                  bordered
-                  rowKey={() => Math.random()}
-                />
-            }
+        // showModal && (
+        <DragModal
+          // wrapClassName="ant-modal-wrap-center"
+          width="880px"
+          visible={showModal}
+          title={titleHead}
+          onCancel={() => onCancel()}
+          footer={null}
 
-          </DragModal>
-        )
+          wrapClassName={`${hideCont ? 'mode_hide' : 'mode_block ant-modal-wrap-center'}`}
+          mask={!hideCont}
+          // width="1200px"
+          // visible={showModal}
+          // title={activeItem?.name || '单据'}
+          // onCancel={() => setShowModal(false)}
+          // footer={null}
+          style={{ display: hideCont ? 'none' : 'block' }}
+        >
+          {
+            isEmpty(checkMeta) ?
+              <>
+                {
+                  imgList.length > 0 ? <ImgViewer info={imgList} /> :
+                    <Table
+                      columns={columns}
+                      dataSource={dataSource}
+                      bordered
+                      rowKey={() => Math.random()}
+                    />
+                }
+              </>
+              :
+              <ImageList
+                data={checkMeta}
+                handleHideCont={() => setHideCont(!hideCont)}
+                refresh={() => { }}
+                sid={sid}
+              />
+          }
+
+        </DragModal>
+        // )
       }
     </div>
   );

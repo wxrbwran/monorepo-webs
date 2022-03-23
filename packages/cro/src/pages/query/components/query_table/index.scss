@@ -29,7 +29,7 @@
 
       .create-btn {
         font-size: 14px;
-        color: #3296FA;
+        color: #3296fa;
         cursor: pointer;
       }
       .full-screen {
@@ -49,7 +49,7 @@
     span {
       margin-left: 50px;
       font-size: 14px;
-      color: #3296FA;
+      color: #3296fa;
       cursor: pointer;
     }
   }
@@ -59,14 +59,18 @@
   }
   .ant-table-cell {
     span {
-      color: #3296FA;
+      color: #3296fa;
       cursor: pointer;
     }
+  }
+  th {
+    white-space: pre-wrap; // 保留空白符序列，但是正常地进行换行。
+    word-wrap: break-word; //在长单词数字或 URL 地址内部进行换行
   }
 
   .checklist-num {
     font-size: 14px;
-    color: #3296FA;
+    color: #3296fa;
     cursor: pointer;
   }
 }
@@ -101,8 +105,8 @@
       width: 120px;
       height: 24px;
       line-height: 24px;
-      background: #F4F4F4;
-      border: 1px solid #EFEFEF;
+      background: #f4f4f4;
+      border: 1px solid #efefef;
       position: absolute;
       bottom: 0;
       left: 0;
