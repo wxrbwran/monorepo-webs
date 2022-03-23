@@ -109,8 +109,6 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
   };
 
   useEffect(() => {
-
-    console.log('============= showModal ---', showModal);
     // 开始从0查询结果
     if (showModal) {
       setDataSource([]);
@@ -131,7 +129,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
           title={titleHead}
           onCancel={() => onCancel()}
           footer={null}
-          wrapClassName={`${hideCont ? 'mode_hide' : 'mode_block ant-modal-wrap-center'}`}
+          wrapClassName={`${hideCont ? 'mode_hide' : 'ant-modal-wrap-center'}`}  // mode_block 
           mask={!hideCont}
           // width="1200px"
           // visible={showModal}
