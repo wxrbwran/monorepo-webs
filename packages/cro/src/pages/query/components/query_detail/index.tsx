@@ -71,7 +71,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
               return text?.source ? <QuestionDetail source={text.source}>
                   <span className={styles.look}>{text.value}</span>
                 </QuestionDetail> : <span>
-                  {text.type && text.value != '-' && text.type === 'timestamp' ? moment(text.value).format('YYYY年MM月DD日 HH:mm') : text.value ?? ''}
+                  {text.type && text.value != '-' && text.type === 'timestamp' ? moment(text.value).format('YYYY年MM月DD日') : text.value ?? ''}
                 </span>;
             },
           }));

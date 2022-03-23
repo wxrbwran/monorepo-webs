@@ -105,7 +105,7 @@ function Query({ }: IProps) {
             {
               key: `${itemTemp.name}_${index}`,
               fieldCheck: itemTemp.description == '姓名',
-              updateTime: itemTemp.description == '姓名' ? dayjs().valueOf() : undefined,
+              fieldUpdateTime: itemTemp.description == '姓名' ? dayjs().valueOf() * 1000 : undefined,
               parent: fatherItem?.description,
               parentName: fatherItem?.name,
               value: description,
@@ -295,25 +295,29 @@ function Query({ }: IProps) {
 
   const onSortEnd = (array, oldIndex, newIndex) => {
 
+
+    console.log('============= array', JSON.stringify(array));
+    console.log('============= oldIndex', oldIndex, newIndex);
+
     if (oldIndex > newIndex) {  // 将元素往前挪
 
-      const tempTiem = array[newIndex].updateTime;
+      const tempTiem = array[newIndex].fieldUpdateTime;
       for (let index = newIndex; index < oldIndex; index++) {
-        array[index].updateTime = array[index + 1].updateTime;
+        array[index].fieldUpdateTime = array[index + 1].fieldUpdateTime;
       }
-      array[oldIndex].updateTime = tempTiem;
+      array[oldIndex].fieldUpdateTime = tempTiem;
     } else { // // 将元素往后挪  1  4 
 
-      const tempTiem = array[newIndex].updateTime;
+      const tempTiem = array[newIndex].fieldUpdateTime;
       for (let index = newIndex; index > oldIndex; index--) {
-        array[index].updateTime = array[index - 1].updateTime;
+        array[index].fieldUpdateTime = array[index - 1].fieldUpdateTime;
       }
-      array[oldIndex].updateTime = tempTiem;
+      array[oldIndex].fieldUpdateTime = tempTiem;
     }
     setAllFields((preState) => { return cloneDeep(preState); });
   };
 
-  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.updateTime - b.updateTime);
+  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
   const step0View = () => {
 
     return (
@@ -363,8 +367,8 @@ function Query({ }: IProps) {
 
                   <SortableList
                     distance={1}
-                    items={otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime)}
-                    onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime), oldIndex, newIndex); }}
+                    items={otherChoiceFields.sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime)}
+                    onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(otherChoiceFields.sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime), oldIndex, newIndex); }}
                     axis="xy"
                     helperClass={styles.SortableHelper}
                   />
@@ -781,9 +785,6 @@ function Query({ }: IProps) {
   };
 
   const onDisabledDate = (current) => {
-    // Can not select days before today and today
-
-    console.log('======== current', current);
     return current && current > moment().endOf('minute');
   };
 
@@ -908,7 +909,7 @@ function Query({ }: IProps) {
         }
       }
       const otherSingleFields = allFields?.items?.flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
-      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.updateTime - b.updateTime);
+      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
       const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, searchField);
 
       if (rules) {
