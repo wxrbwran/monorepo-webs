@@ -158,7 +158,7 @@ const SearchJcd: FC<IProps> = (props) => {
                 >
                   {
                     nameList.map(item => (
-                      <AutoComplete.Option key={item.id} value={item.jcdName}>
+                      <AutoComplete.Option key={item.id} value={`【${getSource(item.source, item.sid, true)}】${item.jcdName}`}>
                         <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
                         <span>{item.jcdName}</span>
                       </AutoComplete.Option>

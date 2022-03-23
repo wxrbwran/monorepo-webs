@@ -78,10 +78,10 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       } else {
         item.fieldCheck = !item.fieldCheck;
       }
+      item.fieldUpdateTime = dayjs().valueOf() * 1000;
     } else {
       item.ruleCheck = !item.ruleCheck;
     }
-    item.updateTime = dayjs().valueOf();
     fetchKvScope(item);
     setFormatData({ ...formatData });
   };
@@ -262,22 +262,19 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       }
     }
 
-    // console.log('=========== 新', cascaderChoiceValues);
-
-
-    itemChainList.forEach((itemChain) => {
-
-      const oldItem = oldItems?.filter((oldTempItem) => oldTempItem.choiceDescription == itemChain.choiceDescription);
-      if (oldItem?.length > 0) {
-        itemChain.updateTime = oldItem[0].updateTime;
-      } else {  // 如果没找到，说明是新增的
-        itemChain.updateTime = dayjs().valueOf();
-      }
-    });
-
-    // console.log('=========== itemChainList', JSON.stringify(itemChainList));
-
     if (type == 'fieldChoice') {
+      itemChainList.forEach((itemChain, index) => {
+
+        const oldItem = oldItems?.filter((oldTempItem) => oldTempItem.choiceDescription == itemChain.choiceDescription);
+        if (oldItem?.length > 0) {
+          item.fieldUpdateTime = dayjs().valueOf() * 1000;
+
+          itemChain.fieldUpdateTime = oldItem[0].fieldUpdateTime;
+        } else {  // 如果没找到，说明是新增的
+          itemChain.fieldUpdateTime = dayjs().valueOf() * 1000 + index; // 防止同一时间时间相同
+        }
+      });
+
       item.cascaderChoiceItems = itemChainList;
       item.cascaderChoiceValues = cascaderChoiceValues;
     } else {
