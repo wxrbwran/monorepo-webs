@@ -52,6 +52,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
         pageSize: pageSize,
       }).then((results) => {
 
+      console.log('===================== results ', JSON.stringify(results));
       if (row.kp.includes('meta-jcd') || row.kp.includes('meta-other')) {
 
         setTitleHead(results?.resultKey);
@@ -64,21 +65,22 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
       } else {
         if (page == 0) {
           setTitleHead(results?.resultKey);
-          const formatResult = results?.tableHead.map((item: IColumns) => ({
+          const formatResult = results?.tableHead?.map((item: IColumns) => ({
             ...item,
             render: (text: any) => {
-
               return text?.source ? <QuestionDetail source={text.source}>
                   <span className={styles.look}>{text.value}</span>
                 </QuestionDetail> : <span>
-                  {text.type && text.value != '-' && text.type === 'timestamp' ? moment(text.value).format('YYYY年MM月DD日 HH:mm') : text.value ?? ''}
+                  {text.type && text.value != '-' && text.type === 'timestamp' ? moment(text.value).format('YYYY年MM月DD日') : text.value ?? ''}
                 </span>;
             },
           }));
-          setColumn([...formatResult]);
+          if (formatResult) {
+            setColumn([...formatResult]);
+          }
         }
 
-        if (results?.tableBody && results?.tableBody.length > 0) {
+        if (results?.tableBody && results?.tableBody?.length > 0) {
 
           setDataSource((preDataSource: any[]) => {
 
@@ -89,7 +91,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
           setImgList((preImageList: any[]) => {
 
             const preList = preImageList || [];
-            const newList = results?.tableBody.map((item: { url: string; }) => item?.url).filter((i: string) => !!i) || [];
+            const newList = results?.tableBody?.map((item: { url: string; }) => item?.url).filter((i: string) => !!i) || [];
             return [...preList, ...newList];
           });
         }

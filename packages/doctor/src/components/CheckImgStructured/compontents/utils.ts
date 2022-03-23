@@ -197,12 +197,15 @@ export const formatTempDdtk = (tkTmpList: any[]) => {
 
 // 处理用户新加问题多tab共享-e
 
-export const getSource = (source: string, sid: string) => {
+export const getSource = (source: string, sid: string, isPureText?: boolean) => {
   if (source === 'SYSTEM') {
+    if (isPureText) return '官方';
     return '<span class="SYSTEM">官方</span>';
   } else if (source === 'DOCTOR' && sid === window.$storage.getItem('sid')) {
+    if (isPureText) return '自己';
     return '<span class="ONESELF">自己</span>';
   } else {
+    if (isPureText) return '他人';
     return '<span class="OTHERS">他人</span>';
   }
 };
