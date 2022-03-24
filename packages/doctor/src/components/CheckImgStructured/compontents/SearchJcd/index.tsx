@@ -1,5 +1,5 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
-import { AutoComplete, Row, Col, message, Button } from 'antd';
+import { AutoComplete, Row, Col, message, Button, Select } from 'antd';
 import * as api from '@/services/api';
 import { IAddJcdItem } from '../type';
 import { isEmpty, debounce } from 'lodash';
@@ -27,6 +27,7 @@ interface IProps {
   onCancel?: () => void;
 }
 
+const { Option } = Select;
 const SearchJcd: FC<IProps> = (props) => {
   const { changePartMethod, handleAddJcdTab, handleShowAddJctBtn, createJcdNum, outType, action, onCancel } = props;
   const partMethod = useRef({ part: '', method: '' });
@@ -99,14 +100,15 @@ const SearchJcd: FC<IProps> = (props) => {
     if (onCancel) {onCancel();}
   };
   // 勾选检查单名称或者其他单据名称
-  const handleSelectName = (val: string, { key }: { key: string }) => {
-    setSelectId(key);
+  const handleSelectName = (val: string, option: { key: string }) => {
+    const id = option.key;
+    setSelectId(id);
     // 如果不是搜索弹框，则直接进行添加tab流程。
     if (!isSearchModal) {
       if (outType === 'JCD') {
-        handleAddJcdBtn(key);
+        handleAddJcdBtn(id);
       } else {
-        handleAddOtherBtn(key);
+        handleAddOtherBtn(id);
       }
     }
   };
@@ -150,42 +152,45 @@ const SearchJcd: FC<IProps> = (props) => {
               <Col span={24}>
               <div className="mt-10 flex items-center">
                 <span className={styles.tit}>检查名称：</span>
-                <AutoComplete
+                <Select
                   placeholder="请输入检查单名称"
                   onSearch={debounce((val) => handleFetchNames(val), 500)}
                   onSelect={handleSelectName}
+                  showSearch
+                  filterOption={false}
                   dropdownClassName={styles.autocomplete}
                 >
                   {
                     nameList.map(item => (
-                      <AutoComplete.Option key={item.id} value={`【${getSource(item.source, item.sid, true)}】${item.jcdName}`}>
+                      <Option key={item.id}  value={item.id} >
                         <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
                         <span>{item.jcdName}</span>
-                      </AutoComplete.Option>
+                      </Option>
                     ))
                   }
-                </AutoComplete>
+                </Select>
               </div>
               </Col>
             </>
           ) : (
             <Col span={24} className='my-10 flex pl-28'>
               <span className={styles.tit}>单据名称：</span>
-              <AutoComplete
+              <Select
                 placeholder="请输入单据名称"
                 onSearch={debounce(handleSearchOtherName, 500)}
                 onSelect={handleSelectName}
-                value={otherNames.find(i => i.id === selectId)?.jcdName}
+                showSearch
+                filterOption={false}
               >
                 {
                   otherNames.map(item => (
-                    <AutoComplete.Option key={item.id} value={item.id}>
+                    <Option key={item.id} value={item.id}>
                       <span dangerouslySetInnerHTML={{ __html: getSource(item.source, item.sid) }}></span>
                       <span>{item.jcdName}</span>
-                    </AutoComplete.Option>
+                    </Option>
                   ))
                 }
-              </AutoComplete>
+              </Select>
             </Col>
           )
         }
