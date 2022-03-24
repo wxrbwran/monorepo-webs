@@ -85,7 +85,6 @@ function Query({ }: IProps) {
 
   const fillChildItemsAndChildren = async (fatherItem) => {
 
-    console.log('========== fatherItem', JSON.stringify(fatherItem), fatherItem.children == undefined);
     if (fatherItem.items?.length > 0) {
 
       if (fatherItem.items[0].type.includes('dynamic')) {
