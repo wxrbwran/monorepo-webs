@@ -554,12 +554,16 @@ function Query({ }: IProps) {
       }];
     } else {
       const res = await api.query.fetchKvScope({ kp: ruleItem.name.name, target, sourceType: ResearchSourceType });
+
+      console.log('=============== handleSelectSearch res', res);
       // 搜索
-      if (res?.values?.length > 1) {
+      if (res?.values?.length > 0) {
         ruleItem.optionArray = res.values;
       } else {
         ruleItem.optionArray = generateDIYOptionArray(ruleItem, target);
       }
+
+      console.log('=============== handleSelectSearch res', ruleItem.optionArray);
     }
     setAllRules(cloneDeep(allRules));
   };
