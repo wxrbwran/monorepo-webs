@@ -611,6 +611,20 @@ function Query({ }: IProps) {
     console.log(`selected allRule ${JSON.stringify(allRules)}`);
   };
 
+  const canRangeValueChanged = (ruleItem, min, max) => {
+    // 数字类型要求只能是数字, medical-img-noReference选择的操作符在numberOperationType中，也算数字类型
+    if (min && min != '' && max && max != '') {
+      if (utilNumType.includes(getRuleItemType(ruleItem)) || ('medical-img-noReference' == getRuleItemType(ruleItem) && numberOperationType.includes(ruleItem.operation))) {
+
+        if (Number(min) >= Number(max)) {
+          message.error('选择范围最小值应小于最大值');
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   const handleSelectMinChange = (ruleItem, description) => {
 
     const opts = ruleItem.optionArray.filter((opt) => (opt.description || opt.value) == description);
@@ -619,12 +633,14 @@ function Query({ }: IProps) {
       console.log(`handleSelectValueChange opts ${JSON.stringify(opts[0])}`);
       const { value, unit, uid } = opts[0];
 
-      ruleItem.min = value;
-      ruleItem.unit = unit || ruleItem.unit;
-      ruleItem.uid = uid;
+      if (canRangeValueChanged(ruleItem, value, ruleItem.max)) {
+        ruleItem.min = value;
+        ruleItem.unit = unit || ruleItem.unit;
+        ruleItem.uid = uid;
 
-      setAllRules(cloneDeep(allRules));
-      console.log(`selected allRule ${JSON.stringify(allRules)}`);
+        setAllRules(cloneDeep(allRules));
+        console.log(`selected allRule ${JSON.stringify(allRules)}`);
+      }
     }
   };
 
@@ -636,12 +652,14 @@ function Query({ }: IProps) {
       console.log(`handleSelectValueChange opts ${JSON.stringify(opts[0])}`);
       const { value, unit, uid } = opts[0];
 
-      ruleItem.max = value;
-      ruleItem.unit = unit || ruleItem.unit;
-      ruleItem.uid = uid;
+      if (canRangeValueChanged(ruleItem, ruleItem.min, value)) {
+        ruleItem.max = value;
+        ruleItem.unit = unit || ruleItem.unit;
+        ruleItem.uid = uid;
 
-      setAllRules(cloneDeep(allRules));
-      console.log(`selected allRule ${JSON.stringify(allRules)}`);
+        setAllRules(cloneDeep(allRules));
+        console.log(`selected allRule ${JSON.stringify(allRules)}`);
+      }
     }
   };
 

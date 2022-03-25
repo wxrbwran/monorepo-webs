@@ -49,7 +49,12 @@ function QueryTable({ location, tableData, head }: IProps) {
     for (let key in text) {
 
       if (key.includes('.value')) {
-        value = text[key];
+
+        if (key.includes('bmi.value')) {
+          value = text[key] / 10000;
+        } else {
+          value = text[key];
+        }
       }
     }
     if (kp.includes('basic')) {
