@@ -247,6 +247,7 @@ export const handleFormatValues = (values: any, checkedField: any[], projectSid:
   return rules;
 };
 
+
 export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRange?, projectSid?) => {
 
   if (item.name.length > 0) {
@@ -322,10 +323,25 @@ export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRa
       }
       console.log('===================  getItemConfigFormItem tmpC', JSON.stringify(tmpC));
     } else { // 自己没有赋值过
-      tmpC = {
-        ...tmpC,
-        ...{ operator: '=', value: item?.assign?.value ?? '*' },
-      };
+      if (utilTimeType.includes(item.type)) {
+        // [1646150400000,1646409600000)
+        if (searchTimeRange?.length > 1) {
+          tmpC = {
+            ...tmpC,
+            ...{ operator: '<>', value: `[${moment(searchTimeRange[0]).valueOf()},${moment(searchTimeRange[1]).valueOf()})` },
+          };
+        } else {
+          tmpC = {
+            ...tmpC,
+            ...{ operator: '=', value: '*' },
+          };
+        }
+      } else {
+        tmpC = {
+          ...tmpC,
+          ...{ operator: '=', value: item?.assign?.value ?? '*' },
+        };
+      }
     }
 
     console.log('===================  getItemConfigFormItem tmpC', JSON.stringify({
@@ -380,7 +396,7 @@ export const getChildItemsConfig = (item, extraConfig, ruleItem?, searchTimeRang
   }
 };
 
-export const transformQueryPageTeamsToFetchQueryIdShoulds = (searchRangeItems) => {
+export const transformQueryPageTeamsToFetchQueryIdShoulds = (searchRangeItems, searchTimeRange) => {
 
   const checkedSearchs = searchRangeItems.filter((item) => item.checked);
 
@@ -395,13 +411,13 @@ export const transformQueryPageTeamsToFetchQueryIdShoulds = (searchRangeItems) =
   return should_1;
 };
 
-export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField) => {
+export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField, searchTimeRange) => {
 
   console.log('================= transformQueryPageFieldsToFetchQueryIdRules start', JSON.stringify(fields));
 
   const should_1 = [];
   for (const field of fields) {
-    let nameConfig = getChildItemsConfig(field, { search: true });
+    let nameConfig = getChildItemsConfig(field, { search: true }, null, searchTimeRange);
     // 加上顶级的
     console.log('================= nameConfig', JSON.stringify(nameConfig));
     // const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == field.parentName);
@@ -419,8 +435,8 @@ export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField) =>
 
 export const transformQueryPageAllRuleToFetchQueryIdRules = (allRule, searchTimeRange, projectSid, allField, searchRangeItems, fields) => {
 
-  const should_1 = transformQueryPageTeamsToFetchQueryIdShoulds(searchRangeItems);
-  const fieldShould_1 = transformQueryPageFieldsToFetchQueryIdRules(fields, allField);
+  const should_1 = transformQueryPageTeamsToFetchQueryIdShoulds(searchRangeItems, searchTimeRange);
+  const fieldShould_1 = transformQueryPageFieldsToFetchQueryIdRules(fields, allField, searchTimeRange);
   const rules = [];
   for (const rule of allRule) {
     const must: any[] = [];
