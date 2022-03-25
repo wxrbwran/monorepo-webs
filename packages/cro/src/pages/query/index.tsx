@@ -314,21 +314,45 @@ function Query({ }: IProps) {
     setAllFields((preState) => { return cloneDeep(preState); });
   };
 
+  const onTimeRangeChange = (_value, dateString) => {
+
+    setSearchTimeRange(dateString);
+  };
+
+  const onDisabledDate = (current) => {
+    // Can not select days before today and today
+
+    console.log('======== current', current);
+    return current && current > moment().endOf('minute');
+  };
+
   const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
   const step0View = () => {
 
     return (
       <div>
 
-        <div className={`${styles.searchRange} flex flex-row ml-50 mr-50 mb-10 h-66 items-center`}>
-          <div className={`mr-20 ml-20 ${styles.searchRangeTitle}`}>查询范围:</div>
-          {
-            <CheckboxGroup
-              options={options}
-              onChange={handleChangeGroup}
-              value={des}
+        <div className={`${styles.searchRange} ml-50 mr-50 items-center pb-20 pt-20`}>
+          <div className='flex flex-row mb-15'>
+            <div className={`mr-20 ml-20 ${styles.searchRangeTitle}`}>查询范围:</div>
+            {
+              <CheckboxGroup
+                options={options}
+                onChange={handleChangeGroup}
+                value={des}
+              />
+            }
+          </div>
+          <div className='flex flex-row'>
+            <div className={`mr-20 ml-20 ${styles.searchRangeTitle}`}>查询时间范围:</div>
+            <RangePicker
+              showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD HH:mm"
+              onChange={onTimeRangeChange}
+              disabledDate={onDisabledDate}
+              value={searchTimeRange?.length == 2 ? [moment(searchTimeRange[0]), moment(searchTimeRange[1])] : []}
             />
-          }
+          </div>
         </div>
 
         <div className={styles.fieldsChoice}>
@@ -467,11 +491,6 @@ function Query({ }: IProps) {
 
 
   //#region  Step 2
-
-  const onTimeRangeChange = (_value, dateString) => {
-
-    setSearchTimeRange(dateString);
-  };
 
   const onDeleteRule = (ruleIndex) => {
 
@@ -816,29 +835,10 @@ function Query({ }: IProps) {
     }]);
   };
 
-  const onDisabledDate = (current) => {
-    // Can not select days before today and today
-
-    console.log('======== current', current);
-    return current && current > moment().endOf('minute');
-  };
-
   const step2View = () => {
     return (
       <div className={styles.rulesBuild}>
         {/* 查询时间范围和查询对象 */}
-
-        <div className='flex flex-row ml-65 mt-30 mb-30'>
-          <div className='mr-10'>查询时间范围:</div>
-          <RangePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-            onChange={onTimeRangeChange}
-            disabledDate={onDisabledDate}
-            value={searchTimeRange?.length == 2 ? [moment(searchTimeRange[0]), moment(searchTimeRange[1])] : []}
-          />
-        </div>
-
         <div className={styles.step3ruleHasChoices}>
           {
             otherChoiceRules && otherChoiceRules.length > 0 ?
