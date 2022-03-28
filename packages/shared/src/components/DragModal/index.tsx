@@ -12,6 +12,7 @@ import 'antd/lib/modal/style/index.css';
 interface IDMProps extends ModalProps {
   title: string;
   extra?: any;
+  titleDoubleClick?: () => void;
 }
 /* eslint-disable */
 const AntdModalDrag: FC<IDMProps> = (props) => {
@@ -35,6 +36,7 @@ const AntdModalDrag: FC<IDMProps> = (props) => {
       // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
       onFocus={() => {}}
       onBlur={() => {}}
+      onDoubleClick={props?.titleDoubleClick || (() => {} )}
       // end
     >
       {title}

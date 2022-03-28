@@ -15,9 +15,40 @@ const LatestHealthHistory: FC = ({ children }) => {
   const [time, setTime] = useState({ startTime: initFrom,  endTime: new Date() });
   const [show, setShow] = useState(false);
   const [activeType, setActiveType] = useState('HYD');
+  const [isFull, setIsFull] = useState(false);
+  let controlLineBar:HTMLElement | null;
+  let modalPanel:HTMLElement | null;
+  let leftWidth: string | number | null = null;
+  let timer: any = null;
+  const handleMouseDown = (e) => {
+    const ev = e || window.event;
+    const disX = ev.clientX; // 获取鼠标按下时光标x的值
+    const disW = modalPanel.offsetWidth; // 获取拖拽前modal的宽
+    document.onmousemove = (event) => {
+      const ee = event || window.event;
+      leftWidth = ee.clientX - (disX - disW);
+      modalPanel!.style.width = `${ leftWidth }px`;
+    };
+    document.onmouseup = () => {
+      document.onmousemove = null;
+      document.onmouseup = null;
+    };
+  };
+  const handleDragControl = () => {
+    controlLineBar = document.getElementById('controlLineR') as HTMLElement;
+    modalPanel = document.querySelector('.ant-modal') as HTMLElement;
+    controlLineBar.addEventListener('mousedown', handleMouseDown, false);
+  };
   useEffect(() => {
     if (show) {
       setTime({ ...time,  endTime: new Date() });
+      timer = setTimeout(() => {
+        handleDragControl();
+      }, 1000);
+    } else {
+      controlLineBar?.removeEventListener('mousedown', handleMouseDown, false);
+      controlLineBar = null;
+      clearTimeout(timer);
     }
   }, [show]);
 
@@ -42,11 +73,13 @@ const LatestHealthHistory: FC = ({ children }) => {
       <span onClick={() => setShow(true)}>{ children }</span>
       <DragModal
         wrapClassName="ant-modal-wrap-center"
-        width={1200}
+        width={isFull ? '99%' : 1200}
         visible={show}
         title="结构化数据"
         onCancel={() => setShow(false)}
         footer={null}
+        titleDoubleClick={() => setIsFull(!isFull)}
+        style={{ minWidth: 800 }}
       >
         <div className="text-center">
           <div className='flex justify-between mb-10'>
@@ -82,6 +115,7 @@ const LatestHealthHistory: FC = ({ children }) => {
               </>
             )
           }
+          <div id="controlLineR" className='absolute right-0 h-full cursor-move bottom-0 w-2'></div>
         </div>
       </DragModal>
     </>
