@@ -7,6 +7,7 @@ import 'antd/lib/modal/style/index.css';
 interface IDMProps extends ModalProps {
     title: string;
     extra?: any;
+    titleDoubleClick?: () => void;
 }
 declare const AntdModalDrag: FC<IDMProps>;
 export default AntdModalDrag;
