@@ -85,7 +85,6 @@ function Query({ }: IProps) {
 
   const fillChildItemsAndChildren = async (fatherItem) => {
 
-    console.log('========== fatherItem', JSON.stringify(fatherItem), fatherItem.children == undefined);
     if (fatherItem.items?.length > 0) {
 
       if (fatherItem.items[0].type.includes('dynamic')) {
@@ -103,7 +102,7 @@ function Query({ }: IProps) {
             {
               key: `${itemTemp.name}_${index}`,
               fieldCheck: itemTemp.description == '姓名',
-              updateTime: itemTemp.description == '姓名' ? dayjs().valueOf() : undefined,
+              fieldUpdateTime: itemTemp.description == '姓名' ? dayjs().valueOf() : undefined,
               parent: fatherItem?.description,
               parentName: fatherItem?.name,
               value: description,
@@ -293,39 +292,67 @@ function Query({ }: IProps) {
 
   const onSortEnd = (array, oldIndex, newIndex) => {
 
+    console.log('================== onSortEnd onSortEnd', JSON.stringify(array));
+    console.log('================== oldIndex newIndex', oldIndex, newIndex);
+
     if (oldIndex > newIndex) {  // 将元素往前挪
 
-      const tempTiem = array[newIndex].updateTime;
+      const tempTiem = array[newIndex].fieldUpdateTime;
       for (let index = newIndex; index < oldIndex; index++) {
-        array[index].updateTime = array[index + 1].updateTime;
+        array[index].fieldUpdateTime = array[index + 1].fieldUpdateTime;
       }
-      array[oldIndex].updateTime = tempTiem;
+      array[oldIndex].fieldUpdateTime = tempTiem;
     } else { // // 将元素往后挪  1  4 
 
-      const tempTiem = array[newIndex].updateTime;
+      const tempTiem = array[newIndex].fieldUpdateTime;
       for (let index = newIndex; index > oldIndex; index--) {
-        array[index].updateTime = array[index - 1].updateTime;
+        array[index].fieldUpdateTime = array[index - 1].fieldUpdateTime;
       }
-      array[oldIndex].updateTime = tempTiem;
+      array[oldIndex].fieldUpdateTime = tempTiem;
     }
+    console.log('================== onSortEnd onSortEnd', JSON.stringify(array));
     setAllFields((preState) => { return cloneDeep(preState); });
   };
 
-  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.updateTime - b.updateTime);
+  const onTimeRangeChange = (_value, dateString) => {
+
+    setSearchTimeRange(dateString);
+  };
+
+  const onDisabledDate = (current) => {
+    // Can not select days before today and today
+
+    console.log('======== current', current);
+    return current && current > moment().endOf('minute');
+  };
+
+  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
   const step0View = () => {
 
     return (
       <div>
 
-        <div className={`${styles.searchRange} flex flex-row ml-50 mr-50 mb-10 h-66 items-center`}>
-          <div className={`mr-20 ml-20 ${styles.searchRangeTitle}`}>查询范围:</div>
-          {
-            <CheckboxGroup
-              options={options}
-              onChange={handleChangeGroup}
-              value={des}
+        <div className={`${styles.searchRange} ml-50 mr-50 items-center pb-20 pt-20`}>
+          <div className='flex flex-row mb-15'>
+            <div className={`mr-20 ml-20 ${styles.searchRangeTitle}`}>查询范围:</div>
+            {
+              <CheckboxGroup
+                options={options}
+                onChange={handleChangeGroup}
+                value={des}
+              />
+            }
+          </div>
+          <div className='flex flex-row'>
+            <div className={`mr-20 ml-20 ${styles.searchRangeTitle}`}>查询时间范围:</div>
+            <RangePicker
+              showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD HH:mm"
+              onChange={onTimeRangeChange}
+              disabledDate={onDisabledDate}
+              value={searchTimeRange?.length == 2 ? [moment(searchTimeRange[0]), moment(searchTimeRange[1])] : []}
             />
-          }
+          </div>
         </div>
 
         <div className={styles.fieldsChoice}>
@@ -361,8 +388,8 @@ function Query({ }: IProps) {
 
                   <SortableList
                     distance={1}
-                    items={otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime)}
-                    onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(otherChoiceFields.sort((a, b) => a.updateTime - b.updateTime), oldIndex, newIndex); }}
+                    items={otherChoiceFields.sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime)}
+                    onSortEnd={({ oldIndex, newIndex }) => { onSortEnd(otherChoiceFields.sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime), oldIndex, newIndex); }}
                     axis="xy"
                     helperClass={styles.SortableHelper}
                   />
@@ -465,11 +492,6 @@ function Query({ }: IProps) {
 
   //#region  Step 2
 
-  const onTimeRangeChange = (_value, dateString) => {
-
-    setSearchTimeRange(dateString);
-  };
-
   const onDeleteRule = (ruleIndex) => {
 
     allRules.splice(ruleIndex, 1);
@@ -551,12 +573,16 @@ function Query({ }: IProps) {
       }];
     } else {
       const res = await api.query.fetchKvScope({ kp: ruleItem.name.name, target, sourceType: ResearchSourceType });
+
+      console.log('=============== handleSelectSearch res', res);
       // 搜索
-      if (res?.values?.length > 1) {
+      if (res?.values?.length > 0) {
         ruleItem.optionArray = res.values;
       } else {
         ruleItem.optionArray = generateDIYOptionArray(ruleItem, target);
       }
+
+      console.log('=============== handleSelectSearch res', ruleItem.optionArray);
     }
     setAllRules(cloneDeep(allRules));
   };
@@ -604,6 +630,20 @@ function Query({ }: IProps) {
     console.log(`selected allRule ${JSON.stringify(allRules)}`);
   };
 
+  const canRangeValueChanged = (ruleItem, min, max) => {
+    // 数字类型要求只能是数字, medical-img-noReference选择的操作符在numberOperationType中，也算数字类型
+    if (min && min != '' && max && max != '') {
+      if (utilNumType.includes(getRuleItemType(ruleItem)) || ('medical-img-noReference' == getRuleItemType(ruleItem) && numberOperationType.includes(ruleItem.operation))) {
+
+        if (Number(min) >= Number(max)) {
+          message.error('选择范围最小值应小于最大值');
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   const handleSelectMinChange = (ruleItem, description) => {
 
     const opts = ruleItem.optionArray.filter((opt) => (opt.description || opt.value) == description);
@@ -612,12 +652,14 @@ function Query({ }: IProps) {
       console.log(`handleSelectValueChange opts ${JSON.stringify(opts[0])}`);
       const { value, unit, uid } = opts[0];
 
-      ruleItem.min = value;
-      ruleItem.unit = unit || ruleItem.unit;
-      ruleItem.uid = uid;
+      if (canRangeValueChanged(ruleItem, value, ruleItem.max)) {
+        ruleItem.min = value;
+        ruleItem.unit = unit || ruleItem.unit;
+        ruleItem.uid = uid;
 
-      setAllRules(cloneDeep(allRules));
-      console.log(`selected allRule ${JSON.stringify(allRules)}`);
+        setAllRules(cloneDeep(allRules));
+        console.log(`selected allRule ${JSON.stringify(allRules)}`);
+      }
     }
   };
 
@@ -629,12 +671,14 @@ function Query({ }: IProps) {
       console.log(`handleSelectValueChange opts ${JSON.stringify(opts[0])}`);
       const { value, unit, uid } = opts[0];
 
-      ruleItem.max = value;
-      ruleItem.unit = unit || ruleItem.unit;
-      ruleItem.uid = uid;
+      if (canRangeValueChanged(ruleItem, ruleItem.min, value)) {
+        ruleItem.max = value;
+        ruleItem.unit = unit || ruleItem.unit;
+        ruleItem.uid = uid;
 
-      setAllRules(cloneDeep(allRules));
-      console.log(`selected allRule ${JSON.stringify(allRules)}`);
+        setAllRules(cloneDeep(allRules));
+        console.log(`selected allRule ${JSON.stringify(allRules)}`);
+      }
     }
   };
 
@@ -650,7 +694,6 @@ function Query({ }: IProps) {
       ruleItem.unit = unit || ruleItem.unit;
       ruleItem.uid = uid;
       ruleItem.description = description;
-
 
       setAllRules(cloneDeep(allRules));
       console.log(`selected allRule ${JSON.stringify(allRules)}`);
@@ -792,29 +835,10 @@ function Query({ }: IProps) {
     }]);
   };
 
-  const onDisabledDate = (current) => {
-    // Can not select days before today and today
-
-    console.log('======== current', current);
-    return current && current > moment().endOf('minute');
-  };
-
   const step2View = () => {
     return (
       <div className={styles.rulesBuild}>
         {/* 查询时间范围和查询对象 */}
-
-        <div className='flex flex-row ml-65 mt-30 mb-30'>
-          <div className='mr-10'>查询时间范围:</div>
-          <RangePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-            onChange={onTimeRangeChange}
-            disabledDate={onDisabledDate}
-            value={searchTimeRange?.length == 2 ? [moment(searchTimeRange[0]), moment(searchTimeRange[1])] : []}
-          />
-        </div>
-
         <div className={styles.step3ruleHasChoices}>
           {
             otherChoiceRules && otherChoiceRules.length > 0 ?
@@ -920,7 +944,7 @@ function Query({ }: IProps) {
         }
       }
       const otherSingleFields = allFields?.items?.flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
-      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.updateTime - b.updateTime);
+      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
       const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, searchField);
 
       if (rules) {
