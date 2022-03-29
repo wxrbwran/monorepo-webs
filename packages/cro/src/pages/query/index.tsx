@@ -164,8 +164,6 @@ function Query({ }: IProps) {
         FIELDCARD.scrollTop = 999999;
       }, 300);
     }
-
-    console.log('================ handleChangeActiveField ', JSON.stringify(item));
     await fillChildItemsAndChildren(item);
     setActiveFieldIndex(index);
   };
