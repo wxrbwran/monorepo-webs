@@ -558,10 +558,10 @@ function Query({ }: IProps) {
       ruleItem.optionArray = generateDIYOptionArray(ruleItem, target);
     } else if (getRuleItemType(ruleItem) == 'medical-img-radio') {
       ruleItem.optionArray = [{
-        value: '阴',
+        value: 'YIN',
         description: '阴',
       }, {
-        value: '阳',
+        value: 'YANG',
         description: '阳',
       }];
     } else {
@@ -911,18 +911,18 @@ function Query({ }: IProps) {
             return;
           }
 
-          if (rangNumberOperationType.includes(item.operation) && (item.min == '' || item.max == '')) {
+          if (rangNumberOperationType.includes(item.operation) && (item.min == '' || item.max === '')) {
 
             console.log('=============== 1 item', JSON.stringify(item));
-            console.log('=============== 2', rangNumberOperationType.includes(item.operation), (item.min == '' || item.max == ''));
+            console.log('=============== 2', rangNumberOperationType.includes(item.operation), (item.min == '' || item.max === ''));
             message.error('请补全您的查询条件 1');
             return;
           }
 
-          if ((numberOperationType.filter((type) => !rangNumberOperationType.includes(type))).includes(item.operation) && item.value == '') {
+          if ((numberOperationType.filter((type) => !rangNumberOperationType.includes(type))).includes(item.operation) && item.value === '') {
 
             console.log('=============== 3 item', JSON.stringify(item));
-            console.log('=============== 3', numberOperationType.includes(item.operation), item.value == '');
+            console.log('=============== 3', numberOperationType.includes(item.operation), item.value === '');
             message.error('请补全您的查询条件 3');
             return;
           }
@@ -930,7 +930,7 @@ function Query({ }: IProps) {
           if (stringOperationType.includes(item.operation) && item.value === '') {
 
             console.log('=============== 2 item', JSON.stringify(item));
-            console.log('=============== 2', stringOperationType.includes(item.operation), item.value == '');
+            console.log('=============== 2', stringOperationType.includes(item.operation), item.value === '');
             message.error('请补全您的查询条件 2');
             return;
           }

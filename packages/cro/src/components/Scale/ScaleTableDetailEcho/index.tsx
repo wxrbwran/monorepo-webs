@@ -110,6 +110,7 @@ function ScaleTableDetailEcho(props: IProps) {
           && window.$storage.getItem('isLeader')
           && !location.pathname.includes('reply')
           && !location.pathname.includes('template')
+          && !location.pathname.includes('query') //查询页面的
           && !location.pathname.includes('operation_log') && (
             <p className={`${styles.icon} mr-20 absolute right-0 top-0`}>
               <Link
