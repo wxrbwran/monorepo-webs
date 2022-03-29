@@ -1,13 +1,12 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, Cascader, message, Tree } from 'antd';
-import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Cascader } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import { IChecked } from '../../index';
 import checkChoicePng from '@/assets/img/check_choice.png';
 import checkUnChoicePng from '@/assets/img/check_unchoice.png';
-import * as api from '@/services/api';
-import { handleFormatValues, handleShouldValues, ResearchSourceType, transformDynamicToStatic } from '@/pages/query/util';
-import { history, useSelector, useDispatch } from 'umi';
+import { ResearchSourceType, transformDynamicToStatic } from '@/pages/query/util';
+import { useSelector } from 'umi';
 import styles from './index.scss';
 import { cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
@@ -19,16 +18,9 @@ interface IProps {
 
 function FieldCard({ currentField, onValueChange, type }: IProps) {
 
-  // const choiceItemsRef = useRef<any[]>([]); // 记录多层级选择每个item的链式结构
   const [formatData, setFormatData] = useState<IChecked>(currentField);
   const projectSid = window.$storage.getItem('projectSid');
   const { projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
-
-
-  useEffect(() => {
-    setFormatData(currentField);
-  }, [currentField]);
-
 
   useEffect(() => {
     onValueChange(formatData);

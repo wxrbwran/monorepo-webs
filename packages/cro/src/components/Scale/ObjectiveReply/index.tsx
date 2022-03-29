@@ -4,6 +4,7 @@ import { Input } from 'antd';
 import * as api from '@/services/api';
 import Viewer from 'react-viewer';
 import styles from './index.scss';
+import config from '@/config';
 
 interface IProps {
   children: React.ReactElement;
@@ -107,7 +108,7 @@ function Reply({ children, scaleId, scaleType }: IProps) {
                     {
                       item.imageList && item.imageList.map((img) => {
                         return (
-                          <img src={img} key={img} onClick={() => handleShowViewer(img)} />
+                          <img src={img} key={img} onClick={() => handleShowViewer(img)} onError={(e) => { e.target.src = config.defaultAvatar; }} />
                         );
                       })
                     }

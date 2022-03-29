@@ -12,10 +12,9 @@ import exportStylesPng from '@/assets/img/export_styles.jpg';
 import addPng from '@/assets/img/add.png';
 import deleteBluePng from '@/assets/img/delete_blue.png';
 import dayjs from 'dayjs';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep } from 'lodash';
 import moment from 'moment';
 import QueryResult from './query_result';
-
 
 import {
   SortableContainer,
@@ -55,7 +54,7 @@ function Query({ }: IProps) {
   const { projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
 
   const [allFields, setAllFields] = useState<IFields>(); // 所有节点
-  const [activeField, setActiveField] = useState<IFields>(); // 选中的节点
+  const [activeFieldIndex, setActiveFieldIndex] = useState<number>(0); // 选中的节点
   const [searchRangeItems, setSearchRangeItems] = useState<any>([]); // 查询范围节点
   const [searchTimeRange, setSearchTimeRange] = useState<string[]>();  // 查询时间范围
   const [resultKey, setResultKey] = useState<string>(); // 查询结果
@@ -149,13 +148,14 @@ function Query({ }: IProps) {
 
     await fillChildItemsAndChildren(allItems.items[0]);
     setAllFields({ ...allItems });
-    setActiveField(allItems.items[0]);
+    setActiveFieldIndex(0);
   };
 
   useEffect(() => {
     // 获取数据
     fetchField();
   }, []);
+
 
   const handleChangeActiveField = async (item: IFieldItem, index: number) => {
     const FIELDCARD = document.getElementById('FIELD_CARD');
@@ -164,26 +164,20 @@ function Query({ }: IProps) {
         FIELDCARD.scrollTop = 999999;
       }, 300);
     }
-    if (activeField.name == item.name) {
-      return;
-    }
 
-    // 判断item是否需要获取子item
     console.log('================ handleChangeActiveField ', JSON.stringify(item));
     await fillChildItemsAndChildren(item);
-    setActiveField(item);
+    setActiveFieldIndex(index);
   };
 
   const onValueChange = (items: IFields) => {
 
-    // 刷新当前页面的值
-    setActiveField(items);
     const needChangeItem = allFields?.items?.filter((item) => item.name == items.name);
 
     if (needChangeItem?.length > 0) {
       const index = allFields?.items.indexOf(needChangeItem[0]);
       allFields?.items.splice(index, 1, items);
-      setAllFields(allFields);
+      setAllFields(cloneDeep(allFields));
     }
   };
 
@@ -193,7 +187,7 @@ function Query({ }: IProps) {
         <div className={styles.left}>
           {allFields && allFields?.items?.map((item, index) => (
             <div
-              className={`${activeField?.name == item.name ? styles.active : ''} ${styles.field}`}
+              className={`${allFields?.items[activeFieldIndex]?.name == item.name ? styles.active : ''} ${styles.field}`}
               title={item.choiceDescription ?? item.description}
               onClick={() => handleChangeActiveField(item, index)}
             >
@@ -206,8 +200,8 @@ function Query({ }: IProps) {
 
         <div className={styles.right}>
           <FieldCard
-            key={activeField?.name}
-            currentField={activeField}
+            key={allFields?.items[activeFieldIndex]?.name}
+            currentField={allFields?.items[activeFieldIndex]}
             type={type}
             onValueChange={onValueChange}
           />
@@ -219,8 +213,9 @@ function Query({ }: IProps) {
   //#region  Step 0
   const otherSingleItems = allFields?.items?.filter((item) => item.name != 'basic').flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
   const choiceMuiltItems = allFields?.items?.filter((item) => item.children?.find((i) => i.cascaderChoiceItems?.length > 0)).flatMap((item) => item.children).filter((item) => item.cascaderChoiceItems?.length > 0).flatMap((item) => item.cascaderChoiceItems) ?? [];
-  const otherChoiceFields = [...otherSingleItems, ...choiceMuiltItems];
+  const otherChoiceFields = [...otherSingleItems, ...choiceMuiltItems].sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
 
+  console.log('================ otherChoiceFields otherChoiceFields otherChoiceFields', otherChoiceFields);
   const options = searchRangeItems.map((item: IItem) => ({
     label: item.description,
     value: item.description,
@@ -241,16 +236,12 @@ function Query({ }: IProps) {
 
   const onCancelItemFieldCheck = (deletedItem) => {
 
-    console.log('==============  onCancelItemFieldCheck ');
     if (deletedItem.children.length > 0) { // 多层级的item删除
 
       const cancelNode = allFields?.items?.filter((item) => item.children?.find((i) => i.key == deletedItem.key));
 
       if (cancelNode?.length > 0) {
         const cancelChild = cancelNode[0].children.filter((i) => i.key == deletedItem.key);
-
-        console.log('================== cancelChild cancelChild', JSON.stringify(cancelChild));
-
         if (cancelChild.length > 0) {
 
           const index = cancelChild[0].cascaderChoiceItems.indexOf(deletedItem);
@@ -259,7 +250,6 @@ function Query({ }: IProps) {
         }
       }
       setAllFields((preState) => { return cloneDeep(preState); });
-      setActiveField(cloneDeep(activeField));
     } else {
 
       deletedItem.fieldCheck = false;
@@ -310,7 +300,7 @@ function Query({ }: IProps) {
       }
       array[oldIndex].fieldUpdateTime = tempTiem;
     }
-    console.log('================== onSortEnd onSortEnd', JSON.stringify(array));
+    console.log('================== onSortEnd onSortEnd', array.sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime));
     setAllFields((preState) => { return cloneDeep(preState); });
   };
 
@@ -326,7 +316,7 @@ function Query({ }: IProps) {
     return current && current > moment().endOf('minute');
   };
 
-  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
+  const basicStep0Arr = allFields?.items?.filter((item) => item.name == 'basic').flatMap((item) => item.children)?.filter((item) => item?.fieldCheck).sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime) ?? [];
   const step0View = () => {
 
     return (
@@ -457,7 +447,7 @@ function Query({ }: IProps) {
         }
       }
       setAllFields((preState) => { return cloneDeep(preState); });
-      setActiveField(cloneDeep(activeField));
+      // setActiveField(cloneDeep(activeField));
     } else {
 
       deletedItem.ruleCheck = false;
@@ -943,8 +933,9 @@ function Query({ }: IProps) {
           }
         }
       }
-      const otherSingleFields = allFields?.items?.flatMap((item) => item.children).filter((item) => item?.fieldCheck) ?? [];
-      const searchField = [...otherSingleFields, ...choiceMuiltItems].sort((a, b) => a.fieldUpdateTime - b.fieldUpdateTime);
+
+      const searchField = [...basicStep0Arr, ...otherChoiceFields];
+      console.log('================  searchField searchField', searchField);
       const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, searchField);
 
       if (rules) {
