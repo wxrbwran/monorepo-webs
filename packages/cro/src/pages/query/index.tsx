@@ -302,9 +302,14 @@ function Query({ }: IProps) {
     setAllFields((preState) => { return cloneDeep(preState); });
   };
 
-  const onTimeRangeChange = (_value, dateString) => {
+  const onTimeRangeChange = (value, dateString) => {
 
-    setSearchTimeRange(dateString);
+    console.log('================ onTimeRangeChange onTimeRangeChange', value, dateString);
+    if (value) {
+      setSearchTimeRange(dateString);
+    } else {
+      setSearchTimeRange([]);
+    }
   };
 
   const onDisabledDate = (current) => {
