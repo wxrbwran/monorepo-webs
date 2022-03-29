@@ -49,7 +49,7 @@ var AntdModalDrag = function (props) {
         }, 
         // fix eslintjsx-a11y/mouse-events-have-key-events
         // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
-        onFocus: function () { }, onBlur: function () { } }, title));
+        onFocus: function () { }, onBlur: function () { }, onDoubleClick: (props === null || props === void 0 ? void 0 : props.titleDoubleClick) || (function () { }) }, title));
     return (React.createElement(Modal, __assign({ destroyOnClose: true }, props, { title: titleNode, modalRender: function (modal) { return (React.createElement(Draggable, { disabled: disabled }, modal)); } }), children));
 };
 export default AntdModalDrag;
