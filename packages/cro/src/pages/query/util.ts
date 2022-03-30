@@ -139,7 +139,13 @@ export const getItemConfigFormItem = (item, extraConfig, ruleItem?, searchTimeRa
       }
       console.log('===================  getItemConfigFormItem tmpC', JSON.stringify(tmpC));
     } else { // 自己没有赋值过
-      if (utilTimeType.includes(item.type)) {
+      if (item.type == 'primary') { // primary 类型，组装方式
+
+        tmpC = {
+          ...tmpC,
+          ...{ operator: '=', value: projectSid },
+        };
+      } else if (utilTimeType.includes(item.type)) {
         // [1646150400000,1646409600000)
         if (searchTimeRange?.length > 1) {
           tmpC = {
