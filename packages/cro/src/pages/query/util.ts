@@ -249,6 +249,7 @@ export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField, se
     //     ...getItemConfigFormItem(parentItems[0], { search: true }),
     //   };
     // }
+
     should_1.push(nameConfig);
   }
   console.log('================= transformQueryPageFieldsToFetchQueryIdRules should_1', JSON.stringify(should_1));
