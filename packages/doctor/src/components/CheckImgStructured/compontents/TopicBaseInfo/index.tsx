@@ -44,7 +44,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       Object.keys(values).forEach((item: string) => {
         questions.push({
           question: baseField[item].text,
-          answer: values[item] !== undefined ? [values[item]] : [],
+          answer: !!values[item] ? [values[item]] : [],
           question_type: 'BASIC',
           group: `0-${baseField[item].inx}`,
           sid: window.$storage.getItem('sid'),
@@ -54,7 +54,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
         data: questions,
         groupInx: 0,
       });
-      console.log('questions', questions);
+      console.log('questions111', questions);
     }).catch((err: any) => {
       console.log('基本信息err', err);
       message.error({
@@ -131,7 +131,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
                 initReportTime={initialValues?.measured_at || new Date().getTime()}
                 setReporttime={(time: number | null) => handleChangeTime(time)}
                 setUnknow={handleChangeUnKonwTime}
-                isUnknownTime={!!(initialValues?.measured_at === null)}
+                isUnknownTime={!initialValues?.measured_at}
                 style={{ width: 'calc(100% - 168px)' }}
                 label="检查时间"
               />
