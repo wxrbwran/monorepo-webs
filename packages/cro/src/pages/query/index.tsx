@@ -157,6 +157,10 @@ function Query({ }: IProps) {
   }, []);
 
 
+
+  console.log('=================== moment', moment(null).format('YYYY年MM月DD日'), moment('').format('YYYY年MM月DD日') == 'Invalid date', moment(undefined).format('YYYY年MM月DD日'));
+
+
   const handleChangeActiveField = async (item: IFieldItem, index: number) => {
     const FIELDCARD = document.getElementById('FIELD_CARD');
     if (FIELDCARD) {
