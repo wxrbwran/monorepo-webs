@@ -25,7 +25,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           initObj.orgName = ans;
           break;
         case '时间':
-          timeRef.current = ans === null ? new Date().getTime() : Number(ans);
+          timeRef.current = !!ans ? Number(ans) : new Date().getTime();
           initObj.measured_at = ans === null ? null : Number(ans);
           break;
         default:
@@ -42,7 +42,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
       Object.keys(values).forEach((item: string) => {
         questions.push({
           question: baseField[item].text,
-          answer: values[item] !== undefined ? [values[item]] : [],
+          answer: !!values[item] ? [values[item]] : [],
           question_type: 'BASIC',
           group: `0-${baseField[item].inx}`,
           sid: localStorage.getItem('xzl-web-doctor_sid'),
@@ -104,7 +104,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
                 initReportTime={initialValues?.measured_at || new Date().getTime()}
                 setReporttime={(time: number | null) => handleChangeTime(time)}
                 setUnknow={handleChangeUnKonwTime}
-                isUnknownTime={!!(initialValues?.measured_at === null)}
+                isUnknownTime={!initialValues?.measured_at}
                 style={{ width: 'calc(100% - 168px)' }}
                 label="检查时间"
               />
