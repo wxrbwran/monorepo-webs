@@ -233,13 +233,13 @@ export const transformQueryPageTeamsToFetchQueryIdShoulds = (searchRangeItems, s
   return should_1;
 };
 
-export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField, searchTimeRange) => {
+export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField, searchTimeRange, projectSid) => {
 
   console.log('================= transformQueryPageFieldsToFetchQueryIdRules start', JSON.stringify(fields));
 
   const should_1 = [];
   for (const field of fields) {
-    let nameConfig = getChildItemsConfig(field, { search: true }, null, searchTimeRange);
+    let nameConfig = getChildItemsConfig(field, { search: true }, null, searchTimeRange, projectSid);
     // 加上顶级的
     console.log('================= nameConfig', JSON.stringify(nameConfig));
     // const parentItems = allField?.items.filter((fieldItem) => fieldItem.name == field.parentName);
@@ -249,6 +249,7 @@ export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField, se
     //     ...getItemConfigFormItem(parentItems[0], { search: true }),
     //   };
     // }
+
     should_1.push(nameConfig);
   }
   console.log('================= transformQueryPageFieldsToFetchQueryIdRules should_1', JSON.stringify(should_1));
@@ -258,7 +259,7 @@ export const transformQueryPageFieldsToFetchQueryIdRules = (fields, allField, se
 export const transformQueryPageAllRuleToFetchQueryIdRules = (allRule, searchTimeRange, projectSid, allField, searchRangeItems, fields) => {
 
   const should_1 = transformQueryPageTeamsToFetchQueryIdShoulds(searchRangeItems, searchTimeRange);
-  const fieldShould_1 = transformQueryPageFieldsToFetchQueryIdRules(fields, allField, searchTimeRange);
+  const fieldShould_1 = transformQueryPageFieldsToFetchQueryIdRules(fields, allField, searchTimeRange, projectSid);
   const rules = [];
   for (const rule of allRule) {
     const must: any[] = [];
