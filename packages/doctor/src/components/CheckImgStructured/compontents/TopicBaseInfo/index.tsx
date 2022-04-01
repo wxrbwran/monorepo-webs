@@ -27,7 +27,7 @@ const TopicBaseInfo: FC<IProps> = (props) => {
           initObj.orgName = ans;
           break;
         case '时间':
-          timeRef.current = ans === null ? new Date().getTime() : Number(ans);
+          timeRef.current = !!ans ?  Number(ans) : new Date().getTime();
           initObj.measured_at = ans === null ? null : Number(ans);
           break;
         default:
