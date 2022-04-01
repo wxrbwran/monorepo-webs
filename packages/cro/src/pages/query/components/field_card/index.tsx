@@ -18,24 +18,11 @@ interface IProps {
 
 function FieldCard({ currentField, onValueChange, type }: IProps) {
 
-  const [formatData, setFormatData] = useState<IChecked>(currentField);
+  const formatData = currentField;
+  // const [formatData, setFormatData] = useState<IChecked>(currentField);
   const projectSid = window.$storage.getItem('projectSid');
   const { projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
 
-  useEffect(() => {
-    onValueChange(formatData);
-  }, [formatData]);
-
-  const fetchKvScope = async (item: IChecked) => {
-
-    // if (!item.option) {
-    //   // 获取填充yu
-    //   const res = await api.query.fetchKvScope({ kp: item.name });
-    //   if (res.values.length > 1) {
-    //     item.option = res.values;
-    //   }
-    // }
-  };
 
   const getChildChoiceItem = (item, elementArray, index, node) => {
 
@@ -74,8 +61,8 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
     } else {
       item.ruleCheck = !item.ruleCheck;
     }
-    fetchKvScope(item);
-    setFormatData({ ...formatData });
+    // setFormatData({ ...formatData });
+    onValueChange({ ...formatData });
   };
 
   const reloadDynamicItem = async (targetOption) => {
@@ -171,12 +158,13 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
     if (targetOption?.items?.length > 0 && targetOption.items[0].type.includes('dynamic')) {
 
       targetOption.loading = true;
-      setFormatData({ ...formatData });
+      onValueChange({ ...formatData });
+
 
       await reloadDynamicItem(targetOption);
 
       targetOption.loading = false;
-      setFormatData(cloneDeep(formatData));
+      onValueChange(cloneDeep(formatData));
 
       console.log('============= loading data 结果', JSON.stringify(targetOption));
     }
@@ -212,7 +200,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       }
     }
 
-    await fetchKvScope(item);
     const itemChainList = [];
 
     const oldItems = item.cascaderChoiceItems;
@@ -269,14 +256,14 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       item.cascaderChoiceRuleItems = itemChainList;
       item.cascaderChoiceRuleValues = cascaderChoiceValues;
     }
-    setFormatData(cloneDeep(formatData));
+    onValueChange(cloneDeep(formatData));
   };
 
   const onItemClick = (item, pageAt) => {
     if (item.isLeaf == false && item.children.length == 0) { // 说明子节点是动态的，并且没有获取过，需要请求
 
       item.loading = true;
-      setFormatData({ ...formatData });
+      onValueChange({ ...formatData });
 
       if (item?.items?.length > 0 && item.items[0].type.includes('dynamic')) {
 
@@ -313,7 +300,7 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
           item.children = [...concatChildrens];
           // }
           item.loading = false;
-          setFormatData({ ...formatData });
+          onValueChange({ ...formatData });
 
         }).catch((err) => {
 
