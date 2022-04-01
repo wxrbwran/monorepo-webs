@@ -23,24 +23,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
   const projectSid = window.$storage.getItem('projectSid');
   const { projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.project.projDetail);
 
-  // useEffect(() => {
-  //   setFormatData(currentField);
-  // }, [currentField]);
-
-  // useEffect(() => {
-  //   onValueChange(formatData);
-  // }, [formatData]);
-
-  const fetchKvScope = async (item: IChecked) => {
-
-    // if (!item.option) {
-    //   // 获取填充yu
-    //   const res = await api.query.fetchKvScope({ kp: item.name });
-    //   if (res.values.length > 1) {
-    //     item.option = res.values;
-    //   }
-    // }
-  };
 
   const getChildChoiceItem = (item, elementArray, index, node) => {
 
@@ -79,7 +61,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
     } else {
       item.ruleCheck = !item.ruleCheck;
     }
-    fetchKvScope(item);
     // setFormatData({ ...formatData });
     onValueChange({ ...formatData });
   };
@@ -219,7 +200,6 @@ function FieldCard({ currentField, onValueChange, type }: IProps) {
       }
     }
 
-    await fetchKvScope(item);
     const itemChainList = [];
 
     const oldItems = item.cascaderChoiceItems;
