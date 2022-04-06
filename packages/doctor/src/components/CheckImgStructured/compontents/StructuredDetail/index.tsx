@@ -80,7 +80,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       payload: { currEditData: {} },
     });
   }, []);
-
   useEffect(() => {
     console.log('saveSuccess', saveSuccess);
     const params = apiParams.current;
@@ -101,7 +100,6 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         message.error('单据内容为空！');
         setLoading(false);
       } else {
-        setLoading(false);
         console.log('====11+++++++++++保存单据内容', params);
         api.image.putImageImageIndexes(params).then(() => {
           if (saveSuccess === 3) {
@@ -123,6 +121,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
         }).catch((err: any) => {
           message.error(err?.result || '保存失败');
           setSaveSuccess(0);
+          setLoading(false);
         });
       }
     }
@@ -205,21 +204,23 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       });
   };
   const handleSaveClick = async () => {
-    setLoading(true);
-    if (isViewOnly) {
-      setisViewOnly(false);
-      setLoading(false);
-    } else {
-      console.log('typeTabs', typeTabs);
-      setSaveSuccess(0);
-      if (!isEmpty(typeTabs)) {
-        // 化验单
-        handleSaveHyd();
-        handleSaveJcd();
-        event.emit('saveStructured');
-      } else {
-        message.error('请选择图片类型');
+    if (!loading) {
+      setLoading(true);
+      if (isViewOnly) {
+        setisViewOnly(false);
         setLoading(false);
+      } else {
+        console.log('typeTabs', typeTabs);
+        setSaveSuccess(0);
+        if (!isEmpty(typeTabs)) {
+          // 化验单
+          handleSaveHyd();
+          handleSaveJcd();
+          event.emit('saveStructured');
+        } else {
+          message.error('请选择图片类型');
+          setLoading(false);
+        }
       }
     }
   };
@@ -321,7 +322,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
             )
           }
         </div>
-        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 800)} loading={loading}>
+        <Button className={styles.save_btn} type="primary" onClick={debounce(handleSaveClick, 500)} loading={loading}>
           {isViewOnly ? '修改结果' : '保存并退出'}
         </Button>
       </div>
