@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { message, Form, Tabs, DatePicker } from 'antd';
 import SelectGroup from '../components/select_group';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
@@ -21,7 +21,7 @@ import StopPatientMedicine from '../components/stop_patient_medicine';
 import { debounce, cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 import GetMedicTime from '../components/get_medic_time';
-import { handleTableDataSource } from 'xzl-web-shared/dist/components/XzlTable/util';
+import { handleTableDataSource, handleTableRowKey } from 'xzl-web-shared/dist/components/XzlTable/util';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -37,7 +37,9 @@ function PatientCro({ }: IProps) {
   const [tabStatus, setTabStatus] = useState<number>(1002); // tab状态
   const dispatch = useDispatch();
 
-  const [data, setData] = useState<any>([]);
+  const [goingData, setGoingData] = useState<any>([]);
+  const [doneData, setDoneData] = useState<any>([]);
+  // const [data, setData] = useState<any>([]);
   const totalRef = useRef(0);
 
 
@@ -51,22 +53,45 @@ function PatientCro({ }: IProps) {
 
   const getPatientList = async (tableOptions) => {
 
+    if (tableOptions.pageAt == 1) {
+      setGoingData([]);
+      setDoneData([]);
+    }
     const res = await window.$api.patientManage.getTestPatients(tableOptions);
     const handledData = handleTableDataSource('teams', res.teams || res.list, res.category || 'patientList');
-    setData((preData) => {
-      let newData;
-      if (tableOptions.pageAt == 1) {
-        newData = [...handledData];
-      } else {
-        newData = [...preData, ...handledData];
-      }
-      totalRef.current = newData.length;
-      return newData;
-    });
+
+    if (tableOptions.status == 1002) {
+      setGoingData((preData) => {
+        let newData;
+        if (tableOptions.pageAt == 1) {
+          newData = [...handledData];
+        } else {
+          newData = [...preData, ...handledData];
+        }
+        totalRef.current = newData.length;
+        return newData;
+      });
+    } else {
+      setDoneData((preData) => {
+        let newData;
+        if (tableOptions.pageAt == 1) {
+          newData = [...handledData];
+        } else {
+          newData = [...preData, ...handledData];
+        }
+        totalRef.current = newData.length;
+        return newData;
+      });
+    }
     if (totalRef.current < res.total) {
       getPatientList({ ...tableOptions, pageAt: tableOptions.pageAt + 1 });
     }
   };
+
+
+  useEffect(() => {
+    getPatientList({ ...initTableOptions, pageAt: 1 });
+  }, []);
 
   const refreshList = () => {
     // setOptions({ ...initTableOptions }); //刷新当前受试者列表
@@ -79,6 +104,15 @@ function PatientCro({ }: IProps) {
       payload: projectNsId,
     });
   };
+
+  const refreshDownList = () => {
+    // setOptions({ ...initTableOptions }); //刷新当前受试者列表
+    // 
+    getPatientList({ ...initTableOptions, pageAt: 1 });
+
+
+  };
+
 
   const putCroToPatient = (team) => {
 
@@ -276,9 +310,9 @@ function PatientCro({ }: IProps) {
         }
         <Table
           columns={columns[tabStatus]}
-          dataSource={data}
+          dataSource={tabStatus === 1002 ? goingData : doneData}
           bordered
-          rowKey={() => Math.random()}
+          rowKey={(record) => handleTableRowKey('teams', record)}
           rowSelection={
             tabStatus === 1002 ? {
               ...rowSelection,
