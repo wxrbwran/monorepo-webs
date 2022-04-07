@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { message, Form, Tabs, DatePicker } from 'antd';
 import SelectGroup from '../components/select_group';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
+import { Table } from 'antd';
 import * as api from '@/services/api';
 import { handleSelection } from '@/utils/conditions';
 import { Status } from 'xzl-web-shared/dist/components/Selects';
@@ -17,9 +18,10 @@ import distributionTeamPng from '@/assets/img/distribution_team.png';
 import { hasPermissions, hasOperationPermissions } from '@/utils/utils';
 import IconAutograph from '@/assets/img/icon_autograph.png';
 import StopPatientMedicine from '../components/stop_patient_medicine';
-import { debounce } from 'lodash';
+import { debounce, cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 import GetMedicTime from '../components/get_medic_time';
+import { handleTableDataSource } from 'xzl-web-shared/dist/components/XzlTable/util';
 interface IProps {
 }
 const { TabPane } = Tabs;
@@ -28,20 +30,49 @@ function PatientCro({ }: IProps) {
   const { projectNsId } = useSelector((state: IState) => state.project.projDetail);
   const teamMembers = useSelector((state: IState) => state.project.teamMembers);
   const [selectPatient, setSelectPatient] = useState<string[]>([]);
-  const [tableOptions, setOptions] = useState<CommonData>({ projectNsId, status: 1002 });
+  const initTableOptions = { projectNsId, status: 1002, pageAt: 1, pageSize: 5 };
+  // const [tableOptions, setOptions] = useState<CommonData>({ projectNsId, status: 1002 });
   const [imgVisible, setImgVisible] = useState(false);
   const [imgArr, setImgArr] = useState<string[]>([]);
   const [tabStatus, setTabStatus] = useState<number>(1002); // tab状态
   const dispatch = useDispatch();
 
+  const [data, setData] = useState<any>([]);
+  const totalRef = useRef(0);
+
+
   const [teamShow, setTeamShow] = useState(false);
   const putCroToRecord = useRef();
-
+  // const [selectedRowKeys, setRowKeys] = useState<Key[]>([]);
 
   const [teamCreateShow, setTeamCreateShow] = useState(false);
 
+  // window.$api.patientManage.getTestPatients
+
+  const getPatientList = async (tableOptions) => {
+
+    const res = await window.$api.patientManage.getTestPatients(tableOptions);
+    const handledData = handleTableDataSource('teams', res.teams || res.list, res.category || 'patientList');
+    setData((preData) => {
+      let newData;
+      if (tableOptions.pageAt == 1) {
+        newData = [...handledData];
+      } else {
+        newData = [...preData, ...handledData];
+      }
+      totalRef.current = newData.length;
+      return newData;
+    });
+    if (totalRef.current < res.total) {
+      getPatientList({ ...tableOptions, pageAt: tableOptions.pageAt + 1 });
+    }
+  };
+
   const refreshList = () => {
-    setOptions({ ...tableOptions }); //刷新当前受试者列表
+    // setOptions({ ...initTableOptions }); //刷新当前受试者列表
+    // 
+    getPatientList({ ...initTableOptions, pageAt: 1 });
+
     //刷新试验分组列表
     dispatch({
       type: 'project/fetchGroupList',
@@ -86,7 +117,7 @@ function PatientCro({ }: IProps) {
 
     const { status, patientGroupId } = allValues;
     const params: CommonData = {
-      ...tableOptions,
+      ...initTableOptions,
       conditions: [],
     };
     if (status) {
@@ -97,7 +128,8 @@ function PatientCro({ }: IProps) {
     } else if (params.patientGroupId) {
       delete params.patientGroupId;
     }
-    setOptions(params);
+    // setOptions(params);
+    getPatientList(params);
   };
 
   const operation = {
@@ -185,8 +217,15 @@ function PatientCro({ }: IProps) {
     1002: patientColums,
     1003: patientCroStopColumns(),
   };
+
+  // const onSelectChange: IOnSelectChange = (keys: Key[]) => {
+  //   setRowKeys(keys);
+  //   // handleCallBackStore({ selectedRowKeys: keys });
+  // };
   const rowSelection = {
+    // selectedRowKeys,
     onChange: (selectedRowKeys: never[], selectedRows: { sid: string }[]) => {
+      // setRowKeys(selectedRowKeys);
       const patients: any = [];
       selectedRows.forEach((item: { sid: string }) => {
         patients.push(item.sid);
@@ -195,16 +234,14 @@ function PatientCro({ }: IProps) {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: (record: { status: number }) => ({
-      disabled: record?.status === 1003 || !hasOperationPermissions(record.team.members),
+      // disabled: record?.status === 1003 || !hasOperationPermissions(record.team.members),
     }),
   };
+
   const handleToggleTab = (key: string) => {
     setTabStatus(Number(key));
-    setOptions({ ...tableOptions, status: +key });
+    getPatientList({ ...initTableOptions, status: +key, pageAt: 1 });
   };
-
-
-
 
 
   return (
@@ -237,21 +274,38 @@ function PatientCro({ }: IProps) {
             加入试验分组
           </SelectGroup>
         }
-        <XzlTable
+        <Table
+          columns={columns[tabStatus]}
+          dataSource={data}
+          bordered
+          rowKey={() => Math.random()}
+          rowSelection={
+            tabStatus === 1002 ? {
+              ...rowSelection,
+            } : false
+          }
+          pagination={false}
+        // rowSelection={{ columnWidth: 100 }}
+        />
+
+        {/* const handledData = handleTableDataSource(dataKey, res[dataKey] || res.list, res.category || category); */}
+
+        {/* <XzlTable
           columns={columns[tabStatus]}
           category="patientList"
           dataKey="teams"
-          request={window.$api.patientManage.getTestPatients}
+          
+          // request={window.$api.patientManage.getTestPatients}
           depOptions={tableOptions}
           // handleCallback={handleCallback}
-          // noPagination={true}
+          noPagination={true}
           tableOptions={{
             rowSelection: tabStatus === 1002 ? {
               ...rowSelection,
             } : false,
-            // pagination: false,
+            pagination: false,
           }}
-        />
+        /> */}
       </div>
       <Viewer
         activeIndex={0}
