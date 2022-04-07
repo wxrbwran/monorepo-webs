@@ -244,12 +244,12 @@ function PatientCro({ }: IProps) {
           request={window.$api.patientManage.getTestPatients}
           depOptions={tableOptions}
           // handleCallback={handleCallback}
-          noPagination={true}
+          // noPagination={true}
           tableOptions={{
             rowSelection: tabStatus === 1002 ? {
               ...rowSelection,
             } : false,
-            pagination: false,
+            // pagination: false,
           }}
         />
       </div>
