@@ -41,6 +41,7 @@ function PatientCro({ }: IProps) {
   const [doneData, setDoneData] = useState<any>([]);
   // const [data, setData] = useState<any>([]);
   const totalRef = useRef(0);
+  const tableOptionsRef = useRef({ projectNsId, status: 1002, pageAt: 1, pageSize: 5 });
 
 
   const [teamShow, setTeamShow] = useState(false);
@@ -51,40 +52,56 @@ function PatientCro({ }: IProps) {
 
   // window.$api.patientManage.getTestPatients
 
+  const getGoingPatientList = async (tableOptions) => {
+
+    const res = await window.$api.patientManage.getTestPatients(tableOptions);
+    const handledData = handleTableDataSource('teams', res.teams || res.list, res.category || 'patientList');
+
+    setGoingData((preData) => {
+      let newData;
+      if (tableOptions.pageAt == 1) {
+        newData = [...handledData];
+      } else {
+        newData = [...preData, ...handledData];
+      }
+      totalRef.current = newData.length;
+      return newData;
+    });
+    if (totalRef.current < res.total && tableOptionsRef.current.status == 1002) {
+      getGoingPatientList({ ...tableOptions, pageAt: tableOptions.pageAt + 1 });
+    }
+  };
+
+  const getDowningPatientList = async (tableOptions) => {
+    const res = await window.$api.patientManage.getTestPatients(tableOptions);
+    const handledData = handleTableDataSource('teams', res.teams || res.list, res.category || 'patientList');
+
+    setDoneData((preData) => {
+      let newData;
+      if (tableOptions.pageAt == 1) {
+        newData = [...handledData];
+      } else {
+        newData = [...preData, ...handledData];
+      }
+      totalRef.current = newData.length;
+      return newData;
+    });
+    if (totalRef.current < res.total && tableOptionsRef.current.status != 1002) {
+      getDowningPatientList({ ...tableOptions, pageAt: tableOptions.pageAt + 1 });
+    }
+  };
+
   const getPatientList = async (tableOptions) => {
 
+    tableOptionsRef.current = tableOptions;
     if (tableOptions.pageAt == 1) {
       setGoingData([]);
       setDoneData([]);
     }
-    const res = await window.$api.patientManage.getTestPatients(tableOptions);
-    const handledData = handleTableDataSource('teams', res.teams || res.list, res.category || 'patientList');
-
     if (tableOptions.status == 1002) {
-      setGoingData((preData) => {
-        let newData;
-        if (tableOptions.pageAt == 1) {
-          newData = [...handledData];
-        } else {
-          newData = [...preData, ...handledData];
-        }
-        totalRef.current = newData.length;
-        return newData;
-      });
+      getGoingPatientList(tableOptions);
     } else {
-      setDoneData((preData) => {
-        let newData;
-        if (tableOptions.pageAt == 1) {
-          newData = [...handledData];
-        } else {
-          newData = [...preData, ...handledData];
-        }
-        totalRef.current = newData.length;
-        return newData;
-      });
-    }
-    if (totalRef.current < res.total) {
-      getPatientList({ ...tableOptions, pageAt: tableOptions.pageAt + 1 });
+      getDowningPatientList(tableOptions);
     }
   };
 
