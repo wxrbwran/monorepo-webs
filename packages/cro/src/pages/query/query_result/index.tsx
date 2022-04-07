@@ -73,7 +73,7 @@ const QueryResult = forwardRef(({ param }: IProps, ref: Ref<any>) => {
 
     if ((results?.tableBody?.length ?? 0) < pageSize) {
 
-      if (page == 0 && retryTimes.current < 5 || (page != 0 && retryTimes.current < 3)) {
+      if (page == 0 && retryTimes.current < 10 || (page != 0 && retryTimes.current < 5)) {
         // 重试5次
         retryTimes.current += 1;
 
