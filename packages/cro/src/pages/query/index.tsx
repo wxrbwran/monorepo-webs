@@ -11,6 +11,7 @@ import deletePng from '@/assets/img/delete.png';
 import exportStylesPng from '@/assets/img/export_styles.jpg';
 import addPng from '@/assets/img/add.png';
 import deleteBluePng from '@/assets/img/delete_blue.png';
+import copyPng from '@/assets/img/copy.png';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
@@ -729,7 +730,7 @@ function Query({ }: IProps) {
               </>
             }
             <div className='flex flex-row items-center mr-20' onClick={() => { onCopyClick(ruleIndex); }}  >
-              <img src={deleteBluePng} className='w-16 h-16' />
+              <img src={copyPng} className='w-16 h-16' />
               <div className='ml-4'>复制</div>
             </div>
           </div>
