@@ -139,27 +139,30 @@ const ChatItem: FC<IProps> = (props) => {
       if (sameNode) {
         return;
       }
+    } else {
+      // 时长
+      const duration = msgItem.file.dur;
+      if (!duration) {
+        return;
+      }
+      // 创建audio
+      audio.$audio = document.createElement('audio');
+      const $source = document.createElement('source');
+      const audioType = msgItem.file.ext;
+      $source.src = msgItem.file.url;
+      $source.type = `audio/${audioType === 'mp3' ? 'mpeg' : audioType}`;
+      audio.$audio.appendChild($source);
+      audio.$audio.play();
+      audio.$node = $target;
+      console.log(' $target',  $target);
+      $target.innerHTML = $target.innerHTML.replace('点击播放',
+        '<span>正在播放</span>');
+      audio.timeout = setTimeout(() => {
+        audio.$audio = null;
+        canclePlayAudio();
+      }, duration);
     }
-    // 时长
-    const duration = msgItem.file.dur;
-    if (!duration) {
-      return;
-    }
-    // 创建audio
-    audio.$audio = document.createElement('audio');
-    const $source = document.createElement('source');
-    const audioType = msgItem.file.ext;
-    $source.src = msgItem.file.url;
-    $source.type = `audio/${audioType === 'mp3' ? 'mpeg' : audioType}`;
-    audio.$audio.appendChild($source);
-    audio.$audio.play();
-    audio.$node = $target;
-    $target.innerHTML = $target.innerHTML.replace('点击播放',
-      '<span>正在播放</span>');
-    audio.timeout = setTimeout(() => {
-      audio.$audio = null;
-      canclePlayAudio();
-    }, duration);
+
   };
 
   const handleShowImage = () => {
