@@ -20,6 +20,9 @@ function DatePicker(props: Iprops) {
   const [day, setDay] = useState(dayV);
   const [dayList, setDayList] = useState(31);
   const [daysMonth, setDaysMonth] = useState([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]);
+  const curYear = new Date().getFullYear();
+  const curMonth = new Date().getMonth() + 1;
+  const curDay = new Date().getDate();
   useEffect(() => {
     setYear(yearV);
     setMonth(monthV);
@@ -153,6 +156,7 @@ function DatePicker(props: Iprops) {
               key={m}
               title={`${m}`}
               value={`${m}`}
+              disabled={Number(year) >= curYear && m > curMonth}
             >
               {m}
             </Option>
@@ -176,6 +180,7 @@ function DatePicker(props: Iprops) {
                 key={d}
                 title={`${d}`}
                 value={`${d}`}
+                disabled={Number(year) >= curYear && Number(month) >= curMonth && d > curDay}
               >
                 {d}
               </Option>
