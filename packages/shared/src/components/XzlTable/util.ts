@@ -142,6 +142,27 @@ export const handleTeamInviteMemberList = (dataSource: Store[]) => {
   // console.log('handleTeamInviteMemberList newData', newData);
   return newData;
 };
+// 九品管理端-服务人员列表和会员列表
+export const handlePersonnewList = (dataSource: Store[]) => {
+  console.log('dataSource333', dataSource);
+  const newData: Array<any> = [];
+  dataSource.forEach(item => {
+
+    const curItem = { ...item.members[0], roleTags: [], teamNSId: item.teamNSId, department: item.name };
+    // 一个人有多个角色，这里把角色集合到roles里
+    item.members.forEach((memberItem: { roleTags?: object[] }) => {
+      if (memberItem?.roleTags) {
+        curItem.roleTags = [
+          ...curItem.roleTags,
+          ...memberItem?.roleTags,
+        ];
+      }
+    });
+    newData.push(curItem);
+  });
+  console.log('newData3', newData);
+  return newData;
+};
 
 const handleDoctorTeamDataSource = (dataSource: Store[]) => {
   const res: Store[] = [];
@@ -249,6 +270,9 @@ export const handleTableDataSource = (dataKey: string, dataSource: Store[], cate
 
       if (category === 'inviteMemberList') {
         return handleTeamInviteMemberList(dataSource);
+      }
+      if (category === 'jp-personnel') {
+        return handlePersonnewList(dataSource);
       }
 
       return dataSource;

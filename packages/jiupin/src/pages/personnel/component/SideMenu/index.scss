@@ -1,0 +1,36 @@
+.side_menu {
+  flex: 0 0 240px;
+  border-right: 1px solid #F5F5F5;
+  height: calc(100vh - 48px);
+  // padding: 20px 0;
+  :global {
+    .ant-input-affix-wrapper {
+      border-radius: 10px;
+      height: 36px;
+      line-height: 36px;
+      width: 210px;
+      margin-left: 15px;
+    }
+    .ant-tabs-ink-bar {
+      display: none;
+    }
+    .ant-tabs-tab {
+      a {
+        color: #666666;
+      }
+      &.ant-tabs-tab-active {
+        a {
+          color: #4D8AFA;
+        }
+      }
+    }
+  }
+}
+.roles {
+  :global {
+    .ant-btn-dashed {
+      border-color: #4D8AFA;
+      color: #4D8AFA;
+    }
+  }
+}

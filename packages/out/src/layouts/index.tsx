@@ -16,6 +16,7 @@ const BasicLayout: FC = (props: IRoute) => {
   const connected = useSelector((state: IState) => state.im.connected);
   const dispatch = useDispatch();
   const store = useStore();
+  console.log('23232');
   if (!window?.$store) {
     window.$store = window.$store || store;
   }

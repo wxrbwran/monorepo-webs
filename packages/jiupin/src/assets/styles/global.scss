@@ -1,0 +1,376 @@
+// config
+@import '@tailwindcss/postcss7-compat/base';
+@import '@tailwindcss/postcss7-compat/components';
+@import '@tailwindcss/postcss7-compat/utilities';
+// 由 layout 引入
+html {
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+img,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body {
+  min-width: 1200px;
+  // button按钮样式
+  .common__btn {
+    text-align: center;
+    button {
+      margin-right: 40px;
+      min-width: 130px;
+      height: 42px;
+      font-size: 16px;
+      border: 1px solid #007ADA;
+      color: #007ADA;
+
+      text-align: center;
+      border-radius: 2px;
+
+      &.finish {
+        margin-right: 0;
+        background-color: #007ADA;
+        color: #fff;
+        padding: 10px;
+        border-radius: 2px;
+      }
+    }
+
+    .ant-btn-primary {
+      color: #fff;
+    }
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+.white {
+  background-color: #fff;
+}
+}
+
+.bg {
+  background-color: #f6f7fb;
+}
+.column_btn {
+  > * {
+    margin-right: 10px;
+  }
+}
+
+.submit-btn-style1 {
+  margin-top: 60px;
+  text-align: center;
+  .ant-btn {
+    width: 98px;
+    height: 40px;
+    font-size: 14px;
+    &:nth-child(2n) {
+      margin-left: 32px;
+    }
+  }
+}
+
+img,
+svg {
+  display: inline-block;
+  vertical-align: initial;
+}
+html,
+body,
+#root {
+  min-height: 100%;
+  font-family: PingFang SC;
+  // font-family: PingFangSC-Semibold, PingFang SC;
+}
+
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+body {
+  min-width: 1200px;
+}
+.ant-modal-footer {
+  text-align: center !important;
+}
+.hide_modal_cancel .ant-btn:first-child {
+  display: none;
+}
+.hide_modalform_cancel .ant-modal-footer .ant-space-item:first-child {
+  display: none;
+}
+.xzl-uni-selects {
+  .ant-select {
+    min-width: 100px;
+    margin-right: 10px;
+  }
+}
+.ant-modal-header {
+  background-color: #f5f5f5;
+  text-align: center;
+  font-weight: bolder;
+  padding: 0;
+}
+.ant-modal-body {
+  // max-height: calc(100vh - 102px);
+  max-height: 78vh;
+  overflow: auto;
+}
+#root .ant-layout-sider-children,
+#root .ant-pro-global-header{
+  // background-color: #f2f0f5;
+  background-color: #Fffff;
+}
+.ant-modal {
+  padding-bottom: 0;
+}
+
+.ant-modal-body {
+  max-height: calc(100vh - 102px);
+  overflow: auto;
+}
+.ant-layout-sider {
+  .ant-pro-sider-logo {
+    padding-right: 2px;
+    img {
+      width: auto;
+    }
+    h1 {
+      font-size: 16px;
+      color: #181818!important;
+      margin-left: 5px;
+    }
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+.white {
+  background-color: #fff;
+}
+.bg {
+  background-color: #f6f7fb;
+}
+
+.ant-pro-basicLayout {
+  height: 100%;
+}
+section.ant-layout {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  .ant-pro-sider {
+    z-index: 999;
+  }
+  > div {
+    flex: 1 1 auto;
+  }
+  main.ant-layout-content {
+    display: flex;
+    background-color: #fff;
+    > div {
+      flex: auto;
+    }
+  }
+}
+.ant-pro-global-header-logo {
+  h1 {
+    color: #181818 !important;
+    font-size: 18px;
+  }
+}
+.ant-modal-title {
+  color: #343537 ;
+  font-weight: normal ;
+}
+.ant-modal-footer {
+  text-align: center ;
+}
+.hide_modal_footer .ant-modal-footer{
+ display: none;
+}
+.hide_modal_cancel .ant-btn:first-child {
+  display: none;
+}
+
+// @media (max-width: @screen-xs) {
+//   .ant-table {
+//     width: 100%;
+//     overflow-x: auto;
+//     &-thead > tr,
+//     &-tbody > tr {
+//       > th,
+//       > td {
+//         white-space: pre;
+//         > span {
+//           display: block;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// 兼容IE11
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
+    min-height: 100vh;
+  }
+}
+
+.black-65 {
+  color: $black-65;
+}
+.linkColor {
+  color: #3588FD
+}
+
+.ant-menu-submenu-selected path {
+  fill: #1890ff;
+}
+.tab_btn_18 {
+  .ant-tabs-tab-btn {
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+.menuIcon {
+  .icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+.mode_hide {
+  z-index: 1!important;
+}
+.react-viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px!important;
+  li {
+    border-radius: 0!important;
+    box-sizing: content-box!important;
+    line-height: normal!important;
+    height: 46px!important;
+    width: 65px!important;
+  }
+}
+.react-viewer-btn[data-key=customStructured] {
+  background: rgba(2, 122, 218, 0.8);
+  width: 100px;
+  height: 46px;
+  padding: 2px 15px;
+  .react-viewer-btn {
+    background-color: transparent;
+  }
+  &:hover {
+    background: rgba(2, 122, 218, 0.9);
+  }
+}
+

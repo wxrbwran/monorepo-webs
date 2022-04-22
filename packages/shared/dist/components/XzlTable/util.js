@@ -9,6 +9,27 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 import dayjs from 'dayjs';
 import { Role, fetchRolePropValue } from '../../utils/role';
 import { projectInviteStatus, sexList } from '../../utils/consts';
@@ -123,6 +144,23 @@ export var handleTeamInviteMemberList = function (dataSource) {
     // console.log('handleTeamInviteMemberList newData', newData);
     return newData;
 };
+// 九品管理端-服务人员列表和会员列表
+export var handlePersonnewList = function (dataSource) {
+    console.log('dataSource333', dataSource);
+    var newData = [];
+    dataSource.forEach(function (item) {
+        var curItem = __assign(__assign({}, item.members[0]), { roleTags: [], teamNSId: item.teamNSId, department: item.name });
+        // 一个人有多个角色，这里把角色集合到roles里
+        item.members.forEach(function (memberItem) {
+            if (memberItem === null || memberItem === void 0 ? void 0 : memberItem.roleTags) {
+                curItem.roleTags = __spreadArray(__spreadArray([], __read(curItem.roleTags)), __read(memberItem === null || memberItem === void 0 ? void 0 : memberItem.roleTags));
+            }
+        });
+        newData.push(curItem);
+    });
+    console.log('newData3', newData);
+    return newData;
+};
 var handleDoctorTeamDataSource = function (dataSource) {
     var res = [];
     // dataSource
@@ -226,6 +264,9 @@ export var handleTableDataSource = function (dataKey, dataSource, category) {
             }
             if (category === 'inviteMemberList') {
                 return handleTeamInviteMemberList(dataSource);
+            }
+            if (category === 'jp-personnel') {
+                return handlePersonnewList(dataSource);
             }
             return dataSource;
         case 'infos':
