@@ -38,7 +38,6 @@ const RoleList: FC = () => {
       });
     }
   }, [location]);
-  console.log('location2', location);
   const columns = [
     name,
     tel,
@@ -58,7 +57,7 @@ const RoleList: FC = () => {
           <Search placeholder='输入关键词搜索' form={form} searchKey="searchByName"  />
         </Form>
         <AddServicePersonnel refresh={() => setOptions({ ...tableOptions })}>
-          <Button type="primary">+新增人员</Button>
+          <Button type="primary">+ 新增人员</Button>
         </AddServicePersonnel>
       </div>
       <XzlTable
