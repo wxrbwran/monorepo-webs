@@ -46,7 +46,6 @@ const RoleList: FC = () => {
   console.log('tableOptions', tableOptions);
   const handleSelectChange = (_changedValues: any, allValues: string[]) => {
     console.log('_changedValues', _changedValues);
-    console.log('allValues', allValues);
     const newConditions = handleSelection(allValues);
     setOptions({ ...tableOptions, conditions: [...newConditions] });
   };
