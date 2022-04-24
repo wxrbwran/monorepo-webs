@@ -16,7 +16,6 @@ interface IParams {
 }
 const RoleList: FC = () => {
   const sid = window.$storage.getItem('sid');
-  const sRole = window.$storage.getItem('role');
   const location = useLocation();
 
   const [tableOptions, setOptions] = useState<IParams>(

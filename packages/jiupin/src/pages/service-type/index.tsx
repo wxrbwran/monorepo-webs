@@ -10,6 +10,7 @@ const ServiceType: FC = () => {
       doctorRole:[window.$storage.getItem('role')],
     },
   );
+
   const [keyword, setKeyWord] = useState('');
   const handleDelete = (record: any) => {
     console.log('record', record);
