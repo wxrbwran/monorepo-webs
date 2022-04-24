@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
-import { Form, Input, Select, message } from 'antd';
+import { Form, Input, Select, message, InputNumber } from 'antd';
 import { useSelector } from 'umi';
 import { debounce } from 'lodash';
 
@@ -30,6 +30,7 @@ const AddServicePersonnel: FC<IProps> = (props) => {
         console.log(params);
         await window.$api.personnel.putTeamWorker(params);
         message.success('新增成功');
+        form.resetFields();
         setShow(false);
         refresh();
       })
@@ -75,7 +76,7 @@ const AddServicePersonnel: FC<IProps> = (props) => {
               <Input placeholder="请输入" type="text" />
             </FormItem>
             <FormItem label="手机号:" name="tel" rules={[{ required: true, message: '请输入手机号!' }]}>
-              <Input placeholder="请输入" type="text" />
+              <InputNumber placeholder="请输入" max={99999999999} maxLength={11} controls={false} />
             </FormItem>
             <FormItem label="角 色:" name="roleTagId" rules={[{ required: true, message: '请选择角色!' }]}>
               <Select placeholder="请选择" style={{ width: 120 }}>

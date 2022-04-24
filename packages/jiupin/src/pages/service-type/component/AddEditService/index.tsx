@@ -55,6 +55,7 @@ const AddEditService: FC<IProps> = (props) => {
           await window.$api.service.postGoods({ id: initData?.id, name: values.name });
         }
         message.success(`${text}成功`);
+        form.resetFields();
         refresh();
         setShow(false);
       })

@@ -125,4 +125,7 @@ interface ISub {
   floorName: string;
   bedName: string;
   enterTime: string;
+
+  emergencyTel: string;// 紧急联系电话
+  emergencyName: string; // 紧急联系人
 }

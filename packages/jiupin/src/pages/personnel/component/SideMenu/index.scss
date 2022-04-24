@@ -1,8 +1,7 @@
 .side_menu {
   flex: 0 0 240px;
   border-right: 1px solid #F5F5F5;
-  height: calc(100vh - 48px);
-  // padding: 20px 0;
+  height: 100%;
   :global {
     .ant-input-affix-wrapper {
       border-radius: 10px;

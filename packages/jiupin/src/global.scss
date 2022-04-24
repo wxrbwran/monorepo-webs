@@ -160,6 +160,7 @@
 
 
 body {
+  height: 100%;
   img,
   svg {
     display: inline-block;
@@ -375,40 +376,6 @@ body {
     height: 3px;
   }
 
-  .ant-modal {
-    padding-bottom: 0;
-  }
-  .ant-modal-content {
-    border-radius: 5px;
-  }
-  .ant-modal-header {
-    padding: 0;
-    height: 50px;
-    background-color: #f5f5f5;
-    border: 0;
-    border-radius: 5px 5px 0 0;
-  }
-
-  .ant-modal-body {
-    padding: 30px;
-    overflow-y: auto;
-    color: #000;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  .ant-modal-title,
-  .ant-modal-close-x {
-    line-height: 50px;
-    text-align: center;
-    color: #333;
-    font-size: 20px;
-  }
-
-  .ant-modal-close-x {
-    color: #979797;
-    font-size: 24px;
-  }
 
   .ant-tabs-bar {
     margin-bottom: 20px;
@@ -570,8 +537,11 @@ body {
   }
 }
 
-.ant-input-number {
-  font-size: 14px;
+.ant-form {
+  .ant-input-number {
+    font-size: 14px;
+    width: 100%;
+  }
 }
 
 .ant-table-pagination.ant-pagination {
@@ -641,3 +611,9 @@ body {
 .hide-text {
   @extend %hide-text;
 }
+
+ .ant-layout-content {
+  height: calc(100vh - 68px)!important;
+  // overflow: hidden;
+}
+

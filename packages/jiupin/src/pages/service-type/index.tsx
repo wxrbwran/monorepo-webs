@@ -7,8 +7,6 @@ const { Search } = Input;
 const ServiceType: FC = () => {
   const [tableOptions, setOptions] = useState(
     { orgNsId: window.$storage.getItem('nsId'),
-      pageAt: 1,
-      pageSize: 10,
       doctorRole:[window.$storage.getItem('role')],
     },
   );
@@ -77,9 +75,11 @@ const ServiceType: FC = () => {
         columns={columns}
         dataKey="goodsDetailList"
         depOptions={tableOptions}
+        noPagination={true}
         tableOptions={{
           onChange: () => {},
           rowSelection: false,
+          pagination: false,
         }}
       ></XzlTable>
     </div>

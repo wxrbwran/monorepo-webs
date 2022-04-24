@@ -9,24 +9,33 @@ import { handleSelection } from 'xzl-web-shared/dist/utils/conditions';
 import { useLocation } from 'umi';
 interface IParams {
   sid: string;
-  sRole: string;
   viewRole?: string;
   pageAt: number;
   pageSize: number;
+  roleTagId: string;
 }
 const RoleList: FC = () => {
   const sid = window.$storage.getItem('sid');
   const sRole = window.$storage.getItem('role');
   const location = useLocation();
-  const [tableOptions, setOptions] = useState<IParams>({ sid, sRole, pageAt: 1, pageSize: config.TABLE_PAGESIZE, viewRole: location?.query?.roleId });
+
+  const [tableOptions, setOptions] = useState<IParams>(
+    {
+      sid,
+      pageAt: 1,
+      pageSize: config.TABLE_PAGESIZE,
+      viewRole: 'test.qWGyBe',
+      roleTagId: location?.query?.roleId,
+    },
+  );
   const [form] = Form.useForm();
 
   useEffect(() => {
     const roleId = location?.query?.roleId;
-    if (roleId !== tableOptions.viewRole) {
+    if (roleId !== tableOptions.roleTagId) {
       setOptions({
         ...tableOptions,
-        viewRole: location?.query?.roleId,
+        roleTagId: location?.query?.roleId,
       });
     }
   }, [location]);

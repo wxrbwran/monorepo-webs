@@ -5,7 +5,7 @@ const SideOrgs: FC = () => {
   const sid = window.$storage.getItem('sid');
   const sRole = window.$storage.getItem('rold');
   useEffect(() => {
-    window.$api.personnel.getPersonnel({ sid, pageAt:1, pageSize: 1, sRole }).then(res => {
+    window.$api.personnel.getPersonnel({ sid, pageAt:1, pageSize: 1, viewRole: 'test.YWLRAe' }).then(res => {
       console.log(res);
       setTotal(res.total);
     });

@@ -3,7 +3,7 @@ import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Descriptions, Button } from 'antd';
 import EditDetail from './EditDetail';
 import { sexList } from 'xzl-web-shared/dist/utils/consts';
-
+import dayjs from 'dayjs';
 
 interface IProps {
   refresh: () => void;
@@ -89,7 +89,9 @@ const ServicePersonnelDetail: FC<IProps> = (props) => {
                 <Descriptions.Item labelStyle={{ color:'#969696' }} label="身份证号" span={3}>{uInfo?.idNum || '--'}</Descriptions.Item>
                 <Descriptions.Item labelStyle={{ color:'#969696' }} label="年龄" span={1}>{uInfo?.age || '--'}</Descriptions.Item>
                 <Descriptions.Item labelStyle={{ color:'#969696' }} label="性别" span={1}>{sexList?.[uInfo?.sex] || '--'}</Descriptions.Item>
-                <Descriptions.Item labelStyle={{ color:'#969696' }} label="出生日期" span={3}>{uInfo?.birthday || '--'}</Descriptions.Item>
+                <Descriptions.Item labelStyle={{ color:'#969696' }} label="出生日期" span={3}>
+                  {uInfo?.birthday ? dayjs(uInfo?.birthday).format('YYYY-MM-DD') : '--'}
+                </Descriptions.Item>
                 <Descriptions.Item labelStyle={{ color:'#969696' }} label="现住址" span={8}>
                   {uInfo?.address}
                   {uInfo?.detailAddress || '--'}

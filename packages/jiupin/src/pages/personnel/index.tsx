@@ -19,7 +19,7 @@ const Personnel: FC = (props) => {
   }, []);
   // fetchRoleList
   return (
-    <div className='flex'>
+    <div className='flex h-full'>
       <SideMenu />
       {children}
     </div>

@@ -31,7 +31,7 @@ const SideRoles: FC = () => {
       >
         <Panel
           header={
-            <div><img src={servecePeople} className="w-14 h-14" alt="" /><span className='ml-3 pt-3 relateiv top-1'>服务人员</span></div>
+            <div className='flex items-center'><img src={servecePeople} className="w-14 h-14" alt="" /><span className='ml-3'>服务人员</span></div>
           } key="1">
           <div>
             {

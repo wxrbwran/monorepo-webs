@@ -1,21 +1,3 @@
-// {
-//   "extends": "../../tsconfig",
-//   "compilerOptions": {
-//     "paths": {
-//       "@/*": ["./src/*"],
-//       "@@/*": ["./src/.umi/*"]
-//     },
-//     "typeRoots": [
-//       "node",
-//       "node_modules/@types",
-//       "./typings"
-//     ],
-//   },
-//   "include": ["src/**/*", "config/**/*"],
-//   "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
-// }
-
-
 {
   "compilerOptions": {
     "outDir": "build/dist",
@@ -24,7 +6,6 @@
     "lib": ["esnext", "dom"],
     "resolveJsonModule": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
@@ -40,11 +21,12 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types", "node", "typings"],
+    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"]
-    }
+    },
   },
   "include": ["src/**/*", "config/**/*", "typings/**/*"],
-  // "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
+  "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
 }

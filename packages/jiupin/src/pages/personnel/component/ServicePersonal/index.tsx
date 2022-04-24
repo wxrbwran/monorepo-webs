@@ -8,15 +8,16 @@ import config from '@/config/index';
 import ServicePersonnelDetail from '../ServicePersonnelDetail';
 interface IParams {
   sid: string;
-  sRole: string;
   viewRole?: string;
   pageAt: number;
   pageSize: number;
+  roleTagId?: string;
 }
 const ServicePersonal: FC = () => {
   const sid = window.$storage.getItem('sid');
-  const sRole = window.$storage.getItem('role');
-  const [tableOptions, setOptions] = useState<IParams>({ sid, sRole, pageAt: 1, pageSize: config.TABLE_PAGESIZE });
+  const [tableOptions, setOptions] = useState<IParams>(
+    { sid, viewRole: 'test.qWGyBe', pageAt: 1, pageSize: config.TABLE_PAGESIZE },
+  );
   const [form] = Form.useForm();
   const columns = [
     name,
@@ -34,12 +35,12 @@ const ServicePersonal: FC = () => {
     },
   ];
   console.log('tableOptions', tableOptions);
-  const handleSelectChange = ({ viewRole }: { viewRole: string }, allValues: string[]) => {
-    console.log('_changedValues', viewRole);
+  const handleSelectChange = ({ roleTagId }: { roleTagId: string }, allValues: string[]) => {
+    console.log('_changedValues', roleTagId);
     console.log('allValues', allValues);
-    const params = { ...tableOptions, viewRole };
-    if (!viewRole) {
-      delete params.viewRole;
+    const params = { ...tableOptions, roleTagId };
+    if (!roleTagId) {
+      delete params.roleTagId;
     }
     setOptions(params);
   };
