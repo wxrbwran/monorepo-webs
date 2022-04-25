@@ -56,6 +56,7 @@
     "dist:nurse": "pnpm dist --filter 'xzl-web-nurse'",
     "dist:org": "pnpm dist --filter 'xzl-web-org'",
     "dist:out": "pnpm dist --filter 'out-hospital-patient'",
+    "dist:jiupin": "pnpm dist --filter 'jiupin'",
     "dist:cro": "pnpm dist --filter 'clinical-cro'",
     "dev-dist:doctor": "pnpm dev-dist --filter 'xzl-web-doctor'",
     "dev-dist:nurse": "pnpm dev-dist --filter 'xzl-web-nurse'",
