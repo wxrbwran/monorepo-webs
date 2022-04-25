@@ -78,11 +78,11 @@ const AddServicePersonnel: FC<IProps> = (props) => {
             <FormItem label="手机号:" name="tel" rules={[{ required: true, message: '请输入手机号!' }]}>
               <InputNumber placeholder="请输入" max={99999999999} maxLength={11} controls={false} />
             </FormItem>
-            <FormItem label="角 色:" name="roleTagId" rules={[{ required: true, message: '请选择角色!' }]}>
+            <FormItem label="角 色:" name="nroleTagId" rules={[{ required: true, message: '请选择角色!' }]}>
               <Select placeholder="请选择" style={{ width: 120 }}>
                 {
                   roleList?.map((item: { id: string;name: string }) => (
-                    <Option id={item.id} value={item.id}>{item.name}</Option>
+                    <Option key={item.id} id={item.id} value={item.id}>{item.name}</Option>
                   ))
                 }
               </Select>

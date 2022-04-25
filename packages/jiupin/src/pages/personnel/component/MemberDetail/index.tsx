@@ -18,7 +18,7 @@ interface IUserInfo {
     id: string;
     name: string;
     subject: ISubject;
-    roleTags: {
+    nroleTags: {
       name: string;
       id: string;
     }[]
@@ -43,8 +43,6 @@ const MemberDetail: FC<IProps> = (props) => {
   }, [show]);
 
   const uInfo = userInfo?.roles?.[0]?.subject || {};
-  console.log('userInfo', userInfo);
-  console.log('uInfo', uInfo);
   return (
     <>
       <div style={{ display: 'inline' }} onClick={() => setShow(!show)}>

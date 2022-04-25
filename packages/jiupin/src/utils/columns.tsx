@@ -48,8 +48,8 @@ export const name = {
 
 export const serviceRoleTags =  {
   title: '角色',
-  dataIndex: 'roleTags',
-  key: 'roleTags',
+  dataIndex: 'nroleTags',
+  key: 'nroleTags',
   align: 'center',
   render: (text: any[]) => <span>{[...new Set(text.map(tag => tag.name))].join('、')}</span>,
 };

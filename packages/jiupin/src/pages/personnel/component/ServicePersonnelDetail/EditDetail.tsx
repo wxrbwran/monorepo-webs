@@ -21,6 +21,10 @@ interface Iprops {
       id: string;
       name: string;
       subject: ISubject;
+      nroleTags: {
+        name: string;
+        id: string;
+      }[]
     }[],
     wcId: string;
   };
@@ -40,13 +44,13 @@ function EditDetail(props: Iprops) {
       id: userInfo?.id,
       ...values,
     };
-    if (detail.roleTagId) {
-      delete detail.roleTagId;
+    if (detail.nroleTagId) {
+      delete detail.nroleTagId;
     }
     const params = {
       coreRel: {
         wcId: userAllInfo.wcId,  // 被修改人员的wcid
-        roleTagIds: [values.roleTagId], // //角色列表id
+        nroleTagIds: [values.nroleTagId], // //角色列表id
       },
       detail,
     };
@@ -65,7 +69,7 @@ function EditDetail(props: Iprops) {
   };
   const initFormVal:CommonData = {
     ...userInfo,
-    roleTagId: userAllInfo.roles[0]?.roleTags?.[0]?.id, // 目前是单角色，默认取第一个。此版本正常来说不存在多个
+    nroleTagId: userAllInfo.roles[0]?.nroleTags?.[0]?.id, // 目前是单角色，默认取第一个。此版本正常来说不存在多个
   };
 
   const getRegion = (region: IRegion) => {
@@ -99,7 +103,7 @@ function EditDetail(props: Iprops) {
           </Form.Item>
           <Form.Item
             label="角色"
-            name="roleTagId"
+            name="nroleTagId"
             rules={[{ required: true, message: '请选择角色!' }]}
           >
              <Select placeholder="请选择角色">
