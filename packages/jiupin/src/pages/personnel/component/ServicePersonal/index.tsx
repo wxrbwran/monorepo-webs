@@ -11,7 +11,7 @@ interface IParams {
   viewRole?: string;
   pageAt: number;
   pageSize: number;
-  roleTagId?: string;
+  nroleTagId?: string;
 }
 const ServicePersonal: FC = () => {
   const sid = window.$storage.getItem('sid');
@@ -35,12 +35,12 @@ const ServicePersonal: FC = () => {
     },
   ];
   console.log('tableOptions', tableOptions);
-  const handleSelectChange = ({ roleTagId }: { roleTagId: string }, allValues: string[]) => {
-    console.log('_changedValues', roleTagId);
+  const handleSelectChange = ({ nroleTagId }: { nroleTagId: string }, allValues: string[]) => {
+    console.log('_changedValues', nroleTagId);
     console.log('allValues', allValues);
-    const params = { ...tableOptions, roleTagId };
-    if (!roleTagId) {
-      delete params.roleTagId;
+    const params = { ...tableOptions, nroleTagId };
+    if (!nroleTagId) {
+      delete params.nroleTagId;
     }
     setOptions(params);
   };

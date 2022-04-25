@@ -12,7 +12,7 @@ interface IParams {
   viewRole?: string;
   pageAt: number;
   pageSize: number;
-  roleTagId: string;
+  nroleTagId: string;
 }
 const RoleList: FC = () => {
   const sid = window.$storage.getItem('sid');
@@ -24,17 +24,17 @@ const RoleList: FC = () => {
       pageAt: 1,
       pageSize: config.TABLE_PAGESIZE,
       viewRole: 'test.qWGyBe',
-      roleTagId: location?.query?.roleId,
+      nroleTagId: location?.query?.roleId,
     },
   );
   const [form] = Form.useForm();
 
   useEffect(() => {
     const roleId = location?.query?.roleId;
-    if (roleId !== tableOptions.roleTagId) {
+    if (roleId !== tableOptions.nroleTagId) {
       setOptions({
         ...tableOptions,
-        roleTagId: location?.query?.roleId,
+        nroleTagId: location?.query?.roleId,
       });
     }
   }, [location]);

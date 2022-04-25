@@ -128,4 +128,9 @@ interface ISub {
 
   emergencyTel: string;// 紧急联系电话
   emergencyName: string; // 紧急联系人
+
+  nroleTags: {
+    id: string;
+    name: string;
+  }[]
 }

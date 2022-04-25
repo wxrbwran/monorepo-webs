@@ -8,7 +8,7 @@ function ServiceRole() {
   console.log('roleList', roleList);
   return (
     <div>
-      <Form.Item name="roleTagId" style={{ width: 150, marginRight: 15 }} label="角色">
+      <Form.Item name="nroleTagId" style={{ width: 150, marginRight: 15 }} label="角色">
         <Select placeholder="全部角色">
           <Option value="">全部角色</Option>
           {

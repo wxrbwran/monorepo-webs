@@ -19,7 +19,7 @@ interface IUserInfo {
     id: string;
     name: string;
     subject: ISubject;
-    roleTags: {
+    nroleTags: {
       name: string;
       id: string;
     }[]
@@ -51,8 +51,6 @@ const ServicePersonnelDetail: FC<IProps> = (props) => {
     setIsEdit(false);
   };
   const uInfo = userInfo?.roles?.[0]?.subject || {};
-  console.log('userInfo', userInfo);
-  console.log('uInfo', uInfo);
   return (
     <>
       <div style={{ display: 'inline' }} onClick={() => setShow(!show)}>
@@ -82,7 +80,7 @@ const ServicePersonnelDetail: FC<IProps> = (props) => {
                 <Descriptions.Item labelStyle={{ color:'#969696' }} label="姓名">{uInfo?.name || '--'}</Descriptions.Item>
                 <Descriptions.Item labelStyle={{ color:'#969696' }} label="手机号">{uInfo?.tel || '--'}</Descriptions.Item>
                 <Descriptions.Item labelStyle={{ color:'#969696' }} label="角色">
-                  {userInfo?.roles?.[0]?.roleTags && userInfo?.roles?.[0]?.roleTags.map(item => item.name).join('、')}
+                  {userInfo?.roles?.[0]?.nroleTags && userInfo?.roles?.[0]?.nroleTags.map(item => item.name).join('、')}
                 </Descriptions.Item>
               </Descriptions>
               <Descriptions title={<div className='text-blue-500'>档案信息</div>} column={8}>

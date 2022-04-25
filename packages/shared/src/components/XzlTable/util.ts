@@ -148,13 +148,13 @@ export const handlePersonnewList = (dataSource: Store[]) => {
   const newData: Array<any> = [];
   dataSource.forEach(item => {
 
-    const curItem = { ...item.members[0], roleTags: [], teamNSId: item.teamNSId, department: item.name };
+    const curItem = { ...item.members[0], nroleTags: [], teamNSId: item.teamNSId, department: item.name };
     // 一个人有多个角色，这里把角色集合到roles里
-    item.members.forEach((memberItem: { roleTags?: object[] }) => {
-      if (memberItem?.roleTags) {
-        curItem.roleTags = [
-          ...curItem.roleTags,
-          ...memberItem?.roleTags,
+    item.members.forEach((memberItem: { nroleTags?: object[] }) => {
+      if (memberItem?.nroleTags) {
+        curItem.nroleTags = [
+          ...curItem.nroleTags,
+          ...memberItem?.nroleTags,
         ];
       }
     });
