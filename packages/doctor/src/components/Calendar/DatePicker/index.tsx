@@ -64,6 +64,8 @@ function DatePicker(props: Iprops) {
         setDay(28);
       }
     } else {
+      props.callback(null, month, day);
+      setYear(null);
       message.error('请选择正确的日期');
     }
   };
@@ -91,6 +93,8 @@ function DatePicker(props: Iprops) {
         setDay(30);
       }
     } else {
+      props.callback(year, null, day);
+      setMonth(null);
       message.error('请选择正确的日期');
     }
   };
@@ -121,7 +125,7 @@ function DatePicker(props: Iprops) {
         <Select
           name="year"
           disabled={disabled}
-          value={year || undefined}
+          value={year}
           onChange={(value) => handelChangeYear('year', value)}
           className="year"
           placeholder="请选择"
@@ -145,7 +149,7 @@ function DatePicker(props: Iprops) {
         <Select
           name="month"
           disabled={disabled}
-          value={month || undefined}
+          value={month}
           onChange={(value) => handelChangeMonth('month', value)}
           className="month"
           placeholder="请选择"
@@ -168,7 +172,7 @@ function DatePicker(props: Iprops) {
         <Select
           name="day"
           disabled={disabled}
-          value={day || undefined}
+          value={day}
           onChange={(value) => handelChangeDay('day', value)}
           className="day"
           placeholder="请选择"
