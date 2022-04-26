@@ -50,16 +50,19 @@ function Calendar1(props: Iprops) {
     }
   }, []);
   const handleChangeDate = (y: number, m: number, d: number) => {
-    const dateString = `${y}/${m}/${d}`;
+    let dateString = '';
+    if (y && m && d) {
+      dateString = `${y}/${m}/${d}`;
+    }
     onChange(dateString);
   };
   const endYear = curDate.getFullYear();
   const yearList = [endYear, 1929];
   return (
     <DatePicker
-      yearV={yearVal}
-      monthV={monthVal}
-      dayV={dayVal}
+      yearV={yearVal || undefined}
+      monthV={monthVal || undefined}
+      dayV={dayVal || undefined}
       yearListV={yearList}
       disabled={!!disabled}
       callback={handleChangeDate}
