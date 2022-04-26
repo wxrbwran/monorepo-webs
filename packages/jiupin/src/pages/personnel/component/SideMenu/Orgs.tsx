@@ -3,9 +3,8 @@ import React, { FC, useEffect, useState } from 'react';
 const SideOrgs: FC = () => {
   const [total, setTotal] = useState(0);
   const sid = window.$storage.getItem('sid');
-  const sRole = window.$storage.getItem('rold');
   useEffect(() => {
-    window.$api.personnel.getPersonnel({ sid, pageAt:1, pageSize: 1, viewRole: 'test.YWLRAe' }).then(res => {
+    window.$api.personnel.getPersonnel({ sid, pageAt:1, pageSize: 1, viewRole: 'test.qWGyBe' }).then(res => {
       console.log(res);
       setTotal(res.total);
     });
