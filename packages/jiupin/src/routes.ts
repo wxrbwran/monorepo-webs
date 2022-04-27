@@ -43,7 +43,6 @@ const routes = [
             hideInMenu: true,
             component: './personnel/role-list',
           },
-          page404,
         ],
       },
       {
