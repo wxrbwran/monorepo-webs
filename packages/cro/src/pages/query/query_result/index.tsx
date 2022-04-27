@@ -123,6 +123,7 @@ const QueryResult = forwardRef(({ param }: IProps, ref: Ref<any>) => {
         location={param}
         tableData={tableData}
         head={head}
+        queryStop={queryStop}
       />
       {!queryStop && <Spin tip="数据量较大，拼命查询中" className={styles.loading_append} />}
 

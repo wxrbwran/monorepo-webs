@@ -4,6 +4,7 @@
 import React from 'react';
 import type { Settings as LayoutSettings } from 'umi';
 import { message } from 'antd';
+import { history } from 'umi';
 import { createLogger } from 'redux-logger';
 import type { BasicLayoutProps } from '@ant-design/pro-layout';
 import RightContent from '@/components/RightContent';
@@ -40,7 +41,9 @@ export const dva = {
       e.preventDefault();
       console.log('dva error **********', e);
       const msg = e.message || e.result;
-      message.error(msg);
+      if (msg !== '该账号不存在') {
+        message.error(msg);
+      }
     },
   },
 };
@@ -92,6 +95,7 @@ export const layout = ({
   return {
     menuDataRender: () => loopMenuItem(routes),
     rightContentRender: () => <RightContent></RightContent>,
+    onMenuHeaderClick: () => { history.push('/personnel/org-structure') },
     onPageChange: (location) => {
       document.title = '九品管理系统';
     },

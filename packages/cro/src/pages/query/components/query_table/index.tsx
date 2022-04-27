@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import QueryDetail from '@/pages/query/components/query_detail';
 import XLSX from 'xlsx';
-import { Table } from 'antd';
-import EndEvent from '@/pages/query/components/end_event';
+import { Table, Button, message } from 'antd';
+import * as api from '@/services/api';
 import './index.scss';
 import { cloneDeep } from 'lodash';
 interface IProps {
@@ -20,6 +20,7 @@ interface IProps {
 
   }],
   head: [],
+  queryStop: boolean;
 }
 interface IColumns {
   title: any;
@@ -27,14 +28,14 @@ interface IColumns {
   children: []
 }
 
-function QueryTable({ location, tableData, head }: IProps) {
+function QueryTable({ location, tableData, head, queryStop }: IProps) {
 
   const [data, setData] = useState<any>([]);
   const [columns, setColumn] = useState<IColumns[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [row, setRow] = useState({});
-
-  const { reportName } = location.query;
+  const [exportLoading, setExportLoading] = useState(false);
+  const { reportName, resultKey } = location.query;
 
   const handleShowModal = (text: any, record: any, tree: any, value: number, kp: string) => {
     setShowModal(true);
@@ -147,7 +148,21 @@ function QueryTable({ location, tableData, head }: IProps) {
     );
   }, [showModal]);
 
-
+  const handleExport = () => {
+    setExportLoading(true);
+    api.query.patchResearchExport({ actionLogId: resultKey }).then(res => {
+      const doma = document.createElement('a');
+      doma.href = res.url;
+      document.body.appendChild(doma);
+      doma.click();
+      document.body.removeChild(doma);
+      message.success('导出成功');
+      setExportLoading(false);
+    }).catch(err => {
+      setExportLoading(false);
+      message.error(err?.result || '导出失败');
+    });
+  };
   return (
     <div className='report-wrap-table'>
       {
@@ -164,6 +179,13 @@ function QueryTable({ location, tableData, head }: IProps) {
                   <CreateReport handleCreateReport={handleCreateReport}>生成报告</CreateReport>
                 </span>
               </div> */}
+              <Button
+                disabled={!queryStop}
+                type='primary'
+                loading={exportLoading}
+                onClick={handleExport}
+                className="hidden"
+              >导出</Button>
           </div>
         )
       }

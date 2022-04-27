@@ -51,6 +51,10 @@ const ServicePersonnelDetail: FC<IProps> = (props) => {
     setIsEdit(false);
   };
   const uInfo = userInfo?.roles?.[0]?.subject || {};
+  const handleClose = () => {
+    setIsEdit(false);
+    setShow(false);
+  };
   return (
     <>
       <div style={{ display: 'inline' }} onClick={() => setShow(!show)}>
@@ -65,7 +69,7 @@ const ServicePersonnelDetail: FC<IProps> = (props) => {
         title={name}
         destroyOnClose
         footer={false}
-        onCancel={() => setShow(false)}
+        onCancel={handleClose}
       >
         {
           isEdit ? (

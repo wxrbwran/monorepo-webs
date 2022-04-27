@@ -295,7 +295,7 @@ function Query({ }: IProps) {
         array[index].fieldUpdateTime = array[index + 1].fieldUpdateTime;
       }
       array[oldIndex].fieldUpdateTime = tempTiem;
-    } else { // // 将元素往后挪  1  4 
+    } else { // // 将元素往后挪  1  4
 
       const tempTiem = array[newIndex].fieldUpdateTime;
       for (let index = newIndex; index > oldIndex; index--) {
