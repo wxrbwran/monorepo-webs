@@ -4,19 +4,20 @@ import { useDispatch, useHistory } from 'umi';
 
 const Personnel: FC = (props) => {
   const dispatch = useDispatch();
-  console.log(12111, props);
-  const { children } = props;
+  const { children, location } = props;
   const history = useHistory();
   useEffect(() => {
-    dispatch({
-      type: 'personnel/fetchRoleList',
-      payload: {
-        nsId: window.$storage.getItem('nsId'),
-        state: 1,
-      },
-    });
-    history.push('/personnel/org-structure');
-  }, []);
+    if (location.pathname === '/personnel') {
+      dispatch({
+        type: 'personnel/fetchRoleList',
+        payload: {
+          nsId: window.$storage.getItem('nsId'),
+          state: 1,
+        },
+      });
+      history.push('/personnel/org-structure');
+    }
+  }, [location]);
   // fetchRoleList
   return (
     <div className='flex h-full'>

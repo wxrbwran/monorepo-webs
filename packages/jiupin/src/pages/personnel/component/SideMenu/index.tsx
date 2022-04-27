@@ -20,7 +20,7 @@ const SideMenu: FC = () => {
         prefix={<SearchOutlined style={{ color: '#999999', fontSize: 16 }} />}
       /> */}
       <div>
-      <Tabs activeKey={location.pathname.includes('org-structure') ? 'org-structure' : 'role-list'}  centered>
+      <Tabs activeKey={location.pathname.includes('role-list') ? 'role-list' : 'org-structure'}  centered>
         <TabPane
           tab={<Link to="/personnel/org-structure"><ApartmentOutlined />组织架构</Link>}
           key="org-structure"
