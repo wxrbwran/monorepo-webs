@@ -75,7 +75,7 @@ const AddServicePersonnel: FC<IProps> = (props) => {
             <FormItem label="姓 名:" name="name" rules={[{ required: true, message: '请输入姓名!' }]}>
               <Input placeholder="请输入" type="text" />
             </FormItem>
-            <FormItem label="手机号:" name="tel" rules={[{ required: true, message: '请输入手机号!' }]}>
+            <FormItem label="手机号:" name="tel" rules={[{ required: true, message: '请输入正确的手机号!', pattern: /^1[3456789]\d{9}$/ }]}>
               <InputNumber placeholder="请输入" max={99999999999} maxLength={11} controls={false} />
             </FormItem>
             <FormItem label="角 色:" name="nroleTagId" rules={[{ required: true, message: '请选择角色!' }]}>

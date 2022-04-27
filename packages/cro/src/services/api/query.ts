@@ -67,5 +67,9 @@ export default {
   fetchResearchStatistics(data: any): Promise<any> {
     return http.get(`research/statistics?data=${JSON.stringify(data)}`);
   },
+  // 查询导出
+  patchResearchExport(data: any): Promise<any> {
+    return http.patch('research/export/excel', { data });
+  },
 };
 
