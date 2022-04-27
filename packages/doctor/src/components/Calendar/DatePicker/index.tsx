@@ -104,6 +104,10 @@ function DatePicker(props: Iprops) {
       setDay(value);
       props.callback(year, month, value);
     } else {
+      props.callback(year, month, null);
+      setYear(null);
+      setMonth(null);
+      setDay(null);
       message.error('请选择正确的日期');
     }
   };
