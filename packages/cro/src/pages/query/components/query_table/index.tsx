@@ -184,7 +184,9 @@ function QueryTable({ location, tableData, head, queryStop }: IProps) {
                 type='primary'
                 loading={exportLoading}
                 onClick={handleExport}
-              >导出</Button>
+              >
+                导出
+              </Button>
           </div>
         )
       }
