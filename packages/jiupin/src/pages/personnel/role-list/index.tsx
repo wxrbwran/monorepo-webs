@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
-import { department, name, tel } from '@/utils/columns';
+import { name, tel } from '@/utils/columns';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import AddServicePersonnel from '../component/AddServicePersonnel';
 import config from '@/config/index';
@@ -41,7 +41,6 @@ const RoleList: FC = () => {
   const columns = [
     name,
     tel,
-    department,
   ];
   console.log('tableOptions', tableOptions);
   const handleSelectChange = (_changedValues: any, allValues: string[]) => {

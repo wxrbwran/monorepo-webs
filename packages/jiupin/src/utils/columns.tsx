@@ -54,7 +54,6 @@ export const serviceRoleTags =  {
   render: (text: any[]) => <span>{[...new Set(text.map(tag => tag.name))].join('、')}</span>,
 };
 
-export const department = columnCreator('部门', 'department', { align: 'center' });
 export const tel = columnCreator('联系电话', 'tel', { align: 'center' });
 export const serviceName =  columnCreator('服务名称', 'name', { align: 'center' });
 
