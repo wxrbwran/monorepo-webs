@@ -60,7 +60,7 @@
     "dev-dist:nurse": "pnpm dev-dist --filter 'xzl-web-nurse'",
     "dev-dist:org": "pnpm dev-dist --filter 'xzl-web-org'",
     "dev-dist:out": "pnpm dev-dist --filter 'out-hospital-patient'",
-    "dev-dist:jiupin": "pnpm dev-dist --filter 'jiupin'",
+    "dev-dist:jiupin": "cnpm dev-dist --filter 'jiupin'",
     "dev-dist:cro": "pnpm dev-dist --filter 'clinical-cro'",
     "build-shared-watch": "cd packages/shared && pnpm build-watch-all"
   },
