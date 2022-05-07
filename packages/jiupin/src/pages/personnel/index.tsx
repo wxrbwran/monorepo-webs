@@ -7,7 +7,7 @@ const Personnel: FC = (props) => {
   const { children, location } = props;
   const history = useHistory();
   useEffect(() => {
-    if (location.pathname === '/personnel') {
+    if (location.pathname === '/personnel/org-structure') {
       dispatch({
         type: 'personnel/fetchRoleList',
         payload: {
