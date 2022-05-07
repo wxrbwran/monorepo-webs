@@ -50,25 +50,31 @@ const RoleList: FC = () => {
   };
   return (
     <div className='p-20 w-full'>
-      <div className='flex justify-between mb-30'>
-        <Form className="text-right mb-18 w-600" form={form} onValuesChange={handleSelectChange}>
-          <Search placeholder='输入关键词搜索' form={form} searchKey="searchByName"  />
-        </Form>
-        <AddServicePersonnel refresh={() => setOptions({ ...tableOptions })}>
-          <Button type="primary">+ 新增人员</Button>
-        </AddServicePersonnel>
-      </div>
-      <XzlTable
-        request={window.$api.personnel.getPersonnel}
-        columns={columns}
-        dataKey="teams"
-        category='jp-personnel'
-        depOptions={tableOptions}
-        tableOptions={{
-          onChange: () => {},
-          rowSelection: false,
-        }}
-      ></XzlTable>
+      {
+        location?.query?.roleId ? (
+          <>
+            <div className='flex justify-between mb-30'>
+            <Form className="text-right mb-18 w-600" form={form} onValuesChange={handleSelectChange}>
+              <Search placeholder='输入关键词搜索' form={form} searchKey="searchByName"  />
+            </Form>
+            <AddServicePersonnel refresh={() => setOptions({ ...tableOptions })}>
+              <Button type="primary">+ 新增人员</Button>
+            </AddServicePersonnel>
+          </div>
+          <XzlTable
+            request={window.$api.personnel.getPersonnel}
+            columns={columns}
+            dataKey="teams"
+            category='jp-personnel'
+            depOptions={tableOptions}
+            tableOptions={{
+              onChange: () => {},
+              rowSelection: false,
+            }}
+          ></XzlTable>
+          </>
+        ) : <div>无数据</div>
+      }
     </div>
   );
 };
