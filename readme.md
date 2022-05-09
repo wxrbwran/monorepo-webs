@@ -30,6 +30,11 @@ pnpm build-css-watch
 
  test
 
+ ```sh
+  "preinstall": "pnpm i -g commitizen concurrently nodemon --registry=https://registry.npmmirror.com",
+    "postinstall": "husky install && commitizen init cz-conventional-changelog-zh",
+ ```
+
 
 
 
