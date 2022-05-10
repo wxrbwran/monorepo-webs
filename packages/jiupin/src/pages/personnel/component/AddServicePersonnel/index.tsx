@@ -4,6 +4,7 @@ import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Form, Input, Select, message, InputNumber } from 'antd';
 import { useSelector } from 'umi';
 import { debounce } from 'lodash';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 const FormItem = Form.Item;
 
@@ -25,7 +26,7 @@ const AddServicePersonnel: FC<IProps> = (props) => {
           ...values,
           sid: window.$storage.getItem('sid'),
           nsId: window.$storage.getItem('nsId'),
-          role: 'test.qWGyBe',
+          role: Role.NINE_MEMBER_CALLER_1.id, // 'qWGyBe'
         };
         console.log(params);
         await window.$api.personnel.putTeamWorker(params);

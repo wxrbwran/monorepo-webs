@@ -62,7 +62,10 @@ export var Role = {
     PHARAMCIST: roleType('Y4n2b4', 0, 0, 0, '药师'),
     KANGFUSHI: roleType('r4qME4', 0, 0, 0, '康复师'),
     PSYCHOLOGIST: roleType('Y0ZxD4', 0, 0, 0, '心理医生'),
-    TEAMNURSE: roleType('6e89J0', 0, 0, 0, '护士'), //69 团队护士（医疗服务包里的护士，不是分配工单的护士）
+    TEAMNURSE: roleType('6e89J0', 0, 0, 0, '护士'),
+    NINE_MEMBER_CALLER_1: roleType('qWGyBe', 0, 0, 0, '长期'),
+    NINE_MEMBER_CALLER_2: roleType('XWrv6W', 0, 0, 0, '临时'),
+    NINE_MEMBER: roleType('YWLRAe', 0, 0, 0, '会员'), // 九品 会员
 };
 export function fetchRolePropById(id) {
     var roleKey = Object.keys(Role);
