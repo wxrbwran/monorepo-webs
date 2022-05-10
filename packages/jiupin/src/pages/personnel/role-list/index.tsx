@@ -7,6 +7,7 @@ import config from '@/config/index';
 import { Search } from 'xzl-web-shared/dist/components/Selects';
 import { handleSelection } from 'xzl-web-shared/dist/utils/conditions';
 import { useLocation } from 'umi';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 interface IParams {
   sid: string;
   viewRole?: string;
@@ -23,7 +24,7 @@ const RoleList: FC = () => {
       sid,
       pageAt: 1,
       pageSize: config.TABLE_PAGESIZE,
-      viewRole: 'test.qWGyBe',
+      viewRole:  Role.NINE_MEMBER_CALLER_1.id,
       nroleTagId: location?.query?.roleId,
     },
   );

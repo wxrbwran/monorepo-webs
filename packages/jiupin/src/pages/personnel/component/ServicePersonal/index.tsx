@@ -6,6 +6,7 @@ import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import AddServicePersonnel from '../AddServicePersonnel';
 import config from '@/config/index';
 import ServicePersonnelDetail from '../ServicePersonnelDetail';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 interface IParams {
   sid: string;
   viewRole?: string;
@@ -15,8 +16,9 @@ interface IParams {
 }
 const ServicePersonal: FC = () => {
   const sid = window.$storage.getItem('sid');
+  console.log('Role3232', Role);
   const [tableOptions, setOptions] = useState<IParams>(
-    { sid, viewRole: 'test.qWGyBe', pageAt: 1, pageSize: config.TABLE_PAGESIZE },
+    { sid, viewRole: Role.NINE_MEMBER_CALLER_1.id, pageAt: 1, pageSize: config.TABLE_PAGESIZE },
   );
   const [form] = Form.useForm();
   const columns = [

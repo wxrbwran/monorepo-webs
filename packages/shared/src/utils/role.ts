@@ -104,6 +104,11 @@ export const Role: RolesMap = {
   KANGFUSHI: roleType('r4qME4', 0, 0, 0, '康复师'), //68 康复师
   PSYCHOLOGIST: roleType('Y0ZxD4', 0, 0, 0, '心理医生'), //69 心理医生
   TEAMNURSE: roleType('6e89J0', 0, 0, 0, '护士'), //69 团队护士（医疗服务包里的护士，不是分配工单的护士）
+
+  NINE_MEMBER_CALLER_1: roleType('qWGyBe', 0, 0, 0, '长期'), // 九品 长期角色，目前是写死
+  NINE_MEMBER_CALLER_2: roleType('XWrv6W', 0, 0, 0, '临时'), // 九品 临时角色，目前是写死
+  NINE_MEMBER: roleType('YWLRAe', 0, 0, 0, '会员'), // 九品 会员
+
 };
 
 export function fetchRolePropById(id: string) {

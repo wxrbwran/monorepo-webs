@@ -15,10 +15,11 @@ const Personnel: FC = (props) => {
           state: 1,
         },
       });
+    } else if (location.pathname === '/personnel') {
       history.push('/personnel/org-structure');
     }
   }, [location]);
-  // fetchRoleList
+
   return (
     <div className='flex h-full'>
       <SideMenu />

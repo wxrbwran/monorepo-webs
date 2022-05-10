@@ -3,6 +3,7 @@ import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { name, tel } from '@/utils/columns';
 import MemberDetail from '../MemberDetail';
 import config from '@/config/index';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 interface IParams {
   sid: string;
@@ -18,7 +19,7 @@ const Member: FC = () => {
       sid,
       pageAt: 1,
       pageSize: config.TABLE_PAGESIZE,
-      viewRole: 'test.YWLRAe', // 写死，长期的
+      viewRole: Role.NINE_MEMBER.id, // 写死，长期的
     },
   );
   const columns = [

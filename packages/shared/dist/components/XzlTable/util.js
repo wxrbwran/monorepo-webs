@@ -149,11 +149,11 @@ export var handlePersonnewList = function (dataSource) {
     console.log('dataSource333', dataSource);
     var newData = [];
     dataSource.forEach(function (item) {
-        var curItem = __assign(__assign({}, item.members[0]), { roleTags: [], teamNSId: item.teamNSId, department: item.name });
+        var curItem = __assign(__assign({}, item.members[0]), { nroleTags: [], teamNSId: item.teamNSId, department: item.name });
         // 一个人有多个角色，这里把角色集合到roles里
         item.members.forEach(function (memberItem) {
-            if (memberItem === null || memberItem === void 0 ? void 0 : memberItem.roleTags) {
-                curItem.roleTags = __spreadArray(__spreadArray([], __read(curItem.roleTags)), __read(memberItem === null || memberItem === void 0 ? void 0 : memberItem.roleTags));
+            if (memberItem === null || memberItem === void 0 ? void 0 : memberItem.nroleTags) {
+                curItem.nroleTags = __spreadArray(__spreadArray([], __read(curItem.nroleTags)), __read(memberItem === null || memberItem === void 0 ? void 0 : memberItem.nroleTags));
             }
         });
         newData.push(curItem);
