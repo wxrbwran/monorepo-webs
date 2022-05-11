@@ -179,14 +179,15 @@ function QueryTable({ location, tableData, head, queryStop }: IProps) {
                   <CreateReport handleCreateReport={handleCreateReport}>生成报告</CreateReport>
                 </span>
               </div> */}
-              <Button
-                disabled={!queryStop}
-                type='primary'
-                loading={exportLoading}
-                onClick={handleExport}
-              >
-                导出
-              </Button>
+            <Button
+              className='hidden'
+              disabled={!queryStop}
+              type='primary'
+              loading={exportLoading}
+              onClick={handleExport}
+            >
+              导出
+            </Button>
           </div>
         )
       }
