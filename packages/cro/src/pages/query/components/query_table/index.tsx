@@ -180,7 +180,6 @@ function QueryTable({ location, tableData, head, queryStop }: IProps) {
                 </span>
               </div> */}
             <Button
-              className='hidden'
               disabled={!queryStop}
               type='primary'
               loading={exportLoading}
