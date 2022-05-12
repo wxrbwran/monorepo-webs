@@ -97,9 +97,9 @@ export const layout = ({
     rightContentRender: () => <RightContent></RightContent>,
     onMenuHeaderClick: () => { history.push('/personnel/org-structure') },
     onPageChange: (location) => {
-      document.title = '九品管理系统';
+      document.title = '久品管理系统';
     },
-    title: '九品管理系统',
+    title: '久品管理系统',
     ...initialState?.settings,
   };
 };

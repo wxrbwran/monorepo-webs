@@ -30,7 +30,7 @@ const Login: FC = () => {
     <div className="login">
       <Row>
         <Col className="login-content">
-          <div className='w-60 h-60 m-auto mb-30'><img src={logo} alt="九品" /></div>
+          <div className='w-60 h-60 m-auto mb-30'><img src={logo} alt="久品" /></div>
           <Form
             className="login-form"
             onFinish={handleLogin}
