@@ -53,7 +53,7 @@ export default defineConfig({
     echarts: 'window.echarts',
     vis: 'vis',
   },
-  // headScripts: ['https://cdn.bootcdn.net/ajax/libs/d3/3.2.7/d3.min.js'],
+  // headScripts: ['https://revomedi.oss-cn-beijing.aliyuncs.com/static/xzl-webs/3.2.7/d3.min.js'],
   // umi routes: https://umijs.org/docs/routing
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
