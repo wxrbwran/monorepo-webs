@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 const ServicePeople: FC = () => {
   return (
     <div className='w-full'>
-      <Tabs defaultActiveKey="1" style={{ paddingLeft: 20 }}>
+      <Tabs defaultActiveKey="1" style={{ paddingLeft: 20 }} destroyInactiveTabPane={true}>
         <TabPane tab="服务人员" key="1">
           <ServicePersonal />
         </TabPane>
