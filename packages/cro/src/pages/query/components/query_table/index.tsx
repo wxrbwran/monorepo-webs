@@ -184,7 +184,7 @@ function QueryTable({ location, tableData, head, queryStop }: IProps) {
               type='primary'
               loading={exportLoading}
               onClick={handleExport}
-              className="hidden"
+              // className="hidden"
             >
               导出
             </Button>
