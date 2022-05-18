@@ -25,8 +25,9 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+/*eslint-disable*/
 import * as React from 'react';
-import './style/index.less';
+// import './style/index.css';
 import classnames from 'classnames';
 import ViewerCanvas from './ViewerCanvas';
 import ViewerNav from './ViewerNav';

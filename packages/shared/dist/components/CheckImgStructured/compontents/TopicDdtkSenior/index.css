@@ -1,0 +1,37 @@
+@charset "UTF-8";
+.shared-check-img-structured .ddtk_senior {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.shared-check-img-structured .ddtk_senior .ant-picker, .shared-check-img-structured .ddtk_senior .ant-select {
+  margin-bottom: 5px;
+  vertical-align: middle;
+}
+.shared-check-img-structured .edit_span {
+  border: 1px solid #E6E6E6;
+  margin-bottom: 5px;
+  min-height: 30px;
+  line-height: 30px;
+  border-radius: 4px;
+  min-width: 120px;
+  display: inline-block;
+  outline: none;
+  vertical-align: middle;
+  position: relative;
+  max-width: calc(100% - 50px);
+  overflow-x: auto;
+  margin-left: 5px;
+  padding: 0 5px;
+}
+.shared-check-img-structured .edit_span.no_border {
+  border: none;
+}
+.shared-check-img-structured .edit_span:empty:before {
+  content: "请输入答案";
+  position: absolute;
+  left: 5px;
+  top: 0;
+  color: #999999;
+}
+
+/*# sourceMappingURL=index.css.map */

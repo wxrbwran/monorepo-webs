@@ -1,0 +1,24 @@
+.shared-check-img-structured .add_problem .ant-input {
+  border: none;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #E0E0E0;
+  font-size: 14px;
+}
+.shared-check-img-structured .add_problem .answer {
+  border: 1px solid #E0E0E0;
+  min-height: 80px;
+}
+.shared-check-img-structured .add_problem .ghost_btn {
+  text-align: center;
+}
+.shared-check-img-structured .add_problem .ghost_btn .ant-btn {
+  margin: 0 20px;
+  height: 24px;
+  border-radius: 3px;
+  border: 1px solid #3296FA;
+  color: #3296FA;
+  font-size: 15px;
+  background-color: #fff;
+}
+
+/*# sourceMappingURL=index.css.map */

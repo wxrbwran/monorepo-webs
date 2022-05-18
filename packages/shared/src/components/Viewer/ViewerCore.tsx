@@ -1,5 +1,6 @@
+/*eslint-disable*/
 import * as React from 'react';
-import './style/index.less';
+// import './style/index.css';
 import classnames from 'classnames';
 import ViewerCanvas from './ViewerCanvas';
 import ViewerNav from './ViewerNav';
