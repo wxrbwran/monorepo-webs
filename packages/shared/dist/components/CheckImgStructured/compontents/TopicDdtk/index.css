@@ -1,0 +1,95 @@
+@charset "UTF-8";
+.shared-check-img-structured .ddtk {
+  position: relative;
+  margin-bottom: 10px;
+}
+.shared-check-img-structured .ddtk.edit {
+  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 10px 8px;
+}
+.shared-check-img-structured .ddtk textarea {
+  border: none;
+  color: #000;
+  height: auto !important;
+}
+.shared-check-img-structured .ddtk .add_btn {
+  font-size: 14px;
+  color: #1488ed;
+  cursor: pointer;
+}
+.shared-check-img-structured .ddtk pre {
+  position: relative;
+  padding-top: 20px;
+  overflow: hidden;
+}
+.shared-check-img-structured .ddtk pre textarea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100% !important;
+}
+.shared-check-img-structured .ddtk pre div {
+  color: #fff;
+  white-space: break-spaces;
+  overflow: hidden;
+}
+.shared-check-img-structured .ddtk.done .ques_span {
+  min-height: 32px;
+  line-height: 32px;
+  font-size: 14px;
+}
+.shared-check-img-structured .ddtk.done .edit_span {
+  border: 1px solid #E6E6E6;
+  min-height: 32px;
+  line-height: 32px;
+  border-radius: 4px;
+  min-width: 120px;
+  display: inline-block;
+  outline: none;
+  vertical-align: bottom;
+  position: relative;
+  max-width: calc(100% - 50px);
+  overflow-x: auto;
+  margin-left: 5px;
+  padding: 0 5px;
+}
+.shared-check-img-structured .ddtk.done .edit_span.no_border {
+  border: none;
+}
+.shared-check-img-structured .ddtk.done .edit_span:empty:before {
+  content: "请输入答案";
+  position: absolute;
+  left: 5px;
+  top: 0;
+  color: #999999;
+}
+.shared-check-img-structured .ddtk.done input {
+  width: auto;
+  display: inline-block;
+  margin: 0 12px 0 8px;
+  min-width: 120px;
+  border-radius: 4px;
+  border: 1px solid #E6E6E6;
+  height: 32px;
+  line-height: 32px;
+}
+.shared-check-img-structured .ddtk.done .ques {
+  margin-top: 3px;
+}
+.shared-check-img-structured .ddtk .order_number {
+  min-width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: #181818;
+  border: 1px solid #181818;
+  font-size: 12px;
+  display: inline-block;
+  line-height: 14px;
+  text-align: center;
+  margin-right: 3px;
+}
+
+/*# sourceMappingURL=index.css.map */

@@ -7,7 +7,7 @@ import ImgViewer from '@/pages/report/components/img_viewer';
 import QuestionDetail from '@/components/Scale/QuestionDetail';
 import styles from './index.scss';
 import { isEmpty } from 'lodash';
-import ImageList from '../Checks/CheckImages/ImageList';
+import ImageList from 'xzl-web-shared/dist/components/CheckImages/ImageList';
 
 
 
@@ -132,7 +132,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
           title={titleHead}
           onCancel={() => onCancel()}
           footer={null}
-          wrapClassName={`${hideCont ? 'mode_hide' : 'ant-modal-wrap-center'}`}  // mode_block 
+          wrapClassName={`${hideCont ? 'mode_hide' : 'ant-modal-wrap-center'}`}  // mode_block
           mask={!hideCont}
           // width="1200px"
           // visible={showModal}

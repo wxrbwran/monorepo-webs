@@ -1,0 +1,107 @@
+.shared-check-img-structured {
+  .tab_wrap {
+    position: relative;
+    margin-top: 20px;
+    min-height: 300px;
+    .add_jct_btn {
+      color: #218CE9;
+      cursor: pointer;
+      flex: 0 0 93px;
+      font-size: 14px;
+      position: absolute;
+      right: 0;
+      top: 11px;
+    }
+    .empty_wrap {
+      border-top: 1px solid #EFEFEF;position: absolute;
+      top: 42px;
+      width: 100%;
+      text-align: center;
+      padding-top: 20%;
+      font-size: 14px;
+      color: #999999;
+    }
+    .ant-tabs-nav {
+      .ant-tabs-nav-add {
+        border: none;
+        background-color: #fff;
+        color: #999999;
+        height: 30px;
+        padding-top: 6px;
+        .anticon-plus {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .anticon-sync {
+      font-size: 12px;
+      margin-right: 3px;
+    }
+    .ant-tabs-nav {
+      width: calc(100% - 120px);
+      &::before {
+        display: none!important;
+      }
+    }
+    .ant-tabs-card {
+      &.ant-tabs-editable-card {
+        .ant-tabs-content-holder {
+          border: none;
+          padding: 0px;
+          padding-top: 20px;
+        }
+        .ant-tabs-nav {
+          border-bottom: 1px solid #d8d8d8;
+        }
+        .ant-tabs-content-holder {
+          height: auto;
+        }
+        .anticon-close {
+          font-size: 12px;
+        }
+        .ant-tabs-tab {
+          color: #999999;
+          flex: 0 0 auto;
+          margin: 0;
+          padding: 5px 10px;
+          font-size: 14px;
+          background-color: #fff;
+          border: none;
+          position: relative;
+          &::before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            background-color: #EFEFEF;
+            height: 14px;
+            top: 10px;
+            right: 0;
+          }
+          &.ant-tabs-tab-active {
+            border: none!important;
+            position: relative;
+            color: #181818;
+            .ant-tabs-tab-btn {
+              color: #181818;
+            }
+          }
+          .ant-tabs-tab-btn {
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+  }
+
+  .jcd_panel_item {
+    position: relative;
+    .copy_temp {
+      color: #218CE9;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  }
+
+
+}

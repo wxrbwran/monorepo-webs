@@ -1,0 +1,23 @@
+.shared-check-img-structured .choice .ant-radio-wrapper {
+  display: block;
+  margin-left: 20px;
+}
+.shared-check-img-structured .choice .ant-checkbox-group.RADIO .ant-checkbox-inner {
+  border-radius: 50%;
+}
+.shared-check-img-structured .choice .ant-checkbox-wrapper {
+  font-size: 14px;
+  display: flex;
+  margin-left: 20px;
+  margin-bottom: 5px;
+}
+.shared-check-img-structured .mask {
+  width: 100%;
+  height: 100%;
+  z-index: 120;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/*# sourceMappingURL=index.css.map */

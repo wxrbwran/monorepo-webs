@@ -1,0 +1,164 @@
+.shared-check-img-structured .topic_list {
+  font-size: 14px;
+}
+.shared-check-img-structured .topic_list .topic_title {
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+}
+.shared-check-img-structured .topic_list .topic_title .edit_btn {
+  color: #3296FA;
+  cursor: pointer;
+  margin-left: 3px;
+}
+.shared-check-img-structured .topic_list .topic_title .edit_btn span {
+  color: #3296FA;
+  font-size: 14px;
+}
+.shared-check-img-structured .topic_list .topic_title .edit_btn .anticon-edit {
+  margin-right: 2px;
+}
+.shared-check-img-structured .topic_list .topic-item {
+  width: 100%;
+  margin: 0 auto 5px;
+  padding: 8px;
+}
+.shared-check-img-structured .topic_list .topic-item .del-icon,
+.shared-check-img-structured .topic_list .topic-item .anticon-close {
+  display: none;
+}
+.shared-check-img-structured .topic_list .topic-item.edit {
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+.shared-check-img-structured .topic_list .topic-item.edit .del-icon,
+.shared-check-img-structured .topic_list .topic-item.edit .anticon-close {
+  display: inline-block;
+}
+.shared-check-img-structured .topic_list .topic-item.edit .choice-tx {
+  display: flex;
+}
+.shared-check-img-structured .topic_list .topic-item.edit .issue__delete {
+  display: inline-block;
+}
+.shared-check-img-structured .topic_list .topic-item-show {
+  position: relative;
+}
+.shared-check-img-structured .topic_list .topic-item-show .anticon-edit {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 6px;
+  font-size: 12px;
+}
+.shared-check-img-structured .topic_list .topic-item-show:hover .anticon-edit {
+  display: inline-block;
+}
+.shared-check-img-structured .topic_list .issue {
+  color: #181818;
+  position: relative;
+  padding-left: 18px;
+}
+.shared-check-img-structured .topic_list .issue .ant-input {
+  border: none;
+  font-size: 14px;
+  margin-right: 5px;
+  color: #181818;
+  width: 94%;
+}
+.shared-check-img-structured .topic_list .issue.input-empty {
+  padding-left: 0;
+}
+.shared-check-img-structured .topic_list .issue.input-empty .ant-input {
+  border-bottom: 1px solid #3296FA;
+}
+.shared-check-img-structured .topic_list .issue.pl0 {
+  padding-left: 0;
+}
+.shared-check-img-structured .topic_list .issue__index {
+  position: absolute;
+  left: 0px;
+  font-size: 16px;
+  top: 3px;
+}
+.shared-check-img-structured .topic_list .issue__delete {
+  display: none;
+}
+.shared-check-img-structured .topic_list .issue .issue__end {
+  display: none;
+}
+.shared-check-img-structured .topic_list .issue.end {
+  padding-left: 72px;
+}
+.shared-check-img-structured .topic_list .issue.end.input-empty {
+  padding-left: 55px;
+}
+.shared-check-img-structured .topic_list .issue.end .issue__index {
+  left: 56px;
+}
+.shared-check-img-structured .topic_list .issue.end .issue__end {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  background: #F5A623;
+  border-radius: 7.5px;
+  width: 55px;
+  height: 18px;
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+  line-height: 18px;
+  transform: scale(0.85);
+  display: block;
+}
+.shared-check-img-structured .topic_list .add-options {
+  color: #3296FA;
+  cursor: pointer;
+}
+.shared-check-img-structured .topic_list .choice-tx {
+  display: flex;
+  margin-top: 10px;
+  display: none;
+}
+.shared-check-img-structured .topic_list .choice-tx .ant-radio-wrapper {
+  font-size: 14px;
+}
+.shared-check-img-structured .topic_list .options-list .item {
+  margin-top: 24px;
+  position: relative;
+}
+.shared-check-img-structured .topic_list .options-list .item .anticon-border {
+  color: #C1C1C1;
+  margin-right: 10px;
+  position: absolute;
+  left: 0;
+  top: 7px;
+  z-index: 2;
+}
+.shared-check-img-structured .topic_list .options-list .item .ant-input {
+  border: none;
+  font-size: 14px;
+  width: 95%;
+  margin-right: 5px;
+  padding-left: 26px;
+}
+.shared-check-img-structured .topic_list .options-list .item .ant-checkbox-wrapper {
+  width: 95%;
+  font-size: 14px;
+}
+.shared-check-img-structured .topic_list .options-list .item.input-empty .ant-input {
+  border-bottom: 1px solid #3296FA;
+}
+.shared-check-img-structured .topic_list .options-list .item .anticon-close {
+  color: #C1C1C1;
+}
+.shared-check-img-structured .topic_list .answer-wrap {
+  margin-top: 5px;
+  margin-left: 20px;
+}
+.shared-check-img-structured .topic_list .answer-wrap textarea.ant-input {
+  resize: none;
+  height: 80px;
+}
+
+/*# sourceMappingURL=index.css.map */

@@ -1,0 +1,118 @@
+.shared_check_images .check_img {
+  flex: 0 1 50%;
+  display: flex;
+  flex-direction: column;
+}
+.shared_check_images .check_img:first-child {
+  margin-right: 5px;
+}
+.shared_check_images .check_img:last-child {
+  margin-left: 5px;
+}
+.shared_check_images .check_img .list {
+  padding: 5px 0;
+  height: 100%;
+}
+.shared_check_images .check_img .list .red span {
+  color: red;
+}
+.shared_check_images .check_img .list > div {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  font-size: 14px;
+  position: relative;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.shared_check_images .check_img .list > div.red::before {
+  background-color: #f04134;
+  cursor: pointer;
+}
+.shared_check_images .check_img .list > div.green::before {
+  background-color: #52c41a;
+  cursor: pointer;
+}
+.shared_check_images .check_img .list .name {
+  width: 38%;
+  color: #000;
+}
+.shared_check_images .check_img .list .date {
+  color: #999;
+  width: 25%;
+  text-align: center;
+  min-width: 67px;
+}
+.shared_check_images .check_img .list .count {
+  padding-right: 20px;
+  display: flex;
+  align-items: center;
+  color: #000;
+}
+.shared_check_images .images_wrap .anticon {
+  font-size: 12px;
+}
+.shared_check_images .images_wrap .images_list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.shared_check_images .images_wrap .images_list .images_item {
+  position: relative;
+  width: 150px;
+  margin: 10px 6px 10px;
+  text-align: center;
+}
+.shared_check_images .images_wrap .images_list .images_item .img_count {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.6);
+  height: 18px;
+  line-height: 18px;
+  padding: 0 5px;
+  border-radius: 3px;
+}
+.shared_check_images .images_wrap .images_list .images_item .check_border {
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 3px;
+  border: 1px solid #c7c7c7;
+  display: inline-block;
+}
+.shared_check_images .images_wrap .images_list .images_item .check_fill {
+  width: 16px;
+  height: 16px;
+}
+.shared_check_images .images_wrap .images_list .images_item .exception,
+.shared_check_images .images_wrap .images_list .images_item .normal {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 20px;
+  line-height: 20px;
+  color: #fff;
+  border-radius: 100px;
+  text-align: center;
+  font-size: 14px;
+  z-index: 2;
+}
+.shared_check_images .images_wrap .images_list .images_item .exception.normal,
+.shared_check_images .images_wrap .images_list .images_item .normal.normal {
+  background: #00b299;
+}
+.shared_check_images .images_wrap .images_list .images_item .exception.exception,
+.shared_check_images .images_wrap .images_list .images_item .normal.exception {
+  background: #f9515c;
+}
+.shared_check_images .images_wrap .images_list .images_item img {
+  width: 150px;
+  height: 150px;
+  display: block;
+}
+
+/*# sourceMappingURL=index.css.map */

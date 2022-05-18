@@ -1,4 +1,3 @@
-import './style/index.less';
 import ViewerProps from './ViewerProps';
 export interface ViewerCoreState {
     visible?: boolean;

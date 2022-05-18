@@ -1,0 +1,16 @@
+.shared-check-img-structured .img_box {
+  padding-left: 20px;
+  padding-top: 13px;
+}
+.shared-check-img-structured .img_box .react-viewer-toolbar li {
+  width: auto;
+  padding: 2px 9px;
+}
+.shared-check-img-structured .img_box .img_wrap {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  width: 45vw;
+  height: 89vh;
+  padding-bottom: 10px;
+}
+
+/*# sourceMappingURL=index.css.map */

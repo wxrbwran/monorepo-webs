@@ -153,11 +153,17 @@ function SideMenu({ location }: Iprops) {
         </a>
 
         <Menu.Item
+          className='query'
           key={'query'.toUpperCase()}
+          icon={<UserOutlined />}
           onClick={() => history.push('/doctor/query')}
         >
-          {'team'}
+          {'数据查询'}
         </Menu.Item>
+
+        {/* <SubMenu key={'query'.toUpperCase()} icon={<UserOutlined />} title="数据查询" onTitleClick={() => history.push('/doctor/query')}>
+
+        </SubMenu> */}
 
         <p>
           <a href={config.PUBLICIZE} target="_blank" className={styles.structure} rel="noopener noreferrer">

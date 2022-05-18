@@ -7,7 +7,7 @@ import ImgViewer from '../img_viewer';
 import QuestionDetail from '../Scale/QuestionDetail';
 import styles from './index.scss';
 import { isEmpty } from 'lodash';
-import ImageList from '../Checks/CheckImages/ImageList';
+import ImageList from 'xzl-web-shared/dist/components/CheckImages/ImageList';
 
 
 

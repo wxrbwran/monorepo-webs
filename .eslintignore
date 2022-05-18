@@ -5,7 +5,7 @@
 /mock
 /src/lib/
 node_modules
-/src/components/Viewer
+/src/components/Viewer/*
 dist/
 test
 build/

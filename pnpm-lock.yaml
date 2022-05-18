@@ -931,6 +931,7 @@ importers:
 
   packages/shared:
     specifiers:
+      '@ant-design/icons': ^4.2.1
       '@ant-design/pro-form': ^1.11.2
       '@types/classnames': ^2.2.10
       '@types/jest': ^24.0.0
@@ -961,6 +962,7 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       react-draggable: ^4.4.3
+      react-redux: ^7.2.5
       react-transition-group: ^4.4.1
       replace-ext: ^2.0.0
       rimraf: ^3.0.2
@@ -973,6 +975,7 @@ importers:
       umi-request: ^1.0.8
       webpack-combine-loaders: ^2.0.4
     dependencies:
+      '@ant-design/icons': registry.npmmirror.com/@ant-design/icons/4.7.0_react-dom@17.0.2+react@17.0.2
       '@ant-design/pro-form': 1.49.0_f34a5f782d7311c9edb9a13fcf4e1654
       antd: 4.17.0_react-dom@17.0.2+react@17.0.2
       axios: 0.21.4
@@ -982,6 +985,7 @@ importers:
       lodash: registry.nlark.com/lodash/4.17.21
       moment: registry.nlark.com/moment/2.29.1
       react-draggable: registry.nlark.com/react-draggable/4.4.4_react-dom@17.0.2+react@17.0.2
+      react-redux: registry.npmmirror.com/react-redux/7.2.6_react-dom@17.0.2+react@17.0.2
       react-transition-group: registry.nlark.com/react-transition-group/4.4.2_react-dom@17.0.2+react@17.0.2
       store: 2.0.12
       style-loader: 2.0.0
@@ -9159,7 +9163,7 @@ packages:
       dva: ^2.5.0-0
     dependencies:
       '@babel/runtime': 7.16.3
-      dva: 2.6.0-beta.22_react-dom@16.14.0+react@16.14.0
+      dva: 2.6.0-beta.22_react-dom@17.0.2+react@17.0.2
       immer: registry.nlark.com/immer/7.0.15
     dev: false
 
@@ -40486,6 +40490,31 @@ packages:
       prop-types: registry.npmmirror.com/prop-types/15.7.2
       react: registry.npmmirror.com/react/16.14.0
       react-dom: registry.npmmirror.com/react-dom/16.14.0_react@16.14.0
+      react-is: registry.npmmirror.com/react-is/17.0.2
+    dev: false
+
+  registry.npmmirror.com/react-redux/7.2.6_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-10RPdsz0UUrRL1NZE0ejTkucnclYSgXp5q+tB5SWx2qeG2ZJQJyymgAhwKy73yiL/13btfB6fPr+rgbMAaZIAQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-redux/-/react-redux-7.2.6.tgz}
+    id: registry.npmmirror.com/react-redux/7.2.6
+    name: react-redux
+    version: 7.2.6
+    peerDependencies:
+      react: ^16.8.3 || ^17
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@babel/runtime': registry.npmmirror.com/@babel/runtime/7.16.3
+      '@types/react-redux': registry.npmmirror.com/@types/react-redux/7.1.20
+      hoist-non-react-statics: registry.npmmirror.com/hoist-non-react-statics/3.3.2
+      loose-envify: registry.npmmirror.com/loose-envify/1.4.0
+      prop-types: registry.npmmirror.com/prop-types/15.7.2
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
       react-is: registry.npmmirror.com/react-is/17.0.2
     dev: false
 

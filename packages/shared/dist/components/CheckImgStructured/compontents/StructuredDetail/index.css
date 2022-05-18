@@ -1,0 +1,190 @@
+@charset "UTF-8";
+.shared-check-img-structured .structrued {
+  height: 90vh;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  min-width: 632px;
+}
+.shared-check-img-structured .structrued.disabled .ant-tabs-nav-add {
+  display: none;
+}
+.shared-check-img-structured .structrued.disabled .structured-edit-wrap {
+  position: relative;
+}
+.shared-check-img-structured .structrued.disabled .structured-edit-wrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
+.shared-check-img-structured .structrued.disabled .ant-tabs-nav-list .anticon-close {
+  display: none;
+}
+.shared-check-img-structured .structrued.disabled input, .shared-check-img-structured .structrued.disabled .ant-picker, .shared-check-img-structured .structrued.disabled .ant-select-selector {
+  border: none !important;
+}
+.shared-check-img-structured .structrued.disabled .ant-select-arrow, .shared-check-img-structured .structrued.disabled .ant-picker-suffix {
+  display: none;
+}
+.shared-check-img-structured .structrued .save_btn {
+  position: absolute;
+  right: 40px;
+  font-size: 16px;
+  height: 34px;
+  z-index: 999;
+}
+.shared-check-img-structured .structrued .active_btn {
+  background: #EAF4FC;
+  border-radius: 3px;
+  color: #218CE9;
+  border: none;
+}
+.shared-check-img-structured .structrued .checkbox_group .ant-checkbox-group {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 10px;
+  border-left: 1px solid #ccc;
+  margin-top: 15px;
+}
+.shared-check-img-structured .structrued .checkbox_group .ant-checkbox-group-item {
+  flex: 0 0 25%;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  margin: 0;
+  border-left: 0;
+  border-top: 0;
+  padding-left: 5px;
+  line-height: 38px;
+  position: relative;
+  top: -1px;
+}
+.shared-check-img-structured .structrued .checkbox_group .ant-checkbox-group-item:nth-child(1), .shared-check-img-structured .structrued .checkbox_group .ant-checkbox-group-item:nth-child(2), .shared-check-img-structured .structrued .checkbox_group .ant-checkbox-group-item:nth-child(3), .shared-check-img-structured .structrued .checkbox_group .ant-checkbox-group-item:nth-child(4) {
+  border-top: 1px solid #ccc;
+}
+.shared-check-img-structured .structrued .no_tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #666666;
+}
+.shared-check-img-structured .structrued .searchHospital .ant-select-selector, .shared-check-img-structured .structrued .searchHospital .ant-select-selection-placeholder {
+  min-height: 32px;
+  line-height: 32px;
+  height: auto;
+}
+.shared-check-img-structured .structrued .searchHospital .ant-select-selection-item {
+  white-space: break-spaces;
+}
+.shared-check-img-structured .structrued .text_red {
+  color: #000;
+  background-color: yellow;
+}
+.shared-check-img-structured .structrued .search_keyword .ant-input-search-button {
+  background-color: #fff;
+  color: #181818;
+  border: 1px solid #d9d9d9;
+}
+.shared-check-img-structured .structured_content {
+  flex: 1;
+}
+.shared-check-img-structured .structured_content .ant-checkbox-wrapper, .shared-check-img-structured .structured_content .ant-radio-wrapper {
+  font-size: 14px;
+}
+.shared-check-img-structured .structured_content .ant-tabs {
+  width: 100%;
+  height: 100%;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-tab {
+  margin: 0;
+  padding: 5px 22px;
+  font-size: 14px;
+  background-color: #fff;
+  border: none;
+  border-bottom: 1px solid #d8d8d8;
+  border-top: 3px solid transparent;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-tab.ant-tabs-tab-active {
+  border-color: #007ADA #d8d8d8 #fff;
+  border-style: solid;
+  border-width: 3px 1px 1px;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-tab .ant-tabs-tab-btn {
+  margin: 0 auto;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-nav {
+  margin-bottom: 0;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-nav .ant-tabs-nav-add {
+  position: relative;
+  width: 90px;
+  background: #fff;
+  border: none;
+  font-size: 14px;
+  margin-left: 10px;
+  height: 36px;
+  line-height: 36px;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-nav .ant-tabs-nav-add span svg {
+  display: none;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-nav .ant-tabs-nav-add::before {
+  content: "+ 添加新单据";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #007ADA;
+}
+.shared-check-img-structured .structured_content .ant-tabs-card .ant-tabs-content-holder {
+  border: 1px solid #d8d8d8;
+  border-top: none;
+  padding: 20px;
+}
+.shared-check-img-structured .structured_content .ant-tabs-editable-card {
+  height: 100%;
+}
+.shared-check-img-structured .structured_content .ant-tabs-editable-card .ant-tabs-content-holder {
+  border: 1px solid #E0E0E0;
+  border-top: none;
+  padding: 20px;
+}
+.shared-check-img-structured .structured_content .ant-tabs-editable-card .ant-tabs-nav {
+  margin-bottom: 0;
+}
+.shared-check-img-structured .structured_content .ant-tabs-editable-card .ant-tabs-tab {
+  border: none;
+  border-bottom: 1px solid #E0E0E0;
+  background: #fff;
+}
+.shared-check-img-structured .structured_content .ant-tabs-editable-card .ant-tabs-tab-active {
+  border: 1px solid #E0E0E0;
+  border-top: 2px solid #218CE9;
+  border-bottom: none;
+}
+.shared-check-img-structured .OTHERS, .shared-check-img-structured .ONESELF, .shared-check-img-structured .SYSTEM {
+  width: 28px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 10px;
+  background: #7596E9;
+  border-radius: 1px;
+  color: #fff;
+  display: inline-block;
+  margin-right: 5px;
+}
+.shared-check-img-structured .ONESELF {
+  background: #8DD2C6;
+}
+.shared-check-img-structured .SYSTEM {
+  background: #E5BF76;
+}
+
+/*# sourceMappingURL=index.css.map */

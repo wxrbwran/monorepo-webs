@@ -1,0 +1,137 @@
+.shared_check_images {
+  .check_img {
+    flex: 0 1 50%;
+    // @include card-shadow();
+    display: flex;
+    flex-direction: column;
+    &:first-child {
+      margin-right: 5px;
+    }
+    &:last-child {
+      margin-left: 5px;
+    }
+    .list {
+      padding: 5px 0;
+      height: 100%;
+      .red {
+        span {
+          color: red;
+        }
+      }
+      > div {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 30px;
+        font-size: 14px;
+        position: relative;
+        margin-top: 5px;
+        cursor: pointer;
+        &::before {
+          // content: '';
+          // position: absolute;
+          // width: 6px;
+          // height: 6px;
+          // left: 20px;
+          // top: 50%;
+          // margin-top: -3px;
+          // border-radius: 50%;
+          // background-color: #d9d9d9;
+        }
+        &.red {
+          &::before {
+            background-color: #f04134;
+            cursor: pointer;
+          }
+        }
+        &.green {
+          &::before {
+            background-color: #52c41a;
+            cursor: pointer;
+          }
+        }
+      }
+      .name {
+        width: 38%;
+        color: #000;
+      }
+      .date {
+        color: #999;
+        width: 25%;
+        text-align: center;
+        min-width: 67px;
+      }
+      .count {
+        padding-right: 20px;
+        display: flex;
+        align-items: center;
+        color: #000;
+      }
+    }
+  }
+  .images_wrap {
+    .anticon {
+      font-size: 12px;
+    }
+    .images_list {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      .images_item {
+        position: relative;
+        width: 150px;
+        margin: 10px 6px 10px;
+        text-align: center;
+        .img_count {
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          z-index: 5;
+          background: rgba(255, 255, 255, 0.6);
+          height: 18px;
+          line-height: 18px;
+          padding: 0 5px;
+          border-radius: 3px;
+        }
+        .check_border {
+          width: 16px;
+          height: 16px;
+          background: #ffffff;
+          border-radius: 3px;
+          border: 1px solid #c7c7c7;
+          display: inline-block;
+        }
+        .check_fill {
+          width: 16px;
+          height: 16px;
+        }
+        .exception,
+        .normal {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          width: 40px;
+          height: 20px;
+          line-height: 20px;
+          color: #fff;
+          border-radius: 100px;
+          text-align: center;
+          font-size: 14px;
+          z-index: 2;
+          &.normal {
+            background: #00b299;
+          }
+          &.exception {
+            background: #f9515c;
+          }
+        }
+        img {
+          width: 150px;
+          height: 150px;
+          display: block;
+        }
+      }
+    }
+  }
+
+}

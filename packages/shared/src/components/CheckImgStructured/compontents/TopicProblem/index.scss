@@ -1,0 +1,28 @@
+.shared-check-img-structured {
+  .add_problem {
+    .ant-input {
+      border: none;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #E0E0E0;
+      font-size: 14px;
+    }
+    .answer {
+      border: 1px solid #E0E0E0;
+      min-height: 80px;
+    }
+    .ghost_btn {
+      text-align: center;
+      .ant-btn {
+        margin: 0 20px;
+        height: 24px;
+        border-radius: 3px;
+        border: 1px solid #3296FA;
+        color: #3296FA;
+        font-size: 15px;
+        background-color: #fff;
+      }
+    }
+  }
+}
+
+
