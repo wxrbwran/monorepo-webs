@@ -3,7 +3,7 @@ import http from '@/services/http';
 export default {
   //  查询报告（搜索结果表）扩展查询
   fetchSearchReport(data: any): Promise<any> {
-    return http.get(`research/patients?data=${JSON.stringify(data)}`);
+    return http.get('research/patients', { data });
   },
   // 直接查询
   fetchBaseReport(data: any): Promise<any> {
@@ -31,12 +31,13 @@ export default {
   },
   // 获取填充值域
   fetchKvScope(data: any): Promise<any> {
-    return http.get(`kv/scope?data=${JSON.stringify(data)}`);
+    return http.get('kv/scope', { data });
   },
   // 动态获取节点
   fetchNodeEl(url: string, data: any): Promise<any> {
     url = url.split('/').filter(a => !!a).join('/');
-    return http.get(`${url}?data=${JSON.stringify(data)}`);
+    // return http.get(`${url}?data=${JSON.stringify(data)}`);
+    return http.get(url, { data });
   },
   // 开始查询
   fetchQueryId(data: any): Promise<any> {
@@ -48,7 +49,7 @@ export default {
   },
   // 查询结果弹窗详情
   fetchQueryResultDetail(data: any): Promise<any> {
-    return http.get(`research/statistics/detail?data=${JSON.stringify(data)}`);
+    return http.get('research/statistics/detail', { data });
   },
   // 查询结果弹窗详情
   fetchQueryDetail(data: any): Promise<any> {
@@ -65,7 +66,7 @@ export default {
   // 智能科研查询结果接口
   // 轮循查询
   fetchResearchStatistics(data: any): Promise<any> {
-    return http.get(`research/statistics?data=${JSON.stringify(data)}`);
+    return http.get('research/statistics', { data });
   },
   // 查询导出
   patchResearchExport(data: any): Promise<any> {

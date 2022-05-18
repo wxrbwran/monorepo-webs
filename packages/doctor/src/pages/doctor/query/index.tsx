@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as api from '@/services/api';
 import { message, Checkbox, Steps, DatePicker, Input, Select } from 'antd';
 import { useSelector, useDispatch } from 'umi';
-// import FieldCard from './components/field_card';
+import FieldCard from './components/field_card';
 import { DoctorSourceType, numberOperationType, rangNumberOperationType, stringOperationType, transformDynamicToStatic, transformQueryPageAllRuleToFetchQueryIdRules, utilNumType, utilStringType, utilYesNoType } from './util';
 import styles from './index.scss';
-// import { IState } from 'typings/global';
-// import { IState } from 'packages/doctor/typings/model';
 import radioCheck from '@/assets/img/query/radio_check.png';
 import deletePng from '@/assets/img/query/delete.png';
 import exportStylesPng from '@/assets/img/query/export_styles.jpg';
@@ -16,7 +14,7 @@ import copyPng from '@/assets/img/query/copy.png';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
-// import QueryResult from './query_result';
+import QueryResult from './query_result';
 
 import {
   SortableContainer,
@@ -52,9 +50,8 @@ function Query({ }: IProps) {
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const dispatch = useDispatch();
-  // const projectSid = window.$storage.getItem('projectSid');
-  // const { projectRoleType, projectNsId, roleType } = useSelector((state: IState) => state.user);
   const doctorSid = window.$storage.getItem('sid');
+  const doctorWcId = window.$storage.getItem('wcId');
   const doctorRoleSid = window.$storage.getItem('roleId');
 
 
@@ -206,12 +203,12 @@ function Query({ }: IProps) {
         <div className={styles.centerLine}></div>
 
         <div className={styles.right}>
-          {/* <FieldCard
+          <FieldCard
             key={allFields?.items[activeFieldIndex]?.name}
             currentField={allFields?.items[activeFieldIndex]}
             type={type}
             onValueChange={onValueChange}
-          /> */}
+          />
         </div>
       </div>
     );
@@ -948,36 +945,42 @@ function Query({ }: IProps) {
 
       const searchField = [...basicStep0Arr, ...otherChoiceFields];
       console.log('================  searchField searchField', searchField);
-      const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, projectSid, allFields, searchRangeItems, searchField);
+      const rules = transformQueryPageAllRuleToFetchQueryIdRules(allRules, searchTimeRange, doctorSid, allFields, searchRangeItems, searchField);
 
       if (rules) {
 
         const params: any = {
           rules: rules,
           meta: {
-            sourceType: 4,
+            sourceType: DoctorSourceType,
             teamLocations: [
               {
-                sid: projectSid,
-                ns: projectNsId,
-                role: projectRoleType,
+                sid: doctorSid,
+                ns: doctorWcId,
+                role: doctorRoleSid,
                 tag: 'ownership',
               },
               {
-                sid: localStorage.getItem('xzl-web-doctor_sid'),
-                ns: projectNsId,
-                role: roleType,
+                sid: doctorSid,
+                ns: doctorWcId,
+                role: doctorRoleSid,
                 tag: 'operator',
               },
             ],
           },
         };
         const head = await api.query.fetchQueryId(params);
+        // dispatch({
+        //   type: 'query/setQueryHead',
+        //   payload: head.id,
+        // });
         dispatch({
           type: 'query/setQueryHead',
           payload: head.tableHead,
         });
+
         setResultKey(head.resultKey);
+        // setResultKey(head.id);
       }
     }
     setCurrentStep(currentStep + 1);
@@ -1018,13 +1021,13 @@ function Query({ }: IProps) {
         currentStep == 2 &&
         step2View()
       }
-      {/* {
+      {
         currentStep == 3 &&
         <QueryResult
           ref={queryResultRef}
           param={{ query: { resultKey } }}
         />
-      } */}
+      }
       <div className={styles.bottom_steps}>
         {
           currentStep != 0 && <div className={styles.pre_step} onClick={onPreStepClick}>上一步</div>

@@ -1,0 +1,18 @@
+.result {
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 30px;
+  .loading {
+    position: absolute;
+    left: 50%;
+    margin-left: -66px;
+    top: 35%;
+    font-size: 15px;
+  }
+  .loading_append {
+    font-size: 15px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

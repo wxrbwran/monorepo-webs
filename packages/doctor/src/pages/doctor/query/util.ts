@@ -22,7 +22,7 @@ export const transformDynamicToStatic = (item: { type: string, name: string, ass
         kp: item.name,
         value: value,
         //// 登陆者 sid,   roleType 登陆者角色
-        // 院外 登陆者 sid,   roleType 登陆者角色  nsId: 登陆者nsid  和机构的sid，机构角色 nsId: 机构nsid
+        // 院外 登陆者 sid,   roleType 登陆者角色  nsId: 登陆者nsid  operator  和机构的sid，机构角色 nsId: 机构nsid
         rsList: [{ sid: projectSid, roleType: projectRoleType }],
         sourceType: sourceType,
         fatherValue: fatherValue,
