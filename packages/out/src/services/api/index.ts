@@ -1,5 +1,6 @@
 export { default as auth } from './auth';
 export { default as query } from './query';
+export { default as patient_query } from './patient_query';
 export { default as report } from './report';
 export { default as overview } from './overview';
 export { default as user } from './user';
@@ -19,3 +20,4 @@ export { default as diagnosis } from './diagnosis';
 export { default as image } from './image';
 export { default as medicine } from './medicine';
 export { default as im } from './im';
+

@@ -112,6 +112,12 @@ const routes = [
     component: './data-statistics',
 
   },
+  {
+    path: '/query',
+    name: '患者查询',
+    icon: 'Icon0',
+    component: './query/index',
+  },
   hospital,
   // {
   //   path: '/medical',

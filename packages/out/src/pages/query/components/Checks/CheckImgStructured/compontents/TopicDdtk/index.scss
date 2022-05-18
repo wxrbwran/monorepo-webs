@@ -1,0 +1,106 @@
+.ddtk {
+  position: relative;
+  margin-bottom: 10px;
+  &.edit {
+    box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    padding: 10px 8px;
+  }
+  textarea {
+    border: none;
+    color: #000;
+    height: auto!important;
+  }
+  .add_btn {
+    font-size: 14px;
+    color: #1488ed;
+    cursor: pointer;
+  }
+
+  // :global {
+  //   // .ant-input:focus {
+  //   //   border: none!important;
+  //   // }
+  // }
+  pre {
+    position: relative;
+    padding-top: 20px;
+    overflow: hidden;
+    textarea {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%!important;
+    }
+    div {
+      color: #fff;
+      white-space: break-spaces;
+      overflow: hidden;
+    }
+  }
+  &.done {
+
+    .ques_span {
+      min-height: 32px;
+      line-height: 32px;
+      font-size: 14px;
+    }
+    .edit_span {
+      border: 1px solid #E6E6E6;
+      min-height: 32px;
+      line-height: 32px;
+      border-radius: 4px;
+      min-width: 120px;
+      display: inline-block;
+      outline: none;
+      vertical-align: bottom;
+      position: relative;
+      max-width: calc(100% - 50px);
+      overflow-x: auto;
+      margin-left: 5px;
+      padding: 0 5px;
+      &.no_border {
+        border: none;
+      }
+      &:empty {
+        &:before {
+          content: '\8bf7\8f93\5165\7b54\6848';
+          position: absolute;
+          left: 5px;
+          top: 0;
+          color: #999999;
+        }
+      }
+    }
+    :global {
+      input {
+        width: auto;
+        display: inline-block;
+        margin: 0 12px 0 8px;
+        min-width: 120px;
+        border-radius: 4px;
+        border: 1px solid #E6E6E6;
+        height: 32px;
+        line-height: 32px;
+      }
+      .ques {
+        margin-top: 3px;
+      }
+    }
+  }
+  .order_number {
+    min-width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    color: #181818;
+    border: 1px solid #181818;
+    font-size: 12px;
+    display: inline-block;
+    line-height: 14px;
+    text-align: center;
+    margin-right: 3px;
+  }
+
+}

@@ -79,7 +79,7 @@
     "@umijs/preset-react": "^1.4.8",
     "@umijs/route-utils": "^1.0.33",
     "@umijs/yorkie": "^2.0.3",
-    "antd": "4.17.0",
+    "antd": "4.18.0",
     "autoprefixer": "^9.8.6",
     "classnames": "^2.2.6",
     "cropperjs": "^1.5.9",
@@ -113,6 +113,8 @@
     "umi": "^3.5.17",
     "umi-request": "^1.0.8",
     "use-merge-value": "^1.0.1",
+    "react-sortable-hoc": "^2.0.0",
+    "xlsx": "^0.17.0",
     "xzl-web-shared": "workspace:^1.0.0"
   },
   "devDependencies": {
