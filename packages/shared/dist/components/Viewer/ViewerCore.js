@@ -386,10 +386,10 @@ export default (function (props) {
         containerSize.current = setContainerWidthHeight();
         if (visible) {
             var left = (containerSize.current.width - state.width) / 2;
-            var top = (containerSize.current.height - state.height - footerHeight) / 2;
+            var top_1 = (containerSize.current.height - state.height - footerHeight) / 2;
             dispatch(createAction(ACTION_TYPES.update, {
                 left: left,
-                top: top,
+                top: top_1,
             }));
         }
     }

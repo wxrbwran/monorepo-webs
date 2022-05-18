@@ -163,7 +163,11 @@ var CheckImgStructured = function (props) {
     console.log('---loading', isLoaded);
     return (React.createElement(React.Fragment, null,
         React.createElement("span", { onClick: handleStructured }, children),
-        React.createElement(DragModal, { wrapClassName: "ant-modal-wrap-full", 
+        React.createElement(DragModal
+        // wrapClassName="ant-modal-wrap-full"
+        // zIndex={1010}
+        , { 
+            // wrapClassName="ant-modal-wrap-full"
             // zIndex={1010}
             style: { top: 0, height: '100vh' }, width: "100%", visible: showViewer, title: "", onCancel: hideViewer, footer: null, destroyOnClose: true },
             React.createElement("div", { className: 'shared-check-img-structured' },

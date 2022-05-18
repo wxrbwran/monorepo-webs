@@ -35,7 +35,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
   const { children, handleRefresh, images } = props;
   console.log('image232s', images);
   const [showViewer, setShowViewer] = useState(false);
-  const initIndexes = { hydData:[], previousHistory: {} };
+  const initIndexes = { hydData: [], previousHistory: {} };
   // 化验单和既往史
   const [indexesData, setIndexesData] = useState<IIndexesData>(initIndexes);
   const [jcdData, setJcdData] = useState<ITopicItemApi[]>([]);
@@ -78,7 +78,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
   };
   const fetchData = (id: string, groupId: string | undefined) => {
     Promise.all([fetchImageIndexes(id, groupId), fetchImageJcds(id, groupId)]).then((res: any[]) => {
-      const [indexesD, jData ] = res;
+      const [indexesD, jData] = res;
       const { list, diagnosisList, treatmentInfoList, integratedHistory } = indexesD;
       const data = {
         hydData: list.map(item => {
@@ -96,10 +96,12 @@ const CheckImgStructured: FC<IProps> = (props) => {
 
       setIndexesData({ ...data });
       setJcdData(jData.list.map(item => {
-        return ({ ...item, meta: {
-          ...item.meta,
-          tabKey: uuid(),
-        } });
+        return ({
+          ...item, meta: {
+            ...item.meta,
+            tabKey: uuid(),
+          },
+        });
       }));
       setIsLoaded(true);
     });

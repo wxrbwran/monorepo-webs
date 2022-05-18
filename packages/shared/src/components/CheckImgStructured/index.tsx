@@ -120,7 +120,7 @@ const CheckImgStructured: FC<IProps> = (props) => {
     <>
       <span onClick={handleStructured}>{children}</span>
       <DragModal
-        wrapClassName="ant-modal-wrap-full"
+        // wrapClassName="ant-modal-wrap-full"
         // zIndex={1010}
         style={{ top: 0, height: '100vh' }}
         width="100%"

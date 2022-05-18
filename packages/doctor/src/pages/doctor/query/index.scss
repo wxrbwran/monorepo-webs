@@ -386,7 +386,20 @@
       font-size: 14px;
       display: flex;
       flex-direction: row;
-
+      
+      :global {
+        .ant-select-selector {
+          height: 34px!important;
+          .ant-select-selection-item,.ant-select-selection-placeholder {
+            line-height: 34px!important;
+            font-size: 14px;
+          }
+        }
+        .ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input {
+          height: 34px;
+        }
+      }
+      
       .name {
         width: 250px;
         height: 34px;
