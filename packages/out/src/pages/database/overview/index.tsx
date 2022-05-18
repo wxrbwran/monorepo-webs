@@ -5,6 +5,52 @@ import ReplyScale from './components/ReplyScale';
 import * as api from '@/services/api';
 import { Empty } from 'antd';
 
+export const RuleTypeMap = {
+  objective: {
+    type: 'OBJECTIVE',
+    scaleType: 'OBJECTIVE',
+    text: '客观量表',
+    sourceType: '7',
+    templeType: 'OBJECTIVE_INSPECTION',
+  },
+  crf: {
+    type: 'CRF',
+    scaleType: 'CRF',
+    text: 'crf量表',
+    sourceType: '6',
+    templeType: 'CRF_SCALE',
+  },
+  subjective: {
+    type: 'SUBJECTIVE',
+    scaleType: 'SUBJECTIVE',
+    text: '主观量表',
+    sourceType: '5',
+    templeType: 'SUBJECTIVE_SCALE',
+  },
+
+  visit_objective: {
+    type: 'VISIT_OBJECTIVE',
+    scaleType: 'VISIT_OBJECTIVE',
+    text: '计划外访视客观',
+    sourceType: '13', // 计划外访视客观量表提醒
+    templeType: 'VISIT_OBJECTIVE_INSPECTION',
+  },
+  visit_crf: {
+    type: 'VISIT_CRF',
+    scaleType: 'VISIT_CRF',
+    text: '计划外访视CRF',
+    sourceType: '12', // 计划外访视CRF量表提醒
+    templeType: 'VISIT_CRF_SCALE',
+  },
+  visit_subjective: {
+    type: 'VISIT_SUBJECTIVE',
+    scaleType: 'VISIT_SUBJECTIVE',
+    text: '计划外访视主观',
+    sourceType: '11', //计划外访视主观量表提醒
+    templeType: 'VISIT_SUBJECTIVE_SCALE',
+  },
+};
+
 function Overview() {
   const [scaleList, setScaleList] = useState([]);
   const [scaleGroupId, setScaleGroupId] = useState<string>();
