@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Menu } from 'antd';
-import Icon, { UserOutlined, BarChartOutlined, ProfileOutlined } from '@ant-design/icons';
+import Icon, { UserOutlined, BarChartOutlined, ProfileOutlined, FileSearchOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import config from '@/config';
 import { Role } from 'xzl-web-shared/dist/utils/role';
@@ -152,19 +152,16 @@ function SideMenu({ location }: Iprops) {
           <span className="ml-8">结构数据展示</span>
         </a>
 
-        <Menu.Item
-          className='query'
-          key={'query'.toUpperCase()}
-          icon={<UserOutlined />}
-          onClick={() => history.push('/doctor/query')}
-        >
-          {'数据查询'}
-        </Menu.Item>
+        <div className={styles.query}>
 
-        {/* <SubMenu key={'query'.toUpperCase()} icon={<UserOutlined />} title="数据查询" onTitleClick={() => history.push('/doctor/query')}>
-
-        </SubMenu> */}
-
+          <Menu.Item
+            key={'query'.toUpperCase()}
+            icon={<FileSearchOutlined />}
+            onClick={() => history.push('/doctor/query')}
+          >
+            {'数据查询'}
+          </Menu.Item>
+        </div>
         <p>
           <a href={config.PUBLICIZE} target="_blank" className={styles.structure} rel="noopener noreferrer">
             <ProfileOutlined />
