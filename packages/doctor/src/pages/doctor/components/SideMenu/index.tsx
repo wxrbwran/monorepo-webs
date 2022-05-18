@@ -50,12 +50,17 @@ function SideMenu({ location }: Iprops) {
   useEffect(() => {
     if (serviceMenu[roleText]) {
       setActiveMenu(roleText);
-    } else if (roleText === 'DEP_HEAD'){
+    } else if (roleText === 'DEP_HEAD') {
       console.log('=3-232', history.location.query.depHeadNsId);
       setActiveMenu(history.location.query.depHeadNsId.toUpperCase());
       window.$storage.setItem('role', roleText);
       window.$storage.setItem('roleId', Role[`${roleText}`].id);
+    } else if (roleText == 'QUERY') { // 查询以独立医生进入
+      window.$storage.setItem('roleId', Role.ALONE_DOCTOR.id);
+      window.$storage.setItem('role', Role.ALONE_DOCTOR);
+      setActiveMenu(`${roleText}`);
     } else {
+      console.log('=========  roleText ', roleText, activeMenu);
       window.$storage.setItem('roleId', Role[`${roleText}`].id);
       window.$storage.setItem('role', `${roleText}`);
       setActiveMenu(`${roleText}`);
@@ -104,7 +109,7 @@ function SideMenu({ location }: Iprops) {
       <Menu
         onClick={handleClick}
         style={{ width: 256 }}
-        // defaultSelectedKeys={[activeMenu.toUpperCase()]}
+
         selectedKeys={[activeMenu.toUpperCase()]}
         defaultOpenKeys={[defaultKey()]}
         mode="inline"
@@ -124,7 +129,7 @@ function SideMenu({ location }: Iprops) {
             })
           }
         </SubMenu>
-        { getDepHead() }
+        {getDepHead()}
         { // utils-tools.ts  accountStatus  110已认证
           userInfo.status === 110 && (
             <SubMenu key="sub3" icon={<Icon className="menuIcon" component={icon1} />} title="服务管理">
@@ -146,6 +151,14 @@ function SideMenu({ location }: Iprops) {
           <BarChartOutlined />
           <span className="ml-8">结构数据展示</span>
         </a>
+
+        <Menu.Item
+          key={'query'.toUpperCase()}
+          onClick={() => history.push('/doctor/query')}
+        >
+          {'team'}
+        </Menu.Item>
+
         <p>
           <a href={config.PUBLICIZE} target="_blank" className={styles.structure} rel="noopener noreferrer">
             <ProfileOutlined />
