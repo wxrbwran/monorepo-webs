@@ -96,7 +96,7 @@ function QueryDetail({ row, showModal, onCancel }: IProps) {
           setImgList((preImageList: any[]) => {
 
             const preList = preImageList || [];
-            const newList = results?.tableBody?.map((item: { url: string; }) => item?.url).filter((i: string) => !!i) || [];
+            const newList = results?.tableBody?.map((item: { image_url: string; }) => item?.image_url).filter((i: string) => !!i) || [];
             return [...preList, ...newList];
           });
         }
