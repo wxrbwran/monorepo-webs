@@ -15,6 +15,7 @@ import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
 import QueryResult from './query_result';
+import { Role } from 'xzl-web-shared/dist/utils/role';
 
 import {
   SortableContainer,
@@ -50,6 +51,10 @@ function Query({ }: IProps) {
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const dispatch = useDispatch();
+
+  // 写死是独立医生
+  window.$storage.setItem('roleId', Role.ALONE_DOCTOR.id);
+
   const doctorSid = window.$storage.getItem('sid');
   const doctorWcId = window.$storage.getItem('wcId');
   const doctorRoleSid = window.$storage.getItem('roleId');
