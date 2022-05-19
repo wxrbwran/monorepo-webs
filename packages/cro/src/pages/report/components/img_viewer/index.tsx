@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../report_table/index.scss';
-import Viewer from '@/components/Viewer';
+import Viewer from 'xzl-web-shared/dist/components/Viewer';
 import moment from 'moment';
 interface IProps {
   info: {
