@@ -104,6 +104,8 @@ function SideMenu({ location }: Iprops) {
       );
     }
   }, [existedRoles]);
+
+  console.log('================= selectedKeys', [activeMenu.toUpperCase()]);
   return (
     <div className={styles.side_menu}>
       <Menu
@@ -152,16 +154,16 @@ function SideMenu({ location }: Iprops) {
           <span className="ml-8">结构数据展示</span>
         </a>
 
-        <div className={styles.query}>
+        <Menu.Item
+          className={styles.query_item}
+          style={{ paddingLeft: 12 }}
+          key={'query'.toUpperCase()}
+          icon={<FileSearchOutlined />}
+          onClick={() => history.push('/doctor/query')}
+        >
+          {'数据查询'}
+        </Menu.Item>
 
-          <Menu.Item
-            key={'query'.toUpperCase()}
-            icon={<FileSearchOutlined />}
-            onClick={() => history.push('/doctor/query')}
-          >
-            {'数据查询'}
-          </Menu.Item>
-        </div>
         <p>
           <a href={config.PUBLICIZE} target="_blank" className={styles.structure} rel="noopener noreferrer">
             <ProfileOutlined />

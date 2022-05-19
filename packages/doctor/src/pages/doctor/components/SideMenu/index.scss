@@ -54,19 +54,26 @@
   font-weight: 600;
 }
 
-.query {
 
-  padding-left: 12px;
+.query_item {
+
+  height: 38px!important;
+  line-height: 38px!important;
+  width: 80%;
+  border-radius: 10px;
+  &::after {
+    border: 0;
+  }
+
   :global {
-    .ant-menu-item {
+
+    .ant-menu-title-content {
       font-size: 16px;
       font-weight: 600;
-      height: 38px!important;
-      line-height: 38px!important;
-      width: 80%;
-      border-radius: 10px;
-      &::after {
-        border: 0;
+    }
+    .ant-menu-submenu-selected {
+      path {
+        fill: #1890ff!important;
       }
     }
   }
