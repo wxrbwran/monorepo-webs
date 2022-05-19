@@ -42,7 +42,7 @@ export function uniqueMsgs(arr: []) {
 }
 
 
-export function getCondition(keyName: string, value:any, operator?: string) {
+export function getCondition(keyName: string, value: any, operator?: string) {
   return {
     var: keyName,
     value,
@@ -86,7 +86,7 @@ export function getRoles(msgCustom: { fromUsers?: { role: string }[], fromUser: 
 
 // 得到IM发送者的信息(只要有智能医生角色，发送者就是智能医生，否则以什么角色进的详情页谁就是发送者)
 export function getFromDoctorInfo(currSession: IPerson) {
-  let fromDoctorInfo:[] = [];
+  let fromDoctorInfo: [] = [];
   console.log('currSession', currSession);
   // 非智能医生
   const doctorInfo = currSession.members.filter(
@@ -111,3 +111,10 @@ export function compare(el) {
     return a - b;
   };
 }
+
+
+export const searchHighLight = (text: string, lightKeyWord: string) => {
+  return !lightKeyWord ? text :
+    text.replaceAll(lightKeyWord.toLowerCase(), `<span class="text_red">${lightKeyWord.toLowerCase()}</span>`).replaceAll(
+      lightKeyWord.toUpperCase(), `<span class="text_red">${lightKeyWord.toUpperCase()}</span>`);
+};

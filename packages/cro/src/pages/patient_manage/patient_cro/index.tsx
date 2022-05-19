@@ -7,7 +7,7 @@ import * as api from '@/services/api';
 import { handleSelection } from '@/utils/conditions';
 import { Status } from 'xzl-web-shared/dist/components/Selects';
 import { Group } from '@/components/Selects';
-import Viewer from 'react-viewer';
+import Viewer from '@/components/Viewer';
 import { patientCroColumns, patientCroStopColumns } from '@/utils/columns';
 import { useSelector, useDispatch } from 'umi';
 import '../index.scss';

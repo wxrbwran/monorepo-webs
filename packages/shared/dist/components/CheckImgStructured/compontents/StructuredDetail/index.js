@@ -37,7 +37,6 @@ import StructuredDetailJcdPanel from '../StructuredDetailJcdPanel';
 import { outTypes } from '../utils';
 import './index.css';
 import { isEmpty, cloneDeep } from 'lodash';
-import EmptyIcon from '@/assets/img/jgh_empty.png';
 var TabPane = Tabs.TabPane;
 var StructuredDetail = function (props) {
     var hydData = props.hydData, jcdData = props.jcdData, images = props.images, handleRefresh = props.handleRefresh, handleClose = props.handleClose, jcdOriginIds = props.jcdOriginIds, groupId = props.groupId;
@@ -133,7 +132,7 @@ var StructuredDetail = function (props) {
                 React.createElement(Tabs, { type: "editable-card", onEdit: handelTabsEdit, hideAdd: true, activeKey: activeType, onChange: function (tab) { return setActiveType(tab); } }, showTypeTabs
                     .map(function (itemTab, inx) { return (React.createElement(TabPane, { tab: outTypes === null || outTypes === void 0 ? void 0 : outTypes[itemTab.outType], key: itemTab.outType, forceRender: true }, renderTabPane(itemTab.outType, inx))); }))))),
         isEmpty(typeTabs) && (React.createElement("div", { className: "no_tab" },
-            React.createElement("img", { className: "w-100 h-66", src: EmptyIcon, alt: "\u8BF7\u9009\u62E9\u56FE\u7247\u7C7B\u578B" }),
+            React.createElement("img", { className: "w-100 h-66", src: 'https://revomedi.oss-cn-beijing.aliyuncs.com/static/xzl-webs/jgh_empty.png', alt: "\u8BF7\u9009\u62E9\u56FE\u7247\u7C7B\u578B" }),
             React.createElement("div", { className: "mt-10" }, "\u8BF7\u9009\u62E9\u56FE\u7247\u7C7B\u578B")))));
 };
 export default StructuredDetail;

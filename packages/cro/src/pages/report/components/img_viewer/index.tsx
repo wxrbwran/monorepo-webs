@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../report_table/index.scss';
-import Viewer from 'react-viewer';
-import moment from 'moment'
+import Viewer from '@/components/Viewer';
+import moment from 'moment';
 interface IProps {
   info: {
     start: number;
@@ -17,12 +17,12 @@ function ImgViewer({ info }: IProps) {
   const changePicState = (idx: any) => {
     setIsShowViewer(false);
     setActiveIndex(idx);
-  }
+  };
 
   const handleShowViewer = (index: number) => {
     setActiveIndex(index);
     setIsShowViewer(true);
-  }
+  };
   return (
     <>
       <div className="img-list">
@@ -37,7 +37,7 @@ function ImgViewer({ info }: IProps) {
                   )
                 }
               </div>
-            )
+            );
           })
         }
       </div>
@@ -47,11 +47,11 @@ function ImgViewer({ info }: IProps) {
         activeIndex={activeIndex}
         images={info.map(item => item.value).map(url => ({
           src: url,
-          alt: "",
+          alt: '',
         }))}
       />
     </>
-  )
+  );
 }
 
 export default ImgViewer;

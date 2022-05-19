@@ -7,7 +7,6 @@ import StructuredDetailJcdPanel from '../StructuredDetailJcdPanel';
 import { outTypes } from '../utils';
 import './index.css';
 import { isEmpty, cloneDeep } from 'lodash';
-import EmptyIcon from '@/assets/img/jgh_empty.png';
 import { IApiDocumentList, IStructuredDetailProps } from 'typings/imgStructured';
 
 const { TabPane } = Tabs;
@@ -140,7 +139,7 @@ const StructuredDetail: FC<IStructuredDetailProps> = (props) => {
       {
         isEmpty(typeTabs) && (
           <div className="no_tab">
-            <img className="w-100 h-66" src={EmptyIcon} alt="请选择图片类型" />
+            <img className="w-100 h-66" src={'https://revomedi.oss-cn-beijing.aliyuncs.com/static/xzl-webs/jgh_empty.png'} alt="请选择图片类型" />
             <div className="mt-10">请选择图片类型</div>
           </div>
         )

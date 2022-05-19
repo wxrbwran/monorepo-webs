@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DragModal from 'xzl-web-shared/dist/components/DragModal';
 import { Input } from 'antd';
 import * as api from '@/services/api';
-import Viewer from 'react-viewer';
+import Viewer from '@/components/Viewer';
 import styles from './index.scss';
 import config from '@/config';
 

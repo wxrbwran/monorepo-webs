@@ -14,7 +14,7 @@ import { persistEnhancer } from 'xzl-web-shared/dist/utils/dva-model-persist';
 // import Icon, { SmileOutlined, HeartOutlined, CrownOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
 import { PieChartOutlined } from '@ant-design/icons';
-import { Icon1, Icon2, Icon3, Icon4, Icon5, Icon6 } from '@/utils/menuIcon';
+import { Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7 } from '@/utils/menuIcon';
 // import icont from '@/assets/img/menuIcon/icongx1.svg';
 
 const IconMap = {
@@ -25,6 +25,7 @@ const IconMap = {
   Icon4: <Icon4 />,
   Icon5: <Icon5 />,
   Icon6: <Icon6 />,
+  Icon7: <Icon7 />,
   // menuIcon: <img src={icont} />
 };
 export const dva = {
