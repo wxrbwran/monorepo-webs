@@ -20,6 +20,13 @@ const iconMenu5 = () => (
 const iconMenu6 = () => (
   <svg viewBox="64 64 896 896" focusable="false" data-icon="profile" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656zM492 400h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H492c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8zm0 144h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H492c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8zm0 144h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H492c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8zM340 368a40 40 0 1080 0 40 40 0 10-80 0zm0 144a40 40 0 1080 0 40 40 0 10-80 0zm0 144a40 40 0 1080 0 40 40 0 10-80 0z"></path></svg>
 );
+
+const iconMenu7 = () => (
+  <svg className="icon" width="18px" height="18px" viewBox="0 0 18 18" version="1.1">
+    <path d="M5.54723657,7.37458992 C5.20802902,7.01621473 5,6.53240126 5,6 C5,4.8954305 5.8954305,4 7,4 C8.1045695,4 9,4.8954305 9,6 C9,6.53240126 8.79197098,7.01621473 8.45276343,7.37458992 C9.37545069,7.88624773 10,8.87018821 10,10 L9,10 C9,8.8954305 8.1045695,8 7,8 C5.8954305,8 5,8.8954305 5,10 L4,10 C4,8.87018821 4.62454931,7.88624773 5.54723657,7.37458992 Z M7,7 C7.55228475,7 8,6.55228475 8,6 C8,5.44771525 7.55228475,5 7,5 C6.44771525,5 6,5.44771525 6,6 C6,6.55228475 6.44771525,7 7,7 Z M4,2.5 C3.44771525,2.5 3,2.94771525 3,3.5 L3,14.5 C3,15.0522847 3.44771525,15.5 4,15.5 L14,15.5 C14.5522847,15.5 15,15.0522847 15,14.5 L15,3.5 C15,2.94771525 14.5522847,2.5 14,2.5 L4,2.5 Z M4,1.5 L14,1.5 C15.1045695,1.5 16,2.3954305 16,3.5 L16,14.5 C16,15.6045695 15.1045695,16.5 14,16.5 L4,16.5 C2.8954305,16.5 2,15.6045695 2,14.5 L2,3.5 C2,2.3954305 2.8954305,1.5 4,1.5 Z M11.5,6 C11.2238576,6 11,5.77614237 11,5.5 C11,5.22385763 11.2238576,5 11.5,5 L13.5,5 C13.7761424,5 14,5.22385763 14,5.5 C14,5.77614237 13.7761424,6 13.5,6 L11.5,6 Z M11.5,9.5 C11.2238576,9.5 11,9.27614237 11,9 C11,8.72385763 11.2238576,8.5 11.5,8.5 L13.5,8.5 C13.7761424,8.5 14,8.72385763 14,9 C14,9.27614237 13.7761424,9.5 13.5,9.5 L11.5,9.5 Z M4.5,13 C4.22385763,13 4,12.7761424 4,12.5 C4,12.2238576 4.22385763,12 4.5,12 L13.5,12 C13.7761424,12 14,12.2238576 14,12.5 C14,12.7761424 13.7761424,13 13.5,13 L4.5,13 Z" id="合并形状" fill="#181818" fill-rule="nonzero"></path>
+  </svg>
+);
+
 export const Icon0 = props => <Icon className="menuIcon" component={iconMenu0} {...props} />;
 export const Icon1 = props => <Icon className="menuIcon" component={iconMenu1} {...props} />;
 export const Icon2 = props => <Icon className="menuIcon" component={iconMenu2} {...props} />;
@@ -27,3 +34,5 @@ export const Icon3 = props => <Icon className="menuIcon" component={iconMenu3} {
 export const Icon4 = props => <Icon className="menuIcon" component={iconMenu4} {...props} />;
 export const Icon5 = props => <Icon className="menuIcon" component={iconMenu5} {...props} />;
 export const Icon6 = props => <Icon className="menuIcon" component={iconMenu6} {...props} />;
+export const Icon7 = props => <Icon className="menuIcon" component={iconMenu7} {...props} />;
+

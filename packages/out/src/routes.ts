@@ -179,7 +179,7 @@ const routes = [
   {
     path: '/query',
     name: '患者查询',
-    icon: 'Icon0',
+    icon: 'Icon7',
     component: './query/index',
   },
   {
