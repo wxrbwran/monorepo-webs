@@ -18,7 +18,7 @@ const Login: FC = () => {
       authType: 'password_type',
       clientId: 'xzl-web-out-org',
     };
-    window.$api.auth.token(params).then(res => {
+    window.$api.auth.token(params).then((res) => {
       localStorage.setItem('xzl-web-out-org_token', JSON.stringify(res.data));
       history.push('/data-statistics');
     });
@@ -27,18 +27,13 @@ const Login: FC = () => {
   return (
     <div className="login">
       <div className="login-slogan">
-        <div className="login-slogan__first">您身边的慢病管理专家</div>
+        <div className="login-slogan__first">您身边的管理专家</div>
         <div className="login-slogan__second">高效 智能 主动 精准</div>
       </div>
       <Row>
         <Col className="login-content">
           <div className="login-title">账号登录</div>
-          <Form
-            className="login-form"
-            onFinish={handleLogin}
-            form={form}
-            data-testid="form"
-          >
+          <Form className="login-form" onFinish={handleLogin} form={form} data-testid="form">
             <FormItem name="account" rules={[{ required: true, message: '请输入用户名或手机号!' }]}>
               <Input className="username" placeholder="用户名" />
             </FormItem>

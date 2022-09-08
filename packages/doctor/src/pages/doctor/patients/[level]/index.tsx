@@ -2,25 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import { useParams, history } from 'umi';
 import { Role } from 'xzl-web-shared/dist/utils/role';
-import {
-  Age, Sex, Address, PatientRole, Search,
-} from 'xzl-web-shared/dist/components/Selects';
+import { Age, Sex, Address, PatientRole, Search } from 'xzl-web-shared/dist/components/Selects';
 // import Organization from '@/components/Selects/Organization';
 import Organization from '@/components/Selects/PatientOrgs';
 import XzlTable from 'xzl-web-shared/dist/components/XzlTable';
 import { handleSelection, initSelectForm } from 'xzl-web-shared/dist/utils/conditions';
 import { doctorRoles, IRoleItem } from '@/utils/tools';
-import {
-  name,
-  org,
-  patientLevel,
-  sex,
-  age,
-  address,
-  msgCount,
-  noteC,
-  project,
-} from './columns';
+import { name, org, patientLevel, sex, age, address, msgCount, noteC, project } from './columns';
 // import AddPatient from './components/AddPatient';
 import PatientRecord from './components/PatientRecord';
 // import UnBind from './components/UnBind';
@@ -53,7 +41,9 @@ function Patients() {
   const [depOptions, setOptions] = useState({ ...getInitOptions() });
   const [pageAt, setPageAt] = useState<number>(1);
   // 慢病医生角色
-  const isDoctor = (Object.values(doctorRoles) as IRoleItem[]).map(item => item.url).includes(level);
+  const isDoctor = (Object.values(doctorRoles) as IRoleItem[])
+    .map((item) => item.url)
+    .includes(level);
   // 切换左侧菜单or刷新页面or从患者详情返回列表页面保留筛选搜索分页条件
   useEffect(() => {
     const newOptions = getInitOptions();
@@ -96,7 +86,7 @@ function Patients() {
     sessionStorage.setItem(level, JSON.stringify(localParams));
   };
   const handlePagerChange = (pagination: { current: number }) => {
-  //  保存分布参数到本地，2保存页码，当修改级别和备注时，需要刷新本页
+    //  保存分布参数到本地，2保存页码，当修改级别和备注时，需要刷新本页
     setPageAt(pagination.current);
     const localParams = {
       conditions: depOptions.conditions,
@@ -115,20 +105,14 @@ function Patients() {
     render: (_text: string, record: IRecord) => {
       return record?.nsOwner?.sid === window.$storage.getItem('sid') ? (
         <ChangeServicePackage data={record} refresh={() => refresh({ pageAt: 1 })} />
-      ) : <>--</>;
+      ) : (
+        <>--</>
+      );
     },
   };
 
-  const columns: CommonData[] = [
-    name,
-    isDoctor ? org : project,
-    sex,
-    age,
-    address,
-    msgCount,
-  ];
+  const columns: CommonData[] = [name, isDoctor ? org : project, sex, age, address, msgCount];
   if (isDoctor) {
-    columns.push(changeServicePackage);
     columns.splice(2, 0, patientLevel(refresh), noteC(refresh));
   }
   console.log('为构建添加console', level);
@@ -145,12 +129,10 @@ function Patients() {
             <Address />
             <Age />
             <Sex />
-            { isDoctor && <PatientRole /> }
+            {isDoctor && <PatientRole />}
             {
               <PatientRecord onSuccess={refresh}>
-                <span className={styles.btn_bind}>
-                  患者建档
-                </span>
+                <span className={styles.btn_bind}>患者建档</span>
               </PatientRecord>
             }
           </div>

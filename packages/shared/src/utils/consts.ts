@@ -1,6 +1,7 @@
 import { Role } from './role';
 import { croStatus, UserStatus } from './enums';
-export const defaultAvatar = 'https://staff-avatars-prod.oss-cn-beijing.aliyuncs.com/default-avatar.jpg';
+export const defaultAvatar =
+  'https://staff-avatars-prod.oss-cn-beijing.aliyuncs.com/default-avatar.jpg';
 
 export const imConfig = {
   // 本地消息显示数量，会影响性能
@@ -54,22 +55,28 @@ export const gluTab = [
   {
     label: 'GLU_BEFORE_BREAKFAST',
     value: '空腹',
-  }, {
+  },
+  {
     label: 'GLU_AFTER_BREAKFAST',
     value: '早餐后',
-  }, {
+  },
+  {
     label: 'GLU_BEFORE_LUNCH',
     value: '午餐前',
-  }, {
+  },
+  {
     label: 'GLU_AFTER_LUNCH',
     value: '午餐后',
-  }, {
+  },
+  {
     label: 'GLU_BEFORE_DINNER',
     value: '晚餐前',
-  }, {
+  },
+  {
     label: 'GLU_AFTER_DINNER',
     value: '晚餐后',
-  }, {
+  },
+  {
     label: 'GLU_BEFORE_SLEEP',
     value: '睡前',
   },
@@ -134,7 +141,7 @@ export const roleList = {
 };
 
 export const orgCategroy = {
-  ORDINARY: '慢病管理',
+  ORDINARY: '患者管理',
   CLINICAL: '临床试验',
 };
 
@@ -412,7 +419,6 @@ export const projectDefaultImg = [
   'https://xzl-im-files.oss-cn-hangzhou.aliyuncs.com/dev/2/ee254d65-f014-4c55-a952-6ec4c5ccf04aprojectImg5.jpeg',
 ];
 
-
 export const statusLists = {
   [UserStatus.Accepted]: '已认证',
   // [UserStatus.InitState]: '未完成注册',
@@ -428,7 +434,6 @@ export const documentType: Record<docTypeKeys, string> = {
   JCD: '检查单',
   OTHER: '其他医学单据',
 };
-
 
 export const referenceList: Record<string, string>[] = [
   {

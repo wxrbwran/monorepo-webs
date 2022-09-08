@@ -19,15 +19,14 @@ function LifeStandard({ children }: IProps) {
   const [sportCondition, setSportCondition] = useState<ISport[]>([]);
   const [sleepCondition, setSleepCondition] = useState<ISleep[]>([]);
 
-  const formatData = (type: string, records:any[]) => {
+  const formatData = (type: string, records: any[]) => {
     const record = records.filter((r) => r.type === type);
-    const recordArr:any = [];
+    const recordArr: any = [];
     record.forEach((r) => {
       let conditionType = null;
       let date = null;
       conditionType = type;
-      date = r.createdAt
-        ? dayjs(r.createdAt).format('MM月DD日 HH:mm') : '';
+      date = r.createdAt ? dayjs(r.createdAt).format('MM月DD日 HH:mm') : '';
       recordArr.push({
         condition: { ...r.content },
         date,
@@ -44,7 +43,8 @@ function LifeStandard({ children }: IProps) {
       // type: 'SPORT',
       pageSize: 3,
     };
-    api.medicine.getLifeStatus(params)
+    api.medicine
+      .getLifeStatus(params)
       .then((res) => {
         setLifeStatusList(res.lifeStatusList.sort((a, b) => a.createdAt - b.createdAt));
       })
@@ -79,71 +79,14 @@ function LifeStandard({ children }: IProps) {
       {showModal && (
         <DragModal
           visible={showModal}
-          title="生活达标"
+          title="宣教课程"
           width="80%"
           wrapClassName="ant-modal-wrap-center"
           onCancel={() => setShowModal(false)}
           maskClosable
           footer={null}
         >
-          <div>
-            <div className={styles.condition}>
-              <div className={styles.life_condition}>
-                <h3 className={styles.life_condition_title}>生活情况</h3>
-                <div className={styles.life_condition_content}>
-                  <div>
-                    { dietCondition.length > 0
-                      ? dietCondition.map((diet:IDiet, idx) => {
-                        const dIndex = idx;
-                        return (
-                          <LifeCondition
-                            key={`${diet.createdAt}${dIndex}`}
-                            text="饮食情况"
-                            conditionType={diet.conditionType}
-                            condition={convertDietData(diet.condition)}
-                            date={diet.date}
-                          />
-                        );
-                      })
-                      : noCondition('饮食') }
-                  </div>
-                  <div>
-                    { sportCondition.length > 0
-                      ? sportCondition.map((sport, idx) => {
-                        const sIndex = idx;
-                        return (
-                          <LifeCondition
-                            key={`${sport.createdAt}${sIndex}`}
-                            text="运动情况"
-                            conditionType={sport.conditionType}
-                            condition={convertSportData(sport.condition)}
-                            date={sport.date}
-                          />
-                        );
-                      }) : noCondition('运动') }
-                  </div>
-                  <div>
-                    { sleepCondition.length > 0
-                      ? sleepCondition.map((sleep, idx) => {
-                        const lIndex = idx;
-                        return (
-                          <LifeCondition
-                            key={`${sleep.createdAt}${lIndex}`}
-                            text="睡眠情况"
-                            conditionType={sleep.conditionType}
-                            condition={sleep.condition && convertSleepData(sleep.condition)}
-                            date={sleep.date}
-                          />
-                        );
-                      }) : noCondition('睡眠') }
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="common__btn">
-              <Button onClick={() => { setShowModal(false); }}>退出</Button>
-            </div>
-          </div>
+          <div>宣教列表</div>
         </DragModal>
       )}
     </div>

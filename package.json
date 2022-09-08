@@ -50,7 +50,7 @@
     "prerelease:out": "pnpm prerelease --filter 'out-hospital-patient'",
     "prerelease:jiupin": "pnpm prerelease --filter 'jiupin'",
     "prerelease:cro": "pnpm prerelease --filter 'clinical-cro'",
-    "dist:doctor": "pnpm dist --filter 'xzl-web-doctor'",
+    "dist:doctor": "pnpm --filter '/packages/xzl-web-doctor'  dist",
     "dist:nurse": "pnpm dist --filter 'xzl-web-nurse'",
     "dist:org": "pnpm dist --filter 'xzl-web-org'",
     "dist:out": "pnpm dist --filter 'out-hospital-patient'",

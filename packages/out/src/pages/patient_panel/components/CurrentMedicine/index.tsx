@@ -14,8 +14,12 @@ function CurrentMedicine() {
         <PlansDetail />
       </div>
       <div className={styles.right_block}>
-        <MedicineHistory><span className={styles.btn}>服药历史</span></MedicineHistory>
-        <LifeStandard><span className={styles.btn}>生活达标</span></LifeStandard>
+        <MedicineHistory>
+          <span className={styles.btn}>饮食运动</span>
+        </MedicineHistory>
+        <LifeStandard>
+          <span className={styles.btn}>生活达标</span>
+        </LifeStandard>
       </div>
     </div>
   );

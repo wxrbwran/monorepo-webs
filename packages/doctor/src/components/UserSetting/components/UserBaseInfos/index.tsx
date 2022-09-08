@@ -16,13 +16,28 @@ interface IProps {
 }
 function UserBaseInfos({ userInfo }: IProps) {
   const {
-    name, tel, title, practiceAreas, mentor,
-    belongToGroup, qcCode, qcIssuingDate, pcCode, pcIssuingDate, biography, expertise,
-    achievement, meetingLecture, firstProfessionBrief, bankName, bankCardNum, roleTags,
+    name,
+    tel,
+    title,
+    practiceAreas,
+    mentor,
+    belongToGroup,
+    qcCode,
+    qcIssuingDate,
+    pcCode,
+    pcIssuingDate,
+    biography,
+    expertise,
+    achievement,
+    meetingLecture,
+    firstProfessionBrief,
+    bankName,
+    bankCardNum,
+    roleTags,
   } = userInfo;
   const { filterOrgs } = useSelector((state: IState) => state.user);
   const [activeInfoTab, setActiveInfoTab] = useState('biography');
-  const tabData:CommonData = {
+  const tabData: CommonData = {
     biography,
     expertise,
     achievement,
@@ -58,29 +73,31 @@ function UserBaseInfos({ userInfo }: IProps) {
       </div>
       <div className="infos__base">
         <div className="flex">
-          <div className="w-140 text-right" style={{ flex: '0 0 112px' }}>执业医院和科室：</div>
+          <div className="w-140 text-right" style={{ flex: '0 0 112px' }}>
+            执业医院和科室：
+          </div>
           <div>
-            {
-              practiceAreas?.length > 0 ? (
-                practiceAreas.map(item => {
+            {practiceAreas?.length > 0
+              ? practiceAreas.map((item) => {
                   return (
-                    <span className="mr-10">{item.name}-{item.sub.name}</span>
+                    <span className="mr-10">
+                      {item.name}-{item?.sub?.name}
+                    </span>
                   );
                 })
-              ) : '--'
-            }
+              : '--'}
           </div>
         </div>
         <div className="flex">
           <div className="w-140 text-right whitespace-nowrap">线上医院和项目机构：</div>
           <div>
-            {
-              filterOrgs?.map((item: { name: string, nsId: string }) => {
-                return (
-                  <span key={item.nsId} className={'mr-20'}>{item.name}</span>
-                );
-              })
-            }
+            {filterOrgs?.map((item: { name: string; nsId: string }) => {
+              return (
+                <span key={item.nsId} className={'mr-20'}>
+                  {item.name}
+                </span>
+              );
+            })}
           </div>
         </div>
         <div className="flex">
@@ -92,29 +109,32 @@ function UserBaseInfos({ userInfo }: IProps) {
         <div className="flex">
           <div className="w-140 text-right">角色标签：</div>
           <div>
-            {
-              roleTags?.length > 0 ? roleTags.map((item: string) => <span className='infos__base__tags'>{item}</span>) : '--'
-            }
+            {roleTags?.length > 0
+              ? roleTags.map((item: string) => <span className="infos__base__tags">{item}</span>)
+              : '--'}
           </div>
         </div>
         <div className="flex">
           <div className="w-140 text-right">银行卡号：</div>
           <div>
             {bankCardNum || '--'}
-            { bankName ? ` - ${bankName}` : null }
+            {bankName ? ` - ${bankName}` : null}
           </div>
         </div>
         <div className="flex">
           <div className="w-140 text-right">资格证书编码：</div>
           <div>
-            {`${qcCode || '--'} ${qcCode && qcIssuingDate ? '-' : ''} 发证日期：${qcIssuingDate ? moment(qcIssuingDate).format('YYYY-MM-DD') : '--'}`}
-
+            {`${qcCode || '--'} ${qcCode && qcIssuingDate ? '-' : ''} 发证日期：${
+              qcIssuingDate ? moment(qcIssuingDate).format('YYYY-MM-DD') : '--'
+            }`}
           </div>
         </div>
         <div className="flex">
           <div className="w-140 text-right">执业证书编码：</div>
           <div>
-            {`${pcCode || '--'} ${pcCode && pcIssuingDate ? '-' : ''} 发证日期：${pcIssuingDate ? moment(pcIssuingDate).format('YYYY-MM-DD') : '--'}`}
+            {`${pcCode || '--'} ${pcCode && pcIssuingDate ? '-' : ''} 发证日期：${
+              pcIssuingDate ? moment(pcIssuingDate).format('YYYY-MM-DD') : '--'
+            }`}
           </div>
         </div>
       </div>

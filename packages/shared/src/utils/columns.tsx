@@ -1,8 +1,13 @@
 import React from 'react';
 import { Avatar, Button } from 'antd';
 import {
-  defaultAvatar, sexList, inviteStatusLists,
-  statusLists, orgCategroy, roleList, projectStatus,
+  defaultAvatar,
+  sexList,
+  inviteStatusLists,
+  statusLists,
+  orgCategroy,
+  roleList,
+  projectStatus,
   yinYangMap,
 } from './consts';
 import { Role, fetchRolePropValue } from './role';
@@ -66,16 +71,11 @@ export const indexCommon = columnCreator('是否常用', 'common', (text: string
   <span>{text ? '是' : '否'}</span>
 ));
 
-
 export const clAvatar = {
   title: '头像',
   dataIndex: 'avatarUrl',
   render: (text: string) => (
-    <img
-      src={text || defaultAvatar}
-      style={{ width: 40, height: 40 }}
-      alt="头像"
-    />
+    <img src={text || defaultAvatar} style={{ width: 40, height: 40 }} alt="头像" />
   ),
 };
 export const clDepartment = {
@@ -87,22 +87,14 @@ export const clDepartment = {
 export const indexAbbr = {
   title: '缩写',
   dataIndex: 'abbreviation',
-  render: (text: string) => (
-    <div>
-      {text || '--'}
-    </div>
-  ),
+  render: (text: string) => <div>{text || '--'}</div>,
 };
-
 
 export const indexSource = {
   title: '数据来源',
   dataIndex: 'source',
-  render: (text: string) => (
-    <div>{text === 'DOCTOR' ? '自己添加' : '系统添加'}</div>
-  ),
+  render: (text: string) => <div>{text === 'DOCTOR' ? '自己添加' : '系统添加'}</div>,
 };
-
 
 export type SexType = 'MALE' | 'FEMALE';
 
@@ -246,7 +238,6 @@ export const patientCount = {
   sorter: true,
 };
 
-
 export const doctorName = {
   title: '医生',
   dataIndex: 'doctorName',
@@ -304,7 +295,6 @@ export const adminDepartment = {
   render: depRender,
 };
 
-
 export const lastMonthWorkload = {
   title: '上月工作量',
   dataIndex: 'lastMonthWorkload',
@@ -314,8 +304,6 @@ export const monthWorkload = {
   title: '本月工作量',
   dataIndex: 'monthWorkload',
 };
-
-
 
 export const organizationNameOut = (params: any) => ({
   title: '医院名',
@@ -356,13 +344,13 @@ export const crostatus = {
   dataIndex: 'status',
   mock: '@pick(["1002", "1001"])',
   align: 'center',
-  render: (text: number) => (projectStatus[text]),
+  render: (text: number) => projectStatus[text],
 };
 
 export const orgaName = {
   title: '机构',
   dataIndex: 'organizationName',
-  mock: '@pick(["心之力医院", "阜外医院", "临汾医院"])',
+  mock: '@pick(["万物无疆医院", "阜外医院", "临汾医院"])',
   align: 'center',
 };
 
@@ -394,32 +382,19 @@ export const groupName = {
   title: '所在分组',
   dataIndex: 'groupName',
   key: 'groupName',
-  render: (_text: any, record: any) => (
-    <div>
-      {record.groupName.join(',')}
-    </div>
-  ),
+  render: (_text: any, record: any) => <div>{record.groupName.join(',')}</div>,
 };
 
 export const initAt = {
   title: '与医生绑定时间',
   dataIndex: 'initAt',
   key: 'initAt',
-  render: (text: any, _record: any) => (
-    <div>
-      {text ? moment(text).format('YYYY.MM.DD') : '--'}
-    </div>
-  ),
+  render: (text: any, _record: any) => <div>{text ? moment(text).format('YYYY.MM.DD') : '--'}</div>,
 };
 
 export const bindAt = {
   title: '与医生绑定时间',
   dataIndex: 'bindAt',
   key: 'bindAt',
-  render: (text: any, _record: any) => (
-    <div>
-      {text ? moment(text).format('YYYY.MM.DD') : '--'}
-    </div>
-  ),
+  render: (text: any, _record: any) => <div>{text ? moment(text).format('YYYY.MM.DD') : '--'}</div>,
 };
-

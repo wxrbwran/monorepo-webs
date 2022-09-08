@@ -22,9 +22,7 @@ const AdjustMedicine: FC<IProps> = (props) => {
   };
   return (
     <>
-      <div onClick={handleShowModal}>
-        {children}
-      </div>
+      <div onClick={handleShowModal}>{children}</div>
       {title}
       <DragModal
         title={title || '调整用药'}
@@ -35,7 +33,7 @@ const AdjustMedicine: FC<IProps> = (props) => {
         footer={null}
       >
         <div className={styles.adjust_medicine_modal}>
-          <p className="text-base mb-15">请使用「心之力医生端APP」扫描屏幕二维码进行调药</p>
+          <p className="text-base mb-15">请使用「万物无疆医生端APP」扫描屏幕二维码进行调药</p>
           <QRCode size={120} value={`${doctorRole}-${doctorSid}-${patientSid}`} />
         </div>
       </DragModal>

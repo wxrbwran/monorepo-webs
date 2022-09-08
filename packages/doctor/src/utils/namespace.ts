@@ -6,7 +6,7 @@ const fetchData = (code: string, desc: string) => ({
 const NSLabelType = {
   GLOBAL: fetchData('global', '根空间标识,可以管理逻辑上所有的机构及其相应的管理员分配'), // 1
   DEFAULT: fetchData('default', '默认系统初始化的机构空间'), // 2
-  CHRONIC_DISEASE: fetchData('chronic_disease_space', '慢病管理的业务空间'), // 3
+  CHRONIC_DISEASE: fetchData('chronic_disease_space', '管理的业务空间'), // 3
   DEPARTMENT_TYPE: fetchData('department_type', '科室类别空间，区分科室所属类别'), // 4
 
   DEPARTMENT: fetchData('department', '表示科室空间'), // 5
@@ -19,7 +19,7 @@ const NSLabelType = {
 
   SUPERIOR_ORG: fetchData('superior_org_space', '上级机构所属的空间类型'), // 12
   LOWER_ORG: fetchData('lower_org_space', '下级机构所属的空间类型'), // 13
-  CHRONIC_DISEASE_TEAM: fetchData('chronic_disease_team', '慢病管理团队空间'), // 14
+  CHRONIC_DISEASE_TEAM: fetchData('chronic_disease_team', '管理团队空间'), // 14
   CHRONIC_DISEASE_TEAM_SESSION: fetchData('session_group', '团队成员内部会话组_SPACE'), // 15
 
   COMMON_DEPARTMENT_TYPE: fetchData('common_department_type', '通用科室'), // 16

@@ -1,5 +1,5 @@
 const rootData: any = {
-  rootName: '心之力医院',
+  rootName: '万物无疆医院',
   downward: {
     direction: 'downward',
     name: 'origin',

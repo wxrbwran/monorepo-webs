@@ -22,7 +22,7 @@ export const roleList = {
 };
 
 export const orgCategroy = {
-  ORDINARY: '慢病管理',
+  ORDINARY: '患者管理',
   CLINICAL: '临床试验',
 };
 

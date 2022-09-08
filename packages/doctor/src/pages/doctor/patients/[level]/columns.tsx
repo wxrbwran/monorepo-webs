@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Switch, Badge, Checkbox, message,
-} from 'antd';
+import { Switch, Badge, Checkbox, message } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import { history, getDvaApp } from 'umi';
 import { sexList } from '@/utils/tools';
@@ -34,8 +32,8 @@ export interface IRecord {
   wcId: string;
   top: number;
   department: object;
-  issueCount:number;
-  role:string;
+  issueCount: number;
+  role: string;
   avatarUrl: string;
   isYlPatient: boolean; // 是否是养老患者
   inCro: boolean; // 是否参与了科研项目
@@ -44,11 +42,19 @@ export interface IRecord {
     sid: string;
   }; // 当前登录医生的信息
 }
-const patientPage = (props: { record: IRecord, actionType?: string }) => {
+const patientPage = (props: { record: IRecord; actionType?: string }) => {
   const { record, actionType } = props;
   console.log('跳转', record, actionType);
   const {
-    wcId, sid, department, imMsgCount, issueCount, avatarUrl, name, currLoginDoctorInfo, role,
+    wcId,
+    sid,
+    department,
+    imMsgCount,
+    issueCount,
+    avatarUrl,
+    name,
+    currLoginDoctorInfo,
+    role,
   } = record;
   let imDocInfo = currLoginDoctorInfo;
   // 如果是从左侧科室管理(科主任)，看其他医生患者的详情，那这个currLoginDoctorInfo的wcId要使用科主任角色的wcID
@@ -94,11 +100,13 @@ export const name = {
   render: (data: string, record: IRecord) => {
     return (
       <div onClick={() => patientPage({ record })}>
-      <span>
-        {data}
-        { record.inCro && window.$storage.getItem('role') !== 'DEP_HEAD' && <img src={patientIcon} alt="" className={styles.tag} /> }
-      </span>
-    </div>
+        <span>
+          {data}
+          {record.inCro && window.$storage.getItem('role') !== 'DEP_HEAD' && (
+            <img src={patientIcon} alt="" className={styles.tag} />
+          )}
+        </span>
+      </div>
     );
   },
 };
@@ -106,18 +114,14 @@ export const org = {
   title: '机构',
   dataIndex: 'organizationName',
   render: (data: string, record: IRecord) => (
-    <div onClick={() => patientPage({ record })}>
-      {data}
-    </div>
+    <div onClick={() => patientPage({ record })}>展示医院</div>
   ),
 };
 export const project = {
   title: ' 科研项目',
   dataIndex: 'projectName',
   render: (data: string, record: IRecord) => (
-    <div onClick={() => patientPage({ record })}>
-      {data}
-    </div>
+    <div onClick={() => patientPage({ record })}>{data}</div>
   ),
 };
 
@@ -125,9 +129,7 @@ export const sex = {
   title: '性别',
   dataIndex: 'sex',
   render: (text: string, record: IRecord) => (
-    <div onClick={() => patientPage({ record })}>
-      {sexList[text]}
-    </div>
+    <div onClick={() => patientPage({ record })}>{sexList[text]}</div>
   ),
 };
 
@@ -136,9 +138,7 @@ export const age = {
   dataIndex: 'age',
   sorter: (a: { age: number }, b: { age: number }) => a.age - b.age,
   render: (text: string, record: IRecord) => (
-    <div onClick={() => patientPage({ record })}>
-      {text}
-    </div>
+    <div onClick={() => patientPage({ record })}>{text}</div>
   ),
 };
 
@@ -190,11 +190,7 @@ export const issueCount = {
         break;
     }
     return (
-      <Badge
-        count={data}
-        className={className}
-        style={{ backgroundColor: bgColor }}
-      >
+      <Badge count={data} className={className} style={{ backgroundColor: bgColor }}>
         <img src={imgSrc} onClick={() => patientPage({ record, actionType: 'issue' })} alt="" />
       </Badge>
     );
@@ -210,10 +206,7 @@ export const msgCount = {
       color = '#f56a00';
     }
     return (
-      <Badge
-        count={record.imMsgCount}
-        style={{ backgroundColor: color as string }}
-      >
+      <Badge count={record.imMsgCount} style={{ backgroundColor: color as string }}>
         <span style={{ color: color as string }}>
           <MessageOutlined
             className={styles.msg}
@@ -241,10 +234,7 @@ export const bindDay = {
         content = `免费中，${data}天`;
         break;
     }
-    return (
-      <div className={className}>
-        {content}
-      </div>);
+    return <div className={className}>{content}</div>;
   },
 };
 
@@ -259,39 +249,37 @@ const handleLevel = (isVip: boolean, record: IRecord, refreshList: () => void) =
     refreshList();
   });
 };
-export const patientLevel = (refreshList: () => void) => (
-  {
-    title: '级别',
-    dataIndex: 'serviceLevel',
-    render: (_text: string, record: IRecord) => {
-      console.log('xxxfe');
-      return (
-        <div className="table-operating">
+export const patientLevel = (refreshList: () => void) => ({
+  title: '级别',
+  dataIndex: 'serviceLevel',
+  render: (_text: string, record: IRecord) => {
+    console.log('xxxfe');
+    return (
+      <div className="table-operating">
         <Switch
           checkedChildren="VIP"
           unCheckedChildren="普通"
           checked={record.role === Role.PATIENT_VIP.id}
-          onChange={(e) => { handleLevel(e, record, refreshList); }}
+          onChange={(e) => {
+            handleLevel(e, record, refreshList);
+          }}
         />
         {/* PATIENT_VIP */}
       </div>
-      );
-    },
-  }
-);
+    );
+  },
+});
 
-export const noteC = (refreshList: () => void) => (
-  {
-    title: '备注',
-    dataIndex: 'remark',
-    render: (text: string, record: IRecord) => (
-      <Note data={record} note={text} refreshList={refreshList} />
-    ),
-  }
-);
+export const noteC = (refreshList: () => void) => ({
+  title: '备注',
+  dataIndex: 'remark',
+  render: (text: string, record: IRecord) => (
+    <Note data={record} note={text} refreshList={refreshList} />
+  ),
+});
 
 const handleSetTop = (
-  e:React.ChangeEvent<HTMLInputElement>,
+  e: React.ChangeEvent<HTMLInputElement>,
   patientId: string,
   refreshList: () => void,
 ) => {
@@ -310,23 +298,21 @@ const handleSetTop = (
   //     message.error(xhr);
   //   });
 };
-export const operate = (refreshList: () => void) => (
-  {
-    title: '操作',
-    dataIndex: '',
-    width: 101,
-    render: (text: string, record: IRecord) => {
-      console.log(text);
-      return (
-        <Checkbox
-          checked={record.top !== 1}
-          onChange={(e) => {
-            handleSetTop(e, record.id, refreshList);
-          }}
-        >
-          置顶
-        </Checkbox>
-      );
-    },
-  }
-);
+export const operate = (refreshList: () => void) => ({
+  title: '操作',
+  dataIndex: '',
+  width: 101,
+  render: (text: string, record: IRecord) => {
+    console.log(text);
+    return (
+      <Checkbox
+        checked={record.top !== 1}
+        onChange={(e) => {
+          handleSetTop(e, record.id, refreshList);
+        }}
+      >
+        置顶
+      </Checkbox>
+    );
+  },
+});

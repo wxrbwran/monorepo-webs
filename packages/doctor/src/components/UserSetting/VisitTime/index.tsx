@@ -23,34 +23,55 @@ function VisitTime() {
       dataIndex: 'ampm',
       width: 80,
       render: (text: string) => ampm[text],
-    }, {
+    },
+    {
       title: '周一',
       dataIndex: 'MONDAY',
-      render: (text: string, record: object) => <Td text={text} record={record} dayOfWeek="MONDAY" activeType={activeType} />,
-    }, {
+      render: (text: string, record: object) => (
+        <Td text={text} record={record} dayOfWeek="MONDAY" activeType={activeType} />
+      ),
+    },
+    {
       title: '周二',
       dataIndex: 'TUESDAY',
-      render: (text: string, record: object) => <Td text={text} record={record} dayOfWeek="TUESDAY" activeType={activeType} />,
-    }, {
+      render: (text: string, record: object) => (
+        <Td text={text} record={record} dayOfWeek="TUESDAY" activeType={activeType} />
+      ),
+    },
+    {
       title: '周三',
       dataIndex: 'WEDNESDAY',
-      render: (text: string, record: object) => <Td text={text} record={record} dayOfWeek="WEDNESDAY" activeType={activeType} />,
-    }, {
+      render: (text: string, record: object) => (
+        <Td text={text} record={record} dayOfWeek="WEDNESDAY" activeType={activeType} />
+      ),
+    },
+    {
       title: '周四',
       dataIndex: 'THURSDAY',
-      render: (text: string, record: object) => <Td text={text} record={record} dayOfWeek="THURSDAY" activeType={activeType} />,
-    }, {
+      render: (text: string, record: object) => (
+        <Td text={text} record={record} dayOfWeek="THURSDAY" activeType={activeType} />
+      ),
+    },
+    {
       title: '周五',
       dataIndex: 'FRIDAY',
-      render: (text: string, record: object) => <Td text={text} record={record} dayOfWeek="FRIDAY" activeType={activeType} />,
-    }, {
+      render: (text: string, record: object) => (
+        <Td text={text} record={record} dayOfWeek="FRIDAY" activeType={activeType} />
+      ),
+    },
+    {
       title: '周六',
       dataIndex: 'SATURDAY',
-      render: (text: string, record: object) => <Td text={text} record={record} dayOfWeek="SATURDAY" activeType={activeType} />,
-    }, {
+      render: (text: string, record: object) => (
+        <Td text={text} record={record} dayOfWeek="SATURDAY" activeType={activeType} />
+      ),
+    },
+    {
       title: '周日',
       dataIndex: 'SUNDAY',
-      render: (text: string, record: object) => <Td text={text} record={record} dayOfWeek="SUNDAY" activeType={activeType} />,
+      render: (text: string, record: object) => (
+        <Td text={text} record={record} dayOfWeek="SUNDAY" activeType={activeType} />
+      ),
     },
   ];
   const orgAppointInfos = [
@@ -167,13 +188,8 @@ function VisitTime() {
     <div className={styles.visit}>
       <Tabs handleChangeTab={handleChangeTab} />
       <div className={styles.item}>
-        <h4>心之力医院</h4>
-        <Table
-          dataSource={orgAppointInfos}
-          columns={columns}
-          bordered
-          pagination={false}
-        />
+        <h4>万物无疆医院</h4>
+        <Table dataSource={orgAppointInfos} columns={columns} bordered pagination={false} />
       </div>
     </div>
   );

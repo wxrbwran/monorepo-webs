@@ -3,23 +3,13 @@ import config from '@/config';
 import styles from './index.scss';
 
 function DoctorInfo({ currDetail }: ISubject) {
-  const {
-    avatarUrl,
-    name,
-    title,
-    biography,
-    expertise,
-    achievement,
-    meetingLecture,
-  } = currDetail;
+  const { avatarUrl, name, title, biography, expertise, achievement, meetingLecture } = currDetail;
   return (
     <div className={styles.faction__info}>
       <div className={styles.top}>
         <img src={avatarUrl || config.defaultAvatar} alt="" />
         <h3>{name}</h3>
-        <div>
-          {title}
-        </div>
+        <div>{title}</div>
       </div>
       <div>
         <div className={styles.item}>
@@ -40,7 +30,7 @@ function DoctorInfo({ currDetail }: ISubject) {
         </div>
         <div className={styles.item}>
           <h4>所在医院: </h4>
-          {/* <p>心之力</p> */}
+          {/* <p>万物无疆</p> */}
         </div>
       </div>
     </div>

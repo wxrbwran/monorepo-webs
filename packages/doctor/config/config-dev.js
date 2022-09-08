@@ -25,7 +25,7 @@ const config = {
   antd: {
     compact: true,
   },
-  title: '心之力',
+  title: '万物无疆',
   locale: {
     default: 'zh-CN',
     title: false,

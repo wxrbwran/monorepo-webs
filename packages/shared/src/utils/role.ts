@@ -52,7 +52,7 @@ export const Role: RolesMap = {
   ORG: roleType('bWwj0P', 49, 40, 48, '机构主体'), // 5
   UPPER_ORG: roleType('YWBa0j', 59, 50, 58, '上级机构'), // 6
   LOWER_ORG: roleType('Y4NqWP', 69, 60, 68, '下级机构'), // 7
-  PATIENT: roleType('YWLG0L', 79, 70, 78, '患者(默认在心之力系统-慢病服务团队)'), // 8
+  PATIENT: roleType('YWLG0L', 79, 70, 78, '患者(默认在万物无疆系统-慢病服务团队)'), // 8
   PATIENT_VIP: roleType('nWgX4b', 89, 80, 88, 'VIP 患者'), // 9
   PATIENT_FAMILY: roleType('70MG43', 99, 90, 98, '患者家属'), // 10
   NURSE: roleType('2Wmj4M', 109, 100, 108, '护士(角色默认在 xinzhili - 护士团队)'), // 11
@@ -108,7 +108,6 @@ export const Role: RolesMap = {
   NINE_MEMBER_CALLER_1: roleType('qWGyBe', 0, 0, 0, '长期'), // 九品 长期角色，目前是写死
   NINE_MEMBER_CALLER_2: roleType('XWrv6W', 0, 0, 0, '临时'), // 九品 临时角色，目前是写死
   NINE_MEMBER: roleType('YWLRAe', 0, 0, 0, '会员'), // 九品 会员
-
 };
 
 export function fetchRolePropById(id: string) {

@@ -26,10 +26,15 @@ function CurrentMedicine() {
         <PlansDetail />
       </div>
       <div className={styles.right_block}>
-        <MedicineHistory><span className={styles.btn}>服药历史</span></MedicineHistory>
-        <AdjustMedicine><span className={styles.btn}>调整用药</span></AdjustMedicine>
-        <LifeStandard><span className={styles.btn}>生活达标</span></LifeStandard>
-        <EndEvent><span className={styles.btn}>终点事件</span></EndEvent>
+        <LifeStandard>
+          <div className={styles.btn}>宣教课程</div>
+        </LifeStandard>
+        <div className={styles.btn}>饮食疗法</div>
+        <div className={styles.btn}>运动训练</div>
+        <div className={styles.btn}>认知训练</div>
+        {/* <EndEvent>
+          <span className={styles.btn}>终点事件</span>
+        </EndEvent> */}
       </div>
     </div>
   );

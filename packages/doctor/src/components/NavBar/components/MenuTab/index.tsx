@@ -52,14 +52,14 @@ function MenuTab() {
         )
       } */}
       <Tabs defaultActiveKey={activeTab} onChange={handleToggleTab}>
-        {
-          !onlyConsultations && <TabPane tab="慢病管理" key="SIGNING" />
-        }
+        {!onlyConsultations && <TabPane tab="患者管理" key="SIGNING" />}
         {/* <TabPane tab="预约患者" key="ORDER" /> */}
         {/* <TabPane tab="患者随访" key="SuiFang" /> */}
       </Tabs>
-      <a href={config.CLINICAL_CRO} id="go_cro" target="_blank" rel="noopener noreferrer"> </a>
-      <div className={styles.clinical} onClick={handleGoCro}>智能科研平台</div>
+      {/* <a href={'http://localhost:8001'} id="go_cro" target="_blank" rel="noopener noreferrer"></a>
+      <div className={styles.clinical} onClick={handleGoCro}>
+        智能科研平台
+      </div> */}
       {/* <a
         href={config.INDEX_LIBRARY}
         className={styles.clinical}

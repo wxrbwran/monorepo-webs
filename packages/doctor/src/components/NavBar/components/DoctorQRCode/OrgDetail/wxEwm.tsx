@@ -4,7 +4,8 @@ import doctorService from '@/assets/img/nav_bar/doctorService.png';
 import styles from '../index.scss';
 
 function OrgDetail() {
-  const qrCodeUrlWx = 'https://staff-qrcode-dev.oss-cn-beijing.aliyuncs.com/f95bda39-7741-4cd5-b7fc-5432534d7b53';
+  const qrCodeUrlWx =
+    'https://staff-qrcode-dev.oss-cn-beijing.aliyuncs.com/f95bda39-7741-4cd5-b7fc-5432534d7b53';
   return (
     <div className={styles.doctor} id="wxewm">
       <div className={styles.wxinfo}>
@@ -12,15 +13,9 @@ function OrgDetail() {
           <img className={styles.avatar} src={config.defaultAvatar} alt="医生头像" />
         </div>
         <div className={styles.left}>
-          <div className={styles.name}>
-            愚人节哈哈哈
-          </div>
-          <div>
-            主任医师 | 全科
-          </div>
-          <div>
-            心之力医院
-          </div>
+          <div className={styles.name}>愚人节哈哈哈</div>
+          <div>主任医师 | 全科</div>
+          <div>万物无疆医院</div>
         </div>
       </div>
       <div className={styles.service}>

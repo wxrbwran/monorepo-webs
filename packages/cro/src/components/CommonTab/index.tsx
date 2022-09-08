@@ -11,7 +11,6 @@ import './index.scss';
 import { CommonData, IState } from 'typings/global';
 import { useRef } from 'react';
 
-
 const { TabPane } = Tabs;
 interface IProps {
   activeTab: string;
@@ -19,7 +18,7 @@ interface IProps {
     pathname: string;
     query: {
       projectSid: string;
-    }
+    };
   };
 }
 function CommonTab(props: IProps) {
@@ -31,30 +30,30 @@ function CommonTab(props: IProps) {
   const { roleType, status } = useSelector((state: IState) => state.project.projDetail);
   const { projectNsId, projectSid } = useSelector((state: IState) => state.project.projDetail);
 
-
   const [val, setVal] = useState('');
   const [seconds, setSeconds] = useState(60);
   const [isGetting, setIsGetting] = useState(false);
   const timerRef = useRef();
   const isLeader = window.$storage.getItem('isLeader');
   const modalText: CommonData = {
-    'del': {
+    del: {
       title: '删除项目',
       btnText: '删除',
       content: `一旦你彻底删除项目「${projectName}」，所有与项目有关的信息将会被永久删除。这是一个不可恢复的操作，请谨慎对待！`,
       type: 3,
     },
-    'close': {
+    close: {
       title: '封闭试验',
       btnText: '确定',
       content: `一旦你封闭【${projectName}】，所有项目信息将不可修改。这是一个不可恢复的操作，请谨慎对待！`,
       type: 1,
       status: 1001,
     },
-    'reOpen': {
+    reOpen: {
       title: '解除封闭',
       btnText: '确定',
-      content: '1. 解除封闭后，你可以修改项目内容\n2. 封闭之前将按原计划执行，封闭之后将按新的计划执行\n3. 请谨慎操作，尽快完成项目修改',
+      content:
+        '1. 解除封闭后，你可以修改项目内容\n2. 封闭之前将按原计划执行，封闭之后将按新的计划执行\n3. 请谨慎操作，尽快完成项目修改',
       type: 2,
       status: 1002,
     },
@@ -74,23 +73,24 @@ function CommonTab(props: IProps) {
   // 封闭项目：1   解封项目：2   删除项目：3
   const fetchVcode = () => {
     if (!isGetting) {
-
       setIsGetting(true);
 
       console.log('======== projectSid', projectSid);
-      api.detail.patchCodeMake({
-        projectSid: projectSid,
-        projectNsId: projectNsId,
-        projectName,
-        type: modalText[modalType].type,
-      }).then(() => {
-        timerRef.current = setInterval(() => {
-          setSeconds((preSeconds) => preSeconds - 1);
-        }, 1000);
-      }).catch(() => {
-
-        setIsGetting(false);
-      });
+      api.detail
+        .patchCodeMake({
+          projectSid: projectSid,
+          projectNsId: projectNsId,
+          projectName,
+          type: modalText[modalType].type,
+        })
+        .then(() => {
+          timerRef.current = setInterval(() => {
+            setSeconds((preSeconds) => preSeconds - 1);
+          }, 1000);
+        })
+        .catch(() => {
+          setIsGetting(false);
+        });
     }
   };
 
@@ -114,41 +114,41 @@ function CommonTab(props: IProps) {
   };
 
   const onFinish = (values: any) => {
-
     // values.code
     if (!/^\d+$/.test(values.code)) {
       message.error('请输入数字');
       return;
     }
     console.log('============== values, ', values);
-    api.detail.patchCodeCheck({
-      projectSid: projectSid,
-      projectNsId: projectNsId,
-      note: {
-        code: values.code,
+    api.detail
+      .patchCodeCheck({
+        projectSid: projectSid,
+        projectNsId: projectNsId,
+        note: {
+          code: values.code,
+          type: modalText[modalType].type,
+        },
+        status: modalText[modalType].status ?? status,
         type: modalText[modalType].type,
-      },
-      status: modalText[modalType].status ?? status,
-      type: modalText[modalType].type,
-    }).then(() => {
-
-      if (modalType === 'del') {
-        message.success('项目删除成功');
-        //更新常用问题列表
-        history.push('/home');
-      } else {
-        window.$log.handleOperationLog({
-          type: 0,
-          copyWriting: `${modalText[modalType].title}`,
-        });
-        message.success('更改信息成功');
-        setShowModal(false);
-        dispatch({
-          type: 'project/fetchProjectDetail',
-          payload: projectSid || window.$storage.getItem('projectSid'),
-        });
-      }
-    });
+      })
+      .then(() => {
+        if (modalType === 'del') {
+          message.success('项目删除成功');
+          //更新常用问题列表
+          history.push('/home');
+        } else {
+          window.$log.handleOperationLog({
+            type: 0,
+            copyWriting: `${modalText[modalType].title}`,
+          });
+          message.success('更改信息成功');
+          setShowModal(false);
+          dispatch({
+            type: 'project/fetchProjectDetail',
+            payload: projectSid || window.$storage.getItem('projectSid'),
+          });
+        }
+      });
   };
 
   const croNav = [
@@ -192,7 +192,6 @@ function CommonTab(props: IProps) {
       statusName: '计划外访视',
       status: 'out_plan_visit',
     },
-
   ];
   if (isLeader) {
     croNav.push({
@@ -201,14 +200,13 @@ function CommonTab(props: IProps) {
     });
   }
   const handleShowModal = (type: string) => {
-
     // 清空之前的计时等数据
     clearInterval(timerRef.current);
     setSeconds(60);
     setIsGetting(false);
     setVal('');
     setFieldsValue({
-      'code': '',
+      code: '',
     });
 
     setModalType(type);
@@ -219,26 +217,22 @@ function CommonTab(props: IProps) {
       <Menu.Item onClick={() => handleShowModal('del')}>
         <DeleteOutlined /> 删除项目
       </Menu.Item>
-      {
-        status !== 1001 && (
-          <>
-            <Divider style={{ margin: 0 }} />
-            <Menu.Item onClick={() => handleShowModal('close')}>
-              <LockOutlined /> 封闭试验
-            </Menu.Item>
-          </>
-        )
-      }
-      {
-        status == 1001 && (
-          <>
-            <Divider style={{ margin: 0 }} />
-            <Menu.Item onClick={() => handleShowModal('reOpen')}>
-              <LockOutlined /> 解封试验
-            </Menu.Item>
-          </>
-        )
-      }
+      {status !== 1001 && (
+        <>
+          <Divider style={{ margin: 0 }} />
+          <Menu.Item onClick={() => handleShowModal('close')}>
+            <LockOutlined /> 封闭试验
+          </Menu.Item>
+        </>
+      )}
+      {status == 1001 && (
+        <>
+          <Divider style={{ margin: 0 }} />
+          <Menu.Item onClick={() => handleShowModal('reOpen')}>
+            <LockOutlined /> 解封试验
+          </Menu.Item>
+        </>
+      )}
     </Menu>
   );
   const operations = (
@@ -256,8 +250,7 @@ function CommonTab(props: IProps) {
         tabPosition="top"
         animated={false}
         tabBarExtraContent={
-          [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType)
-            ? operations : <></>
+          [Role.MAIN_PI.id, Role.PROJECT_LEADER.id].includes(roleType) ? operations : <></>
         }
         className="project-cont-tab"
       >
@@ -288,7 +281,11 @@ function CommonTab(props: IProps) {
             form={form}
           >
             <div className={'code_wrap'}>
-              <Form.Item className='code' name="code" rules={[{ required: true, message: '请输入接收到的验证码!' }]}>
+              <Form.Item
+                className="code"
+                name="code"
+                rules={[{ required: true, message: '请输入接收到的验证码!' }]}
+              >
                 {/* <Input prefix={<LockOutlined />} placeholder="请输入收到的验证码" />
                  */}
                 {/* <Input placeholder={`请输入验证码：${modalText[modalType].title}`} onChange={(e) => setVal(e.target.value)} /> */}
@@ -300,7 +297,7 @@ function CommonTab(props: IProps) {
                 onClick={fetchVcode}
                 style={{ width: isGetting ? 140 : 160 }}
               >
-                {isGetting ? `${seconds}s后重新获取` : '发送验证码到心之力APP'}
+                {isGetting ? `${seconds}s后重新获取` : '发送验证码到万物无疆APP'}
               </Button>
             </div>
 
