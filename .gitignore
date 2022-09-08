@@ -2,14 +2,11 @@
 node_modules
 .vscode
 .idea
-xzl-web-doctor
-xzl-web-nurse
-xzl-web-org
 out-hospital-patient
 clinical-cro
-
-package-lock.json
 .DS_Store
+package-lock.json
+**/.DS_Store
 
 # Logs
 *.log

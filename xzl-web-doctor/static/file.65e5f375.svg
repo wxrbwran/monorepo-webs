@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="70px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52 (66869) - http://www.bohemiancoding.com/sketch -->
+    <title>切片</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#679FF3" offset="0%"></stop>
+            <stop stop-color="#427BFC" offset="100%"></stop>
+        </linearGradient>
+        <path d="M19,21 L32.9296325,21 C33.5983389,21 34.2228015,21.3342023 34.5937331,21.8905996 L37.4062669,26.1094004 C37.7771985,26.6657977 38.4016611,27 39.0703675,27 L51,27 C52.1045695,27 53,27.8954305 53,29 L53,50 C53,51.1045695 52.1045695,52 51,52 L19,52 C17.8954305,52 17,51.1045695 17,50 L17,23 C17,21.8954305 17.8954305,21 19,21 Z M25,42 C24.4477153,42 24,42.4477153 24,43 C24,43.5522847 24.4477153,44 25,44 L45,44 C45.5522847,44 46,43.5522847 46,43 C46,42.4477153 45.5522847,42 45,42 L25,42 Z M25,35 C24.4477153,35 24,35.4477153 24,36 C24,36.5522847 24.4477153,37 25,37 L33,37 C33.5522847,37 34,36.5522847 34,36 C34,35.4477153 33.5522847,35 33,35 L25,35 Z" id="path-2"></path>
+        <filter x="-16.7%" y="-19.4%" width="133.3%" height="138.7%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <path d="M19,27 L51,27 C52.1045695,27 53,27.8954305 53,29 L53,50 C53,51.1045695 52.1045695,52 51,52 L19,52 C17.8954305,52 17,51.1045695 17,50 L17,29 C17,27.8954305 17.8954305,27 19,27 Z M25,42 C24.4477153,42 24,42.4477153 24,43 C24,43.5522847 24.4477153,44 25,44 L45,44 C45.5522847,44 46,43.5522847 46,43 C46,42.4477153 45.5522847,42 45,42 L25,42 Z M25,35 C24.4477153,35 24,35.4477153 24,36 C24,36.5522847 24.4477153,37 25,37 L33,37 C33.5522847,37 34,36.5522847 34,36 C34,35.4477153 33.5522847,35 33,35 L25,35 Z" id="path-4"></path>
+        <filter x="-16.7%" y="-24.0%" width="133.3%" height="148.0%" filterUnits="objectBoundingBox" id="filter-5">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="宣教文件/随访表" transform="translate(-905.000000, -163.000000)">
+            <g id="上传文件" transform="translate(905.000000, 163.000000)">
+                <g id="分组-4">
+                    <circle id="椭圆形" fill="url(#linearGradient-1)" opacity="0.7" cx="35" cy="35" r="35"></circle>
+                    <g id="合并形状" opacity="0.9">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                        <use fill="#FDFDFD" fill-rule="evenodd" xlink:href="#path-2"></use>
+                    </g>
+                    <g id="合并形状" opacity="0.9">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-5)" xlink:href="#path-4"></use>
+                        <use fill="#FDFDFD" fill-rule="evenodd" xlink:href="#path-4"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

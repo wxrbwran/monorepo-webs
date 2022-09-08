@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="70px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52 (66869) - http://www.bohemiancoding.com/sketch -->
+    <title>切片</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#935EDC" offset="0%"></stop>
+            <stop stop-color="#7D2CFA" offset="100%"></stop>
+        </linearGradient>
+        <path d="M19,16 L51,16 C52.1045695,16 53,16.8954305 53,18 L53,52 C53,53.1045695 52.1045695,54 51,54 L19,54 C17.8954305,54 17,53.1045695 17,52 L17,18 C17,16.8954305 17.8954305,16 19,16 Z M23,22 C22.4477153,22 22,22.4477153 22,23 L22,27 C22,27.5522847 22.4477153,28 23,28 C23.5522847,28 24,27.5522847 24,27 L24,23 C24,22.4477153 23.5522847,22 23,22 Z M47,22 C46.4477153,22 46,22.4477153 46,23 L46,27 C46,27.5522847 46.4477153,28 47,28 C47.5522847,28 48,27.5522847 48,27 L48,23 C48,22.4477153 47.5522847,22 47,22 Z M40.8879879,35.8087361 C40.9725939,35.7472044 41.0470206,35.6727777 41.1085523,35.5881717 C41.4333905,35.1415191 41.3346405,34.5161022 40.8879879,34.1912639 L32.5881717,28.155034 C32.4172514,28.0307283 32.2113425,27.96377 32,27.96377 C31.4477153,27.96377 31,28.4114853 31,28.96377 L31,41.03623 C31,41.2475725 31.0669582,41.4534813 31.1912639,41.6244017 C31.5161022,42.0710543 32.1415191,42.1698043 32.5881717,41.844966 L40.8879879,35.8087361 Z M23,32 C22.4477153,32 22,32.4477153 22,33 L22,37 C22,37.5522847 22.4477153,38 23,38 C23.5522847,38 24,37.5522847 24,37 L24,33 C24,32.4477153 23.5522847,32 23,32 Z M47,32 C46.4477153,32 46,32.4477153 46,33 L46,37 C46,37.5522847 46.4477153,38 47,38 C47.5522847,38 48,37.5522847 48,37 L48,33 C48,32.4477153 47.5522847,32 47,32 Z M23,42 C22.4477153,42 22,42.4477153 22,43 L22,47 C22,47.5522847 22.4477153,48 23,48 C23.5522847,48 24,47.5522847 24,47 L24,43 C24,42.4477153 23.5522847,42 23,42 Z M47,42 C46.4477153,42 46,42.4477153 46,43 L46,47 C46,47.5522847 46.4477153,48 47,48 C47.5522847,48 48,47.5522847 48,47 L48,43 C48,42.4477153 47.5522847,42 47,42 Z" id="path-2"></path>
+        <filter x="-16.7%" y="-15.8%" width="133.3%" height="131.6%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="宣教文件/随访表" transform="translate(-382.000000, -164.000000)">
+            <g id="上传视频" transform="translate(382.000000, 164.000000)">
+                <g id="分组">
+                    <circle id="椭圆形" fill="url(#linearGradient-1)" opacity="0.7" cx="35" cy="35" r="35"></circle>
+                    <g id="合并形状" opacity="0.9">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                        <use fill="#FDFDFD" fill-rule="evenodd" xlink:href="#path-2"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
